@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>AuthenticationFailed</Code><Message>Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly including the signature.
+RequestId:27acc1c0-c01e-0023-5d9f-7ec6c4000000
+Time:2026-01-05T23:58:30.3937537Z</Message><AuthenticationErrorDetail>Signature did not match. String to sign used was r
+
+2026-01-06T19:18:14Z
+/blob/fileserviceuploadsperm/files/file-qVz0Z9d8i7x6rZLv8rQWG9
+
+
+
+2024-08-04
+b
+
+
+max-age=604800, immutable, private
+attachment; filename=image.png
+
+
+</AuthenticationErrorDetail></Error>

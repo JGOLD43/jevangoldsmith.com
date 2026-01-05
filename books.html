@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Reviews - Jevan Goldsmith</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">JG</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="essays.html">Essays</a></li>
+                <li><a href="books.html" class="active">Book Reviews</a></li>
+                <li><a href="movies.html">Movie Reviews</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Book Reviews</h1>
+            <p>Books I've read and what I think about them</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="books-container" class="books-grid">
+            <!-- Books will be loaded here dynamically -->
+        </div>
+
+        <div class="content-section" style="margin-top: 3rem;">
+            <p style="text-align: center; color: var(--text-light);">
+                Books with a "Click to read review" badge have my full review—just click the card to read it!
+            </p>
+        </div>
+    </main>
+
+    <!-- Book Review Modal -->
+    <div id="book-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeBookModal()">&times;</span>
+            <div class="modal-body">
+                <div class="modal-header">
+                    <img id="modal-book-cover" src="" alt="" class="modal-cover">
+                    <div class="modal-info">
+                        <h2 id="modal-book-title"></h2>
+                        <p id="modal-book-author" class="modal-author"></p>
+                        <div id="modal-book-rating" class="modal-rating"></div>
+                    </div>
+                </div>
+                <div class="modal-review">
+                    <h3>My Review</h3>
+                    <p id="modal-book-review" class="review-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Jevan Goldsmith. All rights reserved.</p>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="essays.html">Essays</a></li>
+                    <li><a href="books.html">Books</a></li>
+                    <li><a href="movies.html">Movies</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/books.js"></script>
+</body>
+</html>
