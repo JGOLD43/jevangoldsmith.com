@@ -411,7 +411,8 @@ a:hover {
     margin-bottom: 1rem;
 }
 
-.book-card.has-review {
+.book-card.has-review,
+.movie-card.has-review {
     position: relative;
 }
 
@@ -427,7 +428,8 @@ a:hover {
     transition: all 0.3s ease;
 }
 
-.book-card.has-review:hover .read-review-badge {
+.book-card.has-review:hover .read-review-badge,
+.movie-card.has-review:hover .read-review-badge {
     background-color: var(--accent-color);
 }
 
