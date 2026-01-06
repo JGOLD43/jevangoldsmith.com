@@ -86,15 +86,22 @@ function createMovieCard(item) {
     // Extract movie details from the item
     const movieData = parseMovieData(item);
 
+    // If there's a review, make the card clickable
+    if (movieData.review) {
+        card.classList.add('has-review');
+        card.style.cursor = 'pointer';
+        card.onclick = () => openMovieModal(movieData, item);
+    }
+
     card.innerHTML = `
         ${movieData.poster ? `<img src="${movieData.poster}" alt="${movieData.title}" class="movie-poster" loading="lazy">` : '<div class="movie-poster" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
         <div class="movie-info">
             <h3 class="movie-title">${movieData.title}</h3>
             ${movieData.year ? `<p class="movie-year">${movieData.year}</p>` : ''}
             ${movieData.rating ? `<div class="movie-rating">${movieData.rating}</div>` : ''}
-            ${movieData.review ? `<p class="movie-review">${movieData.review}</p>` : ''}
+            <p class="movie-description">${movieData.shortDescription || 'A recent watch from my Letterboxd.'}</p>
             <p class="movie-date">Watched: ${movieData.date}</p>
-            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="view-letterboxd">View on Letterboxd →</a>
+            ${movieData.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
         </div>
     `;
 
@@ -113,7 +120,8 @@ function parseMovieData(item) {
         rating: null,
         year: null,
         poster: null,
-        review: null
+        review: null,
+        shortDescription: null
     };
 
     // Extract year from title (format: "Movie Title, Year")
@@ -150,17 +158,66 @@ function parseMovieData(item) {
         .replace(/Watched on.*$/i, '') // Remove "Watched on" text
         .trim();
 
-    // Limit review length
-    if (reviewText.length > 200) {
-        reviewText = reviewText.substring(0, 200) + '...';
-    }
-
     if (reviewText.length > 10) {
         data.review = reviewText;
+
+        // Create short description for card (limit to 150 characters)
+        if (reviewText.length > 150) {
+            data.shortDescription = reviewText.substring(0, 150) + '...';
+        } else {
+            data.shortDescription = reviewText;
+        }
     }
 
     return data;
 }
+
+function openMovieModal(movieData, item) {
+    const modal = document.getElementById('movie-modal');
+
+    // Populate modal content
+    document.getElementById('modal-movie-title').textContent = movieData.title;
+    document.getElementById('modal-movie-year').textContent = movieData.year || '';
+    document.getElementById('modal-movie-rating').textContent = movieData.rating || '';
+    document.getElementById('modal-movie-date').textContent = `Watched: ${movieData.date}`;
+    document.getElementById('modal-movie-review').textContent = movieData.review || 'No review available.';
+    document.getElementById('modal-letterboxd-link').href = movieData.link;
+
+    // Set poster image
+    const posterImg = document.getElementById('modal-movie-poster');
+    if (movieData.poster) {
+        posterImg.src = movieData.poster;
+        posterImg.alt = movieData.title;
+        posterImg.style.display = 'block';
+    } else {
+        posterImg.style.display = 'none';
+    }
+
+    // Show modal
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMovieModal() {
+    const modal = document.getElementById('movie-modal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('movie-modal');
+    if (event.target === modal) {
+        closeMovieModal();
+    }
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeMovieModal();
+    }
+});
 
 // Load movies when page loads
 document.addEventListener('DOMContentLoaded', fetchLetterboxdMovies);
