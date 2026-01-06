@@ -1,6 +1,6 @@
 // Letterboxd RSS Feed Integration
 // Replace 'yourusername' with your actual Letterboxd username
-const LETTERBOXD_USERNAME = 'Contentwatch';
+const LETTERBOXD_USERNAME = 'contentwatch';
 const RSS_TO_JSON_API = 'https://api.rss2json.com/v1/api.json';
 
 async function fetchLetterboxdMovies() {
