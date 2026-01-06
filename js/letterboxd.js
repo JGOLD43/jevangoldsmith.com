@@ -11,8 +11,9 @@ async function fetchLetterboxdMovies() {
         // Letterboxd RSS feed URL
         const rssUrl = `https://letterboxd.com/${LETTERBOXD_USERNAME}/rss/`;
 
-        // Fetch RSS feed directly
-        const response = await fetch(rssUrl);
+        // Use CORS proxy to fetch RSS feed
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
+        const response = await fetch(proxyUrl);
 
         if (!response.ok) {
             throw new Error('Failed to fetch RSS feed');
