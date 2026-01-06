@@ -122,24 +122,19 @@ function parseMovieData(item) {
         shortDescription: null
     };
 
+    // Extract rating from title (format: "Movie Title, Year - ★★★★★")
+    const ratingMatch = item.title.match(/★+/);
+    if (ratingMatch) {
+        const stars = ratingMatch[0].length;
+        data.rating = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+    }
+
     // Extract year from title (format: "Movie Title, Year")
     const yearMatch = item.title.match(/,\s*(\d{4})/);
     if (yearMatch) {
         data.year = yearMatch[1];
+        // Remove year and rating from title
         data.title = item.title.replace(/,\s*\d{4}.*$/, '').trim();
-    }
-
-    // Extract rating from description
-    const ratingMatch = item.description.match(/★+|Rated\s+([\d.]+)/);
-    if (ratingMatch) {
-        if (ratingMatch[0].includes('★')) {
-            const stars = ratingMatch[0].length;
-            data.rating = '★'.repeat(stars) + '☆'.repeat(5 - stars);
-        } else {
-            const rating = parseFloat(ratingMatch[1]);
-            const stars = Math.round(rating);
-            data.rating = '★'.repeat(stars) + '☆'.repeat(5 - stars);
-        }
     }
 
     // Extract poster image from description
