@@ -1,7 +1,6 @@
 // Letterboxd RSS Feed Integration
 // Replace 'yourusername' with your actual Letterboxd username
 const LETTERBOXD_USERNAME = 'contentwatch';
-const RSS_TO_JSON_API = 'https://api.rss2json.com/v1/api.json';
 
 async function fetchLetterboxdMovies() {
     const loadingEl = document.getElementById('loading');
@@ -12,25 +11,50 @@ async function fetchLetterboxdMovies() {
         // Letterboxd RSS feed URL
         const rssUrl = `https://letterboxd.com/${LETTERBOXD_USERNAME}/rss/`;
 
-        // Use rss2json API to convert RSS to JSON
-        const response = await fetch(`${RSS_TO_JSON_API}?rss_url=${encodeURIComponent(rssUrl)}&api_key=&count=20`);
+        // Fetch RSS feed directly
+        const response = await fetch(rssUrl);
 
         if (!response.ok) {
             throw new Error('Failed to fetch RSS feed');
         }
 
-        const data = await response.json();
+        const xmlText = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
 
-        if (data.status !== 'ok') {
-            throw new Error('RSS feed returned an error');
+        // Check for parse errors
+        if (xmlDoc.querySelector('parsererror')) {
+            throw new Error('Error parsing RSS feed');
         }
+
+        // Extract items from RSS feed
+        const items = Array.from(xmlDoc.querySelectorAll('item')).slice(0, 20);
+
+        if (items.length === 0) {
+            throw new Error('No movies found in feed');
+        }
+
+        // Convert XML items to JSON format
+        const movieItems = items.map(item => {
+            const getElementText = (tagName) => {
+                const el = item.querySelector(tagName);
+                return el ? el.textContent : '';
+            };
+
+            return {
+                title: getElementText('title'),
+                link: getElementText('link'),
+                pubDate: getElementText('pubDate'),
+                description: getElementText('description')
+            };
+        });
 
         // Hide loading, show container
         loadingEl.style.display = 'none';
         containerEl.style.display = 'grid';
 
         // Parse and display movies
-        displayMovies(data.items);
+        displayMovies(movieItems);
 
     } catch (error) {
         console.error('Error fetching Letterboxd data:', error);
