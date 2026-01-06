@@ -90,19 +90,17 @@ function createMovieCard(item) {
     if (movieData.review) {
         card.classList.add('has-review');
         card.style.cursor = 'pointer';
-        card.onclick = () => openMovieModal(movieData, item);
+        card.onclick = () => openMovieModal(movieData);
     }
 
     card.innerHTML = `
         ${movieData.poster ? `<img src="${movieData.poster}" alt="${movieData.title}" class="movie-poster" loading="lazy">` : '<div class="movie-poster" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
-        <div class="movie-info">
-            <h3 class="movie-title">${movieData.title}</h3>
-            ${movieData.year ? `<p class="movie-year">${movieData.year}</p>` : ''}
-            ${movieData.rating ? `<div class="movie-rating">${movieData.rating}</div>` : ''}
-            <p class="movie-description">${movieData.shortDescription || 'A recent watch from my Letterboxd.'}</p>
-            <p class="movie-date">Watched: ${movieData.date}</p>
-            ${movieData.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
-        </div>
+        <h3 class="movie-title">${movieData.title}</h3>
+        ${movieData.year ? `<p class="movie-year">${movieData.year}</p>` : ''}
+        ${movieData.rating ? `<div class="movie-rating">${movieData.rating}</div>` : ''}
+        ${movieData.shortDescription ? `<p class="movie-description">${movieData.shortDescription}</p>` : ''}
+        <p class="movie-date">Watched: ${movieData.date}</p>
+        ${movieData.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
     `;
 
     return card;
@@ -172,7 +170,7 @@ function parseMovieData(item) {
     return data;
 }
 
-function openMovieModal(movieData, item) {
+function openMovieModal(movieData) {
     const modal = document.getElementById('movie-modal');
 
     // Populate modal content
