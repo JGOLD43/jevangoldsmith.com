@@ -128,6 +128,7 @@ function parseMovieData(item) {
         const stars = ratingMatch[0].length;
         data.rating = '★'.repeat(stars) + '☆'.repeat(5 - stars);
     }
+    console.log('Title:', item.title, 'Rating found:', data.rating);
 
     // Extract year from title (format: "Movie Title, Year")
     const yearMatch = item.title.match(/,\s*(\d{4})/);
