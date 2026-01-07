@@ -72,7 +72,7 @@ a:hover {
 
 .logo {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 400;
     color: var(--primary-color);
     font-family: 'Chivo', serif;
 }
