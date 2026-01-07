@@ -154,6 +154,15 @@ a:hover {
     font-family: 'Chivo', sans-serif;
 }
 
+.hero-welcome {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+    font-weight: 300;
+    font-family: 'Chivo', sans-serif;
+}
+
 .hero-tagline {
     font-size: 1.1rem;
     color: var(--text-light);
