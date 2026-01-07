@@ -7,10 +7,11 @@
 
 :root {
     --primary-color: #2c3e50;
-    --secondary-color: #3498db;
+    --secondary-color: #6B8E23;
     --accent-color: #e74c3c;
     --text-color: #333;
     --text-light: #666;
+    --nav-text: #999;
     --background: #FCFBF8;
     --background-alt: #f8f9fa;
     --background-dark: #000000;
@@ -86,11 +87,12 @@ a:hover {
 }
 
 .nav-links a {
-    color: var(--text-color);
-    font-weight: 500;
+    color: var(--nav-text);
+    font-weight: 300;
     font-size: 0.95rem;
     transition: color 0.3s ease;
     position: relative;
+    text-transform: capitalize;
 }
 
 .nav-links a::after {
@@ -99,9 +101,13 @@ a:hover {
     bottom: -5px;
     left: 0;
     width: 0;
-    height: 2px;
+    height: 1px;
     background-color: var(--secondary-color);
     transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #000;
 }
 
 .nav-links a:hover::after,
