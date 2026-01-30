@@ -211,6 +211,23 @@ const categoryMap = {
     'Who Am I?': 'whoami'
 };
 
+// Category icon mapping
+const categoryIcons = {
+    'Advertising and Copywriting': '📢',
+    'Autobiographies': '👤',
+    'Big Ideas': '💡',
+    'The Great Books': '📖',
+    'Out of the Box Thinking': '🎨',
+    'Patience and Clear Thinking': '🧘',
+    'Learning': '🎓',
+    'Persuasion': '🎯',
+    'Psychology Books': '🧠',
+    'Science': '🔬',
+    'Storytelling': '📚',
+    'Strategy and War': '⚔️',
+    'Who Am I?': '🤔'
+};
+
 // Get filtered books based on current filters
 function getFilteredBooks() {
     let filtered = booksData;
@@ -294,13 +311,16 @@ function createBookCard(book) {
         reReadsHTML = `<div class="book-rereads">📖 ${book.reReads} Time${book.reReads === 1 ? '' : 's'} Read</div>`;
     }
 
+    // Get category icon
+    const categoryIcon = categoryIcons[book.category] || '📚';
+
     card.innerHTML = `
         <img src="${coverUrl}" alt="${book.title}" class="book-cover" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.style.color='white'; this.style.fontWeight='bold'; this.style.padding='2rem'; this.style.textAlign='center'; this.innerHTML='${book.title}';">
         <h3 class="book-title">${book.title}</h3>
         <p class="book-author">by ${book.author}</p>
         ${book.year ? `<p class="book-year">${book.year}</p>` : ''}
         <div class="book-rating">${stars}</div>
-        <div class="book-category-badge">${book.category}</div>
+        <div class="book-category-badge">${categoryIcon} ${book.category}</div>
         ${reReadsHTML}
         <p class="book-description">${book.shortDescription}</p>
         ${book.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
