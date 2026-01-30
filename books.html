@@ -40,42 +40,155 @@
                 <h3>Browse Books</h3>
             </div>
 
+            <!-- Star Rating Filter -->
+            <div class="sidebar-filter-section">
+                <div class="filter-label">Filter by Rating:</div>
+                <div class="star-filter-buttons">
+                    <button class="star-filter-btn active" onclick="applyStarFilter('all')">All</button>
+                    <button class="star-filter-btn" onclick="applyStarFilter(5)">5★</button>
+                    <button class="star-filter-btn" onclick="applyStarFilter(4)">4★</button>
+                    <button class="star-filter-btn" onclick="applyStarFilter(3)">3★</button>
+                </div>
+            </div>
+
+            <!-- All Books -->
             <div class="sidebar-section">
-                <button class="sidebar-category active" onclick="filterByRating('all')">
+                <button class="sidebar-category active" onclick="toggleBookCategory('all')">
                     <span class="category-icon">📚</span>
                     <span class="category-name">All Books</span>
                     <span class="category-count" id="count-all">0</span>
                 </button>
             </div>
 
+            <!-- Category Sections -->
             <div class="sidebar-section">
-                <button class="sidebar-category" onclick="toggleRating(5)">
-                    <span class="category-icon">⭐</span>
-                    <span class="category-name">5 Stars</span>
-                    <span class="category-count" id="count-5stars">0</span>
+                <button class="sidebar-category" onclick="toggleBookCategory('advertising')">
+                    <span class="category-icon">📢</span>
+                    <span class="category-name">Advertising and Copywriting</span>
+                    <span class="category-count" id="count-advertising">0</span>
                     <span class="expand-icon">▼</span>
                 </button>
-                <div class="category-books" id="rating-5stars"></div>
+                <div class="category-books" id="category-advertising"></div>
             </div>
 
             <div class="sidebar-section">
-                <button class="sidebar-category" onclick="toggleRating(4)">
-                    <span class="category-icon">⭐</span>
-                    <span class="category-name">4 Stars</span>
-                    <span class="category-count" id="count-4stars">0</span>
+                <button class="sidebar-category" onclick="toggleBookCategory('autobiographies')">
+                    <span class="category-icon">👤</span>
+                    <span class="category-name">Autobiographies</span>
+                    <span class="category-count" id="count-autobiographies">0</span>
                     <span class="expand-icon">▼</span>
                 </button>
-                <div class="category-books" id="rating-4stars"></div>
+                <div class="category-books" id="category-autobiographies"></div>
             </div>
 
             <div class="sidebar-section">
-                <button class="sidebar-category" onclick="toggleRating(3)">
-                    <span class="category-icon">⭐</span>
-                    <span class="category-name">3 Stars</span>
-                    <span class="category-count" id="count-3stars">0</span>
+                <button class="sidebar-category" onclick="toggleBookCategory('bigideas')">
+                    <span class="category-icon">💡</span>
+                    <span class="category-name">Big Ideas</span>
+                    <span class="category-count" id="count-bigideas">0</span>
                     <span class="expand-icon">▼</span>
                 </button>
-                <div class="category-books" id="rating-3stars"></div>
+                <div class="category-books" id="category-bigideas"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('greatbooks')">
+                    <span class="category-icon">📖</span>
+                    <span class="category-name">The Great Books</span>
+                    <span class="category-count" id="count-greatbooks">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-greatbooks"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('outofthebox')">
+                    <span class="category-icon">🎨</span>
+                    <span class="category-name">Out of the Box Thinking</span>
+                    <span class="category-count" id="count-outofthebox">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-outofthebox"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('patience')">
+                    <span class="category-icon">🧘</span>
+                    <span class="category-name">Patience and Clear Thinking</span>
+                    <span class="category-count" id="count-patience">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-patience"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('learning')">
+                    <span class="category-icon">🎓</span>
+                    <span class="category-name">Learning</span>
+                    <span class="category-count" id="count-learning">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-learning"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('persuasion')">
+                    <span class="category-icon">🎯</span>
+                    <span class="category-name">Persuasion</span>
+                    <span class="category-count" id="count-persuasion">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-persuasion"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('psychology')">
+                    <span class="category-icon">🧠</span>
+                    <span class="category-name">Psychology Books</span>
+                    <span class="category-count" id="count-psychology">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-psychology"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('science')">
+                    <span class="category-icon">🔬</span>
+                    <span class="category-name">Science</span>
+                    <span class="category-count" id="count-science">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-science"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('storytelling')">
+                    <span class="category-icon">📚</span>
+                    <span class="category-name">Storytelling</span>
+                    <span class="category-count" id="count-storytelling">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-storytelling"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('strategy')">
+                    <span class="category-icon">⚔️</span>
+                    <span class="category-name">Strategy and War</span>
+                    <span class="category-count" id="count-strategy">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-strategy"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleBookCategory('whoami')">
+                    <span class="category-icon">🤔</span>
+                    <span class="category-name">Who Am I?</span>
+                    <span class="category-count" id="count-whoami">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-books" id="category-whoami"></div>
             </div>
 
             <div class="sidebar-footer">

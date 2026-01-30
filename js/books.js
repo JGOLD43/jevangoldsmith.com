@@ -8,6 +8,7 @@ const booksData = [
         isbn: "9780735211292",
         year: "2018",
         rating: 5,
+        category: "Learning",
         shortDescription: "A transformative guide to building good habits and breaking bad ones.",
         review: `James Clear's "Atomic Habits" is one of the most practical books on behavior change I've ever read.
 
@@ -28,6 +29,7 @@ If you struggle with consistency or want to understand why you do what you do, r
         isbn: "9780307887894",
         year: "2011",
         rating: 4,
+        category: "Strategy and War",
         shortDescription: "Essential reading for entrepreneurs on building successful startups.",
         review: `Eric Ries codified what many successful founders learned the hard way: build, measure, learn, repeat.
 
@@ -45,6 +47,7 @@ If I have one criticism, it's that the book can feel repetitive. The key concept
         isbn: "9780374533557",
         year: "2011",
         rating: 5,
+        category: "Psychology Books",
         shortDescription: "A masterpiece on human cognition and decision-making.",
         review: `Kahneman's magnum opus is dense, challenging, and absolutely essential for understanding how humans think.
 
@@ -67,6 +70,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9780804139298",
         year: "2014",
         rating: 5,
+        category: "Out of the Box Thinking",
         shortDescription: "Contrarian thinking about startups and creating the future.",
         review: null // No review yet
     },
@@ -76,6 +80,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781577314806",
         year: "1997",
         rating: 4,
+        category: "Who Am I?",
         shortDescription: "A spiritual guide to living in the present moment.",
         review: null
     },
@@ -85,6 +90,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781501124020",
         year: "2017",
         rating: 5,
+        category: "Patience and Clear Thinking",
         shortDescription: "Life and work principles from one of the world's most successful investors.",
         review: null
     },
@@ -94,6 +100,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9780062316097",
         year: "2011",
         rating: 5,
+        category: "Big Ideas",
         shortDescription: "A sweeping history of humankind.",
         review: null
     },
@@ -103,6 +110,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9780062273208",
         year: "2014",
         rating: 4,
+        category: "Strategy and War",
         shortDescription: "Building a business when there are no easy answers.",
         review: null
     },
@@ -112,6 +120,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781455586691",
         year: "2016",
         rating: 5,
+        category: "Learning",
         shortDescription: "Rules for focused success in a distracted world.",
         review: null
     },
@@ -121,6 +130,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781492180746",
         year: "2013",
         rating: 5,
+        category: "Strategy and War",
         shortDescription: "How to talk to customers and learn if your business is a good idea.",
         review: null
     },
@@ -130,6 +140,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9780061241895",
         year: "1984",
         rating: 4,
+        category: "Persuasion",
         shortDescription: "The psychology of persuasion.",
         review: null
     },
@@ -139,6 +150,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781501135910",
         year: "2016",
         rating: 5,
+        category: "Autobiographies",
         shortDescription: "A memoir by the creator of Nike.",
         review: null
     }
@@ -166,39 +178,72 @@ function renderBooks(books = booksData) {
     });
 }
 
+// Global filter state
+let currentStarFilter = 'all';
+
+// Category mapping (display name to key)
+const categoryMap = {
+    'Advertising and Copywriting': 'advertising',
+    'Autobiographies': 'autobiographies',
+    'Big Ideas': 'bigideas',
+    'The Great Books': 'greatbooks',
+    'Out of the Box Thinking': 'outofthebox',
+    'Patience and Clear Thinking': 'patience',
+    'Learning': 'learning',
+    'Persuasion': 'persuasion',
+    'Psychology Books': 'psychology',
+    'Science': 'science',
+    'Storytelling': 'storytelling',
+    'Strategy and War': 'strategy',
+    'Who Am I?': 'whoami'
+};
+
+// Get filtered books based on current star filter
+function getFilteredBooks() {
+    if (currentStarFilter === 'all') {
+        return booksData;
+    }
+    return booksData.filter(book => book.rating === currentStarFilter);
+}
+
 // Populate sidebar with book counts and lists
 function populateSidebar() {
-    // Count books by rating
-    const ratingCounts = {
-        5: [],
-        4: [],
-        3: []
-    };
+    const filteredBooks = getFilteredBooks();
 
-    booksData.forEach(book => {
-        if (ratingCounts[book.rating]) {
-            ratingCounts[book.rating].push(book);
+    // Group books by category
+    const categories = {};
+    Object.keys(categoryMap).forEach(cat => {
+        categories[categoryMap[cat]] = [];
+    });
+
+    filteredBooks.forEach(book => {
+        const catKey = categoryMap[book.category];
+        if (catKey && categories[catKey]) {
+            categories[catKey].push(book);
         }
     });
 
     // Update counts
-    document.getElementById('count-all').textContent = booksData.length;
-    document.getElementById('count-5stars').textContent = ratingCounts[5].length;
-    document.getElementById('count-4stars').textContent = ratingCounts[4].length;
-    document.getElementById('count-3stars').textContent = ratingCounts[3].length;
+    document.getElementById('count-all').textContent = filteredBooks.length;
+    Object.values(categoryMap).forEach(catKey => {
+        const count = categories[catKey].length;
+        const countEl = document.getElementById(`count-${catKey}`);
+        if (countEl) {
+            countEl.textContent = count;
+            // Hide category if no books
+            const section = countEl.closest('.sidebar-section');
+            if (section) {
+                section.style.display = count === 0 ? 'none' : 'block';
+            }
+        }
+    });
 
-    // Hide categories with no books
-    if (ratingCounts[3].length === 0) {
-        const section = document.getElementById('count-3stars').closest('.sidebar-section');
-        if (section) section.style.display = 'none';
-    }
+    // Populate category lists
+    Object.values(categoryMap).forEach(catKey => {
+        const container = document.getElementById(`category-${catKey}`);
+        if (!container || categories[catKey].length === 0) return;
 
-    // Populate rating lists
-    [5, 4, 3].forEach(rating => {
-        const container = document.getElementById(`rating-${rating}stars`);
-        if (!container || ratingCounts[rating].length === 0) return;
-
-        container.innerHTML = ratingCounts[rating].map(book => `
+        container.innerHTML = categories[catKey].map(book => `
             <a href="#" class="book-link" onclick="scrollToBook('${book.title.replace(/'/g, "\\'")}', event)">
                 <div>${book.title}</div>
                 <div class="book-link-author">${book.author}</div>
@@ -280,34 +325,54 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// Filter books by rating
-function filterByRating(rating) {
-    // Update active state
-    document.querySelectorAll('.sidebar-category').forEach(btn => {
+// Apply star rating filter
+function applyStarFilter(stars) {
+    currentStarFilter = stars;
+
+    // Update filter button active state
+    document.querySelectorAll('.star-filter-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    event.target.closest('.sidebar-category').classList.add('active');
+    event.target.classList.add('active');
 
-    // Collapse all categories
+    // Re-populate sidebar with filtered books
+    populateSidebar();
+
+    // Show all filtered books
+    renderBooks(getFilteredBooks());
+
+    // Reset category active states
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active', 'expanded');
+    });
     document.querySelectorAll('.category-books').forEach(div => {
         div.classList.remove('expanded');
     });
-    document.querySelectorAll('.sidebar-category').forEach(btn => {
-        btn.classList.remove('expanded');
-    });
-
-    if (rating === 'all') {
-        renderBooks(booksData);
-    } else {
-        const filtered = booksData.filter(book => book.rating === rating);
-        renderBooks(filtered);
-    }
+    // Activate "All Books"
+    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]').classList.add('active');
 }
 
-// Toggle rating category expansion
-function toggleRating(rating) {
+// Toggle book category expansion
+function toggleBookCategory(category) {
+    const filteredBooks = getFilteredBooks();
+
+    if (category === 'all') {
+        // Show all filtered books
+        renderBooks(filteredBooks);
+        // Remove active from all categories
+        document.querySelectorAll('.sidebar-category').forEach(btn => {
+            btn.classList.remove('active', 'expanded');
+        });
+        document.querySelectorAll('.category-books').forEach(div => {
+            div.classList.remove('expanded');
+        });
+        // Activate "All Books"
+        event.target.closest('.sidebar-category').classList.add('active');
+        return;
+    }
+
     const button = event.target.closest('.sidebar-category');
-    const container = document.getElementById(`rating-${rating}stars`);
+    const container = document.getElementById(`category-${category}`);
 
     if (!container) return;
 
@@ -330,9 +395,12 @@ function toggleRating(rating) {
         container.classList.add('expanded');
         button.classList.add('expanded');
 
-        // Filter books by rating
-        const filtered = booksData.filter(book => book.rating === rating);
-        renderBooks(filtered);
+        // Find the full category name from the key
+        const fullCategoryName = Object.keys(categoryMap).find(k => categoryMap[k] === category);
+
+        // Filter books by category (and current star filter)
+        const categoryBooks = filteredBooks.filter(book => book.category === fullCategoryName);
+        renderBooks(categoryBooks);
     }
 
     // Update active state
