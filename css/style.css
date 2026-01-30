@@ -464,29 +464,137 @@ a:hover {
     border-bottom-color: var(--secondary-color);
 }
 
-/* Featured Section */
-.featured-section {
-    background-color: var(--background-dark);
+/* Pillars Section */
+.pillars-section {
+    background-color: var(--background);
     padding: 6rem 0;
     margin: 0;
 }
 
-.featured-container {
+.pillars-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: center;
+}
+
+.pillars-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.pillars-subtitle {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-color);
+    margin-bottom: 2.5rem;
+    text-transform: uppercase;
+}
+
+.pillar-item {
+    position: relative;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.pillar-item:hover {
+    padding-left: 1rem;
+    background-color: rgba(107, 142, 35, 0.05);
+}
+
+.pillar-item:hover .pillar-title {
+    color: var(--primary-color);
+}
+
+.pillar-item:hover .explore-btn {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.pillar-title {
+    font-size: 3rem;
+    font-weight: 100;
+    letter-spacing: -0.02em;
+    margin: 0;
+    padding: 0.5rem 0;
+    color: #999;
+    transition: all 0.3s ease;
+    font-family: 'Chivo', sans-serif;
+}
+
+.pillar-item:first-of-type .pillar-title {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.explore-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) translateX(-20px);
+    background: transparent;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    font-family: 'Chivo', sans-serif;
+}
+
+.pillar-item:first-of-type .explore-btn {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+.explore-btn:hover {
+    color: var(--secondary-color);
+}
+
+.pillars-right {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.featured-image {
+.pillars-image {
     width: 100%;
-    max-width: 1000px;
     height: auto;
     object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 1024px) {
+    .pillars-container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 0 2rem;
+    }
+
+    .pillar-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .pillar-title {
+        font-size: 2rem;
+    }
+
+    .pillars-section {
+        padding: 4rem 0;
+    }
 }
 
 /* Mission & Approach Section */
