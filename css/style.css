@@ -261,11 +261,12 @@ a:hover {
     z-index: 1;
 }
 
-/* Snapshot Toggle Button */
+/* Snapshot Toggle Button - positioned at bottom right */
 .snapshot-toggle {
     position: absolute;
     bottom: 20px;
     right: 20px;
+    top: auto;
     background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
     color: white;
     border: none;
