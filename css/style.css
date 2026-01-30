@@ -1128,80 +1128,97 @@ button[type="submit"]:hover {
     color: #F59E0B;
 }
 
-/* Re-reads filter */
-.rereads-filter {
+/* Times Read filter */
+.timesread-filter {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-.rereads-filter-container {
+.timesread-filter-container {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
 }
 
-.filter-rereads-icon {
-    font-size: 1.5rem;
-    line-height: 1;
-    user-select: none;
-}
-
-.rereads-slider {
+.timesread-slider-wrapper {
     flex: 1;
-    position: relative;
-}
-
-.rereads-track {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     position: relative;
     padding: 0.5rem 0;
 }
 
-.rereads-track::before {
-    content: '';
+.timesread-slider {
+    width: 100%;
+    height: 6px;
+    background: #D1FAE5;
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.timesread-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #059669;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.timesread-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #059669;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.timesread-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.timesread-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.timesread-ticks {
     position: absolute;
     top: 50%;
     left: 0;
     right: 0;
-    height: 2px;
-    background: #D1D5DB;
+    height: 6px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
     transform: translateY(-50%);
-    z-index: 0;
-}
-
-.rereads-marker {
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: #9CA3AF;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    user-select: none;
-    position: relative;
     z-index: 1;
-    background: white;
-    padding: 0.15rem 0.25rem;
-    border-radius: 3px;
 }
 
-.rereads-marker:hover {
-    color: var(--accent-color);
-    transform: scale(1.15);
+.timesread-ticks .tick {
+    width: 2px;
+    height: 12px;
+    background: #10B981;
+    border-radius: 1px;
 }
 
-.rereads-marker.active {
-    color: #059669;
-    font-weight: 700;
-    transform: scale(1.2);
-}
-
-.filter-rereads-text {
-    font-size: 0.9rem;
+.filter-timesread-text {
+    font-size: 0.95rem;
     font-weight: 600;
     color: #059669;
-    min-width: 2.5rem;
+    min-width: 3rem;
+    text-align: right;
 }
 
 /* Re-reads display on book cards */

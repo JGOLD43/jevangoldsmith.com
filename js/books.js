@@ -291,7 +291,7 @@ function createBookCard(book) {
     // Generate re-reads display
     let reReadsHTML = '';
     if (book.reReads > 0) {
-        reReadsHTML = `<div class="book-rereads">📖 Re-read ${book.reReads} time${book.reReads === 1 ? '' : 's'}</div>`;
+        reReadsHTML = `<div class="book-rereads">${book.reReads} Time${book.reReads === 1 ? '' : 's'} Read</div>`;
     }
 
     card.innerHTML = `
@@ -427,9 +427,9 @@ function setReReadsFilter(count) {
     updateReReadsFilterDisplay();
 
     // Update text display
-    const rereadsText = document.getElementById('filter-rereads-text');
-    if (rereadsText) {
-        rereadsText.textContent = count >= 10 ? '10+' : `${count}+`;
+    const timesreadText = document.getElementById('filter-timesread-text');
+    if (timesreadText) {
+        timesreadText.textContent = count >= 10 ? '10' : `${count}`;
     }
 
     // Re-populate sidebar with filtered books
@@ -457,9 +457,9 @@ function clearReReadsFilter() {
     updateReReadsFilterDisplay();
 
     // Clear text display
-    const rereadsText = document.getElementById('filter-rereads-text');
-    if (rereadsText) {
-        rereadsText.textContent = '';
+    const timesreadText = document.getElementById('filter-timesread-text');
+    if (timesreadText) {
+        timesreadText.textContent = '';
     }
 
     // Re-populate sidebar with all books
@@ -479,17 +479,12 @@ function clearReReadsFilter() {
     document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
 }
 
-// Update re-reads filter marker visual states
+// Update times read filter slider visual state
 function updateReReadsFilterDisplay() {
-    const markers = document.querySelectorAll('.rereads-marker');
-    markers.forEach(marker => {
-        marker.classList.remove('active');
-        const markerValue = parseInt(marker.getAttribute('data-rereads'));
-
-        if (currentReReadsFilter !== 'all' && markerValue === currentReReadsFilter) {
-            marker.classList.add('active');
-        }
-    });
+    const slider = document.getElementById('timesread-slider');
+    if (slider) {
+        slider.value = currentReReadsFilter === 'all' ? 0 : currentReReadsFilter;
+    }
 }
 
 // Update the visual state of star filter
@@ -562,51 +557,18 @@ function initStarFilter() {
     });
 }
 
-// Initialize re-reads filter interactions
+// Initialize times read filter slider
 function initReReadsFilter() {
-    const container = document.getElementById('rereads-track');
-    if (!container) return;
+    const slider = document.getElementById('timesread-slider');
+    if (!slider) return;
 
-    const markers = container.querySelectorAll('.rereads-marker');
-
-    markers.forEach((marker) => {
-        // Click to set re-reads filter
-        marker.addEventListener('click', () => {
-            const count = parseInt(marker.getAttribute('data-rereads'));
-            if (count === 0) {
-                // Clicking 0 clears the filter
-                clearReReadsFilter();
-            } else {
-                setReReadsFilter(count);
-            }
-        });
-
-        // Drag functionality
-        marker.addEventListener('mousedown', () => {
-            isRereadsDragging = true;
-            const count = parseInt(marker.getAttribute('data-rereads'));
-            if (count === 0) {
-                clearReReadsFilter();
-            } else {
-                setReReadsFilter(count);
-            }
-        });
-
-        marker.addEventListener('mouseenter', () => {
-            if (isRereadsDragging) {
-                const count = parseInt(marker.getAttribute('data-rereads'));
-                if (count === 0) {
-                    clearReReadsFilter();
-                } else {
-                    setReReadsFilter(count);
-                }
-            }
-        });
-    });
-
-    // Mouse up anywhere - end drag
-    document.addEventListener('mouseup', () => {
-        isRereadsDragging = false;
+    slider.addEventListener('input', (e) => {
+        const count = parseInt(e.target.value);
+        if (count === 0) {
+            clearReReadsFilter();
+        } else {
+            setReReadsFilter(count);
+        }
     });
 }
 
