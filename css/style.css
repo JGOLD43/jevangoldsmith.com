@@ -1129,41 +1129,79 @@ button[type="submit"]:hover {
 }
 
 /* Re-reads filter */
-.rereads-filter-section {
-    padding: 1rem 1.5rem;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.rereads-filter-buttons {
+.rereads-filter {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
-.rereads-filter-btn {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.75rem;
-    border: 1px solid var(--border-color);
-    background: white;
-    color: var(--text-color);
-    border-radius: 4px;
+.rereads-filter-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.filter-rereads-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    user-select: none;
+}
+
+.rereads-slider {
+    flex: 1;
+    position: relative;
+}
+
+.rereads-track {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.rereads-track::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #D1D5DB;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.rereads-marker {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #9CA3AF;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-weight: 500;
+    user-select: none;
+    position: relative;
+    z-index: 1;
+    background: white;
+    padding: 0.15rem 0.25rem;
+    border-radius: 3px;
 }
 
-.rereads-filter-btn:hover {
-    background: #F5F5F4;
-    border-color: var(--accent-color);
+.rereads-marker:hover {
     color: var(--accent-color);
+    transform: scale(1.15);
 }
 
-.rereads-filter-btn.active {
-    background: var(--accent-color);
-    color: white;
-    border-color: var(--accent-color);
+.rereads-marker.active {
+    color: #059669;
+    font-weight: 700;
+    transform: scale(1.2);
+}
+
+.filter-rereads-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #059669;
+    min-width: 2.5rem;
 }
 
 /* Re-reads display on book cards */

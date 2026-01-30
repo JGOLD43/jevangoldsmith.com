@@ -222,13 +222,8 @@ function getFilteredBooks() {
 
     // Apply re-reads filter
     if (currentReReadsFilter !== 'all') {
-        if (currentReReadsFilter === 'rereads') {
-            // Show only books with 1+ re-reads
-            filtered = filtered.filter(book => book.reReads > 0);
-        } else {
-            // Show books with specific re-read count or higher
-            filtered = filtered.filter(book => book.reReads >= currentReReadsFilter);
-        }
+        // Show books with specific re-read count or higher
+        filtered = filtered.filter(book => book.reReads >= currentReReadsFilter);
     }
 
     return filtered;
@@ -360,8 +355,9 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// Star filter interaction state
+// Filter interaction state
 let isDragging = false;
+let isRereadsDragging = false;
 
 // Set star filter when clicking a star
 function setStarFilter(rating) {
@@ -424,11 +420,17 @@ function clearStarFilter() {
 }
 
 // Set re-reads filter
-function setReReadsFilter(filter) {
-    currentReReadsFilter = filter;
+function setReReadsFilter(count) {
+    currentReReadsFilter = count;
 
-    // Update button active states
+    // Update marker visual states
     updateReReadsFilterDisplay();
+
+    // Update text display
+    const rereadsText = document.getElementById('filter-rereads-text');
+    if (rereadsText) {
+        rereadsText.textContent = count >= 10 ? '10+' : `${count}+`;
+    }
 
     // Re-populate sidebar with filtered books
     populateSidebar();
@@ -447,12 +449,18 @@ function setReReadsFilter(filter) {
     document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
 }
 
-// Clear re-reads filter
+// Clear re-reads filter (called by Show All link in star filter)
 function clearReReadsFilter() {
     currentReReadsFilter = 'all';
 
-    // Update button active states
+    // Update marker visual states
     updateReReadsFilterDisplay();
+
+    // Clear text display
+    const rereadsText = document.getElementById('filter-rereads-text');
+    if (rereadsText) {
+        rereadsText.textContent = '';
+    }
 
     // Re-populate sidebar with all books
     populateSidebar();
@@ -471,14 +479,15 @@ function clearReReadsFilter() {
     document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
 }
 
-// Update re-reads filter button visual states
+// Update re-reads filter marker visual states
 function updateReReadsFilterDisplay() {
-    const buttons = document.querySelectorAll('.rereads-filter-btn');
-    buttons.forEach(btn => {
-        btn.classList.remove('active');
-        const filterValue = btn.getAttribute('data-rereads');
-        if (filterValue === currentReReadsFilter) {
-            btn.classList.add('active');
+    const markers = document.querySelectorAll('.rereads-marker');
+    markers.forEach(marker => {
+        marker.classList.remove('active');
+        const markerValue = parseInt(marker.getAttribute('data-rereads'));
+
+        if (currentReReadsFilter !== 'all' && markerValue === currentReReadsFilter) {
+            marker.classList.add('active');
         }
     });
 }
@@ -550,6 +559,54 @@ function initStarFilter() {
     // Mouse up anywhere - end drag
     document.addEventListener('mouseup', () => {
         isDragging = false;
+    });
+}
+
+// Initialize re-reads filter interactions
+function initReReadsFilter() {
+    const container = document.getElementById('rereads-track');
+    if (!container) return;
+
+    const markers = container.querySelectorAll('.rereads-marker');
+
+    markers.forEach((marker) => {
+        // Click to set re-reads filter
+        marker.addEventListener('click', () => {
+            const count = parseInt(marker.getAttribute('data-rereads'));
+            if (count === 0) {
+                // Clicking 0 clears the filter
+                clearReReadsFilter();
+            } else {
+                setReReadsFilter(count);
+            }
+        });
+
+        // Drag functionality
+        marker.addEventListener('mousedown', () => {
+            isRereadsDragging = true;
+            const count = parseInt(marker.getAttribute('data-rereads'));
+            if (count === 0) {
+                clearReReadsFilter();
+            } else {
+                setReReadsFilter(count);
+            }
+        });
+
+        marker.addEventListener('mouseenter', () => {
+            if (isRereadsDragging) {
+                const count = parseInt(marker.getAttribute('data-rereads'));
+                if (count === 0) {
+                    clearReReadsFilter();
+                } else {
+                    setReReadsFilter(count);
+                }
+            }
+        });
+    });
+
+    // Mouse up anywhere - end drag
+    document.addEventListener('mouseup', () => {
+        isRereadsDragging = false;
     });
 }
 
@@ -650,4 +707,5 @@ document.addEventListener('DOMContentLoaded', () => {
     renderBooks();
     populateSidebar();
     initStarFilter();
+    initReReadsFilter();
 });
