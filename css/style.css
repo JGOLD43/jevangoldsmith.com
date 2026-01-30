@@ -163,10 +163,20 @@ a:hover {
 .hero-welcome {
     font-size: 1.1rem;
     color: var(--text-color);
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
     line-height: 1.6;
     font-weight: 300;
     font-family: 'Chivo', sans-serif;
+}
+
+/* Hero CTA on Left Side */
+.hero-cta-left {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: var(--background);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    text-align: left;
 }
 
 .hero-tagline {
@@ -415,15 +425,7 @@ a:hover {
     }
 }
 
-/* Hero CTA Section */
-.hero-cta {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: var(--background);
-    border: 2px solid var(--primary-color);
-    border-radius: 8px;
-    text-align: center;
-}
+/* Note: .hero-cta-left styles are defined earlier in the file */
 
 .cta-title {
     font-size: 1.1rem;
