@@ -1009,3 +1009,222 @@ button[type="submit"]:hover {
         padding: 1.5rem;
     }
 }
+
+/* Books Sidebar Layout (Obsidian-inspired) */
+.books-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.books-sidebar {
+    background: #FAFAF9;
+    border-right: 1px solid var(--border-color);
+    padding: 2rem 0;
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+}
+
+.books-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.books-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.books-sidebar::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 4px;
+}
+
+.books-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+.books-main {
+    padding: 2rem 3rem;
+    background: white;
+}
+
+.sidebar-footer {
+    margin-top: 2rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.sidebar-footer p {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    line-height: 1.4;
+    margin: 0;
+}
+
+.category-books {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #F5F5F4;
+}
+
+.category-books.expanded {
+    max-height: 2000px;
+}
+
+.book-link {
+    display: block;
+    padding: 0.5rem 1.5rem 0.5rem 3.25rem;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.2s ease;
+    border-left: 2px solid transparent;
+}
+
+.book-link:hover {
+    background: #E7E5E4;
+    border-left-color: var(--accent-color);
+    padding-left: 3.5rem;
+}
+
+.book-link.active {
+    background: #FEF3C7;
+    border-left-color: var(--accent-color);
+    font-weight: 500;
+}
+
+.book-link div:first-child {
+    font-size: 0.85rem;
+    font-weight: 400;
+    margin-bottom: 0.15rem;
+}
+
+.book-link-author {
+    font-size: 0.7rem;
+    color: var(--text-light);
+}
+
+@media (max-width: 1024px) {
+    .books-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .books-sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 0;
+    }
+
+    .books-main {
+        padding: 2rem 1rem;
+    }
+}
+
+/* Movies Sidebar Layout (Obsidian-inspired) */
+.movies-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.movies-sidebar {
+    background: #FAFAF9;
+    border-right: 1px solid var(--border-color);
+    padding: 2rem 0;
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+}
+
+.movies-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.movies-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.movies-sidebar::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 4px;
+}
+
+.movies-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+.movies-main {
+    padding: 2rem 3rem;
+    background: white;
+}
+
+.category-movies {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #F5F5F4;
+}
+
+.category-movies.expanded {
+    max-height: 2000px;
+}
+
+.movie-link {
+    display: block;
+    padding: 0.5rem 1.5rem 0.5rem 3.25rem;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.2s ease;
+    border-left: 2px solid transparent;
+}
+
+.movie-link:hover {
+    background: #E7E5E4;
+    border-left-color: var(--accent-color);
+    padding-left: 3.5rem;
+}
+
+.movie-link.active {
+    background: #FEF3C7;
+    border-left-color: var(--accent-color);
+    font-weight: 500;
+}
+
+.movie-link div:first-child {
+    font-size: 0.85rem;
+    font-weight: 400;
+    margin-bottom: 0.15rem;
+}
+
+.movie-link-year {
+    font-size: 0.7rem;
+    color: var(--text-light);
+}
+
+@media (max-width: 1024px) {
+    .movies-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .movies-sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 0;
+    }
+
+    .movies-main {
+        padding: 2rem 1rem;
+    }
+}

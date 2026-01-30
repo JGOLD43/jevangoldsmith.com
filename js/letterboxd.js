@@ -1,6 +1,7 @@
 // Letterboxd RSS Feed Integration
 // Replace 'yourusername' with your actual Letterboxd username
 const LETTERBOXD_USERNAME = 'contentwatch';
+let allMovies = [];
 
 async function fetchLetterboxdMovies() {
     const loadingEl = document.getElementById('loading');
@@ -54,8 +55,16 @@ async function fetchLetterboxdMovies() {
         loadingEl.style.display = 'none';
         containerEl.style.display = 'grid';
 
-        // Parse and display movies
-        displayMovies(movieItems);
+        // Parse movies to structured data
+        const movies = movieItems
+            .filter(item => item.description && !item.title.includes('created a list'))
+            .map(item => parseMovieData(item));
+
+        allMovies = movies;
+
+        // Display movies and populate sidebar
+        displayMovies(movies);
+        populateMoviesSidebar(movies);
 
     } catch (error) {
         console.error('Error fetching Letterboxd data:', error);
@@ -64,27 +73,20 @@ async function fetchLetterboxdMovies() {
     }
 }
 
-function displayMovies(items) {
+function displayMovies(movies) {
     const container = document.getElementById('movies-container');
     container.innerHTML = '';
 
-    // Filter for actual movie reviews/diary entries (not lists)
-    const movies = items.filter(item => {
-        return item.description && !item.title.includes('created a list');
-    });
-
-    movies.forEach(item => {
-        const movieCard = createMovieCard(item);
+    movies.forEach(movieData => {
+        const movieCard = createMovieCardFromData(movieData);
         container.appendChild(movieCard);
     });
 }
 
-function createMovieCard(item) {
+function createMovieCardFromData(movieData) {
     const card = document.createElement('div');
     card.className = 'movie-card';
-
-    // Extract movie details from the item
-    const movieData = parseMovieData(item);
+    card.setAttribute('data-movie-title', movieData.title);
 
     // If there's a review, make the card clickable
     if (movieData.review) {
@@ -106,6 +108,7 @@ function createMovieCard(item) {
     return card;
 }
 
+
 function parseMovieData(item) {
     const data = {
         title: item.title,
@@ -116,6 +119,7 @@ function parseMovieData(item) {
         }),
         link: item.link,
         rating: null,
+        starCount: 0,
         year: null,
         poster: null,
         review: null,
@@ -126,6 +130,7 @@ function parseMovieData(item) {
     const ratingMatch = item.title.match(/★+/);
     if (ratingMatch) {
         const stars = ratingMatch[0].length;
+        data.starCount = stars;
         data.rating = '★'.repeat(stars) + '☆'.repeat(5 - stars);
     }
 
@@ -211,6 +216,160 @@ document.addEventListener('keydown', function(event) {
         closeMovieModal();
     }
 });
+
+// Populate sidebar with movie counts and lists
+function populateMoviesSidebar(movies) {
+    // Hide loading, show content
+    const loadingSidebar = document.getElementById('loading-sidebar');
+    const sidebarContent = document.getElementById('sidebar-content');
+    const sidebarFooter = document.getElementById('sidebar-footer');
+
+    loadingSidebar.style.display = 'none';
+    sidebarContent.style.display = 'block';
+    sidebarFooter.style.display = 'block';
+
+    // Count movies by rating
+    const ratingCounts = {
+        5: [],
+        4: [],
+        3: [],
+        2: [],
+        1: []
+    };
+
+    movies.forEach(movie => {
+        if (movie.starCount && ratingCounts[movie.starCount]) {
+            ratingCounts[movie.starCount].push(movie);
+        }
+    });
+
+    // Update counts
+    document.getElementById('count-all-movies').textContent = movies.length;
+    document.getElementById('count-5stars-movies').textContent = ratingCounts[5].length;
+    document.getElementById('count-4stars-movies').textContent = ratingCounts[4].length;
+    document.getElementById('count-3stars-movies').textContent = ratingCounts[3].length;
+    document.getElementById('count-2stars-movies').textContent = ratingCounts[2].length;
+    document.getElementById('count-1star-movies').textContent = ratingCounts[1].length;
+
+    // Hide categories with no movies
+    [1, 2, 3, 4, 5].forEach(rating => {
+        if (ratingCounts[rating].length === 0) {
+            const section = document.getElementById(`count-${rating}star${rating === 1 ? '' : 's'}-movies`)?.closest('.sidebar-section');
+            if (section) section.style.display = 'none';
+        }
+    });
+
+    // Populate rating lists
+    [5, 4, 3, 2, 1].forEach(rating => {
+        const container = document.getElementById(`rating-${rating}star${rating === 1 ? '' : 's'}-movies`);
+        if (!container || ratingCounts[rating].length === 0) return;
+
+        container.innerHTML = ratingCounts[rating].map(movie => `
+            <a href="#" class="movie-link" onclick="scrollToMovie('${movie.title.replace(/'/g, "\\'")}', event)">
+                <div>${movie.title}</div>
+                <div class="movie-link-year">${movie.year || ''}</div>
+            </a>
+        `).join('');
+    });
+}
+
+// Filter movies by rating
+function filterMoviesByRating(rating) {
+    // Update active state
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.closest('.sidebar-category').classList.add('active');
+
+    // Collapse all categories
+    document.querySelectorAll('.category-movies').forEach(div => {
+        div.classList.remove('expanded');
+    });
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('expanded');
+    });
+
+    if (rating === 'all') {
+        displayMovies(allMovies);
+    } else {
+        const filtered = allMovies.filter(movie => movie.starCount === rating);
+        displayMovies(filtered);
+    }
+}
+
+// Toggle rating category expansion
+function toggleMovieRating(rating) {
+    const button = event.target.closest('.sidebar-category');
+    const container = document.getElementById(`rating-${rating}star${rating === 1 ? '' : 's'}-movies`);
+
+    if (!container) return;
+
+    // Toggle expansion
+    const isExpanded = container.classList.contains('expanded');
+
+    if (isExpanded) {
+        container.classList.remove('expanded');
+        button.classList.remove('expanded');
+    } else {
+        // Collapse all others
+        document.querySelectorAll('.category-movies').forEach(div => {
+            div.classList.remove('expanded');
+        });
+        document.querySelectorAll('.sidebar-category').forEach(btn => {
+            btn.classList.remove('expanded');
+        });
+
+        // Expand this one
+        container.classList.add('expanded');
+        button.classList.add('expanded');
+
+        // Filter movies by rating
+        const filtered = allMovies.filter(movie => movie.starCount === rating);
+        displayMovies(filtered);
+    }
+
+    // Update active state
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    button.classList.add('active');
+}
+
+// Scroll to specific movie
+function scrollToMovie(movieTitle, event) {
+    if (event) event.preventDefault();
+
+    // Find the movie card by title
+    const movieCards = document.querySelectorAll('.movie-card');
+    let targetCard = null;
+
+    movieCards.forEach(card => {
+        const titleAttr = card.getAttribute('data-movie-title');
+        if (titleAttr === movieTitle) {
+            targetCard = card;
+        }
+    });
+
+    if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Highlight the movie briefly
+        targetCard.style.transform = 'scale(1.05)';
+        targetCard.style.boxShadow = '0 8px 30px rgba(102, 126, 234, 0.3)';
+        setTimeout(() => {
+            targetCard.style.transform = '';
+            targetCard.style.boxShadow = '';
+        }, 2000);
+
+        // Update active link
+        document.querySelectorAll('.movie-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        if (event && event.target) {
+            event.target.closest('.movie-link')?.classList.add('active');
+        }
+    }
+}
 
 // Load movies when page loads
 document.addEventListener('DOMContentLoaded', fetchLetterboxdMovies);

@@ -116,23 +116,93 @@
         </div>
     </header>
 
-    <main class="container">
-        <div id="loading" class="loading">
-            <p>Loading recent movies from Letterboxd...</p>
-        </div>
+    <main class="movies-layout">
+        <aside class="movies-sidebar">
+            <div class="sidebar-header">
+                <h3>Browse Movies</h3>
+            </div>
 
-        <div id="error" class="error-message" style="display: none;">
-            <p>Unable to load movies from Letterboxd. Please check the username in the code or try again later.</p>
-        </div>
+            <div id="loading-sidebar" class="loading" style="padding: 1rem;">
+                <p style="font-size: 0.85rem;">Loading...</p>
+            </div>
 
-        <div id="movies-container" class="movies-grid" style="display: none;">
-            <!-- Movies will be loaded here dynamically -->
-        </div>
+            <div id="sidebar-content" style="display: none;">
+                <div class="sidebar-section">
+                    <button class="sidebar-category active" onclick="filterMoviesByRating('all')">
+                        <span class="category-icon">🎬</span>
+                        <span class="category-name">All Movies</span>
+                        <span class="category-count" id="count-all-movies">0</span>
+                    </button>
+                </div>
 
-        <div class="content-section" style="margin-top: 3rem;">
-            <p style="text-align: center; color: var(--text-light);">
-                Movies with a "Click to read review" badge have my full review from Letterboxd—just click the card to read it!
-            </p>
+                <div class="sidebar-section">
+                    <button class="sidebar-category" onclick="toggleMovieRating(5)">
+                        <span class="category-icon">⭐</span>
+                        <span class="category-name">5 Stars</span>
+                        <span class="category-count" id="count-5stars-movies">0</span>
+                        <span class="expand-icon">▼</span>
+                    </button>
+                    <div class="category-movies" id="rating-5stars-movies"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="sidebar-category" onclick="toggleMovieRating(4)">
+                        <span class="category-icon">⭐</span>
+                        <span class="category-name">4 Stars</span>
+                        <span class="category-count" id="count-4stars-movies">0</span>
+                        <span class="expand-icon">▼</span>
+                    </button>
+                    <div class="category-movies" id="rating-4stars-movies"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="sidebar-category" onclick="toggleMovieRating(3)">
+                        <span class="category-icon">⭐</span>
+                        <span class="category-name">3 Stars</span>
+                        <span class="category-count" id="count-3stars-movies">0</span>
+                        <span class="expand-icon">▼</span>
+                    </button>
+                    <div class="category-movies" id="rating-3stars-movies"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="sidebar-category" onclick="toggleMovieRating(2)">
+                        <span class="category-icon">⭐</span>
+                        <span class="category-name">2 Stars</span>
+                        <span class="category-count" id="count-2stars-movies">0</span>
+                        <span class="expand-icon">▼</span>
+                    </button>
+                    <div class="category-movies" id="rating-2stars-movies"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="sidebar-category" onclick="toggleMovieRating(1)">
+                        <span class="category-icon">⭐</span>
+                        <span class="category-name">1 Star</span>
+                        <span class="category-count" id="count-1star-movies">0</span>
+                        <span class="expand-icon">▼</span>
+                    </button>
+                    <div class="category-movies" id="rating-1star-movies"></div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer" style="display: none;" id="sidebar-footer">
+                <p>Movies with a badge have my full review</p>
+            </div>
+        </aside>
+
+        <div class="movies-main">
+            <div id="loading" class="loading">
+                <p>Loading recent movies from Letterboxd...</p>
+            </div>
+
+            <div id="error" class="error-message" style="display: none;">
+                <p>Unable to load movies from Letterboxd. Please check the username in the code or try again later.</p>
+            </div>
+
+            <div id="movies-container" class="movies-grid" style="display: none;">
+                <!-- Movies will be loaded here dynamically -->
+            </div>
         </div>
     </main>
 
