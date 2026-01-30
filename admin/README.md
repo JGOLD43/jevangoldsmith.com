@@ -1,0 +1,278 @@
+# Essay CMS Admin Dashboard
+
+Password-protected content management system for managing essays on your personal website.
+
+## Features
+
+- ✅ Password-protected admin interface
+- ✅ Create and edit essays with rich text editor (TinyMCE)
+- ✅ Draft and publish workflow
+- ✅ Upload and embed images/videos in essays
+- ✅ Category and date management
+- ✅ Live preview before publishing
+- ✅ Simple JSON-based storage (no database required)
+
+## Initial Setup
+
+### 1. Generate Your Admin Password Hash
+
+1. Open your browser and navigate to: `admin/tools/generate-hash.html`
+2. Enter a strong password (12+ characters, mixed case, numbers, symbols)
+3. Click "Generate Hash"
+4. Copy the generated hash
+5. Open `admin/js/auth.js` in your code editor
+6. Replace the `ADMIN_PASSWORD_HASH` value with your copied hash
+7. **IMPORTANT**: Delete the `admin/tools/generate-hash.html` file from your repository for security
+8. Save your password in a password manager
+
+### 2. Deploy to GitHub
+
+```bash
+cd personal-website
+git add -A
+git commit -m "Add essay CMS admin system"
+git push
+```
+
+### 3. Wait for Deployment
+
+GitHub Pages will automatically rebuild your site in 1-2 minutes.
+
+### 4. Access Your Admin Dashboard
+
+Navigate to: `https://jevangoldsmith.com/admin/`
+
+Login with the password you created in step 1.
+
+## Daily Usage
+
+### Creating a New Essay
+
+1. Login to admin dashboard
+2. Click "+ New Essay" button
+3. Fill in the essay details:
+   - **Title**: Main headline (required)
+   - **Subtitle**: Optional tagline or subtitle
+   - **Category**: Choose from Philosophy, Management, Technology, etc.
+   - **Date**: Publication date
+   - **Content**: Write your essay using the rich text editor
+
+4. **Add images/videos** (optional):
+   - Click "+ Upload Image/Video"
+   - Select files from your computer
+   - Click uploaded items to insert into essay
+   - Supported formats: JPEG, PNG, GIF, WebP, MP4, WebM, OGG
+   - Max file size: 50MB
+
+5. Choose an action:
+   - **Save Draft**: Save without publishing (only visible to you)
+   - **Preview**: See how the essay will look on your site
+   - **Publish**: Make the essay live on your website
+
+### Publishing Workflow
+
+When you click "Save Draft" or "Publish", the system will:
+
+1. Download an updated `essays.json` file to your computer
+2. Show you instructions for completing the publication
+
+**You must complete these steps for changes to go live:**
+
+#### Step 1: Replace essays.json
+
+```bash
+# In your local repository
+cd personal-website
+# Replace the existing file with the downloaded one
+mv ~/Downloads/essays.json data/essays.json
+```
+
+#### Step 2: Upload Media Files (if you added any)
+
+If you uploaded images or videos, manually add them to your repository:
+
+```bash
+# Copy images to the images folder
+cp ~/Downloads/image1.jpg media/images/
+
+# Copy videos to the videos folder
+cp ~/Downloads/video1.mp4 media/videos/
+```
+
+#### Step 3: Commit and Push
+
+```bash
+git add -A
+git commit -m "Add new essay: Your Essay Title"
+git push
+```
+
+#### Step 4: Wait for Deployment
+
+Your changes will be live in 1-2 minutes at `https://jevangoldsmith.com/essays.html`
+
+### Editing an Existing Essay
+
+1. Login to admin dashboard
+2. Find the essay in the list
+3. Click "Edit" button
+4. Make your changes
+5. Click "Save Draft" or "Publish"
+6. Follow the publishing workflow above
+
+### Deleting an Essay
+
+1. Login to admin dashboard
+2. Find the essay in the list
+3. Click "Delete" button
+4. Confirm deletion
+5. Follow the publishing workflow to apply changes
+
+### Using Filters
+
+- **All Essays**: View all essays (drafts and published)
+- **Published**: View only live essays
+- **Drafts**: View only unpublished drafts
+
+## Rich Text Editor Features
+
+The TinyMCE editor provides powerful formatting options:
+
+- **Text formatting**: Bold, italic, underline
+- **Headings**: H2, H3, H4 for section titles
+- **Lists**: Bulleted and numbered lists
+- **Links**: Add hyperlinks to external sites
+- **Images**: Insert and resize images
+- **Videos**: Embed videos
+- **Alignment**: Left, center, right, justify
+- **Code view**: Edit raw HTML if needed
+
+## Security
+
+### What This System Protects
+
+- ✅ Prevents unauthorized access to admin dashboard
+- ✅ Blocks search engines from indexing admin pages (via robots.txt)
+- ✅ Rate limiting (5 failed login attempts = 15 minute lockout)
+- ✅ Session expiration (4 hours of inactivity)
+
+### Security Limitations
+
+⚠️ **Important**: This is a client-side authentication system suitable for personal blogs. It has limitations:
+
+- Password hash is visible in public source code (but cannot be reversed)
+- No server-side validation
+- Not suitable for highly sensitive data
+- Anyone with the password can access the admin
+
+### Best Practices
+
+1. **Use a strong password**:
+   - At least 12 characters
+   - Mix of uppercase, lowercase, numbers, symbols
+   - Generated by a password manager
+
+2. **Don't share your password**:
+   - Keep it in a password manager
+   - Don't reuse passwords from other sites
+   - Don't share the admin URL publicly
+
+3. **Change password periodically**:
+   - Regenerate hash using generate-hash.html tool
+   - Update auth.js with new hash
+   - Commit and push changes
+
+4. **Keep admin/ folder private**:
+   - Don't link to admin from public pages
+   - robots.txt blocks search engines
+   - Only access directly via URL
+
+## Troubleshooting
+
+### Can't Login
+
+1. **Check password**: Ensure you're using the correct password
+2. **Locked out?**: Wait 15 minutes if you had 5 failed attempts
+3. **Clear browser cache**: Sometimes old files are cached
+4. **Check password hash**: Ensure auth.js has the correct hash
+
+### Essays Not Showing on Website
+
+1. **Check status**: Ensure essay is marked as "published", not "draft"
+2. **Check essays.json**: Verify file is in `data/essays.json` in repository
+3. **Check GitHub Pages**: Ensure deployment completed (check Actions tab)
+4. **Clear browser cache**: Force refresh with Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)
+
+### Images Not Displaying
+
+1. **Check file path**: Ensure images are in `media/images/` folder
+2. **Check filename**: Must match exactly (case-sensitive)
+3. **Check file format**: Use JPEG, PNG, GIF, or WebP
+4. **Check file size**: Keep under 1MB for best performance
+
+### Session Expired Message
+
+- Sessions expire after 4 hours of inactivity
+- Simply login again to continue working
+- Unsaved changes may be lost - save drafts frequently!
+
+## File Structure
+
+```
+personal-website/
+├── admin/
+│   ├── index.html          # Login page
+│   ├── dashboard.html      # Main admin interface
+│   ├── css/
+│   │   └── admin.css       # Admin styling
+│   ├── js/
+│   │   ├── auth.js         # Authentication logic
+│   │   ├── editor.js       # Editor functionality
+│   │   └── fileManager.js  # Media management
+│   └── README.md           # This file
+├── data/
+│   └── essays.json         # Essay data storage
+├── js/
+│   └── essays.js           # Public essay renderer
+├── media/
+│   ├── images/             # Uploaded images
+│   └── videos/             # Uploaded videos
+├── essays.html             # Public essays page
+└── robots.txt              # Blocks admin from search engines
+```
+
+## Technology Stack
+
+- **Frontend**: Vanilla JavaScript (no framework)
+- **Editor**: TinyMCE 6 (CDN)
+- **Authentication**: bcrypt.js for password hashing
+- **Storage**: JSON file + Git version control
+- **Deployment**: GitHub Pages (static hosting)
+
+## Future Enhancements
+
+Possible improvements for later:
+
+- [ ] GitHub API integration for automatic commits
+- [ ] Image optimization and resizing
+- [ ] SEO metadata fields (description, keywords)
+- [ ] Essay tags and search
+- [ ] Reading time calculation
+- [ ] Analytics integration
+- [ ] RSS feed generation
+- [ ] Email newsletter integration
+
+## Support
+
+For issues or questions:
+
+1. Check this README first
+2. Review the code comments in admin/js/ files
+3. Check browser console for error messages
+4. Create a GitHub issue if you find a bug
+
+---
+
+**Built with ❤️ for Jevan Goldsmith**
+
+Last updated: 2024

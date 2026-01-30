@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Jevan Goldsmith</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+</head>
+<body>
+    <nav class="admin-nav">
+        <div class="container">
+            <a href="../index.html" class="logo">JG</a>
+            <div class="admin-actions">
+                <button id="new-essay-btn" class="btn-primary">+ New Essay</button>
+                <button id="logout-btn" class="btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="admin-main">
+        <div class="container">
+            <!-- Essay List View -->
+            <div id="essay-list-view" class="view active">
+                <h1>Essays</h1>
+
+                <div class="filter-tabs">
+                    <button class="tab active" data-filter="all">All Essays</button>
+                    <button class="tab" data-filter="published">Published</button>
+                    <button class="tab" data-filter="draft">Drafts</button>
+                </div>
+
+                <div id="essays-list" class="essays-list">
+                    <!-- Essays loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- Essay Editor View -->
+            <div id="essay-editor-view" class="view">
+                <div class="editor-header">
+                    <button id="back-to-list" class="btn-secondary">← Back to List</button>
+                    <div class="editor-actions">
+                        <button id="save-draft-btn" class="btn-secondary">Save Draft</button>
+                        <button id="preview-btn" class="btn-secondary">Preview</button>
+                        <button id="publish-btn" class="btn-primary">Publish</button>
+                    </div>
+                </div>
+
+                <form id="essay-form" class="essay-form">
+                    <input type="hidden" id="essay-id">
+
+                    <div class="form-group">
+                        <label for="essay-title">Title *</label>
+                        <input
+                            type="text"
+                            id="essay-title"
+                            placeholder="Enter essay title"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="essay-subtitle">Subtitle (optional)</label>
+                        <input
+                            type="text"
+                            id="essay-subtitle"
+                            placeholder="Enter subtitle or tagline"
+                        >
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="essay-category">Category *</label>
+                            <select id="essay-category" required>
+                                <option value="Philosophy">Philosophy</option>
+                                <option value="Management">Management</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Personal">Personal</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Writing">Writing</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="essay-date">Date *</label>
+                            <input type="date" id="essay-date" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="essay-content">Content *</label>
+                        <textarea id="essay-content"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Media</label>
+                        <button type="button" id="upload-media-btn" class="btn-secondary">+ Upload Image/Video</button>
+                        <div id="media-gallery" class="media-gallery"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="preview-modal">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h2>Preview</h2>
+                <button class="close-preview" onclick="closePreview()">Close</button>
+            </div>
+            <div id="preview-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/fileManager.js"></script>
+    <script src="js/editor.js"></script>
+    <script>
+        // Require authentication
+        requireAuth();
+    </script>
+</body>
+</html>

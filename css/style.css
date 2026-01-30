@@ -427,6 +427,29 @@ a:hover {
     color: var(--text-color);
 }
 
+/* Essay Media (Images and Videos) */
+.essay-image,
+.essay-video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: block;
+}
+
+.essay-image {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.essay-video {
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Book Reviews */
 .books-grid {
     display: grid;

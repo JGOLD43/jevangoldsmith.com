@@ -1,0 +1,13 @@
+# robots.txt for jevangoldsmith.com
+
+User-agent: *
+# Block admin dashboard from search engines
+Disallow: /admin/
+# Block data directory
+Disallow: /data/
+
+# Allow everything else
+Allow: /
+
+# Sitemap (optional - add when you create one)
+# Sitemap: https://jevangoldsmith.com/sitemap.xml
