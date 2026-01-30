@@ -2,7 +2,7 @@
 // Password is hashed using SHA-256 for security
 
 // Your password hash (generated using SHA-256)
-const ADMIN_PASSWORD_HASH = '070d3e9befacc3ef923c2e612ce7bd4462fc0978e8320e70f9bf3e2d3ac1cca6';
+const ADMIN_PASSWORD_HASH = '070d3c9befacc3ef929c2e612ce7bd4462fc0878e8320e70f9bf3e2d3ac1cca6';
 
 // Rate limiting configuration
 const MAX_LOGIN_ATTEMPTS = 5;
