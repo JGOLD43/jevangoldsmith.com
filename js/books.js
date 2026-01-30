@@ -325,15 +325,18 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// Apply star rating filter
-function applyStarFilter(stars) {
-    currentStarFilter = stars;
+// Set star filter when clicking a star
+function setStarFilter(rating) {
+    currentStarFilter = rating;
 
-    // Update filter button active state
-    document.querySelectorAll('.star-filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.target.classList.add('active');
+    // Update star visual states
+    updateStarFilterDisplay();
+
+    // Update "Show All" button state
+    const clearBtn = document.querySelector('.clear-filter-btn');
+    if (clearBtn) {
+        clearBtn.classList.remove('active');
+    }
 
     // Re-populate sidebar with filtered books
     populateSidebar();
@@ -349,7 +352,54 @@ function applyStarFilter(stars) {
         div.classList.remove('expanded');
     });
     // Activate "All Books"
-    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]').classList.add('active');
+    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+}
+
+// Clear star filter to show all books
+function clearStarFilter() {
+    currentStarFilter = 'all';
+
+    // Update star visual states
+    updateStarFilterDisplay();
+
+    // Update "Show All" button state
+    const clearBtn = document.querySelector('.clear-filter-btn');
+    if (clearBtn) {
+        clearBtn.classList.add('active');
+    }
+
+    // Re-populate sidebar with all books
+    populateSidebar();
+
+    // Show all books
+    renderBooks(getFilteredBooks());
+
+    // Reset category active states
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active', 'expanded');
+    });
+    document.querySelectorAll('.category-books').forEach(div => {
+        div.classList.remove('expanded');
+    });
+    // Activate "All Books"
+    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+}
+
+// Update the visual state of star filter
+function updateStarFilterDisplay() {
+    const stars = document.querySelectorAll('.filter-star');
+    stars.forEach((star, index) => {
+        const starRating = parseInt(star.getAttribute('data-rating'));
+        if (currentStarFilter === 'all') {
+            star.classList.remove('active');
+        } else {
+            if (starRating <= currentStarFilter) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        }
+    });
 }
 
 // Toggle book category expansion
@@ -448,4 +498,10 @@ function scrollToBook(bookTitle, event) {
 document.addEventListener('DOMContentLoaded', () => {
     renderBooks();
     populateSidebar();
+
+    // Initialize star filter display
+    const clearBtn = document.querySelector('.clear-filter-btn');
+    if (clearBtn) {
+        clearBtn.classList.add('active');
+    }
 });
