@@ -3,6 +3,27 @@
 const LETTERBOXD_USERNAME = 'contentwatch';
 let allMovies = [];
 
+// Global filter state
+let currentStarFilter = 'all';
+let currentTimesWatchedFilter = 'all';
+
+// Get filtered movies based on current filters
+function getFilteredMovies() {
+    let filtered = allMovies;
+
+    // Apply star filter
+    if (currentStarFilter !== 'all') {
+        filtered = filtered.filter(movie => movie.starCount >= currentStarFilter);
+    }
+
+    // Apply times watched filter
+    if (currentTimesWatchedFilter !== 'all') {
+        filtered = filtered.filter(movie => movie.timesWatched >= currentTimesWatchedFilter);
+    }
+
+    return filtered;
+}
+
 async function fetchLetterboxdMovies() {
     const loadingEl = document.getElementById('loading');
     const errorEl = document.getElementById('error');
@@ -43,11 +64,16 @@ async function fetchLetterboxdMovies() {
                 return el ? el.textContent : '';
             };
 
+            // Extract genre from category tags
+            const categories = Array.from(item.querySelectorAll('category')).map(cat => cat.textContent);
+            const genre = categories.length > 0 ? categories[0] : 'Uncategorized';
+
             return {
                 title: getElementText('title'),
                 link: getElementText('link'),
                 pubDate: getElementText('pubDate'),
-                description: getElementText('description')
+                description: getElementText('description'),
+                genre: genre
             };
         });
 
@@ -95,11 +121,40 @@ function createMovieCardFromData(movieData) {
         card.onclick = () => openMovieModal(movieData);
     }
 
+    // Generate times watched display
+    let timesWatchedHTML = '';
+    if (movieData.timesWatched > 1) {
+        timesWatchedHTML = `<div class="movie-timeswatched">🎬 ${movieData.timesWatched} Time${movieData.timesWatched === 1 ? '' : 's'} Watched</div>`;
+    }
+
+    // Genre icon mapping (will use film-related icons)
+    const genreIcons = {
+        'Action': '💥',
+        'Adventure': '🗺️',
+        'Animation': '🎨',
+        'Comedy': '😂',
+        'Crime': '🔫',
+        'Documentary': '📹',
+        'Drama': '🎭',
+        'Fantasy': '🧙',
+        'Horror': '👻',
+        'Mystery': '🔍',
+        'Romance': '💕',
+        'Sci-Fi': '🚀',
+        'Thriller': '😱',
+        'Western': '🤠',
+        'Uncategorized': '🎬'
+    };
+
+    const genreIcon = genreIcons[movieData.genre] || '🎬';
+
     card.innerHTML = `
         ${movieData.poster ? `<img src="${movieData.poster}" alt="${movieData.title}" class="movie-poster" loading="lazy">` : '<div class="movie-poster" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
         <h3 class="movie-title">${movieData.title}</h3>
         ${movieData.year ? `<p class="movie-year">${movieData.year}</p>` : ''}
         ${movieData.rating ? `<div class="movie-rating">${movieData.rating}</div>` : ''}
+        ${movieData.genre ? `<div class="movie-genre-badge">${genreIcon} ${movieData.genre}</div>` : ''}
+        ${timesWatchedHTML}
         ${movieData.shortDescription ? `<p class="movie-description">${movieData.shortDescription}</p>` : ''}
         <p class="movie-date">Watched: ${movieData.date}</p>
         ${movieData.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
@@ -123,7 +178,9 @@ function parseMovieData(item) {
         year: null,
         poster: null,
         review: null,
-        shortDescription: null
+        shortDescription: null,
+        genre: null,
+        timesWatched: 1 // Default to 1, can be manually updated later
     };
 
     // Extract rating from title (format: "Movie Title, Year - ★★★★★")
@@ -166,6 +223,9 @@ function parseMovieData(item) {
             data.shortDescription = reviewText;
         }
     }
+
+    // Set genre from item
+    data.genre = item.genre || 'Uncategorized';
 
     return data;
 }
@@ -218,89 +278,229 @@ document.addEventListener('keydown', function(event) {
 });
 
 // Populate sidebar with movie counts and lists
-function populateMoviesSidebar(movies) {
+function populateMoviesSidebar(movies = null) {
+    const filteredMovies = movies || getFilteredMovies();
+
     // Hide loading, show content
     const loadingSidebar = document.getElementById('loading-sidebar');
     const sidebarContent = document.getElementById('sidebar-content');
     const sidebarFooter = document.getElementById('sidebar-footer');
 
-    loadingSidebar.style.display = 'none';
-    sidebarContent.style.display = 'block';
-    sidebarFooter.style.display = 'block';
+    if (loadingSidebar) loadingSidebar.style.display = 'none';
+    if (sidebarContent) sidebarContent.style.display = 'block';
+    if (sidebarFooter) sidebarFooter.style.display = 'block';
 
-    // Count movies by rating
-    const ratingCounts = {
-        5: [],
-        4: [],
-        3: [],
-        2: [],
-        1: []
-    };
-
-    movies.forEach(movie => {
-        if (movie.starCount && ratingCounts[movie.starCount]) {
-            ratingCounts[movie.starCount].push(movie);
+    // Group movies by genre
+    const genreGroups = {};
+    filteredMovies.forEach(movie => {
+        const genre = movie.genre || 'Uncategorized';
+        if (!genreGroups[genre]) {
+            genreGroups[genre] = [];
         }
+        genreGroups[genre].push(movie);
     });
 
-    // Update counts
-    document.getElementById('count-all-movies').textContent = movies.length;
-    document.getElementById('count-5stars-movies').textContent = ratingCounts[5].length;
-    document.getElementById('count-4stars-movies').textContent = ratingCounts[4].length;
-    document.getElementById('count-3stars-movies').textContent = ratingCounts[3].length;
-    document.getElementById('count-2stars-movies').textContent = ratingCounts[2].length;
-    document.getElementById('count-1star-movies').textContent = ratingCounts[1].length;
+    // Update all movies count
+    const countAllEl = document.getElementById('count-all-movies');
+    if (countAllEl) countAllEl.textContent = filteredMovies.length;
 
-    // Hide categories with no movies
-    [1, 2, 3, 4, 5].forEach(rating => {
-        if (ratingCounts[rating].length === 0) {
-            const section = document.getElementById(`count-${rating}star${rating === 1 ? '' : 's'}-movies`)?.closest('.sidebar-section');
-            if (section) section.style.display = 'none';
+    // Update genre category counts and populate lists
+    Object.keys(genreGroups).forEach(genre => {
+        const genreKey = genre.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const count = genreGroups[genre].length;
+
+        // Update count
+        const countEl = document.getElementById(`count-${genreKey}`);
+        if (countEl) {
+            countEl.textContent = count;
+            // Hide category if no movies
+            const section = countEl.closest('.sidebar-section');
+            if (section) {
+                section.style.display = count === 0 ? 'none' : 'block';
+            }
         }
-    });
 
-    // Populate rating lists
-    [5, 4, 3, 2, 1].forEach(rating => {
-        const container = document.getElementById(`rating-${rating}star${rating === 1 ? '' : 's'}-movies`);
-        if (!container || ratingCounts[rating].length === 0) return;
-
-        container.innerHTML = ratingCounts[rating].map(movie => `
-            <a href="#" class="movie-link" onclick="scrollToMovie('${movie.title.replace(/'/g, "\\'")}', event)">
-                <div>${movie.title}</div>
-                <div class="movie-link-year">${movie.year || ''}</div>
-            </a>
-        `).join('');
+        // Populate genre list
+        const container = document.getElementById(`genre-${genreKey}`);
+        if (container && count > 0) {
+            container.innerHTML = genreGroups[genre].map(movie => `
+                <a href="#" class="movie-link" onclick="scrollToMovie('${movie.title.replace(/'/g, "\\'")}', event)">
+                    <div>${movie.title}</div>
+                    <div class="movie-link-year">${movie.year || ''}</div>
+                </a>
+            `).join('');
+        }
     });
 }
 
-// Filter movies by rating
-function filterMoviesByRating(rating) {
-    // Update active state
-    document.querySelectorAll('.sidebar-category').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.target.closest('.sidebar-category').classList.add('active');
+// Set star filter when clicking a star
+function setStarFilter(rating) {
+    currentStarFilter = rating;
 
-    // Collapse all categories
-    document.querySelectorAll('.category-movies').forEach(div => {
+    // Update star visual states
+    updateStarFilterDisplay();
+
+    // Update text display
+    const ratingText = document.getElementById('filter-rating-text');
+    if (ratingText) {
+        ratingText.textContent = rating >= 5 ? '★' : `${rating}★+`;
+    }
+
+    // Re-populate sidebar with filtered movies
+    populateMoviesSidebar();
+
+    // Show filtered movies
+    displayMovies(getFilteredMovies());
+
+    // Reset genre active states
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active', 'expanded');
+    });
+    document.querySelectorAll('.genre-movies').forEach(div => {
         div.classList.remove('expanded');
     });
-    document.querySelectorAll('.sidebar-category').forEach(btn => {
-        btn.classList.remove('expanded');
-    });
+    // Activate "All Movies"
+    document.querySelector('[onclick*="toggleMovieGenre(\'all\')"]')?.classList.add('active');
+}
 
-    if (rating === 'all') {
-        displayMovies(allMovies);
-    } else {
-        const filtered = allMovies.filter(movie => movie.starCount === rating);
-        displayMovies(filtered);
+// Clear star filter
+function clearStarFilter() {
+    currentStarFilter = 'all';
+
+    // Update star visual states
+    updateStarFilterDisplay();
+
+    // Clear text display
+    const ratingText = document.getElementById('filter-rating-text');
+    if (ratingText) {
+        ratingText.textContent = '';
+    }
+
+    // Re-populate sidebar with all movies
+    populateMoviesSidebar();
+
+    // Show all movies
+    displayMovies(getFilteredMovies());
+
+    // Reset genre active states
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active', 'expanded');
+    });
+    document.querySelectorAll('.genre-movies').forEach(div => {
+        div.classList.remove('expanded');
+    });
+    // Activate "All Movies"
+    document.querySelector('[onclick*="toggleMovieGenre(\'all\')"]')?.classList.add('active');
+}
+
+// Set times watched filter
+function setTimesWatchedFilter(count) {
+    currentTimesWatchedFilter = count;
+
+    // Update slider visual states
+    updateTimesWatchedFilterDisplay();
+
+    // Update text display
+    const timesWatchedText = document.getElementById('filter-timeswatched-text');
+    if (timesWatchedText) {
+        timesWatchedText.textContent = count >= 10 ? '10' : `${count}`;
+    }
+
+    // Re-populate sidebar with filtered movies
+    populateMoviesSidebar();
+
+    // Show filtered movies
+    displayMovies(getFilteredMovies());
+
+    // Reset genre active states
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active', 'expanded');
+    });
+    document.querySelectorAll('.genre-movies').forEach(div => {
+        div.classList.remove('expanded');
+    });
+    // Activate "All Movies"
+    document.querySelector('[onclick*="toggleMovieGenre(\'all\')"]')?.classList.add('active');
+}
+
+// Clear times watched filter
+function clearTimesWatchedFilter() {
+    currentTimesWatchedFilter = 'all';
+
+    // Update slider visual states
+    updateTimesWatchedFilterDisplay();
+
+    // Clear text display
+    const timesWatchedText = document.getElementById('filter-timeswatched-text');
+    if (timesWatchedText) {
+        timesWatchedText.textContent = '';
+    }
+
+    // Re-populate sidebar with all movies
+    populateMoviesSidebar();
+
+    // Show all movies
+    displayMovies(getFilteredMovies());
+
+    // Reset genre active states
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active', 'expanded');
+    });
+    document.querySelectorAll('.genre-movies').forEach(div => {
+        div.classList.remove('expanded');
+    });
+    // Activate "All Movies"
+    document.querySelector('[onclick*="toggleMovieGenre(\'all\')"]')?.classList.add('active');
+}
+
+// Update times watched filter slider visual state
+function updateTimesWatchedFilterDisplay() {
+    const slider = document.getElementById('timeswatched-slider');
+    if (slider) {
+        slider.value = currentTimesWatchedFilter === 'all' ? 0 : currentTimesWatchedFilter;
     }
 }
 
-// Toggle rating category expansion
-function toggleMovieRating(rating) {
+// Update the visual state of star filter
+function updateStarFilterDisplay() {
+    const stars = document.querySelectorAll('.filter-star');
+    stars.forEach((star, index) => {
+        const starNumber = parseInt(star.getAttribute('data-star'));
+        star.classList.remove('full', 'half');
+
+        if (currentStarFilter === 'all') {
+            // No stars filled
+            return;
+        } else if (starNumber <= currentStarFilter) {
+            star.classList.add('full');
+        } else if (starNumber === currentStarFilter + 0.5) {
+            star.classList.add('half');
+        }
+    });
+}
+
+// Toggle genre category expansion
+function toggleMovieGenre(genre) {
+    const filteredMovies = getFilteredMovies();
+
+    if (genre === 'all') {
+        // Show all filtered movies
+        displayMovies(filteredMovies);
+        // Remove active from all categories
+        document.querySelectorAll('.sidebar-category').forEach(btn => {
+            btn.classList.remove('active', 'expanded');
+        });
+        document.querySelectorAll('.genre-movies').forEach(div => {
+            div.classList.remove('expanded');
+        });
+        // Activate "All Movies"
+        event.target.closest('.sidebar-category').classList.add('active');
+        return;
+    }
+
     const button = event.target.closest('.sidebar-category');
-    const container = document.getElementById(`rating-${rating}star${rating === 1 ? '' : 's'}-movies`);
+    const genreKey = genre.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const container = document.getElementById(`genre-${genreKey}`);
 
     if (!container) return;
 
@@ -312,7 +512,7 @@ function toggleMovieRating(rating) {
         button.classList.remove('expanded');
     } else {
         // Collapse all others
-        document.querySelectorAll('.category-movies').forEach(div => {
+        document.querySelectorAll('.genre-movies').forEach(div => {
             div.classList.remove('expanded');
         });
         document.querySelectorAll('.sidebar-category').forEach(btn => {
@@ -323,8 +523,8 @@ function toggleMovieRating(rating) {
         container.classList.add('expanded');
         button.classList.add('expanded');
 
-        // Filter movies by rating
-        const filtered = allMovies.filter(movie => movie.starCount === rating);
+        // Filter movies by genre
+        const filtered = filteredMovies.filter(m => m.genre === genre);
         displayMovies(filtered);
     }
 
@@ -371,5 +571,60 @@ function scrollToMovie(movieTitle, event) {
     }
 }
 
+// Initialize star filter
+function initStarFilter() {
+    const stars = document.querySelectorAll('.filter-star');
+    if (stars.length === 0) return;
+
+    let isDragging = false;
+
+    // Mouse down on star - start drag
+    stars.forEach(star => {
+        star.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            const rating = parseInt(star.getAttribute('data-star'));
+            setStarFilter(rating);
+        });
+
+        // Mouse enter while dragging
+        star.addEventListener('mouseenter', (e) => {
+            if (isDragging) {
+                const rating = parseInt(star.getAttribute('data-star'));
+                setStarFilter(rating);
+            }
+        });
+
+        // Click on star
+        star.addEventListener('click', (e) => {
+            const rating = parseInt(star.getAttribute('data-star'));
+            setStarFilter(rating);
+        });
+    });
+
+    // Mouse up anywhere - end drag
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+}
+
+// Initialize times watched filter slider
+function initTimesWatchedFilter() {
+    const slider = document.getElementById('timeswatched-slider');
+    if (!slider) return;
+
+    slider.addEventListener('input', (e) => {
+        const count = parseInt(e.target.value);
+        if (count === 0) {
+            clearTimesWatchedFilter();
+        } else {
+            setTimesWatchedFilter(count);
+        }
+    });
+}
+
 // Load movies when page loads
-document.addEventListener('DOMContentLoaded', fetchLetterboxdMovies);
+document.addEventListener('DOMContentLoaded', () => {
+    fetchLetterboxdMovies();
+    initStarFilter();
+    initTimesWatchedFilter();
+});

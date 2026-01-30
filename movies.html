@@ -122,67 +122,146 @@
                 <h3>Browse Movies</h3>
             </div>
 
+            <!-- Star Rating Filter -->
+            <div class="sidebar-filter-section">
+                <div class="filter-header">
+                    <div class="filter-label">Filter by Rating</div>
+                    <a href="#" class="show-all-link" onclick="clearStarFilter(); return false;">Show All</a>
+                </div>
+                <div class="star-rating-filter">
+                    <div class="star-filter-container" id="star-filter-container">
+                        <span class="filter-star" data-star="1">★</span>
+                        <span class="filter-star" data-star="2">★</span>
+                        <span class="filter-star" data-star="3">★</span>
+                        <span class="filter-star" data-star="4">★</span>
+                        <span class="filter-star" data-star="5">★</span>
+                        <span class="filter-rating-text" id="filter-rating-text"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Times Watched Filter -->
+            <div class="sidebar-filter-section">
+                <div class="filter-header">
+                    <div class="filter-label">Filter by Times Watched</div>
+                </div>
+                <div class="timeswatched-filter">
+                    <div class="timeswatched-filter-container">
+                        <span class="filter-timeswatched-icon">🎬</span>
+                        <div class="timeswatched-slider-wrapper">
+                            <input type="range" min="0" max="10" value="0" class="timeswatched-slider" id="timeswatched-slider">
+                            <div class="timeswatched-ticks" id="timeswatched-ticks">
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                            </div>
+                        </div>
+                        <span class="filter-timeswatched-text" id="filter-timeswatched-text"></span>
+                    </div>
+                </div>
+            </div>
+
             <div id="loading-sidebar" class="loading" style="padding: 1rem;">
                 <p style="font-size: 0.85rem;">Loading...</p>
             </div>
 
             <div id="sidebar-content" style="display: none;">
+                <!-- All Movies -->
                 <div class="sidebar-section">
-                    <button class="sidebar-category active" onclick="filterMoviesByRating('all')">
+                    <button class="sidebar-category active" onclick="toggleMovieGenre('all')">
                         <span class="category-icon">🎬</span>
                         <span class="category-name">All Movies</span>
                         <span class="category-count" id="count-all-movies">0</span>
                     </button>
                 </div>
 
+                <!-- Genre Categories (will be dynamically populated) -->
                 <div class="sidebar-section">
-                    <button class="sidebar-category" onclick="toggleMovieRating(5)">
-                        <span class="category-icon">⭐</span>
-                        <span class="category-name">5 Stars</span>
-                        <span class="category-count" id="count-5stars-movies">0</span>
+                    <button class="sidebar-category" onclick="toggleMovieGenre('Action')">
+                        <span class="category-icon">💥</span>
+                        <span class="category-name">Action</span>
+                        <span class="category-count" id="count-action">0</span>
                         <span class="expand-icon">▼</span>
                     </button>
-                    <div class="category-movies" id="rating-5stars-movies"></div>
+                    <div class="genre-movies" id="genre-action"></div>
                 </div>
 
                 <div class="sidebar-section">
-                    <button class="sidebar-category" onclick="toggleMovieRating(4)">
-                        <span class="category-icon">⭐</span>
-                        <span class="category-name">4 Stars</span>
-                        <span class="category-count" id="count-4stars-movies">0</span>
+                    <button class="sidebar-category" onclick="toggleMovieGenre('Comedy')">
+                        <span class="category-icon">😂</span>
+                        <span class="category-name">Comedy</span>
+                        <span class="category-count" id="count-comedy">0</span>
                         <span class="expand-icon">▼</span>
                     </button>
-                    <div class="category-movies" id="rating-4stars-movies"></div>
+                    <div class="genre-movies" id="genre-comedy"></div>
                 </div>
 
                 <div class="sidebar-section">
-                    <button class="sidebar-category" onclick="toggleMovieRating(3)">
-                        <span class="category-icon">⭐</span>
-                        <span class="category-name">3 Stars</span>
-                        <span class="category-count" id="count-3stars-movies">0</span>
+                    <button class="sidebar-category" onclick="toggleMovieGenre('Drama')">
+                        <span class="category-icon">🎭</span>
+                        <span class="category-name">Drama</span>
+                        <span class="category-count" id="count-drama">0</span>
                         <span class="expand-icon">▼</span>
                     </button>
-                    <div class="category-movies" id="rating-3stars-movies"></div>
+                    <div class="genre-movies" id="genre-drama"></div>
                 </div>
 
                 <div class="sidebar-section">
-                    <button class="sidebar-category" onclick="toggleMovieRating(2)">
-                        <span class="category-icon">⭐</span>
-                        <span class="category-name">2 Stars</span>
-                        <span class="category-count" id="count-2stars-movies">0</span>
+                    <button class="sidebar-category" onclick="toggleMovieGenre('Horror')">
+                        <span class="category-icon">👻</span>
+                        <span class="category-name">Horror</span>
+                        <span class="category-count" id="count-horror">0</span>
                         <span class="expand-icon">▼</span>
                     </button>
-                    <div class="category-movies" id="rating-2stars-movies"></div>
+                    <div class="genre-movies" id="genre-horror"></div>
                 </div>
 
                 <div class="sidebar-section">
-                    <button class="sidebar-category" onclick="toggleMovieRating(1)">
-                        <span class="category-icon">⭐</span>
-                        <span class="category-name">1 Star</span>
-                        <span class="category-count" id="count-1star-movies">0</span>
+                    <button class="sidebar-category" onclick="toggleMovieGenre('Sci-Fi')">
+                        <span class="category-icon">🚀</span>
+                        <span class="category-name">Sci-Fi</span>
+                        <span class="category-count" id="count-scifi">0</span>
                         <span class="expand-icon">▼</span>
                     </button>
-                    <div class="category-movies" id="rating-1star-movies"></div>
+                    <div class="genre-movies" id="genre-scifi"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="sidebar-category" onclick="toggleMovieGenre('Romance')">
+                        <span class="category-icon">💕</span>
+                        <span class="category-name">Romance</span>
+                        <span class="category-count" id="count-romance">0</span>
+                        <span class="expand-icon">▼</span>
+                    </button>
+                    <div class="genre-movies" id="genre-romance"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="sidebar-category" onclick="toggleMovieGenre('Thriller')">
+                        <span class="category-icon">😱</span>
+                        <span class="category-name">Thriller</span>
+                        <span class="category-count" id="count-thriller">0</span>
+                        <span class="expand-icon">▼</span>
+                    </button>
+                    <div class="genre-movies" id="genre-thriller"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="sidebar-category" onclick="toggleMovieGenre('Documentary')">
+                        <span class="category-icon">📹</span>
+                        <span class="category-name">Documentary</span>
+                        <span class="category-count" id="count-documentary">0</span>
+                        <span class="expand-icon">▼</span>
+                    </button>
+                    <div class="genre-movies" id="genre-documentary"></div>
                 </div>
             </div>
 
