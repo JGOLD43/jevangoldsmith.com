@@ -666,7 +666,20 @@ a:hover {
 .book-rating {
     color: #f39c12;
     font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.book-category-badge {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    background: var(--background-alt);
+    padding: 0.35rem 0.65rem;
+    border-radius: 4px;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    display: inline-block;
     margin-bottom: 0.75rem;
+    text-align: center;
 }
 
 .book-description {

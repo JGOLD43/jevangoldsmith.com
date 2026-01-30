@@ -300,6 +300,7 @@ function createBookCard(book) {
         <p class="book-author">by ${book.author}</p>
         ${book.year ? `<p class="book-year">${book.year}</p>` : ''}
         <div class="book-rating">${stars}</div>
+        <div class="book-category-badge">${book.category}</div>
         ${reReadsHTML}
         <p class="book-description">${book.shortDescription}</p>
         ${book.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
