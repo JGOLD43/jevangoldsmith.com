@@ -525,7 +525,7 @@ a:hover {
 }
 
 .feature-card {
-    flex: 0 0 calc(25% - 18px);
+    flex: 0 0 calc(20% - 19.2px);
     background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
     border-radius: 12px;
     overflow: hidden;
@@ -614,6 +614,12 @@ a:hover {
 }
 
 /* Responsive carousel */
+@media (max-width: 1400px) {
+    .feature-card {
+        flex: 0 0 calc(25% - 18px);
+    }
+}
+
 @media (max-width: 1024px) {
     .feature-card {
         flex: 0 0 calc(33.333% - 16px);
