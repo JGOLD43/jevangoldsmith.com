@@ -143,10 +143,10 @@ a:hover {
 }
 
 .hero-headline {
-    font-size: 4rem;
-    font-weight: 100;
-    letter-spacing: 0.05em;
-    margin-bottom: 2rem;
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    margin-bottom: 1rem;
     line-height: 1.2;
     color: var(--primary-color);
     font-family: 'Chivo', sans-serif;
@@ -172,11 +172,20 @@ a:hover {
 /* Hero CTA on Left Side */
 .hero-cta-left {
     margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: var(--background);
+    padding: 1.5rem 2rem;
+    background-color: white;
     border: 2px solid var(--primary-color);
-    border-radius: 8px;
-    text-align: left;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hero-cta-left:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: var(--secondary-color);
 }
 
 .hero-tagline {
@@ -428,16 +437,17 @@ a:hover {
 /* Note: .hero-cta-left styles are defined earlier in the file */
 
 .cta-title {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 700;
     color: var(--primary-color);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .cta-text {
-    font-size: 0.95rem;
-    color: var(--text-color);
+    font-size: 0.9rem;
+    color: var(--text-light);
     line-height: 1.5;
+    margin: 0;
 }
 
 .cta-link {
