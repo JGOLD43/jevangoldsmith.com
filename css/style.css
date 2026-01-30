@@ -1057,13 +1057,31 @@ button[type="submit"]:hover {
     border-bottom: 1px solid var(--border-color);
 }
 
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
 .filter-label {
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--text-light);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 0.75rem;
+}
+
+.show-all-link {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-weight: 500;
+}
+
+.show-all-link:hover {
+    color: var(--accent-color);
 }
 
 .star-rating-filter {
@@ -1098,6 +1116,13 @@ button[type="submit"]:hover {
 
 .filter-star.active:hover {
     color: #D97706;
+}
+
+.filter-rating-text {
+    margin-left: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #F59E0B;
 }
 
 .clear-filter-btn {

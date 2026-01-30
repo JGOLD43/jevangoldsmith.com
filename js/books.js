@@ -332,10 +332,10 @@ function setStarFilter(rating) {
     // Update star visual states
     updateStarFilterDisplay();
 
-    // Update "Show All" button state
-    const clearBtn = document.querySelector('.clear-filter-btn');
-    if (clearBtn) {
-        clearBtn.classList.remove('active');
+    // Update rating text display
+    const ratingText = document.getElementById('filter-rating-text');
+    if (ratingText) {
+        ratingText.textContent = `${rating}+`;
     }
 
     // Re-populate sidebar with filtered books
@@ -362,10 +362,10 @@ function clearStarFilter() {
     // Update star visual states
     updateStarFilterDisplay();
 
-    // Update "Show All" button state
-    const clearBtn = document.querySelector('.clear-filter-btn');
-    if (clearBtn) {
-        clearBtn.classList.add('active');
+    // Clear rating text display
+    const ratingText = document.getElementById('filter-rating-text');
+    if (ratingText) {
+        ratingText.textContent = '';
     }
 
     // Re-populate sidebar with all books
@@ -498,10 +498,4 @@ function scrollToBook(bookTitle, event) {
 document.addEventListener('DOMContentLoaded', () => {
     renderBooks();
     populateSidebar();
-
-    // Initialize star filter display
-    const clearBtn = document.querySelector('.clear-filter-btn');
-    if (clearBtn) {
-        clearBtn.classList.add('active');
-    }
 });

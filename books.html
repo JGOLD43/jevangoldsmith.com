@@ -42,7 +42,10 @@
 
             <!-- Star Rating Filter -->
             <div class="sidebar-filter-section">
-                <div class="filter-label">Filter by Rating</div>
+                <div class="filter-header">
+                    <div class="filter-label">Filter by Rating</div>
+                    <a href="#" class="show-all-link" onclick="clearStarFilter(); return false;">Show All</a>
+                </div>
                 <div class="star-rating-filter">
                     <div class="star-filter-container">
                         <span class="filter-star" data-rating="1" onclick="setStarFilter(1)">★</span>
@@ -50,8 +53,8 @@
                         <span class="filter-star" data-rating="3" onclick="setStarFilter(3)">★</span>
                         <span class="filter-star" data-rating="4" onclick="setStarFilter(4)">★</span>
                         <span class="filter-star" data-rating="5" onclick="setStarFilter(5)">★</span>
+                        <span class="filter-rating-text" id="filter-rating-text"></span>
                     </div>
-                    <button class="clear-filter-btn" onclick="clearStarFilter()">Show All</button>
                 </div>
             </div>
 
