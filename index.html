@@ -39,10 +39,16 @@
                 <div class="profile-container">
                     <img src="images/profile.jpg" alt="Jevan Goldsmith" class="hero-image">
 
-                    <!-- Animated Snapshot Card -->
-                    <div class="snapshot-card">
+                    <!-- Quick Snapshot Toggle Button -->
+                    <button class="snapshot-toggle" onclick="toggleSnapshot()" aria-label="Toggle Quick Snapshot">
+                        QUICK SNAPSHOT
+                    </button>
+
+                    <!-- Animated Snapshot Card (Hidden by default) -->
+                    <div class="snapshot-card" id="snapshot-card">
                         <div class="snapshot-header">
                             <h4>QUICK SNAPSHOT</h4>
+                            <button class="snapshot-close" onclick="toggleSnapshot()" aria-label="Close">&times;</button>
                         </div>
                         <div class="snapshot-content">
                             <div class="snapshot-row">
@@ -197,6 +203,14 @@
             </div>
         </div>
     </section>
+
+    <script>
+        // Toggle snapshot card visibility
+        function toggleSnapshot() {
+            const card = document.getElementById('snapshot-card');
+            card.classList.toggle('visible');
+        }
+    </script>
 
     <footer class="footer">
         <div class="container">

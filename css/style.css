@@ -242,34 +242,60 @@ a:hover {
     z-index: 1;
 }
 
+/* Snapshot Toggle Button */
+.snapshot-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    z-index: 3;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.snapshot-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+}
+
+.snapshot-toggle:active {
+    transform: translateY(0);
+}
+
 /* Animated Snapshot Card */
 .snapshot-card {
     position: absolute;
     top: 50%;
     right: -280px;
-    transform: translateY(-50%) translateX(0) rotate(3deg);
+    transform: translateY(-50%) translateX(100%) rotate(8deg);
     width: 280px;
     background: #FFFFFF;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     padding: 0;
     z-index: 2;
-    animation: slideInCard 0.8s ease-out 0.5s both;
-    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-@keyframes slideInCard {
-    0% {
-        opacity: 0;
-        transform: translateY(-50%) translateX(50px) rotate(8deg);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(-50%) translateX(0) rotate(3deg);
-    }
+/* Visible state */
+.snapshot-card.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0) rotate(3deg);
 }
 
-.snapshot-card:hover {
+.snapshot-card.visible:hover {
     transform: translateY(-50%) translateX(-5px) rotate(0deg);
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
 }
@@ -280,6 +306,9 @@ a:hover {
     padding: 1rem 1.25rem;
     border-radius: 12px 12px 0 0;
     border-bottom: 3px solid #e74c3c;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .snapshot-header h4 {
@@ -289,6 +318,26 @@ a:hover {
     letter-spacing: 0.1em;
     color: white;
     text-transform: uppercase;
+}
+
+.snapshot-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.snapshot-close:hover {
+    transform: scale(1.2);
 }
 
 .snapshot-content {
@@ -332,29 +381,36 @@ a:hover {
 }
 
 @media (max-width: 1200px) {
+    .snapshot-toggle {
+        position: static;
+        margin-top: 1rem;
+        display: block;
+        width: 100%;
+        max-width: 250px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     .snapshot-card {
         position: static;
-        transform: none;
-        margin-top: 2rem;
+        transform: translateY(-20px);
+        margin-top: 1rem;
         width: 100%;
         max-width: 350px;
         margin-left: auto;
         margin-right: auto;
-        animation: fadeIn 0.8s ease-out 0.5s both;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
     }
 
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .snapshot-card.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
 
-    .snapshot-card:hover {
+    .snapshot-card.visible:hover {
         transform: translateY(-5px);
     }
 }
