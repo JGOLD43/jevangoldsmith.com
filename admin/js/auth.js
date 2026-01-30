@@ -1,9 +1,8 @@
 // Authentication System for Essay CMS
-// Password is hashed using bcrypt for security
+// Password is hashed using SHA-256 for security
 
-// IMPORTANT: Replace this hash with your own using admin/tools/generate-hash.html
-// This is a placeholder hash for the password "REPLACE_ME_WITH_REAL_PASSWORD"
-const ADMIN_PASSWORD_HASH = '$2a$10$fK8kVQmh3yZ9c.jP8n9bOuHxN9vG.3KmD7qP9nLwQ8EzZxC6V5X2K';
+// Your password hash (generated using SHA-256)
+const ADMIN_PASSWORD_HASH = '070d3e9befacc3ef923c2e612ce7bd4462fc0978e8320e70f9bf3e2d3ac1cca6';
 
 // Rate limiting configuration
 const MAX_LOGIN_ATTEMPTS = 5;
@@ -20,9 +19,9 @@ async function login(password) {
         return false;
     }
 
-    // Verify password using bcrypt
+    // Verify password using SHA-256
     try {
-        const isValid = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+        const isValid = await verifyPassword(password, ADMIN_PASSWORD_HASH);
 
         if (isValid) {
             // Generate session token
@@ -59,6 +58,16 @@ async function login(password) {
         showError('An error occurred during login. Please try again.');
         return false;
     }
+}
+
+// Verify password using SHA-256
+async function verifyPassword(password, hash) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const passwordHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return passwordHash === hash;
 }
 
 // Check if user is authenticated
