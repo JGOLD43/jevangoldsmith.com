@@ -34,9 +34,87 @@
         </div>
     </header>
 
-    <main class="container">
-        <div id="essays-container" class="content-section">
-            <!-- Essays will be loaded dynamically by essays.js -->
+    <main class="essays-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="essays-sidebar">
+            <div class="sidebar-header">
+                <h3>Browse Essays</h3>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleCategory('all')">
+                    <span class="category-icon">📚</span>
+                    <span class="category-name">All Essays</span>
+                    <span class="category-count" id="count-all">0</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleCategory('philosophy')">
+                    <span class="category-icon">🧠</span>
+                    <span class="category-name">Philosophy</span>
+                    <span class="category-count" id="count-philosophy">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-essays" id="category-philosophy"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleCategory('management')">
+                    <span class="category-icon">📊</span>
+                    <span class="category-name">Management</span>
+                    <span class="category-count" id="count-management">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-essays" id="category-management"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleCategory('technology')">
+                    <span class="category-icon">💻</span>
+                    <span class="category-name">Technology</span>
+                    <span class="category-count" id="count-technology">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-essays" id="category-technology"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleCategory('personal')">
+                    <span class="category-icon">✍️</span>
+                    <span class="category-name">Personal</span>
+                    <span class="category-count" id="count-personal">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-essays" id="category-personal"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleCategory('finance')">
+                    <span class="category-icon">💰</span>
+                    <span class="category-name">Finance</span>
+                    <span class="category-count" id="count-finance">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-essays" id="category-finance"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="toggleCategory('writing')">
+                    <span class="category-icon">📝</span>
+                    <span class="category-name">Writing</span>
+                    <span class="category-count" id="count-writing">0</span>
+                    <span class="expand-icon">▼</span>
+                </button>
+                <div class="category-essays" id="category-writing"></div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="essays-main">
+            <div id="essays-container" class="content-section">
+                <!-- Essays will be loaded dynamically by essays.js -->
+            </div>
         </div>
     </main>
 

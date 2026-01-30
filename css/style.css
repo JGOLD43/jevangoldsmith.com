@@ -450,6 +450,169 @@ a:hover {
     margin-right: auto;
 }
 
+/* Essays Page - Obsidian-Inspired Sidebar Layout */
+.essays-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: calc(100vh - 400px);
+}
+
+.essays-sidebar {
+    background: #FAFAF9;
+    border-right: 1px solid var(--border-color);
+    padding: 2rem 0;
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+.essays-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.essays-sidebar::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.essays-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-header {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+}
+
+.sidebar-header h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    font-weight: 600;
+    margin: 0;
+}
+
+.sidebar-section {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-category {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Chivo', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    position: relative;
+}
+
+.sidebar-category:hover {
+    background: #F5F5F4;
+}
+
+.sidebar-category.active {
+    background: #E7E5E4;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.category-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.category-name {
+    flex: 1;
+    text-align: left;
+}
+
+.category-count {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    background: #E7E5E4;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
+.expand-icon {
+    font-size: 0.7rem;
+    color: var(--text-light);
+    transition: transform 0.2s ease;
+    margin-left: 0.25rem;
+}
+
+.sidebar-category.expanded .expand-icon {
+    transform: rotate(-180deg);
+}
+
+.category-essays {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #F9F9F8;
+}
+
+.category-essays.expanded {
+    max-height: 1000px;
+}
+
+.essay-link {
+    display: block;
+    padding: 0.5rem 1.5rem 0.5rem 3.25rem;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    border-left: 2px solid transparent;
+    line-height: 1.4;
+}
+
+.essay-link:hover {
+    background: #F5F5F4;
+    color: var(--secondary-color);
+    border-left-color: var(--secondary-color);
+}
+
+.essay-link.active {
+    background: #E7E5E4;
+    color: var(--secondary-color);
+    font-weight: 500;
+    border-left-color: var(--secondary-color);
+}
+
+.essay-link-date {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    display: block;
+    margin-top: 0.15rem;
+}
+
+.essays-main {
+    padding: 0 2rem;
+}
+
+.essays-main .content-section {
+    max-width: 900px;
+    margin: 0;
+}
+
 /* Book Reviews */
 .books-grid {
     display: grid;
@@ -723,6 +886,25 @@ button[type="submit"]:hover {
 
     .hero-title {
         font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .essays-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .essays-sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 0;
+    }
+
+    .essays-main {
+        padding: 2rem 1rem;
     }
 }
 
