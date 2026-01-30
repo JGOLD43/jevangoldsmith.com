@@ -326,6 +326,10 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+// Star filter interaction state
+let clickTimer = null;
+let isDragging = false;
+
 // Set star filter when clicking a star
 function setStarFilter(rating) {
     currentStarFilter = rating;
@@ -390,22 +394,82 @@ function clearStarFilter() {
 function updateStarFilterDisplay() {
     const stars = document.querySelectorAll('.filter-star');
     stars.forEach((star, index) => {
-        const starRating = parseFloat(star.getAttribute('data-rating'));
+        const starNumber = parseInt(star.getAttribute('data-star'));
+        star.classList.remove('full', 'half');
+
         if (currentStarFilter === 'all') {
-            star.classList.remove('active', 'half-active');
-        } else {
-            // Handle half-star visual states
-            if (starRating <= currentStarFilter) {
-                star.classList.add('active');
-                star.classList.remove('half-active');
-            } else if (starRating === currentStarFilter + 0.5) {
-                // Show half-filled star for the next 0.5 increment
-                star.classList.add('half-active');
-                star.classList.remove('active');
-            } else {
-                star.classList.remove('active', 'half-active');
-            }
+            return;
         }
+
+        // Check if this star should be filled
+        if (starNumber <= Math.floor(currentStarFilter)) {
+            star.classList.add('full');
+        } else if (starNumber === Math.ceil(currentStarFilter) && currentStarFilter % 1 === 0.5) {
+            star.classList.add('half');
+        }
+    });
+}
+
+// Initialize star filter interactions
+function initStarFilter() {
+    const container = document.getElementById('star-filter-container');
+    if (!container) return;
+
+    const stars = container.querySelectorAll('.filter-star');
+
+    stars.forEach((star, index) => {
+        // Mouse down - start potential drag
+        star.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            const starNumber = parseInt(star.getAttribute('data-star'));
+            const rect = star.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const isLeftHalf = clickX < rect.width / 2;
+
+            const rating = isLeftHalf ? starNumber - 0.5 : starNumber;
+            setStarFilter(rating);
+        });
+
+        // Mouse enter while dragging
+        star.addEventListener('mouseenter', (e) => {
+            if (isDragging) {
+                const starNumber = parseInt(star.getAttribute('data-star'));
+                const rect = star.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const isLeftHalf = clickX < rect.width / 2;
+
+                const rating = isLeftHalf ? starNumber - 0.5 : starNumber;
+                setStarFilter(rating);
+            }
+        });
+
+        // Single click - set half star, double click - set full star
+        star.addEventListener('click', (e) => {
+            if (clickTimer) {
+                // This is a double click
+                clearTimeout(clickTimer);
+                clickTimer = null;
+                const starNumber = parseInt(star.getAttribute('data-star'));
+                setStarFilter(starNumber);
+            } else {
+                // This is a single click - wait to see if double click
+                clickTimer = setTimeout(() => {
+                    const starNumber = parseInt(star.getAttribute('data-star'));
+                    const rect = star.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const isLeftHalf = clickX < rect.width / 2;
+
+                    const rating = isLeftHalf ? starNumber - 0.5 : starNumber;
+                    setStarFilter(rating);
+                    clickTimer = null;
+                }, 250);
+            }
+        });
+    });
+
+    // Mouse up - end drag
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
     });
 }
 
@@ -505,4 +569,5 @@ function scrollToBook(bookTitle, event) {
 document.addEventListener('DOMContentLoaded', () => {
     renderBooks();
     populateSidebar();
+    initStarFilter();
 });

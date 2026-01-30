@@ -1092,34 +1092,29 @@ button[type="submit"]:hover {
 
 .star-filter-container {
     display: flex;
-    gap: 0.1rem;
+    gap: 0.25rem;
     align-items: center;
-    flex-wrap: wrap;
 }
 
 .filter-star {
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: #D1D5DB;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     user-select: none;
     line-height: 1;
+    position: relative;
 }
 
 .filter-star:hover {
-    transform: scale(1.15);
-    color: #FCD34D;
+    transform: scale(1.1);
 }
 
-.filter-star.active {
+.filter-star.full {
     color: #F59E0B;
 }
 
-.filter-star.active:hover {
-    color: #D97706;
-}
-
-.filter-star.half-active {
+.filter-star.half {
     background: linear-gradient(to right, #F59E0B 50%, #D1D5DB 50%);
     -webkit-background-clip: text;
     background-clip: text;
