@@ -90,6 +90,72 @@
         </div>
     </header>
 
+    <!-- Featured Carousel Section -->
+    <section class="featured-carousel-section">
+        <div class="carousel-header">
+            <h2 class="carousel-title">Featured things I've been up to</h2>
+            <a href="#" class="carousel-discover">Explore Features →</a>
+        </div>
+        <div class="carousel-controls">
+            <button class="carousel-arrow carousel-prev" onclick="scrollCarousel(-1)" aria-label="Previous">‹</button>
+            <button class="carousel-arrow carousel-next" onclick="scrollCarousel(1)" aria-label="Next">›</button>
+        </div>
+        <div class="carousel-container">
+            <div class="carousel-track" id="carousel-track">
+                <!-- Feature Card 1 -->
+                <div class="feature-card">
+                    <img src="images/feature-1.jpg" alt="Feature 1" class="feature-image">
+                    <div class="feature-content">
+                        <h3 class="feature-title">Business Strategy</h3>
+                        <p class="feature-description">Building sustainable ventures</p>
+                    </div>
+                </div>
+
+                <!-- Feature Card 2 -->
+                <div class="feature-card">
+                    <img src="images/feature-2.jpg" alt="Feature 2" class="feature-image">
+                    <div class="feature-content">
+                        <h3 class="feature-title">Real Estate Development</h3>
+                        <p class="feature-description">Creating value through property</p>
+                    </div>
+                </div>
+
+                <!-- Feature Card 3 -->
+                <div class="feature-card">
+                    <img src="images/feature-3.jpg" alt="Feature 3" class="feature-image">
+                    <div class="feature-content">
+                        <h3 class="feature-title">Writing & Thought Leadership</h3>
+                        <p class="feature-description">Sharing insights and ideas</p>
+                    </div>
+                </div>
+
+                <!-- Feature Card 4 -->
+                <div class="feature-card">
+                    <img src="images/feature-4.jpg" alt="Feature 4" class="feature-image">
+                    <div class="feature-content">
+                        <h3 class="feature-title">Technology Innovation</h3>
+                        <p class="feature-description">Building digital solutions</p>
+                    </div>
+                </div>
+
+                <!-- Feature Card 5 -->
+                <div class="feature-card">
+                    <img src="images/feature-5.jpg" alt="Feature 5" class="feature-image">
+                    <div class="feature-content">
+                        <h3 class="feature-title">Investment Strategy</h3>
+                        <p class="feature-description">Long-term value creation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-dots" id="carousel-dots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="goToSlide(3)"></span>
+        </div>
+    </section>
+
     <section class="pillars-section">
         <div class="pillars-container">
             <div class="pillars-left">
@@ -241,6 +307,66 @@
             const card = document.getElementById('snapshot-card');
             card.classList.toggle('visible');
         }
+
+        // Carousel functionality
+        let currentSlide = 0;
+        const track = document.getElementById('carousel-track');
+        const dots = document.querySelectorAll('.dot');
+
+        function scrollCarousel(direction) {
+            const cards = document.querySelectorAll('.feature-card');
+            const cardWidth = cards[0].offsetWidth;
+            const gap = 24; // Gap between cards
+            const visibleCards = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 3 : 1;
+            const maxSlide = Math.ceil(cards.length - visibleCards);
+
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide > maxSlide) currentSlide = maxSlide;
+
+            const scrollAmount = currentSlide * (cardWidth + gap);
+            track.style.transform = `translateX(-${scrollAmount}px)`;
+            updateDots();
+        }
+
+        function goToSlide(index) {
+            const cards = document.querySelectorAll('.feature-card');
+            const cardWidth = cards[0].offsetWidth;
+            const gap = 24;
+
+            currentSlide = index;
+            const scrollAmount = currentSlide * (cardWidth + gap);
+            track.style.transform = `translateX(-${scrollAmount}px)`;
+            updateDots();
+        }
+
+        function updateDots() {
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active');
+                if (index === currentSlide) {
+                    dot.classList.add('active');
+                }
+            });
+        }
+
+        // Auto-scroll carousel every 5 seconds
+        setInterval(() => {
+            const cards = document.querySelectorAll('.feature-card');
+            const visibleCards = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 3 : 1;
+            const maxSlide = Math.ceil(cards.length - visibleCards);
+
+            if (currentSlide >= maxSlide) {
+                currentSlide = 0;
+            } else {
+                currentSlide++;
+            }
+
+            const cardWidth = cards[0].offsetWidth;
+            const gap = 24;
+            const scrollAmount = currentSlide * (cardWidth + gap);
+            track.style.transform = `translateX(-${scrollAmount}px)`;
+            updateDots();
+        }, 5000);
     </script>
 
     <footer class="footer">
