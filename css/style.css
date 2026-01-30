@@ -231,6 +231,42 @@ a:hover {
     box-shadow: var(--shadow-hover);
 }
 
+/* Hero CTA Section */
+.hero-cta {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: var(--background);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.cta-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+}
+
+.cta-text {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.cta-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.cta-link:hover {
+    color: var(--secondary-color);
+    border-bottom-color: var(--secondary-color);
+}
+
 /* Featured Section */
 .featured-section {
     background-color: var(--background-dark);
