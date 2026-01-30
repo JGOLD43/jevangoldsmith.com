@@ -327,7 +327,6 @@ document.addEventListener('keydown', function(event) {
 });
 
 // Star filter interaction state
-let clickTimer = null;
 let isDragging = false;
 
 // Set star filter when clicking a star
@@ -416,11 +415,12 @@ function initStarFilter() {
     if (!container) return;
 
     const stars = container.querySelectorAll('.filter-star');
+    let mouseDownPos = null;
 
     stars.forEach((star, index) => {
-        // Mouse down - start potential drag
-        star.addEventListener('mousedown', (e) => {
-            isDragging = true;
+        // Click to set rating
+        star.addEventListener('click', (e) => {
+            e.preventDefault();
             const starNumber = parseInt(star.getAttribute('data-star'));
             const rect = star.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
@@ -430,9 +430,37 @@ function initStarFilter() {
             setStarFilter(rating);
         });
 
-        // Mouse enter while dragging
+        // Mouse down - track start position
+        star.addEventListener('mousedown', (e) => {
+            mouseDownPos = { x: e.clientX, y: e.clientY };
+            isDragging = false;
+        });
+
+        // Mouse move - detect drag and update rating
+        star.addEventListener('mousemove', (e) => {
+            if (mouseDownPos && e.buttons === 1) {
+                // Check if we've moved enough to be considered dragging
+                const dx = Math.abs(e.clientX - mouseDownPos.x);
+                const dy = Math.abs(e.clientY - mouseDownPos.y);
+                if (dx > 5 || dy > 5) {
+                    isDragging = true;
+                }
+
+                if (isDragging) {
+                    const starNumber = parseInt(star.getAttribute('data-star'));
+                    const rect = star.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const isLeftHalf = clickX < rect.width / 2;
+
+                    const rating = isLeftHalf ? starNumber - 0.5 : starNumber;
+                    setStarFilter(rating);
+                }
+            }
+        });
+
+        // Mouse enter while mouse is down - update during drag
         star.addEventListener('mouseenter', (e) => {
-            if (isDragging) {
+            if (e.buttons === 1 && isDragging) {
                 const starNumber = parseInt(star.getAttribute('data-star'));
                 const rect = star.getBoundingClientRect();
                 const clickX = e.clientX - rect.left;
@@ -442,33 +470,11 @@ function initStarFilter() {
                 setStarFilter(rating);
             }
         });
-
-        // Single click - set half star, double click - set full star
-        star.addEventListener('click', (e) => {
-            if (clickTimer) {
-                // This is a double click
-                clearTimeout(clickTimer);
-                clickTimer = null;
-                const starNumber = parseInt(star.getAttribute('data-star'));
-                setStarFilter(starNumber);
-            } else {
-                // This is a single click - wait to see if double click
-                clickTimer = setTimeout(() => {
-                    const starNumber = parseInt(star.getAttribute('data-star'));
-                    const rect = star.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    const isLeftHalf = clickX < rect.width / 2;
-
-                    const rating = isLeftHalf ? starNumber - 0.5 : starNumber;
-                    setStarFilter(rating);
-                    clickTimer = null;
-                }, 250);
-            }
-        });
     });
 
     // Mouse up - end drag
     document.addEventListener('mouseup', () => {
+        mouseDownPos = null;
         isDragging = false;
     });
 }
