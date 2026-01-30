@@ -203,7 +203,8 @@ function getFilteredBooks() {
     if (currentStarFilter === 'all') {
         return booksData;
     }
-    return booksData.filter(book => book.rating === currentStarFilter);
+    // Filter for books with rating >= selected rating (e.g., 4+ shows 4 and 5 star books)
+    return booksData.filter(book => book.rating >= currentStarFilter);
 }
 
 // Populate sidebar with book counts and lists
@@ -389,14 +390,20 @@ function clearStarFilter() {
 function updateStarFilterDisplay() {
     const stars = document.querySelectorAll('.filter-star');
     stars.forEach((star, index) => {
-        const starRating = parseInt(star.getAttribute('data-rating'));
+        const starRating = parseFloat(star.getAttribute('data-rating'));
         if (currentStarFilter === 'all') {
-            star.classList.remove('active');
+            star.classList.remove('active', 'half-active');
         } else {
+            // Handle half-star visual states
             if (starRating <= currentStarFilter) {
                 star.classList.add('active');
-            } else {
+                star.classList.remove('half-active');
+            } else if (starRating === currentStarFilter + 0.5) {
+                // Show half-filled star for the next 0.5 increment
+                star.classList.add('half-active');
                 star.classList.remove('active');
+            } else {
+                star.classList.remove('active', 'half-active');
             }
         }
     });
