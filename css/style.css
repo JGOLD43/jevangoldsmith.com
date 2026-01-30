@@ -292,6 +292,90 @@ a:hover {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
+/* Mission & Approach Section */
+.mission-section {
+    padding: 4rem 0;
+    background-color: var(--background);
+}
+
+.mission-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+.mission-statement {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+.approach-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.approach-list li {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.approach-list li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.approach-list strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* What I'm Working On Section */
+.working-on-section {
+    padding: 4rem 0;
+    background-color: var(--background-dark);
+}
+
+.working-on-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+.working-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.working-list li {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.working-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.working-list strong {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
 /* Recent Activity Section */
 .recent-activity {
     padding: 4rem 0;
