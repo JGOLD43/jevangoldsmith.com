@@ -229,9 +229,21 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js" integrity="sha512-rBV8zMt7gSdPZ5bs1aS0GI5cbt3d1k3xamKXbo1c8N19oO0dZWPFV/dx9xLvmQ6yrjgbfWJGKfgGu2wkgj4E9w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
+        // Check if bcrypt loaded
+        window.addEventListener('load', function() {
+            if (typeof bcrypt === 'undefined') {
+                alert('Error: bcrypt library failed to load. Please check your internet connection and refresh the page.');
+            }
+        });
+
         async function generateHash() {
+            // Check bcrypt is available
+            if (typeof bcrypt === 'undefined') {
+                alert('Error: bcrypt library is not loaded. Please refresh the page and try again.');
+                return;
+            }
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             const generateBtn = document.getElementById('generate-btn');
