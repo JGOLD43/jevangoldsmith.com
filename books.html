@@ -58,6 +58,20 @@
                 </div>
             </div>
 
+            <!-- Re-reads Filter -->
+            <div class="rereads-filter-section">
+                <div class="filter-header">
+                    <div class="filter-label">Filter by Re-reads</div>
+                    <a href="#" class="show-all-link" onclick="clearReReadsFilter(); return false;">Show All</a>
+                </div>
+                <div class="rereads-filter-buttons">
+                    <button class="rereads-filter-btn" data-rereads="rereads" onclick="setReReadsFilter('rereads')">Re-reads Only</button>
+                    <button class="rereads-filter-btn" data-rereads="1" onclick="setReReadsFilter(1)">1+</button>
+                    <button class="rereads-filter-btn" data-rereads="2" onclick="setReReadsFilter(2)">2+</button>
+                    <button class="rereads-filter-btn" data-rereads="3" onclick="setReReadsFilter(3)">3+</button>
+                </div>
+            </div>
+
             <!-- All Books -->
             <div class="sidebar-section">
                 <button class="sidebar-category active" onclick="toggleBookCategory('all')">

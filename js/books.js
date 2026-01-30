@@ -8,6 +8,7 @@ const booksData = [
         isbn: "9780735211292",
         year: "2018",
         rating: 5,
+        reReads: 2,
         category: "Learning",
         shortDescription: "A transformative guide to building good habits and breaking bad ones.",
         review: `James Clear's "Atomic Habits" is one of the most practical books on behavior change I've ever read.
@@ -29,6 +30,7 @@ If you struggle with consistency or want to understand why you do what you do, r
         isbn: "9780307887894",
         year: "2011",
         rating: 4,
+        reReads: 0,
         category: "Strategy and War",
         shortDescription: "Essential reading for entrepreneurs on building successful startups.",
         review: `Eric Ries codified what many successful founders learned the hard way: build, measure, learn, repeat.
@@ -47,6 +49,7 @@ If I have one criticism, it's that the book can feel repetitive. The key concept
         isbn: "9780374533557",
         year: "2011",
         rating: 5,
+        reReads: 1,
         category: "Psychology Books",
         shortDescription: "A masterpiece on human cognition and decision-making.",
         review: `Kahneman's magnum opus is dense, challenging, and absolutely essential for understanding how humans think.
@@ -70,6 +73,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9780804139298",
         year: "2014",
         rating: 5,
+        reReads: 0,
         category: "Out of the Box Thinking",
         shortDescription: "Contrarian thinking about startups and creating the future.",
         review: null // No review yet
@@ -80,6 +84,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781577314806",
         year: "1997",
         rating: 4,
+        reReads: 0,
         category: "Who Am I?",
         shortDescription: "A spiritual guide to living in the present moment.",
         review: null
@@ -90,6 +95,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781501124020",
         year: "2017",
         rating: 5,
+        reReads: 3,
         category: "Patience and Clear Thinking",
         shortDescription: "Life and work principles from one of the world's most successful investors.",
         review: null
@@ -100,6 +106,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9780062316097",
         year: "2011",
         rating: 5,
+        reReads: 0,
         category: "Big Ideas",
         shortDescription: "A sweeping history of humankind.",
         review: null
@@ -110,6 +117,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9780062273208",
         year: "2014",
         rating: 4,
+        reReads: 1,
         category: "Strategy and War",
         shortDescription: "Building a business when there are no easy answers.",
         review: null
@@ -120,6 +128,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781455586691",
         year: "2016",
         rating: 5,
+        reReads: 0,
         category: "Learning",
         shortDescription: "Rules for focused success in a distracted world.",
         review: null
@@ -130,6 +139,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781492180746",
         year: "2013",
         rating: 5,
+        reReads: 0,
         category: "Strategy and War",
         shortDescription: "How to talk to customers and learn if your business is a good idea.",
         review: null
@@ -140,6 +150,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9780061241895",
         year: "1984",
         rating: 4,
+        reReads: 0,
         category: "Persuasion",
         shortDescription: "The psychology of persuasion.",
         review: null
@@ -150,6 +161,7 @@ Required reading for anyone interested in psychology, economics, or making bette
         isbn: "9781501135910",
         year: "2016",
         rating: 5,
+        reReads: 0,
         category: "Autobiographies",
         shortDescription: "A memoir by the creator of Nike.",
         review: null
@@ -180,6 +192,7 @@ function renderBooks(books = booksData) {
 
 // Global filter state
 let currentStarFilter = 'all';
+let currentReReadsFilter = 'all';
 
 // Category mapping (display name to key)
 const categoryMap = {
@@ -198,13 +211,27 @@ const categoryMap = {
     'Who Am I?': 'whoami'
 };
 
-// Get filtered books based on current star filter
+// Get filtered books based on current filters
 function getFilteredBooks() {
-    if (currentStarFilter === 'all') {
-        return booksData;
+    let filtered = booksData;
+
+    // Apply star filter
+    if (currentStarFilter !== 'all') {
+        filtered = filtered.filter(book => book.rating >= currentStarFilter);
     }
-    // Filter for books with rating >= selected rating (e.g., 4+ shows 4 and 5 star books)
-    return booksData.filter(book => book.rating >= currentStarFilter);
+
+    // Apply re-reads filter
+    if (currentReReadsFilter !== 'all') {
+        if (currentReReadsFilter === 'rereads') {
+            // Show only books with 1+ re-reads
+            filtered = filtered.filter(book => book.reReads > 0);
+        } else {
+            // Show books with specific re-read count or higher
+            filtered = filtered.filter(book => book.reReads >= currentReReadsFilter);
+        }
+    }
+
+    return filtered;
 }
 
 // Populate sidebar with book counts and lists
@@ -266,12 +293,19 @@ function createBookCard(book) {
     const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
     const coverUrl = getCoverUrl(book.isbn);
 
+    // Generate re-reads display
+    let reReadsHTML = '';
+    if (book.reReads > 0) {
+        reReadsHTML = `<div class="book-rereads">📖 Re-read ${book.reReads} time${book.reReads === 1 ? '' : 's'}</div>`;
+    }
+
     card.innerHTML = `
         <img src="${coverUrl}" alt="${book.title}" class="book-cover" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.style.color='white'; this.style.fontWeight='bold'; this.style.padding='2rem'; this.style.textAlign='center'; this.innerHTML='${book.title}';">
         <h3 class="book-title">${book.title}</h3>
         <p class="book-author">by ${book.author}</p>
         ${book.year ? `<p class="book-year">${book.year}</p>` : ''}
         <div class="book-rating">${stars}</div>
+        ${reReadsHTML}
         <p class="book-description">${book.shortDescription}</p>
         ${book.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
     `;
@@ -389,6 +423,66 @@ function clearStarFilter() {
     document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
 }
 
+// Set re-reads filter
+function setReReadsFilter(filter) {
+    currentReReadsFilter = filter;
+
+    // Update button active states
+    updateReReadsFilterDisplay();
+
+    // Re-populate sidebar with filtered books
+    populateSidebar();
+
+    // Show filtered books
+    renderBooks(getFilteredBooks());
+
+    // Reset category active states
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active', 'expanded');
+    });
+    document.querySelectorAll('.category-books').forEach(div => {
+        div.classList.remove('expanded');
+    });
+    // Activate "All Books"
+    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+}
+
+// Clear re-reads filter
+function clearReReadsFilter() {
+    currentReReadsFilter = 'all';
+
+    // Update button active states
+    updateReReadsFilterDisplay();
+
+    // Re-populate sidebar with all books
+    populateSidebar();
+
+    // Show all books
+    renderBooks(getFilteredBooks());
+
+    // Reset category active states
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active', 'expanded');
+    });
+    document.querySelectorAll('.category-books').forEach(div => {
+        div.classList.remove('expanded');
+    });
+    // Activate "All Books"
+    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+}
+
+// Update re-reads filter button visual states
+function updateReReadsFilterDisplay() {
+    const buttons = document.querySelectorAll('.rereads-filter-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        const filterValue = btn.getAttribute('data-rereads');
+        if (filterValue === currentReReadsFilter) {
+            btn.classList.add('active');
+        }
+    });
+}
+
 // Update the visual state of star filter
 function updateStarFilterDisplay() {
     const stars = document.querySelectorAll('.filter-star');
@@ -415,12 +509,10 @@ function initStarFilter() {
     if (!container) return;
 
     const stars = container.querySelectorAll('.filter-star');
-    let mouseDownPos = null;
 
-    stars.forEach((star, index) => {
+    stars.forEach((star) => {
         // Click to set rating
         star.addEventListener('click', (e) => {
-            e.preventDefault();
             const starNumber = parseInt(star.getAttribute('data-star'));
             const rect = star.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
@@ -430,37 +522,20 @@ function initStarFilter() {
             setStarFilter(rating);
         });
 
-        // Mouse down - track start position
+        // Drag functionality
         star.addEventListener('mousedown', (e) => {
-            mouseDownPos = { x: e.clientX, y: e.clientY };
-            isDragging = false;
+            isDragging = true;
+            const starNumber = parseInt(star.getAttribute('data-star'));
+            const rect = star.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const isLeftHalf = clickX < rect.width / 2;
+
+            const rating = isLeftHalf ? starNumber - 0.5 : starNumber;
+            setStarFilter(rating);
         });
 
-        // Mouse move - detect drag and update rating
-        star.addEventListener('mousemove', (e) => {
-            if (mouseDownPos && e.buttons === 1) {
-                // Check if we've moved enough to be considered dragging
-                const dx = Math.abs(e.clientX - mouseDownPos.x);
-                const dy = Math.abs(e.clientY - mouseDownPos.y);
-                if (dx > 5 || dy > 5) {
-                    isDragging = true;
-                }
-
-                if (isDragging) {
-                    const starNumber = parseInt(star.getAttribute('data-star'));
-                    const rect = star.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    const isLeftHalf = clickX < rect.width / 2;
-
-                    const rating = isLeftHalf ? starNumber - 0.5 : starNumber;
-                    setStarFilter(rating);
-                }
-            }
-        });
-
-        // Mouse enter while mouse is down - update during drag
         star.addEventListener('mouseenter', (e) => {
-            if (e.buttons === 1 && isDragging) {
+            if (isDragging) {
                 const starNumber = parseInt(star.getAttribute('data-star'));
                 const rect = star.getBoundingClientRect();
                 const clickX = e.clientX - rect.left;
@@ -472,9 +547,8 @@ function initStarFilter() {
         });
     });
 
-    // Mouse up - end drag
+    // Mouse up anywhere - end drag
     document.addEventListener('mouseup', () => {
-        mouseDownPos = null;
         isDragging = false;
     });
 }
