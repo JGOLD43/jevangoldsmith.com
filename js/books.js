@@ -291,7 +291,7 @@ function createBookCard(book) {
     // Generate re-reads display
     let reReadsHTML = '';
     if (book.reReads > 0) {
-        reReadsHTML = `<div class="book-rereads">${book.reReads} Time${book.reReads === 1 ? '' : 's'} Read</div>`;
+        reReadsHTML = `<div class="book-rereads">📖 ${book.reReads} Time${book.reReads === 1 ? '' : 's'} Read</div>`;
     }
 
     card.innerHTML = `
