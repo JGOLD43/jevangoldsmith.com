@@ -240,6 +240,35 @@ a:hover {
     height: 22px;
 }
 
+/* Wide dropdown menu with columns (for Explore) */
+.dropdown-menu-wide {
+    min-width: 400px !important;
+    display: block !important;
+    padding: 1.5rem !important;
+}
+
+.dropdown-columns {
+    display: flex;
+    gap: 2rem;
+}
+
+.dropdown-column {
+    flex: 1;
+    min-width: 140px;
+}
+
+.dropdown-column .dropdown-header {
+    grid-column: auto;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-menu-wide a {
+    padding: 0.5rem 0.5rem !important;
+    font-size: 0.95rem !important;
+}
+
 /* Hero Section */
 .hero {
     min-height: 100vh;
