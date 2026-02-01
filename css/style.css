@@ -1644,6 +1644,28 @@ a:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
+/* Badge count on collapsed sidebar icons */
+.books-sidebar.collapsed .category-count {
+    display: flex !important;
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    font-size: 0.6rem;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    border-radius: 7px;
+    background: #666;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.books-sidebar.collapsed .sidebar-category.active .category-count {
+    background: #000;
+}
+
 .movies-sidebar.collapsed .sidebar-category {
     position: relative;
 }
@@ -1665,6 +1687,28 @@ a:hover {
     z-index: 1000;
     pointer-events: none;
     box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* Badge count on collapsed movies sidebar icons */
+.movies-sidebar.collapsed .genre-count {
+    display: flex !important;
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    font-size: 0.6rem;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    border-radius: 7px;
+    background: #666;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.movies-sidebar.collapsed .sidebar-category.active .genre-count {
+    background: #000;
 }
 
 .category-name {
