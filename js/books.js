@@ -386,6 +386,7 @@ let isRereadsDragging = false;
 // Set star filter when clicking a star
 function setStarFilter(rating) {
     currentStarFilter = rating;
+    activeCategory = 'all';
 
     // Update star visual states
     updateStarFilterDisplay();
@@ -400,7 +401,9 @@ function setStarFilter(rating) {
     populateSidebar();
 
     // Show all filtered books
-    renderBooks(getFilteredBooks());
+    const filtered = getFilteredBooks();
+    renderBooks(filtered);
+    updateBookCount(filtered.length, 'all');
 
     // Reset category active states
     document.querySelectorAll('.sidebar-category').forEach(btn => {
@@ -416,6 +419,7 @@ function setStarFilter(rating) {
 // Clear star filter to show all books
 function clearStarFilter() {
     currentStarFilter = 'all';
+    activeCategory = 'all';
 
     // Update star visual states
     updateStarFilterDisplay();
@@ -430,7 +434,9 @@ function clearStarFilter() {
     populateSidebar();
 
     // Show all books
-    renderBooks(getFilteredBooks());
+    const filtered = getFilteredBooks();
+    renderBooks(filtered);
+    updateBookCount(filtered.length, 'all');
 
     // Reset category active states
     document.querySelectorAll('.sidebar-category').forEach(btn => {
@@ -446,6 +452,7 @@ function clearStarFilter() {
 // Set re-reads filter
 function setReReadsFilter(count) {
     currentReReadsFilter = count;
+    activeCategory = 'all';
 
     // Update marker visual states
     updateReReadsFilterDisplay();
@@ -460,7 +467,9 @@ function setReReadsFilter(count) {
     populateSidebar();
 
     // Show filtered books
-    renderBooks(getFilteredBooks());
+    const filtered = getFilteredBooks();
+    renderBooks(filtered);
+    updateBookCount(filtered.length, 'all');
 
     // Reset category active states
     document.querySelectorAll('.sidebar-category').forEach(btn => {
@@ -476,6 +485,7 @@ function setReReadsFilter(count) {
 // Clear re-reads filter (called by Show All link in star filter)
 function clearReReadsFilter() {
     currentReReadsFilter = 'all';
+    activeCategory = 'all';
 
     // Update marker visual states
     updateReReadsFilterDisplay();
@@ -490,7 +500,9 @@ function clearReReadsFilter() {
     populateSidebar();
 
     // Show all books
-    renderBooks(getFilteredBooks());
+    const filtered = getFilteredBooks();
+    renderBooks(filtered);
+    updateBookCount(filtered.length, 'all');
 
     // Reset category active states
     document.querySelectorAll('.sidebar-category').forEach(btn => {
@@ -599,10 +611,13 @@ function initReReadsFilter() {
 // Toggle book category expansion
 function toggleBookCategory(category) {
     const filteredBooks = getFilteredBooks();
+    activeCategory = category;
 
     if (category === 'all') {
         // Show all filtered books
         renderBooks(filteredBooks);
+        // Update counter for all books
+        updateBookCount(filteredBooks.length, 'all');
         // Remove active from all categories
         document.querySelectorAll('.sidebar-category').forEach(btn => {
             btn.classList.remove('active', 'expanded');
@@ -620,12 +635,22 @@ function toggleBookCategory(category) {
 
     if (!container) return;
 
+    // Find the full category name from the key
+    const fullCategoryName = Object.keys(categoryMap).find(k => categoryMap[k] === category);
+
+    // Filter books by category (and current filters)
+    const categoryBooks = filteredBooks.filter(book => book.category === fullCategoryName);
+
     // Toggle expansion
     const isExpanded = container.classList.contains('expanded');
 
     if (isExpanded) {
         container.classList.remove('expanded');
         button.classList.remove('expanded');
+        // When collapsing, show all books and update counter
+        activeCategory = 'all';
+        renderBooks(filteredBooks);
+        updateBookCount(filteredBooks.length, 'all');
     } else {
         // Collapse all others
         document.querySelectorAll('.category-books').forEach(div => {
@@ -639,12 +664,9 @@ function toggleBookCategory(category) {
         container.classList.add('expanded');
         button.classList.add('expanded');
 
-        // Find the full category name from the key
-        const fullCategoryName = Object.keys(categoryMap).find(k => categoryMap[k] === category);
-
-        // Filter books by category (and current star filter)
-        const categoryBooks = filteredBooks.filter(book => book.category === fullCategoryName);
+        // Render and update counter for this category
         renderBooks(categoryBooks);
+        updateBookCount(categoryBooks.length, category);
     }
 
     // Update active state
@@ -688,29 +710,59 @@ function scrollToBook(bookTitle, event) {
     }
 }
 
-// Update the book counter
-function updateBookCount() {
+// Track active category
+let activeCategory = 'all';
+
+// Update the book counter with dynamic label
+function updateBookCount(count = null, categoryName = null) {
     const countElement = document.getElementById('book-count');
+    const labelElement = document.getElementById('counter-label');
+
     if (countElement) {
-        countElement.textContent = booksData.length;
+        if (count !== null) {
+            countElement.textContent = count;
+        } else {
+            countElement.textContent = booksData.length;
+        }
+    }
+
+    if (labelElement) {
+        if (categoryName && categoryName !== 'all') {
+            labelElement.textContent = 'Books Read';
+        } else {
+            labelElement.textContent = 'All Books Read';
+        }
     }
 }
 
 // Clear all filters
 function clearAllFilters() {
-    // Clear star filter
-    clearStarFilter();
+    currentStarFilter = 'all';
+    currentReReadsFilter = 'all';
+    activeCategory = 'all';
+
+    // Update star visual states
+    updateStarFilterDisplay();
+    const ratingText = document.getElementById('filter-rating-text');
+    if (ratingText) ratingText.textContent = '';
+
     // Clear times read filter
     const slider = document.getElementById('timesread-slider');
-    if (slider) {
-        slider.value = 0;
-        filterByTimesRead(0);
-    }
+    if (slider) slider.value = 0;
+    const timesreadText = document.getElementById('filter-timesread-text');
+    if (timesreadText) timesreadText.textContent = '';
+
+    // Re-populate sidebar
+    populateSidebar();
+
     // Clear category selection
-    document.querySelectorAll('.sidebar-category').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.sidebar-category').forEach(btn => btn.classList.remove('active', 'expanded'));
     document.querySelectorAll('.category-books').forEach(section => section.classList.remove('expanded'));
-    // Show all books
+    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+
+    // Show all books and update counter
     renderBooks();
+    updateBookCount(booksData.length, 'all');
 }
 
 // Toggle sidebar collapse
@@ -731,5 +783,5 @@ document.addEventListener('DOMContentLoaded', () => {
     populateSidebar();
     initStarFilter();
     initReReadsFilter();
-    updateBookCount();
+    updateBookCount(booksData.length, 'all');
 });

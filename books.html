@@ -91,7 +91,14 @@
             <!-- All Books -->
             <div class="sidebar-section">
                 <button class="sidebar-category active" onclick="toggleBookCategory('all')">
-                    <span class="category-icon">📚</span>
+                    <span class="category-icon" title="All Books">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            <line x1="8" y1="6" x2="16" y2="6"></line>
+                            <line x1="8" y1="10" x2="14" y2="10"></line>
+                        </svg>
+                    </span>
                     <span class="category-name">All Books</span>
                     <span class="category-count" id="count-all">0</span>
                 </button>
@@ -100,7 +107,13 @@
             <!-- Category Sections -->
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('advertising')">
-                    <span class="category-icon">📢</span>
+                    <span class="category-icon" title="Advertising and Copywriting">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                    </span>
                     <span class="category-name">Advertising and Copywriting</span>
                     <span class="category-count" id="count-advertising">0</span>
                     <span class="expand-icon">▼</span>
@@ -110,7 +123,12 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('autobiographies')">
-                    <span class="category-icon">👤</span>
+                    <span class="category-icon" title="Autobiographies">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
                     <span class="category-name">Autobiographies</span>
                     <span class="category-count" id="count-autobiographies">0</span>
                     <span class="expand-icon">▼</span>
@@ -120,7 +138,13 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('bigideas')">
-                    <span class="category-icon">💡</span>
+                    <span class="category-icon" title="Big Ideas">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18h6"></path>
+                            <path d="M10 22h4"></path>
+                            <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
+                        </svg>
+                    </span>
                     <span class="category-name">Big Ideas</span>
                     <span class="category-count" id="count-bigideas">0</span>
                     <span class="expand-icon">▼</span>
@@ -130,7 +154,12 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('greatbooks')">
-                    <span class="category-icon">📖</span>
+                    <span class="category-icon" title="The Great Books">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                    </span>
                     <span class="category-name">The Great Books</span>
                     <span class="category-count" id="count-greatbooks">0</span>
                     <span class="expand-icon">▼</span>
@@ -140,7 +169,15 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('outofthebox')">
-                    <span class="category-icon">🎨</span>
+                    <span class="category-icon" title="Out of the Box Thinking">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="9" y1="3" x2="9" y2="21"></line>
+                            <line x1="15" y1="3" x2="15" y2="21"></line>
+                            <line x1="3" y1="9" x2="21" y2="9"></line>
+                            <line x1="3" y1="15" x2="21" y2="15"></line>
+                        </svg>
+                    </span>
                     <span class="category-name">Out of the Box Thinking</span>
                     <span class="category-count" id="count-outofthebox">0</span>
                     <span class="expand-icon">▼</span>
@@ -150,7 +187,12 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('patience')">
-                    <span class="category-icon">🧘</span>
+                    <span class="category-icon" title="Patience and Clear Thinking">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                    </span>
                     <span class="category-name">Patience and Clear Thinking</span>
                     <span class="category-count" id="count-patience">0</span>
                     <span class="expand-icon">▼</span>
@@ -160,7 +202,12 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('learning')">
-                    <span class="category-icon">🎓</span>
+                    <span class="category-icon" title="Learning">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                    </span>
                     <span class="category-name">Learning</span>
                     <span class="category-count" id="count-learning">0</span>
                     <span class="expand-icon">▼</span>
@@ -170,7 +217,13 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('persuasion')">
-                    <span class="category-icon">🎯</span>
+                    <span class="category-icon" title="Persuasion">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                    </span>
                     <span class="category-name">Persuasion</span>
                     <span class="category-count" id="count-persuasion">0</span>
                     <span class="expand-icon">▼</span>
@@ -180,7 +233,13 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('psychology')">
-                    <span class="category-icon">🧠</span>
+                    <span class="category-icon" title="Psychology Books">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a8 8 0 0 0-8 8c0 3.5 2 6 4 8l1 4h6l1-4c2-2 4-4.5 4-8a8 8 0 0 0-8-8z"></path>
+                            <line x1="12" y1="2" x2="12" y2="8"></line>
+                            <line x1="8" y1="8" x2="16" y2="8"></line>
+                        </svg>
+                    </span>
                     <span class="category-name">Psychology Books</span>
                     <span class="category-count" id="count-psychology">0</span>
                     <span class="expand-icon">▼</span>
@@ -190,7 +249,13 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('science')">
-                    <span class="category-icon">🔬</span>
+                    <span class="category-icon" title="Science">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 3h6v6l3 9H6l3-9V3z"></path>
+                            <line x1="6" y1="21" x2="18" y2="21"></line>
+                            <circle cx="12" cy="15" r="1"></circle>
+                        </svg>
+                    </span>
                     <span class="category-name">Science</span>
                     <span class="category-count" id="count-science">0</span>
                     <span class="expand-icon">▼</span>
@@ -200,7 +265,11 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('storytelling')">
-                    <span class="category-icon">📚</span>
+                    <span class="category-icon" title="Storytelling">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                        </svg>
+                    </span>
                     <span class="category-name">Storytelling</span>
                     <span class="category-count" id="count-storytelling">0</span>
                     <span class="expand-icon">▼</span>
@@ -210,7 +279,11 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('strategy')">
-                    <span class="category-icon">⚔️</span>
+                    <span class="category-icon" title="Strategy and War">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </span>
                     <span class="category-name">Strategy and War</span>
                     <span class="category-count" id="count-strategy">0</span>
                     <span class="expand-icon">▼</span>
@@ -220,7 +293,13 @@
 
             <div class="sidebar-section">
                 <button class="sidebar-category" onclick="toggleBookCategory('whoami')">
-                    <span class="category-icon">🤔</span>
+                    <span class="category-icon" title="Who Am I?">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </span>
                     <span class="category-name">Who Am I?</span>
                     <span class="category-count" id="count-whoami">0</span>
                     <span class="expand-icon">▼</span>
@@ -241,7 +320,7 @@
                 </div>
                 <div class="header-counter">
                     <span class="counter-number" id="book-count">0</span>
-                    <span class="counter-label">Books Read</span>
+                    <span class="counter-label" id="counter-label">All Books Read</span>
                 </div>
             </header>
             <div id="books-container" class="books-grid">
