@@ -1218,10 +1218,9 @@ a:hover {
 }
 
 .books-sidebar.collapsed .sidebar-header {
-    padding: 2rem 0 0 15px;
+    padding: 1rem 0 0 15px;
     margin-bottom: 0;
     border-bottom: none;
-    justify-content: flex-start;
 }
 
 .books-sidebar.collapsed .sidebar-header h3,
@@ -1961,7 +1960,7 @@ button[type="submit"]:hover {
 .books-sidebar {
     background: #FAFAF9;
     border-right: 1px solid #000;
-    padding: 2rem 0;
+    padding: 0;
     position: sticky;
     transition: width 0.3s ease, min-width 0.3s ease;
     top: 70px;
@@ -1970,7 +1969,7 @@ button[type="submit"]:hover {
 }
 
 .books-sidebar .sidebar-header {
-    padding: 0 1.5rem 0 15px;
+    padding: 1rem 1.5rem 1rem 15px;
 }
 
 .books-sidebar .sidebar-category {
