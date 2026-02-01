@@ -138,7 +138,26 @@
                     </svg>
                 </button>
                 <h3>Browse Books</h3>
-                <a href="#" class="show-all-link" onclick="clearAllFilters(); return false;">Show All</a>
+                <div class="view-toggle">
+                    <button class="view-toggle-btn active" id="list-view-btn" onclick="setViewMode('list')" title="List view">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                    </button>
+                    <button class="view-toggle-btn" id="grid-view-btn" onclick="setViewMode('grid')" title="Grid view">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <!-- Star Rating Filter -->
@@ -430,6 +449,19 @@
             </header>
             <div id="books-container" class="books-grid">
                 <!-- Books will be loaded here dynamically -->
+            </div>
+        </div>
+
+        <!-- Category Grid View -->
+        <div class="category-grid-view" id="category-grid-view" style="display: none;">
+            <header class="main-header">
+                <div class="header-content">
+                    <h1>My Reading List</h1>
+                    <a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a>
+                </div>
+            </header>
+            <div class="category-grid" id="category-grid">
+                <!-- Categories will be populated by JavaScript -->
             </div>
         </div>
     </main>

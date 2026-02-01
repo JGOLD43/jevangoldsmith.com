@@ -836,3 +836,159 @@ document.addEventListener('DOMContentLoaded', () => {
     initCarousel();
     updateBookCount(booksData.length, 'all');
 });
+
+// View mode state
+let currentViewMode = 'list';
+
+// Category display names mapping
+const categoryDisplayNames = {
+    'Advertising and Copywriting': 'Advertising',
+    'Astral Projection': 'Astral projection',
+    'Autobiographies': 'Autobiographies',
+    'Big Ideas': 'Big Ideas',
+    'Copywriting': 'Copywriting',
+    'The Great Books': 'The Great Books',
+    'Lee Kuan Yew': 'Lee Kuan Yew',
+    'Learning': 'Learning',
+    'Out of the Box Thinking': 'Out Of The Box Thinking',
+    'Patience and Clear Thinking': 'Mental Endurance...',
+    'Persuasion': 'Persuasion',
+    'Psychology Books': 'Psychology',
+    'Science': 'Science',
+    'Storytelling': 'Storytelling',
+    'Strategy and War': 'Strategy',
+    'Who Am I?': 'Who Am I?'
+};
+
+// Set view mode (list or grid)
+function setViewMode(mode) {
+    currentViewMode = mode;
+
+    const listBtn = document.getElementById('list-view-btn');
+    const gridBtn = document.getElementById('grid-view-btn');
+    const booksMain = document.querySelector('.books-main');
+    const categoryGridView = document.getElementById('category-grid-view');
+    const sidebar = document.getElementById('books-sidebar');
+
+    // Update button states
+    listBtn.classList.toggle('active', mode === 'list');
+    gridBtn.classList.toggle('active', mode === 'grid');
+
+    if (mode === 'grid') {
+        // Hide list view, show grid view
+        booksMain.style.display = 'none';
+        categoryGridView.style.display = 'block';
+        sidebar.style.display = 'none';
+        renderCategoryGrid();
+    } else {
+        // Show list view, hide grid view
+        booksMain.style.display = 'block';
+        categoryGridView.style.display = 'none';
+        sidebar.style.display = 'block';
+    }
+}
+
+// Get books grouped by category
+function getBooksByCategory() {
+    const categories = {};
+    booksData.forEach(book => {
+        const cat = book.category || 'Uncategorized';
+        if (!categories[cat]) {
+            categories[cat] = [];
+        }
+        categories[cat].push(book);
+    });
+    return categories;
+}
+
+// Render category grid
+function renderCategoryGrid() {
+    const container = document.getElementById('category-grid');
+    const booksByCategory = getBooksByCategory();
+
+    // Sort categories by book count
+    const sortedCategories = Object.entries(booksByCategory)
+        .sort((a, b) => b[1].length - a[1].length);
+
+    container.innerHTML = sortedCategories.map(([category, books]) => {
+        // Get up to 8 book covers for the preview
+        const previewBooks = books.slice(0, 8);
+        const displayName = categoryDisplayNames[category] || category;
+
+        const bookCovers = previewBooks.map(book => {
+            const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`;
+            return `<img src="${coverUrl}" alt="${book.title}" loading="lazy">`;
+        }).join('');
+
+        // Fill empty slots if less than 8 books
+        const emptySlots = Array(Math.max(0, 8 - previewBooks.length))
+            .fill('<div class="empty-slot"></div>')
+            .join('');
+
+        return `
+            <div class="category-card" onclick="openCategoryModal('${category.replace(/'/g, "\\'")}')">
+                <div class="category-card-books">
+                    ${bookCovers}${emptySlots}
+                </div>
+                <div class="category-card-info">
+                    <span class="category-card-name">${displayName}</span>
+                    <span class="category-card-count">${books.length}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Open category modal
+function openCategoryModal(category) {
+    const booksByCategory = getBooksByCategory();
+    const books = booksByCategory[category] || [];
+    const displayName = categoryDisplayNames[category] || category;
+
+    // Create or get modal
+    let modal = document.getElementById('category-expanded-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'category-expanded-modal';
+        modal.className = 'category-expanded';
+        document.body.appendChild(modal);
+    }
+
+    modal.innerHTML = `
+        <div class="category-expanded-header">
+            <h2 class="category-expanded-title">${displayName}</h2>
+            <button class="category-expanded-close" onclick="closeCategoryModal()">&times;</button>
+        </div>
+        <div class="category-expanded-books">
+            ${books.map(book => {
+                const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`;
+                return `
+                    <div class="category-expanded-book" onclick="openBookFromGrid('${book.isbn}')">
+                        <img src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}">
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// Close category modal
+function closeCategoryModal() {
+    const modal = document.getElementById('category-expanded-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Open book modal from grid view
+function openBookFromGrid(isbn) {
+    const book = booksData.find(b => b.isbn === isbn);
+    if (book) {
+        closeCategoryModal();
+        openBookModal(book);
+    }
+}
