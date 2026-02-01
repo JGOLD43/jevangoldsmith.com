@@ -2019,6 +2019,21 @@ button[type="submit"]:hover {
     font-weight: 300;
 }
 
+.header-subtitle-link {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    font-family: 'Chivo', sans-serif;
+    font-weight: 300;
+    text-decoration: none;
+    border-bottom: 1px solid var(--text-light);
+    transition: all 0.2s ease;
+}
+
+.header-subtitle-link:hover {
+    color: var(--secondary-color);
+    border-bottom-color: var(--secondary-color);
+}
+
 .header-counter {
     text-align: center;
     padding: 1rem 2rem;
