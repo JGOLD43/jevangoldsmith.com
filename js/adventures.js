@@ -7,7 +7,7 @@ const ADVENTURES_DATA_URL = 'data/adventures.json';
 
 // State
 let allAdventures = [];
-let currentFilter = 'all';
+let activeFilters = new Set(); // Track active region filters
 let lightboxImages = [];
 let lightboxIndex = 0;
 let worldMap = null;
@@ -208,24 +208,30 @@ function initWorldMap(adventures) {
         return;
     }
 
-    worldMap = L.map('world-map').setView([30, 0], 2);
+    // Create a mini map with no controls for the subnav
+    worldMap = L.map('world-map', {
+        zoomControl: false,
+        attributionControl: false,
+        dragging: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        touchZoom: false,
+        keyboard: false
+    }).setView([30, 0], 1);
 
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-    }).addTo(worldMap);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(worldMap);
 
-    // Add markers for each adventure
+    // Add small circle markers for each adventure
     adventures.forEach(adventure => {
         if (adventure.mapCenter) {
-            const marker = L.marker([adventure.mapCenter.lat, adventure.mapCenter.lng])
-                .addTo(worldMap)
-                .bindPopup(`
-                    <div style="min-width: 150px;">
-                        <strong>${adventure.title}</strong><br>
-                        <span style="color: #666;">${adventure.location}</span><br>
-                        <a href="#${adventure.id}" onclick="expandAdventure('${adventure.id}'); return false;" style="color: #6B8E23;">View Adventure</a>
-                    </div>
-                `);
+            L.circleMarker([adventure.mapCenter.lat, adventure.mapCenter.lng], {
+                radius: 4,
+                fillColor: '#6B8E23',
+                color: '#fff',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.9
+            }).addTo(worldMap);
         }
     });
 }
@@ -348,27 +354,83 @@ function populateSidebar(adventures) {
     });
 }
 
-function filterAdventures(filter, buttonEl) {
-    currentFilter = filter;
+// Toggle a region filter on/off
+function toggleFilter(region, buttonEl) {
+    if (activeFilters.has(region)) {
+        // Already active - remove it
+        activeFilters.delete(region);
+        buttonEl.classList.remove('active');
+    } else {
+        // Not active - add it
+        activeFilters.add(region);
+        buttonEl.classList.add('active');
+    }
 
+    // Update All button state
+    updateAllButtonState();
+
+    // Apply filters
+    applyFilters();
+}
+
+// Remove a specific filter (called by X button)
+function removeFilter(region, event) {
+    event.stopPropagation(); // Don't trigger the button click
+
+    activeFilters.delete(region);
+
+    // Update button state
+    const btn = document.querySelector(`.region-btn[data-region="${region}"]`);
+    if (btn) btn.classList.remove('active');
+
+    // Update All button state
+    updateAllButtonState();
+
+    // Apply filters
+    applyFilters();
+}
+
+// Reset all filters (show all)
+function resetFilters(buttonEl) {
+    // Clear all active filters
+    activeFilters.clear();
+
+    // Remove active class from all region buttons
+    document.querySelectorAll('.region-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // Add active class to All button
+    buttonEl.classList.add('active');
+
+    // Show all adventures
+    renderAdventures(allAdventures);
+    updateAdventureCount(allAdventures.length);
+}
+
+// Update the All button state based on active filters
+function updateAllButtonState() {
+    const allBtn = document.querySelector('.all-btn');
+    if (activeFilters.size === 0) {
+        allBtn.classList.add('active');
+    } else {
+        allBtn.classList.remove('active');
+    }
+}
+
+// Apply current active filters
+function applyFilters() {
     let filtered = allAdventures;
-    if (filter !== 'all') {
+
+    if (activeFilters.size > 0) {
         filtered = allAdventures.filter(a => {
             const region = (a.region || 'other').toLowerCase();
-            return region === filter.toLowerCase();
+            return activeFilters.has(region);
         });
     }
 
     renderAdventures(filtered);
     updateAdventureCount(filtered.length);
-
-    // Update active state
-    document.querySelectorAll('.subnav-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    if (buttonEl) {
-        buttonEl.classList.add('active');
-    }
 }
 
 // ============================================

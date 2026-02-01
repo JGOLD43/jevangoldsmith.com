@@ -41,31 +41,41 @@
         </div>
     </nav>
 
-    <!-- Secondary Navigation for Region Filters -->
+    <!-- Secondary Navigation with Map and Filters -->
     <nav class="adventures-subnav">
         <div class="container">
+            <!-- Mini Map -->
+            <div class="subnav-map" id="world-map"></div>
+
+            <!-- Filter Buttons -->
             <div class="subnav-filters">
-                <button class="subnav-btn active" onclick="filterAdventures('all', this)">
+                <button class="subnav-btn all-btn active" onclick="resetFilters(this)">
                     All
                     <span class="subnav-count" id="count-all">0</span>
                 </button>
-                <button class="subnav-btn" onclick="filterAdventures('europe', this)">
+                <button class="subnav-btn region-btn" data-region="europe" onclick="toggleFilter('europe', this)">
                     Europe
                     <span class="subnav-count" id="count-europe">0</span>
+                    <span class="filter-remove" onclick="removeFilter('europe', event)">&times;</span>
                 </button>
-                <button class="subnav-btn" onclick="filterAdventures('asia', this)">
+                <button class="subnav-btn region-btn" data-region="asia" onclick="toggleFilter('asia', this)">
                     Asia
                     <span class="subnav-count" id="count-asia">0</span>
+                    <span class="filter-remove" onclick="removeFilter('asia', event)">&times;</span>
                 </button>
-                <button class="subnav-btn" onclick="filterAdventures('americas', this)">
+                <button class="subnav-btn region-btn" data-region="americas" onclick="toggleFilter('americas', this)">
                     Americas
                     <span class="subnav-count" id="count-americas">0</span>
+                    <span class="filter-remove" onclick="removeFilter('americas', event)">&times;</span>
                 </button>
-                <button class="subnav-btn" onclick="filterAdventures('other', this)">
+                <button class="subnav-btn region-btn" data-region="other" onclick="toggleFilter('other', this)">
                     Other
                     <span class="subnav-count" id="count-other">0</span>
+                    <span class="filter-remove" onclick="removeFilter('other', event)">&times;</span>
                 </button>
             </div>
+
+            <!-- Counter -->
             <div class="subnav-counter">
                 <span class="counter-number" id="adventure-count">0</span>
                 <span class="counter-label">Adventures</span>
@@ -75,9 +85,6 @@
 
     <main class="adventures-page">
         <div class="container">
-            <!-- World Map Overview -->
-            <div class="adventures-world-map" id="world-map"></div>
-
             <!-- Adventures Container -->
             <div id="adventures-container" class="adventures-list">
                 <!-- Adventure cards will be loaded dynamically -->

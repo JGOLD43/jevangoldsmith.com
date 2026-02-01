@@ -2852,32 +2852,52 @@ button[type="submit"]:hover {
 
 .adventures-subnav .container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    gap: 1.5rem;
+    padding: 0.75rem 2rem;
     max-width: 1400px;
+}
+
+/* Mini Map in Subnav */
+.subnav-map {
+    width: 120px;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+}
+
+.subnav-map .leaflet-control-zoom {
+    display: none;
+}
+
+.subnav-map .leaflet-control-attribution {
+    display: none;
 }
 
 .subnav-filters {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    flex: 1;
 }
 
 .subnav-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.25rem;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
     background: var(--background-alt);
     border: 1px solid var(--border-color);
     border-radius: 25px;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
     color: var(--text-color);
     transition: all 0.2s ease;
+    position: relative;
 }
 
 .subnav-btn:hover {
@@ -2891,9 +2911,33 @@ button[type="submit"]:hover {
     color: white;
 }
 
+/* All button styling */
+.subnav-btn.all-btn.active {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Region buttons with X */
+.subnav-btn.region-btn .filter-remove {
+    display: none;
+    margin-left: 0.25rem;
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.subnav-btn.region-btn.active .filter-remove {
+    display: inline;
+}
+
+.subnav-btn.region-btn .filter-remove:hover {
+    opacity: 1;
+}
+
 .subnav-count {
-    font-size: 0.75rem;
-    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
     background: rgba(0,0,0,0.1);
     border-radius: 10px;
 }
@@ -2906,6 +2950,7 @@ button[type="submit"]:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .subnav-counter .counter-number {
@@ -2915,7 +2960,7 @@ button[type="submit"]:hover {
 }
 
 .subnav-counter .counter-label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-light);
     text-transform: uppercase;
     letter-spacing: 0.5px;
