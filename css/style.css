@@ -58,7 +58,7 @@ a:hover {
 .navbar {
     background-color: var(--background);
     border-bottom: 1px solid var(--border-color);
-    padding: 1rem 0;
+    padding: 1.5rem 0;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -70,6 +70,7 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 1400px;
 }
 
 .logo {
@@ -78,7 +79,7 @@ a:hover {
 }
 
 .logo-image {
-    height: 50px;
+    height: 80px;
     width: auto;
     transition: opacity 0.3s ease;
 }
