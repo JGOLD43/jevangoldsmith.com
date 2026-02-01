@@ -1052,20 +1052,31 @@ a:hover {
 
 /* Page Content Styles */
 .page-header {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 3rem 0;
-    text-align: center;
-    margin-bottom: 3rem;
+    background-color: var(--background);
+    padding: 4rem 0;
+    margin-bottom: 0;
+}
+
+.page-header .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: left;
 }
 
 .page-header h1 {
     font-size: 3rem;
+    font-weight: 600;
     margin-bottom: 1rem;
+    color: #000;
+    font-family: 'Chivo', sans-serif;
 }
 
 .page-header p {
-    font-size: 1.25rem;
-    color: var(--text-light);
+    font-size: 1.1rem;
+    color: var(--text-color);
+    font-family: 'Chivo', sans-serif;
+    font-weight: 300;
 }
 
 .content-section {
