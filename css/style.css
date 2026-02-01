@@ -475,10 +475,11 @@ a:hover {
 
 .carousel-title {
     font-size: 2rem;
-    font-weight: 300;
+    font-weight: 600;
     color: white;
     margin: 0;
     font-family: 'Chivo', sans-serif;
+    letter-spacing: 0;
 }
 
 .carousel-discover {
