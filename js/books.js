@@ -608,6 +608,22 @@ function initReReadsFilter() {
     });
 }
 
+// Show arrow flash animation
+function showArrowFlash(button, isExpanding) {
+    // Remove any existing arrow flash
+    const existingArrow = button.querySelector('.arrow-flash');
+    if (existingArrow) existingArrow.remove();
+
+    // Create arrow element
+    const arrow = document.createElement('span');
+    arrow.className = 'arrow-flash';
+    arrow.textContent = isExpanding ? '▲' : '▼';
+    button.appendChild(arrow);
+
+    // Remove after animation completes
+    setTimeout(() => arrow.remove(), 500);
+}
+
 // Toggle book category expansion
 function toggleBookCategory(category) {
     const filteredBooks = getFilteredBooks();
@@ -643,6 +659,9 @@ function toggleBookCategory(category) {
 
     // Toggle expansion
     const isExpanded = container.classList.contains('expanded');
+
+    // Show arrow flash animation
+    showArrowFlash(button, !isExpanded);
 
     if (isExpanded) {
         container.classList.remove('expanded');

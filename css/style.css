@@ -1391,15 +1391,34 @@ a:hover {
     text-align: center;
 }
 
+/* Hide permanent expand icons - we'll show animated ones instead */
 .expand-icon {
-    font-size: 0.7rem;
-    color: var(--text-light);
-    transition: transform 0.2s ease;
-    margin-left: 0.25rem;
+    display: none;
 }
 
-.sidebar-category.expanded .expand-icon {
-    transform: rotate(-180deg);
+/* Animated arrow flash */
+.sidebar-category .arrow-flash {
+    position: absolute;
+    right: 1.5rem;
+    font-size: 0.7rem;
+    color: var(--secondary-color);
+    opacity: 0;
+    animation: arrowFlash 0.5s ease-out forwards;
+}
+
+@keyframes arrowFlash {
+    0% {
+        opacity: 0;
+        transform: translateX(-5px);
+    }
+    30% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(5px);
+    }
 }
 
 .category-essays {
