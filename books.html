@@ -454,10 +454,30 @@
 
         <!-- Category Grid View -->
         <div class="category-grid-view" id="category-grid-view" style="display: none;">
-            <header class="main-header">
+            <header class="main-header grid-view-header">
                 <div class="header-content">
                     <h1>My Reading List</h1>
                     <a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a>
+                </div>
+                <div class="view-toggle grid-view-toggle">
+                    <button class="view-toggle-btn" id="list-view-btn-grid" onclick="setViewMode('list')" title="List view">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                    </button>
+                    <button class="view-toggle-btn active" id="grid-view-btn-grid" onclick="setViewMode('grid')" title="Grid view">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </button>
                 </div>
             </header>
             <div class="category-grid" id="category-grid">

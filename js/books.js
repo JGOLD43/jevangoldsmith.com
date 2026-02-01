@@ -866,25 +866,32 @@ function setViewMode(mode) {
 
     const listBtn = document.getElementById('list-view-btn');
     const gridBtn = document.getElementById('grid-view-btn');
+    const listBtnGrid = document.getElementById('list-view-btn-grid');
+    const gridBtnGrid = document.getElementById('grid-view-btn-grid');
     const booksMain = document.querySelector('.books-main');
     const categoryGridView = document.getElementById('category-grid-view');
     const sidebar = document.getElementById('books-sidebar');
+    const booksLayout = document.getElementById('books-layout');
 
-    // Update button states
+    // Update button states (both sidebar and grid view toggles)
     listBtn.classList.toggle('active', mode === 'list');
     gridBtn.classList.toggle('active', mode === 'grid');
+    if (listBtnGrid) listBtnGrid.classList.toggle('active', mode === 'list');
+    if (gridBtnGrid) gridBtnGrid.classList.toggle('active', mode === 'grid');
 
     if (mode === 'grid') {
         // Hide list view, show grid view
         booksMain.style.display = 'none';
         categoryGridView.style.display = 'block';
         sidebar.style.display = 'none';
+        booksLayout.classList.add('grid-view-active');
         renderCategoryGrid();
     } else {
         // Show list view, hide grid view
         booksMain.style.display = 'block';
         categoryGridView.style.display = 'none';
         sidebar.style.display = 'block';
+        booksLayout.classList.remove('grid-view-active');
     }
 }
 
