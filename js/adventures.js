@@ -244,31 +244,51 @@ function initWorldMap(adventures) {
         }
     });
 
-    // Enable interactivity on hover
-    mapContainer.addEventListener('mouseenter', () => {
-        mapContainer.classList.add('expanded');
-        worldMap.dragging.enable();
-        worldMap.scrollWheelZoom.enable();
-        worldMap.doubleClickZoom.enable();
-        // Recalculate map size after expansion
-        setTimeout(() => {
-            worldMap.invalidateSize();
-            worldMap.setView([30, 0], 2);
-        }, 350);
+    // Click to expand/collapse
+    mapContainer.addEventListener('click', (e) => {
+        // Don't collapse if clicking on a popup or control
+        if (e.target.closest('.leaflet-popup') || e.target.closest('.leaflet-control')) {
+            return;
+        }
+
+        const isExpanded = mapContainer.classList.contains('expanded');
+
+        if (isExpanded) {
+            collapseWorldMap(mapContainer);
+        } else {
+            expandWorldMap(mapContainer);
+        }
     });
 
-    mapContainer.addEventListener('mouseleave', () => {
-        mapContainer.classList.remove('expanded');
-        worldMap.dragging.disable();
-        worldMap.scrollWheelZoom.disable();
-        worldMap.doubleClickZoom.disable();
-        worldMap.closePopup();
-        // Reset view and recalculate size
-        setTimeout(() => {
-            worldMap.invalidateSize();
-            worldMap.setView([30, 0], 1);
-        }, 350);
+    // Click outside to close
+    document.addEventListener('click', (e) => {
+        if (!mapContainer.contains(e.target) && mapContainer.classList.contains('expanded')) {
+            collapseWorldMap(mapContainer);
+        }
     });
+}
+
+function expandWorldMap(mapContainer) {
+    mapContainer.classList.add('expanded');
+    worldMap.dragging.enable();
+    worldMap.scrollWheelZoom.enable();
+    worldMap.doubleClickZoom.enable();
+    setTimeout(() => {
+        worldMap.invalidateSize();
+        worldMap.setView([30, 0], 2);
+    }, 350);
+}
+
+function collapseWorldMap(mapContainer) {
+    mapContainer.classList.remove('expanded');
+    worldMap.dragging.disable();
+    worldMap.scrollWheelZoom.disable();
+    worldMap.doubleClickZoom.disable();
+    worldMap.closePopup();
+    setTimeout(() => {
+        worldMap.invalidateSize();
+        worldMap.setView([30, 0], 1);
+    }, 350);
 }
 
 function initAdventureMap(adventure) {

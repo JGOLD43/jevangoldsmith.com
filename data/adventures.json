@@ -44,6 +44,52 @@
       "mapZoom": 8,
       "tags": ["nature", "photography", "hiking"],
       "status": "published"
+    },
+    {
+      "id": "japan-adventure",
+      "title": "Temples & Cherry Blossoms",
+      "subtitle": "Exploring ancient Japan during sakura season",
+      "location": "Kyoto, Japan",
+      "region": "Asia",
+      "startDate": "2024-03-25",
+      "endDate": "2024-04-05",
+      "duration": "12 days",
+      "heroImage": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200",
+      "shortDescription": "A journey through Japan's ancient capital during the magical cherry blossom season, visiting temples, shrines, and hidden gardens.",
+      "content": "<p>Japan in spring is a dream come true. The cherry blossoms transform every street, park, and temple into a pink wonderland.</p><p>Kyoto's thousands of temples and shrines each offer their own unique perspective on Japanese history and spirituality. From the golden pavilion of Kinkaku-ji to the endless torii gates of Fushimi Inari, every day brought new discoveries.</p>",
+      "highlights": [
+        "Cherry blossoms",
+        "Ancient temples",
+        "Traditional cuisine",
+        "Zen gardens"
+      ],
+      "gallery": [
+        {
+          "src": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400",
+          "caption": "Fushimi Inari shrine",
+          "lat": 34.9671,
+          "lng": 135.7727
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400",
+          "caption": "Cherry blossoms in bloom",
+          "lat": 35.0116,
+          "lng": 135.7681
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400",
+          "caption": "Traditional pagoda",
+          "lat": 34.9949,
+          "lng": 135.7850
+        }
+      ],
+      "mapCenter": { "lat": 35.0116, "lng": 135.7681 },
+      "mapZoom": 12,
+      "tags": ["culture", "temples", "spring", "photography"],
+      "status": "published"
     }
   ],
   "lastUpdated": "2024-01-01T00:00:00Z"
