@@ -1297,21 +1297,26 @@ a:hover {
 }
 
 .sidebar-category:hover {
-    background: #F5F5F4;
+    background: #D4D4D4;
 }
 
 .sidebar-category.active {
-    background: #E7E5E4;
-    color: #000;
+    background: #000;
+    color: #fff;
     font-weight: 500;
 }
 
 .sidebar-category.active .category-name {
-    color: var(--secondary-color);
+    color: #fff;
+}
+
+.sidebar-category.active .category-count {
+    background: #333;
+    color: #fff;
 }
 
 .sidebar-category.active .category-icon svg {
-    stroke: var(--secondary-color);
+    stroke: #fff;
 }
 
 .category-icon {
