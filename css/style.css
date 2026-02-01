@@ -2845,8 +2845,10 @@ button[type="submit"]:hover {
 .adventures-subnav {
     background: white;
     border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 70px;
+    position: fixed;
+    top: 129px; /* Below navbar: 80px logo + 48px padding + 1px border */
+    left: 0;
+    right: 0;
     z-index: 90;
 }
 
@@ -2862,6 +2864,7 @@ button[type="submit"]:hover {
     gap: 1.5rem;
     padding: 0.75rem 2rem;
     max-width: 1400px;
+    margin: 0 auto;
 }
 
 .adventures-subnav.collapsed .container {
@@ -2896,7 +2899,6 @@ button[type="submit"]:hover {
     padding: 0.5rem 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     pointer-events: auto;
-    margin-top: -1px;
 }
 
 .subnav-toggle:hover {
@@ -2930,8 +2932,13 @@ button[type="submit"]:hover {
     pointer-events: none;
 }
 
-.adventures-subnav.collapsed .container {
-    gap: 0;
+/* Add margin to main content to account for fixed subnav */
+.adventures-page {
+    margin-top: 85px; /* Space for the subnav when expanded */
+}
+
+.adventures-subnav.collapsed + .adventures-page {
+    margin-top: 45px; /* Smaller space for just the toggle tag when collapsed */
 }
 
 /* Button icons */
