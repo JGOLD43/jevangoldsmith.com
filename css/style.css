@@ -4796,7 +4796,7 @@ button[type="submit"]:hover {
     align-items: center;
     overflow: hidden;
     height: 24px;
-    width: 180px;
+    width: 240px;
     position: relative;
     border-left: 1px solid var(--border-color);
     padding-left: 0.75rem;
@@ -4820,12 +4820,13 @@ button[type="submit"]:hover {
 }
 
 @keyframes wisdom-scroll {
-    0%, 16% { transform: translateY(0); }
-    20%, 36% { transform: translateY(-24px); }
-    40%, 56% { transform: translateY(-48px); }
-    60%, 76% { transform: translateY(-72px); }
-    80%, 96% { transform: translateY(-96px); }
-    100% { transform: translateY(-120px); }
+    0%, 14% { transform: translateY(0); }
+    16.67%, 30.67% { transform: translateY(-24px); }
+    33.33%, 47.33% { transform: translateY(-48px); }
+    50%, 64% { transform: translateY(-72px); }
+    66.67%, 80.67% { transform: translateY(-96px); }
+    83.33%, 97.33% { transform: translateY(-120px); }
+    100% { transform: translateY(-144px); }
 }
 
 /* Theme Toggle - Icon Only */
