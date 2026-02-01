@@ -1,6 +1,6 @@
 /**
  * Date Me Funnel - Conversion-Optimized Interactive Questionnaire
- * Built with psychology-backed engagement techniques
+ * Built with psychology-backed engagement techniques + Hormozi value equation
  */
 
 // ============================================
@@ -12,7 +12,59 @@ const state = {
     answers: {},
     rejectionReason: null,
     compatibilityScore: 0,
-    personalityTraits: []
+    personalityTraits: [],
+    toneLevel: 2 // 0-4 scale for the slider
+};
+
+// ============================================
+// TONE SLIDER CONTENT
+// ============================================
+const toneContent = {
+    0: { // Chill
+        label: "Playing it cool",
+        title: "If you want to, no pressure",
+        subtitle: "I mean, I'm pretty busy anyway.",
+        cta: "Sure, why not →",
+        guarantee: "I'll probably respond. Eventually.",
+        noteLabel: "Say something if you feel like it",
+        notePlaceholder: "Or don't. I'm not your boss."
+    },
+    1: { // Casual
+        label: "Mildly interested",
+        title: "I'd be down to chat",
+        subtitle: "You seem cool. Let's see what happens.",
+        cta: "Let's do this →",
+        guarantee: "I'll text you within 48 hours.",
+        noteLabel: "Tell me something interesting",
+        notePlaceholder: "Impress me. Or don't. But do."
+    },
+    2: { // Genuine (default)
+        label: "Genuinely interested",
+        title: "I actually want to hear from you",
+        subtitle: "You made it this far. I'm curious about you.",
+        cta: "Send it to Jevan →",
+        guarantee: "I respond to everyone. Within 24 hours. Personally.",
+        noteLabel: "Say something that'll make me smile",
+        notePlaceholder: "A joke, a question, literally anything..."
+    },
+    3: { // Eager
+        label: "Very interested",
+        title: "Okay I'm kind of excited about this",
+        subtitle: "Your answers were actually really good??",
+        cta: "PLEASE send this →",
+        guarantee: "I will 100% text you TODAY. I promise. Pinky swear.",
+        noteLabel: "Quick, say something before I overthink this",
+        notePlaceholder: "Anything. I'm already composing my first text to you."
+    },
+    4: { // Desperate
+        label: "Completely unhinged",
+        title: "I'M BEGGING YOU",
+        subtitle: "I have SO many dad jokes saved up. Please.",
+        cta: "🚨 SEND IMMEDIATELY 🚨",
+        guarantee: "I will text you in the next 30 SECONDS. I'm already typing. This is not a drill.",
+        noteLabel: "SAY LITERALLY ANYTHING",
+        notePlaceholder: "JUST HIT SEND I'M LOSING MY MIND OVER HERE"
+    }
 };
 
 // ============================================
@@ -95,7 +147,6 @@ const stage1Questions = [
             text: "Look, I need someone who can appreciate that a spider in the apartment is basically a home invasion. Your calmness concerns me.",
             subtext: "We might be too different on the things that matter most (spiders).",
             emoji: "🕷️",
-            spotifyLink: "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT",
             buttons: [
                 { text: "Here's a song to soften the blow", link: "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT", primary: true, external: true },
                 { text: "Fine, I'll pretend to be scared", action: 'restart' }
@@ -237,18 +288,18 @@ const stage2Questions = [
         subtext: "Don't worry—I won't actually judge you by it. Much.",
         type: 'choice',
         options: [
-            { text: "Aries ♈ (main character energy)", value: 'aries' },
-            { text: "Taurus ♉ (stubborn but loyal)", value: 'taurus' },
-            { text: "Gemini ♊ (two for one deal)", value: 'gemini' },
-            { text: "Cancer ♋ (emotional in the best way)", value: 'cancer' },
-            { text: "Leo ♌ (we get it, you're the star)", value: 'leo' },
-            { text: "Virgo ♍ (perfectionist vibes)", value: 'virgo' },
-            { text: "Libra ♎ (can't make a decision)", value: 'libra' },
-            { text: "Scorpio ♏ (intense and mysterious)", value: 'scorpio' },
-            { text: "Sagittarius ♐ (always leaving)", value: 'sagittarius' },
-            { text: "Capricorn ♑ (CEO energy)", value: 'capricorn' },
-            { text: "Aquarius ♒ (definitely weird)", value: 'aquarius' },
-            { text: "Pisces ♓ (living in a fantasy)", value: 'pisces' },
+            { text: "Aries ♈", value: 'aries' },
+            { text: "Taurus ♉", value: 'taurus' },
+            { text: "Gemini ♊", value: 'gemini' },
+            { text: "Cancer ♋", value: 'cancer' },
+            { text: "Leo ♌", value: 'leo' },
+            { text: "Virgo ♍", value: 'virgo' },
+            { text: "Libra ♎", value: 'libra' },
+            { text: "Scorpio ♏", value: 'scorpio' },
+            { text: "Sagittarius ♐", value: 'sagittarius' },
+            { text: "Capricorn ♑", value: 'capricorn' },
+            { text: "Aquarius ♒", value: 'aquarius' },
+            { text: "Pisces ♓", value: 'pisces' },
             { text: "I think astrology is nonsense", value: 'skeptic' }
         ]
     }
@@ -265,13 +316,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================
-// LANDING PAGE - Optimized for Curiosity & Commitment
+// LANDING PAGE - With Personality Preview
 // ============================================
 function renderLanding() {
     state.stage = 'landing';
     state.answers = {};
     state.compatibilityScore = 0;
     state.personalityTraits = [];
+    state.toneLevel = 2;
 
     funnelContainer.innerHTML = `
         <div class="funnel-screen funnel-landing">
@@ -280,26 +332,55 @@ function renderLanding() {
                 <h1 class="funnel-title">Think You're My Type?</h1>
                 <p class="funnel-subtitle">13 questions. 4 minutes. Zero awkward small talk.</p>
 
-                <div class="funnel-value-props">
-                    <div class="funnel-prop">
-                        <span class="funnel-prop-icon">🎯</span>
-                        <span>Actually find out if we'd click</span>
+                <!-- Quick Preview of Me -->
+                <div class="funnel-preview-card">
+                    <div class="preview-header">
+                        <span class="preview-label">Quick preview of the guy behind this</span>
                     </div>
-                    <div class="funnel-prop">
-                        <span class="funnel-prop-icon">🎭</span>
-                        <span>More fun than swiping, I promise</span>
+                    <div class="preview-facts">
+                        <div class="preview-fact">
+                            <span class="fact-emoji">🍕</span>
+                            <span class="fact-text">Pro-pineapple (controversial, I know)</span>
+                        </div>
+                        <div class="preview-fact">
+                            <span class="fact-emoji">📚</span>
+                            <span class="fact-text">Reads more books than is socially acceptable</span>
+                        </div>
+                        <div class="preview-fact">
+                            <span class="fact-emoji">🌮</span>
+                            <span class="fact-text">Will 100% text you about tacos at 2am</span>
+                        </div>
+                        <div class="preview-fact">
+                            <span class="fact-emoji">😂</span>
+                            <span class="fact-text">Dad joke enthusiast (you've been warned)</span>
+                        </div>
                     </div>
-                    <div class="funnel-prop">
-                        <span class="funnel-prop-icon">🔒</span>
-                        <span>Your info stays private until the end</span>
+                    <div class="preview-footer">
+                        <span>Finance brain. Creative soul. Probably overthinking this bio right now.</span>
                     </div>
                 </div>
 
                 <button class="funnel-cta" onclick="startStage1()">
-                    Let's see if I'm your type →
+                    See if we'd actually click →
                 </button>
 
-                <p class="funnel-social-proof">847 people have tried. 194 passed. 12 actually texted me back.</p>
+                <!-- Irresistible Offer Stack -->
+                <div class="funnel-offer-stack">
+                    <div class="offer-item">
+                        <span class="offer-check">✓</span>
+                        <span>I respond to <strong>everyone</strong> who passes (within 24hrs)</span>
+                    </div>
+                    <div class="offer-item">
+                        <span class="offer-check">✓</span>
+                        <span>Worst case: you get my top date spot recommendations</span>
+                    </div>
+                    <div class="offer-item">
+                        <span class="offer-check">✓</span>
+                        <span>If we don't click, I'll wingman you to my cool single friends</span>
+                    </div>
+                </div>
+
+                <p class="funnel-social-proof">847 people have tried. 194 passed. Several are now in my group chat.</p>
             </div>
         </div>
     `;
@@ -318,9 +399,7 @@ function startStage1() {
 function renderQuestion() {
     const questions = state.stage === 'stage1' ? stage1Questions : stage2Questions;
     const questionData = questions[state.currentQuestion];
-    const totalQuestions = questions.length;
 
-    // Calculate overall progress
     const stage1Total = stage1Questions.length;
     const stage2Total = stage2Questions.length;
     const overallCurrent = state.stage === 'stage1'
@@ -334,7 +413,7 @@ function renderQuestion() {
     let optionsHtml = '';
 
     if (questionData.type === 'choice') {
-        optionsHtml = questionData.options.map((opt, index) => `
+        optionsHtml = questionData.options.map((opt) => `
             <button class="funnel-option" data-reaction="${opt.reaction || ''}" onclick="selectAnswer('${questionData.id}', '${opt.value}', ${opt.pass !== false}, this)">
                 <span class="option-text">${opt.text}</span>
             </button>
@@ -408,11 +487,9 @@ function renderQuestion() {
 function selectAnswer(questionId, value, passes, buttonEl) {
     state.answers[questionId] = value;
 
-    // Add selected state
     document.querySelectorAll('.funnel-option').forEach(btn => btn.classList.remove('selected'));
     buttonEl.classList.add('selected');
 
-    // Show reaction if exists
     const reaction = buttonEl.dataset.reaction;
     if (reaction && passes) {
         showReaction(reaction, () => {
@@ -441,10 +518,7 @@ function showReaction(text, callback) {
     reactionEl.innerHTML = `<span>${text}</span>`;
     funnelContainer.querySelector('.funnel-content').appendChild(reactionEl);
 
-    setTimeout(() => {
-        reactionEl.classList.add('show');
-    }, 50);
-
+    setTimeout(() => reactionEl.classList.add('show'), 50);
     setTimeout(() => {
         reactionEl.classList.add('fade-out');
         setTimeout(callback, 300);
@@ -458,9 +532,7 @@ function submitTextAnswer(questionId) {
     if (value.length < 3) {
         textarea.classList.add('funnel-input-error');
         textarea.placeholder = "Come on, give me something...";
-        setTimeout(() => {
-            textarea.classList.remove('funnel-input-error');
-        }, 500);
+        setTimeout(() => textarea.classList.remove('funnel-input-error'), 500);
         return;
     }
 
@@ -484,10 +556,9 @@ function nextQuestion() {
 }
 
 // ============================================
-// STAGE TRANSITION - Celebrate & Build Anticipation
+// STAGE TRANSITION
 // ============================================
 function renderStageTransition() {
-    // Calculate a fun stat
     const pineappleAnswer = state.answers.pineapple;
     const pineappleReaction = pineappleAnswer === 'yes' ? "pineapple defender" :
                               pineappleAnswer === 'no' ? "pizza purist" : "wild card";
@@ -527,7 +598,7 @@ function startStage2() {
 }
 
 // ============================================
-// REJECTION SCREENS - Make it Feel Like a Game
+// REJECTION SCREENS
 // ============================================
 function renderRejection(failMessage) {
     state.stage = 'rejected';
@@ -548,11 +619,7 @@ function renderRejection(failMessage) {
                 <h2 class="funnel-title">${failMessage.title}</h2>
                 <p class="funnel-text">${failMessage.text}</p>
                 ${failMessage.subtext ? `<p class="funnel-subtext">${failMessage.subtext}</p>` : ''}
-
-                <div class="funnel-buttons">
-                    ${buttonsHtml}
-                </div>
-
+                <div class="funnel-buttons">${buttonsHtml}</div>
                 <p class="funnel-rejection-footer">No hard feelings. Seriously. 💙</p>
             </div>
         </div>
@@ -561,10 +628,9 @@ function renderRejection(failMessage) {
 }
 
 // ============================================
-// RESULTS - Give Before You Ask
+// RESULTS
 // ============================================
 function renderResults() {
-    // Calculate personality insights
     const insights = calculatePersonality();
 
     funnelContainer.innerHTML = `
@@ -609,9 +675,8 @@ function renderResults() {
 
 function calculatePersonality() {
     const traits = [];
-    let score = 70; // Base score
+    let score = 70;
 
-    // Add traits based on answers
     if (state.answers.pineapple) {
         const p = personalityMap.pineapple[state.answers.pineapple];
         if (p) traits.push(p.trait);
@@ -619,35 +684,24 @@ function calculatePersonality() {
 
     if (state.answers.loveLanguage) {
         const ll = personalityMap.loveLanguage[state.answers.loveLanguage];
-        if (ll) {
-            traits.push(ll.trait);
-            score += ll.weight;
-        }
+        if (ll) { traits.push(ll.trait); score += ll.weight; }
     }
 
     if (state.answers.social) {
         const s = personalityMap.social[state.answers.social];
-        if (s) {
-            traits.push(s.trait);
-            score += s.weight;
-        }
+        if (s) { traits.push(s.trait); score += s.weight; }
     }
 
-    // Add some based on other answers
     if (state.answers.sunday === 'spontaneous' || state.answers.sunday === 'brunch') {
-        traits.push('Fun-seeker');
-        score += 5;
+        traits.push('Fun-seeker'); score += 5;
     }
 
     if (state.answers.fiveYears === 'entrepreneur' || state.answers.fiveYears === 'creative') {
-        traits.push('Ambitious');
-        score += 5;
+        traits.push('Ambitious'); score += 5;
     }
 
-    // Cap and ensure minimum
     score = Math.min(98, Math.max(72, score));
 
-    // Generate summary based on traits
     const summaries = [
         `You're the kind of person who makes ordinary moments interesting. ${traits.includes('Adventurous') ? "Your sense of adventure is contagious." : "You know how to find depth in simplicity."}`,
         `I get the sense you don't do things halfway. ${traits.includes('Ambitious') ? "That drive is attractive." : "You're intentional about what matters."}`,
@@ -656,23 +710,35 @@ function calculatePersonality() {
 
     return {
         score: score,
-        traits: traits.slice(0, 4), // Max 4 traits
+        traits: traits.slice(0, 4),
         summary: summaries[Math.floor(Math.random() * summaries.length)]
     };
 }
 
 // ============================================
-// CONTACT FORM - Optimized for Completion
+// CONTACT FORM - With Tone Slider
 // ============================================
 function renderContactForm() {
     state.stage = 'stage3';
+    const tone = toneContent[state.toneLevel];
 
     funnelContainer.innerHTML = `
         <div class="funnel-screen funnel-contact">
             <div class="funnel-content">
                 <div class="funnel-contact-header">
-                    <h2 class="funnel-title">Last step—how do I reach you?</h2>
-                    <p class="funnel-subtitle">I actually read every submission. Personally.</p>
+                    <h2 class="funnel-title" id="contact-title">${tone.title}</h2>
+                    <p class="funnel-subtitle" id="contact-subtitle">${tone.subtitle}</p>
+                </div>
+
+                <!-- Tone Slider -->
+                <div class="tone-slider-container">
+                    <label class="tone-slider-label">How much do I want to hear from you?</label>
+                    <div class="tone-slider-wrapper">
+                        <span class="tone-label-left">Chill</span>
+                        <input type="range" id="tone-slider" class="tone-slider" min="0" max="4" value="${state.toneLevel}" oninput="updateTone(this.value)">
+                        <span class="tone-label-right">Desperate</span>
+                    </div>
+                    <div class="tone-indicator" id="tone-indicator">${tone.label}</div>
                 </div>
 
                 <form id="contact-form" class="funnel-form" onsubmit="submitForm(event)">
@@ -684,7 +750,6 @@ function renderContactForm() {
                     <div class="funnel-form-group">
                         <label for="phone">Best way to reach you <span class="funnel-required">*</span></label>
                         <input type="tel" id="phone" name="phone" required class="funnel-input" placeholder="Your number (I'll text first)" autocomplete="tel">
-                        <span class="funnel-field-hint">Texting > calling. Always.</span>
                     </div>
 
                     <div class="funnel-form-row">
@@ -692,26 +757,30 @@ function renderContactForm() {
                             <label for="email">Email <span class="funnel-optional">(backup)</span></label>
                             <input type="email" id="email" name="email" class="funnel-input" placeholder="you@email.com" autocomplete="email">
                         </div>
-
                         <div class="funnel-form-group funnel-form-half">
-                            <label for="instagram">Instagram <span class="funnel-optional">(so I can see you)</span></label>
+                            <label for="instagram">Instagram</label>
                             <input type="text" id="instagram" name="instagram" class="funnel-input" placeholder="@handle">
                         </div>
                     </div>
 
                     <div class="funnel-form-group">
-                        <label for="note">Say something that'll make me smile</label>
-                        <textarea id="note" name="note" class="funnel-textarea" placeholder="A joke, a question, literally anything..." maxlength="200"></textarea>
+                        <label for="note" id="note-label">${tone.noteLabel}</label>
+                        <textarea id="note" name="note" class="funnel-textarea" placeholder="${tone.notePlaceholder}" maxlength="200"></textarea>
                         <div class="funnel-char-count"><span id="note-char-count">0</span>/200</div>
                     </div>
 
-                    <button type="submit" class="funnel-cta funnel-submit">
-                        Send it to Jevan →
+                    <button type="submit" class="funnel-cta funnel-submit" id="submit-btn">
+                        ${tone.cta}
                     </button>
 
+                    <div class="funnel-guarantee" id="guarantee">
+                        <span class="guarantee-icon">🤝</span>
+                        <span id="guarantee-text">${tone.guarantee}</span>
+                    </div>
+
                     <div class="funnel-trust-signals">
-                        <span>🔒 Your info is private</span>
-                        <span>📱 I'll text within 48hrs</span>
+                        <span>🔒 Your info stays private</span>
+                        <span>💬 No weird follow-ups if we don't click</span>
                     </div>
                 </form>
             </div>
@@ -724,10 +793,29 @@ function renderContactForm() {
         counter.textContent = textarea.value.length;
     });
 
-    // Auto-focus first field
     document.getElementById('name').focus();
-
     animateIn();
+}
+
+function updateTone(value) {
+    state.toneLevel = parseInt(value);
+    const tone = toneContent[state.toneLevel];
+
+    // Update all the dynamic content
+    document.getElementById('contact-title').textContent = tone.title;
+    document.getElementById('contact-subtitle').textContent = tone.subtitle;
+    document.getElementById('tone-indicator').textContent = tone.label;
+    document.getElementById('note-label').textContent = tone.noteLabel;
+    document.getElementById('note').placeholder = tone.notePlaceholder;
+    document.getElementById('submit-btn').textContent = tone.cta;
+    document.getElementById('guarantee-text').textContent = tone.guarantee;
+
+    // Add shake animation at max desperation
+    if (state.toneLevel === 4) {
+        document.getElementById('submit-btn').classList.add('desperate-shake');
+    } else {
+        document.getElementById('submit-btn').classList.remove('desperate-shake');
+    }
 }
 
 function submitForm(event) {
@@ -736,16 +824,16 @@ function submitForm(event) {
     const form = document.getElementById('contact-form');
     const formData = new FormData(form);
 
-    // Add quiz answers
     for (const [key, value] of Object.entries(state.answers)) {
         formData.append(`quiz_${key}`, value);
     }
 
-    // Add calculated score
     formData.append('compatibility_score', calculatePersonality().score);
+    formData.append('tone_level', state.toneLevel);
 
     const submitBtn = form.querySelector('.funnel-submit');
-    submitBtn.textContent = 'Sending...';
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = state.toneLevel === 4 ? 'SENDING SENDING SENDING...' : 'Sending...';
     submitBtn.disabled = true;
 
     fetch('https://formspree.io/f/YOUR_FORM_ID', {
@@ -761,7 +849,7 @@ function submitForm(event) {
         }
     })
     .catch(error => {
-        submitBtn.textContent = 'Try again →';
+        submitBtn.textContent = originalText;
         submitBtn.disabled = false;
 
         let errorEl = form.querySelector('.funnel-error');
@@ -780,15 +868,17 @@ function submitForm(event) {
 function renderSuccess() {
     state.stage = 'success';
 
+    const desperateSuccess = state.toneLevel === 4;
+
     funnelContainer.innerHTML = `
         <div class="funnel-screen funnel-success">
             <div class="funnel-content">
                 <div class="funnel-success-animation">
-                    <div class="funnel-emoji-large">💌</div>
+                    <div class="funnel-emoji-large">${desperateSuccess ? '🎊🎉🎊' : '💌'}</div>
                 </div>
 
-                <h2 class="funnel-title">I got your message!</h2>
-                <p class="funnel-subtitle">You'll hear from me soon. I'm already curious.</p>
+                <h2 class="funnel-title">${desperateSuccess ? "OH THANK GOD YOU HIT SEND" : "I got your message!"}</h2>
+                <p class="funnel-subtitle">${desperateSuccess ? "I'm literally texting you right now. Check your phone. NOW." : "You'll hear from me soon. I'm already curious."}</p>
 
                 <div class="funnel-success-box">
                     <p>While you wait, get to know me better:</p>
@@ -800,7 +890,7 @@ function renderSuccess() {
                     </div>
                 </div>
 
-                <p class="funnel-success-footer">Talk soon ✨</p>
+                <p class="funnel-success-footer">${desperateSuccess ? "Check. Your. Phone. 📱" : "Talk soon ✨"}</p>
             </div>
         </div>
     `;
