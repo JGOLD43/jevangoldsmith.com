@@ -71,6 +71,7 @@ a:hover {
     justify-content: space-between;
     align-items: center;
     max-width: 1400px;
+    padding: 0 2rem;
 }
 
 .logo {
@@ -109,8 +110,8 @@ a:hover {
     bottom: -5px;
     left: 0;
     width: 0;
-    height: 1px;
-    background-color: var(--secondary-color);
+    height: 2px;
+    background-color: #000;
     transition: width 0.3s ease;
 }
 
@@ -124,7 +125,7 @@ a:hover {
 }
 
 .nav-links a.active {
-    color: var(--secondary-color);
+    color: #000;
 }
 
 /* Hero Section */
