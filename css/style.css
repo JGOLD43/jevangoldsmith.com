@@ -67,9 +67,8 @@ a:hover {
 }
 
 .navbar .container {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 4rem;
+    display: flex;
+    justify-content: flex-start;
     align-items: center;
     max-width: 1400px !important;
     padding: 0 2rem !important;
@@ -78,6 +77,7 @@ a:hover {
 .logo {
     display: flex;
     align-items: center;
+    margin-right: 4rem;
 }
 
 .logo-image {
@@ -95,6 +95,7 @@ a:hover {
     list-style: none;
     gap: 2rem;
     justify-content: flex-start;
+    flex: 1;
 }
 
 .nav-links a {
@@ -160,7 +161,7 @@ a:hover {
     letter-spacing: 0;
     margin-bottom: 1rem;
     line-height: 1.2;
-    color: var(--primary-color);
+    color: #000;
     font-family: 'Chivo', sans-serif;
 }
 
@@ -186,7 +187,7 @@ a:hover {
     margin-top: 2rem;
     padding: 1.5rem 2rem;
     background-color: white;
-    border: 2px solid var(--primary-color);
+    border: 2px solid #000;
     border-radius: 10px;
     text-align: center;
     cursor: pointer;
@@ -196,8 +197,9 @@ a:hover {
 
 .hero-cta-left:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border-color: var(--secondary-color);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+    border-color: #FFD700;
+    background-color: #FFFEF7;
 }
 
 .hero-tagline {
@@ -671,7 +673,7 @@ a:hover {
 .cta-title {
     font-size: 1.2rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: #000;
     margin-bottom: 0.5rem;
 }
 
@@ -683,7 +685,7 @@ a:hover {
 }
 
 .cta-link {
-    color: var(--primary-color);
+    color: #000;
     text-decoration: none;
     font-weight: 600;
     border-bottom: 1px solid transparent;
