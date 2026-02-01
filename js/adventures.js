@@ -348,7 +348,7 @@ function populateSidebar(adventures) {
     });
 }
 
-function filterAdventures(filter) {
+function filterAdventures(filter, buttonEl) {
     currentFilter = filter;
 
     let filtered = allAdventures;
@@ -363,25 +363,12 @@ function filterAdventures(filter) {
     updateAdventureCount(filtered.length);
 
     // Update active state
-    document.querySelectorAll('.adventures-sidebar .sidebar-category').forEach(btn => {
+    document.querySelectorAll('.subnav-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    event.target.closest('.sidebar-category').classList.add('active');
-}
-
-// ============================================
-// Sidebar Toggle
-// ============================================
-function toggleAdventuresSidebar() {
-    const layout = document.getElementById('adventures-layout');
-    const sidebar = document.getElementById('adventures-sidebar');
-
-    layout.classList.toggle('sidebar-collapsed');
-    sidebar.classList.toggle('collapsed');
-
-    // Save state to localStorage
-    const isCollapsed = sidebar.classList.contains('collapsed');
-    localStorage.setItem('adventures-sidebar-collapsed', isCollapsed);
+    if (buttonEl) {
+        buttonEl.classList.add('active');
+    }
 }
 
 // ============================================
@@ -428,13 +415,4 @@ function showErrorMessage() {
 // ============================================
 // Initialize
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    loadAdventures();
-
-    // Restore sidebar state
-    const isCollapsed = localStorage.getItem('adventures-sidebar-collapsed') === 'true';
-    if (isCollapsed) {
-        document.getElementById('adventures-layout')?.classList.add('sidebar-collapsed');
-        document.getElementById('adventures-sidebar')?.classList.add('collapsed');
-    }
-});
+document.addEventListener('DOMContentLoaded', loadAdventures);
