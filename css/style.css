@@ -57,7 +57,7 @@ a:hover {
 /* Navigation */
 .navbar {
     background-color: var(--background);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid #000;
     padding: 1.5rem 0;
     position: sticky;
     top: 0;
@@ -548,15 +548,14 @@ a:hover {
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transform: translateZ(0);
+    isolation: isolate;
+    will-change: transform;
 }
 
 .feature-card:hover {
-    transform: translateY(-8px) translateZ(0);
+    transform: translateY(-8px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
 }
 
@@ -565,6 +564,7 @@ a:hover {
     height: 300px;
     object-fit: cover;
     display: block;
+    border-radius: 12px 12px 0 0;
 }
 
 .feature-image-placeholder {
