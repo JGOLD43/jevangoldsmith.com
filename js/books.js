@@ -296,6 +296,7 @@ function populateSidebar() {
 function createBookCard(book) {
     const card = document.createElement('div');
     card.className = 'book-card';
+    card.setAttribute('data-isbn', book.isbn);
     if (book.review) {
         card.classList.add('has-review');
         card.style.cursor = 'pointer';
@@ -796,6 +797,21 @@ function toggleSidebar() {
     localStorage.setItem('books-sidebar-collapsed', isCollapsed);
 }
 
+// Scroll to a book in the grid
+function scrollToBook(isbn) {
+    const bookCard = document.querySelector(`[data-isbn="${isbn}"]`);
+    if (bookCard) {
+        bookCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Add a brief highlight effect
+        bookCard.style.transform = 'scale(1.05)';
+        bookCard.style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)';
+        setTimeout(() => {
+            bookCard.style.transform = '';
+            bookCard.style.boxShadow = '';
+        }, 1000);
+    }
+}
+
 // Populate the recent books carousel
 function initCarousel() {
     const track = document.getElementById('carousel-track');
@@ -807,7 +823,7 @@ function initCarousel() {
 
     track.innerHTML = allBooks.map(book => {
         const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`;
-        return `<img class="carousel-book" src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}" onclick="openBookModal('${book.isbn}')">`;
+        return `<img class="carousel-book" src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}" onclick="scrollToBook('${book.isbn}')">`;
     }).join('');
 }
 

@@ -2038,9 +2038,18 @@ button[type="submit"]:hover {
     overflow: hidden;
     margin: 0 2rem;
     position: relative;
-    height: 60px;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    gap: 0.25rem;
+}
+
+.carousel-label {
+    font-size: 0.7rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Chivo', sans-serif;
 }
 
 .carousel-track {
