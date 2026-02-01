@@ -1166,19 +1166,9 @@ a:hover {
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 1rem;
-}
-
-.sidebar-header-top {
     display: flex;
     align-items: center;
-    margin-bottom: 0.75rem;
-    padding-left: 0;
-}
-
-.sidebar-header-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    gap: 0.75rem;
 }
 
 .sidebar-header h3 {
@@ -1188,6 +1178,7 @@ a:hover {
     color: var(--text-light);
     font-weight: 600;
     margin: 0;
+    flex: 1;
 }
 
 .sidebar-header .show-all-link {
@@ -1227,14 +1218,10 @@ a:hover {
 }
 
 .books-sidebar.collapsed .sidebar-header {
-    padding: 0;
+    padding: 2rem 0 0 15px;
     margin-bottom: 0;
     border-bottom: none;
     justify-content: flex-start;
-}
-
-.books-sidebar.collapsed .sidebar-header-bottom {
-    display: none;
 }
 
 .books-sidebar.collapsed .sidebar-header h3,
@@ -1251,11 +1238,6 @@ a:hover {
 .books-sidebar.collapsed .expand-icon,
 .books-sidebar.collapsed .category-books {
     display: none;
-}
-
-.books-sidebar.collapsed .sidebar-header-top {
-    margin-bottom: 0;
-    padding: 3rem 0 0.5rem 15px;
 }
 
 .books-sidebar.collapsed .sidebar-collapse-btn {
@@ -1988,16 +1970,7 @@ button[type="submit"]:hover {
 }
 
 .books-sidebar .sidebar-header {
-    padding: 1rem 0;
-}
-
-.books-sidebar .sidebar-header-top {
-    padding-left: 15px;
-    margin-bottom: 0.5rem;
-}
-
-.books-sidebar .sidebar-header-bottom {
-    padding: 0 1.5rem;
+    padding: 0 1.5rem 0 15px;
 }
 
 .books-sidebar .sidebar-category {
