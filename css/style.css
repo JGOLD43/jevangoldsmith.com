@@ -1138,7 +1138,7 @@ a:hover {
 }
 
 .essays-sidebar {
-    background: #FAFAF9;
+    background: var(--background);
     border-right: 1px solid var(--border-color);
     padding: 2rem 0;
     position: sticky;
@@ -1299,7 +1299,7 @@ a:hover {
 }
 
 .book-card {
-    background-color: var(--background);
+    background-color: #fff;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 1.5rem;
@@ -1341,7 +1341,7 @@ a:hover {
 }
 
 .book-rating {
-    color: #f39c12;
+    color: #FFD700;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
 }
@@ -1479,7 +1479,7 @@ a:hover {
 }
 
 .modal-rating {
-    color: #f39c12;
+    color: #FFD700;
     font-size: 1.5rem;
     margin-bottom: 1rem;
 }
@@ -1710,7 +1710,7 @@ button[type="submit"]:hover {
 }
 
 .books-sidebar {
-    background: #FAFAF9;
+    background: var(--background);
     border-right: 1px solid var(--border-color);
     padding: 2rem 0;
     position: sticky;
@@ -1738,7 +1738,7 @@ button[type="submit"]:hover {
 
 .books-main {
     padding: 2rem 3rem;
-    background: white;
+    background: var(--background);
 }
 
 .sidebar-filter-section {
@@ -1801,11 +1801,11 @@ button[type="submit"]:hover {
 }
 
 .filter-star.full {
-    color: #F59E0B;
+    color: #FFD700;
 }
 
 .filter-star.half {
-    background: linear-gradient(to right, #F59E0B 50%, #D1D5DB 50%);
+    background: linear-gradient(to right, #FFD700 50%, #D1D5DB 50%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1815,7 +1815,7 @@ button[type="submit"]:hover {
     margin-left: 0.75rem;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #F59E0B;
+    color: #FFD700;
 }
 
 /* Times Read filter */
@@ -2178,7 +2178,7 @@ button[type="submit"]:hover {
 }
 
 .movies-sidebar {
-    background: #FAFAF9;
+    background: var(--background);
     border-right: 1px solid var(--border-color);
     padding: 2rem 0;
     position: sticky;
@@ -2206,7 +2206,7 @@ button[type="submit"]:hover {
 
 .movies-main {
     padding: 2rem 3rem;
-    background: white;
+    background: var(--background);
 }
 
 .category-movies {
