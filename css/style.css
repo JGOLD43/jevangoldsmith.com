@@ -3920,6 +3920,375 @@ button[type="submit"]:hover {
     color: var(--secondary-color);
 }
 
+/* ============================================
+   CONVERSION-OPTIMIZED FUNNEL ADDITIONS
+   ============================================ */
+
+/* Landing Page Badge */
+.funnel-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+}
+
+/* Value Props */
+.funnel-value-props {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 2rem 0;
+    text-align: left;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.funnel-prop {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+.funnel-prop-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+/* Social Proof */
+.funnel-social-proof {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 1.5rem;
+    font-style: italic;
+}
+
+/* Progress Wrapper */
+.funnel-progress-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+}
+
+.funnel-stage-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.stage-icon {
+    font-size: 1.1rem;
+}
+
+.stage-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+.funnel-progress-wrapper .funnel-progress-bar {
+    flex: 1;
+    margin-bottom: 0;
+    height: 6px;
+}
+
+.funnel-progress-text {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    flex-shrink: 0;
+}
+
+/* Question Wrapper */
+.funnel-question-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.funnel-question {
+    margin-bottom: 0.5rem;
+}
+
+.funnel-question-subtext {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* Option Selected State */
+.funnel-option.selected {
+    border-color: var(--secondary-color);
+    background-color: rgba(107, 142, 35, 0.1);
+}
+
+/* Reaction Popup */
+.funnel-reaction {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.funnel-reaction.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.funnel-reaction.fade-out {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+/* Textarea Small */
+.funnel-textarea-small {
+    min-height: 80px;
+    resize: none;
+}
+
+/* Input Footer */
+.funnel-input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Stage Transition */
+.funnel-celebration {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.funnel-confetti {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    animation: confetti-bounce 0.6s ease;
+}
+
+@keyframes confetti-bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+.funnel-emoji-large {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.funnel-insight {
+    background-color: rgba(107, 142, 35, 0.1);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.funnel-insight p {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.funnel-transition-desc {
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+.funnel-reassurance {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 1rem;
+}
+
+/* Rejection Improvements */
+.funnel-subtext {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.funnel-rejection-footer {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 2rem;
+}
+
+/* Results/Personality Card */
+.funnel-results-header {
+    margin-bottom: 1.5rem;
+}
+
+.funnel-personality-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.personality-score {
+    margin-bottom: 1.5rem;
+}
+
+.score-circle {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.score-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.score-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+}
+
+.personality-traits {
+    margin-bottom: 1.5rem;
+}
+
+.personality-traits h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+}
+
+.trait-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.trait-tag {
+    background-color: var(--background);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.personality-summary {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+}
+
+.personality-summary p {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.funnel-results-cta {
+    text-align: center;
+}
+
+.funnel-results-hook {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+/* Contact Form Improvements */
+.funnel-contact-header {
+    margin-bottom: 1.5rem;
+}
+
+.funnel-required {
+    color: var(--accent-color);
+}
+
+.funnel-optional {
+    font-weight: 400;
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.funnel-field-hint {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+}
+
+.funnel-form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.funnel-form-half {
+    flex: 1;
+}
+
+.funnel-trust-signals {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+/* Success Improvements */
+.funnel-success-animation {
+    margin-bottom: 1rem;
+}
+
+.funnel-success-box {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.funnel-success-box p {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.funnel-success-footer {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-top: 1rem;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .dateme-main {
@@ -3931,11 +4300,11 @@ button[type="submit"]:hover {
     }
 
     .funnel-landing .funnel-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .funnel-question {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
 
     .funnel-option {
@@ -3954,5 +4323,56 @@ button[type="submit"]:hover {
     .funnel-btn {
         width: 100%;
         text-align: center;
+    }
+
+    .funnel-progress-wrapper {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .funnel-stage-indicator {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .funnel-progress-wrapper .funnel-progress-bar {
+        order: 3;
+        width: 100%;
+        flex: none;
+    }
+
+    .funnel-progress-text {
+        order: 2;
+    }
+
+    .funnel-form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .funnel-form-half {
+        flex: none;
+    }
+
+    .funnel-trust-signals {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .funnel-value-props {
+        max-width: 100%;
+    }
+
+    .funnel-personality-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .score-circle {
+        width: 90px;
+        height: 90px;
+    }
+
+    .score-number {
+        font-size: 1.5rem;
     }
 }
