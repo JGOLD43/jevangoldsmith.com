@@ -44,44 +44,57 @@
     <!-- Secondary Navigation with Map and Filters -->
     <nav class="adventures-subnav">
         <div class="container">
-            <!-- Mini Map -->
-            <div class="subnav-map-wrapper">
-                <div class="subnav-map" id="world-map"></div>
-            </div>
+            <!-- Toggle Button -->
+            <button class="subnav-toggle" onclick="toggleSubnav()">
+                <span class="toggle-icon">▼</span>
+                <span class="toggle-text">Adventures</span>
+            </button>
 
-            <!-- Filter Buttons -->
-            <div class="subnav-filters">
-                <button class="subnav-btn all-btn active" onclick="resetFilters(this)">
-                    <span class="world-icon">🌍</span>
-                    All
-                    <span class="subnav-count" id="count-all">0</span>
-                </button>
-                <button class="subnav-btn region-btn" data-region="europe" onclick="toggleFilter('europe', this)">
-                    Europe
-                    <span class="subnav-count" id="count-europe">0</span>
-                    <span class="filter-remove" onclick="removeFilter('europe', event)">&times;</span>
-                </button>
-                <button class="subnav-btn region-btn" data-region="asia" onclick="toggleFilter('asia', this)">
-                    Asia
-                    <span class="subnav-count" id="count-asia">0</span>
-                    <span class="filter-remove" onclick="removeFilter('asia', event)">&times;</span>
-                </button>
-                <button class="subnav-btn region-btn" data-region="americas" onclick="toggleFilter('americas', this)">
-                    Americas
-                    <span class="subnav-count" id="count-americas">0</span>
-                    <span class="filter-remove" onclick="removeFilter('americas', event)">&times;</span>
-                </button>
-                <button class="subnav-btn region-btn" data-region="other" onclick="toggleFilter('other', this)">
-                    Other
-                    <span class="subnav-count" id="count-other">0</span>
-                    <span class="filter-remove" onclick="removeFilter('other', event)">&times;</span>
-                </button>
-            </div>
+            <!-- Expandable Content -->
+            <div class="subnav-content">
+                <!-- Mini Map -->
+                <div class="subnav-map-wrapper">
+                    <div class="subnav-map" id="world-map"></div>
+                </div>
 
-            <!-- Counter -->
-            <div class="subnav-counter">
-                <span class="counter-number" id="adventure-count">0</span>
-                <span class="counter-label">Adventures</span>
+                <!-- Filter Buttons -->
+                <div class="subnav-filters">
+                    <button class="subnav-btn all-btn active" onclick="resetFilters(this)">
+                        <span class="btn-icon">🌍</span>
+                        All
+                        <span class="subnav-count" id="count-all">0</span>
+                    </button>
+                    <button class="subnav-btn region-btn" data-region="europe" onclick="toggleFilter('europe', this)">
+                        <span class="btn-icon">📍</span>
+                        Europe
+                        <span class="subnav-count" id="count-europe">0</span>
+                        <span class="filter-remove" onclick="removeFilter('europe', event)">&times;</span>
+                    </button>
+                    <button class="subnav-btn region-btn" data-region="asia" onclick="toggleFilter('asia', this)">
+                        <span class="btn-icon">📍</span>
+                        Asia
+                        <span class="subnav-count" id="count-asia">0</span>
+                        <span class="filter-remove" onclick="removeFilter('asia', event)">&times;</span>
+                    </button>
+                    <button class="subnav-btn region-btn" data-region="americas" onclick="toggleFilter('americas', this)">
+                        <span class="btn-icon">📍</span>
+                        Americas
+                        <span class="subnav-count" id="count-americas">0</span>
+                        <span class="filter-remove" onclick="removeFilter('americas', event)">&times;</span>
+                    </button>
+                    <button class="subnav-btn region-btn" data-region="other" onclick="toggleFilter('other', this)">
+                        <span class="btn-icon">📍</span>
+                        Other
+                        <span class="subnav-count" id="count-other">0</span>
+                        <span class="filter-remove" onclick="removeFilter('other', event)">&times;</span>
+                    </button>
+                </div>
+
+                <!-- Counter -->
+                <div class="subnav-counter">
+                    <span class="counter-number" id="adventure-count">0</span>
+                    <span class="counter-label">Adventures</span>
+                </div>
             </div>
         </div>
     </nav>

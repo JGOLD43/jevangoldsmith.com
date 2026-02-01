@@ -489,6 +489,14 @@ function applyFilters() {
 }
 
 // ============================================
+// Subnav Toggle
+// ============================================
+function toggleSubnav() {
+    const subnav = document.querySelector('.adventures-subnav');
+    subnav.classList.toggle('collapsed');
+}
+
+// ============================================
 // Utilities
 // ============================================
 function formatDateRange(startDate, endDate) {

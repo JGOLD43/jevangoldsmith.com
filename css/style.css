@@ -2858,6 +2858,64 @@ button[type="submit"]:hover {
     max-width: 1400px;
 }
 
+/* Toggle Button */
+.subnav-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--background-alt);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.subnav-toggle:hover {
+    background: var(--background);
+    border-color: var(--primary-color);
+}
+
+.toggle-icon {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+}
+
+.adventures-subnav.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+/* Expandable Content */
+.subnav-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.adventures-subnav.collapsed .subnav-content {
+    max-width: 0;
+    opacity: 0;
+    gap: 0;
+    padding: 0;
+}
+
+.adventures-subnav.collapsed .container {
+    gap: 0;
+}
+
+/* Button icons */
+.btn-icon {
+    font-size: 0.9rem;
+}
+
 /* Mini Map in Subnav */
 .subnav-map-wrapper {
     position: relative;
