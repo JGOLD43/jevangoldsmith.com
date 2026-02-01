@@ -7,7 +7,7 @@
 
 :root {
     --primary-color: #2c3e50;
-    --secondary-color: #6B8E23;
+    --secondary-color: #C9A86C;
     --accent-color: #e74c3c;
     --text-color: #333;
     --text-light: #666;
@@ -26,7 +26,7 @@
 /* Dark Mode Theme */
 [data-theme="dark"] {
     --primary-color: #ecf0f1;
-    --secondary-color: #9ACD32;
+    --secondary-color: #D4B87A;
     --accent-color: #ff6b6b;
     --text-color: #e0e0e0;
     --text-light: #aaa;
@@ -1257,27 +1257,36 @@ a:hover {
 .footer {
     background-color: var(--primary-color);
     color: white;
-    padding: 3rem 0;
-    margin-top: 4rem;
+    padding: 2rem 0;
+    margin-top: 0;
 }
 
 .footer-content {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 2rem;
+    text-align: center;
+    gap: 1.5rem;
+}
+
+.footer-content p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin: 0;
 }
 
 .footer-links {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .footer-links a {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.7);
     transition: color 0.3s ease;
+    font-size: 0.9rem;
 }
 
 .footer-links a:hover {
@@ -2412,17 +2421,6 @@ button[type="submit"]:hover {
 
     .posts-grid {
         grid-template-columns: 1fr;
-    }
-
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .footer-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
     }
 
     h1 { font-size: 2rem; }
@@ -5369,7 +5367,7 @@ button[type="submit"]:hover {
 .value-card-icon {
     width: 48px;
     height: 48px;
-    background: rgba(107, 142, 35, 0.1);
+    background: rgba(201, 168, 108, 0.15);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -5379,7 +5377,7 @@ button[type="submit"]:hover {
 }
 
 [data-theme="dark"] .value-card-icon {
-    background: rgba(154, 205, 50, 0.15);
+    background: rgba(212, 184, 122, 0.2);
 }
 
 .value-card h3 {
@@ -5615,7 +5613,7 @@ button[type="submit"]:hover {
 }
 
 .btn-newsletter:hover {
-    background: #7BA428;
+    background: #B8975A;
     transform: translateY(-2px);
 }
 
@@ -5928,7 +5926,7 @@ button[type="submit"]:hover {
 
 .focus-item-active .focus-indicator {
     background: var(--secondary-color);
-    box-shadow: 0 0 0 4px rgba(107, 142, 35, 0.3);
+    box-shadow: 0 0 0 4px rgba(201, 168, 108, 0.4);
 }
 
 .focus-content {
@@ -6056,18 +6054,18 @@ button[type="submit"]:hover {
 }
 
 .interest-tag {
-    background: rgba(107, 142, 35, 0.1);
+    background: rgba(201, 168, 108, 0.12);
     color: var(--secondary-color);
     font-size: 0.85rem;
     font-weight: 500;
     padding: 0.5rem 1rem;
     border-radius: 20px;
-    border: 1px solid rgba(107, 142, 35, 0.2);
+    border: 1px solid rgba(201, 168, 108, 0.25);
 }
 
 [data-theme="dark"] .interest-tag {
-    background: rgba(154, 205, 50, 0.15);
-    border-color: rgba(154, 205, 50, 0.3);
+    background: rgba(212, 184, 122, 0.15);
+    border-color: rgba(212, 184, 122, 0.3);
 }
 
 .btn-secondary {
@@ -6132,14 +6130,30 @@ button[type="submit"]:hover {
 /* Section 7: Final CTA */
 .final-cta-section {
     padding: 6rem 0;
-    background: linear-gradient(135deg, var(--secondary-color) 0%, #5a7a1f 100%);
+    background: #1a1a1a;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.final-cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(201, 168, 108, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(201, 168, 108, 0.05) 0%, transparent 40%);
+    pointer-events: none;
 }
 
 .final-cta-content {
     max-width: 600px;
     margin: 0 auto;
     padding: 0 2rem;
+    position: relative;
+    z-index: 1;
 }
 
 .final-cta-content h2 {
@@ -6151,7 +6165,7 @@ button[type="submit"]:hover {
 
 .final-cta-content p {
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.7);
     line-height: 1.7;
     margin-bottom: 2rem;
 }
@@ -6164,23 +6178,25 @@ button[type="submit"]:hover {
 }
 
 .final-cta-section .btn-primary {
-    background: white;
-    color: var(--secondary-color);
+    background: var(--secondary-color);
+    color: #1a1a1a;
+    border: none;
 }
 
 .final-cta-section .btn-primary:hover {
-    background: #f0f0f0;
+    background: #D4B87A;
     transform: translateY(-2px);
 }
 
 .final-cta-section .btn-secondary {
-    border-color: white;
+    border-color: rgba(255, 255, 255, 0.3);
     color: white;
 }
 
 .final-cta-section .btn-secondary:hover {
-    background: white;
-    color: var(--secondary-color);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
 }
 
 @media (max-width: 600px) {

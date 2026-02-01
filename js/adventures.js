@@ -226,7 +226,7 @@ function initWorldMap(adventures) {
         if (adventure.mapCenter) {
             const marker = L.circleMarker([adventure.mapCenter.lat, adventure.mapCenter.lng], {
                 radius: 6,
-                fillColor: '#6B8E23',
+                fillColor: '#C9A86C',
                 color: '#fff',
                 weight: 2,
                 opacity: 1,
@@ -238,7 +238,7 @@ function initWorldMap(adventures) {
                     <strong>${adventure.title}</strong><br>
                     <span style="color: #666;">${adventure.location}</span><br>
                     <a href="#${adventure.id}" onclick="expandAdventure('${adventure.id}'); return false;"
-                       style="color: #6B8E23; font-weight: 500;">View Adventure →</a>
+                       style="color: #C9A86C; font-weight: 500;">View Adventure →</a>
                 </div>
             `);
         }
