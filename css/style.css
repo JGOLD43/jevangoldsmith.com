@@ -1307,8 +1307,8 @@ a:hover {
 /* Book Reviews */
 .books-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
     margin-bottom: 3rem;
 }
 
@@ -1343,15 +1343,15 @@ a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
-    margin-bottom: 1rem;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
 }
 
 .book-cover {
-    max-width: 180px;
+    max-width: 150px;
     width: auto;
     height: auto;
-    max-height: 280px;
+    max-height: 230px;
     object-fit: contain;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
