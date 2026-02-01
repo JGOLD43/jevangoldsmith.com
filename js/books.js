@@ -713,6 +713,18 @@ function clearAllFilters() {
     renderBooks();
 }
 
+// Toggle sidebar collapse
+function toggleSidebar() {
+    const layout = document.getElementById('books-layout');
+    const sidebar = document.getElementById('books-sidebar');
+    layout.classList.toggle('sidebar-collapsed');
+    sidebar.classList.toggle('collapsed');
+
+    // Save state to localStorage
+    const isCollapsed = sidebar.classList.contains('collapsed');
+    localStorage.setItem('books-sidebar-collapsed', isCollapsed);
+}
+
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
     renderBooks();

@@ -650,6 +650,18 @@ function clearAllFilters() {
     displayMovies(allMovies);
 }
 
+// Toggle sidebar collapse
+function toggleSidebar() {
+    const layout = document.getElementById('movies-layout');
+    const sidebar = document.getElementById('movies-sidebar');
+    layout.classList.toggle('sidebar-collapsed');
+    sidebar.classList.toggle('collapsed');
+
+    // Save state to localStorage
+    const isCollapsed = sidebar.classList.contains('collapsed');
+    localStorage.setItem('movies-sidebar-collapsed', isCollapsed);
+}
+
 // Load movies when page loads
 document.addEventListener('DOMContentLoaded', () => {
     fetchLetterboxdMovies();
