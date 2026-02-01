@@ -1288,8 +1288,12 @@ a:hover {
     transition: all 0.2s ease;
     font-family: 'Chivo', sans-serif;
     font-size: 0.9rem;
-    color: var(--text-color);
+    color: #999;
     position: relative;
+}
+
+.sidebar-category .category-icon svg {
+    stroke: #999;
 }
 
 .sidebar-category:hover {
@@ -1298,8 +1302,16 @@ a:hover {
 
 .sidebar-category.active {
     background: #E7E5E4;
-    color: var(--secondary-color);
+    color: #000;
     font-weight: 500;
+}
+
+.sidebar-category.active .category-name {
+    color: var(--secondary-color);
+}
+
+.sidebar-category.active .category-icon svg {
+    stroke: var(--secondary-color);
 }
 
 .category-icon {
@@ -1321,7 +1333,11 @@ a:hover {
 }
 
 .sidebar-category:hover .category-icon svg {
-    stroke: var(--secondary-color);
+    stroke: #000;
+}
+
+.sidebar-category:hover .category-name {
+    color: #000;
 }
 
 .sidebar-category.active .category-icon svg {
@@ -1399,9 +1415,11 @@ a:hover {
 /* Animated arrow flash */
 .sidebar-category .arrow-flash {
     position: absolute;
-    right: 1.5rem;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 0.7rem;
-    color: var(--secondary-color);
+    color: #000;
     opacity: 0;
     animation: arrowFlash 0.5s ease-out forwards;
 }
@@ -1409,15 +1427,15 @@ a:hover {
 @keyframes arrowFlash {
     0% {
         opacity: 0;
-        transform: translateX(-5px);
+        transform: translateY(-50%) translateX(-5px);
     }
     30% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(-50%) translateX(0);
     }
     100% {
         opacity: 0;
-        transform: translateX(5px);
+        transform: translateY(-50%) translateX(5px);
     }
 }
 
