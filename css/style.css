@@ -1325,17 +1325,17 @@ a:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Times Read Badge - Amazon Best Seller style */
+/* Times Read Badge */
 .times-read-badge {
     position: absolute;
     top: 0.75rem;
-    left: 0.75rem;
-    background-color: #B12704;
+    right: 0.75rem;
+    background-color: #2E7D32;
     color: white;
-    padding: 0.35rem 0.75rem;
+    padding: 0.4rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 600;
-    border-radius: 3px;
+    border-radius: 4px;
     z-index: 2;
 }
 

@@ -305,11 +305,11 @@ function createBookCard(book) {
     const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
     const coverUrl = getCoverUrl(book.isbn);
 
-    // Generate times read badge (top corner like Amazon Best Seller)
+    // Generate times read badge (top right corner)
     let timesReadBadge = '';
     const timesRead = (book.reReads || 0) + 1; // reReads + initial read
     if (timesRead > 1) {
-        timesReadBadge = `<div class="times-read-badge">${timesRead}x Read</div>`;
+        timesReadBadge = `<div class="times-read-badge">📖 ${timesRead}x Read</div>`;
     }
 
     card.innerHTML = `
