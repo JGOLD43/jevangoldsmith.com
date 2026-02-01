@@ -273,9 +273,11 @@ function expandWorldMap(mapContainer) {
     worldMap.dragging.enable();
     worldMap.scrollWheelZoom.enable();
     worldMap.doubleClickZoom.enable();
+    // Invalidate immediately and after transition
+    worldMap.invalidateSize();
     setTimeout(() => {
         worldMap.invalidateSize();
-        worldMap.setView([30, 0], 2);
+        worldMap.setView([35, 20], 2);
     }, 350);
 }
 

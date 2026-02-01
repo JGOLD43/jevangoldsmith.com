@@ -2863,8 +2863,8 @@ button[type="submit"]:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: var(--background-alt);
+    padding: 0.6rem 1rem;
+    background: white;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     cursor: pointer;
@@ -2877,13 +2877,14 @@ button[type="submit"]:hover {
 }
 
 .subnav-toggle:hover {
-    background: var(--background);
-    border-color: var(--primary-color);
+    background: var(--background-alt);
+    border-color: #999;
 }
 
 .toggle-icon {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     transition: transform 0.3s ease;
+    opacity: 0.6;
 }
 
 .adventures-subnav.collapsed .toggle-icon {
@@ -2896,15 +2897,15 @@ button[type="submit"]:hover {
     align-items: center;
     gap: 1.5rem;
     flex: 1;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, max-width 0.3s ease;
+    overflow: visible;
 }
 
 .adventures-subnav.collapsed .subnav-content {
     max-width: 0;
     opacity: 0;
-    gap: 0;
-    padding: 0;
+    overflow: hidden;
+    pointer-events: none;
 }
 
 .adventures-subnav.collapsed .container {
@@ -2913,7 +2914,7 @@ button[type="submit"]:hover {
 
 /* Button icons */
 .btn-icon {
-    font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
 /* Mini Map in Subnav */
@@ -2922,6 +2923,7 @@ button[type="submit"]:hover {
     width: 120px;
     height: 60px;
     flex-shrink: 0;
+    z-index: 100;
 }
 
 .subnav-map {
@@ -2933,16 +2935,16 @@ button[type="submit"]:hover {
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
-    z-index: 100;
+    transition: width 0.3s ease, height 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
+    background: #1a1a1a;
 }
 
 .subnav-map.expanded {
-    width: 400px;
-    height: 300px;
+    width: 500px;
+    height: 350px;
     border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     z-index: 1000;
 }
 
