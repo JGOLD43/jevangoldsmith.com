@@ -67,8 +67,9 @@ a:hover {
 }
 
 .navbar .container {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4rem;
     align-items: center;
     max-width: 1400px !important;
     padding: 0 2rem !important;
@@ -93,6 +94,7 @@ a:hover {
     display: flex;
     list-style: none;
     gap: 2rem;
+    justify-content: flex-start;
 }
 
 .nav-links a {
