@@ -546,7 +546,7 @@ a:hover {
     overflow: hidden;
 }
 
-#carousel-track {
+.feature-carousel-track {
     display: flex;
     gap: 24px;
     transition: transform 0.5s ease;
