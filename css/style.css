@@ -6456,3 +6456,31 @@ button[type="submit"]:hover {
 [data-theme="dark"] .timeswatched-ticks .tick {
     background: var(--secondary-color);
 }
+
+/* Hero Section - Dark Mode */
+[data-theme="dark"] .hero-cta-left {
+    background-color: #2a2a2a;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .hero-cta-left:hover {
+    background-color: #333;
+    border-color: var(--secondary-color);
+    box-shadow: 0 8px 20px rgba(201, 168, 108, 0.3);
+}
+
+[data-theme="dark"] .hero-cta-left h3 {
+    color: var(--secondary-color);
+}
+
+[data-theme="dark"] .hero-social-links a {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+[data-theme="dark"] .hero-social-links a:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: #1a1a1a;
+}
