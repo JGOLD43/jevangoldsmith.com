@@ -1217,10 +1217,10 @@ a:hover {
 }
 
 .books-sidebar.collapsed .sidebar-header {
-    padding: 0.5rem 0;
+    padding: 0.5rem 0 0.5rem 15px;
     margin-bottom: 0.5rem;
     border-bottom: 1px solid var(--border-color);
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .books-sidebar.collapsed .sidebar-header h3,
@@ -1240,7 +1240,8 @@ a:hover {
 }
 
 .books-sidebar.collapsed .sidebar-collapse-btn {
-    margin: 0 auto;
+    margin: 0;
+    padding-left: 15px;
 }
 
 .books-sidebar.collapsed .sidebar-section {
@@ -1350,46 +1351,62 @@ a:hover {
     position: relative;
 }
 
-.books-sidebar.collapsed .sidebar-category:hover::after {
+.books-sidebar.collapsed .sidebar-category::after {
     content: attr(data-tooltip);
     position: absolute;
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
-    margin-left: 12px;
-    padding: 8px 12px;
+    margin-left: 8px;
+    padding: 10px 16px;
     background: #1a1a1a;
     color: white;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     font-weight: 500;
     white-space: nowrap;
-    border-radius: 4px;
+    border-radius: 6px;
     z-index: 1000;
     pointer-events: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.1s ease, visibility 0.1s ease;
+}
+
+.books-sidebar.collapsed .sidebar-category:hover::after {
+    opacity: 1;
+    visibility: visible;
 }
 
 .movies-sidebar.collapsed .sidebar-category {
     position: relative;
 }
 
-.movies-sidebar.collapsed .sidebar-category:hover::after {
+.movies-sidebar.collapsed .sidebar-category::after {
     content: attr(data-tooltip);
     position: absolute;
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
-    margin-left: 12px;
-    padding: 8px 12px;
+    margin-left: 8px;
+    padding: 10px 16px;
     background: #1a1a1a;
     color: white;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     font-weight: 500;
     white-space: nowrap;
-    border-radius: 4px;
+    border-radius: 6px;
     z-index: 1000;
     pointer-events: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.1s ease, visibility 0.1s ease;
+}
+
+.movies-sidebar.collapsed .sidebar-category:hover::after {
+    opacity: 1;
+    visibility: visible;
 }
 
 .category-name {
