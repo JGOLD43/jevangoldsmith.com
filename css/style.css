@@ -543,8 +543,8 @@ a:hover {
 }
 
 .feature-card {
-    flex: 0 0 calc(20% - 19.2px);
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    flex: 0 0 calc(30% - 19.2px);
+    background: #fff;
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
@@ -585,13 +585,13 @@ a:hover {
 
 .feature-content {
     padding: 1.5rem;
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: #fff;
 }
 
 .feature-title {
     font-size: 1.3rem;
     font-weight: 600;
-    color: white;
+    color: #333;
     margin: 0 0 0.5rem 0;
     font-family: 'Chivo', sans-serif;
     text-transform: uppercase;
@@ -600,9 +600,10 @@ a:hover {
 
 .feature-description {
     font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: #333;
     margin: 0;
     font-weight: 300;
+    font-family: 'Chivo', sans-serif;
 }
 
 .carousel-dots {
@@ -634,13 +635,13 @@ a:hover {
 /* Responsive carousel */
 @media (max-width: 1400px) {
     .feature-card {
-        flex: 0 0 calc(25% - 18px);
+        flex: 0 0 calc(40% - 18px);
     }
 }
 
 @media (max-width: 1024px) {
     .feature-card {
-        flex: 0 0 calc(33.333% - 16px);
+        flex: 0 0 calc(50% - 16px);
     }
 
     .carousel-header {
