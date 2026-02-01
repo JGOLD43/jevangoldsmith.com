@@ -1395,6 +1395,16 @@ a:hover {
     color: #FFD700;
     font-size: 1.1rem;
     margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.rating-number {
+    color: #0F1111;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-right: 0.25rem;
 }
 
 .book-description {
@@ -1415,7 +1425,7 @@ a:hover {
 
 .read-review-btn {
     width: 100%;
-    background-color: var(--secondary-color);
+    background-color: #0F1111;
     color: white;
     border: none;
     padding: 0.6rem 1rem;
@@ -1428,7 +1438,7 @@ a:hover {
 }
 
 .read-review-btn:hover {
-    background-color: #5a7a1a;
+    background-color: #333;
 }
 
 /* Legacy badge support */

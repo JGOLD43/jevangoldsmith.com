@@ -323,7 +323,7 @@ function createBookCard(book) {
                 ${book.year ? `<span class="book-year">${book.year}</span>` : ''}
             </div>
             <p class="book-author">by ${book.author}</p>
-            <div class="book-rating">${stars}</div>
+            <div class="book-rating"><span class="rating-number">${book.rating}</span> ${stars}</div>
             ${book.review ? `<p class="book-description">${book.shortDescription}</p>` : ''}
             ${book.review ? '<button class="read-review-btn">Read My Review</button>' : ''}
         </div>
