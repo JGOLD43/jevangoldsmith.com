@@ -309,8 +309,8 @@ a:hover {
 .snapshot-card {
     position: absolute;
     top: 50%;
-    right: -280px;
-    transform: translateY(-50%) translateX(100%) rotate(8deg);
+    right: 100px;
+    transform: translateY(-50%) translateX(150%) rotate(8deg);
     width: 280px;
     background: #FFFFFF;
     border-radius: 12px;
