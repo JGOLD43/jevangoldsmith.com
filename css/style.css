@@ -1337,16 +1337,12 @@ a:hover {
     transition: all 0.2s ease;
 }
 
-.sidebar-category:hover .category-icon svg {
+.sidebar-category:hover:not(.active) .category-icon svg {
     stroke: #000;
 }
 
-.sidebar-category:hover .category-name {
+.sidebar-category:hover:not(.active) .category-name {
     color: #000;
-}
-
-.sidebar-category.active .category-icon svg {
-    stroke: var(--secondary-color);
 }
 
 /* Tooltip styling for collapsed sidebar */
