@@ -115,13 +115,13 @@
         <aside class="movies-sidebar">
             <div class="sidebar-header">
                 <h3>Browse Movies</h3>
+                <a href="#" class="show-all-link" onclick="clearAllFilters(); return false;">Show All</a>
             </div>
 
             <!-- Star Rating Filter -->
             <div class="sidebar-filter-section">
                 <div class="filter-header">
                     <div class="filter-label">Filter by Rating</div>
-                    <a href="#" class="show-all-link" onclick="clearStarFilter(); return false;">Show All</a>
                 </div>
                 <div class="star-rating-filter">
                     <div class="star-filter-container" id="star-filter-container">
@@ -267,8 +267,14 @@
 
         <div class="movies-main">
             <header class="main-header">
-                <h1>Movie Reviews</h1>
-                <p>My recent watches and reviews from Letterboxd</p>
+                <div class="header-content">
+                    <h1>My Movie Reviews</h1>
+                    <p>My recent watches and reviews from Letterboxd</p>
+                </div>
+                <div class="header-counter">
+                    <span class="counter-number" id="movie-count">0</span>
+                    <span class="counter-label">Movies Watched</span>
+                </div>
             </header>
             <div id="loading" class="loading">
                 <p>Loading recent movies from Letterboxd...</p>

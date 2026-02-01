@@ -33,13 +33,13 @@
         <aside class="books-sidebar">
             <div class="sidebar-header">
                 <h3>Browse Books</h3>
+                <a href="#" class="show-all-link" onclick="clearAllFilters(); return false;">Show All</a>
             </div>
 
             <!-- Star Rating Filter -->
             <div class="sidebar-filter-section">
                 <div class="filter-header">
                     <div class="filter-label">Filter by Rating</div>
-                    <a href="#" class="show-all-link" onclick="clearStarFilter(); return false;">Show All</a>
                 </div>
                 <div class="star-rating-filter">
                     <div class="star-filter-container" id="star-filter-container">
@@ -229,8 +229,14 @@
 
         <div class="books-main">
             <header class="main-header">
-                <h1>Book Reviews</h1>
-                <p>Books I've read and what I think about them</p>
+                <div class="header-content">
+                    <h1>My Book Reviews</h1>
+                    <p>Books I've read and what I think about them</p>
+                </div>
+                <div class="header-counter">
+                    <span class="counter-number" id="book-count">0</span>
+                    <span class="counter-label">Books Read</span>
+                </div>
             </header>
             <div id="books-container" class="books-grid">
                 <!-- Books will be loaded here dynamically -->

@@ -1166,6 +1166,9 @@ a:hover {
     padding: 0 1.5rem 1.5rem;
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .sidebar-header h3 {
@@ -1175,6 +1178,17 @@ a:hover {
     color: var(--text-light);
     font-weight: 600;
     margin: 0;
+}
+
+.sidebar-header .show-all-link {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.sidebar-header .show-all-link:hover {
+    color: var(--secondary-color);
 }
 
 .sidebar-section {
@@ -1743,9 +1757,12 @@ button[type="submit"]:hover {
 
 .main-header {
     margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
-.main-header h1 {
+.main-header .header-content h1 {
     font-size: 3rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
@@ -1753,11 +1770,33 @@ button[type="submit"]:hover {
     font-family: 'Chivo', sans-serif;
 }
 
-.main-header p {
+.main-header .header-content p {
     font-size: 1.1rem;
     color: var(--text-color);
     font-family: 'Chivo', sans-serif;
     font-weight: 300;
+}
+
+.header-counter {
+    text-align: center;
+    padding: 1rem 2rem;
+}
+
+.counter-number {
+    display: block;
+    font-size: 3rem;
+    font-weight: 600;
+    color: #000;
+    font-family: 'Chivo', sans-serif;
+    line-height: 1;
+}
+
+.counter-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-family: 'Chivo', sans-serif;
+    margin-top: 0.25rem;
 }
 
 .sidebar-filter-section {

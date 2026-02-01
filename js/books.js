@@ -685,10 +685,36 @@ function scrollToBook(bookTitle, event) {
     }
 }
 
+// Update the book counter
+function updateBookCount() {
+    const countElement = document.getElementById('book-count');
+    if (countElement) {
+        countElement.textContent = booksData.length;
+    }
+}
+
+// Clear all filters
+function clearAllFilters() {
+    // Clear star filter
+    clearStarFilter();
+    // Clear times read filter
+    const slider = document.getElementById('timesread-slider');
+    if (slider) {
+        slider.value = 0;
+        filterByTimesRead(0);
+    }
+    // Clear category selection
+    document.querySelectorAll('.sidebar-category').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.category-books').forEach(section => section.classList.remove('expanded'));
+    // Show all books
+    renderBooks();
+}
+
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
     renderBooks();
     populateSidebar();
     initStarFilter();
     initReReadsFilter();
+    updateBookCount();
 });

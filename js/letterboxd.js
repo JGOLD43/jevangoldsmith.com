@@ -88,6 +88,9 @@ async function fetchLetterboxdMovies() {
 
         allMovies = movies;
 
+        // Update movie count
+        updateMovieCount(movies.length);
+
         // Display movies and populate sidebar
         displayMovies(movies);
         populateMoviesSidebar(movies);
@@ -620,6 +623,31 @@ function initTimesWatchedFilter() {
             setTimesWatchedFilter(count);
         }
     });
+}
+
+// Update the movie counter
+function updateMovieCount(count) {
+    const countElement = document.getElementById('movie-count');
+    if (countElement) {
+        countElement.textContent = count;
+    }
+}
+
+// Clear all filters
+function clearAllFilters() {
+    // Clear star filter
+    clearStarFilter();
+    // Clear times watched filter
+    const slider = document.getElementById('timeswatched-slider');
+    if (slider) {
+        slider.value = 0;
+        setTimesWatchedFilter(0);
+    }
+    // Clear genre selection
+    document.querySelectorAll('.sidebar-category').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.category-movies').forEach(section => section.classList.remove('expanded'));
+    // Show all movies
+    displayMovies(allMovies);
 }
 
 // Load movies when page loads
