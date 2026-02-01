@@ -836,13 +836,14 @@ function submitForm(event) {
     submitBtn.textContent = state.toneLevel === 4 ? 'SENDING SENDING SENDING...' : 'Sending...';
     submitBtn.disabled = true;
 
-    fetch('https://formspree.io/f/YOUR_FORM_ID', {
+    fetch('https://formsubmit.co/ajax/contentreads@gmail.com', {
         method: 'POST',
         body: formData,
         headers: { 'Accept': 'application/json' }
     })
-    .then(response => {
-        if (response.ok) {
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
             renderSuccess();
         } else {
             throw new Error('Failed');
