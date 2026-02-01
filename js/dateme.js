@@ -836,7 +836,7 @@ function submitForm(event) {
     submitBtn.textContent = state.toneLevel === 4 ? 'SENDING SENDING SENDING...' : 'Sending...';
     submitBtn.disabled = true;
 
-    fetch('https://formsubmit.co/ajax/contentreads@gmail.com', {
+    fetch('https://formsubmit.co/ajax/821f324c43f7156401c8429b575ab340', {
         method: 'POST',
         body: formData,
         headers: { 'Accept': 'application/json' }
