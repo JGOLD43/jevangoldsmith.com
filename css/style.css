@@ -2932,15 +2932,20 @@ button[type="submit"]:hover {
 }
 
 .subnav-btn.active {
-    background: var(--primary-color);
-    border-color: var(--primary-color);
+    background: #1a1a1a;
+    border-color: #1a1a1a;
     color: white;
 }
 
 /* All button styling */
 .subnav-btn.all-btn.active {
-    background: var(--secondary-color);
-    border-color: var(--secondary-color);
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+}
+
+/* World icon in All button */
+.subnav-btn.all-btn .world-icon {
+    font-size: 1rem;
 }
 
 /* Region buttons with X */
