@@ -156,6 +156,7 @@ a:hover {
     padding: 0 2rem !important;
     flex-wrap: nowrap;
     gap: 1rem;
+    position: relative;
 }
 
 .logo {
@@ -178,8 +179,9 @@ a:hover {
     display: flex;
     list-style: none;
     gap: 1.25rem;
-    justify-content: flex-start;
-    flex-shrink: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .nav-links a {
@@ -2391,6 +2393,8 @@ button[type="submit"]:hover {
     }
 
     .nav-links {
+        position: static;
+        transform: none;
         flex-wrap: wrap;
         justify-content: center;
         gap: 1rem;
