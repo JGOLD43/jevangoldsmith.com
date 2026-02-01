@@ -2848,6 +2848,12 @@ button[type="submit"]:hover {
     position: sticky;
     top: 70px;
     z-index: 90;
+    transition: all 0.3s ease;
+}
+
+.adventures-subnav.collapsed {
+    background: transparent;
+    border-bottom: none;
 }
 
 .adventures-subnav .container {
@@ -2858,33 +2864,46 @@ button[type="submit"]:hover {
     max-width: 1400px;
 }
 
+.adventures-subnav.collapsed .container {
+    padding: 0 2rem;
+    gap: 0;
+}
+
 /* Toggle Button */
 .subnav-toggle {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1rem;
-    background: white;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
     color: var(--text-color);
     transition: all 0.2s ease;
     flex-shrink: 0;
 }
 
+.adventures-subnav.collapsed .subnav-toggle {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 0.4rem 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
 .subnav-toggle:hover {
-    background: var(--background-alt);
-    border-color: #999;
+    color: var(--primary-color);
 }
 
 .toggle-icon {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     transition: transform 0.3s ease;
-    opacity: 0.6;
+    opacity: 0.5;
 }
 
 .adventures-subnav.collapsed .toggle-icon {
