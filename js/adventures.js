@@ -204,13 +204,13 @@ function initWorldMap(adventures) {
     // Check if there are any adventures with locations
     const adventuresWithLocation = adventures.filter(a => a.mapCenter);
     if (adventuresWithLocation.length === 0) {
-        mapContainer.style.display = 'none';
+        mapContainer.parentElement.style.display = 'none';
         return;
     }
 
-    // Create a mini map with no controls for the subnav
+    // Create map with controls (CSS hides them until hover)
     worldMap = L.map('world-map', {
-        zoomControl: false,
+        zoomControl: true,
         attributionControl: false,
         dragging: false,
         scrollWheelZoom: false,
@@ -221,18 +221,53 @@ function initWorldMap(adventures) {
 
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(worldMap);
 
-    // Add small circle markers for each adventure
+    // Add markers with popups for each adventure
     adventures.forEach(adventure => {
         if (adventure.mapCenter) {
-            L.circleMarker([adventure.mapCenter.lat, adventure.mapCenter.lng], {
-                radius: 4,
+            const marker = L.circleMarker([adventure.mapCenter.lat, adventure.mapCenter.lng], {
+                radius: 6,
                 fillColor: '#6B8E23',
                 color: '#fff',
-                weight: 1,
+                weight: 2,
                 opacity: 1,
                 fillOpacity: 0.9
             }).addTo(worldMap);
+
+            marker.bindPopup(`
+                <div style="min-width: 150px; text-align: center;">
+                    <strong>${adventure.title}</strong><br>
+                    <span style="color: #666;">${adventure.location}</span><br>
+                    <a href="#${adventure.id}" onclick="expandAdventure('${adventure.id}'); return false;"
+                       style="color: #6B8E23; font-weight: 500;">View Adventure →</a>
+                </div>
+            `);
         }
+    });
+
+    // Enable interactivity on hover
+    mapContainer.addEventListener('mouseenter', () => {
+        mapContainer.classList.add('expanded');
+        worldMap.dragging.enable();
+        worldMap.scrollWheelZoom.enable();
+        worldMap.doubleClickZoom.enable();
+        // Recalculate map size after expansion
+        setTimeout(() => {
+            worldMap.invalidateSize();
+            worldMap.setView([30, 0], 2);
+        }, 350);
+    });
+
+    mapContainer.addEventListener('mouseleave', () => {
+        mapContainer.classList.remove('expanded');
+        worldMap.dragging.disable();
+        worldMap.scrollWheelZoom.disable();
+        worldMap.doubleClickZoom.disable();
+        worldMap.closePopup();
+        // Reset view and recalculate size
+        setTimeout(() => {
+            worldMap.invalidateSize();
+            worldMap.setView([30, 0], 1);
+        }, 350);
     });
 }
 

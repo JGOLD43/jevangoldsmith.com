@@ -2859,17 +2859,43 @@ button[type="submit"]:hover {
 }
 
 /* Mini Map in Subnav */
+.subnav-map-wrapper {
+    position: relative;
+    width: 120px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
 .subnav-map {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 120px;
     height: 60px;
     border-radius: 8px;
     overflow: hidden;
-    flex-shrink: 0;
     border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.subnav-map:hover,
+.subnav-map.expanded {
+    width: 400px;
+    height: 300px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    z-index: 1000;
 }
 
 .subnav-map .leaflet-control-zoom {
     display: none;
+}
+
+.subnav-map:hover .leaflet-control-zoom,
+.subnav-map.expanded .leaflet-control-zoom {
+    display: block;
 }
 
 .subnav-map .leaflet-control-attribution {
