@@ -73,11 +73,18 @@ a:hover {
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: 100;
-    letter-spacing: 0.05em;
-    color: var(--primary-color);
-    font-family: 'Chivo', sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+.logo-image {
+    height: 50px;
+    width: auto;
+    transition: opacity 0.3s ease;
+}
+
+.logo-image:hover {
+    opacity: 0.8;
 }
 
 .nav-links {
