@@ -1307,8 +1307,8 @@ a:hover {
 /* Book Reviews */
 .books-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 3rem;
 }
 
@@ -1316,39 +1316,76 @@ a:hover {
     background-color: #fff;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 1.5rem;
+    padding: 1rem;
     transition: all 0.3s ease;
-    text-align: center;
+    position: relative;
 }
 
 .book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Times Read Badge - Amazon Best Seller style */
+.times-read-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    background-color: #B12704;
+    color: white;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 3px;
+    z-index: 2;
+}
+
+.book-cover-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
 }
 
 .book-cover {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    background-color: var(--background-alt);
+    max-width: 180px;
+    width: auto;
+    height: auto;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background-color: #f5f5f5;
+}
+
+.book-info {
+    padding: 0 0.5rem;
+}
+
+.book-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .book-title {
     font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
-}
-
-.book-author {
-    color: var(--text-light);
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
+    color: #0F1111;
+    margin: 0;
+    line-height: 1.3;
+    font-family: 'Chivo', sans-serif;
 }
 
 .book-year {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.book-author {
     color: var(--text-light);
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
@@ -1357,49 +1394,46 @@ a:hover {
 .book-rating {
     color: #FFD700;
     font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-}
-
-.book-category-badge {
-    font-size: 0.75rem;
-    color: var(--text-light);
-    background: var(--background-alt);
-    padding: 0.35rem 0.65rem;
-    border-radius: 4px;
-    font-weight: 500;
-    border: 1px solid var(--border-color);
-    display: inline-block;
     margin-bottom: 0.75rem;
-    text-align: center;
 }
 
 .book-description {
     color: var(--text-color);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     line-height: 1.5;
     margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .book-card.has-review,
 .movie-card.has-review {
-    position: relative;
+    cursor: pointer;
 }
 
-.read-review-badge {
-    display: inline-block;
+.read-review-btn {
+    width: 100%;
     background-color: var(--secondary-color);
     color: white;
-    padding: 0.5rem 1rem;
+    border: none;
+    padding: 0.6rem 1rem;
     border-radius: 4px;
     font-size: 0.85rem;
     font-weight: 600;
-    margin-top: 0.5rem;
-    transition: all 0.3s ease;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-family: 'Chivo', sans-serif;
 }
 
-.book-card.has-review:hover .read-review-badge,
-.movie-card.has-review:hover .read-review-badge {
-    background-color: var(--accent-color);
+.read-review-btn:hover {
+    background-color: #5a7a1a;
+}
+
+/* Legacy badge support */
+.read-review-badge {
+    display: none;
 }
 
 /* Modal Styles */

@@ -305,25 +305,28 @@ function createBookCard(book) {
     const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
     const coverUrl = getCoverUrl(book.isbn);
 
-    // Generate re-reads display
-    let reReadsHTML = '';
-    if (book.reReads > 0) {
-        reReadsHTML = `<div class="book-rereads">📖 ${book.reReads} Time${book.reReads === 1 ? '' : 's'} Read</div>`;
+    // Generate times read badge (top corner like Amazon Best Seller)
+    let timesReadBadge = '';
+    const timesRead = (book.reReads || 0) + 1; // reReads + initial read
+    if (timesRead > 1) {
+        timesReadBadge = `<div class="times-read-badge">${timesRead}x Read</div>`;
     }
 
-    // Get category icon
-    const categoryIcon = categoryIcons[book.category] || '📚';
-
     card.innerHTML = `
-        <img src="${coverUrl}" alt="${book.title}" class="book-cover" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.style.color='white'; this.style.fontWeight='bold'; this.style.padding='2rem'; this.style.textAlign='center'; this.innerHTML='${book.title}';">
-        <h3 class="book-title">${book.title}</h3>
-        <p class="book-author">by ${book.author}</p>
-        ${book.year ? `<p class="book-year">${book.year}</p>` : ''}
-        <div class="book-rating">${stars}</div>
-        <div class="book-category-badge">${categoryIcon} ${book.category}</div>
-        ${reReadsHTML}
-        <p class="book-description">${book.shortDescription}</p>
-        ${book.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
+        ${timesReadBadge}
+        <div class="book-cover-wrapper">
+            <img src="${coverUrl}" alt="${book.title}" class="book-cover" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.style.color='white'; this.style.fontWeight='bold'; this.style.padding='2rem'; this.style.textAlign='center'; this.innerHTML='${book.title}';">
+        </div>
+        <div class="book-info">
+            <div class="book-title-row">
+                <h3 class="book-title">${book.title}</h3>
+                ${book.year ? `<span class="book-year">${book.year}</span>` : ''}
+            </div>
+            <p class="book-author">by ${book.author}</p>
+            <div class="book-rating">${stars}</div>
+            ${book.review ? `<p class="book-description">${book.shortDescription}</p>` : ''}
+            ${book.review ? '<button class="read-review-btn">Read My Review</button>' : ''}
+        </div>
     `;
 
     return card;
