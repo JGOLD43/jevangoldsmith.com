@@ -4828,35 +4828,33 @@ button[type="submit"]:hover {
     100% { transform: translateY(-120px); }
 }
 
-/* Theme Toggle */
+/* Theme Toggle - Icon Only */
 .theme-toggle {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
     cursor: pointer;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 50%;
     background: transparent;
-    transition: all 0.3s ease;
-    font-size: 0.8rem;
+    transition: all 0.2s ease;
     color: var(--nav-text);
-    font-weight: 500;
 }
 
 .theme-toggle:hover {
-    border-color: var(--text-color);
     color: var(--text-color);
+    background: var(--background-alt);
 }
 
 .theme-toggle-icon {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     transition: transform 0.3s ease;
 }
 
 .theme-toggle:hover .theme-toggle-icon {
-    transform: rotate(15deg);
+    transform: rotate(20deg);
 }
 
 /* Sun icon hidden in dark mode, moon hidden in light mode */
@@ -4876,85 +4874,63 @@ button[type="submit"]:hover {
     display: block;
 }
 
-/* Navbar CTA */
-.navbar-cta {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--nav-text);
-    font-weight: 500;
-}
-
-.navbar-cta-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: var(--secondary-color) !important;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
-
-.navbar-cta-link:hover {
-    color: var(--accent-color) !important;
-}
-
-.navbar-cta-link::after {
-    display: none !important;
-}
-
-/* QR Code */
-.navbar-qr {
+/* Contact CTA Button with Dropdown */
+.navbar-contact {
     position: relative;
-    cursor: pointer;
 }
 
-.navbar-qr-trigger {
+.navbar-contact-btn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.4rem 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background: transparent;
-    font-size: 0.75rem;
-    color: var(--nav-text);
-    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 25px;
+    background: var(--secondary-color);
+    font-size: 0.8rem;
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
     transition: all 0.3s ease;
+    text-decoration: none;
+    letter-spacing: 0.3px;
 }
 
-.navbar-qr-trigger:hover {
-    border-color: var(--text-color);
-    color: var(--text-color);
+.navbar-contact-btn:hover {
+    background: var(--accent-color);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.navbar-qr-trigger svg {
-    width: 16px;
-    height: 16px;
+.navbar-contact-btn svg {
+    width: 14px;
+    height: 14px;
 }
 
-.navbar-qr-popup {
+.navbar-contact-dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 10px);
     right: 0;
-    margin-top: 0.75rem;
     background: var(--dropdown-bg);
     border-radius: 12px;
+    padding: 1.25rem;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    padding: 1rem;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.2s ease;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    min-width: 200px;
     z-index: 1000;
-    text-align: center;
 }
 
-.navbar-qr:hover .navbar-qr-popup {
+.navbar-contact:hover .navbar-contact-dropdown {
     opacity: 1;
     visibility: visible;
+    transform: translateY(0);
 }
 
-.navbar-qr-popup::before {
+.navbar-contact-dropdown::before {
     content: '';
     position: absolute;
     top: -8px;
@@ -4964,46 +4940,87 @@ button[type="submit"]:hover {
     border-bottom: 8px solid var(--dropdown-bg);
 }
 
-.navbar-qr-image {
+.contact-dropdown-qr {
+    text-align: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+}
+
+.contact-dropdown-qr img {
     width: 120px;
     height: 120px;
     border-radius: 8px;
-    background: white;
-    padding: 8px;
+    margin-bottom: 0.5rem;
 }
 
-.navbar-qr-label {
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-    color: var(--text-light);
+.contact-dropdown-qr p {
+    font-size: 0.7rem;
+    color: var(--nav-text);
+    margin: 0;
+}
+
+.contact-dropdown-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.contact-dropdown-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 0.85rem;
     font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.contact-dropdown-links a:hover {
+    background: var(--background-alt);
+    color: var(--secondary-color);
+}
+
+.contact-dropdown-links a svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+}
+
+.contact-dropdown-links a:hover svg {
+    opacity: 1;
 }
 
 /* Dark mode adjustments for navbar extras */
-[data-theme="dark"] .theme-toggle {
-    border-color: #444;
-}
-
 [data-theme="dark"] .theme-toggle:hover {
-    border-color: #666;
+    background: #333;
 }
 
-[data-theme="dark"] .navbar-qr-trigger {
-    border-color: #444;
+[data-theme="dark"] .navbar-contact-btn {
+    background: var(--secondary-color);
+    color: #000;
 }
 
-[data-theme="dark"] .navbar-qr-trigger:hover {
-    border-color: #666;
+[data-theme="dark"] .navbar-contact-btn:hover {
+    background: var(--accent-color);
+    color: #fff;
 }
 
-[data-theme="dark"] .navbar-qr-popup {
+[data-theme="dark"] .navbar-contact-dropdown {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* Responsive adjustments for navbar extras */
 @media (max-width: 1500px) {
-    .navbar-cta {
+    .navbar-contact-btn span {
         display: none;
+    }
+
+    .navbar-contact-btn {
+        padding: 0.6rem;
+        border-radius: 50%;
     }
 }
 
