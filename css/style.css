@@ -198,6 +198,17 @@ a:hover {
     color: #000;
 }
 
+.nav-dropdown .dropdown-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    padding: 0.5rem 0.5rem 0.75rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0.5rem;
+}
+
 /* Hero Section */
 .hero {
     min-height: 100vh;
