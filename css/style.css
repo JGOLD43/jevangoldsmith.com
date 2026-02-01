@@ -1248,8 +1248,8 @@ a:hover {
 }
 
 .books-sidebar.collapsed .sidebar-category {
-    justify-content: center;
-    padding: 0.5rem 0;
+    justify-content: flex-start;
+    padding: 0.5rem 0 0.5rem 15px;
     gap: 0;
 }
 
@@ -1328,40 +1328,51 @@ a:hover {
     stroke: var(--secondary-color);
 }
 
-/* Tooltip styling for category icons */
-.category-icon[title] {
-    cursor: pointer;
+/* Tooltip styling for collapsed sidebar */
+.books-sidebar.collapsed .sidebar-category {
+    position: relative;
 }
 
-.category-icon[title]:hover::after {
-    content: attr(title);
+.books-sidebar.collapsed .sidebar-category:hover::after {
+    content: attr(data-tooltip);
     position: absolute;
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
-    margin-left: 8px;
-    padding: 6px 10px;
+    margin-left: 12px;
+    padding: 8px 12px;
     background: #1a1a1a;
     color: white;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 500;
     white-space: nowrap;
     border-radius: 4px;
-    z-index: 100;
+    z-index: 1000;
     pointer-events: none;
-    opacity: 0;
-    animation: tooltipFadeIn 0.2s ease forwards;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-@keyframes tooltipFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-50%) translateX(-5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(-50%) translateX(0);
-    }
+.movies-sidebar.collapsed .sidebar-category {
+    position: relative;
+}
+
+.movies-sidebar.collapsed .sidebar-category:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 12px;
+    padding: 8px 12px;
+    background: #1a1a1a;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    border-radius: 4px;
+    z-index: 1000;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .category-name {
@@ -2470,8 +2481,8 @@ button[type="submit"]:hover {
 }
 
 .movies-sidebar.collapsed .sidebar-category {
-    justify-content: center;
-    padding: 0.5rem 0;
+    justify-content: flex-start;
+    padding: 0.5rem 0 0.5rem 15px;
     gap: 0;
 }
 
