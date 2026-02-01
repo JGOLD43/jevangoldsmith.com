@@ -750,7 +750,7 @@ function updateBookCount(count = null, categoryName = null) {
         if (categoryName && categoryName !== 'all') {
             labelElement.textContent = 'Books Read';
         } else {
-            labelElement.textContent = 'All Books Read';
+            labelElement.textContent = 'Total Books Read';
         }
     }
 }
