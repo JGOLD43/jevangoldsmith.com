@@ -410,6 +410,15 @@ a:hover {
     font-family: 'Chivo', sans-serif;
 }
 
+.snapshot-flag {
+    height: 16px;
+    width: auto;
+    vertical-align: middle;
+    margin-left: 2px;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
 /* Responsive adjustments */
 @media (max-width: 1400px) {
     .snapshot-card {
