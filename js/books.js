@@ -796,11 +796,27 @@ function toggleSidebar() {
     localStorage.setItem('books-sidebar-collapsed', isCollapsed);
 }
 
+// Populate the recent books carousel
+function initCarousel() {
+    const track = document.getElementById('carousel-track');
+    if (!track) return;
+
+    // Get recent books (first 6 from array, duplicated for seamless loop)
+    const recentBooks = booksData.slice(0, 6);
+    const allBooks = [...recentBooks, ...recentBooks]; // Duplicate for seamless scrolling
+
+    track.innerHTML = allBooks.map(book => {
+        const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`;
+        return `<img class="carousel-book" src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}" onclick="openBookModal('${book.isbn}')">`;
+    }).join('');
+}
+
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
     renderBooks();
     populateSidebar();
     initStarFilter();
     initReReadsFilter();
+    initCarousel();
     updateBookCount(booksData.length, 'all');
 });

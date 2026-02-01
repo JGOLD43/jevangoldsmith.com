@@ -2032,6 +2032,51 @@ button[type="submit"]:hover {
     margin-top: 0.25rem;
 }
 
+/* Recent Books Carousel */
+.recent-books-carousel {
+    flex: 1;
+    overflow: hidden;
+    margin: 0 2rem;
+    position: relative;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 1rem;
+    animation: scrollCarousel 20s linear infinite;
+    width: max-content;
+}
+
+.carousel-track:hover {
+    animation-play-state: paused;
+}
+
+.carousel-book {
+    flex-shrink: 0;
+    height: 50px;
+    width: auto;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.carousel-book:hover {
+    transform: scale(1.1);
+}
+
+@keyframes scrollCarousel {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
 .sidebar-filter-section {
     padding: 1rem 1.5rem;
     margin-bottom: 1rem;
