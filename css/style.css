@@ -783,6 +783,9 @@ a:hover {
     position: relative;
     isolation: isolate;
     will-change: transform;
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .feature-card:hover {
