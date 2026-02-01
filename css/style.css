@@ -3548,3 +3548,411 @@ button[type="submit"]:hover {
     .lightbox-prev { left: 0.5rem; }
     .lightbox-next { right: 0.5rem; }
 }
+
+/* ============================================
+   DATE ME FUNNEL STYLES
+   ============================================ */
+
+/* Page Layout */
+.dateme-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.dateme-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.funnel-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Screen Base */
+.funnel-screen {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.funnel-screen.funnel-animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.funnel-content {
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Landing Screen */
+.funnel-landing .funnel-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.funnel-landing .funnel-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.funnel-landing .funnel-description {
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+.funnel-disclaimer {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 1.5rem;
+}
+
+/* CTA Button */
+.funnel-cta {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+}
+
+.funnel-cta:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Progress Bar */
+.funnel-progress {
+    margin-bottom: 2rem;
+}
+
+.funnel-progress-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.funnel-progress-bar {
+    height: 4px;
+    background-color: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.funnel-progress-fill {
+    height: 100%;
+    background-color: var(--secondary-color);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.funnel-progress-count {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+/* Question Screen */
+.funnel-question {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    line-height: 1.4;
+}
+
+/* Option Buttons */
+.funnel-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.funnel-option {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background-color: white;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.funnel-option:hover {
+    border-color: var(--secondary-color);
+    background-color: rgba(107, 142, 35, 0.05);
+    transform: translateX(5px);
+}
+
+.funnel-option:active {
+    transform: translateX(5px) scale(0.98);
+}
+
+/* Text Input */
+.funnel-text-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.funnel-input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    transition: border-color 0.2s ease;
+    font-family: inherit;
+}
+
+.funnel-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+.funnel-input-error {
+    animation: shake 0.5s ease;
+    border-color: var(--accent-color) !important;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.funnel-char-count {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    text-align: right;
+}
+
+.funnel-submit-text {
+    align-self: flex-end;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.funnel-submit-text:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Transition Screen */
+.funnel-transition .funnel-emoji,
+.funnel-rejection .funnel-emoji,
+.funnel-contact .funnel-emoji,
+.funnel-success .funnel-emoji {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.funnel-transition .funnel-title,
+.funnel-rejection .funnel-title,
+.funnel-contact .funnel-title,
+.funnel-success .funnel-title {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+}
+
+.funnel-transition .funnel-subtitle,
+.funnel-rejection .funnel-text,
+.funnel-contact .funnel-subtitle,
+.funnel-success .funnel-subtitle {
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.funnel-transition .funnel-description {
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+/* Rejection Screen */
+.funnel-rejection .funnel-text {
+    max-width: 400px;
+    margin: 0 auto 2rem;
+}
+
+.funnel-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.funnel-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    border: none;
+}
+
+.funnel-btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.funnel-btn-primary:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.funnel-btn-secondary {
+    background-color: transparent;
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+}
+
+.funnel-btn-secondary:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Contact Form */
+.funnel-form {
+    text-align: left;
+    margin-top: 2rem;
+}
+
+.funnel-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.funnel-form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.funnel-label-hint {
+    font-weight: 400;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.funnel-textarea {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.2s ease;
+}
+
+.funnel-textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+.funnel-submit {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.funnel-error {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* Success Screen */
+.funnel-success .funnel-subtitle {
+    margin-bottom: 2rem;
+}
+
+.funnel-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.funnel-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.funnel-link:hover {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .dateme-main {
+        padding: 1rem;
+    }
+
+    .funnel-content {
+        padding: 1.5rem 1rem;
+    }
+
+    .funnel-landing .funnel-title {
+        font-size: 2rem;
+    }
+
+    .funnel-question {
+        font-size: 1.3rem;
+    }
+
+    .funnel-option {
+        padding: 0.875rem 1.25rem;
+    }
+
+    .funnel-cta {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .funnel-buttons {
+        width: 100%;
+    }
+
+    .funnel-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
