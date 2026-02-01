@@ -6410,13 +6410,18 @@ button[type="submit"]:hover {
 }
 
 [data-theme="dark"] .filter-star {
-    color: #555;
+    color: #666;
+}
+
+[data-theme="dark"] .filter-star.full {
+    color: #FFD700;
 }
 
 [data-theme="dark"] .filter-star.half {
-    background: linear-gradient(to right, #FFD700 50%, #555 50%);
+    background: linear-gradient(to right, #FFD700 50%, #666 50%);
     -webkit-background-clip: text;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* Slider - Dark Mode */
