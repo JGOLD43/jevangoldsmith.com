@@ -6221,3 +6221,233 @@ button[type="submit"]:hover {
         text-align: center;
     }
 }
+
+/* ============================================
+   Books Page - Dark Mode
+   ============================================ */
+
+[data-theme="dark"] .books-sidebar {
+    background: #1a1a1a;
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .books-sidebar::-webkit-scrollbar-thumb {
+    background: #444;
+}
+
+[data-theme="dark"] .books-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+[data-theme="dark"] .books-main {
+    background: var(--background);
+}
+
+[data-theme="dark"] .main-header .header-content h1 {
+    color: #fff;
+}
+
+[data-theme="dark"] .counter-number {
+    color: #fff;
+}
+
+[data-theme="dark"] .counter-label {
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .book-card {
+    background-color: #2a2a2a;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .book-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .book-title {
+    color: #fff;
+}
+
+[data-theme="dark"] .book-cover {
+    background-color: #3a3a3a;
+}
+
+[data-theme="dark"] .rating-number {
+    color: #fff;
+}
+
+[data-theme="dark"] .read-review-btn {
+    background-color: var(--secondary-color);
+    color: #1a1a1a;
+}
+
+[data-theme="dark"] .read-review-btn:hover {
+    background-color: #D4B87A;
+}
+
+[data-theme="dark"] .times-read-badge {
+    background-color: var(--secondary-color);
+    color: #1a1a1a;
+}
+
+[data-theme="dark"] .sidebar-header h3 {
+    color: #fff;
+}
+
+[data-theme="dark"] .sidebar-category {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .sidebar-category:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .category-icon {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .category-icon svg {
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .filter-label {
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .view-toggle-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .view-toggle-btn.active {
+    background: var(--secondary-color);
+    color: #1a1a1a;
+}
+
+[data-theme="dark"] .view-toggle-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Category Grid View - Dark Mode */
+[data-theme="dark"] .category-grid-view {
+    background: var(--background);
+}
+
+[data-theme="dark"] .category-grid-section h2 {
+    color: #fff;
+}
+
+[data-theme="dark"] .category-grid-section {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Book shelf styling - Dark Mode */
+[data-theme="dark"] .book-shelf {
+    background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 100%);
+}
+
+/* Modal - Dark Mode */
+[data-theme="dark"] .modal-content {
+    background-color: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .modal-title {
+    color: #fff;
+}
+
+[data-theme="dark"] .review-content {
+    color: var(--text-color);
+}
+
+/* Header shelf display - Dark Mode */
+[data-theme="dark"] .header-shelf {
+    background: #1a1a1a;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .shelf-book {
+    opacity: 0.9;
+}
+
+[data-theme="dark"] .shelf-book:hover {
+    opacity: 1;
+}
+
+[data-theme="dark"] .category-count {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .sidebar-category.active {
+    background: var(--secondary-color);
+    color: #1a1a1a;
+}
+
+[data-theme="dark"] .sidebar-category.active .category-name {
+    color: #1a1a1a;
+}
+
+[data-theme="dark"] .sidebar-category.active .category-count {
+    background: rgba(0, 0, 0, 0.2);
+    color: #1a1a1a;
+}
+
+[data-theme="dark"] .sidebar-category.active .category-icon svg {
+    stroke: #1a1a1a;
+}
+
+[data-theme="dark"] .sidebar-category:hover:not(.active) .category-icon svg {
+    stroke: #fff;
+}
+
+[data-theme="dark"] .sidebar-category:hover:not(.active) .category-name {
+    color: #fff;
+}
+
+[data-theme="dark"] .filter-star {
+    color: #555;
+}
+
+[data-theme="dark"] .filter-star.half {
+    background: linear-gradient(to right, #FFD700 50%, #555 50%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Slider - Dark Mode */
+[data-theme="dark"] .timesread-slider {
+    background: rgba(201, 168, 108, 0.3);
+}
+
+[data-theme="dark"] .timesread-slider::-webkit-slider-thumb {
+    background: var(--secondary-color);
+}
+
+[data-theme="dark"] .timesread-slider::-moz-range-thumb {
+    background: var(--secondary-color);
+}
+
+[data-theme="dark"] .timesread-ticks .tick {
+    background: var(--secondary-color);
+}
+
+[data-theme="dark"] .timeswatched-slider {
+    background: rgba(201, 168, 108, 0.3);
+}
+
+[data-theme="dark"] .timeswatched-slider::-webkit-slider-thumb {
+    background: var(--secondary-color);
+}
+
+[data-theme="dark"] .timeswatched-slider::-moz-range-thumb {
+    background: var(--secondary-color);
+}
+
+[data-theme="dark"] .timeswatched-ticks .tick {
+    background: var(--secondary-color);
+}
