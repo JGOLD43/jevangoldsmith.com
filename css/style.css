@@ -152,14 +152,16 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1400px !important;
+    max-width: 1600px !important;
     padding: 0 2rem !important;
+    flex-wrap: nowrap;
+    gap: 1rem;
 }
 
 .logo {
     display: flex;
     align-items: center;
-    margin-right: 4rem;
+    margin-right: 0;
 }
 
 .logo-image {
@@ -175,9 +177,9 @@ a:hover {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    gap: 1.25rem;
     justify-content: flex-start;
-    flex: 1;
+    flex-shrink: 0;
 }
 
 .nav-links a {
@@ -4777,14 +4779,15 @@ button[type="submit"]:hover {
 .navbar-left {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
+    flex-shrink: 0;
 }
 
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    margin-left: auto;
+    gap: 1rem;
+    flex-shrink: 0;
 }
 
 /* Wisdom Ticker */
@@ -4793,10 +4796,10 @@ button[type="submit"]:hover {
     align-items: center;
     overflow: hidden;
     height: 24px;
-    width: 200px;
+    width: 180px;
     position: relative;
     border-left: 1px solid var(--border-color);
-    padding-left: 1rem;
+    padding-left: 0.75rem;
 }
 
 .wisdom-ticker-track {
@@ -4998,12 +5001,14 @@ button[type="submit"]:hover {
 }
 
 /* Responsive adjustments for navbar extras */
-@media (max-width: 1200px) {
-    .wisdom-ticker {
+@media (max-width: 1500px) {
+    .navbar-cta {
         display: none;
     }
-    
-    .navbar-cta {
+}
+
+@media (max-width: 1300px) {
+    .wisdom-ticker {
         display: none;
     }
 }
