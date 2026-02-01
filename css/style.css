@@ -309,12 +309,13 @@ a:hover {
 .snapshot-card {
     position: absolute;
     top: 50%;
-    right: -280px;
-    transform: translateY(-50%) translateX(100%) rotate(8deg);
+    left: -280px;
+    transform: translateY(-50%) translateX(-100%) rotate(-8deg);
     width: 280px;
     background: #FFFFFF;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border: 2px solid #000;
     padding: 0;
     z-index: 2;
     opacity: 0;
@@ -326,20 +327,20 @@ a:hover {
 .snapshot-card.visible {
     opacity: 1;
     visibility: visible;
-    transform: translateY(-50%) translateX(0) rotate(3deg);
+    transform: translateY(-50%) translateX(0) rotate(-3deg);
 }
 
 .snapshot-card.visible:hover {
-    transform: translateY(-50%) translateX(-5px) rotate(0deg);
+    transform: translateY(-50%) translateX(5px) rotate(0deg);
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
 }
 
 .snapshot-header {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: #000;
     color: white;
     padding: 1rem 1.25rem;
-    border-radius: 12px 12px 0 0;
-    border-bottom: 3px solid #e74c3c;
+    border-radius: 10px 10px 0 0;
+    border-bottom: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -352,6 +353,7 @@ a:hover {
     letter-spacing: 0.1em;
     color: white;
     text-transform: uppercase;
+    font-family: 'Chivo', sans-serif;
 }
 
 .snapshot-close {
@@ -397,13 +399,15 @@ a:hover {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 0.35rem;
+    font-family: 'Chivo', sans-serif;
 }
 
 .snapshot-value {
     font-size: 0.95rem;
     font-weight: 500;
-    color: var(--primary-color);
+    color: #000;
     line-height: 1.4;
+    font-family: 'Chivo', sans-serif;
 }
 
 /* Responsive adjustments */
