@@ -1085,6 +1085,51 @@ a:hover {
     margin: 0 auto;
 }
 
+/* Reading Philosophy Page */
+.reading-philosophy-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.philosophy-section {
+    margin-bottom: 3rem;
+}
+
+.philosophy-section h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    font-family: 'Chivo', sans-serif;
+}
+
+.philosophy-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    font-family: 'Chivo', sans-serif;
+    font-weight: 300;
+}
+
+.back-to-books {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.back-link {
+    font-size: 1rem;
+    color: var(--text-light);
+    text-decoration: none;
+    font-family: 'Chivo', sans-serif;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: var(--secondary-color);
+}
+
 .article-full {
     background-color: var(--background);
     border-radius: 8px;
