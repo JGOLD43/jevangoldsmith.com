@@ -1,0 +1,50 @@
+{
+  "adventures": [
+    {
+      "id": "sample-adventure",
+      "title": "Sample Adventure",
+      "subtitle": "A placeholder to show how adventures work",
+      "location": "Somewhere Beautiful",
+      "region": "Europe",
+      "startDate": "2024-06-15",
+      "endDate": "2024-06-20",
+      "duration": "5 days",
+      "heroImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200",
+      "shortDescription": "This is a sample adventure to demonstrate the layout. Replace this with your own adventures!",
+      "content": "<p>This is where the full story of your adventure would go. You can write multiple paragraphs here, include photos inline, and really tell the story of your experience.</p><p>Add as much detail as you'd like - the places you visited, the people you met, the food you ate, and the memories you made.</p>",
+      "highlights": [
+        "Beautiful scenery",
+        "Great food",
+        "Amazing people"
+      ],
+      "gallery": [
+        {
+          "src": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400",
+          "caption": "Mountain sunrise",
+          "lat": 46.8182,
+          "lng": 8.2275
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400",
+          "caption": "Lake reflection",
+          "lat": 46.6863,
+          "lng": 7.8632
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400",
+          "caption": "Scenic viewpoint",
+          "lat": 46.5197,
+          "lng": 6.6323
+        }
+      ],
+      "mapCenter": { "lat": 46.8182, "lng": 8.2275 },
+      "mapZoom": 8,
+      "tags": ["nature", "photography", "hiking"],
+      "status": "published"
+    }
+  ],
+  "lastUpdated": "2024-01-01T00:00:00Z"
+}
