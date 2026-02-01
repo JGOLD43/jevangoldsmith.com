@@ -70,8 +70,8 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1400px;
-    padding: 0 2rem;
+    max-width: 1400px !important;
+    padding: 0 2rem !important;
 }
 
 .logo {
@@ -97,11 +97,12 @@ a:hover {
 
 .nav-links a {
     color: var(--nav-text);
-    font-weight: 300;
+    font-weight: 600;
     font-size: 0.95rem;
     transition: color 0.3s ease;
     position: relative;
-    text-transform: capitalize;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .nav-links a::after {
