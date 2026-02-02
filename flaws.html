@@ -3,102 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lesson Logger - Jevan Goldsmith</title>
+    <title>Flaws - Jevan Goldsmith</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Experience Pages Shared Styles */
-        .experience-content {
-            max-width: 800px;
+        /* Flaws Page Specific Styles */
+        .flaws-content {
+            max-width: 900px;
             margin: 0 auto;
-            padding: 3rem 2rem 4rem;
+            padding: 4rem 2rem;
         }
 
-        .experience-header {
+        .flaws-header {
             text-align: center;
             margin-bottom: 3rem;
         }
 
-        .experience-eyebrow {
+        .section-eyebrow {
             font-size: 0.7rem;
             font-weight: 600;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--secondary-color);
+            color: var(--text-light);
             margin-bottom: 0.75rem;
         }
 
-        .experience-title {
+        .flaws-title {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
         }
 
-        .experience-subtitle {
+        .flaws-intro {
             font-size: 1.1rem;
             color: var(--text-light);
             max-width: 600px;
             margin: 0 auto;
+            line-height: 1.7;
         }
 
-        /* Lessons Timeline */
-        .lessons-timeline {
-            position: relative;
+        /* Philosophy Card */
+        .philosophy-card {
+            background: var(--background-alt);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
         }
 
-        .lessons-timeline::before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--border-color);
+        .philosophy-card blockquote {
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--text-color);
+            margin: 0 0 1rem 0;
+            line-height: 1.6;
         }
 
-        .lesson-item {
-            position: relative;
-            padding-left: 60px;
-            padding-bottom: 2.5rem;
-        }
-
-        .lesson-item:last-child {
-            padding-bottom: 0;
-        }
-
-        .lesson-marker {
-            position: absolute;
-            left: 8px;
-            top: 4px;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: var(--background);
-            border: 2px solid var(--secondary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
-        }
-
-        .lesson-marker svg {
-            width: 12px;
-            height: 12px;
-            color: var(--secondary-color);
-        }
-
-        .lesson-date {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .philosophy-card cite {
+            font-size: 0.9rem;
             color: var(--text-light);
-            margin-bottom: 0.5rem;
+            font-style: normal;
         }
 
-        .lesson-card {
+        /* Flaws Grid */
+        .flaws-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .flaws-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .flaw-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -106,101 +93,155 @@
             transition: all 0.2s ease;
         }
 
-        .lesson-card:hover {
+        .flaw-card:hover {
             border-color: var(--secondary-color);
-            box-shadow: var(--shadow);
+            transform: translateY(-2px);
         }
 
-        .lesson-category {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .flaw-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
             margin-bottom: 0.75rem;
         }
 
-        .lesson-category.life { background: rgba(52, 152, 219, 0.15); color: #2980b9; }
-        .lesson-category.business { background: rgba(46, 204, 113, 0.15); color: #27ae60; }
-        .lesson-category.relationships { background: rgba(231, 76, 60, 0.15); color: #c0392b; }
-        .lesson-category.mindset { background: rgba(155, 89, 182, 0.15); color: #8e44ad; }
-        .lesson-category.finance { background: rgba(241, 196, 15, 0.15); color: #d4ac0d; }
-
-        .lesson-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
+        .flaw-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 10px;
+            background: var(--background-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
         }
 
-        .lesson-content {
+        .flaw-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .flaw-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .flaw-description {
             font-size: 0.95rem;
             color: var(--text-light);
-            line-height: 1.7;
+            line-height: 1.6;
+            margin: 0;
         }
 
-        .lesson-source {
-            margin-top: 1rem;
-            padding-top: 1rem;
+        /* Working On Section */
+        .working-on-section {
+            margin-top: 3rem;
+            padding-top: 3rem;
             border-top: 1px solid var(--border-color);
-            font-size: 0.85rem;
-            color: var(--text-light);
+        }
+
+        .working-on-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        .working-on-card {
+            background: var(--background-alt);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .working-on-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .lesson-source svg {
-            width: 14px;
-            height: 14px;
-            opacity: 0.7;
-        }
-
-        .lesson-source a {
+        .working-on-card h4 svg {
+            width: 16px;
+            height: 16px;
             color: var(--secondary-color);
         }
 
-        /* Year Divider */
-        .year-divider {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 2rem 0;
-            padding-left: 60px;
-        }
-
-        .year-divider-line {
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        .year-divider-text {
+        .working-on-card p {
             font-size: 0.85rem;
-            font-weight: 700;
+            color: var(--text-light);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Why Share Section */
+        .why-share-section {
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .why-share-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .why-share-text p {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin: 0 0 1rem 0;
+        }
+
+        .why-share-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .why-share-benefits {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .benefit-item svg {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
             color: var(--secondary-color);
+            margin-top: 2px;
+        }
+
+        .benefit-item span {
+            font-size: 0.95rem;
+            color: var(--text-color);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .experience-title {
+            .flaws-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .working-on-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .why-share-content {
+                grid-template-columns: 1fr;
+            }
+
+            .flaws-title {
                 font-size: 2rem;
-            }
-
-            .lessons-timeline::before {
-                left: 15px;
-            }
-
-            .lesson-item {
-                padding-left: 50px;
-            }
-
-            .lesson-marker {
-                left: 3px;
-                width: 24px;
-                height: 24px;
             }
         }
     </style>
@@ -240,7 +281,7 @@
                                 <span class="dropdown-header">Resources</span>
                                 <a href="newsletter.html">Newsletter</a>
                                 <a href="podcast.html">Podcast</a>
-                                <a href="flaws.html">Flaws</a>
+                                <a href="flaws.html" class="active">Flaws</a>
                                 <a href="dateme.html">Date Me</a>
                             </div>
                         </div>
@@ -305,6 +346,7 @@
                         </div>
                     </div>
                 </li>
+
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -337,108 +379,151 @@
         </div>
     </nav>
 
-    <main class="experience-content">
-        <header class="experience-header">
-            <p class="experience-eyebrow">Learning in Public</p>
-            <h1 class="experience-title">Lesson Logger</h1>
-            <p class="experience-subtitle">Insights and lessons I've picked up along the way. Writing them down helps me remember and hopefully helps others too.</p>
+    <main class="flaws-content">
+        <!-- Header -->
+        <header class="flaws-header">
+            <p class="section-eyebrow">Radical Honesty</p>
+            <h1 class="flaws-title">My Flaws</h1>
+            <p class="flaws-intro">I believe in transparency. Here are the things I'm not great at, the patterns I'm working to change, and the blind spots I'm aware of. This page exists because self-awareness is the first step to growth.</p>
         </header>
 
-        <div class="lessons-timeline">
-            <div class="year-divider">
-                <span class="year-divider-text">2026</span>
-                <div class="year-divider-line"></div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
-                <span class="lesson-date">February 2026</span>
-                <div class="lesson-card">
-                    <span class="lesson-category mindset">Mindset</span>
-                    <h3 class="lesson-title">The best time to start was yesterday. The second best time is now.</h3>
-                    <p class="lesson-content">Spent too long researching the "perfect" way to build this website before realizing I just needed to start. Perfectionism is procrastination in disguise. Ship it, then iterate.</p>
-                </div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
-                <span class="lesson-date">January 2026</span>
-                <div class="lesson-card">
-                    <span class="lesson-category finance">Finance</span>
-                    <h3 class="lesson-title">Your lifestyle should lag your income by at least two years</h3>
-                    <p class="lesson-content">After completing a no-spend month, realized how much lifestyle inflation had crept in. The gap between what you earn and what you spend is what creates freedom.</p>
-                    <div class="lesson-source">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                        <span>Learned from: <a href="books.html">The Psychology of Money</a></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
-                <span class="lesson-date">January 2026</span>
-                <div class="lesson-card">
-                    <span class="lesson-category business">Business</span>
-                    <h3 class="lesson-title">Focus on inputs, not outputs</h3>
-                    <p class="lesson-content">Can't control whether a project succeeds, but can control showing up every day and doing the work. Focusing on process over outcomes reduces anxiety and increases consistency.</p>
-                </div>
-            </div>
-
-            <div class="year-divider">
-                <span class="year-divider-text">2025</span>
-                <div class="year-divider-line"></div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
-                <span class="lesson-date">December 2025</span>
-                <div class="lesson-card">
-                    <span class="lesson-category relationships">Relationships</span>
-                    <h3 class="lesson-title">Be the friend who reaches out first</h3>
-                    <p class="lesson-content">Everyone is waiting for someone else to make the first move. The person who initiates builds the deepest relationships. Don't keep score on who texted last.</p>
-                </div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
-                <span class="lesson-date">November 2025</span>
-                <div class="lesson-card">
-                    <span class="lesson-category life">Life</span>
-                    <h3 class="lesson-title">Travel while you're young and healthy</h3>
-                    <p class="lesson-content">You can always make more money, but you can't make more time or recapture youth. The experiences and perspectives gained from travel are irreplaceable.</p>
-                    <div class="lesson-source">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        <span>Learned from: <a href="adventures.html">Japan trip</a></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
-                <span class="lesson-date">October 2025</span>
-                <div class="lesson-card">
-                    <span class="lesson-category mindset">Mindset</span>
-                    <h3 class="lesson-title">You don't rise to the level of your goals, you fall to the level of your systems</h3>
-                    <p class="lesson-content">Goals are for setting direction. Systems are for making progress. After failing to stick to vague resolutions, started building specific daily habits instead.</p>
-                    <div class="lesson-source">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                        <span>Learned from: <a href="books.html">Atomic Habits</a></span>
-                    </div>
-                </div>
-            </div>
+        <!-- Philosophy Quote -->
+        <div class="philosophy-card">
+            <blockquote>"The first principle is that you must not fool yourself - and you are the easiest person to fool."</blockquote>
+            <cite>- Richard Feynman</cite>
         </div>
+
+        <!-- Main Flaws Section -->
+        <section class="flaws-section">
+            <p class="section-eyebrow">Areas for Growth</p>
+            <h2 class="section-title">Things I'm Working On</h2>
+
+            <div class="flaws-grid">
+                <div class="flaw-card">
+                    <div class="flaw-header">
+                        <div class="flaw-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <h3 class="flaw-title">Impatience</h3>
+                    </div>
+                    <p class="flaw-description">I often want results faster than is realistic. This can lead to frustration with processes that naturally take time, and sometimes rushing decisions that deserve more thought.</p>
+                </div>
+
+                <div class="flaw-card">
+                    <div class="flaw-header">
+                        <div class="flaw-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <h3 class="flaw-title">Over-complicating</h3>
+                    </div>
+                    <p class="flaw-description">I have a tendency to make things more complex than they need to be. Simple solutions often work better, but I'm drawn to elaborate systems and frameworks.</p>
+                </div>
+
+                <div class="flaw-card">
+                    <div class="flaw-header">
+                        <div class="flaw-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <h3 class="flaw-title">Selective Socializing</h3>
+                    </div>
+                    <p class="flaw-description">I can be too selective about who I spend time with. While I value deep connections, I sometimes miss opportunities to learn from people outside my usual circles.</p>
+                </div>
+
+                <div class="flaw-card">
+                    <div class="flaw-header">
+                        <div class="flaw-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        </div>
+                        <h3 class="flaw-title">Analysis Paralysis</h3>
+                    </div>
+                    <p class="flaw-description">I can spend too much time researching and planning instead of taking action. The pursuit of the "optimal" choice sometimes prevents me from making any choice at all.</p>
+                </div>
+
+                <div class="flaw-card">
+                    <div class="flaw-header">
+                        <div class="flaw-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <h3 class="flaw-title">Overconfidence</h3>
+                    </div>
+                    <p class="flaw-description">When I've studied a topic deeply, I can become too confident in my views. I need to remember that expertise in one area doesn't transfer to others, and that I can always be wrong.</p>
+                </div>
+
+                <div class="flaw-card">
+                    <div class="flaw-header">
+                        <div class="flaw-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+                        </div>
+                        <h3 class="flaw-title">Saying No</h3>
+                    </div>
+                    <p class="flaw-description">I struggle to say no to interesting opportunities, which can lead to overcommitment. Not everything worth doing is worth doing right now, and focus requires sacrifice.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- What I'm Actively Working On -->
+        <section class="working-on-section">
+            <p class="section-eyebrow">Current Focus</p>
+            <h2 class="section-title">Active Improvements</h2>
+
+            <div class="working-on-grid">
+                <div class="working-on-card">
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Daily Meditation
+                    </h4>
+                    <p>Building patience through consistent practice. Helps with the impatience and need for control.</p>
+                </div>
+
+                <div class="working-on-card">
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        2-Minute Rule
+                    </h4>
+                    <p>If a decision takes longer than 2 minutes, I'm probably overthinking it. Just decide and adjust.</p>
+                </div>
+
+                <div class="working-on-card">
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Weekly Review
+                    </h4>
+                    <p>Reflecting on where I was overconfident or wrong. Keeping a log of predictions and outcomes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Share This -->
+        <section class="why-share-section">
+            <p class="section-eyebrow">The Point</p>
+            <h2 class="section-title">Why Share This Publicly?</h2>
+
+            <div class="why-share-content">
+                <div class="why-share-text">
+                    <p>Most personal websites are highlight reels. I wanted to create something different - a space for honest reflection that might help others feel less alone in their own struggles.</p>
+                    <p>Publishing these flaws also creates accountability. It's harder to ignore patterns when you've acknowledged them publicly.</p>
+                </div>
+
+                <div class="why-share-benefits">
+                    <div class="benefit-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span>Forces regular self-reflection</span>
+                    </div>
+                    <div class="benefit-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span>Creates public accountability</span>
+                    </div>
+                    <div class="benefit-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span>Invites constructive feedback</span>
+                    </div>
+                    <div class="benefit-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span>Normalizes imperfection</span>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
@@ -452,7 +537,6 @@
             </div>
         </div>
     </footer>
-
     <script src="js/theme.js"></script>
 </body>
 </html>
