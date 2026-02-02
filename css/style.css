@@ -201,6 +201,26 @@ a:hover {
     visibility: visible;
 }
 
+/* Dark mode navigation dots */
+[data-theme="dark"] .side-nav-dot {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="dark"] .side-nav-dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .side-nav-dot.active {
+    background: #fff;
+    border-color: #fff;
+}
+
+[data-theme="dark"] .side-nav-dot::before {
+    background: #fff;
+    color: #000;
+}
+
 @media (max-width: 1024px) {
     .side-nav {
         display: none;
