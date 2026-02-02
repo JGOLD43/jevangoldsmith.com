@@ -4,122 +4,726 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Jevan Goldsmith</title>
-    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="css/admin.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <nav class="admin-nav">
-        <div class="container">
-            <a href="../index.html" class="logo">JG</a>
-            <div class="admin-actions">
-                <button id="new-essay-btn" class="btn-primary">+ New Essay</button>
-                <button id="logout-btn" class="btn-secondary">Logout</button>
-            </div>
+<body class="admin-body">
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+        <div class="sidebar-header">
+            <a href="../index.html" class="sidebar-logo">
+                <span class="logo-text">JG</span>
+                <span class="logo-full">Admin</span>
+            </a>
+            <button class="sidebar-toggle" id="sidebar-toggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
         </div>
-    </nav>
 
-    <main class="admin-main">
-        <div class="container">
-            <!-- Essay List View -->
-            <div id="essay-list-view" class="view active">
-                <h1>Essays</h1>
-
-                <div class="filter-tabs">
-                    <button class="tab active" data-filter="all">All Essays</button>
-                    <button class="tab" data-filter="published">Published</button>
-                    <button class="tab" data-filter="draft">Drafts</button>
-                </div>
-
-                <div id="essays-list" class="essays-list">
-                    <!-- Essays loaded dynamically -->
-                </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <span class="nav-section-title">Overview</span>
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
             </div>
 
-            <!-- Essay Editor View -->
-            <div id="essay-editor-view" class="view">
-                <div class="editor-header">
-                    <button id="back-to-list" class="btn-secondary">← Back to List</button>
-                    <div class="editor-actions">
-                        <button id="save-draft-btn" class="btn-secondary">Save Draft</button>
-                        <button id="preview-btn" class="btn-secondary">Preview</button>
-                        <button id="publish-btn" class="btn-primary">Publish</button>
-                    </div>
-                </div>
-
-                <form id="essay-form" class="essay-form">
-                    <input type="hidden" id="essay-id">
-
-                    <div class="form-group">
-                        <label for="essay-title">Title *</label>
-                        <input
-                            type="text"
-                            id="essay-title"
-                            placeholder="Enter essay title"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="essay-subtitle">Subtitle (optional)</label>
-                        <input
-                            type="text"
-                            id="essay-subtitle"
-                            placeholder="Enter subtitle or tagline"
-                        >
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="essay-category">Category *</label>
-                            <select id="essay-category" required>
-                                <option value="Philosophy">Philosophy</option>
-                                <option value="Management">Management</option>
-                                <option value="Technology">Technology</option>
-                                <option value="Personal">Personal</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Writing">Writing</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="essay-date">Date *</label>
-                            <input type="date" id="essay-date" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="essay-content">Content *</label>
-                        <textarea id="essay-content"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Media</label>
-                        <button type="button" id="upload-media-btn" class="btn-secondary">+ Upload Image/Video</button>
-                        <div id="media-gallery" class="media-gallery"></div>
-                    </div>
-                </form>
+            <div class="nav-section">
+                <span class="nav-section-title">Content</span>
+                <a href="#essays" class="nav-item" data-section="essays">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                    </svg>
+                    <span>Essays</span>
+                </a>
+                <a href="#adventures" class="nav-item" data-section="adventures">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="10" r="3"></circle>
+                        <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"></path>
+                    </svg>
+                    <span>Adventures</span>
+                </a>
             </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title">Taste</span>
+                <a href="#books" class="nav-item" data-section="books">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span>Books</span>
+                </a>
+                <a href="#movies" class="nav-item" data-section="movies">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                        <line x1="7" y1="2" x2="7" y2="22"></line>
+                        <line x1="17" y1="2" x2="17" y2="22"></line>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                    </svg>
+                    <span>Movies</span>
+                </a>
+                <a href="#music" class="nav-item" data-section="music">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                    <span>Music</span>
+                </a>
+                <a href="#podcasts" class="nav-item" data-section="podcasts">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                    </svg>
+                    <span>Podcasts</span>
+                </a>
+                <a href="#products" class="nav-item" data-section="products">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span>Products</span>
+                </a>
+                <a href="#people" class="nav-item" data-section="people">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    </svg>
+                    <span>People</span>
+                </a>
+                <a href="#food" class="nav-item" data-section="food">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                    </svg>
+                    <span>Food</span>
+                </a>
+                <a href="#quotes" class="nav-item" data-section="quotes">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21c0 1 0 1 1 1z"></path>
+                        <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
+                    </svg>
+                    <span>Quotes</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title">Experience</span>
+                <a href="#projects" class="nav-item" data-section="projects">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>Projects</span>
+                </a>
+                <a href="#challenges" class="nav-item" data-section="challenges">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>Challenges</span>
+                </a>
+                <a href="#skills" class="nav-item" data-section="skills">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    <span>Skills</span>
+                </a>
+                <a href="#lessons" class="nav-item" data-section="lessons">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    <span>Lessons</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title">Media</span>
+                <a href="#photos" class="nav-item" data-section="photos">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <span>Photos</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="../index.html" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>View Site</span>
+            </a>
+            <button id="logout-btn" class="nav-item logout-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Logout</span>
+            </button>
         </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main" id="admin-main">
+        <!-- Top Bar -->
+        <header class="admin-topbar">
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="topbar-title">
+                <h1 id="page-title">Dashboard</h1>
+            </div>
+            <div class="topbar-actions">
+                <span class="welcome-text">Welcome, Jevan</span>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="section-dashboard" class="content-section active">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon books">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-books">12</span>
+                        <span class="stat-label">Books</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon essays">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-essays">3</span>
+                        <span class="stat-label">Essays</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon movies">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                            <line x1="7" y1="2" x2="7" y2="22"></line>
+                            <line x1="17" y1="2" x2="17" y2="22"></line>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-movies">0</span>
+                        <span class="stat-label">Movies</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon adventures">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="10" r="3"></circle>
+                            <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-adventures">0</span>
+                        <span class="stat-label">Adventures</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="quick-actions">
+                    <h2>Quick Actions</h2>
+                    <div class="action-grid">
+                        <button class="action-card" onclick="navigateTo('books')">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>Add Book</span>
+                        </button>
+                        <button class="action-card" onclick="navigateTo('essays')">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>New Essay</span>
+                        </button>
+                        <button class="action-card" onclick="navigateTo('photos')">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>Upload Photos</span>
+                        </button>
+                        <button class="action-card" onclick="navigateTo('quotes')">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>Add Quote</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                </svg>
+                            </div>
+                            <div class="activity-info">
+                                <span class="activity-title">Published "Feed My Addiction"</span>
+                                <span class="activity-time">July 1, 2024</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="activity-info">
+                                <span class="activity-title">Added "Atomic Habits" to library</span>
+                                <span class="activity-time">June 28, 2024</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Books Section -->
+        <section id="section-books" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Books</h2>
+                    <button class="btn-primary" onclick="showAddForm('books')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Book
+                    </button>
+                </div>
+                <p class="section-description">Manage your book library and reviews</p>
+            </div>
+
+            <div class="content-filters">
+                <input type="text" class="search-input" placeholder="Search books..." id="books-search">
+                <select class="filter-select" id="books-category-filter">
+                    <option value="all">All Categories</option>
+                    <option value="Learning">Learning</option>
+                    <option value="Psychology Books">Psychology</option>
+                    <option value="Strategy and War">Strategy</option>
+                    <option value="Big Ideas">Big Ideas</option>
+                    <option value="Autobiographies">Autobiographies</option>
+                </select>
+            </div>
+
+            <div class="content-list" id="books-list">
+                <!-- Books will be loaded dynamically -->
+            </div>
+        </section>
+
+        <!-- Essays Section -->
+        <section id="section-essays" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Essays</h2>
+                    <button class="btn-primary" onclick="showAddForm('essays')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        New Essay
+                    </button>
+                </div>
+                <p class="section-description">Write and manage your essays</p>
+            </div>
+
+            <div class="filter-tabs">
+                <button class="tab active" data-filter="all">All Essays</button>
+                <button class="tab" data-filter="published">Published</button>
+                <button class="tab" data-filter="draft">Drafts</button>
+            </div>
+
+            <div class="content-list" id="essays-list">
+                <!-- Essays loaded dynamically -->
+            </div>
+        </section>
+
+        <!-- Generic Content Sections -->
+        <section id="section-movies" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Movies</h2>
+                    <button class="btn-primary" onclick="showAddForm('movies')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Movie
+                    </button>
+                </div>
+                <p class="section-description">Track movies you've watched and loved</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                    <line x1="7" y1="2" x2="7" y2="22"></line>
+                    <line x1="17" y1="2" x2="17" y2="22"></line>
+                </svg>
+                <h3>No movies yet</h3>
+                <p>Start adding movies to your collection</p>
+                <button class="btn-primary" onclick="showAddForm('movies')">Add Your First Movie</button>
+            </div>
+        </section>
+
+        <section id="section-music" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Music</h2>
+                    <button class="btn-primary" onclick="showAddForm('music')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Music
+                    </button>
+                </div>
+                <p class="section-description">Share albums and songs you love</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                </svg>
+                <h3>No music yet</h3>
+                <p>Add albums and songs to your collection</p>
+                <button class="btn-primary" onclick="showAddForm('music')">Add Music</button>
+            </div>
+        </section>
+
+        <section id="section-podcasts" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Podcasts</h2>
+                    <button class="btn-primary" onclick="showAddForm('podcasts')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Podcast
+                    </button>
+                </div>
+                <p class="section-description">Recommend podcasts worth listening to</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                </svg>
+                <h3>No podcasts yet</h3>
+                <p>Share your favorite podcasts</p>
+                <button class="btn-primary" onclick="showAddForm('podcasts')">Add Podcast</button>
+            </div>
+        </section>
+
+        <section id="section-products" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Products</h2>
+                    <button class="btn-primary" onclick="showAddForm('products')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Product
+                    </button>
+                </div>
+                <p class="section-description">Products you use and recommend</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                </svg>
+                <h3>No products yet</h3>
+                <p>Share products you love</p>
+                <button class="btn-primary" onclick="showAddForm('products')">Add Product</button>
+            </div>
+        </section>
+
+        <section id="section-people" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>People</h2>
+                    <button class="btn-primary" onclick="showAddForm('people')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Person
+                    </button>
+                </div>
+                <p class="section-description">People who inspire you</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                <h3>No people yet</h3>
+                <p>Add people who inspire you</p>
+                <button class="btn-primary" onclick="showAddForm('people')">Add Person</button>
+            </div>
+        </section>
+
+        <section id="section-food" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Food</h2>
+                    <button class="btn-primary" onclick="showAddForm('food')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Food
+                    </button>
+                </div>
+                <p class="section-description">Favorite restaurants and dishes</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                </svg>
+                <h3>No food yet</h3>
+                <p>Share your favorite places to eat</p>
+                <button class="btn-primary" onclick="showAddForm('food')">Add Food</button>
+            </div>
+        </section>
+
+        <section id="section-quotes" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Quotes</h2>
+                    <button class="btn-primary" onclick="showAddForm('quotes')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Quote
+                    </button>
+                </div>
+                <p class="section-description">Words of wisdom that resonate with you</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21c0 1 0 1 1 1z"></path>
+                </svg>
+                <h3>No quotes yet</h3>
+                <p>Add quotes that inspire you</p>
+                <button class="btn-primary" onclick="showAddForm('quotes')">Add Quote</button>
+            </div>
+        </section>
+
+        <section id="section-adventures" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Adventures</h2>
+                    <button class="btn-primary" onclick="showAddForm('adventures')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Adventure
+                    </button>
+                </div>
+                <p class="section-description">Document your travels and experiences</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <circle cx="12" cy="10" r="3"></circle>
+                    <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"></path>
+                </svg>
+                <h3>No adventures yet</h3>
+                <p>Start documenting your journeys</p>
+                <button class="btn-primary" onclick="showAddForm('adventures')">Add Adventure</button>
+            </div>
+        </section>
+
+        <section id="section-projects" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Projects</h2>
+                    <button class="btn-primary" onclick="showAddForm('projects')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Project
+                    </button>
+                </div>
+                <p class="section-description">Showcase your work and side projects</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <h3>No projects yet</h3>
+                <p>Share your work with the world</p>
+                <button class="btn-primary" onclick="showAddForm('projects')">Add Project</button>
+            </div>
+        </section>
+
+        <section id="section-challenges" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Challenges</h2>
+                    <button class="btn-primary" onclick="showAddForm('challenges')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Challenge
+                    </button>
+                </div>
+                <p class="section-description">Track personal challenges and goals</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <h3>No challenges yet</h3>
+                <p>Set and track your challenges</p>
+                <button class="btn-primary" onclick="showAddForm('challenges')">Add Challenge</button>
+            </div>
+        </section>
+
+        <section id="section-skills" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Skills</h2>
+                    <button class="btn-primary" onclick="showAddForm('skills')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Skill
+                    </button>
+                </div>
+                <p class="section-description">Skills you're developing</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                <h3>No skills yet</h3>
+                <p>Track your skill development</p>
+                <button class="btn-primary" onclick="showAddForm('skills')">Add Skill</button>
+            </div>
+        </section>
+
+        <section id="section-lessons" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Lessons</h2>
+                    <button class="btn-primary" onclick="showAddForm('lessons')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Lesson
+                    </button>
+                </div>
+                <p class="section-description">Log lessons learned along the way</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                <h3>No lessons yet</h3>
+                <p>Document what you've learned</p>
+                <button class="btn-primary" onclick="showAddForm('lessons')">Add Lesson</button>
+            </div>
+        </section>
+
+        <section id="section-photos" class="content-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <h2>Photos</h2>
+                    <button class="btn-primary" onclick="showAddForm('photos')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Upload Photos
+                    </button>
+                </div>
+                <p class="section-description">Manage your photo gallery</p>
+            </div>
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <h3>No photos yet</h3>
+                <p>Upload photos to your gallery</p>
+                <button class="btn-primary" onclick="showAddForm('photos')">Upload Photos</button>
+            </div>
+        </section>
     </main>
 
-    <!-- Preview Modal -->
-    <div id="preview-modal" class="preview-modal">
-        <div class="preview-content">
-            <div class="preview-header">
-                <h2>Preview</h2>
-                <button class="close-preview" onclick="closePreview()">Close</button>
+    <!-- Add/Edit Modal -->
+    <div class="modal" id="form-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add Item</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
-            <div id="preview-body"></div>
+            <div class="modal-body" id="modal-body">
+                <!-- Form content will be dynamically inserted -->
+            </div>
         </div>
     </div>
 
     <script src="js/auth.js"></script>
-    <script src="js/fileManager.js"></script>
-    <script src="js/editor.js"></script>
+    <script src="js/dashboard.js"></script>
     <script>
         // Require authentication
         requireAuth();
