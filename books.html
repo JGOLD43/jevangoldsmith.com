@@ -151,7 +151,7 @@
                         <line x1="9" y1="3" x2="9" y2="21"></line>
                     </svg>
                 </button>
-                <h3>Browse Books</h3>
+                <span class="sidebar-browse-label">Browse</span>
                 <div class="view-toggle">
                     <button class="view-toggle-btn active" id="list-view-btn" onclick="setViewMode('list')" title="List view">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -174,9 +174,30 @@
                 </div>
             </div>
 
+            <!-- List Selector -->
+            <div class="sidebar-list-selector">
+                <div class="list-dropdown" id="list-dropdown">
+                    <button class="list-dropdown-btn" onclick="toggleListDropdown()">
+                        <span id="current-list-name">Books</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="list-dropdown-menu" id="list-dropdown-menu">
+                        <a href="books.html" class="list-option active">Books</a>
+                        <a href="movies.html" class="list-option">Movies</a>
+                        <a href="music.html" class="list-option">Music</a>
+                        <a href="podcasts.html" class="list-option">Podcasts</a>
+                        <a href="products.html" class="list-option">Products</a>
+                        <a href="people.html" class="list-option">People</a>
+                        <a href="food.html" class="list-option">Food</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Search Bar -->
             <div class="sidebar-search">
-                <div class="search-input-wrapper">
+                <div class="search-input-wrapper search-bubble">
                     <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>

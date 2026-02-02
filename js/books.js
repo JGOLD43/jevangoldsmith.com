@@ -853,6 +853,20 @@ function toggleSidebar() {
     localStorage.setItem('books-sidebar-collapsed', isCollapsed);
 }
 
+// Toggle list dropdown
+function toggleListDropdown() {
+    const dropdown = document.getElementById('list-dropdown');
+    dropdown.classList.toggle('open');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('list-dropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+    }
+});
+
 // Scroll to a book in the grid
 function scrollToBook(isbn) {
     const bookCard = document.querySelector(`[data-isbn="${isbn}"]`);
