@@ -25,14 +25,61 @@
 
         .about-image-container {
             position: relative;
+            width: 100%;
         }
 
-        .about-image {
+        /* Photo Collage Grid */
+        .photo-collage {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 6px;
             width: 100%;
             aspect-ratio: 1;
-            object-fit: cover;
             border-radius: 12px;
-            filter: grayscale(20%);
+            overflow: visible;
+            position: relative;
+        }
+
+        .collage-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .collage-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .collage-item:hover {
+            z-index: 10;
+            transform: scale(1.8);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        .collage-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Make certain items span multiple cells for visual interest */
+        .collage-item.span-2-cols {
+            grid-column: span 2;
+        }
+
+        .collage-item.span-2-rows {
+            grid-row: span 2;
+        }
+
+        /* Dark mode adjustments */
+        [data-theme="dark"] .collage-item:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
         .about-intro {
@@ -270,8 +317,12 @@
             }
 
             .about-image-container {
-                max-width: 200px;
+                max-width: 280px;
                 margin: 0 auto;
+            }
+
+            .collage-item:hover {
+                transform: scale(1.5);
             }
 
             .about-meta {
@@ -434,7 +485,23 @@
         <section class="about-hero">
             <div class="about-hero-content">
                 <div class="about-image-container">
-                    <img src="images/profile.jpg" alt="Jevan Goldsmith" class="about-image">
+                    <div class="photo-collage">
+                        <div class="collage-item span-2-rows">
+                            <img src="images/collage/collage-1.jpg" alt="Jevan exploring">
+                        </div>
+                        <div class="collage-item">
+                            <img src="images/collage/collage-2.jpg" alt="Jevan working">
+                        </div>
+                        <div class="collage-item">
+                            <img src="images/collage/collage-3.jpg" alt="Jevan traveling">
+                        </div>
+                        <div class="collage-item">
+                            <img src="images/collage/collage-4.jpg" alt="Jevan adventure">
+                        </div>
+                        <div class="collage-item span-2-cols">
+                            <img src="images/collage/collage-5.jpg" alt="Jevan outdoors">
+                        </div>
+                    </div>
                 </div>
                 <div class="about-intro">
                     <p class="about-eyebrow">About Me</p>
