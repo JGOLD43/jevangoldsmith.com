@@ -90,6 +90,52 @@
       "mapZoom": 12,
       "tags": ["culture", "temples", "spring", "photography"],
       "status": "published"
+    },
+    {
+      "id": "vietnam-adventure",
+      "title": "Motorbikes & Mountains",
+      "subtitle": "Discovering Vietnam from north to south",
+      "location": "Ha Long Bay, Vietnam",
+      "region": "Asia",
+      "startDate": "2024-11-10",
+      "endDate": "2024-11-24",
+      "duration": "14 days",
+      "heroImage": "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200",
+      "shortDescription": "An unforgettable journey through Vietnam's stunning landscapes, from the limestone karsts of Ha Long Bay to the bustling streets of Ho Chi Minh City.",
+      "content": "<p>Vietnam captivated me from the moment I arrived. The energy of the cities, the serenity of the countryside, and the warmth of the people made this an adventure I'll never forget.</p><p>From cruising through the emerald waters of Ha Long Bay to exploring ancient temples in Hoi An, every day brought new wonders. The food alone was worth the trip - fresh pho, banh mi, and countless dishes I'd never heard of before.</p>",
+      "highlights": [
+        "Ha Long Bay cruise",
+        "Street food tours",
+        "Ancient temples",
+        "Motorbike adventures"
+      ],
+      "gallery": [
+        {
+          "src": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1528127269322-539801943592?w=400",
+          "caption": "Ha Long Bay limestone karsts",
+          "lat": 20.9101,
+          "lng": 107.1839
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1557750255-c76072a7aad1?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1557750255-c76072a7aad1?w=400",
+          "caption": "Traditional boat on the bay",
+          "lat": 20.9500,
+          "lng": 107.0500
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=400",
+          "caption": "Hoi An lanterns at night",
+          "lat": 15.8801,
+          "lng": 108.3380
+        }
+      ],
+      "mapCenter": { "lat": 20.9101, "lng": 107.1839 },
+      "mapZoom": 6,
+      "tags": ["nature", "food", "culture", "adventure"],
+      "status": "published"
     }
   ],
   "lastUpdated": "2024-01-01T00:00:00Z"
