@@ -152,8 +152,9 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1600px !important;
-    padding: 0 2rem !important;
+    max-width: 100%;
+    width: 100%;
+    padding: 0 3rem;
     flex-wrap: nowrap;
     gap: 1rem;
     position: relative;
