@@ -2480,8 +2480,7 @@ button[type="submit"]:hover {
     display: grid;
     grid-template-columns: 280px 1fr;
     gap: 0;
-    max-width: 1600px;
-    margin: 0 auto;
+    width: 100%;
     transition: grid-template-columns 0.3s ease;
 }
 
@@ -2526,6 +2525,7 @@ button[type="submit"]:hover {
 .books-main {
     padding: 2rem 3rem;
     background: var(--background);
+    max-width: 1320px;
 }
 
 .main-header {
@@ -3072,8 +3072,7 @@ button[type="submit"]:hover {
     display: grid;
     grid-template-columns: 280px 1fr;
     gap: 0;
-    max-width: 1600px;
-    margin: 0 auto;
+    width: 100%;
     transition: grid-template-columns 0.3s ease;
 }
 
@@ -3171,6 +3170,7 @@ button[type="submit"]:hover {
 .movies-main {
     padding: 2rem 3rem;
     background: var(--background);
+    max-width: 1320px;
 }
 
 .category-movies {
