@@ -9,6 +9,186 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .podcasts-hero {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        .podcasts-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .podcasts-hero p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .podcast-category {
+            margin-bottom: 50px;
+        }
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+        .category-header h2 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .podcasts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .podcast-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .podcast-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .podcast-artwork {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .podcast-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .podcast-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--primary-color);
+        }
+        .podcast-host {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+        }
+        .podcast-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.5;
+            flex: 1;
+        }
+        .podcast-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .podcast-tag {
+            background: var(--background);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .featured-episodes {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 50px;
+            border: 1px solid var(--border-color);
+        }
+        .featured-episodes h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .episode-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .episode-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--background);
+            border-radius: 12px;
+            align-items: center;
+        }
+        .episode-number {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .episode-content {
+            flex: 1;
+        }
+        .episode-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--primary-color);
+        }
+        .episode-podcast {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .podcasts-hero h1 {
+                font-size: 2rem;
+            }
+            .podcasts-grid {
+                grid-template-columns: 1fr;
+            }
+            .podcast-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .podcast-tags {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -111,7 +291,6 @@
                         </div>
                     </div>
                 </li>
-                
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -144,19 +323,150 @@
         </div>
     </nav>
 
-    <header class="page-header">
-        <div class="container">
-            <h1>Podcasts</h1>
-            <p>My favorite podcasts and episodes</p>
-        </div>
-    </header>
-
     <main class="container">
-        <div class="content-section">
-            <article class="article-full">
-                <p>Coming soon...</p>
-            </article>
+        <section class="podcasts-hero">
+            <h1>Podcasts I Listen To</h1>
+            <p>Learning on the go - these shows have shaped how I think about business, technology, and life.</p>
+        </section>
+
+        <div class="featured-episodes">
+            <h2>⭐ Must-Listen Episodes</h2>
+            <div class="episode-list">
+                <div class="episode-item">
+                    <div class="episode-number">1</div>
+                    <div class="episode-content">
+                        <h4 class="episode-title">Naval Ravikant - How to Get Rich</h4>
+                        <p class="episode-podcast">The Tim Ferriss Show</p>
+                    </div>
+                </div>
+                <div class="episode-item">
+                    <div class="episode-number">2</div>
+                    <div class="episode-content">
+                        <h4 class="episode-title">The Psychology of Money</h4>
+                        <p class="episode-podcast">Invest Like the Best - Morgan Housel</p>
+                    </div>
+                </div>
+                <div class="episode-item">
+                    <div class="episode-number">3</div>
+                    <div class="episode-content">
+                        <h4 class="episode-title">Principles for Dealing with the Changing World Order</h4>
+                        <p class="episode-podcast">Lex Fridman Podcast - Ray Dalio</p>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <section class="podcast-category">
+            <div class="category-header">
+                <div class="category-icon" style="background: #1DB954;">💼</div>
+                <h2>Business & Investing</h2>
+            </div>
+            <div class="podcasts-grid">
+                <div class="podcast-card">
+                    <div class="podcast-artwork" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">🎙️</div>
+                    <div class="podcast-info">
+                        <h3 class="podcast-name">Invest Like the Best</h3>
+                        <p class="podcast-host">Patrick O'Shaughnessy</p>
+                        <p class="podcast-description">Deep dives into investing strategies and business models with world-class operators and investors.</p>
+                        <div class="podcast-tags">
+                            <span class="podcast-tag">Investing</span>
+                            <span class="podcast-tag">Business</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="podcast-card">
+                    <div class="podcast-artwork" style="background: linear-gradient(135deg, #0f4c75, #1b262c);">📊</div>
+                    <div class="podcast-info">
+                        <h3 class="podcast-name">All-In Podcast</h3>
+                        <p class="podcast-host">Chamath, Jason, Sacks & Friedberg</p>
+                        <p class="podcast-description">Industry veterans break down the biggest stories in technology, economics, and politics.</p>
+                        <div class="podcast-tags">
+                            <span class="podcast-tag">Tech</span>
+                            <span class="podcast-tag">Venture Capital</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="podcast-card">
+                    <div class="podcast-artwork" style="background: linear-gradient(135deg, #2d3436, #636e72);">🏢</div>
+                    <div class="podcast-info">
+                        <h3 class="podcast-name">Acquired</h3>
+                        <p class="podcast-host">Ben Gilbert & David Rosenthal</p>
+                        <p class="podcast-description">The playbook of great companies - how they were built, acquired, and scaled.</p>
+                        <div class="podcast-tags">
+                            <span class="podcast-tag">Business History</span>
+                            <span class="podcast-tag">Strategy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="podcast-category">
+            <div class="category-header">
+                <div class="category-icon" style="background: #9b59b6;">🧠</div>
+                <h2>Science & Ideas</h2>
+            </div>
+            <div class="podcasts-grid">
+                <div class="podcast-card">
+                    <div class="podcast-artwork" style="background: linear-gradient(135deg, #2c3e50, #34495e);">🤖</div>
+                    <div class="podcast-info">
+                        <h3 class="podcast-name">Lex Fridman Podcast</h3>
+                        <p class="podcast-host">Lex Fridman</p>
+                        <p class="podcast-description">Long-form conversations about AI, science, technology, history, philosophy, and the nature of intelligence.</p>
+                        <div class="podcast-tags">
+                            <span class="podcast-tag">AI</span>
+                            <span class="podcast-tag">Science</span>
+                            <span class="podcast-tag">Philosophy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="podcast-card">
+                    <div class="podcast-artwork" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">🧬</div>
+                    <div class="podcast-info">
+                        <h3 class="podcast-name">Huberman Lab</h3>
+                        <p class="podcast-host">Andrew Huberman</p>
+                        <p class="podcast-description">Science-based tools for everyday life - sleep, focus, motivation, and peak performance.</p>
+                        <div class="podcast-tags">
+                            <span class="podcast-tag">Neuroscience</span>
+                            <span class="podcast-tag">Health</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="podcast-category">
+            <div class="category-header">
+                <div class="category-icon" style="background: #e67e22;">⚡</div>
+                <h2>Personal Development</h2>
+            </div>
+            <div class="podcasts-grid">
+                <div class="podcast-card">
+                    <div class="podcast-artwork" style="background: linear-gradient(135deg, #f39c12, #d68910);">📚</div>
+                    <div class="podcast-info">
+                        <h3 class="podcast-name">The Tim Ferriss Show</h3>
+                        <p class="podcast-host">Tim Ferriss</p>
+                        <p class="podcast-description">Deconstructing world-class performers to extract the tactics and tools you can use.</p>
+                        <div class="podcast-tags">
+                            <span class="podcast-tag">Productivity</span>
+                            <span class="podcast-tag">Success</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="podcast-card">
+                    <div class="podcast-artwork" style="background: linear-gradient(135deg, #27ae60, #229954);">💡</div>
+                    <div class="podcast-info">
+                        <h3 class="podcast-name">The Knowledge Project</h3>
+                        <p class="podcast-host">Shane Parrish</p>
+                        <p class="podcast-description">Master the best of what other people have already figured out. Mental models for better thinking.</p>
+                        <div class="podcast-tags">
+                            <span class="podcast-tag">Mental Models</span>
+                            <span class="podcast-tag">Decision Making</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">

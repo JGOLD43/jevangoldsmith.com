@@ -9,6 +9,177 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .products-hero {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        .products-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .products-hero p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .product-category {
+            margin-bottom: 60px;
+        }
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .category-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+        .category-header h2 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-image {
+            height: 180px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        [data-theme="dark"] .product-image {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        }
+        .product-image-placeholder {
+            font-size: 3rem;
+            opacity: 0.5;
+        }
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--secondary-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+        .product-brand {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .stars {
+            color: #F5C518;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        .rating-value {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .product-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .product-usage {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--background);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        .product-usage svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .products-note {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+        .products-note p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .products-hero h1 {
+                font-size: 2rem;
+            }
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -111,7 +282,7 @@
                         </div>
                     </div>
                 </li>
-                
+
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -144,18 +315,290 @@
         </div>
     </nav>
 
-    <header class="page-header">
-        <div class="container">
-            <h1>Products</h1>
-            <p>Things I use and recommend</p>
-        </div>
-    </header>
-
     <main class="container">
-        <div class="content-section">
-            <article class="article-full">
-                <p>Coming soon...</p>
-            </article>
+        <section class="products-hero">
+            <h1>Products I Use & Recommend</h1>
+            <p>A curated collection of tools, gear, and products that have genuinely improved my daily life and work.</p>
+        </section>
+
+        <!-- Tech & Gadgets -->
+        <section class="product-category">
+            <div class="category-header">
+                <div class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h2>Tech & Gadgets</h2>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">💻</span>
+                        <span class="product-badge">Daily Driver</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Apple</div>
+                        <h3 class="product-name">MacBook Pro 14"</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-value">5.0</span>
+                        </div>
+                        <p class="product-description">The M3 Pro chip handles everything I throw at it. Perfect for coding, video editing, and running multiple apps simultaneously.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Used daily for 2+ years
+                        </span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">🎧</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Sony</div>
+                        <h3 class="product-name">WH-1000XM5</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-value">4.9</span>
+                        </div>
+                        <p class="product-description">Best noise-canceling headphones I've owned. Essential for deep work sessions and long flights.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            30+ hours weekly
+                        </span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">📱</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Apple</div>
+                        <h3 class="product-name">iPhone 15 Pro</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-value">4.5</span>
+                        </div>
+                        <p class="product-description">The action button and USB-C make this a solid upgrade. Camera quality is exceptional for content creation.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Primary phone
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Productivity -->
+        <section class="product-category">
+            <div class="category-header">
+                <div class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <h2>Productivity</h2>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">📓</span>
+                        <span class="product-badge">Essential</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Leuchtturm1917</div>
+                        <h3 class="product-name">A5 Dot Grid Notebook</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-value">5.0</span>
+                        </div>
+                        <p class="product-description">The perfect notebook for journaling and note-taking. Dot grid gives flexibility for diagrams and lists.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            20+ notebooks filled
+                        </span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">⌨️</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Keychron</div>
+                        <h3 class="product-name">K3 Pro Mechanical Keyboard</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-value">4.6</span>
+                        </div>
+                        <p class="product-description">Low-profile mechanical switches with wireless connectivity. Perfect balance of portability and typing experience.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Home office setup
+                        </span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">🖥️</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">LG</div>
+                        <h3 class="product-name">27" 4K Monitor</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-value">4.4</span>
+                        </div>
+                        <p class="product-description">USB-C connectivity with 90W power delivery. One cable for everything - display, power, and data.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Primary display
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Travel -->
+        <section class="product-category">
+            <div class="category-header">
+                <div class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <h2>Travel</h2>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">🎒</span>
+                        <span class="product-badge">Favorite</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Peak Design</div>
+                        <h3 class="product-name">Travel Backpack 45L</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-value">5.0</span>
+                        </div>
+                        <p class="product-description">The best travel bag I've ever owned. Expands from 30L to 45L, opens like a suitcase, and has clever organization.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            15+ countries
+                        </span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">🧳</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Away</div>
+                        <h3 class="product-name">The Carry-On</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-value">4.5</span>
+                        </div>
+                        <p class="product-description">Durable polycarbonate shell with great interior organization. The built-in USB charger is actually useful.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            50+ flights
+                        </span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">🔌</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Anker</div>
+                        <h3 class="product-name">737 Power Bank (24,000mAh)</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-value">4.8</span>
+                        </div>
+                        <p class="product-description">140W output can charge my MacBook Pro. Heavy but worth it for long travel days without outlets.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Every trip
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health & Fitness -->
+        <section class="product-category">
+            <div class="category-header">
+                <div class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </div>
+                <h2>Health & Fitness</h2>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">⌚</span>
+                        <span class="product-badge">Game Changer</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Whoop</div>
+                        <h3 class="product-name">Whoop 4.0</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-value">4.9</span>
+                        </div>
+                        <p class="product-description">Changed how I think about recovery and sleep. The strain coach and HRV data are invaluable for training.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            24/7 for 3 years
+                        </span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">🏋️</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Rogue</div>
+                        <h3 class="product-name">Ohio Bar</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-value">5.0</span>
+                        </div>
+                        <p class="product-description">The gold standard for multipurpose barbells. Excellent knurling and will last a lifetime.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Home gym centerpiece
+                        </span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-image-placeholder">💊</span>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-brand">Athletic Greens</div>
+                        <h3 class="product-name">AG1</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-value">4.3</span>
+                        </div>
+                        <p class="product-description">Expensive but convenient. A solid nutritional foundation when my diet isn't perfect.</p>
+                        <span class="product-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Daily for 2 years
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="products-note">
+            <p>These are products I genuinely use and recommend. Some links may be affiliate links, but I only share things I've personally tested and found valuable.</p>
         </div>
     </main>
 

@@ -9,6 +9,224 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .music-hero {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        .music-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .music-hero p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .now-playing {
+            background: linear-gradient(135deg, var(--secondary-color), #4a7c10);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 50px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        .now-playing-art {
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            flex-shrink: 0;
+        }
+        .now-playing-info h2 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        .now-playing-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+        .now-playing-info p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .music-section {
+            margin-bottom: 50px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .section-header h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-header h2 span {
+            font-size: 1.2rem;
+        }
+
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .album-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .album-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        .album-art {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        [data-theme="dark"] .album-art {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        }
+        .album-info {
+            padding: 16px;
+        }
+        .album-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: var(--primary-color);
+        }
+        .album-artist {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        .album-genre {
+            display: inline-block;
+            background: var(--background);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .artists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        .artist-card {
+            text-align: center;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease;
+        }
+        .artist-card:hover {
+            transform: translateY(-4px);
+        }
+        .artist-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary-color), #4a7c10);
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .artist-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+        .artist-genre {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .playlists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .playlist-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .playlist-card:hover {
+            transform: translateY(-2px);
+        }
+        .playlist-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .playlist-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--primary-color);
+        }
+        .playlist-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .music-hero h1 {
+                font-size: 2rem;
+            }
+            .now-playing {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+            }
+            .albums-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .artists-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -111,7 +329,6 @@
                         </div>
                     </div>
                 </li>
-                
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -144,19 +361,150 @@
         </div>
     </nav>
 
-    <header class="page-header">
-        <div class="container">
-            <h1>Music</h1>
-            <p>What I'm listening to</p>
-        </div>
-    </header>
-
     <main class="container">
-        <div class="content-section">
-            <article class="article-full">
-                <p>Coming soon...</p>
-            </article>
+        <section class="music-hero">
+            <h1>What I'm Listening To</h1>
+            <p>Music is a constant companion - for focus, energy, reflection, and everything in between.</p>
+        </section>
+
+        <div class="now-playing">
+            <div class="now-playing-art">🎵</div>
+            <div class="now-playing-info">
+                <h2>Currently On Repeat</h2>
+                <h3>Time</h3>
+                <p>Hans Zimmer - Inception Soundtrack</p>
+            </div>
         </div>
+
+        <section class="music-section">
+            <div class="section-header">
+                <h2><span>🎸</span> Favorite Albums</h2>
+            </div>
+            <div class="albums-grid">
+                <div class="album-card">
+                    <div class="album-art">🌅</div>
+                    <div class="album-info">
+                        <h3 class="album-title">Rumours</h3>
+                        <p class="album-artist">Fleetwood Mac</p>
+                        <span class="album-genre">Classic Rock</span>
+                    </div>
+                </div>
+                <div class="album-card">
+                    <div class="album-art">🌙</div>
+                    <div class="album-info">
+                        <h3 class="album-title">Dark Side of the Moon</h3>
+                        <p class="album-artist">Pink Floyd</p>
+                        <span class="album-genre">Progressive Rock</span>
+                    </div>
+                </div>
+                <div class="album-card">
+                    <div class="album-art">🎹</div>
+                    <div class="album-info">
+                        <h3 class="album-title">Kind of Blue</h3>
+                        <p class="album-artist">Miles Davis</p>
+                        <span class="album-genre">Jazz</span>
+                    </div>
+                </div>
+                <div class="album-card">
+                    <div class="album-art">🏔️</div>
+                    <div class="album-info">
+                        <h3 class="album-title">In Rainbows</h3>
+                        <p class="album-artist">Radiohead</p>
+                        <span class="album-genre">Alternative</span>
+                    </div>
+                </div>
+                <div class="album-card">
+                    <div class="album-art">🌊</div>
+                    <div class="album-info">
+                        <h3 class="album-title">Blonde</h3>
+                        <p class="album-artist">Frank Ocean</p>
+                        <span class="album-genre">R&B</span>
+                    </div>
+                </div>
+                <div class="album-card">
+                    <div class="album-art">⚡</div>
+                    <div class="album-info">
+                        <h3 class="album-title">Random Access Memories</h3>
+                        <p class="album-artist">Daft Punk</p>
+                        <span class="album-genre">Electronic</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="music-section">
+            <div class="section-header">
+                <h2><span>🎤</span> Artists I Follow</h2>
+            </div>
+            <div class="artists-grid">
+                <div class="artist-card">
+                    <div class="artist-avatar">🎼</div>
+                    <h3 class="artist-name">Hans Zimmer</h3>
+                    <p class="artist-genre">Film Score</p>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-avatar">🎵</div>
+                    <h3 class="artist-name">Khruangbin</h3>
+                    <p class="artist-genre">Psychedelic Soul</p>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-avatar">🎶</div>
+                    <h3 class="artist-name">Bon Iver</h3>
+                    <p class="artist-genre">Indie Folk</p>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-avatar">🎷</div>
+                    <h3 class="artist-name">Kamasi Washington</h3>
+                    <p class="artist-genre">Jazz</p>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-avatar">🎸</div>
+                    <h3 class="artist-name">John Mayer</h3>
+                    <p class="artist-genre">Blues Rock</p>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-avatar">🎹</div>
+                    <h3 class="artist-name">Nils Frahm</h3>
+                    <p class="artist-genre">Neo-Classical</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="music-section">
+            <div class="section-header">
+                <h2><span>📻</span> My Playlists</h2>
+            </div>
+            <div class="playlists-grid">
+                <div class="playlist-card">
+                    <div class="playlist-icon" style="background: linear-gradient(135deg, #1DB954, #1ed760);">🎯</div>
+                    <div class="playlist-info">
+                        <h3>Deep Focus</h3>
+                        <p>Instrumental tracks for deep work sessions</p>
+                    </div>
+                </div>
+                <div class="playlist-card">
+                    <div class="playlist-icon" style="background: linear-gradient(135deg, #FF6B6B, #ee5253);">💪</div>
+                    <div class="playlist-info">
+                        <h3>Workout Energy</h3>
+                        <p>High-energy tracks for the gym</p>
+                    </div>
+                </div>
+                <div class="playlist-card">
+                    <div class="playlist-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">🌙</div>
+                    <div class="playlist-info">
+                        <h3>Evening Wind Down</h3>
+                        <p>Chill vibes for relaxation</p>
+                    </div>
+                </div>
+                <div class="playlist-card">
+                    <div class="playlist-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">☀️</div>
+                    <div class="playlist-info">
+                        <h3>Sunday Morning</h3>
+                        <p>Easy listening for lazy mornings</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">

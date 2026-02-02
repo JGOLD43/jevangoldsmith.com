@@ -9,6 +9,289 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Interests Page Styles */
+        .interests-hero {
+            padding: 4rem 0 3rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .interests-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .interests-hero p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Interest Level Indicator */
+        .interest-level {
+            display: flex;
+            gap: 3px;
+            margin-top: 0.5rem;
+        }
+
+        .level-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-color);
+        }
+
+        .level-dot.active {
+            background: var(--secondary-color);
+        }
+
+        /* Main Interests Grid - Bento Style */
+        .interests-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem 4rem;
+        }
+
+        .interests-bento {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 1.5rem;
+        }
+
+        /* Interest Card Base */
+        .interest-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interest-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--secondary-color);
+        }
+
+        /* Card Sizes */
+        .interest-card.large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .interest-card.tall {
+            grid-row: span 2;
+        }
+
+        .interest-card.wide {
+            grid-column: span 2;
+        }
+
+        /* Card Header */
+        .interest-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .interest-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary-color);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.5rem;
+        }
+
+        .interest-card.large .interest-icon {
+            width: 64px;
+            height: 64px;
+            font-size: 2rem;
+        }
+
+        .interest-badge {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.25rem 0.75rem;
+            background: var(--background-alt);
+            border-radius: 12px;
+            color: var(--text-light);
+        }
+
+        .interest-badge.primary {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        /* Card Content */
+        .interest-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .interest-card.large .interest-title {
+            font-size: 1.75rem;
+        }
+
+        .interest-description {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .interest-card.large .interest-description {
+            font-size: 1.1rem;
+        }
+
+        /* Interest Tags */
+        .interest-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .interest-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--background-alt);
+            border-radius: 12px;
+            color: var(--text-light);
+        }
+
+        /* Interest Stats */
+        .interest-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .interest-stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Currently Section */
+        .currently-section {
+            background: var(--background-alt);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 4rem auto 2rem;
+            max-width: 1000px;
+        }
+
+        .currently-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .currently-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .currently-header p {
+            color: var(--text-light);
+        }
+
+        .currently-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .currently-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .currently-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .currently-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .interests-bento {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .interest-card.large {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .interests-hero h1 {
+                font-size: 2rem;
+            }
+
+            .interests-bento {
+                grid-template-columns: 1fr;
+            }
+
+            .interest-card.large,
+            .interest-card.wide,
+            .interest-card.tall {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .currently-section {
+                padding: 2rem 1.5rem;
+                margin: 3rem 1rem 2rem;
+            }
+        }
+
+        /* Dark mode */
+        [data-theme="dark"] .interest-icon {
+            background: #4a7c1a;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -98,8 +381,8 @@
                 <li class="nav-dropdown">
                     <a href="#" class="dropdown-trigger">Experience</a>
                     <div class="dropdown-menu dropdown-menu-wide">
-                        <div class="dropdown-wide-header">Grow & Create</div>
                         <div class="dropdown-columns">
+                            <div class="dropdown-wide-header">Grow & Create</div>
                             <div class="dropdown-column">
                                 <a href="projects.html">Projects</a>
                                 <a href="challenges.html">Challenges</a>
@@ -111,7 +394,6 @@
                         </div>
                     </div>
                 </li>
-                
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -144,18 +426,196 @@
         </div>
     </nav>
 
-    <header class="page-header">
-        <div class="container">
-            <h1>Interests</h1>
-            <p>Hobbies and topics I'm passionate about</p>
-        </div>
-    </header>
+    <main>
+        <!-- Hero Section -->
+        <section class="interests-hero">
+            <h1>Things I Can't Stop Thinking About</h1>
+            <p>A map of where my curiosity leads me. Some of these are lifelong obsessions, others are recent discoveries. All of them shape how I see the world.</p>
+        </section>
 
-    <main class="container">
-        <div class="content-section">
-            <article class="article-full">
-                <p>Coming soon...</p>
-            </article>
+        <!-- Bento Grid of Interests -->
+        <div class="interests-container">
+            <div class="interests-bento">
+                <!-- Real Estate Development - Large -->
+                <div class="interest-card large">
+                    <div class="interest-header">
+                        <div class="interest-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        </div>
+                        <span class="interest-badge primary">Primary Focus</span>
+                    </div>
+                    <h3 class="interest-title">Real Estate Development</h3>
+                    <p class="interest-description">Understanding how buildings actually get made - from land acquisition to final sale. Currently exploring residential projects on the Sunshine Coast. There's something deeply satisfying about creating tangible things that people will live in for decades.</p>
+                    <div class="interest-tags">
+                        <span class="interest-tag">Feasibility</span>
+                        <span class="interest-tag">Townhouses</span>
+                        <span class="interest-tag">Land Subdivision</span>
+                        <span class="interest-tag">Finance</span>
+                    </div>
+                    <div class="interest-stats">
+                        <div class="interest-stat">
+                            <div class="stat-value">2+</div>
+                            <div class="stat-label">Years Learning</div>
+                        </div>
+                        <div class="interest-stat">
+                            <div class="stat-value">50+</div>
+                            <div class="stat-label">Sites Analyzed</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Writing - Tall -->
+                <div class="interest-card tall">
+                    <div class="interest-header">
+                        <div class="interest-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                        </div>
+                    </div>
+                    <h3 class="interest-title">Writing</h3>
+                    <p class="interest-description">Trying to figure out what I actually think by putting words on a page. The process of writing forces clarity in a way that thinking alone never does. Sometimes it works.</p>
+                    <div class="interest-tags">
+                        <span class="interest-tag">Essays</span>
+                        <span class="interest-tag">Notes</span>
+                        <span class="interest-tag">Journaling</span>
+                    </div>
+                    <div class="interest-level">
+                        <span class="level-dot active"></span>
+                        <span class="level-dot active"></span>
+                        <span class="level-dot active"></span>
+                        <span class="level-dot active"></span>
+                        <span class="level-dot active"></span>
+                    </div>
+                </div>
+
+                <!-- Philosophy -->
+                <div class="interest-card">
+                    <div class="interest-header">
+                        <div class="interest-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                        </div>
+                    </div>
+                    <h3 class="interest-title">Philosophy</h3>
+                    <p class="interest-description">Big questions about meaning, ethics, and how to live. Stoicism has been particularly influential.</p>
+                    <div class="interest-tags">
+                        <span class="interest-tag">Stoicism</span>
+                        <span class="interest-tag">Ethics</span>
+                    </div>
+                </div>
+
+                <!-- Organizational Design -->
+                <div class="interest-card">
+                    <div class="interest-header">
+                        <div class="interest-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                    </div>
+                    <h3 class="interest-title">How Organizations Work</h3>
+                    <p class="interest-description">Why do some companies have amazing cultures while others are miserable? The invisible forces that shape how groups of people operate.</p>
+                    <div class="interest-tags">
+                        <span class="interest-tag">Culture</span>
+                        <span class="interest-tag">Incentives</span>
+                    </div>
+                </div>
+
+                <!-- Technology - Wide -->
+                <div class="interest-card wide">
+                    <div class="interest-header">
+                        <div class="interest-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                    </div>
+                    <h3 class="interest-title">Technology & Software</h3>
+                    <p class="interest-description">Building things when I find problems that bother me enough. This website is one of them. Fascinated by how software is eating the world and the implications for every industry.</p>
+                    <div class="interest-tags">
+                        <span class="interest-tag">Web Dev</span>
+                        <span class="interest-tag">AI</span>
+                        <span class="interest-tag">Automation</span>
+                        <span class="interest-tag">PropTech</span>
+                    </div>
+                </div>
+
+                <!-- Reading -->
+                <div class="interest-card">
+                    <div class="interest-header">
+                        <div class="interest-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                        </div>
+                        <span class="interest-badge">200+ Books</span>
+                    </div>
+                    <h3 class="interest-title">Reading</h3>
+                    <p class="interest-description">Non-fiction mostly. Business, psychology, history, science. Always have 3-4 books going at once.</p>
+                    <a href="books.html" style="color: var(--secondary-color); font-size: 0.9rem; margin-top: auto;">View my bookshelf →</a>
+                </div>
+
+                <!-- Finance & Investing -->
+                <div class="interest-card">
+                    <div class="interest-header">
+                        <div class="interest-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                    </div>
+                    <h3 class="interest-title">Finance & Investing</h3>
+                    <p class="interest-description">Compound interest in all things. Understanding how money actually works versus what we're taught.</p>
+                    <div class="interest-tags">
+                        <span class="interest-tag">Value Investing</span>
+                        <span class="interest-tag">RE</span>
+                    </div>
+                </div>
+
+                <!-- Travel -->
+                <div class="interest-card">
+                    <div class="interest-header">
+                        <div class="interest-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        </div>
+                        <span class="interest-badge">15 Countries</span>
+                    </div>
+                    <h3 class="interest-title">Travel & Adventure</h3>
+                    <p class="interest-description">Experiencing different cultures and ways of living. Every trip recalibrates my perspective.</p>
+                    <a href="adventures.html" style="color: var(--secondary-color); font-size: 0.9rem; margin-top: auto;">View adventures →</a>
+                </div>
+
+                <!-- Health & Fitness -->
+                <div class="interest-card">
+                    <div class="interest-header">
+                        <div class="interest-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </div>
+                    </div>
+                    <h3 class="interest-title">Health & Fitness</h3>
+                    <p class="interest-description">The foundation everything else sits on. Gym, nutrition, sleep optimization, and understanding how the body actually works.</p>
+                    <div class="interest-tags">
+                        <span class="interest-tag">Lifting</span>
+                        <span class="interest-tag">Nutrition</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Currently Section -->
+        <div class="currently-section">
+            <div class="currently-header">
+                <h2>What I'm Into Right Now</h2>
+                <p>The specific things capturing my attention this month</p>
+            </div>
+            <div class="currently-grid">
+                <div class="currently-item">
+                    <div class="currently-label">Reading</div>
+                    <div class="currently-value">The Psychology of Money</div>
+                </div>
+                <div class="currently-item">
+                    <div class="currently-label">Learning</div>
+                    <div class="currently-value">Land Subdivision Process</div>
+                </div>
+                <div class="currently-item">
+                    <div class="currently-label">Building</div>
+                    <div class="currently-value">This Website</div>
+                </div>
+                <div class="currently-item">
+                    <div class="currently-label">Watching</div>
+                    <div class="currently-value">House of the Dragon S2</div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -170,6 +630,7 @@
             </div>
         </div>
     </footer>
+
     <script src="js/theme.js"></script>
 </body>
 </html>

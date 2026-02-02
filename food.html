@@ -9,6 +9,226 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .food-hero {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        .food-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .food-hero p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .food-philosophy {
+            background: linear-gradient(135deg, var(--secondary-color), #4a7c10);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 50px;
+            color: white;
+            text-align: center;
+        }
+        .food-philosophy h2 {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+        .food-philosophy p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .food-section {
+            margin-bottom: 50px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .section-header h2 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .cuisines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .cuisine-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cuisine-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        .cuisine-image {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+        .cuisine-content {
+            padding: 20px;
+        }
+        .cuisine-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+        .cuisine-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .cuisine-favorites {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .dish-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .dish-card:hover {
+            transform: translateY(-4px);
+        }
+        .dish-emoji {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        .dish-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--primary-color);
+        }
+        .dish-type {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .restaurants-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .restaurant-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .restaurant-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+        .restaurant-info {
+            flex: 1;
+        }
+        .restaurant-name {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--primary-color);
+        }
+        .restaurant-location {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+        .restaurant-note {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+
+        .cooking-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+        .cooking-section h2 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cooking-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        .cooking-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 16px;
+            background: var(--background);
+            border-radius: 10px;
+        }
+        .cooking-item-icon {
+            font-size: 1.5rem;
+        }
+        .cooking-item-text h4 {
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+            color: var(--primary-color);
+        }
+        .cooking-item-text p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .food-hero h1 {
+                font-size: 2rem;
+            }
+            .cuisines-grid {
+                grid-template-columns: 1fr;
+            }
+            .restaurant-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -111,7 +331,6 @@
                         </div>
                     </div>
                 </li>
-                
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -144,19 +363,160 @@
         </div>
     </nav>
 
-    <header class="page-header">
-        <div class="container">
-            <h1>Food</h1>
-            <p>Culinary experiences and favorite dishes</p>
-        </div>
-    </header>
-
     <main class="container">
-        <div class="content-section">
-            <article class="article-full">
-                <p>Coming soon...</p>
-            </article>
+        <section class="food-hero">
+            <h1>Food & Culinary Adventures</h1>
+            <p>Exploring flavors, cuisines, and the joy of good food - from home cooking to memorable restaurant experiences.</p>
+        </section>
+
+        <div class="food-philosophy">
+            <h2>My Food Philosophy</h2>
+            <p>Food is more than fuel - it's culture, connection, and creativity. I believe in eating whole foods, exploring diverse cuisines, and finding joy in both cooking simple meals at home and experiencing exceptional restaurants abroad.</p>
         </div>
+
+        <section class="food-section">
+            <div class="section-header">
+                <h2>🌍 Favorite Cuisines</h2>
+            </div>
+            <div class="cuisines-grid">
+                <div class="cuisine-card">
+                    <div class="cuisine-image" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">🇯🇵</div>
+                    <div class="cuisine-content">
+                        <h3 class="cuisine-name">Japanese</h3>
+                        <p class="cuisine-desc">The precision, freshness, and umami depth of Japanese cuisine never fails to impress. From izakaya casual to kaiseki formal.</p>
+                        <p class="cuisine-favorites">Favorites: Omakase sushi, Ramen, Yakitori</p>
+                    </div>
+                </div>
+                <div class="cuisine-card">
+                    <div class="cuisine-image" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">🇮🇹</div>
+                    <div class="cuisine-content">
+                        <h3 class="cuisine-name">Italian</h3>
+                        <p class="cuisine-desc">Simple ingredients, perfect execution. Italian food proves that restraint and quality ingredients win every time.</p>
+                        <p class="cuisine-favorites">Favorites: Cacio e Pepe, Osso Buco, Tiramisu</p>
+                    </div>
+                </div>
+                <div class="cuisine-card">
+                    <div class="cuisine-image" style="background: linear-gradient(135deg, #f39c12, #e67e22);">🇲🇽</div>
+                    <div class="cuisine-content">
+                        <h3 class="cuisine-name">Mexican</h3>
+                        <p class="cuisine-desc">Bold flavors, fresh ingredients, and incredible regional variety. Far beyond Tex-Mex stereotypes.</p>
+                        <p class="cuisine-favorites">Favorites: Tacos al Pastor, Mole, Ceviche</p>
+                    </div>
+                </div>
+                <div class="cuisine-card">
+                    <div class="cuisine-image" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">🇹🇭</div>
+                    <div class="cuisine-content">
+                        <h3 class="cuisine-name">Thai</h3>
+                        <p class="cuisine-desc">The perfect balance of sweet, sour, salty, and spicy. Thai cuisine is a masterclass in flavor harmony.</p>
+                        <p class="cuisine-favorites">Favorites: Pad Kra Pao, Green Curry, Som Tam</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="food-section">
+            <div class="section-header">
+                <h2>🍽️ Comfort Foods</h2>
+            </div>
+            <div class="dishes-grid">
+                <div class="dish-card">
+                    <div class="dish-emoji">🍜</div>
+                    <h3 class="dish-name">Ramen</h3>
+                    <p class="dish-type">Soul food</p>
+                </div>
+                <div class="dish-card">
+                    <div class="dish-emoji">🍕</div>
+                    <h3 class="dish-name">Neapolitan Pizza</h3>
+                    <p class="dish-type">Classic</p>
+                </div>
+                <div class="dish-card">
+                    <div class="dish-emoji">🥩</div>
+                    <h3 class="dish-name">Ribeye Steak</h3>
+                    <p class="dish-type">Celebration meal</p>
+                </div>
+                <div class="dish-card">
+                    <div class="dish-emoji">🍳</div>
+                    <h3 class="dish-name">Eggs Benedict</h3>
+                    <p class="dish-type">Brunch favorite</p>
+                </div>
+                <div class="dish-card">
+                    <div class="dish-emoji">🌮</div>
+                    <h3 class="dish-name">Street Tacos</h3>
+                    <p class="dish-type">Perfect bite</p>
+                </div>
+                <div class="dish-card">
+                    <div class="dish-emoji">🍣</div>
+                    <h3 class="dish-name">Sushi Omakase</h3>
+                    <p class="dish-type">Special occasion</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="food-section">
+            <div class="section-header">
+                <h2>📍 Memorable Restaurants</h2>
+            </div>
+            <div class="restaurants-list">
+                <div class="restaurant-card">
+                    <div class="restaurant-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">🍣</div>
+                    <div class="restaurant-info">
+                        <h3 class="restaurant-name">Sukiyabashi Jiro</h3>
+                        <p class="restaurant-location">Tokyo, Japan</p>
+                        <p class="restaurant-note">The pinnacle of sushi craftsmanship</p>
+                    </div>
+                </div>
+                <div class="restaurant-card">
+                    <div class="restaurant-icon" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">🍝</div>
+                    <div class="restaurant-info">
+                        <h3 class="restaurant-name">Osteria Francescana</h3>
+                        <p class="restaurant-location">Modena, Italy</p>
+                        <p class="restaurant-note">Where tradition meets innovation</p>
+                    </div>
+                </div>
+                <div class="restaurant-card">
+                    <div class="restaurant-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">🦞</div>
+                    <div class="restaurant-info">
+                        <h3 class="restaurant-name">Eleven Madison Park</h3>
+                        <p class="restaurant-location">New York, USA</p>
+                        <p class="restaurant-note">Unforgettable tasting menu experience</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cooking-section">
+            <h2>👨‍🍳 In My Kitchen</h2>
+            <div class="cooking-items">
+                <div class="cooking-item">
+                    <span class="cooking-item-icon">🔪</span>
+                    <div class="cooking-item-text">
+                        <h4>Japanese Knife Set</h4>
+                        <p>A good knife changes everything</p>
+                    </div>
+                </div>
+                <div class="cooking-item">
+                    <span class="cooking-item-icon">🍳</span>
+                    <div class="cooking-item-text">
+                        <h4>Cast Iron Skillet</h4>
+                        <p>The perfect sear, every time</p>
+                    </div>
+                </div>
+                <div class="cooking-item">
+                    <span class="cooking-item-icon">🥘</span>
+                    <div class="cooking-item-text">
+                        <h4>Dutch Oven</h4>
+                        <p>For braises and bread</p>
+                    </div>
+                </div>
+                <div class="cooking-item">
+                    <span class="cooking-item-icon">🧂</span>
+                    <div class="cooking-item-text">
+                        <h4>Maldon Salt</h4>
+                        <p>Finishing touch on everything</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
