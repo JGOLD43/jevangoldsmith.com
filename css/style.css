@@ -2485,12 +2485,15 @@ a:hover {
     padding: 2rem;
     flex: 1;
     min-width: 0;
-    background: #fff;
 }
 
 .essays-main .content-section {
     max-width: 900px;
     margin: 0;
+}
+
+.essays-main .article-full {
+    background-color: #fff;
 }
 
 /* Essays main header */
