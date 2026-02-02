@@ -948,9 +948,9 @@ a:hover {
 }
 
 .carousel-header {
-    max-width: 1400px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 4rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1015,8 +1015,8 @@ a:hover {
 }
 
 .carousel-container {
-    max-width: 1400px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 0;
     padding: 0 4rem;
     overflow: hidden;
 }
@@ -1028,7 +1028,7 @@ a:hover {
 }
 
 .feature-card {
-    flex: 0 0 calc(30% - 19.2px);
+    flex: 0 0 calc(25% - 18px);
     background: #fff;
     border-radius: 12px;
     overflow: hidden;
@@ -1126,7 +1126,7 @@ a:hover {
 /* Responsive carousel */
 @media (max-width: 1400px) {
     .feature-card {
-        flex: 0 0 calc(40% - 18px);
+        flex: 0 0 calc(33.333% - 16px);
     }
 }
 
