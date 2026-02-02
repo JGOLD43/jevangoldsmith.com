@@ -1556,7 +1556,7 @@ a:hover {
 
 /* Layout adjustment when sidebar is collapsed */
 .books-layout.sidebar-collapsed {
-    margin-left: 48px;
+    grid-template-columns: 48px 1fr;
 }
 
 .books-layout.sidebar-collapsed .books-grid {
@@ -2477,25 +2477,24 @@ button[type="submit"]:hover {
 
 /* Books Sidebar Layout (Obsidian-inspired) */
 .books-layout {
-    display: block;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
     max-width: 1600px;
     margin: 0 auto;
-    margin-left: 280px;
-    transition: margin-left 0.3s ease;
+    transition: grid-template-columns 0.3s ease;
 }
 
 .books-sidebar {
     background: #FAFAF9;
     border-right: 1px solid #000;
     padding: 0;
-    position: fixed;
-    left: 0;
+    position: sticky;
     top: 70px;
-    width: 280px;
     height: calc(100vh - 70px);
     overflow-y: auto;
     transition: width 0.3s ease, min-width 0.3s ease;
-    z-index: 100;
+    align-self: start;
 }
 
 .books-sidebar .sidebar-header {
@@ -2913,14 +2912,12 @@ button[type="submit"]:hover {
 
 @media (max-width: 1024px) {
     .books-layout {
-        margin-left: 0;
+        grid-template-columns: 1fr;
     }
 
     .books-sidebar {
         position: relative;
-        left: auto;
         top: 0;
-        width: 100%;
         height: auto;
         border-right: none;
         border-bottom: 1px solid var(--border-color);
@@ -3072,25 +3069,24 @@ button[type="submit"]:hover {
 
 /* Movies Sidebar Layout (Obsidian-inspired) */
 .movies-layout {
-    display: block;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
     max-width: 1600px;
     margin: 0 auto;
-    margin-left: 280px;
-    transition: margin-left 0.3s ease;
+    transition: grid-template-columns 0.3s ease;
 }
 
 .movies-sidebar {
     background: #FAFAF9;
     border-right: 1px solid #000;
     padding: 2rem 0;
-    position: fixed;
-    left: 0;
+    position: sticky;
     top: 70px;
-    width: 280px;
     height: calc(100vh - 70px);
     overflow-y: auto;
     transition: width 0.3s ease, min-width 0.3s ease;
-    z-index: 100;
+    align-self: start;
 }
 
 /* Collapsed movies sidebar state */
@@ -3148,7 +3144,7 @@ button[type="submit"]:hover {
 }
 
 .movies-layout.sidebar-collapsed {
-    margin-left: 48px;
+    grid-template-columns: 48px 1fr;
 }
 
 .movies-layout.sidebar-collapsed .movies-grid {
@@ -3222,14 +3218,12 @@ button[type="submit"]:hover {
 
 @media (max-width: 1024px) {
     .movies-layout {
-        margin-left: 0;
+        grid-template-columns: 1fr;
     }
 
     .movies-sidebar {
         position: relative;
-        left: auto;
         top: 0;
-        width: 100%;
         height: auto;
         border-right: none;
         border-bottom: 1px solid var(--border-color);
