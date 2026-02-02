@@ -3,121 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newsletter - Jevan Goldsmith</title>
+    <title>Notes - Jevan Goldsmith</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Newsletter Page Styles */
-        .newsletter-content {
-            max-width: 700px;
+        /* Notes Page Specific Styles */
+        .notes-content {
+            max-width: 900px;
             margin: 0 auto;
-            padding: 3rem 2rem 4rem;
+            padding: 4rem 2rem;
         }
 
-        .newsletter-intro {
+        .notes-header {
             text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .newsletter-eyebrow {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--secondary-color);
-            margin-bottom: 0.75rem;
-        }
-
-        .newsletter-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .newsletter-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 500px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* Signup Card */
-        .signup-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .signup-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .form-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-
-        .form-input {
-            padding: 0.875rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            background: var(--background-color);
-            color: var(--text-color);
-            transition: all 0.2s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-
-        .form-input::placeholder {
-            color: var(--text-light);
-            opacity: 0.7;
-        }
-
-        .submit-btn {
-            padding: 1rem 2rem;
-            background: var(--secondary-color);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 0.5rem;
-        }
-
-        .submit-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        .form-note {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            text-align: center;
-            margin-top: 0.5rem;
-        }
-
-        /* What You'll Get Section */
-        .benefits-section {
             margin-bottom: 3rem;
         }
 
@@ -130,71 +30,151 @@
             margin-bottom: 0.75rem;
         }
 
+        .notes-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .notes-intro {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Notes Categories */
+        .notes-section {
+            margin-bottom: 3rem;
+        }
+
         .section-title {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
         }
 
-        .benefits-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        /* Note Cards */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
         }
 
-        .benefit-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1.25rem;
-            background: var(--background-alt);
-            border-radius: 10px;
-        }
-
-        .benefit-icon {
-            width: 36px;
-            height: 36px;
-            min-width: 36px;
-            border-radius: 8px;
+        .note-card {
             background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .note-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .note-meta {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: var(--secondary-color);
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
         }
 
-        .benefit-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .benefit-content h4 {
-            font-size: 1rem;
+        .note-category {
+            font-size: 0.7rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+            background: var(--background-alt);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
         }
 
-        .benefit-content p {
+        .note-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .note-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .note-excerpt {
             font-size: 0.9rem;
             color: var(--text-light);
-            line-height: 1.5;
+            line-height: 1.6;
+            margin: 0;
         }
 
-        /* Topics Tags */
-        .topics-section {
+        /* Featured Note */
+        .featured-note {
+            background: var(--background-alt);
+            border-radius: 16px;
+            padding: 2rem;
             margin-bottom: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
+            border: 1px solid var(--border-color);
         }
 
-        .topics-grid {
+        .featured-note-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .featured-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #fff;
+            background: var(--secondary-color);
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        .featured-note h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .featured-note p {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .featured-note-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .featured-note-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Categories Filter */
+        .categories-filter {
             display: flex;
             flex-wrap: wrap;
             gap: 0.75rem;
-            margin-top: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
         }
 
-        .topic-tag {
+        .category-tag {
             padding: 0.5rem 1rem;
             background: var(--background-alt);
             border-radius: 100px;
@@ -202,47 +182,87 @@
             font-weight: 500;
             color: var(--text-color);
             border: 1px solid var(--border-color);
+            cursor: pointer;
             transition: all 0.2s ease;
+            text-decoration: none;
         }
 
-        .topic-tag:hover {
+        .category-tag:hover,
+        .category-tag.active {
             border-color: var(--secondary-color);
             color: var(--secondary-color);
         }
 
-        /* FAQ Section */
-        .faq-section {
-            padding-top: 2rem;
+        /* Recent Notes List */
+        .recent-notes-section {
+            margin-top: 3rem;
+            padding-top: 3rem;
             border-top: 1px solid var(--border-color);
         }
 
-        .faq-list {
+        .notes-list {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
+            gap: 1rem;
         }
 
-        .faq-item h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        .note-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
         }
 
-        .faq-item p {
-            font-size: 0.95rem;
+        .note-list-item:hover {
+            border-color: var(--secondary-color);
+            transform: translateX(4px);
+        }
+
+        .note-list-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .note-list-item .note-category {
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .note-list-title {
+            font-weight: 500;
+        }
+
+        .note-list-date {
+            font-size: 0.85rem;
             color: var(--text-light);
-            line-height: 1.6;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .newsletter-title {
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .notes-title {
                 font-size: 2rem;
             }
 
-            .signup-card {
-                padding: 1.75rem;
+            .note-list-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .note-list-content {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -280,8 +300,8 @@
                             </div>
                             <div class="dropdown-column">
                                 <span class="dropdown-header">Resources</span>
-                                <a href="newsletter.html" class="active">Newsletter</a>
-                                <a href="podcast.html">Podcast</a>
+                                <a href="notes.html" class="active">Notes</a>
+                                <a href="my-roadmap.html">My Roadmap</a>
                                 <a href="flaws.html">Flaws</a>
                                 <a href="dateme.html">Date Me</a>
                             </div>
@@ -347,6 +367,7 @@
                         </div>
                     </div>
                 </li>
+
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -379,98 +400,115 @@
         </div>
     </nav>
 
-    <main class="newsletter-content">
-        <!-- Hero Section -->
-        <section class="newsletter-intro">
-            <p class="newsletter-eyebrow">Subscribe</p>
-            <h1 class="newsletter-title">Newsletter</h1>
-            <p class="newsletter-subtitle">Ideas on building, learning, and living well. Delivered when I have something worth sharing.</p>
-        </section>
+    <main class="notes-content">
+        <!-- Header -->
+        <header class="notes-header">
+            <p class="section-eyebrow">Thinking in Public</p>
+            <h1 class="notes-title">Notes</h1>
+            <p class="notes-intro">Quick thoughts, book takeaways, and ideas I'm still figuring out. Less polished than essays, more honest about what I don't know yet.</p>
+        </header>
 
-        <!-- Signup Card -->
-        <div class="signup-card">
-            <form class="signup-form" action="#" method="POST">
-                <div class="form-group">
-                    <label class="form-label" for="email">Email address</label>
-                    <input type="email" id="email" name="email" class="form-input" placeholder="you@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="name">First name (optional)</label>
-                    <input type="text" id="name" name="name" class="form-input" placeholder="Your name">
-                </div>
-                <button type="submit" class="submit-btn">Subscribe</button>
-                <p class="form-note">No spam. Unsubscribe anytime.</p>
-            </form>
+        <!-- Categories Filter -->
+        <div class="categories-filter">
+            <span class="category-tag active">All</span>
+            <span class="category-tag">Books</span>
+            <span class="category-tag">Business</span>
+            <span class="category-tag">Life</span>
+            <span class="category-tag">Tech</span>
         </div>
 
-        <!-- What You'll Get Section -->
-        <section class="benefits-section">
-            <p class="section-eyebrow">What to Expect</p>
-            <h2 class="section-title">What You'll Get</h2>
-            <div class="benefits-list">
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <!-- Featured Note -->
+        <div class="featured-note">
+            <div class="featured-note-header">
+                <span class="featured-badge">Pinned</span>
+                <span class="note-date">Jan 2026</span>
+            </div>
+            <h3>Why I Started Writing Notes in Public</h3>
+            <p>Most of what I think about never makes it into a polished essay. These notes are my attempt to share the messy middle - the half-formed ideas, the questions I'm wrestling with, and the things I'm reading that are shaping how I think.</p>
+            <a href="#" class="featured-note-link">Read more →</a>
+        </div>
+
+        <!-- Notes Grid -->
+        <section class="notes-section">
+            <p class="section-eyebrow">Recent Notes</p>
+            <h2 class="section-title">What I've Been Thinking About</h2>
+
+            <div class="notes-grid">
+                <a href="#" class="note-card">
+                    <div class="note-meta">
+                        <span class="note-category">Books</span>
+                        <span class="note-date">Jan 28, 2026</span>
                     </div>
-                    <div class="benefit-content">
-                        <h4>Original Thinking</h4>
-                        <p>Essays and ideas I'm working through, not regurgitated content from elsewhere.</p>
+                    <h3 class="note-title">Notes on "The Almanack of Naval Ravikant"</h3>
+                    <p class="note-excerpt">Specific knowledge is found by pursuing your genuine curiosity rather than whatever is hot right now...</p>
+                </a>
+
+                <a href="#" class="note-card">
+                    <div class="note-meta">
+                        <span class="note-category">Business</span>
+                        <span class="note-date">Jan 22, 2026</span>
                     </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <h3 class="note-title">The Problem with "Best Practices"</h3>
+                    <p class="note-excerpt">Best practices are average practices. They're what everyone does, which means they can't be a source of competitive advantage...</p>
+                </a>
+
+                <a href="#" class="note-card">
+                    <div class="note-meta">
+                        <span class="note-category">Life</span>
+                        <span class="note-date">Jan 15, 2026</span>
                     </div>
-                    <div class="benefit-content">
-                        <h4>Book Recommendations</h4>
-                        <p>What I'm reading and why, with honest takes on what's worth your time.</p>
+                    <h3 class="note-title">On Saying No More Often</h3>
+                    <p class="note-excerpt">Every yes is a no to something else. I've been tracking what I say yes to this month and realizing how often I'm trading what matters for what's urgent...</p>
+                </a>
+
+                <a href="#" class="note-card">
+                    <div class="note-meta">
+                        <span class="note-category">Tech</span>
+                        <span class="note-date">Jan 8, 2026</span>
                     </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    </div>
-                    <div class="benefit-content">
-                        <h4>Lessons Learned</h4>
-                        <p>Real experiences and takeaways from projects, investments, and life decisions.</p>
-                    </div>
-                </div>
+                    <h3 class="note-title">Building in Public vs Building in Private</h3>
+                    <p class="note-excerpt">There's a tension between sharing your work early for feedback and protecting ideas until they're ready...</p>
+                </a>
             </div>
         </section>
 
-        <!-- Topics Section -->
-        <section class="topics-section">
-            <p class="section-eyebrow">Coverage</p>
-            <h2 class="section-title">Topics I Write About</h2>
-            <div class="topics-grid">
-                <span class="topic-tag">Finance & Investing</span>
-                <span class="topic-tag">Technology</span>
-                <span class="topic-tag">Real Estate</span>
-                <span class="topic-tag">Mental Models</span>
-                <span class="topic-tag">Productivity</span>
-                <span class="topic-tag">Book Reviews</span>
-                <span class="topic-tag">Career Strategy</span>
-                <span class="topic-tag">Life Optimization</span>
-            </div>
-        </section>
+        <!-- Recent Notes List -->
+        <section class="recent-notes-section">
+            <p class="section-eyebrow">Archive</p>
+            <h2 class="section-title">All Notes</h2>
 
-        <!-- FAQ Section -->
-        <section class="faq-section">
-            <p class="section-eyebrow">Questions</p>
-            <h2 class="section-title">FAQ</h2>
-            <div class="faq-list">
-                <div class="faq-item">
-                    <h4>How often do you send emails?</h4>
-                    <p>When I have something worth sharing. Usually 1-2 times per month. Quality over frequency.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>Can I reply to the newsletter?</h4>
-                    <p>Yes. Every email comes from my actual inbox. I read and respond to replies.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>Is it free?</h4>
-                    <p>Yes, completely free. I write because I enjoy it and want to connect with curious people.</p>
-                </div>
+            <div class="notes-list">
+                <a href="#" class="note-list-item">
+                    <div class="note-list-content">
+                        <span class="note-category">Books</span>
+                        <span class="note-list-title">Lessons from "Zero to One"</span>
+                    </div>
+                    <span class="note-list-date">Dec 2025</span>
+                </a>
+
+                <a href="#" class="note-list-item">
+                    <div class="note-list-content">
+                        <span class="note-category">Life</span>
+                        <span class="note-list-title">The compound effect of small decisions</span>
+                    </div>
+                    <span class="note-list-date">Dec 2025</span>
+                </a>
+
+                <a href="#" class="note-list-item">
+                    <div class="note-list-content">
+                        <span class="note-category">Business</span>
+                        <span class="note-list-title">Why culture eats strategy</span>
+                    </div>
+                    <span class="note-list-date">Nov 2025</span>
+                </a>
+
+                <a href="#" class="note-list-item">
+                    <div class="note-list-content">
+                        <span class="note-category">Tech</span>
+                        <span class="note-list-title">Tools I'm using right now</span>
+                    </div>
+                    <span class="note-list-date">Nov 2025</span>
+                </a>
             </div>
         </section>
     </main>

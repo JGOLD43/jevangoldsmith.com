@@ -3,90 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podcast - Jevan Goldsmith</title>
+    <title>My Roadmap - Jevan Goldsmith</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Podcast Page Styles */
-        .podcast-content {
+        /* Roadmap Page Specific Styles */
+        .roadmap-content {
             max-width: 900px;
             margin: 0 auto;
-            padding: 3rem 2rem 4rem;
+            padding: 4rem 2rem;
         }
 
-        .podcast-intro {
+        .roadmap-header {
             text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .podcast-eyebrow {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--secondary-color);
-            margin-bottom: 0.75rem;
-        }
-
-        .podcast-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .podcast-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* Coming Soon Card */
-        .coming-soon-card {
-            background: var(--background-alt);
-            border-radius: 16px;
-            padding: 3rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .coming-soon-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--card-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            color: var(--secondary-color);
-        }
-
-        .coming-soon-icon svg {
-            width: 40px;
-            height: 40px;
-        }
-
-        .coming-soon-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .coming-soon-text {
-            font-size: 1rem;
-            color: var(--text-light);
-            max-width: 500px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* What to Expect Section */
-        .expect-section {
             margin-bottom: 3rem;
         }
 
@@ -99,19 +30,167 @@
             margin-bottom: 0.75rem;
         }
 
+        .roadmap-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .roadmap-intro {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Current Phase */
+        .current-phase {
+            background: var(--background-alt);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .phase-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #fff;
+            background: var(--secondary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .current-phase h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .current-phase p {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .phase-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .phase-stat {
+            text-align: center;
+        }
+
+        .phase-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .phase-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            margin-bottom: 3rem;
+        }
+
         .section-title {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
         }
 
-        .expect-grid {
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -2rem;
+            top: 0.25rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border-color);
+            transform: translateX(-5px);
+        }
+
+        .timeline-item.active .timeline-dot {
+            background: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(201, 168, 108, 0.2);
+        }
+
+        .timeline-item.completed .timeline-dot {
+            background: #4CAF50;
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-description {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Goals Grid */
+        .goals-section {
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .goals-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
         }
 
-        .expect-card {
+        .goal-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -119,128 +198,116 @@
             transition: all 0.2s ease;
         }
 
-        .expect-card:hover {
+        .goal-card:hover {
             border-color: var(--secondary-color);
+            transform: translateY(-2px);
         }
 
-        .expect-icon {
+        .goal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .goal-icon {
             width: 40px;
             height: 40px;
+            min-width: 40px;
             border-radius: 10px;
             background: var(--background-alt);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1rem;
             color: var(--secondary-color);
         }
 
-        .expect-icon svg {
+        .goal-icon svg {
             width: 20px;
             height: 20px;
         }
 
-        .expect-card h4 {
-            font-size: 1rem;
+        .goal-timeframe {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            background: var(--background-alt);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+
+        .goal-title {
+            font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
 
-        .expect-card p {
+        .goal-description {
             font-size: 0.9rem;
             color: var(--text-light);
-            line-height: 1.5;
+            line-height: 1.6;
+            margin: 0;
         }
 
-        /* Subscribe Section */
-        .subscribe-section {
-            padding-top: 2rem;
+        /* Principles Section */
+        .principles-section {
+            margin-top: 3rem;
+            padding-top: 3rem;
             border-top: 1px solid var(--border-color);
         }
 
-        .subscribe-text {
-            font-size: 1rem;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .platform-links {
+        .principles-list {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 1rem;
         }
 
-        .platform-link {
+        .principle-item {
             display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.875rem 1.25rem;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
             background: var(--background-alt);
             border-radius: 10px;
-            color: var(--text-color);
-            text-decoration: none;
-            transition: all 0.2s ease;
             border: 1px solid var(--border-color);
         }
 
-        .platform-link:hover {
-            border-color: var(--secondary-color);
+        .principle-number {
+            font-size: 1.25rem;
+            font-weight: 700;
             color: var(--secondary-color);
+            min-width: 30px;
         }
 
-        .platform-link svg {
-            width: 20px;
-            height: 20px;
+        .principle-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
         }
 
-        .platform-link span {
-            font-weight: 500;
+        .principle-content p {
             font-size: 0.9rem;
-        }
-
-        /* Topics Tags */
-        .topics-section {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .topics-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .topic-tag {
-            padding: 0.5rem 1rem;
-            background: var(--background-alt);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            transition: all 0.2s ease;
-        }
-
-        .topic-tag:hover {
-            border-color: var(--secondary-color);
-            color: var(--secondary-color);
+            color: var(--text-light);
+            line-height: 1.5;
+            margin: 0;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .podcast-title {
-                font-size: 2rem;
-            }
-
-            .expect-grid {
+            .goals-grid {
                 grid-template-columns: 1fr;
             }
 
-            .coming-soon-card {
-                padding: 2rem;
+            .roadmap-title {
+                font-size: 2rem;
+            }
+
+            .phase-stats {
+                flex-wrap: wrap;
+                gap: 1rem;
             }
         }
     </style>
@@ -278,8 +345,8 @@
                             </div>
                             <div class="dropdown-column">
                                 <span class="dropdown-header">Resources</span>
-                                <a href="newsletter.html">Newsletter</a>
-                                <a href="podcast.html" class="active">Podcast</a>
+                                <a href="notes.html">Notes</a>
+                                <a href="my-roadmap.html" class="active">My Roadmap</a>
                                 <a href="flaws.html">Flaws</a>
                                 <a href="dateme.html">Date Me</a>
                             </div>
@@ -345,6 +412,7 @@
                         </div>
                     </div>
                 </li>
+
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -377,93 +445,160 @@
         </div>
     </nav>
 
-    <main class="podcast-content">
-        <!-- Hero Section -->
-        <section class="podcast-intro">
-            <p class="podcast-eyebrow">Listen</p>
-            <h1 class="podcast-title">Podcast</h1>
-            <p class="podcast-subtitle">Conversations on life, business, and the ideas that shape how we think and act.</p>
-        </section>
+    <main class="roadmap-content">
+        <!-- Header -->
+        <header class="roadmap-header">
+            <p class="section-eyebrow">Where I'm Headed</p>
+            <h1 class="roadmap-title">My Roadmap</h1>
+            <p class="roadmap-intro">A transparent look at what I'm building toward. Goals change, priorities shift, but having a direction matters. Here's mine.</p>
+        </header>
 
-        <!-- Coming Soon Card -->
-        <div class="coming-soon-card">
-            <div class="coming-soon-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        <!-- Current Phase -->
+        <div class="current-phase">
+            <span class="phase-badge">Current Phase</span>
+            <h2>Foundation Building (Age 24-27)</h2>
+            <p>This is my learning and experimentation phase. I'm focused on building skills, understanding how different industries work, and developing a clearer sense of what I want to spend my life doing. The goal isn't to have all the answers - it's to ask better questions.</p>
+            <div class="phase-stats">
+                <div class="phase-stat">
+                    <div class="phase-stat-value">3</div>
+                    <div class="phase-stat-label">Years In</div>
+                </div>
+                <div class="phase-stat">
+                    <div class="phase-stat-value">4</div>
+                    <div class="phase-stat-label">Focus Areas</div>
+                </div>
+                <div class="phase-stat">
+                    <div class="phase-stat-value">∞</div>
+                    <div class="phase-stat-label">To Learn</div>
+                </div>
             </div>
-            <h2 class="coming-soon-title">Coming Soon</h2>
-            <p class="coming-soon-text">The podcast is currently in development. Subscribe to the newsletter to be notified when episodes launch.</p>
         </div>
 
-        <!-- What to Expect Section -->
-        <section class="expect-section">
-            <p class="section-eyebrow">Preview</p>
-            <h2 class="section-title">What to Expect</h2>
-            <div class="expect-grid">
-                <div class="expect-card">
-                    <div class="expect-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    </div>
-                    <h4>In-Depth Conversations</h4>
-                    <p>Long-form discussions with interesting people about how they think and make decisions.</p>
+        <!-- Timeline -->
+        <section class="timeline-section">
+            <p class="section-eyebrow">The Journey</p>
+            <h2 class="section-title">Timeline</h2>
+
+            <div class="timeline">
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2022</div>
+                    <h3 class="timeline-title">Completed Commerce Degree</h3>
+                    <p class="timeline-description">Graduated from UniSC with a focus on finance. Realized I was more interested in building things than analyzing them.</p>
                 </div>
-                <div class="expect-card">
-                    <div class="expect-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                    </div>
-                    <h4>First Principles</h4>
-                    <p>Breaking down complex topics to their fundamental truths and building up from there.</p>
+
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2023</div>
+                    <h3 class="timeline-title">Started Writing Publicly</h3>
+                    <p class="timeline-description">Launched this website and began sharing ideas. Discovered that writing is how I think best.</p>
                 </div>
-                <div class="expect-card">
-                    <div class="expect-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                    </div>
-                    <h4>Book Discussions</h4>
-                    <p>Deep dives into influential books and extracting practical takeaways.</p>
+
+                <div class="timeline-item active">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2024-2026</div>
+                    <h3 class="timeline-title">Real Estate & Tech Exploration</h3>
+                    <p class="timeline-description">Currently learning real estate development while building software projects. Testing where I can create the most value.</p>
                 </div>
-                <div class="expect-card">
-                    <div class="expect-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
-                    </div>
-                    <h4>Real World Application</h4>
-                    <p>Actionable insights you can apply to your own life and work.</p>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2027+</div>
+                    <h3 class="timeline-title">Build Something Meaningful</h3>
+                    <p class="timeline-description">Use everything I've learned to create something that matters. Whether that's a company, a body of work, or something I can't imagine yet.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Subscribe Section -->
-        <section class="subscribe-section">
-            <p class="section-eyebrow">Stay Updated</p>
-            <h2 class="section-title">Where to Listen</h2>
-            <p class="subscribe-text">When the podcast launches, you'll be able to find it on all major platforms.</p>
-            <div class="platform-links">
-                <a href="#" class="platform-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                    <span>Spotify</span>
-                </a>
-                <a href="#" class="platform-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                    <span>Apple Podcasts</span>
-                </a>
-                <a href="#" class="platform-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                    <span>YouTube</span>
-                </a>
+        <!-- Goals Grid -->
+        <section class="goals-section">
+            <p class="section-eyebrow">What I'm Working Toward</p>
+            <h2 class="section-title">Current Goals</h2>
+
+            <div class="goals-grid">
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        </div>
+                        <span class="goal-timeframe">2026</span>
+                    </div>
+                    <h3 class="goal-title">Complete First Development Project</h3>
+                    <p class="goal-description">Take a residential project from concept to completion on the Sunshine Coast. Learn every step of the process.</p>
+                </div>
+
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                        </div>
+                        <span class="goal-timeframe">Ongoing</span>
+                    </div>
+                    <h3 class="goal-title">Write 50 Essays</h3>
+                    <p class="goal-description">Build a body of work that captures how I think. Currently at about 15. Quality over quantity, but volume matters for learning.</p>
+                </div>
+
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                        <span class="goal-timeframe">2026</span>
+                    </div>
+                    <h3 class="goal-title">Ship a Software Product</h3>
+                    <p class="goal-description">Build something people actually use. Not sure what yet, but solving real problems with code is a skill I want to develop.</p>
+                </div>
+
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        </div>
+                        <span class="goal-timeframe">2027</span>
+                    </div>
+                    <h3 class="goal-title">Visit 25 Countries</h3>
+                    <p class="goal-description">Currently at 15. Travel shapes how I see the world. Want to experience more cultures and perspectives before settling anywhere.</p>
+                </div>
             </div>
         </section>
 
-        <!-- Topics Section -->
-        <section class="topics-section">
-            <p class="section-eyebrow">Coverage</p>
-            <h2 class="section-title">Planned Topics</h2>
-            <div class="topics-grid">
-                <span class="topic-tag">Decision Making</span>
-                <span class="topic-tag">Investing</span>
-                <span class="topic-tag">Career Strategy</span>
-                <span class="topic-tag">Mental Models</span>
-                <span class="topic-tag">Book Reviews</span>
-                <span class="topic-tag">Entrepreneurship</span>
-                <span class="topic-tag">Life Design</span>
-                <span class="topic-tag">Technology</span>
+        <!-- Principles Section -->
+        <section class="principles-section">
+            <p class="section-eyebrow">How I'm Getting There</p>
+            <h2 class="section-title">Guiding Principles</h2>
+
+            <div class="principles-list">
+                <div class="principle-item">
+                    <span class="principle-number">01</span>
+                    <div class="principle-content">
+                        <h4>Optimize for Learning, Not Status</h4>
+                        <p>Take the path that teaches you the most, even if it looks less impressive on paper.</p>
+                    </div>
+                </div>
+
+                <div class="principle-item">
+                    <span class="principle-number">02</span>
+                    <div class="principle-content">
+                        <h4>Build in Public</h4>
+                        <p>Share the journey, not just the destination. Accountability and feedback accelerate growth.</p>
+                    </div>
+                </div>
+
+                <div class="principle-item">
+                    <span class="principle-number">03</span>
+                    <div class="principle-content">
+                        <h4>Stay Flexible on Methods, Firm on Values</h4>
+                        <p>The path will change. What matters is staying true to why you're walking it.</p>
+                    </div>
+                </div>
+
+                <div class="principle-item">
+                    <span class="principle-number">04</span>
+                    <div class="principle-content">
+                        <h4>Play Long Games</h4>
+                        <p>Focus on what compounds. Skills, relationships, and reputation all take time to build.</p>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
