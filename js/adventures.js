@@ -12,6 +12,8 @@ let lightboxImages = [];
 let lightboxIndex = 0;
 let worldMap = null;
 let adventureMaps = {};
+let selectedMarker = null; // Track the currently highlighted marker on world map
+let adventureMarkers = {}; // Store markers by adventure ID
 
 // ============================================
 // Data Loading
@@ -174,6 +176,9 @@ function expandAdventure(id, event) {
         }, 100);
     }
 
+    // Highlight location on world map
+    highlightAdventureOnMap(adventure);
+
     // Smooth scroll to card
     setTimeout(() => {
         card.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -188,10 +193,55 @@ function collapseAdventure(id, event) {
     const card = document.getElementById(id);
     card.classList.remove('expanded');
 
+    // Remove highlight from world map
+    clearMapHighlight();
+
     // Scroll back to card position
     setTimeout(() => {
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 50);
+}
+
+// ============================================
+// World Map Highlighting
+// ============================================
+function highlightAdventureOnMap(adventure) {
+    if (!worldMap || !adventure || !adventure.mapCenter) return;
+
+    // Clear any existing highlight
+    clearMapHighlight();
+
+    // Create a larger, pulsing marker for the selected adventure
+    selectedMarker = L.circleMarker([adventure.mapCenter.lat, adventure.mapCenter.lng], {
+        radius: 12,
+        fillColor: '#ff6b6b',
+        color: '#fff',
+        weight: 3,
+        opacity: 1,
+        fillOpacity: 0.8,
+        className: 'selected-marker-pulse'
+    }).addTo(worldMap);
+
+    // Pan the map to center on this location
+    worldMap.setView([adventure.mapCenter.lat, adventure.mapCenter.lng], 3, {
+        animate: true,
+        duration: 0.5
+    });
+}
+
+function clearMapHighlight() {
+    if (selectedMarker && worldMap) {
+        worldMap.removeLayer(selectedMarker);
+        selectedMarker = null;
+    }
+
+    // Reset map view to default
+    if (worldMap) {
+        worldMap.setView([30, 0], 1, {
+            animate: true,
+            duration: 0.5
+        });
+    }
 }
 
 // ============================================
@@ -241,6 +291,9 @@ function initWorldMap(adventures) {
                        style="color: #C9A86C; font-weight: 500;">View Adventure →</a>
                 </div>
             `);
+
+            // Store marker reference for highlighting
+            adventureMarkers[adventure.id] = marker;
         }
     });
 
