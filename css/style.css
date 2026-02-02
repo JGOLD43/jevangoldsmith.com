@@ -2525,7 +2525,6 @@ button[type="submit"]:hover {
 .books-main {
     padding: 2rem 3rem;
     background: var(--background);
-    max-width: 1320px;
 }
 
 .main-header {
@@ -3170,7 +3169,6 @@ button[type="submit"]:hover {
 .movies-main {
     padding: 2rem 3rem;
     background: var(--background);
-    max-width: 1320px;
 }
 
 .category-movies {
