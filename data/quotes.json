@@ -1,0 +1,78 @@
+{
+  "tickerQuotes": [
+    "Stay curious, stay humble",
+    "Build for decades, not quarters",
+    "First principles thinking",
+    "Actions reveal priorities",
+    "Compound interest in all things",
+    "Learn in public",
+    "Question assumptions",
+    "Simple is harder than complex",
+    "The obstacle is the way",
+    "Be so good they can't ignore you",
+    "Comfort is the enemy of progress",
+    "What got you here won't get you there"
+  ],
+  "fullQuotes": [
+    {
+      "text": "Stay curious, stay humble",
+      "author": "",
+      "category": "mindset"
+    },
+    {
+      "text": "Build for decades, not quarters",
+      "author": "",
+      "category": "business"
+    },
+    {
+      "text": "First principles thinking",
+      "author": "Elon Musk",
+      "category": "mindset"
+    },
+    {
+      "text": "Actions reveal priorities",
+      "author": "",
+      "category": "life"
+    },
+    {
+      "text": "Compound interest in all things",
+      "author": "",
+      "category": "wealth"
+    },
+    {
+      "text": "Learn in public",
+      "author": "",
+      "category": "growth"
+    },
+    {
+      "text": "Question assumptions",
+      "author": "",
+      "category": "mindset"
+    },
+    {
+      "text": "Simple is harder than complex",
+      "author": "Steve Jobs",
+      "category": "design"
+    },
+    {
+      "text": "The obstacle is the way",
+      "author": "Marcus Aurelius",
+      "category": "stoicism"
+    },
+    {
+      "text": "Be so good they can't ignore you",
+      "author": "Steve Martin",
+      "category": "career"
+    },
+    {
+      "text": "Comfort is the enemy of progress",
+      "author": "P.T. Barnum",
+      "category": "growth"
+    },
+    {
+      "text": "What got you here won't get you there",
+      "author": "Marshall Goldsmith",
+      "category": "growth"
+    }
+  ]
+}

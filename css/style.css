@@ -5649,7 +5649,7 @@ button[type="submit"]:hover {
 .wisdom-ticker-track {
     display: flex;
     flex-direction: column;
-    animation: wisdom-scroll 12s linear infinite;
+    animation: wisdom-scroll 15s ease-in-out infinite;
 }
 
 .wisdom-item {
@@ -5657,26 +5657,32 @@ button[type="submit"]:hover {
     color: var(--nav-text);
     white-space: nowrap;
     height: 28px;
+    min-height: 28px;
+    max-height: 28px;
     line-height: 28px;
     font-weight: 400;
     letter-spacing: 0.3px;
     font-style: italic;
     text-decoration: none;
     transition: color 0.2s ease;
-    display: block;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 .wisdom-item:hover {
     color: var(--secondary-color);
 }
 
+/* Animation: 5 unique quotes + 1 duplicate for seamless loop = 6 items */
+/* Each item gets ~16.67% of animation, with brief transition between */
 @keyframes wisdom-scroll {
-    0%, 14% { transform: translateY(0); }
-    16.67%, 30.67% { transform: translateY(-28px); }
-    33.33%, 47.33% { transform: translateY(-56px); }
-    50%, 64% { transform: translateY(-84px); }
-    66.67%, 80.67% { transform: translateY(-112px); }
-    83.33%, 100% { transform: translateY(-140px); }
+    0%, 15% { transform: translateY(0); }
+    17%, 32% { transform: translateY(-28px); }
+    34%, 49% { transform: translateY(-56px); }
+    51%, 66% { transform: translateY(-84px); }
+    68%, 83% { transform: translateY(-112px); }
+    85%, 100% { transform: translateY(-140px); }
 }
 
 /* Theme Toggle - Icon Only */

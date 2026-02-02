@@ -46,7 +46,8 @@
     }
 
     // Wisdom Ticker - Short quotes that cycle through
-    const wisdomPhrases = [
+    // Fallback quotes in case JSON fetch fails
+    const fallbackQuotes = [
         "Stay curious, stay humble",
         "Build for decades, not quarters",
         "First principles thinking",
@@ -56,17 +57,16 @@
         "Question assumptions",
         "Simple is harder than complex",
         "The obstacle is the way",
-        "What got you here won't get you there",
         "Be so good they can't ignore you",
         "Comfort is the enemy of progress"
     ];
 
-    function initWisdomTicker() {
+    function renderWisdomTicker(quotes) {
         const track = document.querySelector('.wisdom-ticker-track');
         if (!track) return;
 
-        // Shuffle phrases
-        const shuffled = [...wisdomPhrases].sort(() => Math.random() - 0.5);
+        // Shuffle quotes
+        const shuffled = [...quotes].sort(() => Math.random() - 0.5);
 
         // Take first 5 unique items, then add first one at end for seamless loop
         // This creates exactly 6 items to match the CSS animation (6 positions)
@@ -77,6 +77,29 @@
         track.innerHTML = selected.map(phrase =>
             `<a href="quotes.html" class="wisdom-item">${phrase}</a>`
         ).join('');
+    }
+
+    async function initWisdomTicker() {
+        const track = document.querySelector('.wisdom-ticker-track');
+        if (!track) return;
+
+        try {
+            // Try to fetch quotes from JSON file
+            const response = await fetch('data/quotes.json');
+            if (response.ok) {
+                const data = await response.json();
+                // Use tickerQuotes array from JSON
+                if (data.tickerQuotes && data.tickerQuotes.length >= 5) {
+                    renderWisdomTicker(data.tickerQuotes);
+                    return;
+                }
+            }
+        } catch (e) {
+            // Fetch failed, use fallback
+        }
+
+        // Use fallback quotes if fetch failed
+        renderWisdomTicker(fallbackQuotes);
     }
 
     // Logo video hover effect
