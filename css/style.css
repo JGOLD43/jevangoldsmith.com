@@ -5636,38 +5636,33 @@ button[type="submit"]:hover {
 
 /* Wisdom Ticker */
 .wisdom-ticker {
-    display: flex;
-    align-items: center;
+    position: relative;
     overflow: hidden;
     height: 28px;
     width: 380px;
-    position: relative;
     border-left: 2px solid var(--border-color);
     padding-left: 1rem;
 }
 
 .wisdom-ticker-track {
-    display: flex;
-    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 1rem;
     animation: wisdom-scroll 15s ease-in-out infinite;
 }
 
 .wisdom-item {
+    display: block;
     font-size: 0.95rem;
     color: var(--nav-text);
     white-space: nowrap;
     height: 28px;
-    min-height: 28px;
-    max-height: 28px;
     line-height: 28px;
     font-weight: 400;
     letter-spacing: 0.3px;
     font-style: italic;
     text-decoration: none;
     transition: color 0.2s ease;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
 }
 
 .wisdom-item:hover {
