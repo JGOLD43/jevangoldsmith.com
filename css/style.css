@@ -2492,8 +2492,10 @@ button[type="submit"]:hover {
     position: sticky;
     transition: width 0.3s ease, min-width 0.3s ease;
     top: 70px;
-    height: calc(100vh - 70px);
+    max-height: calc(100vh - 70px);
+    height: fit-content;
     overflow-y: auto;
+    align-self: start;
 }
 
 .books-sidebar .sidebar-header {
@@ -3082,9 +3084,11 @@ button[type="submit"]:hover {
     padding: 2rem 0;
     position: sticky;
     top: 70px;
-    height: calc(100vh - 70px);
+    max-height: calc(100vh - 70px);
+    height: fit-content;
     overflow-y: auto;
     transition: width 0.3s ease, min-width 0.3s ease;
+    align-self: start;
 }
 
 /* Collapsed movies sidebar state */
