@@ -5050,7 +5050,7 @@ button[type="submit"]:hover {
     align-items: center;
     overflow: hidden;
     height: 28px;
-    width: 320px;
+    width: 380px;
     position: relative;
     border-left: 2px solid var(--border-color);
     padding-left: 1rem;
