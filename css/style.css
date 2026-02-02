@@ -295,6 +295,7 @@ a:hover {
     border-bottom: 1px solid #eee;
     margin-bottom: 0.5rem;
     grid-column: 1 / -1;
+    text-align: center;
 }
 
 /* Icon-only dropdown menu (for Content/Social links) */
@@ -2563,6 +2564,19 @@ button[type="submit"]:hover {
 .header-subtitle-link:hover {
     color: var(--secondary-color);
     border-bottom-color: var(--secondary-color);
+}
+
+.philosophy-link-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.read-first-note {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-style: italic;
+    font-weight: 400;
 }
 
 .header-counter {
