@@ -1697,8 +1697,7 @@ a:hover {
 
 /* Sidebar Search Bar */
 .sidebar-search {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem 1rem 0.75rem;
 }
 
 .search-input-wrapper {
@@ -1709,35 +1708,37 @@ a:hover {
 
 .search-icon {
     position: absolute;
-    left: 10px;
+    left: 0;
     color: var(--text-light);
     pointer-events: none;
+    opacity: 0.5;
 }
 
 .book-search-input {
     width: 100%;
-    padding: 8px 32px 8px 36px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 0.85rem;
-    background: var(--bg-color);
+    padding: 6px 24px 6px 24px;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+    font-size: 0.8rem;
+    background: transparent;
     color: var(--text-color);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease;
 }
 
 .book-search-input:focus {
     outline: none;
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    border-bottom-color: var(--text-color);
 }
 
 .book-search-input::placeholder {
     color: var(--text-light);
+    font-size: 0.8rem;
 }
 
 .search-clear-btn {
     position: absolute;
-    right: 8px;
+    right: 0;
     background: none;
     border: none;
     cursor: pointer;
