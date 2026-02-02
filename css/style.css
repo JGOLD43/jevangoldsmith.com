@@ -5661,6 +5661,13 @@ button[type="submit"]:hover {
     font-weight: 400;
     letter-spacing: 0.3px;
     font-style: italic;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: block;
+}
+
+.wisdom-item:hover {
+    color: var(--secondary-color);
 }
 
 @keyframes wisdom-scroll {

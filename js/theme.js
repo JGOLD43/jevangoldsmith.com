@@ -45,7 +45,7 @@
         }
     }
 
-    // Wisdom Ticker - Randomize order on load
+    // Wisdom Ticker - Short quotes that cycle through
     const wisdomPhrases = [
         "Stay curious, stay humble",
         "Build for decades, not quarters",
@@ -54,7 +54,11 @@
         "Compound interest in all things",
         "Learn in public",
         "Question assumptions",
-        "Simple is harder than complex"
+        "Simple is harder than complex",
+        "The obstacle is the way",
+        "What got you here won't get you there",
+        "Be so good they can't ignore you",
+        "Comfort is the enemy of progress"
     ];
 
     function initWisdomTicker() {
@@ -64,14 +68,14 @@
         // Shuffle phrases
         const shuffled = [...wisdomPhrases].sort(() => Math.random() - 0.5);
 
-        // Take first 6 for the animation cycle
-        const selected = shuffled.slice(0, 6);
-        // Add first one at end for seamless loop
+        // Take first 5 unique items, then add first one at end for seamless loop
+        // This creates exactly 6 items to match the CSS animation (6 positions)
+        const selected = shuffled.slice(0, 5);
         selected.push(selected[0]);
 
-        // Build HTML
+        // Build HTML with clickable links to quotes page
         track.innerHTML = selected.map(phrase =>
-            `<span class="wisdom-item">${phrase}</span>`
+            `<a href="quotes.html" class="wisdom-item">${phrase}</a>`
         ).join('');
     }
 
