@@ -8,6 +8,235 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Health Page Styles */
+        .health-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem 4rem;
+        }
+
+        .health-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .health-eyebrow {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .health-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .health-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Pillars Grid */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .pillar-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .pillar-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--background-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .pillar-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .pillar-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pillar-description {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Philosophy Section */
+        .health-section {
+            padding: 2.5rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .section-eyebrow {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            max-width: 700px;
+        }
+
+        .section-text + .section-text {
+            margin-top: 1rem;
+        }
+
+        /* Routine List */
+        .routine-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .routine-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: var(--background-alt);
+            border-radius: 10px;
+        }
+
+        .routine-time {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            min-width: 80px;
+            padding-top: 2px;
+        }
+
+        .routine-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .routine-content p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Principles Tags */
+        .principles-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .principle-tag {
+            padding: 0.5rem 1rem;
+            background: var(--background-alt);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .principle-tag:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        /* Current Focus */
+        .focus-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .focus-card {
+            background: var(--background-alt);
+            border-radius: 10px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .focus-metric {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .focus-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .focus-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .health-title {
+                font-size: 2rem;
+            }
+
+            .routine-item {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .routine-time {
+                min-width: auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -36,7 +265,7 @@
                             <div class="dropdown-column">
                                 <span class="dropdown-header">Topics</span>
                                 <a href="essays.html">Essays</a>
-                                <a href="health.html">Health</a>
+                                <a href="health.html" class="active">Health</a>
                                 <a href="north-star.html">North Star</a>
                                 <a href="about.html">About Me</a>
                             </div>
@@ -109,7 +338,6 @@
                         </div>
                     </div>
                 </li>
-                
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -142,25 +370,125 @@
         </div>
     </nav>
 
-    <header class="page-header">
-        <div class="container">
-            <h1>Health</h1>
-            <p>Physical and mental wellness for peak performance</p>
-        </div>
-    </header>
+    <main class="health-content">
+        <!-- Hero Section -->
+        <section class="health-intro">
+            <p class="health-eyebrow">Wellness</p>
+            <h1 class="health-title">Health</h1>
+            <p class="health-subtitle">Physical and mental wellness as the foundation for everything else. Without health, nothing else matters.</p>
+        </section>
 
-    <main class="container">
-        <div class="content-section">
-            <div class="posts-grid">
-                <article class="post-card">
-                    <div class="post-meta">
-                        <span class="post-category">Coming Soon</span>
-                    </div>
-                    <h3>Health Content</h3>
-                    <p>Essays and thoughts on health, fitness, and wellness coming soon.</p>
-                </article>
+        <!-- Four Pillars -->
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <div class="pillar-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                </div>
+                <h3 class="pillar-title">Nutrition</h3>
+                <p class="pillar-description">Whole foods, minimal processing. Focus on protein, vegetables, and quality fats. Intermittent fasting when it fits the schedule.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>
+                </div>
+                <h3 class="pillar-title">Movement</h3>
+                <p class="pillar-description">Strength training, walking, and staying active throughout the day. The goal is longevity, not aesthetics.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/><polyline points="8 6 12 2 16 6"/></svg>
+                </div>
+                <h3 class="pillar-title">Sleep</h3>
+                <p class="pillar-description">7-8 hours, consistent schedule, dark room, cool temperature. Sleep is when the body and mind recover and consolidate.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                </div>
+                <h3 class="pillar-title">Mental Health</h3>
+                <p class="pillar-description">Time outdoors, meaningful relationships, journaling, and managing stress through perspective and structure.</p>
             </div>
         </div>
+
+        <!-- Philosophy Section -->
+        <section class="health-section">
+            <p class="section-eyebrow">Philosophy</p>
+            <h2 class="section-title">My Approach</h2>
+            <p class="section-text">I don't believe in extreme diets, unsustainable workout routines, or health fads. The goal is to build habits that can be maintained for decades, not programs that burn you out in weeks.</p>
+            <p class="section-text">Health is the foundation that enables everything else: clear thinking, sustained energy, emotional stability, and the physical capacity to pursue ambitious goals. It's an investment, not an expense.</p>
+        </section>
+
+        <!-- Daily Routine Section -->
+        <section class="health-section">
+            <p class="section-eyebrow">Daily Practice</p>
+            <h2 class="section-title">Typical Routine</h2>
+            <div class="routine-list">
+                <div class="routine-item">
+                    <span class="routine-time">Morning</span>
+                    <div class="routine-content">
+                        <h4>Natural Wake + Hydration</h4>
+                        <p>Wake without alarm when possible. Large glass of water with electrolytes. Sunlight exposure within 30 minutes.</p>
+                    </div>
+                </div>
+                <div class="routine-item">
+                    <span class="routine-time">Mid-Day</span>
+                    <div class="routine-content">
+                        <h4>Movement + First Meal</h4>
+                        <p>Strength training or long walk. Break fast with protein-focused meal around noon.</p>
+                    </div>
+                </div>
+                <div class="routine-item">
+                    <span class="routine-time">Afternoon</span>
+                    <div class="routine-content">
+                        <h4>Deep Work + Walking</h4>
+                        <p>Focused work blocks. Walking meetings or breaks to maintain energy levels.</p>
+                    </div>
+                </div>
+                <div class="routine-item">
+                    <span class="routine-time">Evening</span>
+                    <div class="routine-content">
+                        <h4>Wind Down + Recovery</h4>
+                        <p>Last meal 3+ hours before sleep. Dim lights, no screens before bed. Reading to transition to sleep.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Guiding Principles Section -->
+        <section class="health-section">
+            <p class="section-eyebrow">Beliefs</p>
+            <h2 class="section-title">Guiding Principles</h2>
+            <div class="principles-grid">
+                <span class="principle-tag">Consistency Over Intensity</span>
+                <span class="principle-tag">Sleep Is Non-Negotiable</span>
+                <span class="principle-tag">Walk More</span>
+                <span class="principle-tag">Eat Real Food</span>
+                <span class="principle-tag">Sunlight Daily</span>
+                <span class="principle-tag">Lift Heavy Things</span>
+                <span class="principle-tag">Manage Stress</span>
+                <span class="principle-tag">Strong Social Connections</span>
+            </div>
+        </section>
+
+        <!-- Current Focus Section -->
+        <section class="health-section">
+            <p class="section-eyebrow">Current Focus</p>
+            <h2 class="section-title">What I'm Working On</h2>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-metric">10K</div>
+                    <div class="focus-label">Daily steps goal</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-metric">3x</div>
+                    <div class="focus-label">Strength sessions per week</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-metric">8hr</div>
+                    <div class="focus-label">Sleep target</div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">

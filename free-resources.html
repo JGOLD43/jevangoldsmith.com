@@ -8,6 +8,242 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Free Resources Page Styles */
+        .resources-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem 4rem;
+        }
+
+        .resources-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .resources-eyebrow {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .resources-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .resources-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Resource Cards Grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .resource-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .resource-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .resource-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--background-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .resource-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .resource-category {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: var(--background-alt);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .resource-link:hover {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        .resource-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Coming Soon Badge */
+        .badge-coming-soon {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            background: var(--background-alt);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Styles */
+        .resources-section {
+            padding: 2.5rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .section-eyebrow {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            max-width: 700px;
+        }
+
+        /* Request Section */
+        .request-card {
+            background: var(--background-alt);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .request-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+        }
+
+        .request-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .request-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .request-content p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .request-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .request-link:hover {
+            text-decoration: underline;
+        }
+
+        .request-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resources-title {
+                font-size: 2rem;
+            }
+
+            .request-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -35,19 +271,17 @@
                         <div class="dropdown-columns">
                             <div class="dropdown-column">
                                 <span class="dropdown-header">Topics</span>
-                                <a href="mindset.html">Mindset</a>
-                                <a href="wealth.html">Wealth</a>
+                                <a href="essays.html">Essays</a>
                                 <a href="health.html">Health</a>
-                                <a href="relationships.html">Relationships</a>
-                                <a href="business.html">Business</a>
-                                <a href="leadership.html">Leadership</a>
-                                <a href="happiness.html">Happiness</a>
+                                <a href="north-star.html">North Star</a>
+                                <a href="about.html">About Me</a>
                             </div>
                             <div class="dropdown-column">
                                 <span class="dropdown-header">Resources</span>
                                 <a href="newsletter.html">Newsletter</a>
                                 <a href="podcast.html">Podcast</a>
                                 <a href="free-resources.html" class="active">Free Resources</a>
+                                <a href="dateme.html">Date Me</a>
                             </div>
                         </div>
                     </div>
@@ -111,7 +345,6 @@
                         </div>
                     </div>
                 </li>
-                
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -144,25 +377,82 @@
         </div>
     </nav>
 
-    <header class="page-header">
-        <div class="container">
-            <h1>Free Resources</h1>
-            <p>Guides, templates, and tools to help you level up</p>
-        </div>
-    </header>
+    <main class="resources-content">
+        <!-- Hero Section -->
+        <section class="resources-intro">
+            <p class="resources-eyebrow">Download</p>
+            <h1 class="resources-title">Free Resources</h1>
+            <p class="resources-subtitle">Guides, templates, and tools to help you think better, work smarter, and live well.</p>
+        </section>
 
-    <main class="container">
-        <div class="content-section">
-            <div class="posts-grid">
-                <article class="post-card">
-                    <div class="post-meta">
-                        <span class="post-category">Coming Soon</span>
-                    </div>
-                    <h3>Free Downloads</h3>
-                    <p>Free guides, templates, and resources will be added here.</p>
-                </article>
+        <!-- Resources Grid -->
+        <div class="resources-grid">
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </div>
+                <p class="resource-category">Reading</p>
+                <h3 class="resource-title">Book Notes Collection</h3>
+                <p class="resource-description">My personal notes and key takeaways from impactful books across business, psychology, and philosophy.</p>
+                <span class="badge-coming-soon">Coming Soon</span>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <p class="resource-category">Productivity</p>
+                <h3 class="resource-title">Weekly Review Template</h3>
+                <p class="resource-description">The template I use every Sunday to reflect on the week and plan ahead with intention.</p>
+                <span class="badge-coming-soon">Coming Soon</span>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <p class="resource-category">Finance</p>
+                <h3 class="resource-title">Personal Finance Tracker</h3>
+                <p class="resource-description">A simple spreadsheet for tracking income, expenses, savings rate, and net worth over time.</p>
+                <span class="badge-coming-soon">Coming Soon</span>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <p class="resource-category">Mental Models</p>
+                <h3 class="resource-title">Decision Making Framework</h3>
+                <p class="resource-description">A checklist of questions and frameworks I use when facing important decisions.</p>
+                <span class="badge-coming-soon">Coming Soon</span>
             </div>
         </div>
+
+        <!-- About Section -->
+        <section class="resources-section">
+            <p class="section-eyebrow">Philosophy</p>
+            <h2 class="section-title">Why Free?</h2>
+            <p class="section-text">I create these resources because I find value in organizing my own thinking. If they help others along the way, that's a bonus. No email required, no sales funnels, no gated content. Just useful tools available to anyone who wants them.</p>
+        </section>
+
+        <!-- Request Section -->
+        <section class="resources-section">
+            <p class="section-eyebrow">Suggestions</p>
+            <h2 class="section-title">Request a Resource</h2>
+            <div class="request-card">
+                <div class="request-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="request-content">
+                    <h4>Have an idea?</h4>
+                    <p>If there's a template, guide, or tool you'd find useful, let me know. I'm always looking for ways to create practical resources.</p>
+                    <a href="contact.html" class="request-link">
+                        Send a suggestion
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
