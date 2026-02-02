@@ -255,6 +255,7 @@ a:hover {
     display: flex;
     align-items: center;
     margin-right: 0;
+    position: relative;
 }
 
 .logo-image {
@@ -263,8 +264,24 @@ a:hover {
     transition: opacity 0.3s ease;
 }
 
-.logo-image:hover {
-    opacity: 0.8;
+.logo-static {
+    opacity: 1;
+}
+
+.logo-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.logo:hover .logo-static {
+    opacity: 0;
+}
+
+.logo:hover .logo-video {
+    opacity: 1;
 }
 
 .nav-links {

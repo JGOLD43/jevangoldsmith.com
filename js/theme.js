@@ -75,15 +75,32 @@
         ).join('');
     }
 
+    // Logo video hover effect
+    function initLogoVideo() {
+        const logo = document.querySelector('.logo');
+        const video = document.querySelector('.logo-video');
+        if (logo && video) {
+            logo.addEventListener('mouseenter', () => {
+                video.currentTime = 0;
+                video.play();
+            });
+            logo.addEventListener('mouseleave', () => {
+                video.pause();
+            });
+        }
+    }
+
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             initTheme();
             initWisdomTicker();
+            initLogoVideo();
         });
     } else {
         initTheme();
         initWisdomTicker();
+        initLogoVideo();
     }
 
     // Listen for system theme changes
