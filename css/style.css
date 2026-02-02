@@ -5868,7 +5868,7 @@ button[type="submit"]:hover {
 }
 
 /* Responsive adjustments for navbar extras */
-@media (max-width: 1500px) {
+@media (max-width: 1100px) {
     .navbar-contact-btn span {
         display: none;
     }
