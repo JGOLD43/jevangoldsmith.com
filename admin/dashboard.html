@@ -325,30 +325,20 @@
 
         <!-- Books Section -->
         <section id="section-books" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Books</h2>
-                    <button class="btn-primary" onclick="showAddForm('books')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Book
-                    </button>
+            <div class="section-toolbar">
+                <div class="toolbar-filters">
+                    <input type="text" class="search-input" placeholder="Search books..." id="books-search">
+                    <select class="filter-select" id="books-category-filter">
+                        <option value="all">All Categories</option>
+                    </select>
                 </div>
-                <p class="section-description">Manage your book library and reviews</p>
-            </div>
-
-            <div class="content-filters">
-                <input type="text" class="search-input" placeholder="Search books..." id="books-search">
-                <select class="filter-select" id="books-category-filter">
-                    <option value="all">All Categories</option>
-                    <option value="Learning">Learning</option>
-                    <option value="Psychology Books">Psychology</option>
-                    <option value="Strategy and War">Strategy</option>
-                    <option value="Big Ideas">Big Ideas</option>
-                    <option value="Autobiographies">Autobiographies</option>
-                </select>
+                <button class="btn-primary" onclick="showAddForm('books')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Book
+                </button>
             </div>
 
             <div class="content-list" id="books-list">
@@ -358,24 +348,19 @@
 
         <!-- Essays Section -->
         <section id="section-essays" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Essays</h2>
-                    <button class="btn-primary" onclick="showAddForm('essays')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        New Essay
-                    </button>
+            <div class="section-toolbar">
+                <div class="filter-tabs">
+                    <button class="tab active" data-filter="all">All</button>
+                    <button class="tab" data-filter="published">Published</button>
+                    <button class="tab" data-filter="draft">Drafts</button>
                 </div>
-                <p class="section-description">Write and manage your essays</p>
-            </div>
-
-            <div class="filter-tabs">
-                <button class="tab active" data-filter="all">All Essays</button>
-                <button class="tab" data-filter="published">Published</button>
-                <button class="tab" data-filter="draft">Drafts</button>
+                <button class="btn-primary" onclick="showAddForm('essays')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Essay
+                </button>
             </div>
 
             <div class="content-list" id="essays-list">
@@ -385,21 +370,19 @@
 
         <!-- Generic Content Sections -->
         <section id="section-movies" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Movies</h2>
-                    <button class="btn-primary" onclick="showAddForm('movies')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Movie
-                    </button>
-                </div>
-                <p class="section-description">Track movies you've watched and loved</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search movies..." id="movies-search">
+                <button class="btn-primary" onclick="showAddForm('movies')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Movie
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="movies-list"></div>
+            <div class="empty-state" id="movies-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
                     <line x1="7" y1="2" x2="7" y2="22"></line>
                     <line x1="17" y1="2" x2="17" y2="22"></line>
@@ -411,21 +394,19 @@
         </section>
 
         <section id="section-music" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Music</h2>
-                    <button class="btn-primary" onclick="showAddForm('music')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Music
-                    </button>
-                </div>
-                <p class="section-description">Share albums and songs you love</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search music..." id="music-search">
+                <button class="btn-primary" onclick="showAddForm('music')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Music
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="music-list"></div>
+            <div class="empty-state" id="music-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M9 18V5l12-2v13"></path>
                     <circle cx="6" cy="18" r="3"></circle>
                     <circle cx="18" cy="16" r="3"></circle>
@@ -437,21 +418,19 @@
         </section>
 
         <section id="section-podcasts" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Podcasts</h2>
-                    <button class="btn-primary" onclick="showAddForm('podcasts')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Podcast
-                    </button>
-                </div>
-                <p class="section-description">Recommend podcasts worth listening to</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search podcasts..." id="podcasts-search">
+                <button class="btn-primary" onclick="showAddForm('podcasts')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Podcast
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="podcasts-list"></div>
+            <div class="empty-state" id="podcasts-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
                     <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
                 </svg>
@@ -462,21 +441,19 @@
         </section>
 
         <section id="section-products" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Products</h2>
-                    <button class="btn-primary" onclick="showAddForm('products')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Product
-                    </button>
-                </div>
-                <p class="section-description">Products you use and recommend</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search products..." id="products-search">
+                <button class="btn-primary" onclick="showAddForm('products')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Product
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="products-list"></div>
+            <div class="empty-state" id="products-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                 </svg>
@@ -487,21 +464,19 @@
         </section>
 
         <section id="section-people" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>People</h2>
-                    <button class="btn-primary" onclick="showAddForm('people')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Person
-                    </button>
-                </div>
-                <p class="section-description">People who inspire you</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search people..." id="people-search">
+                <button class="btn-primary" onclick="showAddForm('people')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Person
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="people-list"></div>
+            <div class="empty-state" id="people-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                     <circle cx="9" cy="7" r="4"></circle>
                 </svg>
@@ -512,21 +487,19 @@
         </section>
 
         <section id="section-food" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Food</h2>
-                    <button class="btn-primary" onclick="showAddForm('food')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Food
-                    </button>
-                </div>
-                <p class="section-description">Favorite restaurants and dishes</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search food..." id="food-search">
+                <button class="btn-primary" onclick="showAddForm('food')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Food
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="food-list"></div>
+            <div class="empty-state" id="food-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
                     <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
                 </svg>
@@ -537,21 +510,19 @@
         </section>
 
         <section id="section-quotes" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Quotes</h2>
-                    <button class="btn-primary" onclick="showAddForm('quotes')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Quote
-                    </button>
-                </div>
-                <p class="section-description">Words of wisdom that resonate with you</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search quotes..." id="quotes-search">
+                <button class="btn-primary" onclick="showAddForm('quotes')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Quote
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="quotes-list"></div>
+            <div class="empty-state" id="quotes-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21c0 1 0 1 1 1z"></path>
                 </svg>
                 <h3>No quotes yet</h3>
@@ -561,21 +532,19 @@
         </section>
 
         <section id="section-adventures" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Adventures</h2>
-                    <button class="btn-primary" onclick="showAddForm('adventures')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Adventure
-                    </button>
-                </div>
-                <p class="section-description">Document your travels and experiences</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search adventures..." id="adventures-search">
+                <button class="btn-primary" onclick="showAddForm('adventures')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Adventure
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="adventures-list"></div>
+            <div class="empty-state" id="adventures-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <circle cx="12" cy="10" r="3"></circle>
                     <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"></path>
                 </svg>
@@ -586,21 +555,19 @@
         </section>
 
         <section id="section-projects" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Projects</h2>
-                    <button class="btn-primary" onclick="showAddForm('projects')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Project
-                    </button>
-                </div>
-                <p class="section-description">Showcase your work and side projects</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search projects..." id="projects-search">
+                <button class="btn-primary" onclick="showAddForm('projects')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Project
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="projects-list"></div>
+            <div class="empty-state" id="projects-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                 </svg>
                 <h3>No projects yet</h3>
@@ -610,21 +577,19 @@
         </section>
 
         <section id="section-challenges" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Challenges</h2>
-                    <button class="btn-primary" onclick="showAddForm('challenges')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Challenge
-                    </button>
-                </div>
-                <p class="section-description">Track personal challenges and goals</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search challenges..." id="challenges-search">
+                <button class="btn-primary" onclick="showAddForm('challenges')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Challenge
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="challenges-list"></div>
+            <div class="empty-state" id="challenges-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
                 <h3>No challenges yet</h3>
@@ -634,21 +599,19 @@
         </section>
 
         <section id="section-skills" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Skills</h2>
-                    <button class="btn-primary" onclick="showAddForm('skills')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Skill
-                    </button>
-                </div>
-                <p class="section-description">Skills you're developing</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search skills..." id="skills-search">
+                <button class="btn-primary" onclick="showAddForm('skills')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Skill
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="skills-list"></div>
+            <div class="empty-state" id="skills-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                 </svg>
                 <h3>No skills yet</h3>
@@ -658,21 +621,19 @@
         </section>
 
         <section id="section-lessons" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Lessons</h2>
-                    <button class="btn-primary" onclick="showAddForm('lessons')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Lesson
-                    </button>
-                </div>
-                <p class="section-description">Log lessons learned along the way</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search lessons..." id="lessons-search">
+                <button class="btn-primary" onclick="showAddForm('lessons')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Lesson
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="lessons-list"></div>
+            <div class="empty-state" id="lessons-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                 </svg>
@@ -683,21 +644,19 @@
         </section>
 
         <section id="section-photos" class="content-section">
-            <div class="section-header">
-                <div class="section-title-row">
-                    <h2>Photos</h2>
-                    <button class="btn-primary" onclick="showAddForm('photos')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Upload Photos
-                    </button>
-                </div>
-                <p class="section-description">Manage your photo gallery</p>
+            <div class="section-toolbar">
+                <input type="text" class="search-input" placeholder="Search photos..." id="photos-search">
+                <button class="btn-primary" onclick="showAddForm('photos')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Upload Photos
+                </button>
             </div>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <div class="content-list" id="photos-list"></div>
+            <div class="empty-state" id="photos-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                     <circle cx="8.5" cy="8.5" r="1.5"></circle>
                     <polyline points="21 15 16 10 5 21"></polyline>
@@ -722,6 +681,8 @@
         </div>
     </div>
 
+    <!-- Load books data from main site -->
+    <script src="../js/books.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/dashboard.js"></script>
     <script>

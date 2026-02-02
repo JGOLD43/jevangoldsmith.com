@@ -31,12 +31,172 @@ document.addEventListener('DOMContentLoaded', function() {
     initLogout();
     initModalClose();
 
+    // Load books from main site data
+    loadBooksFromData();
+
+    // Update stats
+    updateStats();
+
     // Check for hash in URL and navigate to that section
     const hash = window.location.hash.slice(1);
     if (hash && sectionTitles[hash]) {
         navigateTo(hash);
     }
 });
+
+// ==================== BOOKS DATA INTEGRATION ====================
+
+// Load books from the main site's booksData array
+function loadBooksFromData() {
+    // Check if booksData exists (loaded from ../js/books.js)
+    if (typeof booksData === 'undefined') {
+        console.warn('booksData not found - books.js may not be loaded');
+        return;
+    }
+
+    // Populate category dropdown
+    populateBookCategories();
+
+    // Display books
+    displayBooks(booksData);
+
+    // Setup search
+    const searchInput = document.getElementById('books-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(function() {
+            filterBooks();
+        }, 300));
+    }
+
+    // Setup category filter
+    const categoryFilter = document.getElementById('books-category-filter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', filterBooks);
+    }
+}
+
+// Get unique categories from books
+function populateBookCategories() {
+    const categoryFilter = document.getElementById('books-category-filter');
+    if (!categoryFilter || typeof booksData === 'undefined') return;
+
+    const categories = [...new Set(booksData.map(book => book.category))].sort();
+
+    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+    categories.forEach(category => {
+        categoryFilter.innerHTML += `<option value="${category}">${category}</option>`;
+    });
+}
+
+// Display books in the list
+function displayBooks(books) {
+    const booksList = document.getElementById('books-list');
+    if (!booksList) return;
+
+    if (books.length === 0) {
+        booksList.innerHTML = `
+            <div class="empty-state" style="padding: 2rem;">
+                <p>No books found</p>
+            </div>
+        `;
+        return;
+    }
+
+    booksList.innerHTML = books.map(book => `
+        <div class="item-card" data-isbn="${book.isbn}">
+            <div class="item-info">
+                <h3>${book.title}</h3>
+                <div class="item-meta">
+                    <span>${book.author}</span>
+                    <span>${book.category}</span>
+                    <span class="star-rating">${'★'.repeat(book.rating)}${'☆'.repeat(5 - book.rating)}</span>
+                    ${book.reReads > 0 ? `<span>Re-reads: ${book.reReads}</span>` : ''}
+                </div>
+            </div>
+            <div class="item-actions">
+                <button class="btn-edit" onclick="editBook('${book.isbn}')">Edit</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Filter books by search and category
+function filterBooks() {
+    if (typeof booksData === 'undefined') return;
+
+    const searchTerm = document.getElementById('books-search')?.value?.toLowerCase() || '';
+    const category = document.getElementById('books-category-filter')?.value || 'all';
+
+    let filtered = booksData;
+
+    if (searchTerm) {
+        filtered = filtered.filter(book =>
+            book.title.toLowerCase().includes(searchTerm) ||
+            book.author.toLowerCase().includes(searchTerm)
+        );
+    }
+
+    if (category !== 'all') {
+        filtered = filtered.filter(book => book.category === category);
+    }
+
+    displayBooks(filtered);
+}
+
+// Edit book (show info - actual editing would require backend)
+function editBook(isbn) {
+    const book = booksData.find(b => b.isbn === isbn);
+    if (!book) return;
+
+    const modal = document.getElementById('form-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+
+    if (!modal || !modalBody) return;
+
+    if (modalTitle) modalTitle.textContent = 'Edit Book';
+
+    modalBody.innerHTML = `
+        <form id="edit-book-form">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" value="${book.title}" readonly style="background: var(--admin-background);">
+            </div>
+            <div class="form-group">
+                <label>Author</label>
+                <input type="text" value="${book.author}" readonly style="background: var(--admin-background);">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" value="${book.category}" readonly style="background: var(--admin-background);">
+                </div>
+                <div class="form-group">
+                    <label>Rating</label>
+                    <input type="text" value="${'★'.repeat(book.rating)}" readonly style="background: var(--admin-background);">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>ISBN</label>
+                <input type="text" value="${book.isbn}" readonly style="background: var(--admin-background);">
+            </div>
+            ${book.shortDescription ? `
+            <div class="form-group">
+                <label>Description</label>
+                <textarea readonly style="background: var(--admin-background); min-height: 80px;">${book.shortDescription}</textarea>
+            </div>
+            ` : ''}
+            <div class="form-hint" style="margin-top: 1rem; padding: 1rem; background: rgba(201, 168, 108, 0.1); border-radius: 8px;">
+                <strong>Note:</strong> Book data is stored in <code>js/books.js</code>. To edit books, modify that file directly and redeploy your site.
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </form>
+    `;
+
+    modal.classList.add('show');
+}
 
 // Initialize navigation click handlers
 function initNavigation() {
@@ -494,7 +654,7 @@ function handleFormSubmit(event, contentType) {
 
 // Generate unique ID
 function generateId() {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
 // ==================== DATA STORAGE ====================
@@ -618,8 +778,11 @@ function editContent(contentType, id) {
 // ==================== STATS ====================
 
 function updateStats() {
+    // Count books from actual booksData if available
+    const booksCount = (typeof booksData !== 'undefined') ? booksData.length : getContent('books').length;
+
     const stats = {
-        books: getContent('books').length,
+        books: booksCount,
         essays: getContent('essays').length,
         movies: getContent('movies').length,
         adventures: getContent('adventures').length
