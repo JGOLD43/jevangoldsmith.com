@@ -2323,7 +2323,25 @@ a:hover {
 }
 
 .category-expanded.active {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.category-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+}
+
+.category-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    z-index: 1;
 }
 
 .category-expanded-header {

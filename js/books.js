@@ -388,6 +388,7 @@ window.onclick = function(event) {
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         closeBookModal();
+        closeCategoryModal();
     }
 });
 
@@ -934,20 +935,25 @@ const categoryDisplayNames = {
 function setViewMode(mode) {
     currentViewMode = mode;
 
+    // Get all view toggle buttons
     const listBtn = document.getElementById('list-view-btn');
     const gridBtn = document.getElementById('grid-view-btn');
     const listBtnGrid = document.getElementById('list-view-btn-grid');
     const gridBtnGrid = document.getElementById('grid-view-btn-grid');
+    const listBtnMain = document.getElementById('list-view-btn-main');
+    const gridBtnMain = document.getElementById('grid-view-btn-main');
     const booksMain = document.querySelector('.books-main');
     const categoryGridView = document.getElementById('category-grid-view');
     const sidebar = document.getElementById('books-sidebar');
     const booksLayout = document.getElementById('books-layout');
 
-    // Update button states (both sidebar and grid view toggles)
-    listBtn.classList.toggle('active', mode === 'list');
-    gridBtn.classList.toggle('active', mode === 'grid');
+    // Update button states (all toggle buttons)
+    if (listBtn) listBtn.classList.toggle('active', mode === 'list');
+    if (gridBtn) gridBtn.classList.toggle('active', mode === 'grid');
     if (listBtnGrid) listBtnGrid.classList.toggle('active', mode === 'list');
     if (gridBtnGrid) gridBtnGrid.classList.toggle('active', mode === 'grid');
+    if (listBtnMain) listBtnMain.classList.toggle('active', mode === 'list');
+    if (gridBtnMain) gridBtnMain.classList.toggle('active', mode === 'grid');
 
     if (mode === 'grid') {
         // Hide list view, show grid view
@@ -1032,19 +1038,22 @@ function openCategoryModal(category) {
     }
 
     modal.innerHTML = `
-        <div class="category-expanded-header">
-            <h2 class="category-expanded-title">${displayName}</h2>
-            <button class="category-expanded-close" onclick="closeCategoryModal()">&times;</button>
-        </div>
-        <div class="category-expanded-books">
-            ${books.map(book => {
-                const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`;
-                return `
-                    <div class="category-expanded-book" onclick="openBookFromGrid('${book.isbn}')">
-                        <img src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}">
-                    </div>
-                `;
-            }).join('')}
+        <div class="category-modal-backdrop" onclick="closeCategoryModal()"></div>
+        <div class="category-modal-content" onclick="event.stopPropagation()">
+            <div class="category-expanded-header">
+                <h2 class="category-expanded-title">${displayName}</h2>
+                <button class="category-expanded-close" onclick="closeCategoryModal()">&times;</button>
+            </div>
+            <div class="category-expanded-books">
+                ${books.map(book => {
+                    const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`;
+                    return `
+                        <div class="category-expanded-book" onclick="openBookFromGrid('${book.isbn}')">
+                            <img src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}">
+                        </div>
+                    `;
+                }).join('')}
+            </div>
         </div>
     `;
 
