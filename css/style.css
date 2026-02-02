@@ -256,12 +256,13 @@ a:hover {
     align-items: center;
     margin-right: 0;
     position: relative;
+    height: 80px;
 }
 
 .logo-image {
     height: 80px;
     width: auto;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
 .logo-static {
@@ -270,13 +271,13 @@ a:hover {
 
 .logo-video {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     height: 80px;
-    width: auto;
+    max-width: none;
     opacity: 0;
     pointer-events: none;
-    object-fit: contain;
 }
 
 .logo:hover .logo-static {
@@ -285,6 +286,11 @@ a:hover {
 
 .logo:hover .logo-video {
     opacity: 1;
+    filter: brightness(1.1);
+}
+
+.logo:hover {
+    filter: drop-shadow(0 0 8px rgba(107, 142, 35, 0.4));
 }
 
 .nav-links {
