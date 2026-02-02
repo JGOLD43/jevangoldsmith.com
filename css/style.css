@@ -5049,11 +5049,11 @@ button[type="submit"]:hover {
     display: flex;
     align-items: center;
     overflow: hidden;
-    height: 24px;
-    width: 240px;
+    height: 28px;
+    width: 320px;
     position: relative;
-    border-left: 1px solid var(--border-color);
-    padding-left: 0.75rem;
+    border-left: 2px solid var(--border-color);
+    padding-left: 1rem;
 }
 
 .wisdom-ticker-track {
@@ -5063,11 +5063,11 @@ button[type="submit"]:hover {
 }
 
 .wisdom-item {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     color: var(--nav-text);
     white-space: nowrap;
-    height: 24px;
-    line-height: 24px;
+    height: 28px;
+    line-height: 28px;
     font-weight: 400;
     letter-spacing: 0.3px;
     font-style: italic;
