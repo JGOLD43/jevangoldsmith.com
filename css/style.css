@@ -448,6 +448,24 @@ a:hover {
     font-size: 0.95rem !important;
 }
 
+/* Centered header for wide dropdowns (spans both columns) */
+.dropdown-wide-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    text-align: center;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+/* Column headers (smaller, left-aligned) */
+.dropdown-column .dropdown-header {
+    text-align: left;
+}
+
 /* Hero Section */
 .hero {
     min-height: 100vh;
