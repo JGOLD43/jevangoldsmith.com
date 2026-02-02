@@ -193,6 +193,7 @@ function renderBooks(books = booksData) {
 // Global filter state
 let currentStarFilter = 'all';
 let currentReReadsFilter = 'all';
+let currentSearchQuery = '';
 
 // Category mapping (display name to key)
 const categoryMap = {
@@ -231,6 +232,16 @@ const categoryIcons = {
 // Get filtered books based on current filters
 function getFilteredBooks() {
     let filtered = booksData;
+
+    // Apply search filter
+    if (currentSearchQuery) {
+        const query = currentSearchQuery.toLowerCase();
+        filtered = filtered.filter(book =>
+            book.title.toLowerCase().includes(query) ||
+            book.author.toLowerCase().includes(query) ||
+            (book.category && book.category.toLowerCase().includes(query))
+        );
+    }
 
     // Apply star filter
     if (currentStarFilter !== 'all') {
@@ -383,6 +394,44 @@ document.addEventListener('keydown', function(event) {
 // Filter interaction state
 let isDragging = false;
 let isRereadsDragging = false;
+
+// Search books by title, author, or category
+function searchBooks(query) {
+    currentSearchQuery = query.trim();
+
+    // Show/hide clear button
+    const clearBtn = document.getElementById('search-clear-btn');
+    if (clearBtn) {
+        clearBtn.style.display = currentSearchQuery ? 'flex' : 'none';
+    }
+
+    // Reset category to 'all' when searching
+    activeCategory = 'all';
+
+    // Re-populate sidebar and render books
+    populateSidebar();
+    const filtered = getFilteredBooks();
+    renderBooks(filtered);
+}
+
+// Clear search input and results
+function clearSearch() {
+    currentSearchQuery = '';
+    const searchInput = document.getElementById('book-search');
+    const clearBtn = document.getElementById('search-clear-btn');
+
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    if (clearBtn) {
+        clearBtn.style.display = 'none';
+    }
+
+    // Re-populate sidebar and render books
+    populateSidebar();
+    const filtered = getFilteredBooks();
+    renderBooks(filtered);
+}
 
 // Set star filter when clicking a star
 function setStarFilter(rating) {
@@ -759,7 +808,14 @@ function updateBookCount(count = null, categoryName = null) {
 function clearAllFilters() {
     currentStarFilter = 'all';
     currentReReadsFilter = 'all';
+    currentSearchQuery = '';
     activeCategory = 'all';
+
+    // Clear search input
+    const searchInput = document.getElementById('book-search');
+    const searchClearBtn = document.getElementById('search-clear-btn');
+    if (searchInput) searchInput.value = '';
+    if (searchClearBtn) searchClearBtn.style.display = 'none';
 
     // Update star visual states
     updateStarFilterDisplay();

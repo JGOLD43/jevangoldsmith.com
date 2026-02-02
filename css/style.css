@@ -715,6 +715,24 @@ a:hover {
     box-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
 
+.snapshot-bio-link {
+    display: block;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #000;
+    text-decoration: none;
+    text-align: center;
+    transition: color 0.2s ease;
+}
+
+.snapshot-bio-link:hover {
+    color: #666;
+    text-decoration: underline;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1400px) {
     .snapshot-card {
@@ -1675,6 +1693,68 @@ a:hover {
 
 .sidebar-header .show-all-link:hover {
     color: var(--secondary-color);
+}
+
+/* Sidebar Search Bar */
+.sidebar-search {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    color: var(--text-light);
+    pointer-events: none;
+}
+
+.book-search-input {
+    width: 100%;
+    padding: 8px 32px 8px 36px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: var(--bg-color);
+    color: var(--text-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.book-search-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.book-search-input::placeholder {
+    color: var(--text-light);
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.search-clear-btn:hover {
+    color: var(--text-color);
+}
+
+.books-sidebar.collapsed .sidebar-search {
+    display: none;
 }
 
 /* Sidebar collapse button */
@@ -5281,12 +5361,11 @@ button[type="submit"]:hover {
 
 @keyframes wisdom-scroll {
     0%, 14% { transform: translateY(0); }
-    16.67%, 30.67% { transform: translateY(-24px); }
-    33.33%, 47.33% { transform: translateY(-48px); }
-    50%, 64% { transform: translateY(-72px); }
-    66.67%, 80.67% { transform: translateY(-96px); }
-    83.33%, 97.33% { transform: translateY(-120px); }
-    100% { transform: translateY(-144px); }
+    16.67%, 30.67% { transform: translateY(-28px); }
+    33.33%, 47.33% { transform: translateY(-56px); }
+    50%, 64% { transform: translateY(-84px); }
+    66.67%, 80.67% { transform: translateY(-112px); }
+    83.33%, 100% { transform: translateY(-140px); }
 }
 
 /* Theme Toggle - Icon Only */
