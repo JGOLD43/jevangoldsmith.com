@@ -221,14 +221,14 @@
     <section class="newsletter-cta-section" id="newsletter-cta">
         <div class="newsletter-cta-container">
             <div class="newsletter-cta-content">
-                <span class="newsletter-eyebrow">Join 1,000+ readers</span>
-                <h2 class="newsletter-cta-title">Get my best ideas delivered weekly</h2>
-                <p class="newsletter-cta-description">Every Sunday, I share lessons learned building companies, reading books, and living intentionally. No fluff, just actionable insights.</p>
+                <span class="newsletter-eyebrow">Thinking out loud</span>
+                <h2 class="newsletter-cta-title">I write about what I'm learning</h2>
+                <p class="newsletter-cta-description">Half-formed ideas about business, books that changed how I think, and questions I can't stop asking. I'm figuring things out in public - you're welcome to come along.</p>
                 <form class="newsletter-cta-form" action="#" method="POST">
-                    <input type="email" placeholder="Enter your email" class="newsletter-cta-input" required>
-                    <button type="submit" class="newsletter-cta-button">Subscribe Free</button>
+                    <input type="email" placeholder="Your email" class="newsletter-cta-input" required>
+                    <button type="submit" class="newsletter-cta-button">I'm In</button>
                 </form>
-                <p class="newsletter-cta-disclaimer">No spam. Unsubscribe anytime.</p>
+                <p class="newsletter-cta-disclaimer">No spam. I barely send emails as it is.</p>
             </div>
         </div>
     </section>
@@ -366,47 +366,7 @@
         </div>
     </section>
 
-    <!-- Section 3: Newsletter Signup -->
-    <section class="newsletter-section">
-        <div class="newsletter-card">
-            <div class="newsletter-content">
-                <div class="newsletter-badge">THINKING OUT LOUD</div>
-                <h2>Join the Conversation</h2>
-                <p>Every week I send out whatever's been rattling around in my head — half-formed theories about business, questions I can't answer, books that changed how I see things, and occasional rants about things that don't make sense.</p>
-                <ul class="newsletter-benefits">
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        Essays that take longer to write than read
-                    </li>
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        Book notes and ideas worth stealing
-                    </li>
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        Zero productivity hacks, I promise
-                    </li>
-                </ul>
-            </div>
-            <div class="newsletter-form-wrapper">
-                <form class="newsletter-form" id="newsletter-form">
-                    <div class="form-group">
-                        <input type="text" name="first_name" placeholder="First name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" name="email" placeholder="Email address" required>
-                    </div>
-                    <button type="submit" class="btn-newsletter">
-                        <span>Count Me In</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    </button>
-                </form>
-                <p class="newsletter-privacy">No spam. I barely send emails as it is.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 4: Featured Essays -->
+    <!-- Section 3: Featured Essays -->
     <section class="featured-essays-section" id="essays">
         <div class="section-header">
             <div class="section-header-left">
@@ -644,23 +604,6 @@
 
         // Initialize stat animation on load
         document.addEventListener('DOMContentLoaded', animateStats);
-
-        // Newsletter form placeholder handling
-        document.getElementById('newsletter-form')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const button = this.querySelector('button');
-            const originalHTML = button.innerHTML;
-
-            // Show success state (placeholder - connect to actual service later)
-            button.innerHTML = '<span>Coming Soon!</span>';
-            button.style.background = '#C9A86C';
-
-            setTimeout(() => {
-                button.innerHTML = originalHTML;
-                button.style.background = '';
-                this.reset();
-            }, 3000);
-        });
     </script>
 
     <footer class="footer">

@@ -843,13 +843,14 @@ a:hover {
 
 .newsletter-eyebrow {
     display: inline-block;
-    background: #000;
-    color: #FFD700;
-    padding: 0.4rem 1rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    background: transparent;
+    color: var(--secondary-color);
+    padding: 0.4rem 0;
+    border-radius: 0;
+    font-size: 0.8rem;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 }
 
 .newsletter-cta-title {
@@ -880,7 +881,7 @@ a:hover {
 .newsletter-cta-input {
     flex: 1;
     padding: 1rem 1.25rem;
-    border: 2px solid #000;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
     font-family: 'Chivo', sans-serif;
@@ -890,7 +891,8 @@ a:hover {
 
 .newsletter-cta-input:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(201, 168, 108, 0.2);
 }
 
 .newsletter-cta-input::placeholder {
@@ -899,8 +901,8 @@ a:hover {
 
 .newsletter-cta-button {
     padding: 1rem 1.75rem;
-    background: #000;
-    color: #FFD700;
+    background: var(--secondary-color);
+    color: #fff;
     border: 2px solid #000;
     border-radius: 8px;
     font-size: 1rem;
@@ -912,9 +914,9 @@ a:hover {
 }
 
 .newsletter-cta-button:hover {
-    background: #333;
+    background: #b8956a;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(201, 168, 108, 0.4);
 }
 
 .newsletter-cta-disclaimer {
