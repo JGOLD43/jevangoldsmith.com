@@ -57,6 +57,20 @@
     overflow: hidden;
 }
 
+/* Collapsed sidebar header - center the toggle button */
+.admin-sidebar.collapsed .sidebar-header {
+    justify-content: center;
+    padding: 1.25rem 0.5rem;
+}
+
+.admin-sidebar.collapsed .sidebar-logo {
+    display: none;
+}
+
+.admin-sidebar.collapsed .sidebar-toggle {
+    margin: 0;
+}
+
 .sidebar-header {
     padding: 1.25rem;
     display: flex;
