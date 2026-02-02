@@ -2,6 +2,8 @@
 // Loads essays from JSON and renders them dynamically
 
 let allEssays = [];
+let filteredEssays = [];
+let currentSearchTerm = '';
 
 // Load and render essays
 async function loadEssays() {
@@ -20,8 +22,10 @@ async function loadEssays() {
         publishedEssays.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         allEssays = publishedEssays;
+        filteredEssays = publishedEssays;
         renderEssays(publishedEssays);
         populateSidebar(publishedEssays);
+        updateEssayCount(publishedEssays.length);
     } catch (error) {
         console.error('Error loading essays:', error);
         showErrorMessage();
@@ -219,6 +223,81 @@ function formatDateShort(dateString) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
+
+// Update essay count display
+function updateEssayCount(count) {
+    const countEl = document.getElementById('essay-count');
+    if (countEl) {
+        countEl.textContent = count;
+    }
+}
+
+// Search essays
+function searchEssays(term) {
+    currentSearchTerm = term.toLowerCase().trim();
+    const clearBtn = document.getElementById('search-clear-btn');
+
+    if (clearBtn) {
+        clearBtn.style.display = term ? 'block' : 'none';
+    }
+
+    if (!term) {
+        filteredEssays = allEssays;
+        renderEssays(allEssays);
+        updateEssayCount(allEssays.length);
+        return;
+    }
+
+    filteredEssays = allEssays.filter(essay => {
+        const searchable = [
+            essay.title,
+            essay.subtitle || '',
+            essay.category,
+            essay.content || ''
+        ].join(' ').toLowerCase();
+
+        return searchable.includes(currentSearchTerm);
+    });
+
+    renderEssays(filteredEssays);
+    updateEssayCount(filteredEssays.length);
+}
+
+// Clear essay search
+function clearEssaySearch() {
+    const searchInput = document.getElementById('essay-search');
+    if (searchInput) {
+        searchInput.value = '';
+        searchEssays('');
+    }
+}
+
+// Toggle essays sidebar
+function toggleEssaysSidebar() {
+    const sidebar = document.getElementById('essays-sidebar');
+    const layout = document.getElementById('essays-layout');
+
+    if (sidebar && layout) {
+        sidebar.classList.toggle('collapsed');
+        layout.classList.toggle('sidebar-collapsed');
+    }
+}
+
+// Toggle list dropdown
+function toggleListDropdown() {
+    const dropdown = document.getElementById('list-dropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('open');
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('list-dropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+    }
+});
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', loadEssays);
