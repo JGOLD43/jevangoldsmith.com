@@ -136,6 +136,98 @@
       "mapZoom": 6,
       "tags": ["nature", "food", "culture", "adventure"],
       "status": "published"
+    },
+    {
+      "id": "sydney-adventure",
+      "title": "Harbour City Dreams",
+      "subtitle": "Exploring the iconic coastline and vibrant culture of Sydney",
+      "location": "Sydney, Australia",
+      "region": "Australia",
+      "startDate": "2024-08-10",
+      "endDate": "2024-08-20",
+      "duration": "10 days",
+      "heroImage": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200",
+      "shortDescription": "From the iconic Opera House to hidden beaches, discovering why Sydney is one of the world's most beautiful cities.",
+      "content": "<p>Sydney exceeded every expectation. The harbour is even more stunning in person, with the Opera House and Harbour Bridge creating an unforgettable skyline.</p><p>Beyond the famous landmarks, I discovered secret coastal walks, vibrant neighborhoods like Newtown and Surry Hills, and some of the freshest seafood I've ever tasted at the Sydney Fish Market.</p>",
+      "highlights": [
+        "Sydney Opera House",
+        "Bondi to Coogee walk",
+        "Harbour Bridge climb",
+        "Fresh seafood"
+      ],
+      "gallery": [
+        {
+          "src": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=400",
+          "caption": "Sydney Opera House at sunset",
+          "lat": -33.8568,
+          "lng": 151.2153
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=400",
+          "caption": "Bondi Beach",
+          "lat": -33.8915,
+          "lng": 151.2767
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1524293581917-878a6d017c71?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1524293581917-878a6d017c71?w=400",
+          "caption": "Sydney Harbour Bridge",
+          "lat": -33.8523,
+          "lng": 151.2108
+        }
+      ],
+      "mapCenter": { "lat": -33.8688, "lng": 151.2093 },
+      "mapZoom": 11,
+      "tags": ["city", "beach", "culture", "food"],
+      "status": "published"
+    },
+    {
+      "id": "uluru-adventure",
+      "title": "Red Centre Journey",
+      "subtitle": "Walking in the footsteps of ancient traditions",
+      "location": "Uluru, Northern Territory",
+      "region": "Australia",
+      "startDate": "2024-09-05",
+      "endDate": "2024-09-12",
+      "duration": "7 days",
+      "heroImage": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=1200",
+      "shortDescription": "A spiritual journey to Australia's Red Centre, witnessing Uluru's magic at sunrise and sunset while learning about Aboriginal culture.",
+      "content": "<p>Nothing prepares you for the sheer presence of Uluru. Rising from the flat desert landscape, this sacred monolith changes color throughout the day in ways photographs simply cannot capture.</p><p>Learning about the Anangu people's connection to this land over 30,000 years was humbling. The Field of Light art installation at night created a surreal contrast between ancient landscape and modern art.</p>",
+      "highlights": [
+        "Uluru sunrise",
+        "Kata Tjuta hike",
+        "Aboriginal culture",
+        "Field of Light"
+      ],
+      "gallery": [
+        {
+          "src": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=400",
+          "caption": "Uluru at sunset",
+          "lat": -25.3444,
+          "lng": 131.0369
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1494791368093-85217fbbf8de?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1494791368093-85217fbbf8de?w=400",
+          "caption": "Kata Tjuta domes",
+          "lat": -25.2869,
+          "lng": 130.7392
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=400",
+          "caption": "Desert sunset",
+          "lat": -25.3000,
+          "lng": 131.0000
+        }
+      ],
+      "mapCenter": { "lat": -25.3444, "lng": 131.0369 },
+      "mapZoom": 9,
+      "tags": ["nature", "culture", "spiritual", "photography"],
+      "status": "published"
     }
   ],
   "lastUpdated": "2024-01-01T00:00:00Z"

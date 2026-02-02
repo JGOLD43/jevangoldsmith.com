@@ -391,6 +391,7 @@ function populateSidebar(adventures) {
         all: adventures.length,
         europe: 0,
         asia: 0,
+        australia: 0,
         americas: 0,
         other: 0
     };
