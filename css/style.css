@@ -2485,6 +2485,7 @@ a:hover {
     padding: 2rem;
     flex: 1;
     min-width: 0;
+    background: #fff;
 }
 
 .essays-main .content-section {
