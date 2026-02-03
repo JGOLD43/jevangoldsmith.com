@@ -327,7 +327,7 @@ function createBookCard(book) {
     card.innerHTML = `
         ${timesReadBadge}
         <div class="book-cover-wrapper">
-            <img src="${coverUrl}" alt="${book.title}" class="book-cover" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.style.color='white'; this.style.fontWeight='bold'; this.style.padding='2rem'; this.style.textAlign='center'; this.innerHTML='${book.title}';">
+            <img src="${coverUrl}" alt="${book.title}" class="book-cover" loading="lazy" decoding="async" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.style.color='white'; this.style.fontWeight='bold'; this.style.padding='2rem'; this.style.textAlign='center'; this.innerHTML='${book.title}';">
         </div>
         <div class="book-info">
             <div class="book-title-row">
@@ -894,7 +894,7 @@ function initCarousel() {
 
     track.innerHTML = allBooks.map(book => {
         const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`;
-        return `<img class="carousel-book" src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}" onclick="scrollToBook('${book.isbn}')">`;
+        return `<img class="carousel-book" src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}" decoding="async" onclick="scrollToBook('${book.isbn}')">`;
     }).join('');
 }
 
@@ -1000,7 +1000,7 @@ function renderCategoryGrid() {
 
         const bookCovers = previewBooks.map(book => {
             const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`;
-            return `<img src="${coverUrl}" alt="${book.title}" loading="lazy">`;
+            return `<img src="${coverUrl}" alt="${book.title}" loading="lazy" decoding="async">`;
         }).join('');
 
         // Fill empty slots if less than 8 books
@@ -1049,7 +1049,7 @@ function openCategoryModal(category) {
                     const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`;
                     return `
                         <div class="category-expanded-book" onclick="openBookFromGrid('${book.isbn}')">
-                            <img src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}">
+                            <img src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}" decoding="async">
                         </div>
                     `;
                 }).join('')}

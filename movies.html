@@ -97,8 +97,8 @@
         <div class="container">
             <div class="navbar-left">
                 <a href="index.html" class="logo">
-                    <img src="images/logo.png" alt="J.GOLDSMITH" class="logo-image logo-static">
-                    <video src="images/logo-animated.mp4" class="logo-image logo-video" muted playsinline loop></video>
+                    <img src="images/logo.png" alt="J.GOLDSMITH" class="logo-image logo-static" width="88" height="80" decoding="async">
+                    <video class="logo-image logo-video" poster="images/logo.png" muted playsinline loop preload="none" data-src="images/logo-animated.mp4"></video>
                 </a>
                 <div class="wisdom-ticker">
                     <div class="wisdom-ticker-track">
@@ -207,7 +207,7 @@
                     </button>
                     <div class="navbar-contact-dropdown">
                         <div class="contact-dropdown-qr">
-                            <img src="images/qr-contact.svg" alt="Scan to contact">
+                            <img src="images/qr-contact.svg" alt="Scan to contact" width="120" height="120" loading="lazy" decoding="async">
                             <p>Scan to connect</p>
                         </div>
                         <div class="contact-dropdown-links">
@@ -417,7 +417,7 @@
             <span class="modal-close" onclick="closeMovieModal()">&times;</span>
             <div class="modal-body">
                 <div class="modal-header">
-                    <img id="modal-movie-poster" src="" alt="" class="modal-cover">
+                    <img id="modal-movie-poster" src="" alt="" class="modal-cover" decoding="async">
                     <div class="modal-info">
                         <h2 id="modal-movie-title"></h2>
                         <p id="modal-movie-year" class="modal-author"></p>

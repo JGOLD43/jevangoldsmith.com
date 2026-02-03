@@ -79,7 +79,7 @@ function createAdventureCard(adventure) {
     card.innerHTML = `
         <!-- Collapsed View -->
         <div class="adventure-card-collapsed" onclick="expandAdventure('${adventure.id}', event)">
-            <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-hero-image" loading="lazy">
+            <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-hero-image" loading="lazy" decoding="async">
             <div class="adventure-card-content">
                 <div class="adventure-meta">
                     <span class="adventure-location">${adventure.location}</span>
@@ -98,7 +98,7 @@ function createAdventureCard(adventure) {
 
         <!-- Expanded View -->
         <div class="adventure-expanded">
-            <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-expanded-hero">
+            <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-expanded-hero" loading="lazy" decoding="async">
             <div class="adventure-expanded-content">
                 <button class="collapse-btn" onclick="collapseAdventure('${adventure.id}', event)">
                     &times; Close
@@ -144,7 +144,7 @@ function createGalleryHTML(gallery, adventureId) {
 
     return gallery.map((photo, index) => `
         <div class="gallery-item" onclick="openLightbox('${adventureId}', ${index})">
-            <img src="${photo.thumbnail || photo.src}" alt="${photo.caption}" loading="lazy">
+            <img src="${photo.thumbnail || photo.src}" alt="${photo.caption}" loading="lazy" decoding="async">
             <div class="gallery-item-overlay">${photo.caption}</div>
         </div>
     `).join('');
@@ -370,7 +370,7 @@ function initAdventureMap(adventure) {
                 .addTo(map)
                 .bindPopup(`
                     <div>
-                        <img src="${photo.thumbnail || photo.src}" class="map-popup-image" alt="${photo.caption}">
+                        <img src="${photo.thumbnail || photo.src}" class="map-popup-image" alt="${photo.caption}" loading="lazy" decoding="async">
                         <p class="map-popup-caption">${photo.caption}</p>
                     </div>
                 `);

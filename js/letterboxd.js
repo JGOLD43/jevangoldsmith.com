@@ -152,7 +152,7 @@ function createMovieCardFromData(movieData) {
     const genreIcon = genreIcons[movieData.genre] || '🎬';
 
     card.innerHTML = `
-        ${movieData.poster ? `<img src="${movieData.poster}" alt="${movieData.title}" class="movie-poster" loading="lazy">` : '<div class="movie-poster" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
+        ${movieData.poster ? `<img src="${movieData.poster}" alt="${movieData.title}" class="movie-poster" loading="lazy" decoding="async">` : '<div class="movie-poster" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
         <h3 class="movie-title">${movieData.title}</h3>
         ${movieData.year ? `<p class="movie-year">${movieData.year}</p>` : ''}
         ${movieData.rating ? `<div class="movie-rating">${movieData.rating}</div>` : ''}

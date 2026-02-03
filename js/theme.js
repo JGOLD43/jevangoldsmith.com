@@ -102,19 +102,44 @@
         renderWisdomTicker(fallbackQuotes);
     }
 
-    // Logo video hover effect
+    // Logo video hover effect (lazy-load video source on first interaction)
     function initLogoVideo() {
         const logo = document.querySelector('.logo');
         const video = document.querySelector('.logo-video');
-        if (logo && video) {
-            logo.addEventListener('mouseenter', () => {
-                video.currentTime = 0;
-                video.play();
-            });
-            logo.addEventListener('mouseleave', () => {
-                video.pause();
-            });
+        if (!logo || !video) return;
+
+        let sourceLoaded = false;
+
+        function ensureVideoSource() {
+            if (sourceLoaded) return;
+            const dataSrc = video.getAttribute('data-src');
+            if (!dataSrc) return;
+            video.src = dataSrc;
+            video.preload = 'auto';
+            video.load();
+            sourceLoaded = true;
         }
+
+        function playVideo() {
+            ensureVideoSource();
+            if (video.readyState >= 2) {
+                video.currentTime = 0;
+                video.play().catch(() => {});
+                return;
+            }
+            const playOnReady = () => {
+                video.currentTime = 0;
+                video.play().catch(() => {});
+                video.removeEventListener('canplay', playOnReady);
+            };
+            video.addEventListener('canplay', playOnReady);
+        }
+
+        logo.addEventListener('mouseenter', playVideo);
+        logo.addEventListener('mouseleave', () => {
+            video.pause();
+        });
+        logo.addEventListener('touchstart', ensureVideoSource, { passive: true });
     }
 
     // Initialize on DOM ready

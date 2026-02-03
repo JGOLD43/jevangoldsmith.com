@@ -92,7 +92,7 @@ function createVideoCard(video) {
     card.onclick = () => window.open(video.url, '_blank');
 
     card.innerHTML = `
-        <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail" loading="lazy">
+        <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail" loading="lazy" decoding="async">
         <div class="video-info">
             <h3 class="video-title">${video.title}</h3>
             ${video.description ? `<p class="video-description">${video.description}</p>` : ''}
