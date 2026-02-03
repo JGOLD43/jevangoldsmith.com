@@ -1774,17 +1774,6 @@ a:hover {
 /* List Selector Dropdown */
 .sidebar-list-selector {
     padding: 0.5rem 1.5rem 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.sidebar-browse-label-inline {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-light);
-    font-weight: 600;
 }
 
 .list-dropdown {
@@ -3143,6 +3132,17 @@ button[type="submit"]:hover {
     color: var(--text-light);
     font-style: italic;
     font-weight: 400;
+}
+
+/* Header Right - View Toggle + Counter */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.header-right .view-toggle {
+    margin-left: 0;
 }
 
 .header-counter {
