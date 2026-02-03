@@ -807,36 +807,41 @@ a:hover {
 
 @media (max-width: 1200px) {
     .snapshot-toggle {
-        position: static;
-        margin-top: 1rem;
-        display: block;
-        width: 100%;
-        max-width: 250px;
-        margin-left: auto;
-        margin-right: auto;
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        left: auto;
+        top: auto;
+        margin: 0;
+        width: auto;
+        max-width: none;
+        padding: 0.6rem 1rem;
+        font-size: 0.7rem;
     }
 
     .snapshot-card {
-        position: static;
-        transform: translateY(-20px);
-        margin-top: 1rem;
-        width: 100%;
-        max-width: 350px;
-        margin-left: auto;
-        margin-right: auto;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        transform: translateY(10px);
+        margin: 0.5rem auto 0;
+        width: calc(100% + 40px);
+        max-width: 320px;
         opacity: 0;
         visibility: hidden;
-        transition: all 0.4s ease;
+        transition: all 0.3s ease;
+        z-index: 100;
     }
 
     .snapshot-card.visible {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        transform: translateY(5px);
     }
 
     .snapshot-card.visible:hover {
-        transform: translateY(-5px);
+        transform: translateY(2px);
     }
 }
 
@@ -7464,16 +7469,36 @@ button[type="submit"]:hover {
         margin: 0 auto;
     }
 
+    .profile-container {
+        position: relative;
+    }
+
     .snapshot-toggle {
-        position: static;
-        margin-top: 1rem;
-        width: 100%;
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        left: auto;
+        top: auto;
+        margin: 0;
+        width: auto;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.65rem;
     }
 
     .snapshot-card {
-        position: static;
-        width: 100%;
-        margin-top: 1rem;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%) translateY(10px);
+        width: 280px;
+        max-width: 90vw;
+        margin: 0;
+        z-index: 100;
+    }
+
+    .snapshot-card.visible {
+        transform: translateX(-50%) translateY(5px);
     }
 }
 
