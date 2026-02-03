@@ -7239,19 +7239,20 @@ button[type="submit"]:hover {
 
 /* Mobile Navigation Styles */
 @media (max-width: 968px) {
-    /* Navbar - single row: logo left, controls right */
+    /* Navbar - logo left, controls right */
     .navbar {
         padding: 0.5rem 0;
     }
 
     .navbar .container {
-        padding: 0 1rem;
+        display: flex;
         flex-wrap: nowrap;
         justify-content: space-between;
         align-items: center;
+        padding: 0 1rem;
     }
 
-    /* Logo - left side */
+    /* Logo - left side, bigger */
     .navbar-left {
         flex: 0 0 auto;
     }
@@ -7261,18 +7262,18 @@ button[type="submit"]:hover {
     }
 
     .logo {
-        height: 50px;
+        height: 60px;
     }
 
     .logo-image {
-        height: 50px;
+        height: 60px;
     }
 
     .logo-video {
-        height: 50px;
+        height: 60px;
     }
 
-    /* Right side - theme, CTA, hamburger in a row */
+    /* Right side controls */
     .navbar-right {
         display: flex;
         align-items: center;
@@ -7293,8 +7294,9 @@ button[type="submit"]:hover {
         display: block;
     }
 
-    /* Hide main nav links on mobile by default */
+    /* Hide nav links completely, show as overlay when open */
     .nav-links {
+        display: none;
         position: fixed;
         top: 0;
         left: 0;
@@ -7315,6 +7317,7 @@ button[type="submit"]:hover {
     }
 
     .nav-links.mobile-open {
+        display: flex;
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
