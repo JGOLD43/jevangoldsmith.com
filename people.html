@@ -19,12 +19,16 @@
         }
 
         .people-layout.sidebar-collapsed {
-            grid-template-columns: 0 1fr;
+            grid-template-columns: 1fr;
         }
 
         .people-layout.sidebar-collapsed .people-sidebar {
-            transform: translateX(-100%);
-            opacity: 0;
+            display: none;
+        }
+
+        .people-layout.sidebar-collapsed .people-main {
+            max-width: 1600px;
+            margin: 0 auto;
         }
 
         /* Sidebar */
