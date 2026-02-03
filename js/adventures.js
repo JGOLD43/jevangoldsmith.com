@@ -594,6 +594,30 @@ function showErrorMessage() {
 }
 
 // ============================================
+// View Toggle
+// ============================================
+let currentAdventureView = 'list';
+
+function setAdventureViewMode(mode) {
+    currentAdventureView = mode;
+    const container = document.getElementById('adventures-container');
+    const listBtn = document.getElementById('list-view-btn');
+    const gridBtn = document.getElementById('grid-view-btn');
+
+    if (mode === 'list') {
+        container.classList.remove('adventures-grid');
+        container.classList.add('adventures-list');
+        listBtn.classList.add('active');
+        gridBtn.classList.remove('active');
+    } else {
+        container.classList.remove('adventures-list');
+        container.classList.add('adventures-grid');
+        gridBtn.classList.add('active');
+        listBtn.classList.remove('active');
+    }
+}
+
+// ============================================
 // Initialize
 // ============================================
 document.addEventListener('DOMContentLoaded', loadAdventures);

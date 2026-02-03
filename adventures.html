@@ -218,6 +218,28 @@
                     </button>
                 </div>
 
+                <!-- View Toggle -->
+                <div class="view-toggle adventure-view-toggle">
+                    <button class="view-toggle-btn active" id="list-view-btn" onclick="setAdventureViewMode('list')" title="List view">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                    </button>
+                    <button class="view-toggle-btn" id="grid-view-btn" onclick="setAdventureViewMode('grid')" title="Grid view">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </button>
+                </div>
+
                 <!-- Counter -->
                 <div class="subnav-counter">
                     <span class="counter-number" id="adventure-count">0</span>
