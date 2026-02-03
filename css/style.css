@@ -2582,6 +2582,11 @@ a:hover {
 
 .essays-layout.sidebar-collapsed {
     grid-template-columns: 70px 1fr;
+    max-width: none;
+}
+
+.essays-layout.sidebar-collapsed .essays-main .content-section {
+    max-width: 1200px;
 }
 
 .essays-sidebar.collapsed .sidebar-collapse-btn {
