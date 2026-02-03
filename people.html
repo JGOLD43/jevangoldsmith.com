@@ -19,17 +19,22 @@
         }
 
         .people-layout.sidebar-collapsed {
-            display: block;
+            display: block !important;
+            grid-template-columns: none !important;
         }
 
         .people-layout.sidebar-collapsed .people-sidebar {
-            display: none;
+            display: none !important;
+            width: 0 !important;
+            padding: 0 !important;
+            border: none !important;
         }
 
         .people-layout.sidebar-collapsed .people-main {
-            width: 100%;
+            width: 100% !important;
             max-width: 1600px;
             margin: 0 auto;
+            padding: 40px;
         }
 
         /* Sidebar */
