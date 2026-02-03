@@ -153,7 +153,6 @@
                         <line x1="9" y1="3" x2="9" y2="21"></line>
                     </svg>
                 </button>
-                <span class="sidebar-browse-label">Browse</span>
                 <div class="view-toggle">
                     <button class="view-toggle-btn active" id="list-view-btn" onclick="setViewMode('list')" title="List view">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -176,8 +175,9 @@
                 </div>
             </div>
 
-            <!-- List Selector -->
+            <!-- List Selector with Browse label -->
             <div class="sidebar-list-selector">
+                <span class="sidebar-browse-label-inline">Browse</span>
                 <div class="list-dropdown" id="list-dropdown">
                     <button class="list-dropdown-btn" onclick="toggleListDropdown()">
                         <span id="current-list-name">Books</span>

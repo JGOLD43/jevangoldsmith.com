@@ -1773,7 +1773,18 @@ a:hover {
 
 /* List Selector Dropdown */
 .sidebar-list-selector {
-    padding: 0.5rem 1rem 0.75rem;
+    padding: 0.5rem 1.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sidebar-browse-label-inline {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    font-weight: 600;
 }
 
 .list-dropdown {
