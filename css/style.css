@@ -1197,6 +1197,7 @@ a:hover {
     font-weight: 700;
     color: #000;
     margin-bottom: 0.5rem;
+    text-align: center;
 }
 
 .cta-text {
@@ -1204,6 +1205,7 @@ a:hover {
     color: var(--text-light);
     line-height: 1.5;
     margin: 0;
+    text-align: center;
 }
 
 .cta-link {
