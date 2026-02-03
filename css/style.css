@@ -7239,17 +7239,19 @@ button[type="submit"]:hover {
 
 /* Mobile Navigation Styles */
 @media (max-width: 968px) {
-    /* Navbar container - logo left, controls right */
+    /* Navbar - single row: logo left, controls right */
     .navbar {
-        padding: 0.75rem 0;
+        padding: 0.5rem 0;
     }
 
     .navbar .container {
         padding: 0 1rem;
+        flex-wrap: nowrap;
         justify-content: space-between;
+        align-items: center;
     }
 
-    /* Logo - left side, bigger */
+    /* Logo - left side */
     .navbar-left {
         flex: 0 0 auto;
     }
@@ -7270,16 +7272,15 @@ button[type="submit"]:hover {
         height: 50px;
     }
 
-    /* Right side controls - theme, CTA, hamburger */
+    /* Right side - theme, CTA, hamburger in a row */
     .navbar-right {
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        order: 2;
+        flex: 0 0 auto;
     }
 
     .theme-toggle {
-        order: 1;
         padding: 0.4rem;
     }
 
@@ -7288,13 +7289,8 @@ button[type="submit"]:hover {
         height: 18px;
     }
 
-    .navbar-contact {
-        order: 2;
-    }
-
     .mobile-menu-toggle {
         display: block;
-        order: 3;
     }
 
     /* Hide main nav links on mobile by default */
@@ -7430,25 +7426,18 @@ button[type="submit"]:hover {
         width: 100%;
     }
 
-    /* Navbar contact button - icon only with circle background */
+    /* Navbar contact button - icon only on mobile */
     .navbar-contact-btn span {
         display: none;
     }
 
     .navbar-contact-btn {
-        width: 36px;
-        height: 36px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        background: var(--secondary-color);
+        padding: 0.5rem;
     }
 
     .navbar-contact-btn svg {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
     }
 
     .navbar-contact-dropdown {
