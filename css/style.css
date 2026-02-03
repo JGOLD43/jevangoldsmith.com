@@ -7294,15 +7294,15 @@ button[type="submit"]:hover {
         display: block;
     }
 
-    /* Hide nav links completely, show as overlay when open */
+    /* Hide nav links, show as overlay when open */
     .nav-links {
-        display: none;
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
         background: var(--background);
+        display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
@@ -7310,6 +7310,7 @@ button[type="submit"]:hover {
         gap: 0;
         opacity: 0;
         visibility: hidden;
+        pointer-events: none;
         transform: translateY(-20px);
         transition: all 0.3s ease;
         z-index: 10000;
@@ -7317,9 +7318,9 @@ button[type="submit"]:hover {
     }
 
     .nav-links.mobile-open {
-        display: flex;
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
         transform: translateY(0);
     }
 
