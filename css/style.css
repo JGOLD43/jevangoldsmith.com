@@ -7434,12 +7434,10 @@ button[type="submit"]:hover {
     }
 
     .hero-left {
-        order: 2;
         max-width: 100%;
     }
 
     .hero-right {
-        order: 1;
         max-width: 280px;
         margin: 0 auto;
     }
