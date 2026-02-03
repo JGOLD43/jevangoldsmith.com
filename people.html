@@ -18,23 +18,42 @@
             background: var(--background);
         }
 
+        /* Collapsed sidebar - matches Books page pattern */
         .people-layout.sidebar-collapsed {
-            display: block !important;
-            grid-template-columns: none !important;
+            grid-template-columns: 48px 1fr;
         }
 
-        .people-layout.sidebar-collapsed .people-sidebar {
-            display: none !important;
-            width: 0 !important;
-            padding: 0 !important;
-            border: none !important;
+        .people-sidebar.collapsed {
+            width: 48px;
+            min-width: 48px;
+            padding: 0;
         }
 
-        .people-layout.sidebar-collapsed .people-main {
-            width: 100% !important;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 40px;
+        .people-sidebar.collapsed .sidebar-header {
+            padding: 0.5rem 0 0.5rem 15px;
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .people-sidebar.collapsed .sidebar-browse-label,
+        .people-sidebar.collapsed .sidebar-search,
+        .people-sidebar.collapsed .category-name,
+        .people-sidebar.collapsed .category-count {
+            display: none;
+        }
+
+        .people-sidebar.collapsed .sidebar-section {
+            margin-bottom: 0;
+        }
+
+        .people-sidebar.collapsed .sidebar-category {
+            justify-content: flex-start;
+            padding: 0.5rem 0 0.5rem 15px;
+            gap: 0;
+        }
+
+        .people-sidebar.collapsed .sidebar-collapse-btn {
+            margin: 0;
         }
 
         /* Sidebar */
@@ -771,7 +790,10 @@
         }
 
         function togglePeopleSidebar() {
-            document.getElementById('people-layout').classList.toggle('sidebar-collapsed');
+            const layout = document.getElementById('people-layout');
+            const sidebar = document.getElementById('people-sidebar');
+            layout.classList.toggle('sidebar-collapsed');
+            sidebar.classList.toggle('collapsed');
         }
     </script>
 </body>
