@@ -184,27 +184,30 @@
 
         /* Main Content */
         .people-main {
-            padding: 40px;
-            max-width: 1400px;
+            padding: 2rem 3rem;
+            background: var(--background);
         }
 
         .people-main .main-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 40px;
+            margin-bottom: 2rem;
         }
 
         .people-main .header-content h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
             color: #000;
+            font-family: 'Chivo', sans-serif;
         }
 
         .people-main .header-subtitle {
             color: var(--text-light);
             font-size: 1.1rem;
+            font-family: 'Chivo', sans-serif;
+            font-weight: 300;
         }
 
         .people-main .header-counter {
@@ -221,6 +224,7 @@
         }
 
         .people-main .counter-label {
+            display: block;
             font-size: 0.9rem;
             color: var(--text-light);
         }
@@ -228,8 +232,13 @@
         /* People Grid - More columns like Bookshelf */
         .people-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.25rem;
+        }
+
+        /* Adjust grid when sidebar is collapsed for more space */
+        .people-layout.sidebar-collapsed .people-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         }
 
         /* Person Card */
