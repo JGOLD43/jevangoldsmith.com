@@ -3826,7 +3826,7 @@ button[type="submit"]:hover {
 
 /* Secondary Navigation Bar */
 .adventures-subnav {
-    background: white;
+    background: var(--background);
     border-bottom: 1px solid var(--border-color);
     position: fixed;
     top: 129px; /* Below navbar: 80px logo + 48px padding + 1px border */
