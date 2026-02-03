@@ -56,39 +56,51 @@
             margin: 0;
         }
 
-        /* Sidebar */
+        /* Sidebar - matches Essays sidebar style */
         .people-sidebar {
-            background: var(--card-bg);
+            background: var(--background);
             border-right: 1px solid var(--border-color);
-            padding: 20px;
+            padding: 2rem 0;
             position: sticky;
             top: 80px;
             height: calc(100vh - 80px);
             overflow-y: auto;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            scrollbar-width: thin;
+            scrollbar-color: #ccc transparent;
+        }
+
+        .people-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .people-sidebar::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        .people-sidebar::-webkit-scrollbar-track {
+            background: transparent;
         }
 
         .people-sidebar .sidebar-header {
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
+            gap: 0.75rem;
         }
 
         .people-sidebar .sidebar-collapse-btn {
             background: none;
             border: none;
             cursor: pointer;
-            padding: 6px;
-            border-radius: 6px;
+            padding: 4px;
             color: var(--text-light);
-            transition: background 0.2s ease;
+            transition: color 0.2s ease;
         }
 
         .people-sidebar .sidebar-collapse-btn:hover {
-            background: var(--background);
+            color: #000;
         }
 
         .people-sidebar .sidebar-browse-label {
@@ -101,14 +113,14 @@
 
         /* Sidebar Search */
         .people-sidebar .sidebar-search {
-            margin-bottom: 20px;
+            padding: 1rem 1.5rem;
         }
 
         .people-sidebar .search-bubble {
             display: flex;
             align-items: center;
             gap: 8px;
-            background: var(--background);
+            background: #fff;
             border: 1px solid var(--border-color);
             border-radius: 20px;
             padding: 8px 14px;
@@ -129,35 +141,56 @@
 
         /* Sidebar Categories */
         .people-sidebar .sidebar-section {
-            margin-bottom: 4px;
+            margin-bottom: 0;
         }
 
         .people-sidebar .sidebar-category {
+            width: 100%;
             display: flex;
             align-items: center;
-            gap: 10px;
-            width: 100%;
-            padding: 10px 12px;
+            gap: 0.75rem;
+            padding: 0.65rem 1.5rem;
+            background: transparent;
             border: none;
-            background: none;
             cursor: pointer;
-            border-radius: 8px;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
             text-align: left;
+            position: relative;
+        }
+
+        .people-sidebar .sidebar-category .category-icon svg {
+            stroke: #999;
         }
 
         .people-sidebar .sidebar-category:hover {
-            background: var(--background);
+            background: #D4D4D4;
+        }
+
+        .people-sidebar .sidebar-category:hover:not(.active) .category-icon svg {
+            stroke: #000;
+        }
+
+        .people-sidebar .sidebar-category:hover:not(.active) .category-name {
+            color: #000;
         }
 
         .people-sidebar .sidebar-category.active {
             background: #000;
-            color: white;
+            color: #fff;
+            font-weight: 500;
         }
 
-        .people-sidebar .sidebar-category.active .category-icon,
+        .people-sidebar .sidebar-category.active .category-name {
+            color: #fff;
+        }
+
         .people-sidebar .sidebar-category.active .category-count {
-            color: white;
+            background: #333;
+            color: #fff;
+        }
+
+        .people-sidebar .sidebar-category.active .category-icon svg {
+            stroke: #fff;
         }
 
         .people-sidebar .category-icon {
@@ -167,19 +200,19 @@
         .people-sidebar .category-name {
             flex: 1;
             font-size: 0.9rem;
-            font-weight: 500;
+            font-weight: 400;
+            color: #666;
+            transition: all 0.2s ease;
         }
 
         .people-sidebar .category-count {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            background: var(--background);
-            padding: 2px 8px;
+            font-size: 0.75rem;
+            color: #666;
+            background: #E5E5E5;
+            padding: 0.15rem 0.5rem;
             border-radius: 10px;
-        }
-
-        .people-sidebar .sidebar-category.active .category-count {
-            background: rgba(255,255,255,0.2);
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
         /* Main Content */
