@@ -142,17 +142,75 @@
         logo.addEventListener('touchstart', ensureVideoSource, { passive: true });
     }
 
+    // Mobile Navigation
+    function initMobileNav() {
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const dropdowns = document.querySelectorAll('.nav-dropdown');
+
+        if (!mobileMenuToggle || !navLinks) return;
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenuToggle.classList.toggle('active');
+            navLinks.classList.toggle('mobile-open');
+            document.body.style.overflow = navLinks.classList.contains('mobile-open') ? 'hidden' : '';
+        });
+
+        // Handle dropdown toggles on mobile
+        dropdowns.forEach(dropdown => {
+            const trigger = dropdown.querySelector('.dropdown-trigger');
+            if (trigger) {
+                trigger.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 968) {
+                        e.preventDefault();
+                        // Close other dropdowns
+                        dropdowns.forEach(d => {
+                            if (d !== dropdown) {
+                                d.classList.remove('mobile-dropdown-open');
+                            }
+                        });
+                        dropdown.classList.toggle('mobile-dropdown-open');
+                    }
+                });
+            }
+        });
+
+        // Close mobile menu when clicking a non-dropdown link
+        navLinks.querySelectorAll('a:not(.dropdown-trigger)').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 968) {
+                    mobileMenuToggle.classList.remove('active');
+                    navLinks.classList.remove('mobile-open');
+                    document.body.style.overflow = '';
+                    dropdowns.forEach(d => d.classList.remove('mobile-dropdown-open'));
+                }
+            });
+        });
+
+        // Close menu when resizing to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 968) {
+                mobileMenuToggle.classList.remove('active');
+                navLinks.classList.remove('mobile-open');
+                document.body.style.overflow = '';
+                dropdowns.forEach(d => d.classList.remove('mobile-dropdown-open'));
+            }
+        });
+    }
+
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             initTheme();
             initWisdomTicker();
             initLogoVideo();
+            initMobileNav();
         });
     } else {
         initTheme();
         initWisdomTicker();
         initLogoVideo();
+        initMobileNav();
     }
 
     // Listen for system theme changes
