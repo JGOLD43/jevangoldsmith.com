@@ -3096,8 +3096,8 @@ button[type="submit"]:hover {
     justify-content: center;
     gap: 0.5rem;
     padding: 1rem 1.5rem;
-    background: #FFD700;
-    color: #000;
+    background: #FFD700 !important;
+    color: #000 !important;
     border: 2px solid #000;
     border-radius: 8px;
     font-size: 1rem;
