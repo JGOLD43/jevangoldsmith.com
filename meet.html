@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Chat | Jevan Goldsmith</title>
+    <meta name="description" content="Get in touch with Jevan Goldsmith. Whether it's a coffee chat, business opportunity, or just to say hi.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body class="meet-page">
+    <!-- Minimal Header -->
+    <header class="meet-header">
+        <a href="index.html" class="meet-logo">
+            <img src="images/logo.png" alt="J.GOLD" height="50">
+        </a>
+        <a href="index.html" class="meet-close" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="meet-main">
+        <div class="meet-container">
+            <!-- Header Content -->
+            <div class="meet-content-header">
+                <h1>Let's Chat</h1>
+                <p>Whether it's a coffee chat, business idea, or just to say hi — I'd love to hear from you.</p>
+            </div>
+
+            <!-- Form -->
+            <form class="meet-form" action="https://formspree.io/f/your-form-id" method="POST">
+                <div class="meet-form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" required placeholder="First name is fine">
+                </div>
+
+                <div class="meet-form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="Where can I reach you?">
+                </div>
+
+                <div class="meet-form-group">
+                    <label for="reason">What brings you here?</label>
+                    <select id="reason" name="reason" required>
+                        <option value="" disabled selected>Select one...</option>
+                        <option value="coffee-chat">Coffee chat / networking</option>
+                        <option value="business">Business opportunity</option>
+                        <option value="collaboration">Collaboration idea</option>
+                        <option value="saying-hi">Just saying hi</option>
+                        <option value="other">Something else</option>
+                    </select>
+                </div>
+
+                <div class="meet-form-group">
+                    <label for="message">Anything you'd like to add?</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Optional — but I'd love to know more!"></textarea>
+                </div>
+
+                <button type="submit" class="meet-submit">
+                    <span>Send Message</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Trust & Alternatives -->
+            <div class="meet-footer">
+                <p class="meet-response-time">I typically respond within 24-48 hours</p>
+                <p class="meet-alternatives">
+                    Prefer another way?
+                    <a href="mailto:hello@jevangoldsmith.com">Email</a> ·
+                    <a href="https://x.com/JevanGoldsmith" target="_blank">X</a> ·
+                    <a href="https://linkedin.com/in/jevangoldsmith" target="_blank">LinkedIn</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/theme.js"></script>
+</body>
+</html>

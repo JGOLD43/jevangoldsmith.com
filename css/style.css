@@ -2921,6 +2921,239 @@ button[type="submit"]:hover {
     box-shadow: var(--shadow-hover);
 }
 
+/* ============================================
+   MEET PAGE - Lead Capture
+   ============================================ */
+.meet-page {
+    min-height: 100vh;
+    background: var(--background);
+    display: flex;
+    flex-direction: column;
+}
+
+.meet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--background);
+}
+
+.meet-logo img {
+    height: 50px;
+    width: auto;
+}
+
+.meet-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--text-color);
+    transition: all 0.2s ease;
+}
+
+.meet-close:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--secondary-color);
+}
+
+[data-theme="dark"] .meet-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.meet-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 1.5rem 2rem;
+}
+
+.meet-container {
+    width: 100%;
+    max-width: 480px;
+}
+
+.meet-content-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.meet-content-header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+    font-family: 'Chivo', sans-serif;
+}
+
+.meet-content-header p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.meet-form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .meet-form {
+    background: #1a1a1a;
+    border-color: #333;
+}
+
+.meet-form-group {
+    margin-bottom: 1.25rem;
+}
+
+.meet-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.meet-form-group input,
+.meet-form-group select,
+.meet-form-group textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text-color);
+    background: var(--background);
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.meet-form-group input::placeholder,
+.meet-form-group textarea::placeholder {
+    color: var(--text-light);
+}
+
+.meet-form-group input:focus,
+.meet-form-group select:focus,
+.meet-form-group textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(201, 168, 108, 0.2);
+}
+
+.meet-form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+
+[data-theme="dark"] .meet-form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.meet-form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.meet-submit {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: var(--secondary-color);
+    color: #fff;
+    border: 2px solid #000;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+}
+
+.meet-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(201, 168, 108, 0.4);
+}
+
+.meet-submit svg {
+    flex-shrink: 0;
+}
+
+.meet-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.meet-response-time {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+}
+
+.meet-alternatives {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.meet-alternatives a {
+    color: var(--text-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.meet-alternatives a:hover {
+    color: var(--secondary-color);
+}
+
+/* Meet Page Mobile */
+@media (max-width: 600px) {
+    .meet-header {
+        padding: 1rem;
+    }
+
+    .meet-logo img {
+        height: 40px;
+    }
+
+    .meet-main {
+        padding: 90px 1rem 1.5rem;
+    }
+
+    .meet-content-header h1 {
+        font-size: 2rem;
+    }
+
+    .meet-content-header p {
+        font-size: 1rem;
+    }
+
+    .meet-form {
+        padding: 1.5rem;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .hero-container {
