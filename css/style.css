@@ -7348,25 +7348,33 @@ button[type="submit"]:hover {
         height: 20px;
     }
 
-    /* Hamburger - last item */
+    /* Hamburger - fixed position so it stays in same spot as X */
     .mobile-menu-toggle {
         order: 3;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
-        position: relative;
+        width: 44px;
+        height: 44px;
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 10005;
+        background: transparent;
+        border-radius: 8px;
     }
 
-    /* When menu is open, position hamburger fixed in top right */
+    /* When menu is open, add background for visibility */
     .mobile-menu-toggle.active {
-        position: fixed;
-        top: 15px;
-        right: 15px;
-        z-index: 10005;
         background: var(--background);
-        border-radius: 8px;
+    }
+
+    /* Hide navbar content when menu is open */
+    body:has(.nav-links.mobile-open) .navbar-left,
+    body:has(.nav-links.mobile-open) .navbar-contact,
+    body:has(.nav-links.mobile-open) .theme-toggle {
+        opacity: 0;
+        pointer-events: none;
     }
 
     /* Hide side-nav when mobile menu is open */
@@ -7374,21 +7382,21 @@ button[type="submit"]:hover {
         display: none !important;
     }
 
-    /* Hide nav links by default, show as overlay below navbar when open */
+    /* Hide nav links by default, show as full-screen overlay when open */
     .nav-links {
         position: fixed !important;
-        top: 110px !important;
+        top: 0 !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
         width: 100% !important;
-        height: calc(100vh - 110px) !important;
+        height: 100vh !important;
         background: #fff !important;
         display: none !important;
         flex-direction: column !important;
         justify-content: flex-start !important;
         align-items: stretch !important;
-        padding: 1.5rem !important;
+        padding: 120px 1.5rem 1.5rem 1.5rem !important;
         gap: 0 !important;
         transform: none !important;
         z-index: 10001 !important;
