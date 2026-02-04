@@ -2932,11 +2932,22 @@ button[type="submit"]:hover {
 /* ============================================
    MEET PAGE - Lead Capture
    ============================================ */
-.meet-page {
+body.meet-page {
     min-height: 100vh;
     background: var(--background);
     display: flex;
     flex-direction: column;
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-top: 0 !important;
+}
+
+.meet-page .meet-header {
+    margin: 0;
+    padding-top: env(safe-area-inset-top, 0.5rem);
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .meet-header {
