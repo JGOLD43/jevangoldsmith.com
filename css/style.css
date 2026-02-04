@@ -7264,6 +7264,7 @@ button[type="submit"]:hover {
         right: 0;
         z-index: 10002;
         background: var(--background);
+        border-bottom: 1px solid #000;
     }
 
     .navbar .container {
@@ -7393,7 +7394,6 @@ button[type="submit"]:hover {
         overflow-y: auto;
         margin: 0 !important;
         list-style: none !important;
-        border-top: 1px solid #000 !important;
     }
 
     [data-theme="dark"] .nav-links {
