@@ -970,22 +970,24 @@ a:hover {
 
 .newsletter-cta-button {
     padding: 1rem 1.75rem;
-    background: var(--secondary-color);
-    color: #fff;
+    background: white;
+    color: #000;
     border: 2px solid #000;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 1rem;
     font-weight: 700;
     font-family: 'Chivo', sans-serif;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .newsletter-cta-button:hover {
-    background: #b8956a;
+    background: #FFF8DC;
+    border-color: #FFD700;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(201, 168, 108, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .newsletter-cta-disclaimer {
@@ -7485,6 +7487,20 @@ body.meet-page {
     background-color: var(--secondary-color);
     border-color: var(--secondary-color);
     color: #1a1a1a;
+}
+
+/* Newsletter CTA Button - Dark Mode */
+[data-theme="dark"] .newsletter-cta-button {
+    background-color: #FFD700;
+    border-color: #FFD700;
+    color: #000;
+}
+
+[data-theme="dark"] .newsletter-cta-button:hover {
+    background-color: #000;
+    border-color: #FFD700;
+    color: #FFD700;
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
 }
 
 /* ============================================
