@@ -1190,3 +1190,346 @@
 .sidebar-overlay.show {
     display: block;
 }
+
+/* ==================== IMPORT PANEL ==================== */
+.toolbar-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.import-panel {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.import-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--admin-background);
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.import-panel-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--admin-primary);
+}
+
+.import-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--admin-text-light);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.import-close-btn:hover {
+    background: var(--admin-surface);
+    color: var(--admin-danger);
+}
+
+.import-panel-body {
+    padding: 1.5rem;
+}
+
+.import-instructions {
+    margin-bottom: 1.5rem;
+}
+
+.import-instructions p {
+    color: var(--admin-text-light);
+    margin: 0 0 0.75rem 0;
+    font-size: 0.95rem;
+}
+
+.column-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.column-tag {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    background: var(--admin-background);
+    border: 1px solid var(--admin-border);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-family: monospace;
+    color: var(--admin-text);
+}
+
+.column-tag.required {
+    background: rgba(201, 168, 108, 0.1);
+    border-color: var(--admin-secondary);
+    color: var(--admin-secondary);
+}
+
+.column-tag.required::after {
+    content: '*';
+    color: var(--admin-danger);
+    margin-left: 2px;
+}
+
+.import-note {
+    font-size: 0.85rem !important;
+    color: var(--admin-text-light) !important;
+    font-style: italic;
+}
+
+/* Dropzone */
+.import-dropzone {
+    border: 2px dashed var(--admin-border);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--admin-background);
+    position: relative;
+}
+
+.import-dropzone:hover,
+.import-dropzone.dragover {
+    border-color: var(--admin-secondary);
+    background: rgba(201, 168, 108, 0.05);
+}
+
+.import-dropzone input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.dropzone-content svg {
+    color: var(--admin-text-light);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.dropzone-content p {
+    color: var(--admin-text-light);
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+}
+
+.browse-link {
+    color: var(--admin-secondary);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.file-types {
+    font-size: 0.85rem !important;
+    opacity: 0.7;
+}
+
+/* Preview Table */
+.import-preview {
+    margin-top: 1.5rem;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.preview-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--admin-primary);
+}
+
+.btn-text {
+    background: transparent;
+    border: none;
+    color: var(--admin-text-light);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+    transition: color 0.2s ease;
+    font-family: 'Chivo', sans-serif;
+}
+
+.btn-text:hover {
+    color: var(--admin-danger);
+}
+
+.preview-table-wrapper {
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    overflow-x: auto;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.preview-table th,
+.preview-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--admin-border);
+    white-space: nowrap;
+}
+
+.preview-table th {
+    background: var(--admin-background);
+    font-weight: 600;
+    color: var(--admin-primary);
+    position: sticky;
+    top: 0;
+}
+
+.preview-table tbody tr:hover {
+    background: var(--admin-background);
+}
+
+.preview-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Import Actions */
+.import-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.import-options {
+    flex: 1;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--admin-text);
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--admin-secondary);
+}
+
+.import-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* Import Result */
+.import-result {
+    text-align: center;
+    padding: 2rem;
+}
+
+.result-success {
+    margin-bottom: 2rem;
+}
+
+.result-success svg {
+    color: var(--admin-success);
+    margin-bottom: 1rem;
+}
+
+.result-success h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--admin-primary);
+}
+
+.result-success p {
+    margin: 0;
+    color: var(--admin-text-light);
+}
+
+.result-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.result-note {
+    font-size: 0.85rem;
+    color: var(--admin-text-light);
+    margin: 0;
+}
+
+.result-note code {
+    background: var(--admin-background);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .import-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .import-buttons {
+        flex-direction: column;
+    }
+
+    .import-buttons button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .result-actions {
+        flex-direction: column;
+    }
+
+    .result-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .toolbar-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .toolbar-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}

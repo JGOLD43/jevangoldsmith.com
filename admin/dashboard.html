@@ -332,13 +332,136 @@
                         <option value="all">All Categories</option>
                     </select>
                 </div>
-                <button class="btn-primary" onclick="showAddForm('books')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Add Book
-                </button>
+                <div class="toolbar-actions">
+                    <button class="btn-secondary" onclick="toggleImportPanel()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Import Books
+                    </button>
+                    <button class="btn-primary" onclick="showAddForm('books')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Book
+                    </button>
+                </div>
+            </div>
+
+            <!-- Book Import Panel -->
+            <div class="import-panel" id="book-import-panel" style="display: none;">
+                <div class="import-panel-header">
+                    <h3>Import Books from File</h3>
+                    <button class="import-close-btn" onclick="toggleImportPanel()">&times;</button>
+                </div>
+                <div class="import-panel-body">
+                    <div class="import-instructions">
+                        <p>Upload a CSV or Excel file with your book data. The file should have these columns:</p>
+                        <div class="column-list">
+                            <span class="column-tag required">title</span>
+                            <span class="column-tag required">author</span>
+                            <span class="column-tag">isbn</span>
+                            <span class="column-tag">year</span>
+                            <span class="column-tag">rating (1-5)</span>
+                            <span class="column-tag">reReads</span>
+                            <span class="column-tag">category</span>
+                            <span class="column-tag">shortDescription</span>
+                            <span class="column-tag">review</span>
+                        </div>
+                        <p class="import-note">Required columns are marked. Other columns are optional.</p>
+                    </div>
+
+                    <div class="import-dropzone" id="import-dropzone">
+                        <input type="file" id="book-file-input" accept=".csv,.xlsx,.xls" onchange="handleFileSelect(event)">
+                        <div class="dropzone-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p>Drag and drop your file here, or <span class="browse-link">browse</span></p>
+                            <p class="file-types">Supports: CSV, Excel (.xlsx, .xls)</p>
+                        </div>
+                    </div>
+
+                    <div class="import-preview" id="import-preview" style="display: none;">
+                        <div class="preview-header">
+                            <h4>Preview (<span id="preview-count">0</span> books)</h4>
+                            <button class="btn-text" onclick="clearImport()">Clear</button>
+                        </div>
+                        <div class="preview-table-wrapper">
+                            <table class="preview-table" id="preview-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>ISBN</th>
+                                        <th>Year</th>
+                                        <th>Rating</th>
+                                        <th>Category</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="preview-tbody"></tbody>
+                            </table>
+                        </div>
+                        <div class="import-actions">
+                            <div class="import-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="merge-books" checked>
+                                    <span>Merge with existing books (uncheck to replace all)</span>
+                                </label>
+                            </div>
+                            <div class="import-buttons">
+                                <button class="btn-secondary" onclick="downloadTemplate()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    Download Template
+                                </button>
+                                <button class="btn-primary" onclick="applyImport()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Apply Import
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="import-result" id="import-result" style="display: none;">
+                        <div class="result-success">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <h4>Import Successful!</h4>
+                            <p id="result-message">Your books.js file has been generated.</p>
+                        </div>
+                        <div class="result-actions">
+                            <button class="btn-primary" onclick="downloadBooksJS()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Download books.js
+                            </button>
+                            <button class="btn-secondary" onclick="copyBooksJS()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                Copy to Clipboard
+                            </button>
+                        </div>
+                        <p class="result-note">Replace your existing <code>js/books.js</code> file with the downloaded file to update your website.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="content-list" id="books-list">
@@ -684,6 +807,7 @@
     <!-- Load books data from main site -->
     <script src="../js/books.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/bookImporter.js"></script>
     <script src="js/dashboard.js"></script>
     <script>
         // Require authentication
