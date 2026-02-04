@@ -734,6 +734,39 @@ a:hover {
     font-family: 'Chivo', sans-serif;
 }
 
+.snapshot-camera-icon {
+    color: white;
+    flex-shrink: 0;
+}
+
+.snapshot-camera-icon .flash-line {
+    stroke: var(--secondary-color);
+    animation: flash-pulse 1.5s ease-in-out infinite;
+}
+
+.snapshot-camera-icon .flash-line:nth-child(5) {
+    animation-delay: 0s;
+}
+
+.snapshot-camera-icon .flash-line:nth-child(6) {
+    animation-delay: 0.1s;
+}
+
+.snapshot-camera-icon .flash-line:nth-child(7) {
+    animation-delay: 0.2s;
+}
+
+@keyframes flash-pulse {
+    0%, 100% {
+        opacity: 0.3;
+        stroke-width: 1.5;
+    }
+    50% {
+        opacity: 1;
+        stroke-width: 2;
+    }
+}
+
 .snapshot-close {
     background: none;
     border: none;

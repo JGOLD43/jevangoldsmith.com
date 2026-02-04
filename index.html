@@ -183,6 +183,17 @@
                     <div class="snapshot-card" id="snapshot-card">
                         <div class="snapshot-header">
                             <h4>QUICK SNAPSHOT</h4>
+                            <svg class="snapshot-camera-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- Retro camera body -->
+                                <rect x="2" y="6" width="20" height="14" rx="2"/>
+                                <circle cx="12" cy="13" r="4"/>
+                                <circle cx="12" cy="13" r="2"/>
+                                <path d="M6 6V4a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2"/>
+                                <!-- Flash burst lines -->
+                                <line x1="18" y1="3" x2="18" y2="1" class="flash-line"/>
+                                <line x1="20" y1="4" x2="21.5" y2="2.5" class="flash-line"/>
+                                <line x1="21" y1="6" x2="23" y2="6" class="flash-line"/>
+                            </svg>
                             <button class="snapshot-close" onclick="toggleSnapshot()" aria-label="Close">&times;</button>
                         </div>
                         <div class="snapshot-content">
