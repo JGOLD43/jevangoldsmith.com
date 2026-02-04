@@ -7387,7 +7387,7 @@ button[type="submit"]:hover {
         flex-direction: column !important;
         justify-content: flex-start !important;
         align-items: stretch !important;
-        padding: 1.5rem !important;
+        padding: 2.5rem 1.5rem 1.5rem 1.5rem !important;
         gap: 0 !important;
         transform: none !important;
         z-index: 10001 !important;
