@@ -564,12 +564,12 @@ a:hover {
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .hero-cta-left:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border-color: #FFD700;
     background-color: #FFF8DC;
 }
