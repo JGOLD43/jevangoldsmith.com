@@ -7372,9 +7372,9 @@ button[type="submit"]:hover {
         display: flex !important;
     }
 
-    /* Remove ALL pseudo-elements from nav items on mobile */
-    .nav-links a::before,
-    .nav-links a::after,
+    /* Remove pseudo-elements from nav items on mobile, EXCEPT dropdown triggers */
+    .nav-links a:not(.dropdown-trigger)::before,
+    .nav-links a:not(.dropdown-trigger)::after,
     .nav-links li::before,
     .nav-links li::after {
         display: none !important;
@@ -7453,24 +7453,21 @@ button[type="submit"]:hover {
     }
 
     /* Open dropdown when class is added */
-    .nav-dropdown.mobile-dropdown-open .dropdown-menu {
-        visibility: visible;
-        max-height: 500px;
+    .nav-dropdown.mobile-dropdown-open .dropdown-menu,
+    .nav-dropdown.mobile-dropdown-open:hover .dropdown-menu {
+        visibility: visible !important;
+        max-height: 500px !important;
         padding: 1rem !important;
+        opacity: 1 !important;
+        display: block !important;
     }
 
     /* DISABLE hover on mobile - only use click */
-    .nav-dropdown:hover .dropdown-menu {
-        visibility: hidden;
-        max-height: 0;
+    .nav-dropdown:not(.mobile-dropdown-open):hover .dropdown-menu {
+        visibility: hidden !important;
+        max-height: 0 !important;
         padding: 0 !important;
-    }
-
-    /* But if manually opened, keep it open even on hover */
-    .nav-dropdown.mobile-dropdown-open:hover .dropdown-menu {
-        visibility: visible;
-        max-height: 500px;
-        padding: 1rem !important;
+        display: none !important;
     }
 
     /* Wide dropdown mobile styles */
