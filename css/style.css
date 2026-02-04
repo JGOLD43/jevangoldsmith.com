@@ -7391,6 +7391,7 @@ button[type="submit"]:hover {
         gap: 0 !important;
         transform: none !important;
         z-index: 10001 !important;
+        overflow-x: hidden !important;
         overflow-y: auto;
         margin: 0 !important;
         list-style: none !important;
