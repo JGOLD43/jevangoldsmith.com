@@ -445,6 +445,16 @@ a:hover {
     height: 22px;
 }
 
+/* Dark mode icon dropdown styles */
+[data-theme="dark"] .dropdown-icon-link {
+    color: #ccc !important;
+}
+
+[data-theme="dark"] .dropdown-icon-link:hover {
+    background: #444 !important;
+    color: #fff !important;
+}
+
 /* Wide dropdown menu with columns (for Explore) */
 .dropdown-menu-wide {
     min-width: 400px !important;
