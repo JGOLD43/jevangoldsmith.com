@@ -7376,12 +7376,12 @@ button[type="submit"]:hover {
     /* Hide nav links by default, show as overlay below navbar when open */
     .nav-links {
         position: fixed !important;
-        top: 140px !important;
+        top: 139px !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
         width: 100% !important;
-        height: calc(100vh - 140px) !important;
+        height: calc(100vh - 139px) !important;
         background: #fff !important;
         display: none !important;
         flex-direction: column !important;
