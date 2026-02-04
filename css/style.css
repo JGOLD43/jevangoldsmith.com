@@ -7318,9 +7318,22 @@ button[type="submit"]:hover {
     }
 
     .mobile-menu-toggle {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
         position: relative;
-        order: 10; /* Keep hamburger last */
+    }
+
+    /* When menu is open, position hamburger fixed in top right */
+    .mobile-menu-toggle.active {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        z-index: 10005;
+        background: var(--background);
+        border-radius: 8px;
     }
 
     /* Hide side-nav when mobile menu is open */
@@ -7363,9 +7376,7 @@ button[type="submit"]:hover {
     .nav-links a::before,
     .nav-links a::after,
     .nav-links li::before,
-    .nav-links li::after,
-    .dropdown-trigger::before,
-    .dropdown-trigger::after {
+    .nav-links li::after {
         display: none !important;
         content: none !important;
     }
@@ -7381,13 +7392,30 @@ button[type="submit"]:hover {
 
     .nav-links > li > a,
     .nav-links > li > .dropdown-trigger {
-        display: block !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
         padding: 1rem 0 !important;
         font-size: 1.1rem !important;
         color: #000 !important;
         text-decoration: none !important;
         font-weight: 500;
         position: relative;
+        cursor: pointer;
+    }
+
+    /* Add chevron indicator for dropdowns */
+    .nav-dropdown > .dropdown-trigger::after {
+        content: '+' !important;
+        display: inline-block !important;
+        font-size: 1.5rem !important;
+        font-weight: 300 !important;
+        color: #666 !important;
+        transition: transform 0.3s ease !important;
+    }
+
+    .nav-dropdown.mobile-dropdown-open > .dropdown-trigger::after {
+        content: '−' !important;
     }
 
     [data-theme="dark"] .nav-links > li > a,
@@ -7401,41 +7429,48 @@ button[type="submit"]:hover {
 
     /* Mobile Dropdown Styles */
     .nav-dropdown .dropdown-menu {
-        position: static;
-        transform: none;
-        margin: 0;
-        box-shadow: none;
-        border-radius: 0;
-        padding: 0;
-        min-width: 100%;
-        opacity: 1;
+        position: static !important;
+        transform: none !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        min-width: 100% !important;
+        opacity: 1 !important;
         visibility: hidden;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease, visibility 0.3s ease;
-        background: var(--background-alt, #f5f5f5);
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        background: #f5f5f5 !important;
+    }
+
+    [data-theme="dark"] .nav-dropdown .dropdown-menu {
+        background: #1a1a1a !important;
     }
 
     .nav-dropdown .dropdown-menu::before {
-        display: none;
+        display: none !important;
     }
 
+    /* Open dropdown when class is added */
     .nav-dropdown.mobile-dropdown-open .dropdown-menu {
         visibility: visible;
         max-height: 500px;
-        padding: 1rem;
+        padding: 1rem !important;
     }
 
-    /* Don't open dropdown on hover for mobile */
+    /* DISABLE hover on mobile - only use click */
     .nav-dropdown:hover .dropdown-menu {
-        opacity: 1;
         visibility: hidden;
         max-height: 0;
+        padding: 0 !important;
     }
 
+    /* But if manually opened, keep it open even on hover */
     .nav-dropdown.mobile-dropdown-open:hover .dropdown-menu {
         visibility: visible;
         max-height: 500px;
+        padding: 1rem !important;
     }
 
     /* Wide dropdown mobile styles */
