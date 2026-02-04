@@ -5093,6 +5093,15 @@ body.meet-page {
     color: #000;
 }
 
+[data-theme="dark"] .mobile-view-btn.active {
+    color: #fff;
+    border-bottom-color: #fff;
+}
+
+[data-theme="dark"] .mobile-view-btn:hover {
+    color: #fff;
+}
+
 /* Mobile View Toggle (hidden on desktop) */
 .adventures-mobile-toggle {
     display: none;
@@ -5138,12 +5147,12 @@ body.meet-page {
     }
 
     .mobile-view-btn:hover {
-        color: var(--primary-color);
+        color: #1a1a1a;
     }
 
     .mobile-view-btn.active {
-        color: var(--primary-color);
-        border-bottom-color: var(--secondary-color);
+        color: #1a1a1a;
+        border-bottom-color: #1a1a1a;
     }
 
     .mobile-view-btn svg {
