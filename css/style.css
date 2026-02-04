@@ -735,35 +735,22 @@ a:hover {
 }
 
 .snapshot-camera-icon {
-    color: white;
     flex-shrink: 0;
 }
 
-.snapshot-camera-icon .flash-line {
-    stroke: var(--secondary-color);
-    animation: flash-pulse 1.5s ease-in-out infinite;
+.snapshot-camera-icon .flash-burst {
+    animation: flash-glow 2s ease-in-out infinite;
+    transform-origin: 25px 8px;
 }
 
-.snapshot-camera-icon .flash-line:nth-child(5) {
-    animation-delay: 0s;
-}
-
-.snapshot-camera-icon .flash-line:nth-child(6) {
-    animation-delay: 0.1s;
-}
-
-.snapshot-camera-icon .flash-line:nth-child(7) {
-    animation-delay: 0.2s;
-}
-
-@keyframes flash-pulse {
+@keyframes flash-glow {
     0%, 100% {
-        opacity: 0.3;
-        stroke-width: 1.5;
+        opacity: 0.6;
+        transform: scale(0.9);
     }
     50% {
         opacity: 1;
-        stroke-width: 2;
+        transform: scale(1.1);
     }
 }
 

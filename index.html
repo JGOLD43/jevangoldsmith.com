@@ -183,16 +183,29 @@
                     <div class="snapshot-card" id="snapshot-card">
                         <div class="snapshot-header">
                             <h4>QUICK SNAPSHOT</h4>
-                            <svg class="snapshot-camera-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <!-- Retro camera body -->
-                                <rect x="2" y="6" width="20" height="14" rx="2"/>
-                                <circle cx="12" cy="13" r="4"/>
-                                <circle cx="12" cy="13" r="2"/>
-                                <path d="M6 6V4a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2"/>
-                                <!-- Flash burst lines -->
-                                <line x1="18" y1="3" x2="18" y2="1" class="flash-line"/>
-                                <line x1="20" y1="4" x2="21.5" y2="2.5" class="flash-line"/>
-                                <line x1="21" y1="6" x2="23" y2="6" class="flash-line"/>
+                            <svg class="snapshot-camera-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 32">
+                                <!-- Flash starburst -->
+                                <g class="flash-burst">
+                                    <polygon points="26,2 27,5 30,4 28,7 31,9 28,10 29,13 26,11 24,14 24,11 21,12 23,9 20,8 23,6 22,3 25,5" fill="#FFD700"/>
+                                    <circle cx="25" cy="8" r="2" fill="#FFF5CC"/>
+                                </g>
+                                <!-- Retro camera body - black -->
+                                <rect x="2" y="10" width="22" height="16" rx="2" fill="#1a1a1a" stroke="#333" stroke-width="0.5"/>
+                                <!-- Viewfinder bump -->
+                                <rect x="6" y="6" width="8" height="5" rx="1" fill="#1a1a1a" stroke="#333" stroke-width="0.5"/>
+                                <!-- Flash cube on top -->
+                                <rect x="16" y="7" width="4" height="4" fill="#444" stroke="#555" stroke-width="0.5"/>
+                                <!-- Main lens ring - silver -->
+                                <circle cx="13" cy="18" r="6" fill="#2a2a2a" stroke="#666" stroke-width="1"/>
+                                <circle cx="13" cy="18" r="4.5" fill="#1a1a1a" stroke="#888" stroke-width="0.5"/>
+                                <!-- Lens glass - dark with reflection -->
+                                <circle cx="13" cy="18" r="3" fill="#0a0a0a"/>
+                                <ellipse cx="12" cy="17" rx="1" ry="0.6" fill="rgba(255,255,255,0.15)"/>
+                                <!-- Shutter button - red accent -->
+                                <circle cx="20" cy="13" r="1.5" fill="#cc3333"/>
+                                <!-- Grip lines -->
+                                <line x1="3" y1="14" x2="3" y2="22" stroke="#333" stroke-width="0.5"/>
+                                <line x1="4.5" y1="14" x2="4.5" y2="22" stroke="#333" stroke-width="0.5"/>
                             </svg>
                             <button class="snapshot-close" onclick="toggleSnapshot()" aria-label="Close">&times;</button>
                         </div>
