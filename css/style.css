@@ -2982,7 +2982,7 @@ button[type="submit"]:hover {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 2rem 1.5rem;
+    padding: 70px 1.5rem 1rem;
 }
 
 .meet-container {
@@ -2992,7 +2992,7 @@ button[type="submit"]:hover {
 
 .meet-content-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .meet-content-header h1 {
@@ -3156,7 +3156,7 @@ button[type="submit"]:hover {
     }
 
     .meet-main {
-        padding: 1.5rem 1rem;
+        padding: 60px 1rem 1rem;
     }
 
     .meet-content-header h1 {
