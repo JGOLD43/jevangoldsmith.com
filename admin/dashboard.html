@@ -477,13 +477,132 @@
                     <button class="tab" data-filter="published">Published</button>
                     <button class="tab" data-filter="draft">Drafts</button>
                 </div>
-                <button class="btn-primary" onclick="showAddForm('essays')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    New Essay
-                </button>
+                <div class="toolbar-actions">
+                    <button class="btn-secondary" onclick="toggleEssayImportPanel()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Import Essays
+                    </button>
+                    <button class="btn-primary" onclick="showAddForm('essays')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        New Essay
+                    </button>
+                </div>
+            </div>
+
+            <!-- Essay Import Panel -->
+            <div class="import-panel" id="essay-import-panel" style="display: none;">
+                <div class="import-panel-header">
+                    <h3>Import Essays from Markdown</h3>
+                    <button class="import-close-btn" onclick="toggleEssayImportPanel()">&times;</button>
+                </div>
+                <div class="import-panel-body">
+                    <div class="import-instructions">
+                        <p>Drag and drop Markdown files (.md) to import essays. Use frontmatter to set metadata:</p>
+                        <div class="column-list">
+                            <span class="column-tag required">title</span>
+                            <span class="column-tag">subtitle</span>
+                            <span class="column-tag">date (YYYY-MM-DD)</span>
+                            <span class="column-tag">category</span>
+                            <span class="column-tag">status (draft/published)</span>
+                        </div>
+                        <p class="import-note">Essays without frontmatter will use the filename as title and default to "draft" status.</p>
+                    </div>
+
+                    <div class="import-dropzone" id="essay-import-dropzone">
+                        <input type="file" id="essay-file-input" accept=".md,.markdown" multiple onchange="handleEssayFileSelect(event)">
+                        <div class="dropzone-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <p>Drag and drop your Markdown files here, or <span class="browse-link">browse</span></p>
+                            <p class="file-types">Supports: Markdown (.md, .markdown)</p>
+                        </div>
+                    </div>
+
+                    <div class="import-preview" id="essay-import-preview" style="display: none;">
+                        <div class="preview-header">
+                            <h4>Preview (<span id="essay-preview-count">0</span> essays)</h4>
+                            <button class="btn-text" onclick="clearEssayImport()">Clear</button>
+                        </div>
+                        <div class="preview-table-wrapper">
+                            <table class="preview-table" id="essay-preview-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="essay-preview-tbody"></tbody>
+                            </table>
+                        </div>
+                        <div class="import-actions">
+                            <div class="import-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="merge-essays" checked>
+                                    <span>Merge with existing essays (uncheck to replace all)</span>
+                                </label>
+                            </div>
+                            <div class="import-buttons">
+                                <button class="btn-secondary" onclick="downloadEssayTemplate()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    Download Template
+                                </button>
+                                <button class="btn-primary" onclick="applyEssayImport()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Apply Import
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="import-result" id="essay-import-result" style="display: none;">
+                        <div class="result-success">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <h4>Import Successful!</h4>
+                            <p id="essay-result-message">Your essays.json file has been generated.</p>
+                        </div>
+                        <div class="result-actions">
+                            <button class="btn-primary" onclick="downloadEssaysJSON()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Download essays.json
+                            </button>
+                            <button class="btn-secondary" onclick="copyEssaysJSON()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                Copy to Clipboard
+                            </button>
+                        </div>
+                        <p class="result-note">Replace your existing <code>data/essays.json</code> file with the downloaded file to update your website.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="content-list" id="essays-list">
@@ -808,6 +927,7 @@
     <script src="../js/books.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/bookImporter.js"></script>
+    <script src="js/essayImporter.js"></script>
     <script src="js/dashboard.js"></script>
     <script>
         // Require authentication
