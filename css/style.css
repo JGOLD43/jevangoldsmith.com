@@ -2943,12 +2943,7 @@ button[type="submit"]:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
+    padding: 0.75rem 2rem;
     background: var(--background);
 }
 
@@ -2982,7 +2977,7 @@ button[type="submit"]:hover {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 70px 1.5rem 1rem;
+    padding: 0.5rem 1.5rem 1rem;
 }
 
 .meet-container {
@@ -3148,8 +3143,7 @@ button[type="submit"]:hover {
 /* Meet Page Mobile */
 @media (max-width: 600px) {
     .meet-header {
-        padding: 0.75rem 1rem;
-        position: static;
+        padding: 0.5rem 1rem;
     }
 
     .meet-logo img {
@@ -3157,7 +3151,7 @@ button[type="submit"]:hover {
     }
 
     .meet-main {
-        padding: 10px 1rem 1rem;
+        padding: 0.25rem 1rem 1rem;
     }
 
     .meet-content-header h1 {
