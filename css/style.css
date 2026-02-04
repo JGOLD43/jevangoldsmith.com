@@ -7316,20 +7316,25 @@ button[type="submit"]:hover {
         display: flex !important;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.6rem 1rem !important;
-        background: var(--primary-color) !important;
-        border-radius: 25px;
+        padding: 0.6rem 1.2rem !important;
+        background: #FFD700 !important;
+        border: 2px solid #000 !important;
+        border-radius: 25px !important;
+        color: #000 !important;
     }
 
     .navbar-contact-btn span {
         display: inline !important;
         font-size: 0.9rem;
         font-weight: 600;
+        color: #000 !important;
     }
 
     .navbar-contact-btn svg {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
+        color: #000 !important;
+        stroke: #000 !important;
     }
 
     /* Hide contact dropdown on mobile */
@@ -7348,7 +7353,7 @@ button[type="submit"]:hover {
         height: 20px;
     }
 
-    /* Hamburger - fixed position so it stays in same spot as X */
+    /* Hamburger - normal position when closed */
     .mobile-menu-toggle {
         order: 3;
         display: flex;
@@ -7356,16 +7361,17 @@ button[type="submit"]:hover {
         justify-content: center;
         width: 44px;
         height: 44px;
-        position: fixed;
-        top: 12px;
-        right: 12px;
+        position: relative;
         z-index: 10005;
         background: transparent;
         border-radius: 8px;
     }
 
-    /* When menu is open, add background for visibility */
+    /* When menu is open, make it fixed in top-right */
     .mobile-menu-toggle.active {
+        position: fixed;
+        top: 12px;
+        right: 12px;
         background: var(--background);
     }
 
