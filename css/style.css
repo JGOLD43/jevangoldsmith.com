@@ -2946,8 +2946,8 @@ body.meet-page {
     margin: 0;
     padding-top: calc(env(safe-area-inset-top, 0px) + 2.5rem);
     padding-bottom: 0.5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
 }
 
 .meet-header {
