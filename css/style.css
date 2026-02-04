@@ -7372,11 +7372,13 @@ button[type="submit"]:hover {
         display: flex !important;
     }
 
-    /* Remove pseudo-elements from nav items on mobile, EXCEPT dropdown triggers */
-    .nav-links a:not(.dropdown-trigger)::before,
-    .nav-links a:not(.dropdown-trigger)::after,
+    /* Remove ALL pseudo-elements from nav items on mobile */
+    .nav-links a::before,
+    .nav-links a::after,
     .nav-links li::before,
-    .nav-links li::after {
+    .nav-links li::after,
+    .nav-dropdown .dropdown-trigger::before,
+    .nav-dropdown .dropdown-trigger::after {
         display: none !important;
         content: none !important;
     }
@@ -7404,18 +7406,10 @@ button[type="submit"]:hover {
         cursor: pointer;
     }
 
-    /* Add chevron indicator for dropdowns */
+    /* No indicator for dropdowns - keep clean */
     .nav-dropdown > .dropdown-trigger::after {
-        content: '+' !important;
-        display: inline-block !important;
-        font-size: 1.5rem !important;
-        font-weight: 300 !important;
-        color: #666 !important;
-        transition: transform 0.3s ease !important;
-    }
-
-    .nav-dropdown.mobile-dropdown-open > .dropdown-trigger::after {
-        content: '−' !important;
+        display: none !important;
+        content: none !important;
     }
 
     [data-theme="dark"] .nav-links > li > a,
@@ -7503,22 +7497,12 @@ button[type="submit"]:hover {
         padding: 1rem;
     }
 
-    /* Mobile dropdown trigger - simple text indicator */
+    /* Mobile dropdown trigger */
     .nav-dropdown > .dropdown-trigger {
         display: flex !important;
         align-items: center;
         justify-content: space-between;
         width: 100%;
-    }
-
-    /* Add a simple + indicator for dropdowns */
-    .nav-dropdown > .dropdown-trigger span.dropdown-icon {
-        font-size: 1.2rem;
-        font-weight: 300;
-    }
-
-    .nav-dropdown.mobile-dropdown-open > .dropdown-trigger span.dropdown-icon {
-        transform: rotate(45deg);
     }
 
     /* Navbar contact button - icon only on mobile */

@@ -160,9 +160,10 @@
         dropdowns.forEach(dropdown => {
             const trigger = dropdown.querySelector('.dropdown-trigger');
             if (trigger) {
-                trigger.addEventListener('click', (e) => {
+                const handleDropdownClick = (e) => {
                     if (window.innerWidth <= 968) {
                         e.preventDefault();
+                        e.stopPropagation();
                         // Close other dropdowns
                         dropdowns.forEach(d => {
                             if (d !== dropdown) {
@@ -170,6 +171,13 @@
                             }
                         });
                         dropdown.classList.toggle('mobile-dropdown-open');
+                    }
+                };
+                trigger.addEventListener('click', handleDropdownClick);
+                trigger.addEventListener('touchend', (e) => {
+                    if (window.innerWidth <= 968) {
+                        e.preventDefault();
+                        handleDropdownClick(e);
                     }
                 });
             }
