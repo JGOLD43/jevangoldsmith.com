@@ -7386,21 +7386,24 @@ button[type="submit"]:hover {
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
-        width: 100% !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
         height: calc(100vh - 139px) !important;
         background: #fff !important;
         display: none !important;
         flex-direction: column !important;
+        flex-wrap: nowrap !important;
         justify-content: flex-start !important;
         align-items: stretch !important;
         padding: 1.5rem !important;
         gap: 0 !important;
         transform: none !important;
         z-index: 10001 !important;
-        overflow-x: hidden !important;
-        overflow-y: auto;
+        overflow: hidden !important;
+        overflow-y: auto !important;
         margin: 0 !important;
         list-style: none !important;
+        box-sizing: border-box !important;
     }
 
     [data-theme="dark"] .nav-links {
@@ -7409,6 +7412,8 @@ button[type="submit"]:hover {
 
     .nav-links.mobile-open {
         display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
     }
 
     /* Remove ALL pseudo-elements from nav items on mobile */
@@ -7426,9 +7431,13 @@ button[type="submit"]:hover {
     .nav-links > li {
         display: block !important;
         width: 100% !important;
+        max-width: 100% !important;
         border-bottom: 1px solid #eee;
         list-style: none !important;
         position: relative;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+        flex-shrink: 0 !important;
     }
 
     .nav-links > li > a,
