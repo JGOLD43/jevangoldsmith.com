@@ -659,6 +659,36 @@ function setAdventureViewMode(mode) {
 }
 
 // ============================================
+// Mobile View Toggle
+// ============================================
+function switchMobileView(view) {
+    const pageContainer = document.querySelector('.adventures-page-split');
+    const buttons = document.querySelectorAll('.mobile-view-btn');
+
+    if (!pageContainer) return;
+
+    // Update buttons
+    buttons.forEach(btn => {
+        if (btn.dataset.view === view) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Toggle view
+    if (view === 'map') {
+        pageContainer.classList.add('map-view');
+        // Invalidate map size to fix rendering issues
+        if (worldMap) {
+            setTimeout(() => worldMap.invalidateSize(), 100);
+        }
+    } else {
+        pageContainer.classList.remove('map-view');
+    }
+}
+
+// ============================================
 // Initialize
 // ============================================
 document.addEventListener('DOMContentLoaded', loadAdventures);

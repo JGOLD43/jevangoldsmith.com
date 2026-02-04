@@ -5093,6 +5093,11 @@ body.meet-page {
     color: #000;
 }
 
+/* Mobile View Toggle (hidden on desktop) */
+.adventures-mobile-toggle {
+    display: none;
+}
+
 /* Adventures Split Layout Responsive */
 @media (max-width: 1200px) {
     .adventures-page-split {
@@ -5105,20 +5110,77 @@ body.meet-page {
 }
 
 @media (max-width: 968px) {
+    /* Mobile View Toggle */
+    .adventures-mobile-toggle {
+        display: flex;
+        gap: 0;
+        background: var(--background);
+        border-bottom: 1px solid var(--border-color);
+        padding: 0;
+    }
+
+    .mobile-view-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: transparent;
+        border: none;
+        border-bottom: 3px solid transparent;
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .mobile-view-btn:hover {
+        color: var(--primary-color);
+    }
+
+    .mobile-view-btn.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--secondary-color);
+    }
+
+    .mobile-view-btn svg {
+        flex-shrink: 0;
+    }
+
     .adventures-page-split {
-        grid-template-columns: 1fr;
-        height: auto;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 70px);
     }
 
     .adventures-sidebar {
+        flex: 1;
         height: auto;
-        max-height: 50vh;
+        max-height: none;
         border-right: none;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: none;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
     .adventures-map-panel {
-        height: 50vh;
+        display: none;
+        height: 100%;
+        flex: 1;
+    }
+
+    /* Show map, hide list when map view is active */
+    .adventures-page-split.map-view .adventures-sidebar {
+        display: none;
+    }
+
+    .adventures-page-split.map-view .adventures-map-panel {
+        display: block;
+        height: calc(100vh - 70px - 52px); /* viewport - navbar - toggle */
     }
 
     .adventure-detail-overlay {
