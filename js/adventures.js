@@ -12,7 +12,6 @@ let lightboxImages = [];
 let lightboxIndex = 0;
 let worldMap = null;
 let adventureMaps = {};
-let selectedMarker = null; // Track the currently highlighted marker on world map
 let adventureMarkers = {}; // Store markers by adventure ID
 
 // ============================================
@@ -302,23 +301,6 @@ function collapseAdventure(id, event) {
 function highlightAdventureOnMap(adventure) {
     if (!worldMap || !adventure || !adventure.mapCenter) return;
 
-    // Clear any existing highlight
-    if (selectedMarker) {
-        worldMap.removeLayer(selectedMarker);
-        selectedMarker = null;
-    }
-
-    // Create a larger, pulsing marker for the selected adventure
-    selectedMarker = L.circleMarker([adventure.mapCenter.lat, adventure.mapCenter.lng], {
-        radius: 16,
-        fillColor: '#ff6b6b',
-        color: '#fff',
-        weight: 3,
-        opacity: 1,
-        fillOpacity: 0.8,
-        className: 'selected-marker-pulse'
-    }).addTo(worldMap);
-
     // Pan the map to center on this location with higher zoom
     worldMap.setView([adventure.mapCenter.lat, adventure.mapCenter.lng], 5, {
         animate: true,
@@ -327,11 +309,6 @@ function highlightAdventureOnMap(adventure) {
 }
 
 function clearMapHighlight() {
-    if (selectedMarker && worldMap) {
-        worldMap.removeLayer(selectedMarker);
-        selectedMarker = null;
-    }
-
     // Reset map view to default (showing more of the world)
     if (worldMap) {
         worldMap.setView([20, 0], 2, {
