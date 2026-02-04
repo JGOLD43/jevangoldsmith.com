@@ -41,7 +41,7 @@ async function loadAdventures() {
 }
 
 // ============================================
-// Rendering
+// Rendering - Compact Cards for Split Layout
 // ============================================
 function renderAdventures(adventures) {
     const container = document.getElementById('adventures-container');
@@ -59,9 +59,103 @@ function renderAdventures(adventures) {
     }
 
     adventures.forEach(adventure => {
-        const card = createAdventureCard(adventure);
+        const card = createCompactCard(adventure);
         container.appendChild(card);
     });
+}
+
+// Create compact card for sidebar
+function createCompactCard(adventure) {
+    const card = document.createElement('div');
+    card.className = 'adventure-compact-card';
+    card.id = `card-${adventure.id}`;
+    card.setAttribute('data-adventure-id', adventure.id);
+
+    const formattedDate = formatDateRange(adventure.startDate, adventure.endDate);
+
+    card.innerHTML = `
+        <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-compact-image" loading="lazy" decoding="async">
+        <div class="adventure-compact-info">
+            <div class="adventure-compact-location">${adventure.location}</div>
+            <h3 class="adventure-compact-title">${adventure.title}</h3>
+            <div class="adventure-compact-meta">${formattedDate} · ${adventure.duration}</div>
+        </div>
+    `;
+
+    card.addEventListener('click', () => selectAdventure(adventure.id));
+
+    return card;
+}
+
+// Select an adventure - highlight on map and show detail overlay
+let selectedAdventureId = null;
+
+function selectAdventure(id) {
+    const adventure = allAdventures.find(a => a.id === id);
+    if (!adventure) return;
+
+    // Update selected state in sidebar
+    document.querySelectorAll('.adventure-compact-card').forEach(card => {
+        card.classList.remove('active');
+    });
+    const selectedCard = document.getElementById(`card-${id}`);
+    if (selectedCard) {
+        selectedCard.classList.add('active');
+    }
+
+    selectedAdventureId = id;
+
+    // Highlight on map
+    highlightAdventureOnMap(adventure);
+
+    // Show detail overlay
+    showAdventureDetail(adventure);
+}
+
+function showAdventureDetail(adventure) {
+    const overlay = document.getElementById('adventure-detail-overlay');
+    const content = document.getElementById('adventure-detail-content');
+    if (!overlay || !content) return;
+
+    const formattedDate = formatDateRange(adventure.startDate, adventure.endDate);
+    const highlightsHTML = adventure.highlights
+        .map(h => `<span class="highlight-tag">${h}</span>`)
+        .join('');
+
+    content.innerHTML = `
+        <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-detail-hero" loading="lazy" decoding="async">
+        <div class="adventure-detail-body">
+            <div class="adventure-location">${adventure.location}</div>
+            <h2 class="adventure-title">${adventure.title}</h2>
+            ${adventure.subtitle ? `<p class="adventure-subtitle">${adventure.subtitle}</p>` : ''}
+            <div class="adventure-meta">
+                <span>${formattedDate}</span>
+                <span>${adventure.duration}</span>
+            </div>
+            <p class="adventure-description">${adventure.shortDescription}</p>
+            <div class="adventure-highlights">${highlightsHTML}</div>
+            <a href="adventure-${adventure.id}.html" class="view-full-story-btn">View Full Story</a>
+        </div>
+    `;
+
+    overlay.classList.add('active');
+}
+
+function closeAdventureDetail() {
+    const overlay = document.getElementById('adventure-detail-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+
+    // Clear selection
+    document.querySelectorAll('.adventure-compact-card').forEach(card => {
+        card.classList.remove('active');
+    });
+
+    selectedAdventureId = null;
+
+    // Clear map highlight
+    clearMapHighlight();
 }
 
 function createAdventureCard(adventure) {
@@ -209,11 +303,14 @@ function highlightAdventureOnMap(adventure) {
     if (!worldMap || !adventure || !adventure.mapCenter) return;
 
     // Clear any existing highlight
-    clearMapHighlight();
+    if (selectedMarker) {
+        worldMap.removeLayer(selectedMarker);
+        selectedMarker = null;
+    }
 
     // Create a larger, pulsing marker for the selected adventure
     selectedMarker = L.circleMarker([adventure.mapCenter.lat, adventure.mapCenter.lng], {
-        radius: 12,
+        radius: 16,
         fillColor: '#ff6b6b',
         color: '#fff',
         weight: 3,
@@ -222,8 +319,8 @@ function highlightAdventureOnMap(adventure) {
         className: 'selected-marker-pulse'
     }).addTo(worldMap);
 
-    // Pan the map to center on this location
-    worldMap.setView([adventure.mapCenter.lat, adventure.mapCenter.lng], 3, {
+    // Pan the map to center on this location with higher zoom
+    worldMap.setView([adventure.mapCenter.lat, adventure.mapCenter.lng], 5, {
         animate: true,
         duration: 0.5
     });
@@ -235,9 +332,9 @@ function clearMapHighlight() {
         selectedMarker = null;
     }
 
-    // Reset map view to default
+    // Reset map view to default (showing more of the world)
     if (worldMap) {
-        worldMap.setView([30, 0], 1, {
+        worldMap.setView([20, 0], 2, {
             animate: true,
             duration: 0.5
         });
@@ -245,7 +342,7 @@ function clearMapHighlight() {
 }
 
 // ============================================
-// Map Integration (Leaflet)
+// Map Integration (Leaflet) - Large Interactive Map
 // ============================================
 function initWorldMap(adventures) {
     const mapContainer = document.getElementById('world-map');
@@ -254,20 +351,20 @@ function initWorldMap(adventures) {
     // Check if there are any adventures with locations
     const adventuresWithLocation = adventures.filter(a => a.mapCenter);
     if (adventuresWithLocation.length === 0) {
-        mapContainer.parentElement.style.display = 'none';
+        mapContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#666;">No location data available</div>';
         return;
     }
 
-    // Create map with controls (CSS hides them until hover)
+    // Create fully interactive map for the large panel
     worldMap = L.map('world-map', {
         zoomControl: true,
         attributionControl: false,
-        dragging: false,
-        scrollWheelZoom: false,
-        doubleClickZoom: false,
-        touchZoom: false,
-        keyboard: false
-    }).setView([30, 0], 1);
+        dragging: true,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        touchZoom: true,
+        keyboard: true
+    }).setView([20, 0], 2);
 
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(worldMap);
 
@@ -275,7 +372,7 @@ function initWorldMap(adventures) {
     adventures.forEach(adventure => {
         if (adventure.mapCenter) {
             const marker = L.circleMarker([adventure.mapCenter.lat, adventure.mapCenter.lng], {
-                radius: 6,
+                radius: 8,
                 fillColor: '#C9A86C',
                 color: '#fff',
                 weight: 2,
@@ -284,66 +381,30 @@ function initWorldMap(adventures) {
             }).addTo(worldMap);
 
             marker.bindPopup(`
-                <div style="min-width: 150px; text-align: center;">
-                    <strong>${adventure.title}</strong><br>
-                    <span style="color: #666;">${adventure.location}</span><br>
-                    <a href="#${adventure.id}" onclick="expandAdventure('${adventure.id}'); return false;"
-                       style="color: #C9A86C; font-weight: 500;">View Adventure →</a>
+                <div style="min-width: 180px; text-align: center; padding: 0.5rem;">
+                    <strong style="font-size: 1rem;">${adventure.title}</strong><br>
+                    <span style="color: #666; font-size: 0.85rem;">${adventure.location}</span><br>
+                    <button onclick="selectAdventure('${adventure.id}')"
+                       style="margin-top: 0.5rem; padding: 0.4rem 1rem; background: #C9A86C; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">
+                       View Details
+                    </button>
                 </div>
             `);
 
             // Store marker reference for highlighting
             adventureMarkers[adventure.id] = marker;
+
+            // Click marker to select adventure
+            marker.on('click', () => {
+                selectAdventure(adventure.id);
+            });
         }
     });
 
-    // Click to expand/collapse
-    mapContainer.addEventListener('click', (e) => {
-        // Don't collapse if clicking on a popup or control
-        if (e.target.closest('.leaflet-popup') || e.target.closest('.leaflet-control')) {
-            return;
-        }
-
-        const isExpanded = mapContainer.classList.contains('expanded');
-
-        if (isExpanded) {
-            collapseWorldMap(mapContainer);
-        } else {
-            expandWorldMap(mapContainer);
-        }
-    });
-
-    // Click outside to close
-    document.addEventListener('click', (e) => {
-        if (!mapContainer.contains(e.target) && mapContainer.classList.contains('expanded')) {
-            collapseWorldMap(mapContainer);
-        }
-    });
-}
-
-function expandWorldMap(mapContainer) {
-    mapContainer.classList.add('expanded');
-    worldMap.dragging.enable();
-    worldMap.scrollWheelZoom.enable();
-    worldMap.doubleClickZoom.enable();
-    // Invalidate immediately and after transition
-    worldMap.invalidateSize();
+    // Invalidate size after a short delay to ensure proper rendering
     setTimeout(() => {
         worldMap.invalidateSize();
-        worldMap.setView([35, 20], 2);
-    }, 350);
-}
-
-function collapseWorldMap(mapContainer) {
-    mapContainer.classList.remove('expanded');
-    worldMap.dragging.disable();
-    worldMap.scrollWheelZoom.disable();
-    worldMap.doubleClickZoom.disable();
-    worldMap.closePopup();
-    setTimeout(() => {
-        worldMap.invalidateSize();
-        worldMap.setView([30, 0], 1);
-    }, 350);
+    }, 100);
 }
 
 function initAdventureMap(adventure) {
@@ -491,7 +552,7 @@ function removeFilter(region, event) {
     activeFilters.delete(region);
 
     // Update button state
-    const btn = document.querySelector(`.region-btn[data-region="${region}"]`);
+    const btn = document.querySelector(`.filter-pill[data-region="${region}"]`);
     if (btn) btn.classList.remove('active');
 
     // Update All button state
@@ -506,13 +567,16 @@ function resetFilters(buttonEl) {
     // Clear all active filters
     activeFilters.clear();
 
-    // Remove active class from all region buttons
-    document.querySelectorAll('.region-btn').forEach(btn => {
+    // Remove active class from all filter pills except All
+    document.querySelectorAll('.filter-pill:not([data-region="all"])').forEach(btn => {
         btn.classList.remove('active');
     });
 
     // Add active class to All button
     buttonEl.classList.add('active');
+
+    // Close any open detail overlay
+    closeAdventureDetail();
 
     // Show all adventures
     renderAdventures(allAdventures);
@@ -521,11 +585,11 @@ function resetFilters(buttonEl) {
 
 // Update the All button state based on active filters
 function updateAllButtonState() {
-    const allBtn = document.querySelector('.all-btn');
+    const allBtn = document.querySelector('.filter-pill[data-region="all"]');
     if (activeFilters.size === 0) {
-        allBtn.classList.add('active');
+        if (allBtn) allBtn.classList.add('active');
     } else {
-        allBtn.classList.remove('active');
+        if (allBtn) allBtn.classList.remove('active');
     }
 }
 

@@ -152,115 +152,41 @@
         </div>
     </nav>
 
-    <!-- Secondary Navigation with Map and Filters -->
-    <nav class="adventures-subnav">
-        <div class="container">
-            <!-- Toggle Button -->
-            <button class="subnav-toggle" onclick="toggleSubnav()">
-                <span class="toggle-icon">▾</span>
-                ADVENTURES
-            </button>
-
-            <!-- Expandable Content -->
-            <div class="subnav-content">
-                <!-- Mini Map -->
-                <div class="subnav-map-wrapper">
-                    <div class="subnav-map" id="world-map"></div>
-                </div>
-
-                <!-- Filter Buttons -->
-                <div class="subnav-filters">
-                    <button class="subnav-btn all-btn active" onclick="resetFilters(this)">
-                        <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                        </svg>
-                        All
-                        <span class="subnav-count" id="count-all">0</span>
-                    </button>
-                    <button class="subnav-btn region-btn" data-region="europe" onclick="toggleFilter('europe', this)">
-                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        Europe
-                        <span class="subnav-count" id="count-europe">0</span>
-                        <span class="filter-remove" onclick="removeFilter('europe', event)">&times;</span>
-                    </button>
-                    <button class="subnav-btn region-btn" data-region="asia" onclick="toggleFilter('asia', this)">
-                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        Asia
-                        <span class="subnav-count" id="count-asia">0</span>
-                        <span class="filter-remove" onclick="removeFilter('asia', event)">&times;</span>
-                    </button>
-                    <button class="subnav-btn region-btn" data-region="australia" onclick="toggleFilter('australia', this)">
-                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        Australia
-                        <span class="subnav-count" id="count-australia">0</span>
-                        <span class="filter-remove" onclick="removeFilter('australia', event)">&times;</span>
-                    </button>
-                    <button class="subnav-btn region-btn" data-region="americas" onclick="toggleFilter('americas', this)">
-                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        Americas
-                        <span class="subnav-count" id="count-americas">0</span>
-                        <span class="filter-remove" onclick="removeFilter('americas', event)">&times;</span>
-                    </button>
-                    <button class="subnav-btn region-btn" data-region="other" onclick="toggleFilter('other', this)">
-                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        Other
-                        <span class="subnav-count" id="count-other">0</span>
-                        <span class="filter-remove" onclick="removeFilter('other', event)">&times;</span>
-                    </button>
-                </div>
-
-                <!-- View Toggle -->
-                <div class="view-toggle adventure-view-toggle">
-                    <button class="view-toggle-btn active" id="list-view-btn" onclick="setAdventureViewMode('list')" title="List view">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="8" y1="6" x2="21" y2="6"></line>
-                            <line x1="8" y1="12" x2="21" y2="12"></line>
-                            <line x1="8" y1="18" x2="21" y2="18"></line>
-                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                        </svg>
-                    </button>
-                    <button class="view-toggle-btn" id="grid-view-btn" onclick="setAdventureViewMode('grid')" title="Grid view">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="14" width="7" height="7"></rect>
-                            <rect x="3" y="14" width="7" height="7"></rect>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Counter -->
-                <div class="subnav-counter">
-                    <span class="counter-number" id="adventure-count">0</span>
-                    <span class="counter-label">Adventures</span>
-                </div>
+    <!-- Adventures Split Layout -->
+    <main class="adventures-page-split">
+        <!-- Left Sidebar - Adventure List -->
+        <aside class="adventures-sidebar">
+            <div class="adventures-sidebar-header">
+                <h1>Adventures</h1>
+                <span class="adventures-count"><span id="adventure-count">0</span> trips</span>
             </div>
-        </div>
-    </nav>
 
-    <main class="adventures-page">
-        <div class="container">
-            <!-- Adventures Container -->
-            <div id="adventures-container" class="adventures-list">
+            <!-- Filter Pills -->
+            <div class="adventures-filters">
+                <button class="filter-pill active" data-region="all" onclick="resetFilters(this)">All</button>
+                <button class="filter-pill" data-region="europe" onclick="toggleFilter('europe', this)">Europe <span id="count-europe"></span></button>
+                <button class="filter-pill" data-region="asia" onclick="toggleFilter('asia', this)">Asia <span id="count-asia"></span></button>
+                <button class="filter-pill" data-region="australia" onclick="toggleFilter('australia', this)">Australia <span id="count-australia"></span></button>
+                <button class="filter-pill" data-region="americas" onclick="toggleFilter('americas', this)">Americas <span id="count-americas"></span></button>
+                <button class="filter-pill" data-region="other" onclick="toggleFilter('other', this)">Other <span id="count-other"></span></button>
+            </div>
+
+            <!-- Compact Adventure Cards List -->
+            <div class="adventures-compact-list" id="adventures-container">
                 <!-- Adventure cards will be loaded dynamically -->
+            </div>
+        </aside>
+
+        <!-- Right - Large Interactive Map -->
+        <div class="adventures-map-panel">
+            <div class="adventures-main-map" id="world-map"></div>
+
+            <!-- Adventure Detail Overlay (shows when adventure is selected) -->
+            <div class="adventure-detail-overlay" id="adventure-detail-overlay">
+                <button class="detail-close-btn" onclick="closeAdventureDetail()">&times;</button>
+                <div class="adventure-detail-content" id="adventure-detail-content">
+                    <!-- Dynamic content loaded here -->
+                </div>
             </div>
         </div>
     </main>
