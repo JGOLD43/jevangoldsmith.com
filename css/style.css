@@ -7263,7 +7263,7 @@ button[type="submit"]:hover {
         left: 0;
         right: 0;
         z-index: 10002;
-        background: var(--background);
+        background: #fff;
         border-bottom: 1px solid #000;
     }
 
