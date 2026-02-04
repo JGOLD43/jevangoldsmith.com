@@ -7503,6 +7503,40 @@ body.meet-page {
     box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
 }
 
+/* Newsletter CTA Section - Dark Mode */
+[data-theme="dark"] .newsletter-cta-section {
+    background: #1a1a1a;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+[data-theme="dark"] .newsletter-cta-title {
+    color: #fff;
+}
+
+[data-theme="dark"] .newsletter-cta-description {
+    color: #ccc;
+}
+
+[data-theme="dark"] .newsletter-cta-input {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #fff;
+}
+
+[data-theme="dark"] .newsletter-cta-input::placeholder {
+    color: #888;
+}
+
+[data-theme="dark"] .newsletter-cta-input:focus {
+    border-color: #FFD700;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+}
+
+[data-theme="dark"] .newsletter-cta-disclaimer {
+    color: rgba(255, 255, 255, 0.6);
+}
+
 /* ============================================
    MOBILE NAVIGATION
    ============================================ */
