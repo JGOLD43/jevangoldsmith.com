@@ -2963,11 +2963,14 @@ body.meet-page {
 }
 
 .meet-page .meet-header {
-    margin: 0;
+    margin: 0 auto;
     padding-top: calc(env(safe-area-inset-top, 0px) + 2.5rem);
     padding-bottom: 0.5rem;
     padding-left: 2.5rem;
     padding-right: 2.5rem;
+    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .meet-header {
