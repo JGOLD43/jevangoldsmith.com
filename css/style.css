@@ -7323,46 +7323,80 @@ button[type="submit"]:hover {
         order: 10; /* Keep hamburger last */
     }
 
-    /* Hide nav links by default, show as fullscreen overlay when open */
+    /* Hide side-nav when mobile menu is open */
+    body:has(.nav-links.mobile-open) .side-nav {
+        display: none !important;
+    }
+
+    /* Hide nav links by default, show as overlay below navbar when open */
     .nav-links {
         position: fixed !important;
-        top: 0 !important;
+        top: 70px !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
         width: 100% !important;
-        height: 100vh !important;
-        background: var(--background) !important;
+        height: calc(100vh - 70px) !important;
+        background: #fff !important;
         display: none !important;
         flex-direction: column !important;
         justify-content: flex-start !important;
         align-items: stretch !important;
-        padding: 100px 2rem 2rem !important;
+        padding: 1.5rem !important;
         gap: 0 !important;
         transform: none !important;
         z-index: 10001 !important;
         overflow-y: auto;
         margin: 0 !important;
+        list-style: none !important;
+    }
+
+    [data-theme="dark"] .nav-links {
+        background: var(--background) !important;
     }
 
     .nav-links.mobile-open {
         display: flex !important;
     }
 
+    /* Remove ALL pseudo-elements from nav items on mobile */
+    .nav-links a::before,
+    .nav-links a::after,
+    .nav-links li::before,
+    .nav-links li::after,
+    .dropdown-trigger::before,
+    .dropdown-trigger::after {
+        display: none !important;
+        content: none !important;
+    }
+
     /* Each nav item as block */
     .nav-links > li {
         display: block !important;
         width: 100% !important;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid #eee;
+        list-style: none !important;
+        position: relative;
     }
 
     .nav-links > li > a,
     .nav-links > li > .dropdown-trigger {
         display: block !important;
-        padding: 1.25rem 0 !important;
-        font-size: 1.2rem !important;
+        padding: 1rem 0 !important;
+        font-size: 1.1rem !important;
+        color: #000 !important;
+        text-decoration: none !important;
+        font-weight: 500;
+        position: relative;
+    }
+
+    [data-theme="dark"] .nav-links > li > a,
+    [data-theme="dark"] .nav-links > li > .dropdown-trigger {
         color: var(--text-color) !important;
-        text-decoration: none;
+    }
+
+    [data-theme="dark"] .nav-links > li {
+        border-bottom-color: #333;
     }
 
     /* Mobile Dropdown Styles */
@@ -7437,27 +7471,22 @@ button[type="submit"]:hover {
         padding: 1rem;
     }
 
-    /* Mobile dropdown trigger arrow */
-    .nav-dropdown > .dropdown-trigger::after {
-        content: '';
-        display: inline-block;
-        width: 8px;
-        height: 8px;
-        border-right: 2px solid currentColor;
-        border-bottom: 2px solid currentColor;
-        transform: rotate(45deg);
-        margin-left: auto;
-        transition: transform 0.3s ease;
-    }
-
-    .nav-dropdown.mobile-dropdown-open > .dropdown-trigger::after {
-        transform: rotate(-135deg);
-    }
-
+    /* Mobile dropdown trigger - simple text indicator */
     .nav-dropdown > .dropdown-trigger {
-        display: flex;
+        display: flex !important;
         align-items: center;
+        justify-content: space-between;
         width: 100%;
+    }
+
+    /* Add a simple + indicator for dropdowns */
+    .nav-dropdown > .dropdown-trigger span.dropdown-icon {
+        font-size: 1.2rem;
+        font-weight: 300;
+    }
+
+    .nav-dropdown.mobile-dropdown-open > .dropdown-trigger span.dropdown-icon {
+        transform: rotate(45deg);
     }
 
     /* Navbar contact button - icon only on mobile */
