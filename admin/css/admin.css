@@ -2159,3 +2159,531 @@
         flex-direction: column;
     }
 }
+
+/* ==================== SETTINGS PAGE ==================== */
+.settings-container {
+    max-width: 800px;
+    padding: 1.5rem;
+}
+
+.settings-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.settings-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--admin-background);
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.settings-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.settings-card-icon.security {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--admin-success);
+}
+
+.settings-card-icon.session {
+    background: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+}
+
+.settings-card-header h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.25rem 0;
+    color: var(--admin-primary);
+}
+
+.settings-subtitle {
+    color: var(--admin-text-light);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.settings-card-body {
+    padding: 1.5rem;
+}
+
+/* 2FA Status */
+.twofa-status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--admin-background);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.enabled {
+    background: rgba(39, 174, 96, 0.15);
+    color: var(--admin-success);
+}
+
+.status-badge.disabled {
+    background: rgba(231, 76, 60, 0.15);
+    color: var(--admin-danger);
+}
+
+.twofa-status p {
+    margin: 0;
+    color: var(--admin-text);
+    font-size: 0.95rem;
+}
+
+/* Setup Step Cards */
+.setup-step-card {
+    background: var(--admin-background);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.step-header.success {
+    color: var(--admin-success);
+}
+
+.step-badge {
+    background: var(--admin-secondary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.step-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--admin-primary);
+}
+
+.setup-step-card > p {
+    color: var(--admin-text-light);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+/* Secret Display */
+.secret-display {
+    margin: 1.5rem 0;
+}
+
+.secret-display label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--admin-text-light);
+    margin-bottom: 0.5rem;
+}
+
+.secret-value-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+}
+
+.secret-value-box code {
+    flex: 1;
+    font-size: 1rem;
+    font-family: monospace;
+    letter-spacing: 1px;
+    word-break: break-all;
+    color: var(--admin-primary);
+}
+
+/* QR Display */
+.qr-display {
+    text-align: center;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.qr-display img {
+    display: block;
+}
+
+/* Manual Entry Box */
+.manual-entry-box {
+    background: var(--admin-surface);
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.manual-entry-box p {
+    margin-bottom: 0.75rem;
+    color: var(--admin-text);
+}
+
+.manual-entry-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.manual-entry-box li {
+    margin-bottom: 0.5rem;
+    color: var(--admin-text-light);
+}
+
+.manual-entry-box code {
+    background: var(--admin-background);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85em;
+}
+
+/* Step Actions */
+.step-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+/* Config Code Block */
+.config-code-block {
+    position: relative;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.config-code-block pre {
+    padding: 1rem;
+    padding-right: 3rem;
+    margin: 0;
+    font-family: monospace;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--admin-text);
+}
+
+.config-code-block.small pre {
+    font-size: 0.85rem;
+    padding: 0.75rem;
+}
+
+.copy-config-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+/* Warning Box */
+.warning-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(243, 156, 18, 0.1);
+    border: 1px solid var(--admin-warning);
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.warning-box svg {
+    color: var(--admin-warning);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.warning-box span {
+    font-size: 0.9rem;
+    color: var(--admin-text);
+}
+
+/* Email Setup Instructions */
+.email-setup-instructions {
+    margin: 1rem 0;
+}
+
+.email-setup-instructions h4 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--admin-primary);
+}
+
+.email-setup-instructions ol {
+    padding-left: 1.5rem;
+    margin: 0;
+}
+
+.email-setup-instructions li {
+    margin-bottom: 0.75rem;
+    color: var(--admin-text);
+    font-size: 0.95rem;
+}
+
+.email-setup-instructions a {
+    color: var(--admin-secondary);
+}
+
+.email-setup-instructions code {
+    background: var(--admin-background);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85em;
+}
+
+/* Success Card */
+.success-card {
+    background: rgba(39, 174, 96, 0.05);
+    border-color: var(--admin-success);
+}
+
+.success-content {
+    text-align: center;
+}
+
+.success-icon-large {
+    margin-bottom: 1rem;
+}
+
+.success-icon-large svg {
+    color: var(--admin-success);
+}
+
+.success-content h3 {
+    color: var(--admin-success);
+    margin-bottom: 0.5rem;
+}
+
+.success-content p {
+    color: var(--admin-text-light);
+}
+
+/* Next Steps Box */
+.next-steps-box {
+    text-align: left;
+    margin: 1.5rem auto;
+    padding: 1.25rem;
+    background: var(--admin-surface);
+    border-radius: 8px;
+    max-width: 400px;
+}
+
+.next-steps-box h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: var(--admin-primary);
+}
+
+.next-steps-box ol {
+    padding-left: 1.25rem;
+    margin: 0;
+}
+
+.next-steps-box li {
+    margin-bottom: 0.5rem;
+    color: var(--admin-text);
+    font-size: 0.9rem;
+}
+
+.next-steps-box code {
+    background: var(--admin-background);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85em;
+}
+
+/* 2FA Enabled Section */
+.twofa-enabled {
+    text-align: center;
+}
+
+.enabled-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 1rem;
+}
+
+.enabled-info svg {
+    color: var(--admin-success);
+}
+
+.enabled-info h3 {
+    margin: 0;
+    color: var(--admin-success);
+}
+
+.enabled-info p {
+    margin: 0;
+    color: var(--admin-text-light);
+    max-width: 400px;
+}
+
+.enabled-actions {
+    padding: 1rem;
+    border-top: 1px solid var(--admin-border);
+    background: var(--admin-background);
+}
+
+/* Session Info */
+.session-info {
+    margin-bottom: 1.5rem;
+}
+
+.session-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.session-item:last-child {
+    border-bottom: none;
+}
+
+.session-label {
+    color: var(--admin-text-light);
+    font-size: 0.9rem;
+}
+
+.session-value {
+    color: var(--admin-text);
+    font-weight: 500;
+}
+
+/* Danger Button */
+.btn-danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--admin-danger);
+    border: 1px solid var(--admin-danger);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Chivo', sans-serif;
+}
+
+.btn-danger:hover {
+    background: var(--admin-danger);
+    color: white;
+}
+
+/* Settings Toast */
+.settings-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 0.75rem 1.5rem;
+    background: var(--admin-primary);
+    color: white;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10000;
+}
+
+.settings-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Verify Result in Settings */
+.settings-card .verify-result {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.settings-card .verify-result.success {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--admin-success);
+}
+
+.settings-card .verify-result.error {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--admin-danger);
+}
+
+/* Settings Responsive */
+@media (max-width: 600px) {
+    .settings-container {
+        padding: 1rem;
+    }
+
+    .settings-card-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .settings-card-icon {
+        align-self: center;
+    }
+
+    .twofa-status {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .step-actions {
+        flex-direction: column;
+    }
+
+    .session-item {
+        flex-direction: column;
+        gap: 0.25rem;
+        align-items: flex-start;
+    }
+}

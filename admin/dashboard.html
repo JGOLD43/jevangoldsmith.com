@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- EmailJS SDK for backup codes -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body class="admin-body">
     <!-- Sidebar Navigation -->
@@ -161,6 +163,17 @@
                         <polyline points="21 15 16 10 5 21"></polyline>
                     </svg>
                     <span>Photos</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title">Account</span>
+                <a href="#settings" class="nav-item" data-section="settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span>Settings</span>
                 </a>
             </div>
         </nav>
@@ -908,6 +921,262 @@
                 <button class="btn-primary" onclick="showAddForm('photos')">Upload Photos</button>
             </div>
         </section>
+
+        <!-- Settings Section -->
+        <section id="section-settings" class="content-section">
+            <div class="settings-container">
+                <!-- Security Settings -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon security">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2>Two-Factor Authentication</h2>
+                            <p class="settings-subtitle">Add an extra layer of security to your account</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-card-body">
+                        <!-- 2FA Status -->
+                        <div class="twofa-status" id="twofa-status">
+                            <div class="status-indicator" id="twofa-status-indicator">
+                                <span class="status-badge disabled" id="twofa-badge">Disabled</span>
+                            </div>
+                            <p id="twofa-status-text">Two-factor authentication is not configured.</p>
+                        </div>
+
+                        <!-- Setup Steps (shown when 2FA is not configured) -->
+                        <div class="twofa-setup" id="twofa-setup-section">
+                            <!-- Step 1: Generate Secret -->
+                            <div class="setup-step-card" id="setup-step-1">
+                                <div class="step-header">
+                                    <span class="step-badge">Step 1</span>
+                                    <h3>Generate Secret Key</h3>
+                                </div>
+                                <p>Generate a unique secret key to link your authenticator app.</p>
+                                <button class="btn-primary" onclick="generateTOTPSecret()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                                    </svg>
+                                    Generate Secret Key
+                                </button>
+
+                                <div id="secret-generated" style="display: none;">
+                                    <div class="secret-display">
+                                        <label>Your Secret Key (save this securely):</label>
+                                        <div class="secret-value-box">
+                                            <code id="generated-secret"></code>
+                                            <button class="btn-icon" onclick="copyToClipboard(document.getElementById('generated-secret').textContent, 'Secret key copied!')" title="Copy">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button class="btn-secondary" onclick="showSetupStep(2)">Next: Add to Authenticator</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: QR Code -->
+                            <div class="setup-step-card" id="setup-step-2" style="display: none;">
+                                <div class="step-header">
+                                    <span class="step-badge">Step 2</span>
+                                    <h3>Add to Microsoft Authenticator</h3>
+                                </div>
+                                <p>Open Microsoft Authenticator on your phone and scan this QR code:</p>
+
+                                <div class="qr-display">
+                                    <img id="setup-qr-code" src="" alt="QR Code" width="180" height="180">
+                                </div>
+
+                                <div class="manual-entry-box">
+                                    <p><strong>Can't scan?</strong> Enter manually:</p>
+                                    <ul>
+                                        <li><strong>Account:</strong> JevanGoldsmith Admin</li>
+                                        <li><strong>Key:</strong> <code id="manual-secret-key"></code></li>
+                                        <li><strong>Type:</strong> Time-based</li>
+                                    </ul>
+                                </div>
+
+                                <div class="step-actions">
+                                    <button class="btn-secondary" onclick="showSetupStep(1)">Back</button>
+                                    <button class="btn-primary" onclick="showSetupStep(3)">Next: Verify Code</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Verify -->
+                            <div class="setup-step-card" id="setup-step-3" style="display: none;">
+                                <div class="step-header">
+                                    <span class="step-badge">Step 3</span>
+                                    <h3>Verify Setup</h3>
+                                </div>
+                                <p>Enter the 6-digit code from your authenticator app to verify:</p>
+
+                                <form id="verify-setup-form" onsubmit="verifySetupCode(event)">
+                                    <input type="text" id="setup-verify-code" class="code-input" placeholder="000000" maxlength="6" pattern="[0-9]*" inputmode="numeric" required>
+                                    <button type="submit" class="btn-primary">Verify Code</button>
+                                </form>
+                                <div id="setup-verify-result" class="verify-result"></div>
+
+                                <div class="step-actions">
+                                    <button class="btn-secondary" onclick="showSetupStep(2)">Back</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Update Code -->
+                            <div class="setup-step-card" id="setup-step-4" style="display: none;">
+                                <div class="step-header success">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
+                                    <h3>Verification Successful!</h3>
+                                </div>
+                                <p>Now update your code to enable 2FA. Copy these values into <code>admin/js/twofa.js</code>:</p>
+
+                                <div class="config-code-block">
+                                    <pre id="twofa-config-output"></pre>
+                                    <button class="btn-icon copy-config-btn" onclick="copyTOTPConfig()" title="Copy">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div class="warning-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                    <span>Save your secret key securely! You'll need it to recover your account.</span>
+                                </div>
+
+                                <button class="btn-primary" onclick="showSetupStep(5)">Continue to Email Backup</button>
+                            </div>
+
+                            <!-- Step 5: Email Backup -->
+                            <div class="setup-step-card" id="setup-step-5" style="display: none;">
+                                <div class="step-header">
+                                    <span class="step-badge">Step 5</span>
+                                    <h3>Email Backup (Optional)</h3>
+                                </div>
+                                <p>Set up email backup in case you lose access to your authenticator.</p>
+
+                                <div class="email-setup-instructions">
+                                    <h4>EmailJS Setup:</h4>
+                                    <ol>
+                                        <li>Go to <a href="https://www.emailjs.com/" target="_blank">EmailJS.com</a> and create a free account</li>
+                                        <li>Add an email service (Gmail, Outlook, etc.)</li>
+                                        <li>Create an email template with variables: <code>{{backup_code}}</code>, <code>{{expiry_minutes}}</code>, <code>{{timestamp}}</code></li>
+                                        <li>Add your credentials to <code>admin/js/twofa.js</code>:</li>
+                                    </ol>
+                                    <div class="config-code-block small">
+                                        <pre>EMAILJS_PUBLIC_KEY: 'your-public-key',
+EMAILJS_SERVICE_ID: 'your-service-id',
+EMAILJS_TEMPLATE_ID: 'your-template-id',
+BACKUP_EMAIL: 'your@email.com',</pre>
+                                    </div>
+                                </div>
+
+                                <div class="step-actions">
+                                    <button class="btn-secondary" onclick="showSetupStep(4)">Back</button>
+                                    <button class="btn-primary" onclick="finishTwoFASetup()">Finish Setup</button>
+                                </div>
+                            </div>
+
+                            <!-- Completion -->
+                            <div class="setup-step-card success-card" id="setup-complete" style="display: none;">
+                                <div class="success-content">
+                                    <div class="success-icon-large">
+                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                            <polyline points="9 12 12 15 16 10"></polyline>
+                                        </svg>
+                                    </div>
+                                    <h3>2FA Setup Complete!</h3>
+                                    <p>Your account is now protected with two-factor authentication.</p>
+
+                                    <div class="next-steps-box">
+                                        <h4>Next Steps:</h4>
+                                        <ol>
+                                            <li>Open <code>admin/js/twofa.js</code></li>
+                                            <li>Update the configuration with your values</li>
+                                            <li>Set <code>ENABLED: true</code></li>
+                                            <li>Commit and push your changes</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2FA Already Enabled Section -->
+                        <div class="twofa-enabled" id="twofa-enabled-section" style="display: none;">
+                            <div class="enabled-info">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    <polyline points="9 12 12 15 16 10"></polyline>
+                                </svg>
+                                <div>
+                                    <h3>2FA is Active</h3>
+                                    <p>Your account is protected with two-factor authentication using Microsoft Authenticator.</p>
+                                </div>
+                            </div>
+
+                            <div class="enabled-actions">
+                                <button class="btn-secondary" onclick="showReconfigureWarning()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                                    </svg>
+                                    Reconfigure 2FA
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session Info -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon session">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2>Session</h2>
+                            <p class="settings-subtitle">Current login session information</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="session-info">
+                            <div class="session-item">
+                                <span class="session-label">Session Started:</span>
+                                <span class="session-value" id="session-start-time">-</span>
+                            </div>
+                            <div class="session-item">
+                                <span class="session-label">Session Expires:</span>
+                                <span class="session-value" id="session-expire-time">-</span>
+                            </div>
+                        </div>
+                        <button class="btn-danger" onclick="logout()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Add/Edit Modal -->
@@ -926,9 +1195,12 @@
     <!-- Load books data from main site -->
     <script src="../js/books.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/totp.js"></script>
+    <script src="js/twofa.js"></script>
     <script src="js/bookImporter.js"></script>
     <script src="js/essayImporter.js"></script>
     <script src="js/dashboard.js"></script>
+    <script src="js/settings.js"></script>
     <script>
         // Require authentication
         requireAuth();

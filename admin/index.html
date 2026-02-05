@@ -103,10 +103,6 @@
             </div>
         </div>
 
-        <!-- Setup Link (only shown if 2FA not configured) -->
-        <div id="setup-link" class="setup-link" style="display: none;">
-            <a href="setup-2fa.html">Set up Two-Factor Authentication</a>
-        </div>
     </div>
 
     <script src="js/totp.js"></script>
@@ -319,11 +315,6 @@
         // Check if already authenticated
         if (isAuthenticated()) {
             window.location.href = 'dashboard.html';
-        }
-
-        // Show setup link if 2FA not configured
-        if (!TwoFA.isConfigured()) {
-            document.getElementById('setup-link').style.display = 'block';
         }
     </script>
 </body>
