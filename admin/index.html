@@ -9,61 +9,300 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
+    <!-- EmailJS SDK for backup codes -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body class="admin-login">
     <div class="login-container">
-        <h1>Admin Login</h1>
-        <p>Essay Management System</p>
+        <!-- Step 1: Password -->
+        <div id="step-password">
+            <h1>Admin Login</h1>
+            <p>Essay Management System</p>
 
-        <form id="login-form">
-            <div style="position: relative;">
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter admin password"
-                    required
-                    autocomplete="current-password"
-                    style="padding-right: 50px;"
-                >
-                <button
-                    type="button"
-                    id="toggle-password"
-                    onclick="togglePassword()"
-                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; width: 30px; color: #666;"
-                    title="Show/Hide Password"
-                >👁️</button>
+            <form id="login-form">
+                <div class="input-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter admin password"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        onclick="togglePassword()"
+                        title="Show/Hide Password"
+                    >
+                        <svg class="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+                <button type="submit" class="btn-primary btn-full">Login</button>
+                <div id="error-message" class="error"></div>
+            </form>
+        </div>
+
+        <!-- Step 2: Two-Factor Authentication -->
+        <div id="step-2fa" style="display: none;">
+            <div class="twofa-header">
+                <button type="button" class="back-btn" onclick="goBackToPassword()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </button>
+                <div>
+                    <h1>Two-Factor Authentication</h1>
+                    <p>Enter the code from your authenticator app</p>
+                </div>
             </div>
-            <button type="submit">Login</button>
-            <div id="error-message" class="error"></div>
-        </form>
+
+            <form id="twofa-form">
+                <div class="code-input-container">
+                    <input
+                        type="text"
+                        id="twofa-code"
+                        class="code-input"
+                        placeholder="000000"
+                        maxlength="6"
+                        pattern="[0-9]*"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        required
+                    >
+                    <div class="code-timer" id="code-timer">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span id="timer-seconds">30</span>s
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary btn-full">Verify</button>
+                <div id="twofa-error" class="error"></div>
+            </form>
+
+            <div class="backup-section">
+                <p class="backup-text">Can't access your authenticator?</p>
+                <button type="button" class="btn-link" id="send-backup-btn" onclick="sendBackupCode()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Send code to email
+                </button>
+                <div id="backup-status" class="backup-status"></div>
+            </div>
+        </div>
+
+        <!-- Setup Link (only shown if 2FA not configured) -->
+        <div id="setup-link" class="setup-link" style="display: none;">
+            <a href="setup-2fa.html">Set up Two-Factor Authentication</a>
+        </div>
     </div>
 
+    <script src="js/totp.js"></script>
+    <script src="js/twofa.js"></script>
     <script src="js/auth.js"></script>
     <script>
-        // Handle login form submission
+        // State
+        let passwordVerified = false;
+        let timerInterval = null;
+
+        // Handle password form submission
         document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('error-message');
 
             if (!password) {
-                showError('Please enter a password');
+                showError('error-message', 'Please enter a password');
                 return;
             }
 
-            // Attempt login
-            const success = await login(password);
+            // Verify password
+            const isValid = await verifyPasswordOnly(password);
 
-            if (!success) {
-                // Error will be shown by login function
+            if (isValid) {
+                passwordVerified = true;
+
+                // Check if 2FA is enabled
+                if (TwoFA.isConfigured()) {
+                    // Show 2FA step
+                    document.getElementById('step-password').style.display = 'none';
+                    document.getElementById('step-2fa').style.display = 'block';
+                    document.getElementById('twofa-code').focus();
+                    startTimer();
+
+                    // Show email backup option if configured
+                    if (!TwoFA.isEmailConfigured()) {
+                        document.getElementById('send-backup-btn').style.display = 'none';
+                    }
+                } else {
+                    // 2FA not configured, complete login
+                    completeLogin();
+                }
+            } else {
                 document.getElementById('password').value = '';
                 document.getElementById('password').focus();
             }
         });
 
-        function showError(message) {
-            const errorElement = document.getElementById('error-message');
+        // Handle 2FA form submission
+        document.getElementById('twofa-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const code = document.getElementById('twofa-code').value;
+
+            if (!code || code.length !== 6) {
+                showError('twofa-error', 'Please enter a 6-digit code');
+                return;
+            }
+
+            // Verify 2FA code
+            const result = await TwoFA.verify(code);
+
+            if (result.valid) {
+                stopTimer();
+                completeLogin();
+            } else {
+                showError('twofa-error', 'Invalid code. Please try again.');
+                document.getElementById('twofa-code').value = '';
+                document.getElementById('twofa-code').focus();
+            }
+        });
+
+        // Send backup code via email
+        async function sendBackupCode() {
+            const btn = document.getElementById('send-backup-btn');
+            const status = document.getElementById('backup-status');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Sending...';
+            status.className = 'backup-status';
+            status.textContent = '';
+
+            try {
+                const result = await TwoFA.sendBackupCode();
+                status.className = 'backup-status success';
+                status.textContent = result.message;
+
+                // Show countdown for backup code
+                updateBackupCountdown();
+            } catch (error) {
+                status.className = 'backup-status error';
+                status.textContent = error.message;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Send new code
+                `;
+            }
+        }
+
+        // Update backup code countdown
+        function updateBackupCountdown() {
+            const status = document.getElementById('backup-status');
+            const remaining = TwoFA.getBackupCodeRemainingTime();
+
+            if (remaining > 0) {
+                const minutes = Math.floor(remaining / 60);
+                const seconds = remaining % 60;
+                status.textContent = `Code sent! Valid for ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                setTimeout(updateBackupCountdown, 1000);
+            } else {
+                status.textContent = 'Code expired. Request a new one.';
+                status.className = 'backup-status';
+            }
+        }
+
+        // Complete the login process
+        function completeLogin() {
+            // Generate session token
+            const token = generateToken();
+            sessionStorage.setItem('adminToken', token);
+            sessionStorage.setItem('loginTime', Date.now().toString());
+
+            // Reset login attempts
+            localStorage.removeItem('loginAttempts');
+            localStorage.removeItem('lockoutUntil');
+
+            // Redirect to dashboard
+            window.location.href = 'dashboard.html';
+        }
+
+        // Go back to password step
+        function goBackToPassword() {
+            passwordVerified = false;
+            stopTimer();
+            document.getElementById('step-2fa').style.display = 'none';
+            document.getElementById('step-password').style.display = 'block';
+            document.getElementById('password').value = '';
+            document.getElementById('twofa-code').value = '';
+            document.getElementById('twofa-error').classList.remove('show');
+            document.getElementById('backup-status').textContent = '';
+            document.getElementById('password').focus();
+        }
+
+        // Timer for TOTP code refresh
+        function startTimer() {
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimer() {
+            const remaining = TOTP.getRemainingSeconds();
+            const timerEl = document.getElementById('timer-seconds');
+            timerEl.textContent = remaining;
+
+            // Visual warning when time is low
+            const timerContainer = document.getElementById('code-timer');
+            if (remaining <= 5) {
+                timerContainer.classList.add('warning');
+            } else {
+                timerContainer.classList.remove('warning');
+            }
+        }
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeOpen = document.querySelector('.eye-open');
+            const eyeClosed = document.querySelector('.eye-closed');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'block';
+            } else {
+                passwordInput.type = 'password';
+                eyeOpen.style.display = 'block';
+                eyeClosed.style.display = 'none';
+            }
+        }
+
+        // Show error message
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
             errorElement.textContent = message;
             errorElement.classList.add('show');
 
@@ -72,24 +311,19 @@
             }, 5000);
         }
 
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleButton = document.getElementById('toggle-password');
+        // Auto-format 2FA code input
+        document.getElementById('twofa-code').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+        });
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleButton.textContent = '🙈';
-                toggleButton.title = 'Hide Password';
-            } else {
-                passwordInput.type = 'password';
-                toggleButton.textContent = '👁️';
-                toggleButton.title = 'Show Password';
-            }
-        }
-
-        // If already logged in, redirect to dashboard
+        // Check if already authenticated
         if (isAuthenticated()) {
             window.location.href = 'dashboard.html';
+        }
+
+        // Show setup link if 2FA not configured
+        if (!TwoFA.isConfigured()) {
+            document.getElementById('setup-link').style.display = 'block';
         }
     </script>
 </body>

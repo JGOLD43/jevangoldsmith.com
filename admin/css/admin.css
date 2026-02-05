@@ -1536,3 +1536,626 @@
         justify-content: center;
     }
 }
+
+/* ==================== TWO-FACTOR AUTHENTICATION ==================== */
+
+/* Login container adjustments for 2FA */
+.login-container {
+    max-width: 420px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper input {
+    padding-right: 50px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--admin-text-light);
+    transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+    color: var(--admin-primary);
+}
+
+.btn-full {
+    width: 100%;
+}
+
+/* 2FA Header */
+.twofa-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.twofa-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.twofa-header p {
+    margin: 0;
+    color: var(--admin-text-light);
+}
+
+.back-btn {
+    background: transparent;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--admin-text-light);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.back-btn:hover {
+    border-color: var(--admin-primary);
+    color: var(--admin-primary);
+}
+
+/* Code Input */
+.code-input-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.code-input {
+    flex: 1;
+    font-size: 1.5rem;
+    font-family: monospace;
+    letter-spacing: 0.5rem;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid var(--admin-border);
+    border-radius: 12px;
+    background: var(--admin-background);
+    transition: border-color 0.2s ease;
+}
+
+.code-input:focus {
+    outline: none;
+    border-color: var(--admin-secondary);
+}
+
+.code-input::placeholder {
+    color: var(--admin-border);
+    letter-spacing: 0.5rem;
+}
+
+.code-timer {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--admin-background);
+    border-radius: 8px;
+    color: var(--admin-text-light);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.code-timer.warning {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--admin-danger);
+}
+
+.code-timer.warning svg {
+    color: var(--admin-danger);
+}
+
+/* Backup Section */
+.backup-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--admin-border);
+    text-align: center;
+}
+
+.backup-text {
+    color: var(--admin-text-light);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    color: var(--admin-secondary);
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: opacity 0.2s ease;
+    font-family: 'Chivo', sans-serif;
+}
+
+.btn-link:hover {
+    opacity: 0.8;
+}
+
+.btn-link:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.backup-status {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    min-height: 1.5em;
+}
+
+.backup-status.success {
+    color: var(--admin-success);
+}
+
+.backup-status.error {
+    color: var(--admin-danger);
+}
+
+/* Setup Link */
+.setup-link {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--admin-border);
+    text-align: center;
+}
+
+.setup-link a {
+    color: var(--admin-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.setup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Spinner */
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==================== 2FA SETUP PAGE ==================== */
+.setup-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.setup-container > h1 {
+    text-align: center;
+    color: var(--admin-primary);
+    margin-bottom: 0.5rem;
+}
+
+.setup-subtitle {
+    text-align: center;
+    color: var(--admin-text-light);
+    margin-bottom: 2rem;
+}
+
+.setup-step {
+    display: flex;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: var(--admin-secondary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h2 {
+    font-size: 1.25rem;
+    color: var(--admin-primary);
+    margin-bottom: 0.5rem;
+}
+
+.step-content p {
+    color: var(--admin-text-light);
+    margin-bottom: 1rem;
+}
+
+/* Secret Key Display */
+.secret-key {
+    margin: 1.5rem 0;
+}
+
+.secret-key label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--admin-text-light);
+    margin-bottom: 0.5rem;
+}
+
+.secret-value {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--admin-background);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+}
+
+.secret-value code {
+    flex: 1;
+    font-size: 1.1rem;
+    font-family: monospace;
+    letter-spacing: 2px;
+    word-break: break-all;
+}
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--admin-text-light);
+    transition: color 0.2s ease;
+}
+
+.btn-icon:hover {
+    color: var(--admin-secondary);
+}
+
+/* QR Code */
+.qr-container {
+    text-align: center;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+.qr-container img {
+    display: block;
+}
+
+/* Manual Entry */
+.manual-entry {
+    background: var(--admin-background);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.manual-entry p {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.manual-entry ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.manual-entry li {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: var(--admin-text);
+}
+
+.manual-entry code {
+    background: var(--admin-surface);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+/* Step Buttons */
+.step-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Verify Result */
+.verify-result {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.verify-result.success {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--admin-success);
+}
+
+.verify-result.error {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--admin-danger);
+}
+
+/* Success Step */
+.success-step {
+    text-align: center;
+}
+
+.success-icon {
+    margin-bottom: 1rem;
+}
+
+.success-icon svg {
+    color: var(--admin-success);
+}
+
+/* Code Update Section */
+.code-update-section {
+    text-align: left;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--admin-background);
+    border-radius: 12px;
+}
+
+.code-update-section h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.code-block {
+    position: relative;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.code-block pre {
+    padding: 1rem;
+    margin: 0;
+    font-family: monospace;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.code-block .copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+/* Important Warning */
+.important-warning {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(243, 156, 18, 0.1);
+    border: 1px solid var(--admin-warning);
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    text-align: left;
+}
+
+.important-warning svg {
+    color: var(--admin-warning);
+    flex-shrink: 0;
+}
+
+.important-warning div {
+    font-size: 0.9rem;
+    color: var(--admin-text);
+}
+
+/* EmailJS Setup */
+.emailjs-setup {
+    text-align: left;
+}
+
+.emailjs-setup h3 {
+    font-size: 1.1rem;
+    color: var(--admin-primary);
+    margin-bottom: 1rem;
+}
+
+.emailjs-setup ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.emailjs-setup li {
+    margin-bottom: 0.75rem;
+    color: var(--admin-text);
+}
+
+.emailjs-setup ul {
+    margin-top: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.emailjs-setup a {
+    color: var(--admin-secondary);
+}
+
+.email-template-example {
+    background: var(--admin-background);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.email-template-example h4 {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.email-template-example pre {
+    font-family: monospace;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+.email-config-section {
+    margin-top: 1.5rem;
+}
+
+.email-config-section h4 {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Completion */
+.completion-checklist {
+    text-align: left;
+    margin: 2rem auto;
+    max-width: 300px;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    color: var(--admin-text-light);
+    font-size: 0.95rem;
+}
+
+.checklist-item.done {
+    color: var(--admin-success);
+}
+
+.checklist-item.done svg {
+    color: var(--admin-success);
+}
+
+.next-steps {
+    text-align: left;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--admin-background);
+    border-radius: 12px;
+}
+
+.next-steps h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.next-steps ol {
+    padding-left: 1.5rem;
+    margin: 0;
+}
+
+.next-steps li {
+    margin-bottom: 0.5rem;
+    color: var(--admin-text);
+}
+
+.back-to-login {
+    display: block;
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--admin-text-light);
+    font-size: 0.9rem;
+}
+
+.back-to-login:hover {
+    color: var(--admin-secondary);
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 0.75rem 1.5rem;
+    background: var(--admin-primary);
+    color: white;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .setup-container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .setup-step {
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
+    .step-number {
+        align-self: flex-start;
+    }
+
+    .code-input-container {
+        flex-direction: column;
+    }
+
+    .code-timer {
+        align-self: flex-end;
+    }
+
+    .step-buttons {
+        flex-direction: column;
+    }
+
+    .twofa-header {
+        flex-direction: column;
+    }
+}

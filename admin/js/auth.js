@@ -70,6 +70,53 @@ async function verifyPassword(password, hash) {
     return passwordHash === hash;
 }
 
+// Verify password only (for 2FA flow - doesn't complete login)
+async function verifyPasswordOnly(password) {
+    // Check if locked out
+    const lockoutUntil = localStorage.getItem('lockoutUntil');
+    if (lockoutUntil && Date.now() < parseInt(lockoutUntil)) {
+        const remainingTime = Math.ceil((parseInt(lockoutUntil) - Date.now()) / 60000);
+        if (typeof showError === 'function') {
+            showError('error-message', `Too many failed attempts. Try again in ${remainingTime} minute(s).`);
+        }
+        return false;
+    }
+
+    try {
+        const isValid = await verifyPassword(password, ADMIN_PASSWORD_HASH);
+
+        if (isValid) {
+            // Password valid - don't complete login yet, wait for 2FA
+            return true;
+        } else {
+            // Increment failed attempts
+            let attempts = parseInt(localStorage.getItem('loginAttempts') || '0') + 1;
+            localStorage.setItem('loginAttempts', attempts.toString());
+
+            if (attempts >= MAX_LOGIN_ATTEMPTS) {
+                const lockoutTime = Date.now() + LOCKOUT_DURATION;
+                localStorage.setItem('lockoutUntil', lockoutTime.toString());
+                if (typeof showError === 'function') {
+                    showError('error-message', `Too many failed attempts. Locked out for 15 minutes.`);
+                }
+            } else {
+                const remaining = MAX_LOGIN_ATTEMPTS - attempts;
+                if (typeof showError === 'function') {
+                    showError('error-message', `Invalid password. ${remaining} attempt(s) remaining.`);
+                }
+            }
+
+            return false;
+        }
+    } catch (error) {
+        console.error('Password verification error:', error);
+        if (typeof showError === 'function') {
+            showError('error-message', 'An error occurred. Please try again.');
+        }
+        return false;
+    }
+}
+
 // Check if user is authenticated
 function isAuthenticated() {
     const token = sessionStorage.getItem('adminToken');
