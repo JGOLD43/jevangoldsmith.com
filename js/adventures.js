@@ -352,9 +352,11 @@ function initWorldMap(adventures) {
         maxBoundsViscosity: 1.0
     }).setView([15, 50], 2);
 
-    // Use Stadia Alidade Satellite for clean satellite imagery
+    // Use ESRI World Imagery for clean satellite imagery
+    // errorTileUrl uses a transparent 1x1 pixel to hide "Map data not available" messages
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        noWrap: true
+        noWrap: true,
+        errorTileUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
     }).addTo(worldMap);
 
     // Add markers with popups for each adventure

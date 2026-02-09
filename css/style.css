@@ -4937,6 +4937,25 @@ body.meet-page {
     background: #0c1d2d;
 }
 
+/* Hide Leaflet tile loading errors and empty areas */
+.adventures-main-map .leaflet-tile-pane {
+    background: #0c1d2d;
+}
+
+.adventures-main-map .leaflet-tile.leaflet-tile-loaded[src=""] {
+    display: none;
+}
+
+/* Hide any error text that appears on failed tiles */
+.leaflet-tile-container img[alt],
+.leaflet-tile-container::after {
+    color: transparent !important;
+}
+
+.adventures-main-map .leaflet-container {
+    background: #0c1d2d;
+}
+
 .adventures-main-map .leaflet-control-zoom {
     margin-top: 80px;
     margin-right: 15px;
