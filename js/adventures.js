@@ -333,6 +333,11 @@ function initWorldMap(adventures) {
     }
 
     // Create fully interactive map for the large panel
+    // Set bounds to prevent infinite scrolling
+    const southWest = L.latLng(-85, -180);
+    const northEast = L.latLng(85, 180);
+    const bounds = L.latLngBounds(southWest, northEast);
+
     worldMap = L.map('world-map', {
         zoomControl: true,
         attributionControl: false,
@@ -340,10 +345,15 @@ function initWorldMap(adventures) {
         scrollWheelZoom: true,
         doubleClickZoom: true,
         touchZoom: true,
-        keyboard: true
+        keyboard: true,
+        minZoom: 2,
+        maxBounds: bounds,
+        maxBoundsViscosity: 1.0
     }).setView([20, 0], 2);
 
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(worldMap);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        noWrap: true
+    }).addTo(worldMap);
 
     // Add markers with popups for each adventure
     adventures.forEach(adventure => {
