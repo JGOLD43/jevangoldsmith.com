@@ -1,0 +1,210 @@
+{
+  "skills": [
+    {
+      "id": "first-principles-thinking",
+      "title": "First Principles Thinking",
+      "tagline": "Breaking problems down to their fundamental truths",
+      "category": "foundation",
+      "proficiency": "advanced",
+      "activity": "active",
+      "shortDescription": "Deconstructing problems to their most basic elements rather than reasoning by analogy or accepting conventional wisdom.",
+      "fullContent": "<p>Rather than reasoning by analogy or accepting conventional wisdom, I try to deconstruct problems to their most basic elements. What do we actually know to be true? What assumptions are we making? This approach takes longer but often reveals solutions that others miss.</p><p>I learned this framework from studying how Elon Musk approaches engineering problems, but I've found it applies equally well to business decisions, personal choices, and understanding complex systems.</p><p>The process involves three steps: identify your assumptions, break them down to fundamental truths, and rebuild your reasoning from there. It sounds simple, but it requires discipline to resist the pull of conventional thinking.</p>",
+      "importance": "First principles thinking is the foundation of original thought. Without it, we're simply remixing existing ideas and accepting limitations that may not actually exist. Every major innovation in history came from someone questioning 'the way things are done' and rebuilding from fundamental truths. In my own life, this skill has helped me see opportunities others miss and avoid traps that seem inevitable but aren't.",
+      "relatedSkills": ["deep-research", "strategic-thinking", "clear-communication"],
+      "skillInteractions": "First principles thinking pairs naturally with Deep Research - you need deep knowledge to identify true fundamentals versus assumed constraints. It enhances Strategic Thinking by ensuring your strategy is built on reality rather than inherited assumptions. And it improves Clear Communication because when you understand something from first principles, you can explain it more simply.",
+      "howIApply": [
+        "Questioning industry 'best practices' before accepting them",
+        "Building financial models from ground-up assumptions rather than templates",
+        "Evaluating career decisions based on fundamental goals, not conventional paths",
+        "Analyzing business opportunities by identifying what must be true for success"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "deep-research",
+      "title": "Deep Research",
+      "tagline": "Going beyond surface-level understanding",
+      "category": "foundation",
+      "proficiency": "advanced",
+      "activity": "active",
+      "shortDescription": "Digging into primary sources, academic papers, and original thinkers to understand topics at a level most people never reach.",
+      "fullContent": "<p>When I become interested in a topic, I don't stop at the first article or summary. I dig into primary sources, read academic papers, find the original thinkers, and try to understand the full context. This habit means I often know more about niche topics than people who work in those fields professionally.</p><p>The process itself is enjoyable to me. There's a satisfaction in connecting dots that others haven't seen, in finding that one obscure source that changes how you understand everything else.</p><p>Deep research isn't about memorizing facts - it's about building mental models that help you understand how systems actually work, not just how they appear to work on the surface.</p>",
+      "importance": "Surface-level knowledge is increasingly commoditized. Anyone can Google basic facts. The value comes from understanding nuance, context, and connections that aren't obvious. Deep research creates genuine expertise and reveals opportunities invisible to those with shallow understanding. It's also how you avoid being fooled by confident-sounding but wrong ideas.",
+      "relatedSkills": ["first-principles-thinking", "clear-communication", "strategic-thinking"],
+      "skillInteractions": "Deep research provides the raw material for First Principles Thinking - you can't identify fundamental truths without deep knowledge. It strengthens Clear Communication because true understanding enables simple explanations. And it's essential for Strategic Thinking since good strategy requires accurate understanding of the terrain.",
+      "howIApply": [
+        "Reading original books and papers instead of summaries or articles",
+        "Following citation trails to find foundational sources",
+        "Synthesizing insights across different domains and disciplines",
+        "Building comprehensive mental models of complex topics",
+        "Maintaining organized notes and knowledge systems"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "clear-communication",
+      "title": "Clear Communication",
+      "tagline": "Making complex ideas accessible",
+      "category": "foundation",
+      "proficiency": "intermediate",
+      "activity": "active",
+      "shortDescription": "Explaining complex ideas simply and ensuring understanding, not just sounding smart.",
+      "fullContent": "<p>I believe that if you truly understand something, you should be able to explain it simply. Writing forces clarity of thought - you can't hide behind jargon or hand-waving when the words are on the page. This is why I write essays: the process of articulating ideas reveals gaps in my own understanding.</p><p>Good communication isn't about sounding smart. It's about being understood. The best explanations meet people where they are and build up from there.</p><p>I'm still developing this skill, particularly in verbal communication. Written communication gives you time to think and revise; speaking requires real-time clarity that I'm working to improve.</p>",
+      "importance": "Ideas without communication have no impact. The ability to transfer understanding from your mind to another's is perhaps the most valuable skill for anyone who wants to influence the world. It multiplies the value of everything else you know. Poor communication means your insights stay trapped; excellent communication means your ideas spread and compound.",
+      "relatedSkills": ["deep-research", "first-principles-thinking"],
+      "skillInteractions": "Clear Communication is the output channel for everything else. Deep Research provides the substance to communicate. First Principles Thinking ensures you truly understand what you're explaining. The act of communicating also reveals gaps in your own understanding, creating a feedback loop that strengthens other skills.",
+      "howIApply": [
+        "Writing essays to clarify and share my thinking",
+        "Explaining technical concepts to non-technical people",
+        "Structuring presentations for maximum clarity",
+        "Using analogies and examples to bridge understanding gaps",
+        "Seeking feedback on whether my communication actually landed"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "financial-analysis",
+      "title": "Financial Analysis",
+      "tagline": "Understanding what the numbers actually mean",
+      "category": "applied",
+      "proficiency": "advanced",
+      "activity": "maintained",
+      "shortDescription": "Building and interpreting financial models to make better decisions under uncertainty.",
+      "fullContent": "<p>My commerce degree gave me the technical foundation, but real understanding came from applying these tools to actual decisions. I don't just know how to build a DCF model - I understand why it matters, when it's useful, and when other approaches work better.</p><p>Financial analysis is ultimately about making better decisions under uncertainty. The models are tools for thinking, not answers in themselves. The goal is to understand the key drivers and sensitivities, not to produce precise predictions.</p><p>The most valuable financial skill isn't technical - it's knowing which questions to ask and which assumptions matter most. A simple model with the right focus beats a complex model that obscures what's important.</p>",
+      "importance": "Money is the language of resource allocation. Understanding financial analysis means understanding how value is created, measured, and captured. It's essential for evaluating any business opportunity, investment decision, or career choice. Without this skill, you're flying blind in a world where most important decisions have financial implications.",
+      "relatedSkills": ["spreadsheet-mastery", "strategic-thinking", "first-principles-thinking"],
+      "skillInteractions": "Financial Analysis depends on Spreadsheet Mastery for implementation. It requires First Principles Thinking to question assumptions built into models. Strategic Thinking provides the context for what questions the analysis should answer. Together, these skills enable rigorous evaluation of opportunities.",
+      "howIApply": [
+        "Building valuation models for investment decisions",
+        "Analyzing real estate development feasibility",
+        "Personal financial planning and wealth building",
+        "Evaluating business cases and ROI projections",
+        "Understanding financial statements and key metrics"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "strategic-thinking",
+      "title": "Strategic Thinking",
+      "tagline": "Seeing the whole board, not just the next move",
+      "category": "applied",
+      "proficiency": "intermediate",
+      "activity": "active",
+      "shortDescription": "Making choices that position you well for the long term while understanding systems and competitive dynamics.",
+      "fullContent": "<p>Strategy is about making choices that position you well for the long term, even when the short-term costs are real. It requires understanding competitive dynamics, identifying leverage points, and having the discipline to stay focused on what matters.</p><p>I've developed this skill through studying business history, analyzing successful companies, and applying strategic frameworks to my own decisions. The best strategists I've studied all share one trait: they think in systems, not events.</p><p>Good strategy often means saying no to good opportunities because they don't fit. It means accepting short-term pain for long-term positioning. Most people optimize locally; strategic thinkers optimize globally across time.</p>",
+      "importance": "Without strategy, you're reactive - constantly responding to circumstances rather than shaping them. Strategic thinking lets you play a different game than everyone else, one where you have advantages. It's the difference between working hard in a bad position and working smart in a good one. Career success, business success, and life success all depend on making strategic choices.",
+      "relatedSkills": ["first-principles-thinking", "financial-analysis", "deep-research"],
+      "skillInteractions": "Strategic Thinking uses First Principles Thinking to question conventional strategic wisdom. It uses Financial Analysis to evaluate strategic options quantitatively. Deep Research provides the competitive and industry knowledge needed for good strategy. These skills combine to enable informed, original strategic decisions.",
+      "howIApply": [
+        "Long-term career and life planning with explicit trade-offs",
+        "Evaluating business opportunities and competitive positions",
+        "Making resource allocation decisions",
+        "Identifying leverage points and asymmetric opportunities",
+        "Avoiding local maxima by thinking about the full game"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "spreadsheet-mastery",
+      "title": "Spreadsheet Mastery",
+      "tagline": "Excel as a thinking tool, not just a calculator",
+      "category": "technical",
+      "proficiency": "advanced",
+      "activity": "maintained",
+      "shortDescription": "Using advanced spreadsheet techniques to build readable, auditable models that clarify thinking.",
+      "fullContent": "<p>Most people use 10% of what Excel can do. I've invested time in learning advanced formulas, data manipulation techniques, and model architecture because spreadsheets are one of the most powerful thinking tools available. A well-built model forces you to be explicit about your assumptions and logic.</p><p>The key insight is that spreadsheets should be readable and auditable. If someone else can't understand your model, it's not a good model - even if the calculations are correct.</p><p>I treat spreadsheet building like programming: clear structure, documentation, separation of inputs from calculations, error checking. This discipline pays off in reliability and the ability to update models over time.</p>",
+      "importance": "Spreadsheets are the universal business tool. Mastering them gives you superpowers in any analytical role. But beyond the practical value, building models teaches you to think rigorously about systems. The discipline of making every assumption explicit reveals fuzzy thinking. It's not just a tool - it's a way of thinking.",
+      "relatedSkills": ["financial-analysis", "first-principles-thinking"],
+      "skillInteractions": "Spreadsheet Mastery is the implementation layer for Financial Analysis. It enforces First Principles Thinking by requiring explicit assumptions. The skill combination enables rapid exploration of scenarios and sensitivity analysis that would be impractical otherwise.",
+      "howIApply": [
+        "Building complex financial models with proper documentation",
+        "Data analysis and visualization for decision-making",
+        "Automating repetitive tasks with formulas and macros",
+        "Creating dashboards and reporting tools",
+        "Scenario analysis with data tables and goal seek"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "ai-assisted-work",
+      "title": "AI-Assisted Work",
+      "tagline": "Multiplying my capabilities with intelligent tools",
+      "category": "technical",
+      "proficiency": "intermediate",
+      "activity": "active",
+      "shortDescription": "Using AI tools strategically as thinking partners while maintaining human direction and genuine understanding.",
+      "fullContent": "<p>I've learned to use AI tools like Claude not as a crutch, but as a thinking partner. The skill isn't in prompting - it's in knowing what questions to ask, how to structure problems, and when AI assistance helps versus when it hinders genuine understanding.</p><p>This website, for example, was built with AI assistance. But the ideas, the design decisions, the content - those are mine. AI helped me implement my vision faster than I could have alone. That's the right relationship: human direction, AI acceleration.</p><p>The key is maintaining critical thinking. AI can be confidently wrong. The skill is knowing when to trust, when to verify, and when to do the hard thinking yourself because that's where the real learning happens.</p>",
+      "importance": "AI is changing what individuals can accomplish. Those who learn to work effectively with AI will have significant advantages over those who don't. But the advantage goes to those who use AI to augment genuine capability, not replace it. Understanding this balance is crucial as AI becomes more capable.",
+      "relatedSkills": ["clear-communication", "first-principles-thinking", "deep-research"],
+      "skillInteractions": "AI-Assisted Work benefits from Clear Communication because better prompts yield better results. First Principles Thinking helps evaluate AI outputs critically. Deep Research skills help you know when AI is right versus confidently wrong. The combination enables rapid learning and implementation.",
+      "howIApply": [
+        "Rapid prototyping and implementation of ideas",
+        "Research synthesis and information processing",
+        "Learning new skills faster through interactive dialogue",
+        "Code generation and debugging with review",
+        "Draft generation with human editing and refinement"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "real-estate-development",
+      "title": "Real Estate Development",
+      "tagline": "Understanding how physical spaces get built",
+      "category": "learning",
+      "proficiency": "beginner",
+      "activity": "active",
+      "shortDescription": "Learning the full lifecycle of development from site acquisition through construction and lease-up.",
+      "fullContent": "<p>I'm actively studying how real estate development works - from site acquisition to feasibility analysis to project management. This combines my financial skills with a tangible, physical outcome that creates lasting value.</p><p>The appeal is the complexity: development touches finance, design, construction, marketing, and community relations. It's a field where deep knowledge compounds over time and relationships matter enormously.</p><p>I'm approaching this systematically - studying the fundamentals, analyzing deals, building relationships with people in the industry, and looking for opportunities to get involved in actual projects, even in small ways initially.</p>",
+      "importance": "Real estate development creates physical infrastructure that shapes how people live and work. It's one of the oldest wealth-building activities and one where local knowledge and relationships create real competitive advantages. Learning this field opens opportunities that pure financial or tech skills don't access.",
+      "relatedSkills": ["financial-analysis", "strategic-thinking", "spreadsheet-mastery"],
+      "skillInteractions": "Financial Analysis is essential for development feasibility. Strategic Thinking helps with site selection and market positioning. Spreadsheet Mastery enables building pro formas and tracking project economics. This skill builds on my existing foundation while adding new dimensions.",
+      "howIApply": [
+        "Development feasibility analysis and pro forma modeling",
+        "Understanding zoning, planning, and approval processes",
+        "Building relationships in the local development community",
+        "Analyzing market conditions and comparable projects",
+        "Learning construction basics and project management"
+      ],
+      "status": "published"
+    }
+  ],
+  "categories": {
+    "foundation": {
+      "name": "Foundation Skills",
+      "icon": "layers",
+      "description": "Core thinking and reasoning skills that underpin everything else",
+      "color": "#4A5568"
+    },
+    "applied": {
+      "name": "Applied Skills",
+      "icon": "wrench",
+      "description": "Practical skills for analysis and decision-making",
+      "color": "#2B6CB0"
+    },
+    "technical": {
+      "name": "Technical Skills",
+      "icon": "code",
+      "description": "Tools and technologies I use to get work done",
+      "color": "#2F855A"
+    },
+    "learning": {
+      "name": "Currently Learning",
+      "icon": "book",
+      "description": "Skills I'm actively developing right now",
+      "color": "#C05621"
+    }
+  },
+  "proficiencyLevels": {
+    "novice": { "label": "Novice", "level": 1, "description": "Just starting, basic awareness" },
+    "beginner": { "label": "Beginner", "level": 2, "description": "Developing fundamentals" },
+    "intermediate": { "label": "Intermediate", "level": 3, "description": "Comfortable applying" },
+    "advanced": { "label": "Advanced", "level": 4, "description": "Strong proficiency" },
+    "master": { "label": "Master", "level": 5, "description": "Deep expertise" }
+  },
+  "activityStatuses": {
+    "active": { "label": "Active", "color": "#48BB78", "description": "Currently practicing and developing" },
+    "maintained": { "label": "Maintained", "color": "#ECC94B", "description": "Regularly used but not actively developing" },
+    "dormant": { "label": "Dormant", "color": "#A0AEC0", "description": "Have the skill but not currently using" }
+  },
+  "lastUpdated": "2026-02-09T00:00:00Z"
+}

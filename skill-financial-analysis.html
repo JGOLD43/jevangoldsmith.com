@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Analysis - Jevan Goldsmith</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .skill-detail-hero { padding: 3rem 0 2rem; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .skill-detail-hero h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .skill-detail-tagline { font-size: 1.25rem; font-style: italic; color: var(--text-light); margin-bottom: 1.5rem; }
+        .skill-detail-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; }
+        .skill-meta-item { display: flex; align-items: center; gap: 0.5rem; }
+        .skill-meta-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); font-weight: 600; }
+        .skill-meta-value { font-weight: 600; color: var(--text-color); }
+        .proficiency-bar { display: flex; align-items: center; gap: 0.75rem; }
+        .proficiency-segments { display: flex; gap: 4px; }
+        .proficiency-segment { width: 28px; height: 8px; border-radius: 4px; background: var(--border-color); }
+        .proficiency-segment.filled { background: var(--secondary-color); }
+        .proficiency-label { font-size: 0.85rem; color: var(--text-light); font-weight: 500; }
+        .activity-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0.6rem; border-radius: 100px; font-size: 0.75rem; font-weight: 600; }
+        .activity-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .activity-active { background: rgba(72, 187, 120, 0.15); color: #48BB78; }
+        .activity-active .activity-dot { background: #48BB78; }
+        .activity-maintained { background: rgba(236, 201, 75, 0.15); color: #D69E2E; }
+        .activity-maintained .activity-dot { background: #ECC94B; }
+        .activity-dormant { background: rgba(160, 174, 192, 0.15); color: #718096; }
+        .activity-dormant .activity-dot { background: #A0AEC0; }
+        .skill-detail-content { max-width: 800px; }
+        .skill-section { margin-bottom: 2.5rem; }
+        .skill-section h2 { font-size: 1.35rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-color); }
+        .skill-section p { font-size: 1rem; line-height: 1.8; color: var(--text-color); margin-bottom: 1rem; }
+        .skill-section ul { list-style: none; padding: 0; }
+        .skill-section li { position: relative; padding-left: 1.5rem; margin-bottom: 0.75rem; font-size: 1rem; line-height: 1.6; }
+        .skill-section li::before { content: "→"; position: absolute; left: 0; color: var(--secondary-color); font-weight: 600; }
+        .related-skills { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-skill-link { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; text-decoration: none; color: var(--text-color); font-weight: 500; transition: all 0.2s ease; }
+        .related-skill-link:hover { border-color: var(--secondary-color); color: var(--secondary-color); }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-light); text-decoration: none; font-weight: 500; margin-bottom: 2rem; transition: color 0.2s ease; }
+        .back-link:hover { color: var(--secondary-color); }
+        .back-link svg { width: 18px; height: 18px; }
+        .category-tag { display: inline-block; padding: 0.25rem 0.75rem; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 100px; font-size: 0.8rem; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-left">
+                <a href="index.html" class="logo"><img src="images/logo.png" alt="J.GOLDSMITH" class="logo-image logo-static" width="88" height="80" decoding="async"></a>
+                <div class="wisdom-ticker"><div class="wisdom-ticker-track"><span class="wisdom-item">Stay curious, stay humble</span><span class="wisdom-item">Build for decades, not quarters</span><span class="wisdom-item">First principles thinking</span><span class="wisdom-item">Actions reveal priorities</span><span class="wisdom-item">Compound interest in all things</span><span class="wisdom-item">Stay curious, stay humble</span></div></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li class="nav-dropdown"><a href="#" class="dropdown-trigger">Explore</a><div class="dropdown-menu dropdown-menu-wide"><div class="dropdown-wide-header">What I Am About</div><div class="dropdown-columns"><div class="dropdown-column"><a href="north-star.html">North Star</a><a href="my-roadmap.html">My Roadmap</a><a href="about.html">About Me</a></div><div class="dropdown-column"><a href="health.html">Health</a><a href="flaws.html">Flaws</a><a href="dateme.html">Date Me</a></div></div></div></li>
+                <li class="nav-dropdown"><a href="#" class="dropdown-trigger">Taste</a><div class="dropdown-menu dropdown-menu-wide"><div class="dropdown-wide-header">Things I Interact With</div><div class="dropdown-columns"><div class="dropdown-column"><a href="books.html">Reading</a><a href="movies.html">Movies</a><a href="music.html">Music</a></div><div class="dropdown-column"><a href="podcasts.html">Podcasts</a><a href="products.html">Products</a><a href="food.html">Food</a></div></div></div></li>
+                <li><a href="adventures.html">Adventures</a></li>
+                <li class="nav-dropdown"><a href="#" class="dropdown-trigger">Experience</a><div class="dropdown-menu dropdown-menu-wide"><div class="dropdown-wide-header">Things I think up, build and learn</div><div class="dropdown-columns"><div class="dropdown-column"><a href="essays.html">Essays</a><a href="projects.html">Projects</a><a href="challenges.html">Challenges</a></div><div class="dropdown-column"><a href="skills.html">Skills</a><a href="lesson-logger.html">Lesson Logger</a></div></div></div></li>
+            </ul>
+            <div class="navbar-right">
+                <button class="theme-toggle" aria-label="Toggle theme"><svg class="theme-toggle-icon icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg><svg class="theme-toggle-icon icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+                <div class="navbar-contact"><a href="meet.html" class="navbar-contact-btn"><span>Let's Chat</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></a></div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <a href="applied-skills.html" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Applied Skills
+        </a>
+
+        <div class="skill-detail-hero">
+            <span class="category-tag" id="skill-category">Applied</span>
+            <h1 id="skill-title">Financial Analysis</h1>
+            <p class="skill-detail-tagline" id="skill-tagline">Understanding what the numbers actually mean</p>
+            <div class="skill-detail-meta">
+                <div class="skill-meta-item">
+                    <span class="skill-meta-label">Proficiency</span>
+                    <div class="proficiency-bar" id="skill-proficiency"></div>
+                </div>
+                <div class="skill-meta-item">
+                    <span class="skill-meta-label">Status</span>
+                    <span id="skill-activity"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="skill-detail-content">
+            <section class="skill-section">
+                <div id="skill-full-content"></div>
+            </section>
+
+            <section class="skill-section">
+                <h2>Why This Matters</h2>
+                <p id="skill-importance"></p>
+            </section>
+
+            <section class="skill-section">
+                <h2>How I Apply This</h2>
+                <ul id="skill-applications"></ul>
+            </section>
+
+            <section class="skill-section">
+                <h2>Skill Interactions</h2>
+                <p id="skill-interactions"></p>
+                <div class="related-skills" id="related-skills"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="container"><div class="footer-content"><p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p></div></div></footer>
+    <script src="js/theme.js"></script>
+    <script src="js/skills.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { initSkillDetailPage('financial-analysis'); });</script>
+</body>
+</html>
