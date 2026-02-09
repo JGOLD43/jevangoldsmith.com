@@ -10,217 +10,404 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Experience Pages Shared Styles */
-        .experience-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 3rem 2rem 4rem;
+        /* Skills Page Layout - Mirrors Essays Layout */
+        .skills-layout {
+            display: flex;
+            min-height: calc(100vh - 80px);
+            padding-top: 80px;
         }
 
-        .experience-header {
-            text-align: center;
-            margin-bottom: 3rem;
+        /* Sidebar Styles */
+        .skills-sidebar {
+            width: 280px;
+            min-width: 280px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            transition: all 0.3s ease;
         }
 
-        .experience-eyebrow {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--secondary-color);
-            margin-bottom: 0.75rem;
+        .skills-sidebar.collapsed {
+            width: 60px;
+            min-width: 60px;
         }
 
-        .experience-title {
-            font-size: 2.5rem;
-            font-weight: 700;
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0 1rem 1rem;
+            border-bottom: 1px solid var(--border-color);
             margin-bottom: 1rem;
         }
 
-        .experience-subtitle {
-            font-size: 1.1rem;
+        .sidebar-collapse-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
             color: var(--text-light);
-            max-width: 600px;
-            margin: 0 auto;
+            border-radius: 6px;
+            transition: all 0.2s ease;
         }
 
-        /* Skills Grid */
-        .skills-section {
-            margin-bottom: 3rem;
+        .sidebar-collapse-btn:hover {
+            background: var(--background-alt);
+            color: var(--text-color);
         }
 
-        .skills-section-header {
+        .sidebar-browse-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-light);
+        }
+
+        .skills-sidebar.collapsed .sidebar-browse-label,
+        .skills-sidebar.collapsed .category-name,
+        .skills-sidebar.collapsed .category-count {
+            display: none;
+        }
+
+        /* List Selector */
+        .sidebar-list-selector {
+            padding: 0 1rem 1rem;
+        }
+
+        .list-dropdown {
+            position: relative;
+        }
+
+        .list-dropdown-btn {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--background-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: all 0.2s ease;
         }
 
-        .skills-section-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .list-dropdown-btn:hover {
+            border-color: var(--secondary-color);
+        }
+
+        .list-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            display: none;
+        }
+
+        .list-dropdown-menu.active {
+            display: block;
+        }
+
+        .list-option {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .list-option:hover,
+        .list-option.active {
             background: var(--background-alt);
             color: var(--secondary-color);
         }
 
-        .skills-section-icon svg {
-            width: 20px;
-            height: 20px;
+        /* Sidebar Sections */
+        .sidebar-section {
+            padding: 0.25rem 0.75rem;
         }
 
-        .skills-section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        /* Skill Item */
-        .skill-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.25rem;
-            transition: all 0.2s ease;
-        }
-
-        .skill-item:hover {
-            border-color: var(--secondary-color);
-        }
-
-        .skill-header {
+        .sidebar-category {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.75rem;
-        }
-
-        .skill-name {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .skill-level {
-            font-size: 0.75rem;
-            font-weight: 500;
-            padding: 0.2rem 0.6rem;
-            border-radius: 100px;
-            background: var(--background-alt);
-            color: var(--text-light);
-        }
-
-        .skill-level.expert {
-            background: rgba(46, 204, 113, 0.15);
-            color: #27ae60;
-        }
-
-        .skill-level.advanced {
-            background: rgba(52, 152, 219, 0.15);
-            color: #2980b9;
-        }
-
-        .skill-level.intermediate {
-            background: rgba(241, 196, 15, 0.15);
-            color: #d4ac0d;
-        }
-
-        .skill-level.learning {
-            background: rgba(155, 89, 182, 0.15);
-            color: #8e44ad;
-        }
-
-        .skill-bar {
-            height: 6px;
-            background: var(--background-alt);
-            border-radius: 100px;
-            overflow: hidden;
-        }
-
-        .skill-bar-fill {
-            height: 100%;
-            border-radius: 100px;
-            background: linear-gradient(90deg, var(--secondary-color), #e0c590);
-            transition: width 0.5s ease;
-        }
-
-        .skill-description {
-            margin-top: 0.75rem;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            line-height: 1.5;
-        }
-
-        /* Learning List */
-        .learning-section {
-            margin-top: 3rem;
-            padding-top: 3rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .learning-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
-
-        .learning-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.25rem;
-            text-align: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.75rem;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-color);
             transition: all 0.2s ease;
+            text-align: left;
         }
 
-        .learning-item:hover {
-            border-color: var(--secondary-color);
-            transform: translateY(-2px);
+        .sidebar-category:hover {
+            background: var(--background-alt);
         }
 
-        .learning-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+        .sidebar-category.active {
+            background: var(--text-color);
+            color: var(--card-bg);
+        }
+
+        .category-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
+            min-width: 24px;
+        }
+
+        .category-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .category-count {
             background: var(--background-alt);
-            font-size: 1.5rem;
-        }
-
-        .learning-name {
-            font-size: 1rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            color: var(--text-light);
         }
 
-        .learning-status {
+        .sidebar-category.active .category-count {
+            background: rgba(255,255,255,0.2);
+            color: var(--card-bg);
+        }
+
+        /* Main Content */
+        .skills-main {
+            flex: 1;
+            padding: 2rem 3rem;
+            max-width: 900px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .header-counter {
+            text-align: right;
+        }
+
+        .counter-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            line-height: 1;
+        }
+
+        .counter-label {
             font-size: 0.8rem;
             color: var(--text-light);
         }
 
+        /* Skill Card - Essay-like style */
+        .skill-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .skill-card:hover {
+            border-color: var(--secondary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .skill-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-card-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .skill-card-category {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--secondary-color);
+        }
+
+        .skill-card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .skill-card-tagline {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .skill-card-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+
+        .skill-card-content p {
+            margin-bottom: 1rem;
+        }
+
+        .skill-card-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* How I Apply Section */
+        .skill-applications {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .skill-applications h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .application-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .application-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .application-item svg {
+            min-width: 18px;
+            color: var(--secondary-color);
+            margin-top: 2px;
+        }
+
+        /* Section Header in Main */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2.5rem 0 1.5rem;
+            color: var(--text-light);
+        }
+
+        .section-divider-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--background-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+        }
+
+        .section-divider-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .section-divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
         /* Responsive */
+        @media (max-width: 1024px) {
+            .skills-sidebar {
+                width: 60px;
+                min-width: 60px;
+            }
+            .skills-sidebar .sidebar-browse-label,
+            .skills-sidebar .category-name,
+            .skills-sidebar .category-count,
+            .skills-sidebar .sidebar-list-selector {
+                display: none;
+            }
+            .skills-main {
+                padding: 1.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            .experience-title {
-                font-size: 2rem;
+            .skills-layout {
+                flex-direction: column;
             }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
+            .skills-sidebar {
+                width: 100%;
+                min-width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
             }
-
-            .learning-grid {
-                grid-template-columns: 1fr;
+            .skills-sidebar .sidebar-browse-label,
+            .skills-sidebar .category-name,
+            .skills-sidebar .category-count,
+            .skills-sidebar .sidebar-list-selector {
+                display: block;
+            }
+            .main-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .header-counter {
+                text-align: left;
             }
         }
     </style>
@@ -364,159 +551,411 @@
         </div>
     </nav>
 
-    <main class="experience-content">
-        <header class="experience-header">
-            <p class="experience-eyebrow">What I Know</p>
-            <h1 class="experience-title">Skills</h1>
-            <p class="experience-subtitle">A honest assessment of my capabilities. Always learning, always improving.</p>
-        </header>
+    <main class="skills-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="skills-sidebar" id="skills-sidebar">
+            <div class="sidebar-header">
+                <button class="sidebar-collapse-btn" onclick="toggleSkillsSidebar()" title="Collapse sidebar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                    </svg>
+                </button>
+                <span class="sidebar-browse-label">Browse</span>
+            </div>
 
-        <!-- Finance & Business -->
-        <section class="skills-section">
-            <div class="skills-section-header">
-                <div class="skills-section-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                </div>
-                <h2 class="skills-section-title">Finance & Business</h2>
-            </div>
-            <div class="skills-grid">
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">Financial Analysis</span>
-                        <span class="skill-level advanced">Advanced</span>
+            <!-- List Selector -->
+            <div class="sidebar-list-selector">
+                <div class="list-dropdown" id="list-dropdown">
+                    <button class="list-dropdown-btn" onclick="toggleListDropdown()">
+                        <span id="current-list-name">Skills</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="list-dropdown-menu" id="list-dropdown-menu">
+                        <a href="essays.html" class="list-option">Essays</a>
+                        <a href="skills.html" class="list-option active">Skills</a>
+                        <a href="projects.html" class="list-option">Projects</a>
+                        <a href="challenges.html" class="list-option">Challenges</a>
                     </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 80%;"></div></div>
-                    <p class="skill-description">Financial modeling, valuation, and investment analysis from my commerce degree and ongoing work.</p>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">Real Estate Analysis</span>
-                        <span class="skill-level intermediate">Intermediate</span>
-                    </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 60%;"></div></div>
-                    <p class="skill-description">Property evaluation, development feasibility, and market research.</p>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">Business Strategy</span>
-                        <span class="skill-level intermediate">Intermediate</span>
-                    </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 65%;"></div></div>
-                    <p class="skill-description">Strategic thinking, competitive analysis, and business model evaluation.</p>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">Excel / Spreadsheets</span>
-                        <span class="skill-level expert">Expert</span>
-                    </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 90%;"></div></div>
-                    <p class="skill-description">Advanced formulas, financial models, data analysis, and automation.</p>
                 </div>
             </div>
-        </section>
 
-        <!-- Technology -->
-        <section class="skills-section">
-            <div class="skills-section-header">
-                <div class="skills-section-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                </div>
-                <h2 class="skills-section-title">Technology</h2>
+            <!-- All Skills -->
+            <div class="sidebar-section">
+                <button class="sidebar-category active" onclick="filterSkills('all')" data-category="all">
+                    <span class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 16v-4M12 8h.01"></path>
+                        </svg>
+                    </span>
+                    <span class="category-name">All Skills</span>
+                    <span class="category-count">8</span>
+                </button>
             </div>
-            <div class="skills-grid">
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">HTML / CSS</span>
-                        <span class="skill-level intermediate">Intermediate</span>
-                    </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 70%;"></div></div>
-                    <p class="skill-description">Web development basics, responsive design, modern CSS.</p>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">JavaScript</span>
-                        <span class="skill-level learning">Learning</span>
-                    </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 40%;"></div></div>
-                    <p class="skill-description">DOM manipulation, basic programming concepts, still improving.</p>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">No-Code Tools</span>
-                        <span class="skill-level advanced">Advanced</span>
-                    </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 85%;"></div></div>
-                    <p class="skill-description">Notion, Airtable, Zapier, and other productivity tools.</p>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">AI Tools</span>
-                        <span class="skill-level advanced">Advanced</span>
-                    </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 80%;"></div></div>
-                    <p class="skill-description">Effective use of Claude, ChatGPT, and other AI assistants for productivity.</p>
-                </div>
-            </div>
-        </section>
 
-        <!-- Communication -->
-        <section class="skills-section">
-            <div class="skills-section-header">
-                <div class="skills-section-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                </div>
-                <h2 class="skills-section-title">Communication</h2>
+            <!-- Foundation Skills -->
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="filterSkills('foundation')" data-category="foundation">
+                    <span class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </span>
+                    <span class="category-name">Foundation Skills</span>
+                    <span class="category-count">3</span>
+                </button>
             </div>
-            <div class="skills-grid">
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">Writing</span>
-                        <span class="skill-level advanced">Advanced</span>
-                    </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 80%;"></div></div>
-                    <p class="skill-description">Essays, analysis, and clear communication of complex ideas.</p>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">Research</span>
-                        <span class="skill-level advanced">Advanced</span>
-                    </div>
-                    <div class="skill-bar"><div class="skill-bar-fill" style="width: 85%;"></div></div>
-                    <p class="skill-description">Deep dives, synthesizing information, finding patterns.</p>
-                </div>
-            </div>
-        </section>
 
-        <!-- Currently Learning -->
-        <section class="learning-section">
-            <div class="experience-header" style="margin-bottom: 2rem;">
-                <p class="experience-eyebrow">Always Improving</p>
-                <h2 class="experience-title" style="font-size: 1.75rem;">Currently Learning</h2>
+            <!-- Applied Skills -->
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="filterSkills('applied')" data-category="applied">
+                    <span class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                        </svg>
+                    </span>
+                    <span class="category-name">Applied Skills</span>
+                    <span class="category-count">2</span>
+                </button>
             </div>
-            <div class="learning-grid">
-                <div class="learning-item">
-                    <div class="learning-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--secondary-color)" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                    </div>
-                    <h3 class="learning-name">Real Estate Development</h3>
-                    <p class="learning-status">Active study</p>
-                </div>
-                <div class="learning-item">
-                    <div class="learning-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--secondary-color)" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                    </div>
-                    <h3 class="learning-name">Python</h3>
-                    <p class="learning-status">Starting soon</p>
-                </div>
-                <div class="learning-item">
-                    <div class="learning-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--secondary-color)" stroke-width="2"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
-                    </div>
-                    <h3 class="learning-name">Prompt Engineering</h3>
-                    <p class="learning-status">Ongoing</p>
-                </div>
+
+            <!-- Technical Skills -->
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="filterSkills('technical')" data-category="technical">
+                    <span class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                    </span>
+                    <span class="category-name">Technical Skills</span>
+                    <span class="category-count">2</span>
+                </button>
             </div>
-        </section>
+
+            <!-- Currently Learning -->
+            <div class="sidebar-section">
+                <button class="sidebar-category" onclick="filterSkills('learning')" data-category="learning">
+                    <span class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                    </span>
+                    <span class="category-name">Currently Learning</span>
+                    <span class="category-count">1</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="skills-main">
+            <header class="main-header">
+                <div class="header-content">
+                    <h1>Skills</h1>
+                    <p class="header-subtitle">How I think, learn, and apply what I know</p>
+                </div>
+                <div class="header-counter">
+                    <span class="counter-number">8</span>
+                    <span class="counter-label">Skills Documented</span>
+                </div>
+            </header>
+
+            <div id="skills-container">
+                <!-- Foundation Skills Section -->
+                <div class="section-divider" data-category="foundation">
+                    <div class="section-divider-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <span class="section-divider-text">Foundation Skills</span>
+                    <div class="section-divider-line"></div>
+                </div>
+
+                <!-- First Principles Thinking -->
+                <article class="skill-card" data-category="foundation">
+                    <div class="skill-card-header">
+                        <span class="skill-card-category">Foundation</span>
+                    </div>
+                    <h2 class="skill-card-title">First Principles Thinking</h2>
+                    <p class="skill-card-tagline">Breaking problems down to their fundamental truths.</p>
+                    <div class="skill-card-content">
+                        <p>Rather than reasoning by analogy or accepting conventional wisdom, I try to deconstruct problems to their most basic elements. What do we actually know to be true? What assumptions are we making? This approach takes longer but often reveals solutions that others miss.</p>
+                        <p>I learned this framework from studying how Elon Musk approaches engineering problems, but I've found it applies equally well to business decisions, personal choices, and understanding complex systems.</p>
+                    </div>
+                    <div class="skill-applications">
+                        <h4>How I Apply This</h4>
+                        <div class="application-list">
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Questioning industry "best practices" before accepting them</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Building financial models from ground-up assumptions</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Evaluating career decisions based on fundamental goals</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Deep Research -->
+                <article class="skill-card" data-category="foundation">
+                    <div class="skill-card-header">
+                        <span class="skill-card-category">Foundation</span>
+                    </div>
+                    <h2 class="skill-card-title">Deep Research</h2>
+                    <p class="skill-card-tagline">Going beyond surface-level understanding.</p>
+                    <div class="skill-card-content">
+                        <p>When I become interested in a topic, I don't stop at the first article or summary. I dig into primary sources, read academic papers, find the original thinkers, and try to understand the full context. This habit means I often know more about niche topics than people who work in those fields professionally.</p>
+                        <p>The process itself is enjoyable to me. There's a satisfaction in connecting dots that others haven't seen, in finding that one obscure source that changes how you understand everything else.</p>
+                    </div>
+                    <div class="skill-applications">
+                        <h4>How I Apply This</h4>
+                        <div class="application-list">
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Reading original books instead of summaries</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Following citation trails to find foundational papers</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Synthesizing insights across different domains</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Clear Communication -->
+                <article class="skill-card" data-category="foundation">
+                    <div class="skill-card-header">
+                        <span class="skill-card-category">Foundation</span>
+                    </div>
+                    <h2 class="skill-card-title">Clear Communication</h2>
+                    <p class="skill-card-tagline">Making complex ideas accessible.</p>
+                    <div class="skill-card-content">
+                        <p>I believe that if you truly understand something, you should be able to explain it simply. Writing forces clarity of thought - you can't hide behind jargon or hand-waving when the words are on the page. This is why I write essays: the process of articulating ideas reveals gaps in my own understanding.</p>
+                        <p>Good communication isn't about sounding smart. It's about being understood. The best explanations meet people where they are and build up from there.</p>
+                    </div>
+                    <div class="skill-applications">
+                        <h4>How I Apply This</h4>
+                        <div class="application-list">
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Writing essays to clarify and share my thinking</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Explaining technical concepts to non-technical people</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Structuring presentations for maximum clarity</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Applied Skills Section -->
+                <div class="section-divider" data-category="applied">
+                    <div class="section-divider-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                        </svg>
+                    </div>
+                    <span class="section-divider-text">Applied Skills</span>
+                    <div class="section-divider-line"></div>
+                </div>
+
+                <!-- Financial Analysis -->
+                <article class="skill-card" data-category="applied">
+                    <div class="skill-card-header">
+                        <span class="skill-card-category">Applied</span>
+                    </div>
+                    <h2 class="skill-card-title">Financial Analysis</h2>
+                    <p class="skill-card-tagline">Understanding what the numbers actually mean.</p>
+                    <div class="skill-card-content">
+                        <p>My commerce degree gave me the technical foundation, but real understanding came from applying these tools to actual decisions. I don't just know how to build a DCF model - I understand why it matters, when it's useful, and when other approaches work better.</p>
+                        <p>Financial analysis is ultimately about making better decisions under uncertainty. The models are tools for thinking, not answers in themselves. The goal is to understand the key drivers and sensitivities, not to produce precise predictions.</p>
+                    </div>
+                    <div class="skill-applications">
+                        <h4>How I Apply This</h4>
+                        <div class="application-list">
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Building valuation models for investment decisions</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Analyzing real estate development feasibility</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Personal financial planning and wealth building</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Strategic Thinking -->
+                <article class="skill-card" data-category="applied">
+                    <div class="skill-card-header">
+                        <span class="skill-card-category">Applied</span>
+                    </div>
+                    <h2 class="skill-card-title">Strategic Thinking</h2>
+                    <p class="skill-card-tagline">Seeing the whole board, not just the next move.</p>
+                    <div class="skill-card-content">
+                        <p>Strategy is about making choices that position you well for the long term, even when the short-term costs are real. It requires understanding competitive dynamics, identifying leverage points, and having the discipline to stay focused on what matters.</p>
+                        <p>I've developed this skill through studying business history, analyzing successful companies, and applying strategic frameworks to my own decisions. The best strategists I've studied all share one trait: they think in systems, not events.</p>
+                    </div>
+                    <div class="skill-applications">
+                        <h4>How I Apply This</h4>
+                        <div class="application-list">
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Long-term career and life planning</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Evaluating business opportunities and competitive positions</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Making resource allocation decisions</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Technical Skills Section -->
+                <div class="section-divider" data-category="technical">
+                    <div class="section-divider-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                    </div>
+                    <span class="section-divider-text">Technical Skills</span>
+                    <div class="section-divider-line"></div>
+                </div>
+
+                <!-- Spreadsheet Mastery -->
+                <article class="skill-card" data-category="technical">
+                    <div class="skill-card-header">
+                        <span class="skill-card-category">Technical</span>
+                    </div>
+                    <h2 class="skill-card-title">Spreadsheet Mastery</h2>
+                    <p class="skill-card-tagline">Excel as a thinking tool, not just a calculator.</p>
+                    <div class="skill-card-content">
+                        <p>Most people use 10% of what Excel can do. I've invested time in learning advanced formulas, data manipulation techniques, and model architecture because spreadsheets are one of the most powerful thinking tools available. A well-built model forces you to be explicit about your assumptions and logic.</p>
+                        <p>The key insight is that spreadsheets should be readable and auditable. If someone else can't understand your model, it's not a good model - even if the calculations are correct.</p>
+                    </div>
+                    <div class="skill-applications">
+                        <h4>How I Apply This</h4>
+                        <div class="application-list">
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Building complex financial models with proper documentation</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Data analysis and visualization for decision-making</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Automating repetitive tasks with macros and formulas</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- AI-Assisted Work -->
+                <article class="skill-card" data-category="technical">
+                    <div class="skill-card-header">
+                        <span class="skill-card-category">Technical</span>
+                    </div>
+                    <h2 class="skill-card-title">AI-Assisted Work</h2>
+                    <p class="skill-card-tagline">Multiplying my capabilities with intelligent tools.</p>
+                    <div class="skill-card-content">
+                        <p>I've learned to use AI tools like Claude not as a crutch, but as a thinking partner. The skill isn't in prompting - it's in knowing what questions to ask, how to structure problems, and when AI assistance helps versus when it hinders genuine understanding.</p>
+                        <p>This website, for example, was built with AI assistance. But the ideas, the design decisions, the content - those are mine. AI helped me implement my vision faster than I could have alone. That's the right relationship: human direction, AI acceleration.</p>
+                    </div>
+                    <div class="skill-applications">
+                        <h4>How I Apply This</h4>
+                        <div class="application-list">
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Rapid prototyping and implementation of ideas</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Research synthesis and information processing</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Learning new skills faster through interactive dialogue</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Currently Learning Section -->
+                <div class="section-divider" data-category="learning">
+                    <div class="section-divider-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                    </div>
+                    <span class="section-divider-text">Currently Learning</span>
+                    <div class="section-divider-line"></div>
+                </div>
+
+                <!-- Real Estate Development -->
+                <article class="skill-card" data-category="learning">
+                    <div class="skill-card-header">
+                        <span class="skill-card-category">Learning</span>
+                    </div>
+                    <h2 class="skill-card-title">Real Estate Development</h2>
+                    <p class="skill-card-tagline">Understanding how physical spaces get built.</p>
+                    <div class="skill-card-content">
+                        <p>I'm actively studying how real estate development works - from site acquisition to feasibility analysis to project management. This combines my financial skills with a tangible, physical outcome that creates lasting value.</p>
+                        <p>The appeal is the complexity: development touches finance, design, construction, marketing, and community relations. It's a field where deep knowledge compounds over time and relationships matter enormously.</p>
+                    </div>
+                    <div class="skill-applications">
+                        <h4>Current Learning Focus</h4>
+                        <div class="application-list">
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Development feasibility analysis and pro forma modeling</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Understanding zoning, planning, and approval processes</span>
+                            </div>
+                            <div class="application-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                <span>Building relationships in the local development community</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
     </main>
 
     <footer class="footer">
@@ -532,5 +971,54 @@
     </footer>
 
     <script src="js/theme.js"></script>
+    <script>
+        // Sidebar toggle
+        function toggleSkillsSidebar() {
+            const sidebar = document.getElementById('skills-sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        // List dropdown toggle
+        function toggleListDropdown() {
+            const menu = document.getElementById('list-dropdown-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('list-dropdown');
+            const menu = document.getElementById('list-dropdown-menu');
+            if (dropdown && !dropdown.contains(e.target)) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Filter skills by category
+        function filterSkills(category) {
+            // Update active button
+            document.querySelectorAll('.sidebar-category').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Show/hide skill cards and section dividers
+            const cards = document.querySelectorAll('.skill-card');
+            const dividers = document.querySelectorAll('.section-divider');
+
+            if (category === 'all') {
+                cards.forEach(card => card.style.display = 'block');
+                dividers.forEach(div => div.style.display = 'flex');
+            } else {
+                cards.forEach(card => {
+                    card.style.display = card.dataset.category === category ? 'block' : 'none';
+                });
+                dividers.forEach(div => {
+                    div.style.display = div.dataset.category === category ? 'flex' : 'none';
+                });
+            }
+        }
+    </script>
 </body>
 </html>
