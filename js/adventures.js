@@ -333,11 +333,6 @@ function initWorldMap(adventures) {
     }
 
     // Create fully interactive map for the large panel
-    // Extended bounds to show more coverage (Sydney at 151 lng needs room)
-    const southWest = L.latLng(-65, -180);
-    const northEast = L.latLng(80, 180);
-    const bounds = L.latLngBounds(southWest, northEast);
-
     worldMap = L.map('world-map', {
         zoomControl: true,
         attributionControl: false,
@@ -348,15 +343,13 @@ function initWorldMap(adventures) {
         keyboard: true,
         minZoom: 2,
         maxZoom: 18,
-        maxBounds: bounds,
-        maxBoundsViscosity: 1.0
-    }).setView([15, 50], 2);
+        worldCopyJump: false
+    }).setView([20, 40], 2);
 
-    // Use ESRI World Imagery for clean satellite imagery
-    // errorTileUrl uses a transparent 1x1 pixel to hide "Map data not available" messages
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        noWrap: true,
-        errorTileUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+    // Use CartoDB Dark Matter - elegant dark theme with full global coverage
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd',
+        maxZoom: 20
     }).addTo(worldMap);
 
     // Add markers with popups for each adventure
