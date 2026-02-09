@@ -228,7 +228,99 @@
       "mapZoom": 9,
       "tags": ["nature", "culture", "spiritual", "photography"],
       "status": "published"
+    },
+    {
+      "id": "austin-adventure",
+      "title": "Live Music & BBQ Capital",
+      "subtitle": "Exploring the heart of Texas",
+      "location": "Austin, Texas",
+      "region": "Americas",
+      "startDate": "2025-03-01",
+      "endDate": "2025-03-08",
+      "duration": "7 days",
+      "heroImage": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200",
+      "shortDescription": "A week in Austin experiencing world-famous BBQ, incredible live music, and the unique culture that makes Texas's capital so special.",
+      "content": "<p>Austin lived up to its reputation as the Live Music Capital of the World. Every night brought new discoveries on 6th Street and beyond.</p><p>The BBQ scene here is legendary - from Franklin's to Terry Black's, I sampled brisket that melted in my mouth. Beyond the food and music, the city's tech scene and outdoor activities along Lady Bird Lake made for an unforgettable trip.</p>",
+      "highlights": [
+        "Live music on 6th Street",
+        "World-famous BBQ",
+        "Lady Bird Lake",
+        "South Congress shopping"
+      ],
+      "gallery": [
+        {
+          "src": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=400",
+          "caption": "Austin skyline at dusk",
+          "lat": 30.2672,
+          "lng": -97.7431
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1529543544277-29eb4d5e0586?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1529543544277-29eb4d5e0586?w=400",
+          "caption": "Texas BBQ spread",
+          "lat": 30.2700,
+          "lng": -97.7500
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400",
+          "caption": "Congress Avenue Bridge",
+          "lat": 30.2614,
+          "lng": -97.7453
+        }
+      ],
+      "mapCenter": { "lat": 30.2672, "lng": -97.7431 },
+      "mapZoom": 11,
+      "tags": ["music", "food", "culture", "city"],
+      "status": "published"
+    },
+    {
+      "id": "ayr-adventure",
+      "title": "Sugar Cane & Sunsets",
+      "subtitle": "Discovering the charm of North Queensland",
+      "location": "Ayr, North Queensland",
+      "region": "Australia",
+      "startDate": "2025-05-15",
+      "endDate": "2025-05-22",
+      "duration": "7 days",
+      "heroImage": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200",
+      "shortDescription": "Exploring the quiet beauty of North Queensland's sugar country, from the Burdekin River to nearby Great Barrier Reef day trips.",
+      "content": "<p>Ayr offered a different side of Australia - the real, working Australia that most tourists never see. Surrounded by endless sugar cane fields, this small town has its own unique charm.</p><p>The Burdekin River provided stunning sunset views, and day trips to the nearby reef and Magnetic Island added adventure to the relaxed country pace. The locals were some of the friendliest I've ever met.</p>",
+      "highlights": [
+        "Burdekin River sunsets",
+        "Sugar cane country",
+        "Great Barrier Reef day trip",
+        "Friendly locals"
+      ],
+      "gallery": [
+        {
+          "src": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+          "caption": "Sunset over the Burdekin",
+          "lat": -19.5744,
+          "lng": 147.4056
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=400",
+          "caption": "Sugar cane fields",
+          "lat": -19.5500,
+          "lng": 147.3800
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800",
+          "thumbnail": "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400",
+          "caption": "Great Barrier Reef",
+          "lat": -19.2500,
+          "lng": 147.5000
+        }
+      ],
+      "mapCenter": { "lat": -19.5744, "lng": 147.4056 },
+      "mapZoom": 10,
+      "tags": ["nature", "rural", "reef", "relaxation"],
+      "status": "published"
     }
   ],
-  "lastUpdated": "2024-01-01T00:00:00Z"
+  "lastUpdated": "2025-02-09T00:00:00Z"
 }
