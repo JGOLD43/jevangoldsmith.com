@@ -333,9 +333,9 @@ function initWorldMap(adventures) {
     }
 
     // Create fully interactive map for the large panel
-    // Set tighter bounds to keep view within tile coverage
-    const southWest = L.latLng(-55, -160);
-    const northEast = L.latLng(70, 160);
+    // Extended bounds to show more coverage (Sydney at 151 lng needs room)
+    const southWest = L.latLng(-65, -180);
+    const northEast = L.latLng(80, 180);
     const bounds = L.latLngBounds(southWest, northEast);
 
     worldMap = L.map('world-map', {
@@ -346,11 +346,11 @@ function initWorldMap(adventures) {
         doubleClickZoom: true,
         touchZoom: true,
         keyboard: true,
-        minZoom: 3,
+        minZoom: 2,
         maxZoom: 18,
         maxBounds: bounds,
         maxBoundsViscosity: 1.0
-    }).setView([20, 30], 3);
+    }).setView([15, 50], 2);
 
     // Use Stadia Alidade Satellite for clean satellite imagery
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
