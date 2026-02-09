@@ -10,232 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Skills Page Layout - Mirrors Essays Layout */
-        .skills-layout {
-            display: flex;
-            min-height: calc(100vh - 80px);
-            padding-top: 80px;
-        }
-
-        /* Sidebar Styles */
-        .skills-sidebar {
-            width: 280px;
-            min-width: 280px;
-            background: var(--card-bg);
-            border-right: 1px solid var(--border-color);
-            padding: 1.5rem 0;
-            position: sticky;
-            top: 80px;
-            height: calc(100vh - 80px);
-            overflow-y: auto;
-            transition: all 0.3s ease;
-        }
-
-        .skills-sidebar.collapsed {
-            width: 60px;
-            min-width: 60px;
-        }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0 1rem 1rem;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1rem;
-        }
-
-        .sidebar-collapse-btn {
-            background: none;
-            border: none;
-            padding: 0.5rem;
-            cursor: pointer;
-            color: var(--text-light);
-            border-radius: 6px;
-            transition: all 0.2s ease;
-        }
-
-        .sidebar-collapse-btn:hover {
-            background: var(--background-alt);
-            color: var(--text-color);
-        }
-
-        .sidebar-browse-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--text-light);
-        }
-
-        .skills-sidebar.collapsed .sidebar-browse-label,
-        .skills-sidebar.collapsed .category-name,
-        .skills-sidebar.collapsed .category-count {
-            display: none;
-        }
-
-        /* List Selector */
-        .sidebar-list-selector {
-            padding: 0 1rem 1rem;
-        }
-
-        .list-dropdown {
-            position: relative;
-        }
-
-        .list-dropdown-btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: var(--background-alt);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--text-color);
-            transition: all 0.2s ease;
-        }
-
-        .list-dropdown-btn:hover {
-            border-color: var(--secondary-color);
-        }
-
-        .list-dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-top: 0.5rem;
-            box-shadow: var(--shadow);
-            z-index: 100;
-            display: none;
-        }
-
-        .list-dropdown-menu.active {
-            display: block;
-        }
-
-        .list-option {
-            display: block;
-            padding: 0.75rem 1rem;
-            color: var(--text-color);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .list-option:hover,
-        .list-option.active {
-            background: var(--background-alt);
-            color: var(--secondary-color);
-        }
-
-        /* Sidebar Sections */
-        .sidebar-section {
-            padding: 0.25rem 0.75rem;
-        }
-
-        .sidebar-category {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            width: 100%;
-            padding: 0.75rem;
-            background: none;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--text-color);
-            transition: all 0.2s ease;
-            text-align: left;
-        }
-
-        .sidebar-category:hover {
-            background: var(--background-alt);
-        }
-
-        .sidebar-category.active {
-            background: var(--text-color);
-            color: var(--card-bg);
-        }
-
-        .category-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 24px;
-        }
-
-        .category-name {
-            flex: 1;
-            font-weight: 500;
-        }
-
-        .category-count {
-            background: var(--background-alt);
-            padding: 0.15rem 0.5rem;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-light);
-        }
-
-        .sidebar-category.active .category-count {
-            background: rgba(255,255,255,0.2);
-            color: var(--card-bg);
-        }
-
-        /* Main Content */
-        .skills-main {
-            flex: 1;
-            padding: 2rem 3rem;
-            max-width: 900px;
-        }
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .header-content h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .header-subtitle {
-            color: var(--text-light);
-            font-size: 1.1rem;
-        }
-
-        .header-counter {
-            text-align: right;
-        }
-
-        .counter-number {
-            display: block;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-color);
-            line-height: 1;
-        }
-
-        .counter-label {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-
-        /* Skill Card - Essay-like style */
+        /* Skill Card Styles */
         .skill-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -250,24 +25,13 @@
             box-shadow: var(--shadow);
         }
 
-        .skill-card-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .skill-card-date {
-            font-size: 0.85rem;
-            color: var(--text-light);
-        }
-
         .skill-card-category {
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--secondary-color);
+            margin-bottom: 0.5rem;
         }
 
         .skill-card-title {
@@ -333,13 +97,17 @@
             margin-top: 2px;
         }
 
-        /* Section Header in Main */
+        /* Section Divider */
         .section-divider {
             display: flex;
             align-items: center;
             gap: 1rem;
             margin: 2.5rem 0 1.5rem;
             color: var(--text-light);
+        }
+
+        .section-divider:first-child {
+            margin-top: 0;
         }
 
         .section-divider-icon {
@@ -364,51 +132,6 @@
             flex: 1;
             height: 1px;
             background: var(--border-color);
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .skills-sidebar {
-                width: 60px;
-                min-width: 60px;
-            }
-            .skills-sidebar .sidebar-browse-label,
-            .skills-sidebar .category-name,
-            .skills-sidebar .category-count,
-            .skills-sidebar .sidebar-list-selector {
-                display: none;
-            }
-            .skills-main {
-                padding: 1.5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .skills-layout {
-                flex-direction: column;
-            }
-            .skills-sidebar {
-                width: 100%;
-                min-width: 100%;
-                height: auto;
-                position: relative;
-                top: 0;
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-            }
-            .skills-sidebar .sidebar-browse-label,
-            .skills-sidebar .category-name,
-            .skills-sidebar .category-count,
-            .skills-sidebar .sidebar-list-selector {
-                display: block;
-            }
-            .main-header {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .header-counter {
-                text-align: left;
-            }
         }
     </style>
 </head>
@@ -551,9 +274,9 @@
         </div>
     </nav>
 
-    <main class="skills-layout">
+    <main class="essays-layout" id="skills-layout">
         <!-- Sidebar Navigation -->
-        <aside class="skills-sidebar" id="skills-sidebar">
+        <aside class="essays-sidebar" id="skills-sidebar">
             <div class="sidebar-header">
                 <button class="sidebar-collapse-btn" onclick="toggleSkillsSidebar()" title="Collapse sidebar">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -584,11 +307,10 @@
 
             <!-- All Skills -->
             <div class="sidebar-section">
-                <button class="sidebar-category active" onclick="filterSkills('all')" data-category="all">
-                    <span class="category-icon">
+                <button class="sidebar-category active" onclick="filterSkills('all')" data-category="all" data-tooltip="All Skills">
+                    <span class="category-icon" title="All Skills">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 16v-4M12 8h.01"></path>
                         </svg>
                     </span>
                     <span class="category-name">All Skills</span>
@@ -598,8 +320,8 @@
 
             <!-- Foundation Skills -->
             <div class="sidebar-section">
-                <button class="sidebar-category" onclick="filterSkills('foundation')" data-category="foundation">
-                    <span class="category-icon">
+                <button class="sidebar-category" onclick="filterSkills('foundation')" data-category="foundation" data-tooltip="Foundation Skills">
+                    <span class="category-icon" title="Foundation Skills">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                             <path d="M2 17l10 5 10-5"></path>
@@ -613,8 +335,8 @@
 
             <!-- Applied Skills -->
             <div class="sidebar-section">
-                <button class="sidebar-category" onclick="filterSkills('applied')" data-category="applied">
-                    <span class="category-icon">
+                <button class="sidebar-category" onclick="filterSkills('applied')" data-category="applied" data-tooltip="Applied Skills">
+                    <span class="category-icon" title="Applied Skills">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
                         </svg>
@@ -626,8 +348,8 @@
 
             <!-- Technical Skills -->
             <div class="sidebar-section">
-                <button class="sidebar-category" onclick="filterSkills('technical')" data-category="technical">
-                    <span class="category-icon">
+                <button class="sidebar-category" onclick="filterSkills('technical')" data-category="technical" data-tooltip="Technical Skills">
+                    <span class="category-icon" title="Technical Skills">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <polyline points="16 18 22 12 16 6"></polyline>
                             <polyline points="8 6 2 12 8 18"></polyline>
@@ -640,8 +362,8 @@
 
             <!-- Currently Learning -->
             <div class="sidebar-section">
-                <button class="sidebar-category" onclick="filterSkills('learning')" data-category="learning">
-                    <span class="category-icon">
+                <button class="sidebar-category" onclick="filterSkills('learning')" data-category="learning" data-tooltip="Currently Learning">
+                    <span class="category-icon" title="Currently Learning">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
@@ -654,7 +376,7 @@
         </aside>
 
         <!-- Main Content -->
-        <div class="skills-main">
+        <div class="essays-main">
             <header class="main-header">
                 <div class="header-content">
                     <h1>Skills</h1>
@@ -666,7 +388,7 @@
                 </div>
             </header>
 
-            <div id="skills-container">
+            <div id="skills-container" class="content-section">
                 <!-- Foundation Skills Section -->
                 <div class="section-divider" data-category="foundation">
                     <div class="section-divider-icon">
@@ -682,9 +404,7 @@
 
                 <!-- First Principles Thinking -->
                 <article class="skill-card" data-category="foundation">
-                    <div class="skill-card-header">
-                        <span class="skill-card-category">Foundation</span>
-                    </div>
+                    <div class="skill-card-category">Foundation</div>
                     <h2 class="skill-card-title">First Principles Thinking</h2>
                     <p class="skill-card-tagline">Breaking problems down to their fundamental truths.</p>
                     <div class="skill-card-content">
@@ -712,9 +432,7 @@
 
                 <!-- Deep Research -->
                 <article class="skill-card" data-category="foundation">
-                    <div class="skill-card-header">
-                        <span class="skill-card-category">Foundation</span>
-                    </div>
+                    <div class="skill-card-category">Foundation</div>
                     <h2 class="skill-card-title">Deep Research</h2>
                     <p class="skill-card-tagline">Going beyond surface-level understanding.</p>
                     <div class="skill-card-content">
@@ -742,9 +460,7 @@
 
                 <!-- Clear Communication -->
                 <article class="skill-card" data-category="foundation">
-                    <div class="skill-card-header">
-                        <span class="skill-card-category">Foundation</span>
-                    </div>
+                    <div class="skill-card-category">Foundation</div>
                     <h2 class="skill-card-title">Clear Communication</h2>
                     <p class="skill-card-tagline">Making complex ideas accessible.</p>
                     <div class="skill-card-content">
@@ -783,9 +499,7 @@
 
                 <!-- Financial Analysis -->
                 <article class="skill-card" data-category="applied">
-                    <div class="skill-card-header">
-                        <span class="skill-card-category">Applied</span>
-                    </div>
+                    <div class="skill-card-category">Applied</div>
                     <h2 class="skill-card-title">Financial Analysis</h2>
                     <p class="skill-card-tagline">Understanding what the numbers actually mean.</p>
                     <div class="skill-card-content">
@@ -813,9 +527,7 @@
 
                 <!-- Strategic Thinking -->
                 <article class="skill-card" data-category="applied">
-                    <div class="skill-card-header">
-                        <span class="skill-card-category">Applied</span>
-                    </div>
+                    <div class="skill-card-category">Applied</div>
                     <h2 class="skill-card-title">Strategic Thinking</h2>
                     <p class="skill-card-tagline">Seeing the whole board, not just the next move.</p>
                     <div class="skill-card-content">
@@ -855,9 +567,7 @@
 
                 <!-- Spreadsheet Mastery -->
                 <article class="skill-card" data-category="technical">
-                    <div class="skill-card-header">
-                        <span class="skill-card-category">Technical</span>
-                    </div>
+                    <div class="skill-card-category">Technical</div>
                     <h2 class="skill-card-title">Spreadsheet Mastery</h2>
                     <p class="skill-card-tagline">Excel as a thinking tool, not just a calculator.</p>
                     <div class="skill-card-content">
@@ -885,9 +595,7 @@
 
                 <!-- AI-Assisted Work -->
                 <article class="skill-card" data-category="technical">
-                    <div class="skill-card-header">
-                        <span class="skill-card-category">Technical</span>
-                    </div>
+                    <div class="skill-card-category">Technical</div>
                     <h2 class="skill-card-title">AI-Assisted Work</h2>
                     <p class="skill-card-tagline">Multiplying my capabilities with intelligent tools.</p>
                     <div class="skill-card-content">
@@ -927,9 +635,7 @@
 
                 <!-- Real Estate Development -->
                 <article class="skill-card" data-category="learning">
-                    <div class="skill-card-header">
-                        <span class="skill-card-category">Learning</span>
-                    </div>
+                    <div class="skill-card-category">Learning</div>
                     <h2 class="skill-card-title">Real Estate Development</h2>
                     <p class="skill-card-tagline">Understanding how physical spaces get built.</p>
                     <div class="skill-card-content">
@@ -975,7 +681,9 @@
         // Sidebar toggle
         function toggleSkillsSidebar() {
             const sidebar = document.getElementById('skills-sidebar');
+            const layout = document.getElementById('skills-layout');
             sidebar.classList.toggle('collapsed');
+            layout.classList.toggle('sidebar-collapsed');
         }
 
         // List dropdown toggle
