@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Music & BBQ Capital - Jevan Goldsmith</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        .adventure-detail-page { padding-top: 80px; }
+        .adventure-hero { position: relative; height: 60vh; min-height: 400px; overflow: hidden; }
+        .adventure-hero img { width: 100%; height: 100%; object-fit: cover; }
+        .adventure-hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 3rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
+        .adventure-hero-location { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--secondary-color); margin-bottom: 0.5rem; }
+        .adventure-hero-title { font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .adventure-hero-subtitle { font-size: 1.25rem; font-style: italic; opacity: 0.9; }
+        .adventure-content { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem; }
+        .adventure-meta-bar { display: flex; gap: 2rem; padding: 1.5rem 0; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; flex-wrap: wrap; }
+        .adventure-meta-item { display: flex; align-items: center; gap: 0.5rem; color: var(--text-light); }
+        .adventure-meta-item svg { width: 20px; height: 20px; }
+        .adventure-story { font-size: 1.1rem; line-height: 1.8; color: var(--text-color); }
+        .adventure-story p { margin-bottom: 1.5rem; }
+        .adventure-highlights-section { margin: 3rem 0; padding: 2rem; background: var(--background-alt); border-radius: 12px; }
+        .adventure-highlights-section h3 { margin-bottom: 1rem; color: var(--primary-color); }
+        .adventure-highlights-list { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .adventure-highlight-tag { background: var(--secondary-color); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; }
+        .adventure-gallery-section { margin: 3rem 0; }
+        .adventure-gallery-section h3 { margin-bottom: 1.5rem; color: var(--primary-color); }
+        .adventure-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+        .adventure-gallery-item { position: relative; aspect-ratio: 4/3; overflow: hidden; border-radius: 8px; cursor: pointer; }
+        .adventure-gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .adventure-gallery-item:hover img { transform: scale(1.05); }
+        .adventure-gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; font-size: 0.9rem; }
+        .adventure-map-section { margin: 3rem 0; }
+        .adventure-map-section h3 { margin-bottom: 1.5rem; color: var(--primary-color); }
+        .adventure-map-container { height: 400px; border-radius: 12px; overflow: hidden; }
+        .adventure-back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--secondary-color); text-decoration: none; margin-bottom: 2rem; font-weight: 600; }
+        .adventure-back-link:hover { text-decoration: underline; }
+        @media (max-width: 768px) {
+            .adventure-hero-title { font-size: 2rem; }
+            .adventure-hero { height: 50vh; }
+            .adventure-meta-bar { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-left">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="J.GOLDSMITH" class="logo-image logo-static" width="88" height="80">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="adventures.html" class="active">Adventures</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="navbar-right">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="theme-toggle-icon icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="theme-toggle-icon icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="adventure-detail-page">
+        <div class="adventure-hero">
+            <img src="https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200" alt="Live Music & BBQ Capital">
+            <div class="adventure-hero-overlay">
+                <div class="adventure-hero-location">Austin, Texas</div>
+                <h1 class="adventure-hero-title">Live Music & BBQ Capital</h1>
+                <p class="adventure-hero-subtitle">Exploring the heart of Texas</p>
+            </div>
+        </div>
+
+        <div class="adventure-content">
+            <a href="adventures.html" class="adventure-back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Adventures
+            </a>
+
+            <div class="adventure-meta-bar">
+                <div class="adventure-meta-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span>Mar 2025</span>
+                </div>
+                <div class="adventure-meta-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span>7 days</span>
+                </div>
+                <div class="adventure-meta-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span>Austin, Texas</span>
+                </div>
+            </div>
+
+            <div class="adventure-story">
+                <p>Austin lived up to its reputation as the Live Music Capital of the World. Every night brought new discoveries on 6th Street and beyond.</p>
+                <p>The BBQ scene here is legendary - from Franklin's to Terry Black's, I sampled brisket that melted in my mouth. Beyond the food and music, the city's tech scene and outdoor activities along Lady Bird Lake made for an unforgettable trip.</p>
+            </div>
+
+            <div class="adventure-highlights-section">
+                <h3>Trip Highlights</h3>
+                <div class="adventure-highlights-list">
+                    <span class="adventure-highlight-tag">Live music on 6th Street</span>
+                    <span class="adventure-highlight-tag">World-famous BBQ</span>
+                    <span class="adventure-highlight-tag">Lady Bird Lake</span>
+                    <span class="adventure-highlight-tag">South Congress shopping</span>
+                </div>
+            </div>
+
+            <div class="adventure-map-section">
+                <h3>Photo Locations</h3>
+                <div class="adventure-map-container" id="adventure-map"></div>
+            </div>
+
+            <div class="adventure-gallery-section">
+                <h3>Photo Gallery</h3>
+                <div class="adventure-gallery-grid">
+                    <div class="adventure-gallery-item" onclick="openLightbox(0)">
+                        <img src="https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=800" alt="Austin skyline at dusk">
+                        <div class="adventure-gallery-caption">Austin skyline at dusk</div>
+                    </div>
+                    <div class="adventure-gallery-item" onclick="openLightbox(1)">
+                        <img src="https://images.unsplash.com/photo-1529543544277-29eb4d5e0586?w=800" alt="Texas BBQ spread">
+                        <div class="adventure-gallery-caption">Texas BBQ spread</div>
+                    </div>
+                    <div class="adventure-gallery-item" onclick="openLightbox(2)">
+                        <img src="https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800" alt="Congress Avenue Bridge">
+                        <div class="adventure-gallery-caption">Congress Avenue Bridge</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <span class="lightbox-prev" onclick="prevImage()">&#10094;</span>
+        <img id="lightbox-image" src="" alt="">
+        <span class="lightbox-next" onclick="nextImage()">&#10095;</span>
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+        <div class="lightbox-counter" id="lightbox-counter"></div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/theme.js"></script>
+    <script>
+        const map = L.map('adventure-map').setView([30.2672, -97.7431], 11);
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
+
+        const photos = [
+            { lat: 30.2672, lng: -97.7431, caption: "Austin skyline at dusk" },
+            { lat: 30.2700, lng: -97.7500, caption: "Texas BBQ spread" },
+            { lat: 30.2614, lng: -97.7453, caption: "Congress Avenue Bridge" }
+        ];
+
+        photos.forEach(photo => {
+            L.circleMarker([photo.lat, photo.lng], {
+                radius: 8, fillColor: '#C9A86C', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.9
+            }).addTo(map).bindPopup(photo.caption);
+        });
+
+        const galleryImages = [
+            { src: "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200", caption: "Austin skyline at dusk" },
+            { src: "https://images.unsplash.com/photo-1529543544277-29eb4d5e0586?w=1200", caption: "Texas BBQ spread" },
+            { src: "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=1200", caption: "Congress Avenue Bridge" }
+        ];
+        let currentIndex = 0;
+
+        function openLightbox(index) {
+            currentIndex = index;
+            updateLightbox();
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % galleryImages.length;
+            updateLightbox();
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+            updateLightbox();
+        }
+
+        function updateLightbox() {
+            document.getElementById('lightbox-image').src = galleryImages[currentIndex].src;
+            document.getElementById('lightbox-caption').textContent = galleryImages[currentIndex].caption;
+            document.getElementById('lightbox-counter').textContent = `${currentIndex + 1} / ${galleryImages.length}`;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+    </script>
+</body>
+</html>
