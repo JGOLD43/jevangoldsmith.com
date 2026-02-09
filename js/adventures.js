@@ -333,6 +333,11 @@ function initWorldMap(adventures) {
     }
 
     // Create fully interactive map for the large panel
+    // Tight bounds to hide "no data" areas while showing all adventure markers
+    const southWest = L.latLng(-50, -130);
+    const northEast = L.latLng(65, 160);
+    const bounds = L.latLngBounds(southWest, northEast);
+
     worldMap = L.map('world-map', {
         zoomControl: true,
         attributionControl: false,
@@ -341,15 +346,15 @@ function initWorldMap(adventures) {
         doubleClickZoom: true,
         touchZoom: true,
         keyboard: true,
-        minZoom: 2,
+        minZoom: 3,
         maxZoom: 18,
-        worldCopyJump: false
-    }).setView([20, 40], 2);
+        maxBounds: bounds,
+        maxBoundsViscosity: 1.0
+    }).setView([25, 40], 3);
 
-    // Use CartoDB Dark Matter - elegant dark theme with full global coverage
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
-        maxZoom: 20
+    // Use ESRI World Imagery satellite tiles
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19
     }).addTo(worldMap);
 
     // Add markers with popups for each adventure
