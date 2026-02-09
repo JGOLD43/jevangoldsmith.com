@@ -333,9 +333,9 @@ function initWorldMap(adventures) {
     }
 
     // Create fully interactive map for the large panel
-    // Set bounds to prevent infinite scrolling
-    const southWest = L.latLng(-85, -180);
-    const northEast = L.latLng(85, 180);
+    // Set tighter bounds to keep view within tile coverage
+    const southWest = L.latLng(-55, -160);
+    const northEast = L.latLng(70, 160);
     const bounds = L.latLngBounds(southWest, northEast);
 
     worldMap = L.map('world-map', {
@@ -346,11 +346,13 @@ function initWorldMap(adventures) {
         doubleClickZoom: true,
         touchZoom: true,
         keyboard: true,
-        minZoom: 2,
+        minZoom: 3,
+        maxZoom: 18,
         maxBounds: bounds,
         maxBoundsViscosity: 1.0
-    }).setView([20, 0], 2);
+    }).setView([20, 30], 3);
 
+    // Use Stadia Alidade Satellite for clean satellite imagery
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         noWrap: true
     }).addTo(worldMap);
