@@ -71,6 +71,69 @@
             color: var(--text-color);
         }
 
+        /* Manifesto */
+        .manifesto-section {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .manifesto-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 1.5rem;
+        }
+
+        .manifesto-column-header {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .manifesto-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .manifesto-list li {
+            position: relative;
+            padding-left: 0;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-color);
+        }
+
+        .manifesto-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .manifesto-list strong {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .manifesto-list.reject li {
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .manifesto-columns {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
         /* Sections */
         .northstar-section {
             padding: 2.5rem 0;
@@ -415,6 +478,40 @@
             <p class="mission-label">Personal Mission</p>
             <p class="mission-text">To build things that matter, learn continuously, and help others think better about their lives and decisions.</p>
         </div>
+
+        <!-- Personal Manifesto -->
+        <section class="manifesto-section">
+            <p class="section-eyebrow">Manifesto</p>
+            <h2 class="section-title">What I Stand For</h2>
+            <div class="manifesto-columns">
+                <div class="manifesto-believe">
+                    <p class="manifesto-column-header">I Believe</p>
+                    <ul class="manifesto-list">
+                        <li><strong>Ownership over entitlement.</strong> Nobody owes you anything. The quality of your life is your responsibility. Build your own leverage, earn your own seat.</li>
+                        <li><strong>Thinking from first principles.</strong> Most people inherit their opinions. Strip problems down to what's actually true, then reason up from there.</li>
+                        <li><strong>Compounding is the eighth wonder of the world.</strong> Skills, relationships, capital, reputation - the ones who win are the ones who stay consistent long enough for compounding to kick in.</li>
+                        <li><strong>Action beats analysis.</strong> A good plan executed today beats a perfect plan executed never. Ship it, learn, iterate. Momentum creates clarity.</li>
+                        <li><strong>Deep work over busywork.</strong> Most people confuse motion with progress. An hour of focused thinking creates more value than a week of meetings.</li>
+                        <li><strong>Skin in the game.</strong> Don't trust anyone who doesn't eat their own cooking. Advisors, investors, partners - alignment comes from shared risk.</li>
+                        <li><strong>Saying no is a superpower.</strong> Every yes is a no to something else. Protect your time and attention like they're your most valuable assets - because they are.</li>
+                        <li><strong>Health is the foundation.</strong> You can't think clearly, build ambitiously, or show up for the people you love if you're running on empty. Sleep, move, eat well. Everything else sits on top of this.</li>
+                    </ul>
+                </div>
+                <div class="manifesto-reject">
+                    <p class="manifesto-column-header">I Reject</p>
+                    <ul class="manifesto-list reject">
+                        <li><strong>Playing status games.</strong> Chasing titles, logos, and social signals is a hamster wheel. I'd rather be rich and anonymous than broke and famous.</li>
+                        <li><strong>Borrowed opinions.</strong> Repeating what someone else said without doing the work to understand it yourself is intellectual laziness. Think for yourself or don't speak on it.</li>
+                        <li><strong>Complexity as a proxy for intelligence.</strong> If you can't explain it simply, you don't understand it well enough. Simplicity on the other side of complexity is where mastery lives.</li>
+                        <li><strong>Short-termism.</strong> Quarterly thinking, overnight success fantasies, get-rich-quick schemes. The best things take years. Be patient enough to let them.</li>
+                        <li><strong>Comfort as a life strategy.</strong> Growth happens at the edge of discomfort. If everything feels easy, you're probably not learning anything.</li>
+                        <li><strong>Zero-sum thinking.</strong> The world isn't a fixed pie. Create value instead of fighting over scraps. The best deals are the ones where everyone wins.</li>
+                        <li><strong>Credentials over competence.</strong> I care about what you can do, not what's written on your diploma. Show me the work.</li>
+                        <li><strong>Consensus as a compass.</strong> If everyone agrees with your plan, it's probably not ambitious enough. The best opportunities look like bad ideas to most people.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
         <!-- Core Values Section -->
         <section class="northstar-section">
