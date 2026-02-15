@@ -9,9 +9,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <!-- EmailJS SDK for backup codes -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" integrity="sha384-VDbnsk/qjpIVHPQMkJiROI+vW/7cw0k8TFYVLUabm7EWoLEDwcXh09XQ6gQ86Y0B" crossorigin="anonymous"></script>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.emailjs.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.emailjs.com https://*.googleapis.com https://*.firebaseio.com https://*.firebaseapp.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="admin-login">
@@ -107,13 +111,12 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js" integrity="sha384-qGFE4FIJLgCFuYs3nzg39XpCtvT5AZUhaBdjB3e1+vpKQa03AkyWOyBSFb9OcQ/g" crossorigin="anonymous"></script>
+    <script src="js/firebase-config.js"></script>
     <script src="js/totp.js"></script>
     <script src="js/twofa.js"></script>
     <script src="js/auth.js"></script>
     <script>
         // State
-        let passwordVerified = false;
         let timerInterval = null;
 
         // Handle password form submission
@@ -121,20 +124,25 @@
             e.preventDefault();
 
             const password = document.getElementById('password').value;
-
             if (!password) {
-                showError('error-message', 'Please enter a password');
+                showError('Please enter a password');
                 return;
             }
 
-            // Verify password
-            const isValid = await verifyPasswordOnly(password);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in...';
 
-            if (isValid) {
-                passwordVerified = true;
+            try {
+                // Authenticate with Firebase
+                await login(password);
 
-                // Check if 2FA is enabled
-                if (TwoFA.isConfigured()) {
+                // Check if 2FA is enabled (now we can read Firestore)
+                const is2FAEnabled = await TwoFA.isConfigured();
+
+                if (is2FAEnabled) {
+                    sessionStorage.setItem('twofaRequired', 'true');
+
                     // Show 2FA step
                     document.getElementById('step-password').style.display = 'none';
                     document.getElementById('step-2fa').style.display = 'block';
@@ -142,16 +150,23 @@
                     startTimer();
 
                     // Show email backup option if configured
-                    if (!TwoFA.isEmailConfigured()) {
+                    const emailConfigured = await TwoFA.isEmailConfigured();
+                    if (!emailConfigured) {
                         document.getElementById('send-backup-btn').style.display = 'none';
                     }
                 } else {
-                    // 2FA not configured, complete login
-                    completeLogin();
+                    // No 2FA, go straight to dashboard
+                    sessionStorage.setItem('twofaRequired', 'false');
+                    sessionStorage.setItem('twofaVerified', 'true');
+                    window.location.href = 'dashboard.html';
                 }
-            } else {
+            } catch (error) {
+                showError(error.message);
                 document.getElementById('password').value = '';
                 document.getElementById('password').focus();
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
             }
         });
 
@@ -160,20 +175,19 @@
             e.preventDefault();
 
             const code = document.getElementById('twofa-code').value;
-
             if (!code || code.length !== 6) {
-                showError('twofa-error', 'Please enter a 6-digit code');
+                showLocalError('twofa-error', 'Please enter a 6-digit code');
                 return;
             }
 
-            // Verify 2FA code
             const result = await TwoFA.verify(code);
 
             if (result.valid) {
                 stopTimer();
-                completeLogin();
+                sessionStorage.setItem('twofaVerified', 'true');
+                window.location.href = 'dashboard.html';
             } else {
-                showError('twofa-error', 'Invalid code. Please try again.');
+                showLocalError('twofa-error', 'Invalid code. Please try again.');
                 document.getElementById('twofa-code').value = '';
                 document.getElementById('twofa-code').focus();
             }
@@ -193,8 +207,6 @@
                 const result = await TwoFA.sendBackupCode();
                 status.className = 'backup-status success';
                 status.textContent = result.message;
-
-                // Show countdown for backup code
                 updateBackupCountdown();
             } catch (error) {
                 status.className = 'backup-status error';
@@ -227,25 +239,11 @@
             }
         }
 
-        // Complete the login process
-        function completeLogin() {
-            // Generate session token
-            const token = generateToken();
-            sessionStorage.setItem('adminToken', token);
-            sessionStorage.setItem('loginTime', Date.now().toString());
-
-            // Reset login attempts
-            localStorage.removeItem('loginAttempts');
-            localStorage.removeItem('lockoutUntil');
-
-            // Redirect to dashboard
-            window.location.href = 'dashboard.html';
-        }
-
-        // Go back to password step
+        // Go back to password step (also signs out Firebase)
         function goBackToPassword() {
-            passwordVerified = false;
             stopTimer();
+            auth.signOut();
+            sessionStorage.removeItem('twofaRequired');
             document.getElementById('step-2fa').style.display = 'none';
             document.getElementById('step-password').style.display = 'block';
             document.getElementById('password').value = '';
@@ -273,7 +271,6 @@
             const timerEl = document.getElementById('timer-seconds');
             timerEl.textContent = remaining;
 
-            // Visual warning when time is low
             const timerContainer = document.getElementById('code-timer');
             if (remaining <= 5) {
                 timerContainer.classList.add('warning');
@@ -299,15 +296,12 @@
             }
         }
 
-        // Show error message
-        function showError(elementId, message) {
+        // Show error on a specific element
+        function showLocalError(elementId, message) {
             const errorElement = document.getElementById(elementId);
             errorElement.textContent = message;
             errorElement.classList.add('show');
-
-            setTimeout(() => {
-                errorElement.classList.remove('show');
-            }, 5000);
+            setTimeout(() => errorElement.classList.remove('show'), 5000);
         }
 
         // Auto-format 2FA code input
@@ -315,10 +309,16 @@
             this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
         });
 
-        // Check if already authenticated
-        if (isAuthenticated()) {
-            window.location.href = 'dashboard.html';
-        }
+        // Check if already authenticated (redirect if so)
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                const twofaRequired = sessionStorage.getItem('twofaRequired');
+                const twofaVerified = sessionStorage.getItem('twofaVerified');
+                if (twofaRequired !== 'true' || twofaVerified === 'true') {
+                    window.location.href = 'dashboard.html';
+                }
+            }
+        });
     </script>
 </body>
 </html>

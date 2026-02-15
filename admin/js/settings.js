@@ -10,30 +10,27 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSettings();
 });
 
-function initializeSettings() {
-    // Update 2FA status display
-    updateTwoFAStatus();
-
-    // Update session info
+async function initializeSettings() {
+    await updateTwoFAStatus();
     updateSessionInfo();
 }
 
-// Update 2FA status based on configuration
-function updateTwoFAStatus() {
+// Update 2FA status based on Firestore config
+async function updateTwoFAStatus() {
     const badge = document.getElementById('twofa-badge');
     const statusText = document.getElementById('twofa-status-text');
     const setupSection = document.getElementById('twofa-setup-section');
     const enabledSection = document.getElementById('twofa-enabled-section');
 
-    if (TwoFA.isConfigured()) {
-        // 2FA is enabled
+    const isConfigured = await TwoFA.isConfigured();
+
+    if (isConfigured) {
         badge.textContent = 'Enabled';
         badge.className = 'status-badge enabled';
         statusText.textContent = 'Two-factor authentication is active and protecting your account.';
         setupSection.style.display = 'none';
         enabledSection.style.display = 'block';
     } else {
-        // 2FA is not configured
         badge.textContent = 'Disabled';
         badge.className = 'status-badge disabled';
         statusText.textContent = 'Two-factor authentication is not configured. Set it up to secure your account.';
@@ -44,16 +41,18 @@ function updateTwoFAStatus() {
 
 // Update session information display
 function updateSessionInfo() {
-    const loginTime = sessionStorage.getItem('loginTime');
     const startTimeEl = document.getElementById('session-start-time');
     const expireTimeEl = document.getElementById('session-expire-time');
 
-    if (loginTime) {
-        const startDate = new Date(parseInt(loginTime));
-        const expireDate = new Date(parseInt(loginTime) + (4 * 60 * 60 * 1000)); // 4 hours
-
-        startTimeEl.textContent = formatDateTime(startDate);
-        expireTimeEl.textContent = formatDateTime(expireDate);
+    const user = auth.currentUser;
+    if (user) {
+        // Get last sign in time from Firebase
+        const signInTime = user.metadata.lastSignInTime;
+        if (signInTime) {
+            const startDate = new Date(signInTime);
+            startTimeEl.textContent = formatDateTime(startDate);
+            expireTimeEl.textContent = 'Managed by Firebase';
+        }
     }
 }
 
@@ -73,7 +72,6 @@ function formatDateTime(date) {
 function generateTOTPSecret() {
     setupTOTPSecret = TOTP.generateSecret();
 
-    // Display the secret
     document.getElementById('generated-secret').textContent = setupTOTPSecret;
     document.getElementById('secret-generated').style.display = 'block';
 
@@ -81,37 +79,22 @@ function generateTOTPSecret() {
     const qrUrl = TOTP.getQRCodeUrl(setupTOTPSecret, 'admin', 'JevanGoldsmith Admin');
     document.getElementById('setup-qr-code').src = qrUrl;
     document.getElementById('manual-secret-key').textContent = setupTOTPSecret;
-
-    // Prepare config output for step 4
-    updateConfigOutput();
-}
-
-// Update the configuration code output
-function updateConfigOutput() {
-    const config = `// Update these values in admin/js/twofa.js
-
-TOTP_SECRET: '${setupTOTPSecret}',
-ENABLED: true,`;
-    document.getElementById('twofa-config-output').textContent = config;
 }
 
 // Navigate between setup steps
 function showSetupStep(step) {
-    // Hide all steps
     for (let i = 1; i <= 5; i++) {
         const stepEl = document.getElementById('setup-step-' + i);
         if (stepEl) stepEl.style.display = 'none';
     }
     document.getElementById('setup-complete').style.display = 'none';
 
-    // Show target step
     const targetEl = document.getElementById('setup-step-' + step);
     if (targetEl) {
         targetEl.style.display = 'block';
         currentSetupStep = step;
     }
 
-    // Focus on code input for step 3
     if (step === 3) {
         setTimeout(() => {
             document.getElementById('setup-verify-code').focus();
@@ -132,16 +115,26 @@ async function verifySetupCode(event) {
         return;
     }
 
-    // Verify the code
     const isValid = await TOTP.verifyCode(setupTOTPSecret, code, 1);
 
     if (isValid) {
         resultEl.className = 'verify-result success';
-        resultEl.textContent = 'Code verified successfully!';
+        resultEl.textContent = 'Code verified! Saving to your account...';
 
-        setTimeout(() => {
-            showSetupStep(4);
-        }, 1000);
+        // Save TOTP secret to Firestore
+        try {
+            await TwoFA.saveConfig({
+                totpSecret: setupTOTPSecret,
+                enabled: true,
+                setupDate: new Date().toISOString()
+            });
+
+            resultEl.textContent = 'Code verified and saved successfully!';
+            setTimeout(() => showSetupStep(5), 1000);
+        } catch (error) {
+            resultEl.className = 'verify-result error';
+            resultEl.textContent = 'Code verified but failed to save. Please try again.';
+        }
     } else {
         resultEl.className = 'verify-result error';
         resultEl.textContent = 'Invalid code. Make sure your authenticator is synced correctly.';
@@ -150,28 +143,23 @@ async function verifySetupCode(event) {
     }
 }
 
-// Copy TOTP config to clipboard
-function copyTOTPConfig() {
-    const config = document.getElementById('twofa-config-output').textContent;
-    copyToClipboard(config, 'Configuration copied to clipboard!');
-}
-
 // Finish 2FA setup
-function finishTwoFASetup() {
-    // Hide all steps
+async function finishTwoFASetup() {
     for (let i = 1; i <= 5; i++) {
         const stepEl = document.getElementById('setup-step-' + i);
         if (stepEl) stepEl.style.display = 'none';
     }
 
-    // Show completion
     document.getElementById('setup-complete').style.display = 'block';
+
+    // Refresh status display
+    TwoFA._loaded = false;
+    await updateTwoFAStatus();
 }
 
 // Show reconfigure warning
 function showReconfigureWarning() {
     if (confirm('Warning: Reconfiguring 2FA will invalidate your current authenticator setup. You will need to update your authenticator app with a new secret key.\n\nAre you sure you want to continue?')) {
-        // Reset and show setup
         setupTOTPSecret = '';
         currentSetupStep = 1;
         document.getElementById('secret-generated').style.display = 'none';
@@ -179,7 +167,6 @@ function showReconfigureWarning() {
         document.getElementById('setup-verify-result').textContent = '';
         document.getElementById('setup-verify-result').className = 'verify-result';
 
-        // Show setup section
         document.getElementById('twofa-enabled-section').style.display = 'none';
         document.getElementById('twofa-setup-section').style.display = 'block';
         showSetupStep(1);
@@ -192,7 +179,6 @@ function copyToClipboard(text, successMessage) {
         showSettingsToast(successMessage || 'Copied to clipboard!');
     }).catch(err => {
         console.error('Failed to copy:', err);
-        // Fallback
         const textarea = document.createElement('textarea');
         textarea.value = text;
         document.body.appendChild(textarea);
@@ -205,7 +191,6 @@ function copyToClipboard(text, successMessage) {
 
 // Show toast notification
 function showSettingsToast(message) {
-    // Remove existing toast
     const existingToast = document.querySelector('.settings-toast');
     if (existingToast) existingToast.remove();
 
@@ -215,7 +200,6 @@ function showSettingsToast(message) {
     document.body.appendChild(toast);
 
     setTimeout(() => toast.classList.add('show'), 10);
-
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);

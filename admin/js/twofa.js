@@ -1,69 +1,75 @@
 // Two-Factor Authentication Management
-// Integrates TOTP and Email backup verification
+// Stores config in Firestore instead of source code
 
 const TwoFA = {
-    // ============================================
-    // CONFIGURATION - Update these values after setup
-    // ============================================
-
-    // Your TOTP secret (generated during setup, paste here after setup)
-    // KEEP THIS SECRET! Anyone with this can generate valid codes
-    TOTP_SECRET: '', // Will be set during setup
-
-    // Whether 2FA is enabled (set to true after completing setup)
-    ENABLED: false,
-
-    // EmailJS Configuration for backup codes
-    // Sign up at https://www.emailjs.com/ (free tier: 200 emails/month)
-    EMAILJS_PUBLIC_KEY: '', // Your EmailJS public key
-    EMAILJS_SERVICE_ID: '', // Your EmailJS service ID
-    EMAILJS_TEMPLATE_ID: '', // Your EmailJS template ID
-
-    // Your email address for receiving backup codes
-    BACKUP_EMAIL: '', // e.g., 'your@email.com'
-
-    // ============================================
-    // STATE MANAGEMENT
-    // ============================================
+    // Runtime state (loaded from Firestore)
+    _config: null,
+    _loaded: false,
 
     currentBackupCode: null,
     backupCodeExpiry: null,
     BACKUP_CODE_VALIDITY: 5 * 60 * 1000, // 5 minutes
 
+    // Load 2FA config from Firestore
+    async loadConfig() {
+        if (this._loaded) return this._config;
+
+        try {
+            const doc = await db.collection('admin').doc('twofa').get();
+            if (doc.exists) {
+                this._config = doc.data();
+            } else {
+                this._config = null;
+            }
+            this._loaded = true;
+            return this._config;
+        } catch (error) {
+            console.error('Error loading 2FA config:', error);
+            this._loaded = true;
+            this._config = null;
+            return null;
+        }
+    },
+
+    // Save 2FA config to Firestore
+    async saveConfig(config) {
+        try {
+            await db.collection('admin').doc('twofa').set(config, { merge: true });
+            this._config = { ...this._config, ...config };
+            return true;
+        } catch (error) {
+            console.error('Error saving 2FA config:', error);
+            throw new Error('Failed to save 2FA configuration.');
+        }
+    },
+
     // Check if 2FA is properly configured
-    isConfigured() {
-        return this.ENABLED && this.TOTP_SECRET && this.TOTP_SECRET.length > 0;
+    async isConfigured() {
+        const config = await this.loadConfig();
+        return config && config.enabled && config.totpSecret && config.totpSecret.length > 0;
     },
 
     // Check if email backup is configured
-    isEmailConfigured() {
-        return this.EMAILJS_PUBLIC_KEY &&
-               this.EMAILJS_SERVICE_ID &&
-               this.EMAILJS_TEMPLATE_ID &&
-               this.BACKUP_EMAIL;
+    async isEmailConfigured() {
+        const config = await this.loadConfig();
+        return config &&
+               config.emailjsPublicKey &&
+               config.emailjsServiceId &&
+               config.emailjsTemplateId &&
+               config.backupEmail;
     },
-
-    // ============================================
-    // TOTP VERIFICATION
-    // ============================================
 
     // Verify a TOTP code from authenticator app
     async verifyTOTP(code) {
-        if (!this.TOTP_SECRET) {
+        const config = await this.loadConfig();
+        if (!config || !config.totpSecret) {
             console.error('TOTP secret not configured');
             return false;
         }
 
-        // Clean the code (remove spaces)
         code = code.replace(/\s/g, '');
-
-        // Verify using TOTP library
-        return await TOTP.verifyCode(this.TOTP_SECRET, code, 1);
+        return await TOTP.verifyCode(config.totpSecret, code, 1);
     },
-
-    // ============================================
-    // EMAIL BACKUP CODES
-    // ============================================
 
     // Generate a random 6-digit backup code
     generateBackupCode() {
@@ -77,38 +83,30 @@ const TwoFA = {
 
     // Send backup code via email using EmailJS
     async sendBackupCode() {
-        if (!this.isEmailConfigured()) {
-            throw new Error('Email backup not configured. Please set up EmailJS.');
+        const config = await this.loadConfig();
+        if (!config || !config.emailjsPublicKey || !config.emailjsServiceId || !config.emailjsTemplateId || !config.backupEmail) {
+            throw new Error('Email backup not configured.');
         }
 
-        // Generate new backup code
         const code = this.generateBackupCode();
 
-        // Initialize EmailJS if not already done
         if (typeof emailjs !== 'undefined' && !emailjs._initialized) {
-            emailjs.init(this.EMAILJS_PUBLIC_KEY);
+            emailjs.init(config.emailjsPublicKey);
             emailjs._initialized = true;
         }
 
-        // Prepare email parameters
         const templateParams = {
-            to_email: this.BACKUP_EMAIL,
+            to_email: config.backupEmail,
             backup_code: code,
             expiry_minutes: Math.floor(this.BACKUP_CODE_VALIDITY / 60000),
             timestamp: new Date().toLocaleString()
         };
 
         try {
-            // Send email via EmailJS
-            await emailjs.send(
-                this.EMAILJS_SERVICE_ID,
-                this.EMAILJS_TEMPLATE_ID,
-                templateParams
-            );
-
+            await emailjs.send(config.emailjsServiceId, config.emailjsTemplateId, templateParams);
             return {
                 success: true,
-                message: `Backup code sent to ${this.maskEmail(this.BACKUP_EMAIL)}`
+                message: `Backup code sent to ${this.maskEmail(config.backupEmail)}`
             };
         } catch (error) {
             console.error('Failed to send backup code:', error);
@@ -120,29 +118,18 @@ const TwoFA = {
 
     // Verify backup code
     verifyBackupCode(code) {
-        // Clean the code
         code = code.replace(/\s/g, '');
-
-        // Check if code exists and hasn't expired
-        if (!this.currentBackupCode || !this.backupCodeExpiry) {
-            return false;
-        }
-
+        if (!this.currentBackupCode || !this.backupCodeExpiry) return false;
         if (Date.now() > this.backupCodeExpiry) {
             this.currentBackupCode = null;
             this.backupCodeExpiry = null;
             return false;
         }
-
-        // Verify code
         const isValid = code === this.currentBackupCode;
-
-        // Clear code after use (one-time use)
         if (isValid) {
             this.currentBackupCode = null;
             this.backupCodeExpiry = null;
         }
-
         return isValid;
     },
 
@@ -153,61 +140,38 @@ const TwoFA = {
         return Math.max(0, Math.ceil(remaining / 1000));
     },
 
-    // ============================================
-    // VERIFICATION (combined)
-    // ============================================
-
     // Verify any code (TOTP or backup)
     async verify(code) {
         code = code.replace(/\s/g, '');
 
-        // First try TOTP
         const totpValid = await this.verifyTOTP(code);
-        if (totpValid) {
-            return { valid: true, method: 'totp' };
-        }
+        if (totpValid) return { valid: true, method: 'totp' };
 
-        // Then try backup code
         const backupValid = this.verifyBackupCode(code);
-        if (backupValid) {
-            return { valid: true, method: 'backup' };
-        }
+        if (backupValid) return { valid: true, method: 'backup' };
 
         return { valid: false, method: null };
     },
 
-    // ============================================
-    // SETUP HELPERS
-    // ============================================
-
-    // Generate new TOTP secret for setup
+    // Setup helpers
     generateNewSecret() {
         return TOTP.generateSecret();
     },
 
-    // Get QR code URL for setup
     getSetupQRCode(secret, accountName = 'admin') {
         return TOTP.getQRCodeUrl(secret, accountName, 'JevanGoldsmith Admin');
     },
 
-    // Get remaining seconds in TOTP period
     getRemainingSeconds() {
         return TOTP.getRemainingSeconds();
     },
 
-    // ============================================
-    // UTILITIES
-    // ============================================
-
-    // Mask email for display (j***@email.com)
+    // Mask email for display
     maskEmail(email) {
         const [localPart, domain] = email.split('@');
-        if (localPart.length <= 2) {
-            return `${localPart[0]}***@${domain}`;
-        }
+        if (localPart.length <= 2) return `${localPart[0]}***@${domain}`;
         return `${localPart[0]}${'*'.repeat(Math.min(localPart.length - 1, 5))}@${domain}`;
     }
 };
 
-// Export for use in other files
 window.TwoFA = TwoFA;
