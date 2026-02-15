@@ -75,7 +75,7 @@
 
         // Build HTML with clickable links to quotes page
         track.innerHTML = selected.map(phrase =>
-            `<a href="quotes.html" class="wisdom-item">${phrase}</a>`
+            `<a href="quotes.html" class="wisdom-item">${typeof escapeHTML === 'function' ? escapeHTML(phrase) : phrase}</a>`
         ).join('');
     }
 

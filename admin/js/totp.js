@@ -127,14 +127,18 @@ const TOTP = {
         return false;
     },
 
-    // Generate QR code URL for authenticator apps
-    getQRCodeUrl(secret, accountName, issuer = 'JevanGoldsmith Admin') {
+    // Generate otpauth:// URI for authenticator apps
+    // Returns the URI directly - use a client-side QR library to display it
+    getOtpauthUrl(secret, accountName, issuer = 'JevanGoldsmith Admin') {
         const encodedIssuer = encodeURIComponent(issuer);
         const encodedAccount = encodeURIComponent(accountName);
-        const otpauthUrl = `otpauth://totp/${encodedIssuer}:${encodedAccount}?secret=${secret}&issuer=${encodedIssuer}&algorithm=SHA1&digits=6&period=30`;
+        return `otpauth://totp/${encodedIssuer}:${encodedAccount}?secret=${secret}&issuer=${encodedIssuer}&algorithm=SHA1&digits=6&period=30`;
+    },
 
-        // Use Google Charts API to generate QR code
-        return `https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=${encodeURIComponent(otpauthUrl)}`;
+    // Generate QR code as data URL (client-side, no external API)
+    // Requires QRCode library or returns the otpauth URL for manual entry
+    getQRCodeUrl(secret, accountName, issuer = 'JevanGoldsmith Admin') {
+        return this.getOtpauthUrl(secret, accountName, issuer);
     },
 
     // Get remaining seconds in current period

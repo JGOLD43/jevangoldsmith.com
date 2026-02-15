@@ -60,12 +60,12 @@ function createEssayArticle(essay) {
 
     article.innerHTML = `
         <div class="post-meta">
-            <span class="post-date">${formattedDate}</span>
-            <span class="post-category">${essay.category}</span>
+            <span class="post-date">${escapeHTML(formattedDate)}</span>
+            <span class="post-category">${escapeHTML(essay.category)}</span>
         </div>
-        <h2>${essay.title}</h2>
-        ${essay.subtitle ? `<p><em>${essay.subtitle}</em></p>` : ''}
-        ${essay.content}
+        <h2>${escapeHTML(essay.title)}</h2>
+        ${essay.subtitle ? `<p><em>${escapeHTML(essay.subtitle)}</em></p>` : ''}
+        ${sanitizeHTML(essay.content)}
     `;
 
     return article;
@@ -134,9 +134,9 @@ function populateSidebar(essays) {
         if (!container || categories[cat].length === 0) return;
 
         container.innerHTML = categories[cat].map(essay => `
-            <a href="#${essay.id}" class="essay-link" onclick="scrollToEssay('${essay.id}', event)">
-                <div>${essay.title}</div>
-                <div class="essay-link-date">${formatDateShort(essay.date)}</div>
+            <a href="#${escapeAttr(essay.id)}" class="essay-link" onclick="scrollToEssay('${escapeAttr(essay.id)}', event)">
+                <div>${escapeHTML(essay.title)}</div>
+                <div class="essay-link-date">${escapeHTML(formatDateShort(essay.date))}</div>
             </a>
         `).join('');
     });

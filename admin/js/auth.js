@@ -61,8 +61,7 @@ async function login(password) {
                 localStorage.setItem('lockoutMultiplier', (lockoutMultiplier * 2).toString());
                 showError(`Too many failed attempts. Locked out for ${15 * lockoutMultiplier} minutes.`);
             } else {
-                const remaining = MAX_LOGIN_ATTEMPTS - attempts;
-                showError(`Invalid password. ${remaining} attempt(s) remaining.`);
+                showError('Invalid password. Please try again.');
             }
 
             return false;
@@ -146,9 +145,8 @@ async function verifyPasswordOnly(password) {
                     showError('error-message', `Too many failed attempts. Locked out for 15 minutes.`);
                 }
             } else {
-                const remaining = MAX_LOGIN_ATTEMPTS - attempts;
                 if (typeof showError === 'function') {
-                    showError('error-message', `Invalid password. ${remaining} attempt(s) remaining.`);
+                    showError('error-message', 'Invalid password. Please try again.');
                 }
             }
 

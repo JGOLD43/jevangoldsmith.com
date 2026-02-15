@@ -64,7 +64,7 @@ function renderProficiencyBar(proficiency) {
     return `
         <div class="proficiency-bar">
             <div class="proficiency-segments">${barsHtml}</div>
-            <span class="proficiency-label">${profInfo?.label || proficiency} (${currentIndex + 1}/5)</span>
+            <span class="proficiency-label">${escapeHTML(profInfo?.label || proficiency)} (${currentIndex + 1}/5)</span>
         </div>
     `;
 }
@@ -75,7 +75,7 @@ function renderActivityBadge(activity) {
     return `
         <div class="activity-badge activity-${activity}">
             <span class="activity-dot"></span>
-            <span class="activity-label">${actInfo?.label || activity}</span>
+            <span class="activity-label">${escapeHTML(actInfo?.label || activity)}</span>
         </div>
     `;
 }
@@ -85,18 +85,18 @@ function renderSkillCard(skill) {
     const categoryInfo = getCategoryInfo(skill.category);
 
     return `
-        <article class="skill-card" data-skill-id="${skill.id}">
+        <article class="skill-card" data-skill-id="${escapeAttr(skill.id)}">
             <div class="skill-card-header">
-                <span class="skill-card-category">${categoryInfo?.name || skill.category}</span>
+                <span class="skill-card-category">${escapeHTML(categoryInfo?.name || skill.category)}</span>
                 ${renderActivityBadge(skill.activity)}
             </div>
-            <h2 class="skill-card-title">${skill.title}</h2>
-            <p class="skill-card-tagline">${skill.tagline}</p>
+            <h2 class="skill-card-title">${escapeHTML(skill.title)}</h2>
+            <p class="skill-card-tagline">${escapeHTML(skill.tagline)}</p>
             <div class="skill-card-proficiency">
                 ${renderProficiencyBar(skill.proficiency)}
             </div>
-            <p class="skill-card-description">${skill.shortDescription}</p>
-            <a href="skill-${skill.id}.html" class="skill-card-link">
+            <p class="skill-card-description">${escapeHTML(skill.shortDescription)}</p>
+            <a href="skill-${escapeAttr(skill.id)}.html" class="skill-card-link">
                 Learn More
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -129,8 +129,8 @@ function renderCategoryCard(categoryId, category, skillCount) {
                     ${icons[category.icon] || icons.layers}
                 </svg>
             </div>
-            <h3 class="category-card-title">${category.name}</h3>
-            <p class="category-card-description">${category.description}</p>
+            <h3 class="category-card-title">${escapeHTML(category.name)}</h3>
+            <p class="category-card-description">${escapeHTML(category.description)}</p>
             <div class="category-card-count">${skillCount} skill${skillCount !== 1 ? 's' : ''}</div>
         </a>
     `;
@@ -147,9 +147,9 @@ function renderRelatedSkills(relatedIds) {
     if (relatedSkills.length === 0) return '';
 
     const skillLinks = relatedSkills.map(skill => `
-        <a href="skill-${skill.id}.html" class="related-skill-link">
-            <span class="related-skill-title">${skill.title}</span>
-            <span class="related-skill-tagline">${skill.tagline}</span>
+        <a href="skill-${escapeAttr(skill.id)}.html" class="related-skill-link">
+            <span class="related-skill-title">${escapeHTML(skill.title)}</span>
+            <span class="related-skill-tagline">${escapeHTML(skill.tagline)}</span>
         </a>
     `).join('');
 
@@ -264,11 +264,11 @@ async function initSkillDetailPage(skillId) {
 
     // Update content
     const contentEl = document.getElementById('skill-content');
-    if (contentEl) contentEl.innerHTML = skill.fullContent;
+    if (contentEl) contentEl.innerHTML = sanitizeHTML(skill.fullContent);
 
     // Update importance
     const importanceEl = document.getElementById('skill-importance');
-    if (importanceEl) importanceEl.innerHTML = `<p>${skill.importance}</p>`;
+    if (importanceEl) importanceEl.innerHTML = `<p>${escapeHTML(skill.importance)}</p>`;
 
     // Update how I apply
     const applyEl = document.getElementById('skill-applications');
@@ -279,14 +279,14 @@ async function initSkillDetailPage(skillId) {
                     <polyline points="9 11 12 14 22 4"></polyline>
                     <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
                 </svg>
-                <span>${item}</span>
+                <span>${escapeHTML(item)}</span>
             </div>
         `).join('');
     }
 
     // Update skill interactions
     const interactionsEl = document.getElementById('skill-interactions');
-    if (interactionsEl) interactionsEl.innerHTML = `<p>${skill.skillInteractions}</p>`;
+    if (interactionsEl) interactionsEl.innerHTML = `<p>${escapeHTML(skill.skillInteractions)}</p>`;
 
     // Update related skills
     const relatedEl = document.getElementById('related-skills');

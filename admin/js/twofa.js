@@ -67,7 +67,9 @@ const TwoFA = {
 
     // Generate a random 6-digit backup code
     generateBackupCode() {
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        const array = new Uint32Array(1);
+        crypto.getRandomValues(array);
+        const code = (100000 + (array[0] % 900000)).toString();
         this.currentBackupCode = code;
         this.backupCodeExpiry = Date.now() + this.BACKUP_CODE_VALIDITY;
         return code;

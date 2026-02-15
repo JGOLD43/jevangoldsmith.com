@@ -84,16 +84,16 @@ function createEssayListItem(essay) {
 
     item.innerHTML = `
         <div class="essay-info">
-            <h3>${essay.title}</h3>
+            <h3>${escapeHTML(essay.title)}</h3>
             <div class="essay-meta">
-                <span>📅 ${formattedDate}</span>
-                <span>📂 ${essay.category}</span>
-                <span class="status-badge ${essay.status}">${essay.status}</span>
+                <span>📅 ${escapeHTML(formattedDate)}</span>
+                <span>📂 ${escapeHTML(essay.category)}</span>
+                <span class="status-badge ${escapeAttr(essay.status)}">${escapeHTML(essay.status)}</span>
             </div>
         </div>
         <div class="essay-actions">
-            <button onclick="editEssay('${essay.id}')" class="btn-secondary">Edit</button>
-            <button onclick="deleteEssay('${essay.id}')" class="btn-danger">Delete</button>
+            <button onclick="editEssay('${escapeAttr(essay.id)}')" class="btn-secondary">Edit</button>
+            <button onclick="deleteEssay('${escapeAttr(essay.id)}')" class="btn-danger">Delete</button>
         </div>
     `;
 
@@ -330,12 +330,12 @@ function previewEssay() {
     previewBody.innerHTML = `
         <article class="article-full">
             <div class="post-meta">
-                <span class="post-date">${formatDate(essayData.date)}</span>
-                <span class="post-category">${essayData.category}</span>
+                <span class="post-date">${escapeHTML(formatDate(essayData.date))}</span>
+                <span class="post-category">${escapeHTML(essayData.category)}</span>
             </div>
-            <h2>${essayData.title}</h2>
-            ${essayData.subtitle ? `<p><em>${essayData.subtitle}</em></p>` : ''}
-            ${essayData.content}
+            <h2>${escapeHTML(essayData.title)}</h2>
+            ${essayData.subtitle ? `<p><em>${escapeHTML(essayData.subtitle)}</em></p>` : ''}
+            ${sanitizeHTML(essayData.content)}
         </article>
     `;
 

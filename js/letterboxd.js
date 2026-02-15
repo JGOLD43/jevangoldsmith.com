@@ -152,14 +152,14 @@ function createMovieCardFromData(movieData) {
     const genreIcon = genreIcons[movieData.genre] || '🎬';
 
     card.innerHTML = `
-        ${movieData.poster ? `<img src="${movieData.poster}" alt="${movieData.title}" class="movie-poster" loading="lazy" decoding="async">` : '<div class="movie-poster" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
-        <h3 class="movie-title">${movieData.title}</h3>
-        ${movieData.year ? `<p class="movie-year">${movieData.year}</p>` : ''}
-        ${movieData.rating ? `<div class="movie-rating">${movieData.rating}</div>` : ''}
-        ${movieData.genre ? `<div class="movie-genre-badge">${genreIcon} ${movieData.genre}</div>` : ''}
+        ${movieData.poster ? `<img src="${escapeAttr(movieData.poster)}" alt="${escapeAttr(movieData.title)}" class="movie-poster" loading="lazy" decoding="async">` : '<div class="movie-poster" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
+        <h3 class="movie-title">${escapeHTML(movieData.title)}</h3>
+        ${movieData.year ? `<p class="movie-year">${escapeHTML(movieData.year)}</p>` : ''}
+        ${movieData.rating ? `<div class="movie-rating">${escapeHTML(movieData.rating)}</div>` : ''}
+        ${movieData.genre ? `<div class="movie-genre-badge">${genreIcon} ${escapeHTML(movieData.genre)}</div>` : ''}
         ${timesWatchedHTML}
-        ${movieData.shortDescription ? `<p class="movie-description">${movieData.shortDescription}</p>` : ''}
-        <p class="movie-date">Watched: ${movieData.date}</p>
+        ${movieData.shortDescription ? `<p class="movie-description">${escapeHTML(movieData.shortDescription)}</p>` : ''}
+        <p class="movie-date">Watched: ${escapeHTML(movieData.date)}</p>
         ${movieData.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
     `;
 
@@ -327,9 +327,9 @@ function populateMoviesSidebar(movies = null) {
         const container = document.getElementById(`genre-${genreKey}`);
         if (container && count > 0) {
             container.innerHTML = genreGroups[genre].map(movie => `
-                <a href="#" class="movie-link" onclick="scrollToMovie('${movie.title.replace(/'/g, "\\'")}', event)">
-                    <div>${movie.title}</div>
-                    <div class="movie-link-year">${movie.year || ''}</div>
+                <a href="#" class="movie-link" onclick="scrollToMovie('${escapeAttr(movie.title)}', event)">
+                    <div>${escapeHTML(movie.title)}</div>
+                    <div class="movie-link-year">${escapeHTML(movie.year || '')}</div>
                 </a>
             `).join('');
         }

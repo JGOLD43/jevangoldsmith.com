@@ -166,9 +166,11 @@ function extractBookData(values, columnMap) {
 function parseExcel(file) {
     // Check if SheetJS is loaded
     if (typeof XLSX === 'undefined') {
-        // Dynamically load SheetJS
+        // Dynamically load SheetJS with SRI
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+        script.integrity = 'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw';
+        script.crossOrigin = 'anonymous';
         script.onload = () => parseExcelWithLibrary(file);
         script.onerror = () => alert('Failed to load Excel parser. Please try a CSV file instead.');
         document.head.appendChild(script);

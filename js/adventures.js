@@ -73,11 +73,11 @@ function createCompactCard(adventure) {
     const formattedDate = formatDateRange(adventure.startDate, adventure.endDate);
 
     card.innerHTML = `
-        <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-compact-image" loading="lazy" decoding="async">
+        <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-compact-image" loading="lazy" decoding="async">
         <div class="adventure-compact-info">
-            <div class="adventure-compact-location">${adventure.location}</div>
-            <h3 class="adventure-compact-title">${adventure.title}</h3>
-            <div class="adventure-compact-meta">${formattedDate} · ${adventure.duration}</div>
+            <div class="adventure-compact-location">${escapeHTML(adventure.location)}</div>
+            <h3 class="adventure-compact-title">${escapeHTML(adventure.title)}</h3>
+            <div class="adventure-compact-meta">${escapeHTML(formattedDate)} · ${escapeHTML(adventure.duration)}</div>
         </div>
     `;
 
@@ -118,22 +118,22 @@ function showAdventureDetail(adventure) {
 
     const formattedDate = formatDateRange(adventure.startDate, adventure.endDate);
     const highlightsHTML = adventure.highlights
-        .map(h => `<span class="highlight-tag">${h}</span>`)
+        .map(h => `<span class="highlight-tag">${escapeHTML(h)}</span>`)
         .join('');
 
     content.innerHTML = `
-        <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-detail-hero" loading="lazy" decoding="async">
+        <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-detail-hero" loading="lazy" decoding="async">
         <div class="adventure-detail-body">
-            <div class="adventure-location">${adventure.location}</div>
-            <h2 class="adventure-title">${adventure.title}</h2>
-            ${adventure.subtitle ? `<p class="adventure-subtitle">${adventure.subtitle}</p>` : ''}
+            <div class="adventure-location">${escapeHTML(adventure.location)}</div>
+            <h2 class="adventure-title">${escapeHTML(adventure.title)}</h2>
+            ${adventure.subtitle ? `<p class="adventure-subtitle">${escapeHTML(adventure.subtitle)}</p>` : ''}
             <div class="adventure-meta">
-                <span>${formattedDate}</span>
-                <span>${adventure.duration}</span>
+                <span>${escapeHTML(formattedDate)}</span>
+                <span>${escapeHTML(adventure.duration)}</span>
             </div>
-            <p class="adventure-description">${adventure.shortDescription}</p>
+            <p class="adventure-description">${escapeHTML(adventure.shortDescription)}</p>
             <div class="adventure-highlights">${highlightsHTML}</div>
-            <a href="adventure-${adventure.id}.html" class="view-full-story-btn">View Full Story</a>
+            <a href="adventure-${escapeAttr(adventure.id)}.html" class="view-full-story-btn">View Full Story</a>
         </div>
     `;
 
@@ -164,26 +164,26 @@ function createAdventureCard(adventure) {
 
     const formattedDate = formatDateRange(adventure.startDate, adventure.endDate);
     const highlightsHTML = adventure.highlights
-        .map(h => `<span class="highlight-tag">${h}</span>`)
+        .map(h => `<span class="highlight-tag">${escapeHTML(h)}</span>`)
         .join('');
 
     const galleryHTML = createGalleryHTML(adventure.gallery, adventure.id);
 
     card.innerHTML = `
         <!-- Collapsed View -->
-        <div class="adventure-card-collapsed" onclick="expandAdventure('${adventure.id}', event)">
-            <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-hero-image" loading="lazy" decoding="async">
+        <div class="adventure-card-collapsed" onclick="expandAdventure('${escapeAttr(adventure.id)}', event)">
+            <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-hero-image" loading="lazy" decoding="async">
             <div class="adventure-card-content">
                 <div class="adventure-meta">
-                    <span class="adventure-location">${adventure.location}</span>
-                    <span class="adventure-date">${formattedDate}</span>
-                    <span class="adventure-duration">${adventure.duration}</span>
+                    <span class="adventure-location">${escapeHTML(adventure.location)}</span>
+                    <span class="adventure-date">${escapeHTML(formattedDate)}</span>
+                    <span class="adventure-duration">${escapeHTML(adventure.duration)}</span>
                 </div>
-                <h2 class="adventure-title">${adventure.title}</h2>
-                ${adventure.subtitle ? `<p class="adventure-subtitle">${adventure.subtitle}</p>` : ''}
-                <p class="adventure-description">${adventure.shortDescription}</p>
+                <h2 class="adventure-title">${escapeHTML(adventure.title)}</h2>
+                ${adventure.subtitle ? `<p class="adventure-subtitle">${escapeHTML(adventure.subtitle)}</p>` : ''}
+                <p class="adventure-description">${escapeHTML(adventure.shortDescription)}</p>
                 <div class="adventure-highlights">${highlightsHTML}</div>
-                <button class="expand-adventure-btn" onclick="expandAdventure('${adventure.id}', event)">
+                <button class="expand-adventure-btn" onclick="expandAdventure('${escapeAttr(adventure.id)}', event)">
                     View Full Story
                 </button>
             </div>
@@ -191,21 +191,21 @@ function createAdventureCard(adventure) {
 
         <!-- Expanded View -->
         <div class="adventure-expanded">
-            <img src="${adventure.heroImage}" alt="${adventure.title}" class="adventure-expanded-hero" loading="lazy" decoding="async">
+            <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-expanded-hero" loading="lazy" decoding="async">
             <div class="adventure-expanded-content">
-                <button class="collapse-btn" onclick="collapseAdventure('${adventure.id}', event)">
+                <button class="collapse-btn" onclick="collapseAdventure('${escapeAttr(adventure.id)}', event)">
                     &times; Close
                 </button>
                 <div class="adventure-meta">
-                    <span class="adventure-location">${adventure.location}</span>
-                    <span class="adventure-date">${formattedDate}</span>
-                    <span class="adventure-duration">${adventure.duration}</span>
+                    <span class="adventure-location">${escapeHTML(adventure.location)}</span>
+                    <span class="adventure-date">${escapeHTML(formattedDate)}</span>
+                    <span class="adventure-duration">${escapeHTML(adventure.duration)}</span>
                 </div>
-                <h1 class="adventure-title">${adventure.title}</h1>
-                ${adventure.subtitle ? `<p class="adventure-subtitle">${adventure.subtitle}</p>` : ''}
+                <h1 class="adventure-title">${escapeHTML(adventure.title)}</h1>
+                ${adventure.subtitle ? `<p class="adventure-subtitle">${escapeHTML(adventure.subtitle)}</p>` : ''}
 
                 <div class="adventure-body">
-                    ${adventure.content}
+                    ${sanitizeHTML(adventure.content)}
                 </div>
 
                 <!-- Interactive Map -->
@@ -236,9 +236,9 @@ function createGalleryHTML(gallery, adventureId) {
     if (!gallery || gallery.length === 0) return '';
 
     return gallery.map((photo, index) => `
-        <div class="gallery-item" onclick="openLightbox('${adventureId}', ${index})">
-            <img src="${photo.thumbnail || photo.src}" alt="${photo.caption}" loading="lazy" decoding="async">
-            <div class="gallery-item-overlay">${photo.caption}</div>
+        <div class="gallery-item" onclick="openLightbox('${escapeAttr(adventureId)}', ${index})">
+            <img src="${escapeAttr(photo.thumbnail || photo.src)}" alt="${escapeAttr(photo.caption)}" loading="lazy" decoding="async">
+            <div class="gallery-item-overlay">${escapeHTML(photo.caption)}</div>
         </div>
     `).join('');
 }
@@ -371,9 +371,9 @@ function initWorldMap(adventures) {
 
             marker.bindPopup(`
                 <div style="min-width: 180px; text-align: center; padding: 0.5rem;">
-                    <strong style="font-size: 1rem;">${adventure.title}</strong><br>
-                    <span style="color: #666; font-size: 0.85rem;">${adventure.location}</span><br>
-                    <button onclick="selectAdventure('${adventure.id}')"
+                    <strong style="font-size: 1rem;">${escapeHTML(adventure.title)}</strong><br>
+                    <span style="color: #666; font-size: 0.85rem;">${escapeHTML(adventure.location)}</span><br>
+                    <button onclick="selectAdventure('${escapeAttr(adventure.id)}')"
                        style="margin-top: 0.5rem; padding: 0.4rem 1rem; background: #C9A86C; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">
                        View Details
                     </button>
@@ -420,8 +420,8 @@ function initAdventureMap(adventure) {
                 .addTo(map)
                 .bindPopup(`
                     <div>
-                        <img src="${photo.thumbnail || photo.src}" class="map-popup-image" alt="${photo.caption}" loading="lazy" decoding="async">
-                        <p class="map-popup-caption">${photo.caption}</p>
+                        <img src="${escapeAttr(photo.thumbnail || photo.src)}" class="map-popup-image" alt="${escapeAttr(photo.caption)}" loading="lazy" decoding="async">
+                        <p class="map-popup-caption">${escapeHTML(photo.caption)}</p>
                     </div>
                 `);
         }

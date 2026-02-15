@@ -295,9 +295,9 @@ function populateSidebar() {
         if (!container || categories[catKey].length === 0) return;
 
         container.innerHTML = categories[catKey].map(book => `
-            <a href="#" class="book-link" onclick="scrollToBook('${book.title.replace(/'/g, "\\'")}', event)">
-                <div>${book.title}</div>
-                <div class="book-link-author">${book.author}</div>
+            <a href="#" class="book-link" onclick="scrollToBook('${escapeAttr(book.title)}', event)">
+                <div>${escapeHTML(book.title)}</div>
+                <div class="book-link-author">${escapeHTML(book.author)}</div>
             </a>
         `).join('');
     });
@@ -327,16 +327,16 @@ function createBookCard(book) {
     card.innerHTML = `
         ${timesReadBadge}
         <div class="book-cover-wrapper">
-            <img src="${coverUrl}" alt="${book.title}" class="book-cover" loading="lazy" decoding="async" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.style.color='white'; this.style.fontWeight='bold'; this.style.padding='2rem'; this.style.textAlign='center'; this.innerHTML='${book.title}';">
+            <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" class="book-cover" loading="lazy" decoding="async" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.style.color='white'; this.style.fontWeight='bold'; this.style.padding='2rem'; this.style.textAlign='center'; this.textContent=this.alt;">
         </div>
         <div class="book-info">
             <div class="book-title-row">
-                <h3 class="book-title">${book.title}</h3>
-                ${book.year ? `<span class="book-year">${book.year}</span>` : ''}
+                <h3 class="book-title">${escapeHTML(book.title)}</h3>
+                ${book.year ? `<span class="book-year">${escapeHTML(book.year)}</span>` : ''}
             </div>
-            <p class="book-author">by ${book.author}</p>
+            <p class="book-author">by ${escapeHTML(book.author)}</p>
             <div class="book-rating"><span class="rating-number">${book.rating}</span> ${stars}</div>
-            ${book.review ? `<p class="book-description">${book.shortDescription}</p>` : ''}
+            ${book.review ? `<p class="book-description">${escapeHTML(book.shortDescription)}</p>` : ''}
             ${book.review ? '<button class="read-review-btn">Read My Review</button>' : ''}
         </div>
     `;
@@ -893,8 +893,8 @@ function initCarousel() {
     const allBooks = [...recentBooks, ...recentBooks]; // Duplicate for seamless scrolling
 
     track.innerHTML = allBooks.map(book => {
-        const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`;
-        return `<img class="carousel-book" src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}" decoding="async" onclick="scrollToBook('${book.isbn}')">`;
+        const coverUrl = `https://covers.openlibrary.org/b/isbn/${escapeAttr(book.isbn)}-M.jpg`;
+        return `<img class="carousel-book" src="${coverUrl}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" onclick="scrollToBook('${escapeAttr(book.isbn)}')">`;
     }).join('');
 }
 
@@ -999,8 +999,8 @@ function renderCategoryGrid() {
         const displayName = categoryDisplayNames[category] || category;
 
         const bookCovers = previewBooks.map(book => {
-            const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`;
-            return `<img src="${coverUrl}" alt="${book.title}" loading="lazy" decoding="async">`;
+            const coverUrl = `https://covers.openlibrary.org/b/isbn/${escapeAttr(book.isbn)}-M.jpg`;
+            return `<img src="${coverUrl}" alt="${escapeAttr(book.title)}" loading="lazy" decoding="async">`;
         }).join('');
 
         // Fill empty slots if less than 8 books
@@ -1009,12 +1009,12 @@ function renderCategoryGrid() {
             .join('');
 
         return `
-            <div class="category-card" onclick="openCategoryModal('${category.replace(/'/g, "\\'")}')">
+            <div class="category-card" onclick="openCategoryModal('${escapeAttr(category)}')">
                 <div class="category-card-books">
                     ${bookCovers}${emptySlots}
                 </div>
                 <div class="category-card-info">
-                    <span class="category-card-name">${displayName}</span>
+                    <span class="category-card-name">${escapeHTML(displayName)}</span>
                     <span class="category-card-count">${books.length}</span>
                 </div>
             </div>
@@ -1041,15 +1041,15 @@ function openCategoryModal(category) {
         <div class="category-modal-backdrop" onclick="closeCategoryModal()"></div>
         <div class="category-modal-content" onclick="event.stopPropagation()">
             <div class="category-expanded-header">
-                <h2 class="category-expanded-title">${displayName}</h2>
+                <h2 class="category-expanded-title">${escapeHTML(displayName)}</h2>
                 <button class="category-expanded-close" onclick="closeCategoryModal()">&times;</button>
             </div>
             <div class="category-expanded-books">
                 ${books.map(book => {
-                    const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`;
+                    const coverUrl = `https://covers.openlibrary.org/b/isbn/${escapeAttr(book.isbn)}-L.jpg`;
                     return `
-                        <div class="category-expanded-book" onclick="openBookFromGrid('${book.isbn}')">
-                            <img src="${coverUrl}" alt="${book.title}" title="${book.title} by ${book.author}" decoding="async">
+                        <div class="category-expanded-book" onclick="openBookFromGrid('${escapeAttr(book.isbn)}')">
+                            <img src="${coverUrl}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async">
                         </div>
                     `;
                 }).join('')}

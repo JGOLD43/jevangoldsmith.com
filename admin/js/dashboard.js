@@ -84,7 +84,7 @@ function populateBookCategories() {
 
     categoryFilter.innerHTML = '<option value="all">All Categories</option>';
     categories.forEach(category => {
-        categoryFilter.innerHTML += `<option value="${category}">${category}</option>`;
+        categoryFilter.innerHTML += `<option value="${escapeAttr(category)}">${escapeHTML(category)}</option>`;
     });
 }
 
@@ -103,18 +103,18 @@ function displayBooks(books) {
     }
 
     booksList.innerHTML = books.map(book => `
-        <div class="item-card" data-isbn="${book.isbn}">
+        <div class="item-card" data-isbn="${escapeAttr(book.isbn)}">
             <div class="item-info">
-                <h3>${book.title}</h3>
+                <h3>${escapeHTML(book.title)}</h3>
                 <div class="item-meta">
-                    <span>${book.author}</span>
-                    <span>${book.category}</span>
+                    <span>${escapeHTML(book.author)}</span>
+                    <span>${escapeHTML(book.category)}</span>
                     <span class="star-rating">${'★'.repeat(book.rating)}${'☆'.repeat(5 - book.rating)}</span>
                     ${book.reReads > 0 ? `<span>Re-reads: ${book.reReads}</span>` : ''}
                 </div>
             </div>
             <div class="item-actions">
-                <button class="btn-edit" onclick="editBook('${book.isbn}')">Edit</button>
+                <button class="btn-edit" onclick="editBook('${escapeAttr(book.isbn)}')">Edit</button>
             </div>
         </div>
     `).join('');
@@ -160,16 +160,16 @@ function editBook(isbn) {
         <form id="edit-book-form">
             <div class="form-group">
                 <label>Title</label>
-                <input type="text" value="${book.title}" readonly style="background: var(--admin-background);">
+                <input type="text" value="${escapeAttr(book.title)}" readonly style="background: var(--admin-background);">
             </div>
             <div class="form-group">
                 <label>Author</label>
-                <input type="text" value="${book.author}" readonly style="background: var(--admin-background);">
+                <input type="text" value="${escapeAttr(book.author)}" readonly style="background: var(--admin-background);">
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>Category</label>
-                    <input type="text" value="${book.category}" readonly style="background: var(--admin-background);">
+                    <input type="text" value="${escapeAttr(book.category)}" readonly style="background: var(--admin-background);">
                 </div>
                 <div class="form-group">
                     <label>Rating</label>
@@ -178,12 +178,12 @@ function editBook(isbn) {
             </div>
             <div class="form-group">
                 <label>ISBN</label>
-                <input type="text" value="${book.isbn}" readonly style="background: var(--admin-background);">
+                <input type="text" value="${escapeAttr(book.isbn)}" readonly style="background: var(--admin-background);">
             </div>
             ${book.shortDescription ? `
             <div class="form-group">
                 <label>Description</label>
-                <textarea readonly style="background: var(--admin-background); min-height: 80px;">${book.shortDescription}</textarea>
+                <textarea readonly style="background: var(--admin-background); min-height: 80px;">${escapeHTML(book.shortDescription)}</textarea>
             </div>
             ` : ''}
             <div class="form-hint" style="margin-top: 1rem; padding: 1rem; background: rgba(201, 168, 108, 0.1); border-radius: 8px;">
@@ -702,16 +702,16 @@ function loadSectionContent(contentType) {
     contentList.innerHTML = items.map(item => `
         <div class="item-card">
             <div class="item-info">
-                <h3>${item.title || item.text || 'Untitled'}</h3>
+                <h3>${escapeHTML(item.title || item.text || 'Untitled')}</h3>
                 <div class="item-meta">
-                    ${item.author ? `<span>${item.author}</span>` : ''}
-                    ${item.category ? `<span>${item.category}</span>` : ''}
+                    ${item.author ? `<span>${escapeHTML(item.author)}</span>` : ''}
+                    ${item.category ? `<span>${escapeHTML(item.category)}</span>` : ''}
                     ${item.rating ? `<span class="star-rating">${'★'.repeat(item.rating)}</span>` : ''}
                 </div>
             </div>
             <div class="item-actions">
-                <button class="btn-edit" onclick="editContent('${contentType}', '${item.id}')">Edit</button>
-                <button class="btn-delete" onclick="deleteContent('${contentType}', '${item.id}')">Delete</button>
+                <button class="btn-edit" onclick="editContent('${escapeAttr(contentType)}', '${escapeAttr(item.id)}')">Edit</button>
+                <button class="btn-delete" onclick="deleteContent('${escapeAttr(contentType)}', '${escapeAttr(item.id)}')">Delete</button>
             </div>
         </div>
     `).join('');
@@ -806,7 +806,7 @@ function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `admin-notification ${type}`;
     notification.innerHTML = `
-        <span>${message}</span>
+        <span>${escapeHTML(message)}</span>
         <button onclick="this.parentElement.remove()">&times;</button>
     `;
 
