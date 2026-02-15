@@ -1,7 +1,15 @@
 // Authentication System for Essay CMS
-// Password is hashed using SHA-256 for security
+// Uses bcrypt for password hashing (upgrade from SHA-256)
 
-// Your password hash (generated using SHA-256)
+// Your password hash - REPLACE with a bcrypt hash generated via browser console:
+//   1. Open admin/index.html in browser
+//   2. Open DevTools console (F12)
+//   3. Run: bcrypt.hash("your-password-here", 12).then(h => console.log(h))
+//   4. Copy the resulting hash and paste it below
+//   5. Commit and push
+//
+// IMPORTANT: The hash below is your OLD SHA-256 hash kept for backwards compatibility.
+// Generate a bcrypt hash (starts with $2a$ or $2b$) to upgrade security.
 const ADMIN_PASSWORD_HASH = '070d3c9befacc3ef929c2e612ce7bd4462fc0878e8320e70f9bf3e2d3ac1cca6';
 
 // Rate limiting configuration
@@ -19,14 +27,15 @@ async function login(password) {
         return false;
     }
 
-    // Verify password using SHA-256
     try {
         const isValid = await verifyPassword(password, ADMIN_PASSWORD_HASH);
 
         if (isValid) {
-            // Generate session token
+            // Generate session token with fingerprint
             const token = generateToken();
+            const fingerprint = generateFingerprint();
             sessionStorage.setItem('adminToken', token);
+            sessionStorage.setItem('adminFingerprint', fingerprint);
             sessionStorage.setItem('loginTime', Date.now().toString());
 
             // Reset login attempts
@@ -37,15 +46,20 @@ async function login(password) {
             window.location.href = 'dashboard.html';
             return true;
         } else {
+            // Add artificial delay to slow brute-force attacks
+            await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+
             // Increment failed attempts
             let attempts = parseInt(localStorage.getItem('loginAttempts') || '0') + 1;
             localStorage.setItem('loginAttempts', attempts.toString());
 
             if (attempts >= MAX_LOGIN_ATTEMPTS) {
-                // Lock out user
-                const lockoutTime = Date.now() + LOCKOUT_DURATION;
+                // Exponential lockout: doubles each time max is hit
+                const lockoutMultiplier = parseInt(localStorage.getItem('lockoutMultiplier') || '1');
+                const lockoutTime = Date.now() + (LOCKOUT_DURATION * lockoutMultiplier);
                 localStorage.setItem('lockoutUntil', lockoutTime.toString());
-                showError(`Too many failed attempts. Locked out for 15 minutes.`);
+                localStorage.setItem('lockoutMultiplier', (lockoutMultiplier * 2).toString());
+                showError(`Too many failed attempts. Locked out for ${15 * lockoutMultiplier} minutes.`);
             } else {
                 const remaining = MAX_LOGIN_ATTEMPTS - attempts;
                 showError(`Invalid password. ${remaining} attempt(s) remaining.`);
@@ -60,14 +74,46 @@ async function login(password) {
     }
 }
 
-// Verify password using SHA-256
+// Verify password - supports bcrypt (preferred) and SHA-256 (legacy)
 async function verifyPassword(password, hash) {
+    // Check if hash is bcrypt format (starts with $2a$ or $2b$)
+    if (hash.startsWith('$2a$') || hash.startsWith('$2b$')) {
+        // Use bcrypt verification
+        if (typeof bcrypt === 'undefined') {
+            console.error('bcryptjs library not loaded');
+            showError('Authentication library failed to load. Please refresh.');
+            return false;
+        }
+        return await bcrypt.compare(password, hash);
+    }
+
+    // Legacy SHA-256 fallback
+    // WARNING: SHA-256 is not a password-hashing algorithm. Upgrade to bcrypt.
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const passwordHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return passwordHash === hash;
+
+    // Timing-safe comparison to prevent timing attacks
+    if (passwordHash.length !== hash.length) return false;
+    let result = 0;
+    for (let i = 0; i < passwordHash.length; i++) {
+        result |= passwordHash.charCodeAt(i) ^ hash.charCodeAt(i);
+    }
+    return result === 0;
+}
+
+// Generate browser fingerprint for session binding
+function generateFingerprint() {
+    const components = [
+        navigator.userAgent,
+        navigator.language,
+        screen.colorDepth,
+        screen.width + 'x' + screen.height,
+        new Date().getTimezoneOffset()
+    ];
+    return components.join('|');
 }
 
 // Verify password only (for 2FA flow - doesn't complete login)
@@ -121,6 +167,7 @@ async function verifyPasswordOnly(password) {
 function isAuthenticated() {
     const token = sessionStorage.getItem('adminToken');
     const loginTime = sessionStorage.getItem('loginTime');
+    const storedFingerprint = sessionStorage.getItem('adminFingerprint');
 
     if (!token || !loginTime) {
         return false;
@@ -129,7 +176,12 @@ function isAuthenticated() {
     // Check if session has expired
     const sessionAge = Date.now() - parseInt(loginTime);
     if (sessionAge > SESSION_DURATION) {
-        // Session expired
+        logout();
+        return false;
+    }
+
+    // Verify browser fingerprint hasn't changed (session hijacking protection)
+    if (storedFingerprint && storedFingerprint !== generateFingerprint()) {
         logout();
         return false;
     }
@@ -147,6 +199,7 @@ function requireAuth() {
 // Logout function
 function logout() {
     sessionStorage.removeItem('adminToken');
+    sessionStorage.removeItem('adminFingerprint');
     sessionStorage.removeItem('loginTime');
     window.location.href = 'index.html';
 }
@@ -162,7 +215,6 @@ function generateToken() {
 
 // Show error message (works on both login page and dashboard)
 function showError(message) {
-    // Try to find error element on page
     const errorElement = document.getElementById('error-message');
 
     if (errorElement) {
@@ -173,7 +225,6 @@ function showError(message) {
             errorElement.classList.remove('show');
         }, 5000);
     } else {
-        // Fallback to alert if no error element
         alert(message);
     }
 }

@@ -5,6 +5,8 @@ User-agent: *
 Disallow: /admin/
 # Block data directory
 Disallow: /data/
+# Block well-known directory
+Disallow: /.well-known/
 
 # Allow everything else
 Allow: /
