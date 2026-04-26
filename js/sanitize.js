@@ -51,3 +51,28 @@ function escapeAttr(str) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 }
+
+/**
+ * Return a safe, escaped URL for href/src-like attributes.
+ * Allows http(s), mailto, tel, #hash, and relative paths.
+ */
+function sanitizeUrl(url, fallback = '#') {
+    const raw = String(url || '').trim();
+    if (!raw) return fallback;
+
+    if (raw.startsWith('#') || raw.startsWith('/') || raw.startsWith('./') || raw.startsWith('../')) {
+        return escapeAttr(raw);
+    }
+
+    try {
+        const parsed = new URL(raw, window.location.origin);
+        const protocol = parsed.protocol.toLowerCase();
+        if (protocol === 'http:' || protocol === 'https:' || protocol === 'mailto:' || protocol === 'tel:') {
+            return escapeAttr(raw);
+        }
+    } catch {
+        return fallback;
+    }
+
+    return fallback;
+}

@@ -1,0 +1,238 @@
+.archive-home,
+.field-notes-main,
+.resource-detail {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 120px 24px 80px;
+}
+
+.archive-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+    gap: 36px;
+    align-items: stretch;
+    min-height: calc(100vh - 180px);
+}
+
+.archive-hero-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.archive-kicker,
+.shelf-kicker {
+    color: var(--secondary-color);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.archive-hero h1 {
+    color: var(--primary-color);
+    font-size: clamp(2.7rem, 7vw, 6.5rem);
+    line-height: 0.95;
+    margin: 14px 0 22px;
+    max-width: 940px;
+}
+
+.archive-deck,
+.archive-final p {
+    color: var(--text-light);
+    font-size: 1.15rem;
+    line-height: 1.7;
+    max-width: 760px;
+}
+
+.archive-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.field-note-card {
+    align-self: center;
+    background: var(--background-alt);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 28px;
+}
+
+.field-note-card h2 {
+    color: var(--primary-color);
+    font-size: 1.9rem;
+    line-height: 1.12;
+    margin: 10px 0 14px;
+}
+
+.field-note-card p,
+.field-note-microcopy {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.field-notes-form {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.field-notes-form input {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-color);
+    min-height: 46px;
+    padding: 0 14px;
+}
+
+.field-notes-form button {
+    background: var(--secondary-color);
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    min-height: 46px;
+    padding: 0 16px;
+}
+
+.archive-section {
+    border-top: 1px solid var(--border-color);
+    padding: 58px 0;
+}
+
+.archive-section-heading {
+    margin-bottom: 24px;
+}
+
+.archive-section-heading h2,
+.archive-final h2 {
+    color: var(--primary-color);
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1;
+    margin: 8px 0 0;
+}
+
+.archive-door-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.archive-door,
+.archive-trail a,
+.archive-list a {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-color);
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.archive-door:hover,
+.archive-trail a:hover,
+.archive-list a:hover {
+    border-color: var(--secondary-color);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.archive-door span,
+.archive-trail strong {
+    color: var(--primary-color);
+    display: block;
+    font-size: 1.08rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.archive-door p,
+.archive-trail span {
+    color: var(--text-light);
+    line-height: 1.55;
+    margin: 0;
+}
+
+.archive-two-column {
+    display: grid;
+    gap: 36px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.archive-list {
+    display: grid;
+    gap: 10px;
+}
+
+.archive-list a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.archive-list span {
+    color: var(--secondary-color);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.obsession-cloud,
+.best-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.obsession-cloud a,
+.best-links a {
+    background: var(--background-alt);
+    border-radius: 6px;
+    color: var(--text-color);
+    font-weight: 700;
+    padding: 10px 14px;
+    text-decoration: none;
+}
+
+.obsession-cloud a:hover,
+.best-links a:hover {
+    background: var(--secondary-color);
+    color: #fff;
+}
+
+.archive-trail {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.archive-final {
+    background: var(--background-alt);
+    border-radius: 8px;
+    padding: 40px;
+}
+
+.footer-note {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0;
+}
+
+@media (max-width: 860px) {
+    .archive-hero,
+    .archive-two-column,
+    .archive-trail {
+        grid-template-columns: 1fr;
+    }
+
+    .archive-home,
+    .field-notes-main,
+    .resource-detail {
+        padding: 96px 18px 56px;
+    }
+}

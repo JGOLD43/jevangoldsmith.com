@@ -3,246 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Challenges - Jevan Goldsmith</title>
+    <title>Challenges, Constraints &amp; Personal Experiments | Jevan Goldsmith</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Experience Pages Shared Styles */
-        .experience-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 3rem 2rem 4rem;
-        }
-
-        .experience-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .experience-eyebrow {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--secondary-color);
-            margin-bottom: 0.75rem;
-        }
-
-        .experience-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .experience-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Challenge Cards */
-        .challenges-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .challenge-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .challenge-card:hover {
-            box-shadow: var(--shadow);
-        }
-
-        .challenge-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .challenge-icon {
-            width: 48px;
-            height: 48px;
-            min-width: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .challenge-icon.fitness { background: rgba(231, 76, 60, 0.1); }
-        .challenge-icon.learning { background: rgba(52, 152, 219, 0.1); }
-        .challenge-icon.creative { background: rgba(155, 89, 182, 0.1); }
-        .challenge-icon.financial { background: rgba(46, 204, 113, 0.1); }
-
-        .challenge-info {
-            flex: 1;
-        }
-
-        .challenge-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.3rem 0.75rem;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .challenge-status.active {
-            background: rgba(46, 204, 113, 0.15);
-            color: #27ae60;
-        }
-
-        .challenge-status.completed {
-            background: rgba(52, 152, 219, 0.15);
-            color: #2980b9;
-        }
-
-        .challenge-status.upcoming {
-            background: rgba(155, 89, 182, 0.15);
-            color: #8e44ad;
-        }
-
-        .challenge-name {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .challenge-dates {
-            font-size: 0.85rem;
-            color: var(--text-light);
-        }
-
-        .challenge-description {
-            font-size: 0.95rem;
-            color: var(--text-light);
-            line-height: 1.6;
-            margin-bottom: 1.25rem;
-        }
-
-        /* Progress Bar */
-        .challenge-progress {
-            margin-bottom: 1rem;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-        }
-
-        .progress-label {
-            color: var(--text-light);
-        }
-
-        .progress-value {
-            font-weight: 600;
-            color: var(--secondary-color);
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: var(--background-alt);
-            border-radius: 100px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--secondary-color), #e0c590);
-            border-radius: 100px;
-            transition: width 0.5s ease;
-        }
-
-        /* Challenge Stats */
-        .challenge-stats {
-            display: flex;
-            gap: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .challenge-stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-color);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Section Divider */
-        .section-divider {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 2.5rem 0 1.5rem;
-        }
-
-        .section-divider-line {
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        .section-divider-text {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-light);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .experience-title {
-                font-size: 2rem;
-            }
-
-            .challenge-header {
-                flex-direction: column;
-            }
-
-            .challenge-stats {
-                flex-wrap: wrap;
-            }
-        }
-    </style>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://images.unsplash.com https://flagcdn.com https://*.ltrbxd.com data:; connect-src 'self' https://api.allorigins.win https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+    <meta name="description" content="A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://jevangoldsmith.com/challenges.html">
+    <link rel="alternate" type="application/json" href="api/v1/index.json" title="Agent API index">
+    <link rel="alternate" type="text/plain" href="llms.txt" title="Agent instructions">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Challenges, Constraints &amp; Personal Experiments">
+    <meta property="og:description" content="A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.">
+    <meta property="og:url" content="https://jevangoldsmith.com/challenges.html">
+    <meta property="og:site_name" content="Jevan Goldsmith">
+    <meta property="og:image" content="https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Challenges, Constraints &amp; Personal Experiments">
+    <meta name="twitter:description" content="A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.">
+    <meta name="twitter:image" content="https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://jevangoldsmith.com/#person","name":"Jevan Goldsmith","url":"https://jevangoldsmith.com/","email":"hello@jevangoldsmith.com","description":"Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.","jobTitle":"Writer and builder","image":"https://jevangoldsmith.com/images/generated/profile/profile-720.jpg","knowsAbout":["better thinking","books and reading","AI-assisted work","personal systems","real estate development","business building"],"sameAs":["https://x.com/JevanGoldsmith","https://youtube.com/@JevanGoldsmith","https://instagram.com/jevangoldsmith","https://linkedin.com/in/jevan-goldsmith-7b885a185","https://letterboxd.com/contentwatch"]},{"@type":"WebSite","@id":"https://jevangoldsmith.com/#website","name":"Jevan Goldsmith","url":"https://jevangoldsmith.com/","inLanguage":"en","publisher":{"@id":"https://jevangoldsmith.com/#person"},"potentialAction":{"@type":"SearchAction","target":"https://jevangoldsmith.com/search.html?q={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"BreadcrumbList","@id":"https://jevangoldsmith.com/challenges.html#breadcrumbs","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jevangoldsmith.com/"},{"@type":"ListItem","position":2,"name":"Ventures","item":"https://jevangoldsmith.com/essays.html"},{"@type":"ListItem","position":3,"name":"Challenges, Constraints & Personal Experiments","item":"https://jevangoldsmith.com/challenges.html"}]},{"@type":"CollectionPage","@id":"https://jevangoldsmith.com/challenges.html#page","url":"https://jevangoldsmith.com/challenges.html","name":"Challenges, Constraints & Personal Experiments","headline":"Challenges, Constraints & Personal Experiments","description":"A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.","image":{"@type":"ImageObject","url":"https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png","contentUrl":"https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png","caption":"Challenges, Constraints & Personal Experiments","width":1200,"height":630},"isPartOf":{"@id":"https://jevangoldsmith.com/#website"},"author":{"@id":"https://jevangoldsmith.com/#person"},"publisher":{"@id":"https://jevangoldsmith.com/#person"},"inLanguage":"en","dateModified":"2026-04-26","keywords":["challenges","Better Thinking","Personal Systems","Essays on Thinking, Business, Culture & Personal Systems","Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments","Useful Resources for Thinking, Building & Learning","How I Read: A Practical Reading Philosophy"],"audience":{"@type":"Audience","audienceType":"Builders and operators looking for practical judgment"},"about":["Better Thinking","Personal Systems"],"breadcrumb":{"@id":"https://jevangoldsmith.com/challenges.html#breadcrumbs"},"mainEntity":{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"url":"https://jevangoldsmith.com/essays.html","name":"Essays on Thinking, Business, Culture & Personal Systems"},{"@type":"ListItem","position":2,"url":"https://jevangoldsmith.com/field-notes.html","name":"Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"},{"@type":"ListItem","position":3,"url":"https://jevangoldsmith.com/free-resources.html","name":"Useful Resources for Thinking, Building & Learning"},{"@type":"ListItem","position":4,"url":"https://jevangoldsmith.com/reading-philosophy.html","name":"How I Read: A Practical Reading Philosophy"},{"@type":"ListItem","position":5,"url":"https://jevangoldsmith.com/index.html","name":"Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"},{"@type":"ListItem","position":6,"url":"https://jevangoldsmith.com/weekly-review-template.html","name":"Weekly Review Template for Reflection, Planning & Better Decisions"}]}}]}</script>
 </head>
-<body>
+<body class="nav-compact">
     <nav class="navbar">
         <div class="container">
             <div class="navbar-left">
                 <a href="index.html" class="logo">
-                    <img src="images/logo.png" alt="J.GOLDSMITH" class="logo-image logo-static" width="88" height="80" decoding="async">
-                    <video class="logo-image logo-video" poster="images/logo.png" muted playsinline loop preload="none" data-src="images/logo-animated.mp4"></video>
+                    <picture class="logo-static">
+                        <source type="image/avif" srcset="images/generated/logo/logo-nav-88.avif 1x, images/generated/logo/logo-nav-176.avif 2x, images/generated/logo/logo-nav-264.avif 3x, images/generated/logo/logo-nav-352.avif 4x">
+                        <source type="image/webp" srcset="images/generated/logo/logo-nav-88.webp 1x, images/generated/logo/logo-nav-176.webp 2x, images/generated/logo/logo-nav-264.webp 3x, images/generated/logo/logo-nav-352.webp 4x">
+                        <img src="images/generated/logo/logo-nav-176.png" srcset="images/generated/logo/logo-nav-88.png 1x, images/generated/logo/logo-nav-176.png 2x, images/generated/logo/logo-nav-264.png 3x, images/generated/logo/logo-nav-352.png 4x" alt="J.GOLDSMITH" class="logo-image" width="88" height="80" decoding="async">
+                    </picture>
+                    <video class="logo-image logo-video" poster="images/generated/logo/logo-nav-176.webp" muted playsinline loop preload="none" data-webm-1x="images/generated/video/logo-animated-176.webm" data-webm-2x="images/generated/video/logo-animated-352.webm" data-webm-3x="images/generated/video/logo-animated-528.webm" data-mp4-1x="images/generated/video/logo-animated-176.mp4" data-mp4-2x="images/generated/video/logo-animated-352.mp4" data-mp4-3x="images/generated/video/logo-animated-528.mp4"></video>
                 </a>
                 <div class="wisdom-ticker">
                     <div class="wisdom-ticker-track">
@@ -260,17 +51,18 @@
                 <li class="nav-dropdown">
                     <a href="#" class="dropdown-trigger">Explore</a>
                     <div class="dropdown-menu dropdown-menu-wide">
-                        <div class="dropdown-wide-header">What I Am About</div>
+                        <div class="dropdown-wide-header">A Collection of Thoughts</div>
                         <div class="dropdown-columns">
                             <div class="dropdown-column">
-                                <a href="north-star.html">North Star</a>
-                                <a href="my-roadmap.html">My Roadmap</a>
-                                <a href="about.html">About Me</a>
+                                <a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="challenges">Field Notes</a>
+                                <a href="essays.html" data-analytics="cta" data-cta-id="best-essays" data-cta-location="challenges">Essays</a>
+                                <a href="takes.html">Takes</a>
+                                <a href="problems.html">Problems</a>
                             </div>
                             <div class="dropdown-column">
+                                <a href="north-star.html">North Star</a>
+                                <a href="about.html">Website Purpose</a>
                                 <a href="health.html">Health</a>
-                                <a href="flaws.html">Flaws</a>
-                                <a href="dateme.html">Date Me</a>
                             </div>
                         </div>
                     </div>
@@ -278,19 +70,19 @@
                 <li class="nav-dropdown">
                     <a href="#" class="dropdown-trigger">Content</a>
                     <div class="dropdown-menu dropdown-menu-icons">
-                        <a href="https://youtube.com/@YourChannel" target="_blank" class="dropdown-icon-link" title="YouTube">
+                        <a href="https://youtube.com/@JevanGoldsmith" target="_blank" class="dropdown-icon-link" title="YouTube">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                         </a>
-                        <a href="https://instagram.com/YourHandle" target="_blank" class="dropdown-icon-link" title="Instagram">
+                        <a href="https://instagram.com/jevangoldsmith" target="_blank" class="dropdown-icon-link" title="Instagram">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                         </a>
                         <a href="https://x.com/JevanGoldsmith" target="_blank" class="dropdown-icon-link" title="X">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                         </a>
-                        <a href="https://linkedin.com/in/YourProfile" target="_blank" class="dropdown-icon-link" title="LinkedIn">
+                        <a href="https://linkedin.com/in/jevan-goldsmith-7b885a185" target="_blank" class="dropdown-icon-link" title="LinkedIn">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                         </a>
-                        <a href="mailto:newsletter@example.com" class="dropdown-icon-link" title="Newsletter">
+                        <a href="mailto:hello@jevangoldsmith.com?subject=Newsletter" class="dropdown-icon-link" title="Newsletter" data-analytics="contact" data-cta-location="challenges">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         </a>
                     </div>
@@ -303,39 +95,34 @@
                             <div class="dropdown-column">
                                 <a href="books.html">Reading</a>
                                 <a href="movies.html">Movies</a>
-                                <a href="music.html">Music</a>
                                 <a href="podcasts.html">Podcasts</a>
-                                <a href="products.html">Products</a>
                             </div>
                             <div class="dropdown-column">
+                                <a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="challenges">The Shelf</a>
                                 <a href="cool-shit.html">Cool Shit</a>
                                 <a href="people.html">People</a>
-                                <a href="food.html">Food</a>
-                                <a href="quotes.html">Quotes</a>
-                                <a href="interests.html">Interests</a>
                             </div>
                         </div>
                     </div>
                 </li>
                 <li><a href="adventures.html">Adventures</a></li>
                 <li class="nav-dropdown">
-                    <a href="#" class="dropdown-trigger">Experience</a>
+                    <a href="#" class="dropdown-trigger">Ventures</a>
                     <div class="dropdown-menu dropdown-menu-wide">
                         <div class="dropdown-wide-header">Things I think up, build and learn</div>
                         <div class="dropdown-columns">
                             <div class="dropdown-column">
-                                <a href="essays.html">Essays</a>
                                 <a href="projects.html">Projects</a>
-                                <a href="challenges.html">Challenges</a>
+                                <a href="challenges.html" class="active">Challenges</a>
                             </div>
                             <div class="dropdown-column">
-                                <a href="skills.html">Skills</a>
+                                <a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges">Resources</a>
                                 <a href="lesson-logger.html">Lesson Logger</a>
-                                <a href="important-or-not.html">Important or Not</a>
                             </div>
                         </div>
                     </div>
                 </li>
+                
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -350,7 +137,7 @@
                     </div>
                 </button>
                 <div class="navbar-contact">
-                    <a href="meet.html" class="navbar-contact-btn">
+                    <a href="meet.html" class="navbar-contact-btn" data-analytics="contact" data-cta-location="challenges">
                         <span>Let's Chat</span>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </a>
@@ -360,11 +147,11 @@
                             <p>Scan to connect</p>
                         </div>
                         <div class="contact-dropdown-links">
-                            <a href="contact.html">
+                            <a href="contact.html" data-analytics="cta" data-cta-id="contact" data-cta-location="challenges">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                                 Contact Page
                             </a>
-                            <a href="mailto:hello@jevangoldsmith.com">
+                            <a href="mailto:hello@jevangoldsmith.com" data-analytics="contact" data-cta-location="challenges">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                                 Email Me
                             </a>
@@ -374,142 +161,254 @@
             </div>
         </div>
     </nav>
+    <main class="movies-layout sidebar-collapsed" id="challenges-layout">
+        <aside class="movies-sidebar collapsed" id="challenges-sidebar">
+            <div class="sidebar-header">
+                <button class="sidebar-collapse-btn" data-action="toggleChallengeSidebar" title="Collapse sidebar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                    </svg>
+                </button>
+                <span class="sidebar-browse-label">Browse</span>
+            </div>
 
-    <main class="experience-content">
-        <header class="experience-header">
-            <p class="experience-eyebrow">Pushing Limits</p>
-            <h1 class="experience-title">Challenges</h1>
-            <p class="experience-subtitle">Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.</p>
-        </header>
-
-        <div class="challenges-list">
-            <!-- Active Challenge -->
-            <div class="challenge-card">
-                <div class="challenge-header">
-                    <div class="challenge-icon learning">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                    </div>
-                    <div class="challenge-info">
-                        <h3 class="challenge-name">52 Books in 2026</h3>
-                        <p class="challenge-dates">Jan 1 - Dec 31, 2026</p>
-                    </div>
-                    <div class="challenge-status active">Active</div>
-                </div>
-                <p class="challenge-description">Reading one book per week for the entire year. Focusing on a mix of business, philosophy, biography, and fiction. Tracking progress and sharing reviews on the books page.</p>
-                <div class="challenge-progress">
-                    <div class="progress-header">
-                        <span class="progress-label">Progress</span>
-                        <span class="progress-value">5 / 52 books</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 10%;"></div>
-                    </div>
-                </div>
-                <div class="challenge-stats">
-                    <div class="challenge-stat">
-                        <div class="stat-value">5</div>
-                        <div class="stat-label">Books Read</div>
-                    </div>
-                    <div class="challenge-stat">
-                        <div class="stat-value">47</div>
-                        <div class="stat-label">To Go</div>
-                    </div>
-                    <div class="challenge-stat">
-                        <div class="stat-value">1,847</div>
-                        <div class="stat-label">Pages</div>
+            <div class="sidebar-list-selector">
+                <div class="list-dropdown" id="list-dropdown">
+                    <button class="list-dropdown-btn" data-action="toggleChallengeListDropdown">
+                        <span id="current-list-name">Challenges</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="list-dropdown-menu" id="list-dropdown-menu">
+                        <a href="projects.html" class="list-option">Projects</a>
+                        <a href="challenges.html" class="list-option active">Challenges</a>
+                        <a href="free-resources.html" class="list-option" data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges">Resources</a>
+                        <a href="lesson-logger.html" class="list-option">Lesson Logger</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Another Active Challenge -->
-            <div class="challenge-card">
-                <div class="challenge-header">
-                    <div class="challenge-icon fitness">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>
-                    </div>
-                    <div class="challenge-info">
-                        <h3 class="challenge-name">Morning Routine</h3>
-                        <p class="challenge-dates">Ongoing</p>
-                    </div>
-                    <div class="challenge-status active">Active</div>
-                </div>
-                <p class="challenge-description">Wake up at 6am every day. Exercise, meditate, write, and plan the day before checking any screens. Building habits that compound over time.</p>
-                <div class="challenge-progress">
-                    <div class="progress-header">
-                        <span class="progress-label">Current Streak</span>
-                        <span class="progress-value">23 days</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 77%;"></div>
-                    </div>
+            <div class="sidebar-search">
+                <div class="search-input-wrapper search-bubble">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="challenge-search" class="movie-search-input" placeholder="Search challenges..." data-action="searchChallenges" data-action-event="input" data-action-value="true">
+                    <button class="search-clear-btn" id="challenge-search-clear-btn" data-action="clearChallengeSearch" style="display: none;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
-            <div class="section-divider">
-                <div class="section-divider-line"></div>
-                <span class="section-divider-text">Upcoming</span>
-                <div class="section-divider-line"></div>
+            <div class="sidebar-section">
+                <button class="sidebar-category active" data-action="filterChallenges" data-action-args="all" data-action-this="true" data-tooltip="All Challenges">
+                    <span class="category-icon">🎯</span>
+                    <span class="category-name">All Challenges</span>
+                    <span class="category-count" id="count-all-challenges">4</span>
+                </button>
             </div>
 
-            <!-- Upcoming Challenge -->
-            <div class="challenge-card">
-                <div class="challenge-header">
-                    <div class="challenge-icon creative">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9b59b6" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                    </div>
-                    <div class="challenge-info">
-                        <h3 class="challenge-name">100 Days of Writing</h3>
-                        <p class="challenge-dates">Starting Q2 2026</p>
-                    </div>
-                    <div class="challenge-status upcoming">Upcoming</div>
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="active" data-action-this="true" data-tooltip="Active">
+                    <span class="category-icon">⚡</span>
+                    <span class="category-name">Active</span>
+                    <span class="category-count" id="count-active">2</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="upcoming" data-action-this="true" data-tooltip="Upcoming">
+                    <span class="category-icon">📋</span>
+                    <span class="category-name">Upcoming</span>
+                    <span class="category-count" id="count-upcoming">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="completed" data-action-this="true" data-tooltip="Completed">
+                    <span class="category-icon">✅</span>
+                    <span class="category-name">Completed</span>
+                    <span class="category-count" id="count-completed">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="learning" data-action-this="true" data-tooltip="Learning">
+                    <span class="category-icon">📚</span>
+                    <span class="category-name">Learning</span>
+                    <span class="category-count" id="count-learning">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="fitness" data-action-this="true" data-tooltip="Fitness">
+                    <span class="category-icon">💪</span>
+                    <span class="category-name">Fitness</span>
+                    <span class="category-count" id="count-fitness">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="creative" data-action-this="true" data-tooltip="Creative">
+                    <span class="category-icon">✍️</span>
+                    <span class="category-name">Creative</span>
+                    <span class="category-count" id="count-creative">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="financial" data-action-this="true" data-tooltip="Financial">
+                    <span class="category-icon">💰</span>
+                    <span class="category-name">Financial</span>
+                    <span class="category-count" id="count-financial">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-footer">
+                <p>Personal challenges, constraints, and experiments</p>
+            </div>
+        </aside>
+
+        <div class="movies-main">
+            <header class="main-header">
+                <div class="header-content">
+                    <h1>Challenges</h1>
+                    <p>Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.</p>
                 </div>
-                <p class="challenge-description">Write and publish something every day for 100 days straight. Could be an essay, a tweet thread, or a short reflection. Building a consistent writing practice.</p>
-            </div>
-
-            <div class="section-divider">
-                <div class="section-divider-line"></div>
-                <span class="section-divider-text">Completed</span>
-                <div class="section-divider-line"></div>
-            </div>
-
-            <!-- Completed Challenge -->
-            <div class="challenge-card">
-                <div class="challenge-header">
-                    <div class="challenge-icon financial">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    </div>
-                    <div class="challenge-info">
-                        <h3 class="challenge-name">No-Spend Month</h3>
-                        <p class="challenge-dates">January 2026</p>
-                    </div>
-                    <div class="challenge-status completed">Completed</div>
+                <div class="header-counter">
+                    <span class="counter-number" id="challenge-count">4</span>
+                    <span class="counter-label">Challenges</span>
                 </div>
-                <p class="challenge-description">One month of only essential spending. No restaurants, no subscriptions, no impulse purchases. Reset my relationship with money and consumption.</p>
-                <div class="challenge-stats">
-                    <div class="challenge-stat">
-                        <div class="stat-value">$1,240</div>
-                        <div class="stat-label">Saved</div>
+            </header>
+
+            <div id="challenges-container" class="movies-grid">
+                <div class="movie-card challenge-card js-zoom-item" data-status="active" data-category="active learning" data-search="52 Books 2026 reading learning books year week business philosophy biography fiction">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder placeholder-learning">📚</div>
                     </div>
-                    <div class="challenge-stat">
-                        <div class="stat-value">31</div>
-                        <div class="stat-label">Days</div>
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-active">Active</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">52 Books in 2026</h3>
+                        </div>
+                        <div class="podcast-category-badge">Learning · Jan 1 – Dec 31, 2026</div>
+                        <p class="movie-description">Reading one book per week for the year. A mix of business, philosophy, biography, and fiction.</p>
+                        <div class="challenge-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-value">5 / 52 books</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 10%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="movie-card challenge-card js-zoom-item" data-status="active" data-category="active fitness" data-search="Morning Routine wake 6am exercise meditate write plan habits compound">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder placeholder-fitness">🌅</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-active">Active</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">Morning Routine</h3>
+                        </div>
+                        <div class="podcast-category-badge">Fitness · Ongoing</div>
+                        <p class="movie-description">Wake at 6am. Exercise, meditate, write, and plan the day before any screens. Habits that compound.</p>
+                        <div class="challenge-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Current streak</span>
+                                <span class="progress-value">23 days</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 77%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="movie-card challenge-card js-zoom-item" data-status="upcoming" data-category="upcoming creative" data-search="100 Days Writing essay tweet reflection daily publish consistent practice">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder placeholder-creative">✍️</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-upcoming">Upcoming</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">100 Days of Writing</h3>
+                        </div>
+                        <div class="podcast-category-badge">Creative · Starting Q2 2026</div>
+                        <p class="movie-description">Write and publish something every day for 100 days. Essay, thread, or short reflection. Building a consistent writing practice.</p>
+                    </div>
+                </div>
+
+                <div class="movie-card challenge-card js-zoom-item" data-status="completed" data-category="completed financial" data-search="No-Spend Month January 2026 essential spending money consumption restaurants subscriptions impulse">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder placeholder-financial">💰</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-completed">Completed</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">No-Spend Month</h3>
+                        </div>
+                        <div class="podcast-category-badge">Financial · January 2026</div>
+                        <p class="movie-description">One month of essential spending only. No restaurants, no subscriptions, no impulse buys. Saved $1,240 over 31 days.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    <section class="seo-related-section" data-seo-related>
+        <p class="seo-related-eyebrow">Related thread</p>
+        <h2>Keep exploring this idea</h2>
+        <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
+        <div class="seo-related-grid">
+            <a class="seo-related-card" href="essays.html" data-analytics="cta" data-cta-id="best-essays" data-cta-location="challenges">
+                <span>Essays on Thinking, Business, Culture &amp; Personal Systems</span>
+                <p>Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems.</p>
+            </a>
+            <a class="seo-related-card" href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="challenges">
+                <span>Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments</span>
+                <p>One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive.</p>
+            </a>
+            <a class="seo-related-card" href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges">
+                <span>Useful Resources for Thinking, Building &amp; Learning</span>
+                <p>Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work.</p>
+            </a>
+            <a class="seo-related-card" href="reading-philosophy.html">
+                <span>How I Read: A Practical Reading Philosophy</span>
+                <p>Notes on reading for judgment, taste, decision-making, and a better personal operating system.</p>
+            </a>
+        </div>
+    </section>
+</main>
 
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+                <div>
+                    <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+                    <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
+                </div>
                 <ul class="footer-links">
                     <li><a href="index.html">Home</a></li>
+                    <li><a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="challenges">Field Notes</a></li>
+                    <li><a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="challenges">The Shelf</a></li>
+                    <li><a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges">Resources</a></li>
                 </ul>
             </div>
         </div>
     </footer>
 
+    <script src="js/grid-zoom.js"></script>
+    <script src="js/action-dispatcher.js"></script>
+    <script src="js/challenges.js"></script>
     <script src="js/theme.js"></script>
+    <script src="js/analytics.js"></script>
 </body>
 </html>

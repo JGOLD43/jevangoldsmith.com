@@ -742,6 +742,7 @@ function renderContactForm() {
                 </div>
 
                 <form id="contact-form" class="funnel-form" onsubmit="submitForm(event)">
+                    <input type="text" name="_trap" tabindex="-1" autocomplete="off" class="funnel-honeypot" aria-hidden="true">
                     <div class="funnel-form-group">
                         <label for="name">What should I call you?</label>
                         <input type="text" id="name" name="name" required class="funnel-input" placeholder="Your first name" autocomplete="given-name">
@@ -822,9 +823,18 @@ function submitForm(event) {
     event.preventDefault();
 
     const form = document.getElementById('contact-form');
+    const trap = form.querySelector('input[name="_trap"]');
+    if (trap && trap.value.trim()) {
+        return;
+    }
     const formData = new FormData(form);
 
+    // Keep answers needed for context while avoiding over-collection.
+    const allowedQuizFields = new Set([
+        'pineapple', 'humor', 'spontaneous', 'values', 'loveLanguage', 'social'
+    ]);
     for (const [key, value] of Object.entries(state.answers)) {
+        if (!allowedQuizFields.has(key)) continue;
         formData.append(`quiz_${key}`, value);
     }
 

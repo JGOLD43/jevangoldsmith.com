@@ -1,0 +1,179 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-26T07:57:56.047Z",
+  "policy": "Counts may only ratchet downward. JSON-LD scripts are excluded.",
+  "strictPages": [
+    "free-resources.html",
+    "products.html",
+    "projects.html",
+    "quotes.html",
+    "reading-philosophy.html"
+  ],
+  "totals": {
+    "inlineStyles": 0,
+    "inlineScripts": 9,
+    "inlineHandlers": 108
+  },
+  "pages": {
+    "about.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "adventure-austin-adventure.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 1,
+      "inlineHandlers": 6
+    },
+    "adventure-ayr-adventure.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 1,
+      "inlineHandlers": 6
+    },
+    "adventure-japan-adventure.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 1,
+      "inlineHandlers": 6
+    },
+    "adventure-sample-adventure.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 1,
+      "inlineHandlers": 6
+    },
+    "adventure-sydney-adventure.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 1,
+      "inlineHandlers": 6
+    },
+    "adventure-uluru-adventure.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 1,
+      "inlineHandlers": 6
+    },
+    "adventure-vietnam-adventure.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 1,
+      "inlineHandlers": 6
+    },
+    "adventures.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 12
+    },
+    "books.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 24
+    },
+    "challenges.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "contact.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "cool-shit.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "dateme.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "essays.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 11
+    },
+    "free-resources.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "health.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "important-or-not.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 1,
+      "inlineHandlers": 0
+    },
+    "index.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "lesson-logger.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "meet.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "movies.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 12
+    },
+    "north-star.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "notes.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "people.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 1,
+      "inlineHandlers": 7
+    },
+    "podcasts.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "products.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "projects.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "quotes.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "reading-philosophy.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "search.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    },
+    "videos.html": {
+      "inlineStyles": 0,
+      "inlineScripts": 0,
+      "inlineHandlers": 0
+    }
+  }
+}

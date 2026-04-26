@@ -1,125 +1,161 @@
-# Jevan Goldsmith - Personal Website
+# Jevan Goldsmith Website
 
-A clean, modern personal website built with pure HTML and CSS. No frameworks, no build process—just straightforward code.
+Static personal website for `jevangoldsmith.com`, hosted on Firebase Hosting.
+The public experience is now organized as a living archive, with Field Notes as
+the recurring audience thread.
 
-## Features
+The public runtime is framework-free: generated HTML, CSS, JavaScript, JSON,
+images, and vendor assets are served from `dist/`. The source remains a
+transitioning static-site system with root HTML pages, shared partials, source
+CSS layers, content data, and build/check scripts.
 
-- **Responsive Design**: Works beautifully on desktop, tablet, and mobile devices
-- **Clean Typography**: Uses Inter and Merriweather fonts for a professional, readable design
-- **Fast Loading**: No heavy frameworks means quick page loads
-- **Easy to Customize**: Simple HTML/CSS structure makes it easy to modify
+## Start Here
 
-## Pages
+Read [docs/START_HERE.md](docs/START_HERE.md) first. It links to the active
+engineering, product, design, content, and release docs.
 
-- **Home** (`index.html`): Introduction, bio, and recent activity
-- **Essays** (`essays.html`): Blog posts and long-form writing
-- **Book Reviews** (`books.html`): Reviews of books you've read
-- **Movie Reviews** (`movies.html`): Automatically pulls your recent movie reviews from Letterboxd via RSS feed
-- **About** (`about.html`): More detailed background and interests
-- **Contact** (`contact.html`): Contact form and social media links
+## Structure
 
-## Setup
-
-1. **Update Social Media Links**: Replace `yourusername` in all HTML files with your actual social media handles:
-   - X (Twitter): Search for `https://x.com/yourusername`
-   - Facebook: Search for `https://facebook.com/yourusername`
-   - Letterboxd: Search for `https://letterboxd.com/yourusername`
-   - LinkedIn: Search for `https://linkedin.com/in/yourusername`
-
-2. **Add Your Profile Image**: Replace the placeholder in `index.html`:
-   - Add your profile image to the `images/` folder (e.g., `images/profile.jpg`)
-   - The current reference is: `<img src="images/profile.jpg" alt="Jevan Goldsmith">`
-
-3. **Setup Contact Form**: The contact form uses Formspree (free service):
-   - Go to [formspree.io](https://formspree.io) and create a free account
-   - Create a new form and get your form ID
-   - In `contact.html`, replace `your-form-id` with your actual Formspree form ID
-
-4. **Customize Content**:
-   - Update the essays in `essays.html` with your actual writing
-   - Update the book reviews in `books.html` with books you've actually read
-   - Modify the About page with your personal background
-   - Add real book cover images if desired (replace the gradient placeholders)
-
-## Deployment Options
-
-### Option 1: GitHub Pages (Free & Easy)
-1. Create a GitHub repository
-2. Upload all files to the repository
-3. Go to Settings > Pages
-4. Select "Deploy from branch" and choose your main branch
-5. Your site will be live at `https://yourusername.github.io/repository-name`
-
-### Option 2: Netlify (Free & Simple)
-1. Sign up at [netlify.com](https://netlify.com)
-2. Drag and drop the `personal-website` folder into Netlify
-3. Your site will be live instantly with a custom URL
-4. You can add a custom domain if you have one
-
-### Option 3: Vercel (Free)
-1. Sign up at [vercel.com](https://vercel.com)
-2. Import your project from GitHub or upload directly
-3. Deploy with one click
-
-### Option 4: Traditional Web Hosting
-1. Upload all files to your web host via FTP
-2. Make sure `index.html` is in the root directory
-3. Your site will be accessible at your domain
-
-## Customization
-
-### Colors
-Edit the CSS variables in `css/style.css` to change the color scheme:
-
-```css
-:root {
-    --primary-color: #2c3e50;      /* Main heading color */
-    --secondary-color: #3498db;     /* Links and buttons */
-    --accent-color: #e74c3c;        /* Hover states */
-    --text-color: #333;             /* Body text */
-    --text-light: #666;             /* Secondary text */
-}
+```text
+.
+├── *.html                  # Public page source/output during migration
+├── _src/layouts/           # Shared HTML layouts for migrated pages
+├── _src/pages/             # Migrated page source
+├── _src/partials/          # Shared source nav/footer chrome
+├── admin/                  # Admin source, excluded from public Hosting deploys
+├── css/src/                # CSS source layers
+├── css/style.css           # Generated shared CSS bundle; do not hand-edit
+├── css/page-*.css          # Generated per-page CSS bundles; do not hand-edit
+├── data/                   # Static content plus site/deploy config
+├── dist/                   # Generated Firebase Hosting output; ignored
+├── docs/                   # Canonical project/product/design docs
+├── images/                 # Static images and media
+├── js/                     # Browser JavaScript
+├── scripts/                # Build, validation, and sync scripts
+├── vendor/                 # Self-hosted third-party runtime assets
+├── firebase.json           # Firebase Hosting and Firestore config
+└── firestore.rules         # Firestore access rules
 ```
 
-### Fonts
-The site uses Google Fonts (Inter and Merriweather). To change fonts:
-1. Visit [fonts.google.com](https://fonts.google.com)
-2. Select your desired fonts
-3. Replace the font links in the `<head>` of each HTML file
-4. Update the font-family in `css/style.css`
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the current architecture and
+recommended evolution path.
 
-### Layout
-All styling is in `css/style.css`. The site uses CSS Grid and Flexbox for layouts, making it easy to modify.
+## Common Commands
 
-## File Structure
+Build generated output:
 
-```
-personal-website/
-├── index.html          # Home page
-├── essays.html         # Essays/blog page
-├── books.html          # Book reviews page
-├── movies.html         # Movie reviews page (Letterboxd integration)
-├── about.html          # About page
-├── contact.html        # Contact page
-├── README.md           # This file
-├── css/
-│   └── style.css       # All styles
-├── js/
-│   └── letterboxd.js   # Letterboxd RSS feed integration
-└── images/
-    └── profile.jpg     # Your profile image (you need to add this)
+```bash
+npm run build
 ```
 
-## Browser Support
+Run all local checks:
 
-Works on all modern browsers:
-- Chrome, Firefox, Safari, Edge (latest versions)
-- Mobile browsers (iOS Safari, Chrome Mobile)
+```bash
+npm run check
+```
 
-## License
+Verify live Firebase output (without requiring custom domain cutover):
 
-Feel free to use this template for your own personal website. No attribution required.
+```bash
+npm run check:live:firebase
+```
 
-## Questions?
+Sync repeated site-wide links from `data/site.json`:
 
-If you need help customizing or deploying your site, feel free to reach out!
+```bash
+npm run sync:site
+```
+
+Enrich `data/movies.json` with TMDB metadata (runtime, genres, overview,
+backdrop). Idempotent — only fetches entries missing `runtime`/`tmdbId`. Reads
+`TMDB_API_KEY` from environment or `.env.local` (gitignored). Get a free key at
+<https://www.themoviedb.org/settings/api>.
+
+```bash
+TMDB_API_KEY=xxxxx npm run enrich:movies
+# or, with .env.local:
+npm run enrich:movies
+# Force re-fetch all entries:
+node scripts/enrich-movies.js --force
+# Enrich a single title:
+node scripts/enrich-movies.js --only="Lawrence of Arabia"
+```
+
+Re-run after each Letterboxd sync. Watch stats panel on `movies.html` reads
+`runtime` × `timesWatched` to compute total hours, hours-by-genre, decade
+breakdown, rating histogram, and most-rewatched.
+
+## Generated Files Policy
+
+The canonical generated-file policy lives in
+[docs/SOURCE_OF_TRUTH.md](docs/SOURCE_OF_TRUTH.md). In short: author source in
+`_src/`, `css/src/`, `data/*.json` except generated indexes, root legacy HTML
+while still source, `js/`, `scripts/`, `docs/`, `tests/`, and `vendor/`.
+Generated bundles, indexes, deploy output, and test artifacts stay ignored.
+Route ownership is tracked in `data/source-ownership.json`; structure cleanup
+is enforced by `npm run check:source` and `npm run check:structure`.
+
+## Deployment
+
+Firebase Hosting serves `dist/`, not the repository root. The previous
+placeholder `/api/**` Cloud Function rewrite has been removed until there is a
+real server-side API to expose.
+
+`admin/**` is excluded from Hosting until admin writes are server-enforced.
+
+Relevant files:
+
+- `firebase.json`
+- `data/site.config.json`
+- `dist/`
+- `firestore.rules`
+- `.firebaserc`
+- `CNAME`
+
+## Content Model
+
+The site currently uses a hybrid content model:
+
+- many pages are still hand-authored root HTML files
+- migrated pages live in `_src/pages/`
+- root route ownership is classified in `data/source-ownership.json`
+- shared nav/footer source lives in `_src/partials/`
+- collections live in `data/*.json` where migrated
+- primary commercial actions live in `data/ctas.json`
+- Field Notes configuration lives in `data/newsletter.json`
+- topic taxonomy starts in `data/topics.json`
+- books live in `data/books.json` and are rendered by `js/books.js`
+- admin tools are present, but not all content types persist through a backend
+
+The next major structural improvement is to continue migrating root HTML pages
+into `_src/pages/`, then generate the same public HTML output through templates.
+
+## Static Agent API
+
+Agents and crawlers should start with `llms.txt` or the static JSON API at
+`/api/v1/index.json`. These endpoints are generated files in `dist/`, not live
+server functions, so ingestion does not create Cloud Function or database-read
+costs. Collection endpoints such as `/api/v1/skills.json`,
+`/api/v1/adventures.json`, and `/api/v1/products.json` expose shareable records
+with canonical URLs for citation and future commerce/resource surfaces. Agents
+can use `/api/v1/search-index.json` as the cheapest discovery map before
+fetching larger content payloads.
+
+See [docs/STATIC_AGENT_API.md](docs/STATIC_AGENT_API.md).
+
+## Analytics
+
+Analytics events are privacy-friendly and configured through
+`data/site.config.json`. See [docs/ANALYTICS.md](docs/ANALYTICS.md) for what is
+tracked, what is intentionally not tracked, and how to debug local events.
+
+## Security Notes
+
+Firestore only allows the configured admin email to read/write `/admin/**` and
+denies everything else. The admin source also performs client-side 2FA checks,
+but client-side 2FA should not be treated as a backend authorization boundary,
+so `admin/**` is not deployed publicly.
+
+If admin writes become production-critical, move them behind Cloud Functions or
+another server-side API that verifies Firebase ID tokens and second-factor state
+before writing data.

@@ -3,234 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Jevan Goldsmith</title>
+    <title>Projects Jevan Goldsmith Is Building &amp; Exploring</title>
+    
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@100;300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Experience Pages Shared Styles */
-        .experience-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 3rem 2rem 4rem;
-        }
-
-        .experience-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .experience-eyebrow {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--secondary-color);
-            margin-bottom: 0.75rem;
-        }
-
-        .experience-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .experience-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Section Navigation */
-        .section-nav {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .section-nav-btn {
-            padding: 0.6rem 1.25rem;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .section-nav-btn:hover {
-            border-color: var(--secondary-color);
-            color: var(--secondary-color);
-        }
-
-        .section-nav-btn.active {
-            background: var(--text-color);
-            border-color: var(--text-color);
-            color: var(--background);
-        }
-
-        /* Project Cards */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .project-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .project-image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background: var(--background-alt);
-        }
-
-        .project-content {
-            padding: 1.5rem;
-        }
-
-        .project-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.3rem 0.75rem;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.75rem;
-        }
-
-        .project-status.active {
-            background: rgba(46, 204, 113, 0.15);
-            color: #27ae60;
-        }
-
-        .project-status.completed {
-            background: rgba(52, 152, 219, 0.15);
-            color: #2980b9;
-        }
-
-        .project-status.planned {
-            background: rgba(155, 89, 182, 0.15);
-            color: #8e44ad;
-        }
-
-        .project-status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        .project-name {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .project-description {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .tech-tag {
-            padding: 0.25rem 0.6rem;
-            background: var(--background-alt);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--text-light);
-        }
-
-        .project-links {
-            display: flex;
-            gap: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .project-link {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--secondary-color);
-            transition: color 0.2s ease;
-        }
-
-        .project-link:hover {
-            color: var(--text-color);
-        }
-
-        .project-link svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-light);
-        }
-
-        .empty-state-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 1.5rem;
-            opacity: 0.3;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .experience-title {
-                font-size: 2rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://images.unsplash.com https://flagcdn.com https://*.ltrbxd.com data:; connect-src 'self' https://api.allorigins.win https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+    <meta name="description" content="A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://jevangoldsmith.com/projects.html">
+    <link rel="alternate" type="application/json" href="api/v1/index.json" title="Agent API index">
+    <link rel="alternate" type="text/plain" href="llms.txt" title="Agent instructions">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Projects Jevan Goldsmith Is Building &amp; Exploring">
+    <meta property="og:description" content="A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems.">
+    <meta property="og:url" content="https://jevangoldsmith.com/projects.html">
+    <meta property="og:site_name" content="Jevan Goldsmith">
+    <meta property="og:image" content="https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Projects Jevan Goldsmith Is Building &amp; Exploring">
+    <meta name="twitter:description" content="A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems.">
+    <meta name="twitter:image" content="https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://jevangoldsmith.com/#person","name":"Jevan Goldsmith","url":"https://jevangoldsmith.com/","email":"hello@jevangoldsmith.com","description":"Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.","jobTitle":"Writer and builder","image":"https://jevangoldsmith.com/images/generated/profile/profile-720.jpg","knowsAbout":["better thinking","books and reading","AI-assisted work","personal systems","real estate development","business building"],"sameAs":["https://x.com/JevanGoldsmith","https://youtube.com/@JevanGoldsmith","https://instagram.com/jevangoldsmith","https://linkedin.com/in/jevan-goldsmith-7b885a185","https://letterboxd.com/contentwatch"]},{"@type":"WebSite","@id":"https://jevangoldsmith.com/#website","name":"Jevan Goldsmith","url":"https://jevangoldsmith.com/","inLanguage":"en","publisher":{"@id":"https://jevangoldsmith.com/#person"},"potentialAction":{"@type":"SearchAction","target":"https://jevangoldsmith.com/search.html?q={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"BreadcrumbList","@id":"https://jevangoldsmith.com/projects.html#breadcrumbs","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jevangoldsmith.com/"},{"@type":"ListItem","position":2,"name":"Ventures","item":"https://jevangoldsmith.com/essays.html"},{"@type":"ListItem","position":3,"name":"Projects Jevan Goldsmith Is Building & Exploring","item":"https://jevangoldsmith.com/projects.html"}]},{"@type":"CollectionPage","@id":"https://jevangoldsmith.com/projects.html#page","url":"https://jevangoldsmith.com/projects.html","name":"Projects Jevan Goldsmith Is Building & Exploring","headline":"Projects Jevan Goldsmith Is Building & Exploring","description":"A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems.","image":{"@type":"ImageObject","url":"https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png","contentUrl":"https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png","caption":"Projects Jevan Goldsmith Is Building & Exploring","width":1200,"height":630},"isPartOf":{"@id":"https://jevangoldsmith.com/#website"},"author":{"@id":"https://jevangoldsmith.com/#person"},"publisher":{"@id":"https://jevangoldsmith.com/#person"},"inLanguage":"en","dateModified":"2026-04-26","keywords":["projects","Business & Building","AI-Assisted Work","Tools & Objects","Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech","The Shelf: Tools, Objects & Gear That Earned Their Place","Essays on Thinking, Business, Culture & Personal Systems","Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"],"audience":{"@type":"Audience","audienceType":"Builders and operators looking for practical judgment"},"about":["Business & Building","AI-Assisted Work","Tools & Objects"],"breadcrumb":{"@id":"https://jevangoldsmith.com/projects.html#breadcrumbs"},"mainEntity":{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"url":"https://jevangoldsmith.com/projects.html#personal-website","name":"Personal Website"},{"@type":"ListItem","position":2,"url":"https://jevangoldsmith.com/projects.html#people-of-history","name":"People of History"},{"@type":"ListItem","position":3,"url":"https://jevangoldsmith.com/projects.html#openclaw-agents","name":"Openclaw Agents"},{"@type":"ListItem","position":4,"url":"https://jevangoldsmith.com/projects.html#development-ai","name":"Development AI"},{"@type":"ListItem","position":5,"url":"https://jevangoldsmith.com/projects.html#weekly-newsletter","name":"Field Notes"}]}}]}</script>
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
             <div class="navbar-left">
                 <a href="index.html" class="logo">
-                    <img src="images/logo.png" alt="J.GOLDSMITH" class="logo-image logo-static" width="88" height="80" decoding="async">
-                    <video class="logo-image logo-video" poster="images/logo.png" muted playsinline loop preload="none" data-src="images/logo-animated.mp4"></video>
+                    <picture class="logo-static">
+                        <source type="image/avif" srcset="images/generated/logo/logo-nav-88.avif 1x, images/generated/logo/logo-nav-176.avif 2x, images/generated/logo/logo-nav-264.avif 3x, images/generated/logo/logo-nav-352.avif 4x">
+                        <source type="image/webp" srcset="images/generated/logo/logo-nav-88.webp 1x, images/generated/logo/logo-nav-176.webp 2x, images/generated/logo/logo-nav-264.webp 3x, images/generated/logo/logo-nav-352.webp 4x">
+                        <img src="images/generated/logo/logo-nav-176.png" srcset="images/generated/logo/logo-nav-88.png 1x, images/generated/logo/logo-nav-176.png 2x, images/generated/logo/logo-nav-264.png 3x, images/generated/logo/logo-nav-352.png 4x" alt="J.GOLDSMITH" class="logo-image" width="88" height="80" decoding="async">
+                    </picture>
+                    <video class="logo-image logo-video" poster="images/generated/logo/logo-nav-176.webp" muted playsinline loop preload="none" data-webm-1x="images/generated/video/logo-animated-176.webm" data-webm-2x="images/generated/video/logo-animated-352.webm" data-webm-3x="images/generated/video/logo-animated-528.webm" data-mp4-1x="images/generated/video/logo-animated-176.mp4" data-mp4-2x="images/generated/video/logo-animated-352.mp4" data-mp4-3x="images/generated/video/logo-animated-528.mp4"></video>
                 </a>
                 <div class="wisdom-ticker">
                     <div class="wisdom-ticker-track">
@@ -248,17 +52,18 @@
                 <li class="nav-dropdown">
                     <a href="#" class="dropdown-trigger">Explore</a>
                     <div class="dropdown-menu dropdown-menu-wide">
-                        <div class="dropdown-wide-header">What I Am About</div>
+                        <div class="dropdown-wide-header">A Collection of Thoughts</div>
                         <div class="dropdown-columns">
                             <div class="dropdown-column">
-                                <a href="north-star.html">North Star</a>
-                                <a href="my-roadmap.html">My Roadmap</a>
-                                <a href="about.html">About Me</a>
+                                <a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="projects">Field Notes</a>
+                                <a href="essays.html" data-analytics="cta" data-cta-id="best-essays" data-cta-location="projects">Essays</a>
+                                <a href="takes.html">Takes</a>
+                                <a href="problems.html">Problems</a>
                             </div>
                             <div class="dropdown-column">
+                                <a href="north-star.html">North Star</a>
+                                <a href="about.html">Website Purpose</a>
                                 <a href="health.html">Health</a>
-                                <a href="flaws.html">Flaws</a>
-                                <a href="dateme.html">Date Me</a>
                             </div>
                         </div>
                     </div>
@@ -266,19 +71,19 @@
                 <li class="nav-dropdown">
                     <a href="#" class="dropdown-trigger">Content</a>
                     <div class="dropdown-menu dropdown-menu-icons">
-                        <a href="https://youtube.com/@YourChannel" target="_blank" class="dropdown-icon-link" title="YouTube">
+                        <a href="https://youtube.com/@JevanGoldsmith" target="_blank" class="dropdown-icon-link" title="YouTube">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                         </a>
-                        <a href="https://instagram.com/YourHandle" target="_blank" class="dropdown-icon-link" title="Instagram">
+                        <a href="https://instagram.com/jevangoldsmith" target="_blank" class="dropdown-icon-link" title="Instagram">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                         </a>
                         <a href="https://x.com/JevanGoldsmith" target="_blank" class="dropdown-icon-link" title="X">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                         </a>
-                        <a href="https://linkedin.com/in/YourProfile" target="_blank" class="dropdown-icon-link" title="LinkedIn">
+                        <a href="https://linkedin.com/in/jevan-goldsmith-7b885a185" target="_blank" class="dropdown-icon-link" title="LinkedIn">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                         </a>
-                        <a href="mailto:newsletter@example.com" class="dropdown-icon-link" title="Newsletter">
+                        <a href="mailto:hello@jevangoldsmith.com?subject=Newsletter" class="dropdown-icon-link" title="Newsletter" data-analytics="contact" data-cta-location="projects">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         </a>
                     </div>
@@ -291,39 +96,34 @@
                             <div class="dropdown-column">
                                 <a href="books.html">Reading</a>
                                 <a href="movies.html">Movies</a>
-                                <a href="music.html">Music</a>
                                 <a href="podcasts.html">Podcasts</a>
-                                <a href="products.html">Products</a>
                             </div>
                             <div class="dropdown-column">
+                                <a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="projects">The Shelf</a>
                                 <a href="cool-shit.html">Cool Shit</a>
                                 <a href="people.html">People</a>
-                                <a href="food.html">Food</a>
-                                <a href="quotes.html">Quotes</a>
-                                <a href="interests.html">Interests</a>
                             </div>
                         </div>
                     </div>
                 </li>
                 <li><a href="adventures.html">Adventures</a></li>
                 <li class="nav-dropdown">
-                    <a href="#" class="dropdown-trigger">Experience</a>
+                    <a href="#" class="dropdown-trigger">Ventures</a>
                     <div class="dropdown-menu dropdown-menu-wide">
                         <div class="dropdown-wide-header">Things I think up, build and learn</div>
                         <div class="dropdown-columns">
                             <div class="dropdown-column">
-                                <a href="essays.html">Essays</a>
-                                <a href="projects.html">Projects</a>
+                                <a href="projects.html" class="active">Projects</a>
                                 <a href="challenges.html">Challenges</a>
                             </div>
                             <div class="dropdown-column">
-                                <a href="skills.html">Skills</a>
+                                <a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="projects">Resources</a>
                                 <a href="lesson-logger.html">Lesson Logger</a>
-                                <a href="important-or-not.html">Important or Not</a>
                             </div>
                         </div>
                     </div>
                 </li>
+                
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -338,7 +138,7 @@
                     </div>
                 </button>
                 <div class="navbar-contact">
-                    <a href="meet.html" class="navbar-contact-btn">
+                    <a href="meet.html" class="navbar-contact-btn" data-analytics="contact" data-cta-location="projects">
                         <span>Let's Chat</span>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </a>
@@ -348,11 +148,11 @@
                             <p>Scan to connect</p>
                         </div>
                         <div class="contact-dropdown-links">
-                            <a href="contact.html">
+                            <a href="contact.html" data-analytics="cta" data-cta-id="contact" data-cta-location="projects">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                                 Contact Page
                             </a>
-                            <a href="mailto:hello@jevangoldsmith.com">
+                            <a href="mailto:hello@jevangoldsmith.com" data-analytics="contact" data-cta-location="projects">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                                 Email Me
                             </a>
@@ -363,31 +163,85 @@
         </div>
     </nav>
 
-    <main class="experience-content">
-        <header class="experience-header">
-            <p class="experience-eyebrow">What I'm Building</p>
+    <main class="experience-content projects-page">
+        <section class="experience-header">
+            <p class="experience-eyebrow">Build Documentary</p>
             <h1 class="experience-title">Projects</h1>
-            <p class="experience-subtitle">A collection of things I'm working on, from software to real estate to creative experiments.</p>
-        </header>
+            <p class="experience-subtitle">Things I am building, exploring, and learning in public. Each one has the current question, evidence, and next move.</p>
+        </section>
 
-        <nav class="section-nav">
-            <button class="section-nav-btn active" onclick="filterProjects('all')">All</button>
-            <button class="section-nav-btn" onclick="filterProjects('active')">Active</button>
-            <button class="section-nav-btn" onclick="filterProjects('completed')">Completed</button>
-            <button class="section-nav-btn" onclick="filterProjects('planned')">Planned</button>
-        </nav>
+        <div class="section-nav" data-filter-group="projects" data-filter-field="status">
+            <button class="section-nav-btn active" type="button" data-filter-value="all">All Projects</button>
+            <button class="section-nav-btn " type="button" data-filter-value="active">Active</button>
+            <button class="section-nav-btn " type="button" data-filter-value="completed">Completed</button>
+            <button class="section-nav-btn " type="button" data-filter-value="planned">Planned</button>
+        </div>
 
-        <div class="projects-grid" id="projects-grid">
-            <!-- Project 1: Personal Website -->
-            <div class="project-card" data-status="active">
-                <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&h=400&fit=crop" alt="Personal Website" class="project-image" width="600" height="400" loading="lazy" decoding="async">
+        <div class="projects-grid project-documentary-list" id="projects-grid">
+            <article class="project-card project-documentary-card" id="personal-website" data-status="active">
+                <div class="project-media"><img src="images/generated/remote/db938b17ac74e4-800.jpg" alt="Personal Website" class="project-image" width="600" height="400" loading="lazy" decoding="async" srcset="images/generated/remote/db938b17ac74e4-320.jpg 320w, images/generated/remote/db938b17ac74e4-480.jpg 480w, images/generated/remote/db938b17ac74e4-800.jpg 800w, images/generated/remote/db938b17ac74e4-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px"></div>
                 <div class="project-content">
-                    <div class="project-status active">
-                        <span class="project-status-dot"></span>
-                        Active
+                    <div class="project-card-header">
+                        <div>
+                            <div class="project-status active">
+                                <span class="project-status-dot"></span>
+                                Active
+                            </div>
+                            <h3 class="project-name">Personal Website</h3>
+                        </div>
+                        <span class="project-category">Software</span>
                     </div>
-                    <h3 class="project-name">Personal Website</h3>
-                    <p class="project-description">This website you're on. A digital home for my thoughts, projects, and adventures.</p>
+                    <p class="project-description">This website you&#39;re on. A digital home for my thoughts, projects, and adventures.</p>
+                    <p class="project-documentary-lead">This is the live container for the whole archive. The project is less about having a website and more about learning how to make a personal operating system legible to other people.</p>
+                    <section class="project-current-question">
+                        <span>Current question</span>
+                        <p>How do I make the first five minutes feel like a guided tour instead of a pile of interesting rooms?</p>
+                    </section>
+                    <dl class="project-proof">
+                        <div class="project-proof-item">
+                            <dt>What it is</dt>
+                            <dd>A personal archive for essays, projects, books, tools, adventures, and useful notes.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Why I made it</dt>
+                            <dd>I wanted a durable home for the things I am learning and collecting instead of scattering them across social platforms.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>What I learned</dt>
+                            <dd>Clear information architecture matters more than adding another page.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Next step</dt>
+                            <dd>Tighten the first-visitor path, keep improving project proof, and replace placeholder visuals with owned artifacts.</dd>
+                        </div>
+                    </dl>
+                    <div class="project-artifacts">
+                        <div class="project-artifact">
+                            <span>Shipped</span>
+                            <p>Navigation, search, Field Notes, books, essays, projects, products, adventures, skills, and agent-readable API surfaces.</p>
+                        </div>
+                        <div class="project-artifact">
+                            <span>Tension</span>
+                            <p>The archive has more depth than the homepage currently explains.</p>
+                        </div>
+                    </div>
+                    <div class="project-build-log">
+                        <h4>Build notes</h4>
+                        <article class="project-log-entry">
+                            <time datetime="2026-04-23">Apr 23, 2026</time>
+                            <div>
+                                <h5>Reframed Projects as a build documentary</h5>
+                                <p>Moved project pages away from static portfolio cards and toward current questions, evidence, and dated progress notes.</p>
+                            </div>
+                        </article>
+                        <article class="project-log-entry">
+                            <time datetime="2026-04-22">Apr 22, 2026</time>
+                            <div>
+                                <h5>Structured the site as a living archive</h5>
+                                <p>Generated pages, metadata, sitemaps, and API outputs so the site can scale without every new thought becoming a hand-edited page.</p>
+                            </div>
+                        </article>
+                    </div>
                     <div class="project-tech">
                         <span class="tech-tag">HTML</span>
                         <span class="tech-tag">CSS</span>
@@ -398,121 +252,321 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                             View Live
                         </a>
-                        <a href="https://github.com/JGOLD43/jevangoldsmith.com" target="_blank" class="project-link">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        <a href="https://github.com/JGOLD43/jevangoldsmith.com" class="project-link" target="_blank" rel="noopener noreferrer">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.5 11.5 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
                             GitHub
                         </a>
                     </div>
                 </div>
-            </div>
-
-            <!-- Project 2: People of History -->
-            <div class="project-card" data-status="active">
-                <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop" alt="People of History" class="project-image" width="600" height="400" loading="lazy" decoding="async">
+            </article>
+            <article class="project-card project-documentary-card" id="people-of-history" data-status="active">
+                <div class="project-media"><img src="images/generated/remote/fd65c00a2d01b6-800.jpg" alt="Books in a library" class="project-image" width="600" height="400" loading="lazy" decoding="async" srcset="images/generated/remote/fd65c00a2d01b6-320.jpg 320w, images/generated/remote/fd65c00a2d01b6-480.jpg 480w, images/generated/remote/fd65c00a2d01b6-800.jpg 800w, images/generated/remote/fd65c00a2d01b6-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px"></div>
                 <div class="project-content">
-                    <div class="project-status active">
-                        <span class="project-status-dot"></span>
-                        Active
+                    <div class="project-card-header">
+                        <div>
+                            <div class="project-status active">
+                                <span class="project-status-dot"></span>
+                                Active
+                            </div>
+                            <h3 class="project-name">People of History</h3>
+                        </div>
+                        <span class="project-category">Research</span>
                     </div>
-                    <h3 class="project-name">People of History</h3>
-                    <p class="project-description">A deep-dive platform for historical and contemporary figures. Linking their works, ideas, influences, and primary sources—making it 1000% more useful than Wikipedia for actually understanding how great minds thought.</p>
+                    <p class="project-description">A deep-dive platform for historical and contemporary figures, linking their works, ideas, influences, and primary sources.</p>
+                    <p class="project-documentary-lead">This is a research-system experiment. The bet is that people become easier to understand when their ideas, work, influences, contradictions, and primary sources are shown together.</p>
+                    <section class="project-current-question">
+                        <span>Current question</span>
+                        <p>What is the smallest profile format that teaches how someone thought without becoming a giant biography?</p>
+                    </section>
+                    <dl class="project-proof">
+                        <div class="project-proof-item">
+                            <dt>What it is</dt>
+                            <dd>A research concept for mapping people, ideas, works, influences, and source material.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Why I made it</dt>
+                            <dd>I wanted a better way to study how important people actually thought, not just read disconnected summaries.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>What I learned</dt>
+                            <dd>The hard part is not collecting more facts; it is designing relationships between them.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Next step</dt>
+                            <dd>Define the smallest useful profile format and test it with one historical figure.</dd>
+                        </div>
+                    </dl>
+                    <div class="project-artifacts">
+                        <div class="project-artifact">
+                            <span>Prototype shape</span>
+                            <p>Person, works, ideas, influences, contradictions, primary sources, and second-order effects.</p>
+                        </div>
+                        <div class="project-artifact">
+                            <span>Risk</span>
+                            <p>It can become a fact collection instead of a thinking tool.</p>
+                        </div>
+                    </div>
+                    <div class="project-build-log">
+                        <h4>Build notes</h4>
+                        <article class="project-log-entry">
+                            <time datetime="2026-04-23">Apr 23, 2026</time>
+                            <div>
+                                <h5>Narrowed the first version</h5>
+                                <p>The next useful version is one excellent profile, not a database of half-finished people.</p>
+                            </div>
+                        </article>
+                    </div>
                     <div class="project-tech">
                         <span class="tech-tag">Research</span>
                         <span class="tech-tag">Education</span>
                         <span class="tech-tag">Web Platform</span>
                     </div>
+                    
                 </div>
-            </div>
-
-            <!-- Project 3: Openclaw Agents -->
-            <div class="project-card" data-status="active">
-                <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop" alt="Openclaw Agents" class="project-image" width="600" height="400" loading="lazy" decoding="async">
+            </article>
+            <article class="project-card project-documentary-card" id="openclaw-agents" data-status="active">
+                <div class="project-media"><img src="images/generated/remote/713f2899c8de0d-800.jpg" alt="Abstract AI interface" class="project-image" width="600" height="400" loading="lazy" decoding="async" srcset="images/generated/remote/713f2899c8de0d-320.jpg 320w, images/generated/remote/713f2899c8de0d-480.jpg 480w, images/generated/remote/713f2899c8de0d-800.jpg 800w, images/generated/remote/713f2899c8de0d-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px"></div>
                 <div class="project-content">
-                    <div class="project-status active">
-                        <span class="project-status-dot"></span>
-                        Active
+                    <div class="project-card-header">
+                        <div>
+                            <div class="project-status active">
+                                <span class="project-status-dot"></span>
+                                Active
+                            </div>
+                            <h3 class="project-name">Openclaw Agents</h3>
+                        </div>
+                        <span class="project-category">AI</span>
                     </div>
-                    <h3 class="project-name">Openclaw Agents</h3>
-                    <p class="project-description">Building AI agents that automate complex workflows and tasks. Exploring the frontier of autonomous systems and practical AI applications.</p>
+                    <p class="project-description">Building AI agents that automate complex workflows and tasks.</p>
+                    <p class="project-documentary-lead">This is where I test which agent workflows survive contact with real work. The interesting part is not that an agent can act. It is whether the loop stays visible, bounded, and useful.</p>
+                    <section class="project-current-question">
+                        <span>Current question</span>
+                        <p>Where do agents save judgment work, and where do they just create a more confident mess?</p>
+                    </section>
+                    <dl class="project-proof">
+                        <div class="project-proof-item">
+                            <dt>What it is</dt>
+                            <dd>A set of experiments with AI agents that can help run practical workflows.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Why I made it</dt>
+                            <dd>I want to understand where agents are genuinely useful and where they just add complexity.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>What I learned</dt>
+                            <dd>Agents need tight scopes, visible feedback, and clear handoff points to stay useful.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Next step</dt>
+                            <dd>Document the best agent workflows and turn repeatable patterns into examples.</dd>
+                        </div>
+                    </dl>
+                    <div class="project-artifacts">
+                        <div class="project-artifact">
+                            <span>Useful pattern</span>
+                            <p>Agents work better when the task has a clear done state, visible logs, and a human review point.</p>
+                        </div>
+                        <div class="project-artifact">
+                            <span>Anti-pattern</span>
+                            <p>Long autonomous loops with vague goals create impressive motion and weak accountability.</p>
+                        </div>
+                    </div>
+                    <div class="project-build-log">
+                        <h4>Build notes</h4>
+                        <article class="project-log-entry">
+                            <time datetime="2026-04-23">Apr 23, 2026</time>
+                            <div>
+                                <h5>Documenting the handoff points</h5>
+                                <p>The best workflows are the ones where the agent knows when to stop and show its work.</p>
+                            </div>
+                        </article>
+                    </div>
                     <div class="project-tech">
                         <span class="tech-tag">AI</span>
                         <span class="tech-tag">Agents</span>
                         <span class="tech-tag">Automation</span>
                     </div>
+                    
                 </div>
-            </div>
-
-            <!-- Project 4: Development Ai -->
-            <div class="project-card" data-status="active">
-                <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&h=400&fit=crop" alt="Development Ai" class="project-image" width="600" height="400" loading="lazy" decoding="async">
+            </article>
+            <article class="project-card project-documentary-card" id="development-ai" data-status="active">
+                <div class="project-media"><img src="images/generated/remote/b1130034d11397-800.jpg" alt="Code on a laptop" class="project-image" width="600" height="400" loading="lazy" decoding="async" srcset="images/generated/remote/b1130034d11397-320.jpg 320w, images/generated/remote/b1130034d11397-480.jpg 480w, images/generated/remote/b1130034d11397-800.jpg 800w, images/generated/remote/b1130034d11397-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px"></div>
                 <div class="project-content">
-                    <div class="project-status active">
-                        <span class="project-status-dot"></span>
-                        Active
+                    <div class="project-card-header">
+                        <div>
+                            <div class="project-status active">
+                                <span class="project-status-dot"></span>
+                                Active
+                            </div>
+                            <h3 class="project-name">Development AI</h3>
+                        </div>
+                        <span class="project-category">AI</span>
                     </div>
-                    <h3 class="project-name">Development Ai</h3>
-                    <p class="project-description">AI-powered development tools and workflows. Exploring how artificial intelligence can accelerate software development and automate coding tasks.</p>
+                    <p class="project-description">AI-powered development tools and workflows for accelerating software development and automating coding tasks.</p>
+                    <p class="project-documentary-lead">This project tracks how I actually use AI while building: where it speeds me up, where it makes me lazy, and where the human taste layer still matters most.</p>
+                    <section class="project-current-question">
+                        <span>Current question</span>
+                        <p>What parts of building should be delegated, and what parts should stay stubbornly human?</p>
+                    </section>
+                    <dl class="project-proof">
+                        <div class="project-proof-item">
+                            <dt>What it is</dt>
+                            <dd>A working set of AI-assisted development workflows for research, coding, review, and QA.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Why I made it</dt>
+                            <dd>I want to build faster without outsourcing taste, judgment, or responsibility.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>What I learned</dt>
+                            <dd>The best AI workflow is still a human workflow with better feedback loops.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Next step</dt>
+                            <dd>Write up the strongest patterns and connect them to the technical skills archive.</dd>
+                        </div>
+                    </dl>
+                    <div class="project-artifacts">
+                        <div class="project-artifact">
+                            <span>Working loop</span>
+                            <p>Research, plan, implement, review, QA, then tighten the product judgment.</p>
+                        </div>
+                        <div class="project-artifact">
+                            <span>Standard</span>
+                            <p>Speed only counts if the final thing is clearer, more useful, and easier to maintain.</p>
+                        </div>
+                    </div>
+                    <div class="project-build-log">
+                        <h4>Build notes</h4>
+                        <article class="project-log-entry">
+                            <time datetime="2026-04-23">Apr 23, 2026</time>
+                            <div>
+                                <h5>Separated speed from taste</h5>
+                                <p>The tool can draft, inspect, and verify. It still needs a person deciding what is worth making.</p>
+                            </div>
+                        </article>
+                    </div>
                     <div class="project-tech">
                         <span class="tech-tag">AI</span>
                         <span class="tech-tag">Development</span>
                         <span class="tech-tag">Automation</span>
                     </div>
+                    
                 </div>
-            </div>
-
-            <!-- Project 5: Newsletter -->
-            <div class="project-card" data-status="planned">
-                <img src="https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?w=600&h=400&fit=crop" alt="Newsletter" class="project-image" width="600" height="400" loading="lazy" decoding="async">
+            </article>
+            <article class="project-card project-documentary-card" id="weekly-newsletter" data-status="planned">
+                <div class="project-media"><img src="images/generated/remote/4983bd7192e7b3-800.jpg" alt="Newspaper pages" class="project-image" width="600" height="400" loading="lazy" decoding="async" srcset="images/generated/remote/4983bd7192e7b3-320.jpg 320w, images/generated/remote/4983bd7192e7b3-480.jpg 480w, images/generated/remote/4983bd7192e7b3-800.jpg 800w, images/generated/remote/4983bd7192e7b3-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px"></div>
                 <div class="project-content">
-                    <div class="project-status planned">
-                        <span class="project-status-dot"></span>
-                        Planned
+                    <div class="project-card-header">
+                        <div>
+                            <div class="project-status planned">
+                                <span class="project-status-dot"></span>
+                                Planned
+                            </div>
+                            <h3 class="project-name">Field Notes</h3>
+                        </div>
+                        <span class="project-category">Writing</span>
                     </div>
-                    <h3 class="project-name">Weekly Newsletter</h3>
-                    <p class="project-description">A weekly email sharing ideas about business, books, and life. Coming soon.</p>
+                    <p class="project-description">A weekly-ish note sharing useful ideas, books, tools, questions, and experiments from the archive.</p>
+                    <p class="project-documentary-lead">This is the lightweight publishing channel for things before they become polished essays. It should feel like a useful note from the archive, not a content machine.</p>
+                    <section class="project-current-question">
+                        <span>Current question</span>
+                        <p>What is the smallest note format that is consistently worth opening?</p>
+                    </section>
+                    <dl class="project-proof">
+                        <div class="project-proof-item">
+                            <dt>What it is</dt>
+                            <dd>A short email for ideas, objects, books, questions, and experiments worth keeping.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Why I made it</dt>
+                            <dd>Some useful things are too small for essays but too valuable to disappear into private notes.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>What I learned</dt>
+                            <dd>A newsletter needs a clear promise before it needs volume.</dd>
+                        </div>
+                        <div class="project-proof-item">
+                            <dt>Next step</dt>
+                            <dd>Publish a sample issue and turn the archive page into the canonical signup surface.</dd>
+                        </div>
+                    </dl>
+                    <div class="project-artifacts">
+                        <div class="project-artifact">
+                            <span>Promise</span>
+                            <p>One useful idea, object, book, question, or experiment from the archive.</p>
+                        </div>
+                        <div class="project-artifact">
+                            <span>Constraint</span>
+                            <p>It has to be short enough to send and useful enough to keep.</p>
+                        </div>
+                    </div>
+                    <div class="project-build-log">
+                        <h4>Build notes</h4>
+                        <article class="project-log-entry">
+                            <time datetime="2026-04-23">Apr 23, 2026</time>
+                            <div>
+                                <h5>Kept the scope small</h5>
+                                <p>The next version needs a sample issue before it needs a cadence.</p>
+                            </div>
+                        </article>
+                    </div>
                     <div class="project-tech">
                         <span class="tech-tag">Writing</span>
                         <span class="tech-tag">Email</span>
                     </div>
                     <div class="project-links">
-                        <a href="newsletter.html" class="project-link">
+                        <a href="field-notes.html" class="project-link" data-analytics="cta" data-cta-id="newsletter" data-cta-location="projects">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                             Subscribe
                         </a>
                     </div>
                 </div>
-            </div>
+            </article>
         </div>
-    </main>
+        <section class="seo-related-section" data-seo-related>
+        <p class="seo-related-eyebrow">Related thread</p>
+        <h2>Keep exploring this idea</h2>
+        <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
+        <div class="seo-related-grid">
+            <a class="seo-related-card" href="index.html">
+                <span>Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech</span>
+                <p>Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas.</p>
+            </a>
+            <a class="seo-related-card" href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="projects">
+                <span>The Shelf: Tools, Objects &amp; Gear That Earned Their Place</span>
+                <p>A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced.</p>
+            </a>
+            <a class="seo-related-card" href="essays.html" data-analytics="cta" data-cta-id="best-essays" data-cta-location="projects">
+                <span>Essays on Thinking, Business, Culture &amp; Personal Systems</span>
+                <p>Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems.</p>
+            </a>
+            <a class="seo-related-card" href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="projects">
+                <span>Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments</span>
+                <p>One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive.</p>
+            </a>
+        </div>
+    </section>
+</main>
 
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+                <div>
+                    <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+                    <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
+                </div>
                 <ul class="footer-links">
                     <li><a href="index.html">Home</a></li>
+                    <li><a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="projects">Field Notes</a></li>
+                    <li><a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="projects">The Shelf</a></li>
+                    <li><a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="projects">Resources</a></li>
                 </ul>
             </div>
         </div>
     </footer>
-
     <script src="js/theme.js"></script>
-    <script>
-        function filterProjects(status) {
-            const cards = document.querySelectorAll('.project-card');
-            const buttons = document.querySelectorAll('.section-nav-btn');
-
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            cards.forEach(card => {
-                if (status === 'all' || card.dataset.status === status) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-    </script>
+    <script src="js/collection-filters.js"></script>
+    <script src="js/analytics.js"></script>
 </body>
 </html>

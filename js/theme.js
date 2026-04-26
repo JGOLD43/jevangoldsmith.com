@@ -107,12 +107,32 @@
         const logo = document.querySelector('.logo');
         const video = document.querySelector('.logo-video');
         if (!logo || !video) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
         let sourceLoaded = false;
 
+        function supportsVideoType(type) {
+            return Boolean(video.canPlayType && video.canPlayType(type).replace('no', ''));
+        }
+
+        function densityKey() {
+            const dpr = window.devicePixelRatio || 1;
+            if (dpr >= 2.75) return '3x';
+            if (dpr >= 1.5) return '2x';
+            return '1x';
+        }
+
+        function videoSourceForDisplay() {
+            const density = densityKey();
+            const webm = video.getAttribute(`data-webm-${density}`);
+            const mp4 = video.getAttribute(`data-mp4-${density}`);
+            if (webm && supportsVideoType('video/webm; codecs="vp9"')) return webm;
+            return mp4 || webm;
+        }
+
         function ensureVideoSource() {
             if (sourceLoaded) return;
-            const dataSrc = video.getAttribute('data-src');
+            const dataSrc = videoSourceForDisplay();
             if (!dataSrc) return;
             video.src = dataSrc;
             video.preload = 'auto';
@@ -206,6 +226,24 @@
         });
     }
 
+    // Track navbar height as a CSS variable so sticky sidebars align with the nav
+    // regardless of compact/non-compact nav or resize changes.
+    function syncNavHeight() {
+        const navbar = document.querySelector('.navbar');
+        if (!navbar) return;
+        const h = Math.round(navbar.getBoundingClientRect().height);
+        if (h > 0) document.documentElement.style.setProperty('--nav-height', `${h}px`);
+    }
+
+    function initNavHeight() {
+        syncNavHeight();
+        window.addEventListener('resize', syncNavHeight);
+        if (window.ResizeObserver) {
+            const navbar = document.querySelector('.navbar');
+            if (navbar) new ResizeObserver(syncNavHeight).observe(navbar);
+        }
+    }
+
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
@@ -213,12 +251,14 @@
             initWisdomTicker();
             initLogoVideo();
             initMobileNav();
+            initNavHeight();
         });
     } else {
         initTheme();
         initWisdomTicker();
         initLogoVideo();
         initMobileNav();
+        initNavHeight();
     }
 
     // Listen for system theme changes

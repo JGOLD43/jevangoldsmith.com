@@ -1,19 +1,35 @@
 {
   "hosting": {
-    "public": ".",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
-      "functions/**"
-    ],
-    "rewrites": [
-      {
-        "source": "/api/**",
-        "function": "api"
-      }
+      "admin/**",
+      "functions/**",
+      "_src/**",
+      "scripts/**",
+      "css/src/**"
     ],
     "headers": [
+      {
+        "source": "**/*.@(css|js|png|jpg|jpeg|svg|webp|gif|mp4|woff|woff2)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=86400"
+          }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      },
       {
         "source": "**",
         "headers": [
@@ -28,6 +44,14 @@
           {
             "key": "Referrer-Policy",
             "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=()"
+          },
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' https://images.unsplash.com https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com data:; connect-src 'self' https://api.allorigins.win https://formsubmit.co https://server.arcgisonline.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' mailto: https://formsubmit.co"
           }
         ]
       }
@@ -36,18 +60,5 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
-  },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ]
-    }
-  ]
+  }
 }

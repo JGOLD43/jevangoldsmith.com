@@ -3,410 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>People Who Inspire Me - Jevan Goldsmith</title>
+    <title>People Who Inspire Me | Jevan Goldsmith</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* People Page Layout - Similar to Essays */
-        .people-layout {
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            min-height: calc(100vh - 80px);
-            background: var(--background);
-        }
-
-        /* Collapsed sidebar - matches Books page pattern */
-        .people-layout.sidebar-collapsed {
-            grid-template-columns: 48px 1fr;
-        }
-
-        .people-sidebar.collapsed {
-            width: 48px;
-            min-width: 48px;
-            padding: 0;
-        }
-
-        .people-sidebar.collapsed .sidebar-header {
-            padding: 0.5rem 0 0.5rem 15px;
-            margin-bottom: 0;
-            border-bottom: none;
-        }
-
-        .people-sidebar.collapsed .sidebar-browse-label,
-        .people-sidebar.collapsed .sidebar-search,
-        .people-sidebar.collapsed .category-name,
-        .people-sidebar.collapsed .category-count {
-            display: none;
-        }
-
-        .people-sidebar.collapsed .sidebar-section {
-            margin-bottom: 0;
-        }
-
-        .people-sidebar.collapsed .sidebar-category {
-            justify-content: flex-start;
-            padding: 0.5rem 0 0.5rem 15px;
-            gap: 0;
-        }
-
-        .people-sidebar.collapsed .sidebar-collapse-btn {
-            margin: 0;
-        }
-
-        /* Sidebar - matches Essays sidebar style */
-        .people-sidebar {
-            background: var(--background);
-            border-right: 1px solid var(--border-color);
-            padding: 2rem 0;
-            position: sticky;
-            top: 80px;
-            height: calc(100vh - 80px);
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #ccc transparent;
-        }
-
-        .people-sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .people-sidebar::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 3px;
-        }
-
-        .people-sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .people-sidebar .sidebar-header {
-            padding: 0.75rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .people-sidebar .sidebar-collapse-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-            color: var(--text-light);
-            transition: color 0.2s ease;
-        }
-
-        .people-sidebar .sidebar-collapse-btn:hover {
-            color: #000;
-        }
-
-        .people-sidebar .sidebar-browse-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-light);
-            font-weight: 600;
-        }
-
-        /* Sidebar Search */
-        .people-sidebar .sidebar-search {
-            padding: 1rem 1.5rem;
-        }
-
-        .people-sidebar .search-bubble {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #fff;
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 8px 14px;
-        }
-
-        .people-sidebar .search-bubble input {
-            flex: 1;
-            border: none;
-            background: none;
-            outline: none;
-            font-size: 0.9rem;
-            color: var(--text-color);
-        }
-
-        .people-sidebar .search-icon {
-            color: var(--text-light);
-        }
-
-        /* Sidebar Categories */
-        .people-sidebar .sidebar-section {
-            margin-bottom: 0;
-        }
-
-        .people-sidebar .sidebar-category {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.65rem 1.5rem;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-            position: relative;
-        }
-
-        .people-sidebar .sidebar-category .category-icon svg {
-            stroke: #999;
-        }
-
-        .people-sidebar .sidebar-category:hover {
-            background: #D4D4D4;
-        }
-
-        .people-sidebar .sidebar-category:hover:not(.active) .category-icon svg {
-            stroke: #000;
-        }
-
-        .people-sidebar .sidebar-category:hover:not(.active) .category-name {
-            color: #000;
-        }
-
-        .people-sidebar .sidebar-category.active {
-            background: #000;
-            color: #fff;
-            font-weight: 500;
-        }
-
-        .people-sidebar .sidebar-category.active .category-name {
-            color: #fff;
-        }
-
-        .people-sidebar .sidebar-category.active .category-count {
-            background: #333;
-            color: #fff;
-        }
-
-        .people-sidebar .sidebar-category.active .category-icon svg {
-            stroke: #fff;
-        }
-
-        .people-sidebar .category-icon {
-            color: var(--text-light);
-        }
-
-        .people-sidebar .category-name {
-            flex: 1;
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #666;
-            transition: all 0.2s ease;
-        }
-
-        .people-sidebar .category-count {
-            font-size: 0.75rem;
-            color: #666;
-            background: #E5E5E5;
-            padding: 0.15rem 0.5rem;
-            border-radius: 10px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        /* Main Content */
-        .people-main {
-            padding: 2rem 3rem;
-            background: var(--background);
-        }
-
-        .people-main .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-        }
-
-        .people-main .header-content h1 {
-            font-size: 3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #000;
-            font-family: 'Chivo', sans-serif;
-        }
-
-        .people-main .header-subtitle {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            font-family: 'Chivo', sans-serif;
-            font-weight: 300;
-        }
-
-        .people-main .header-counter {
-            text-align: center;
-            padding: 1rem 2rem;
-        }
-
-        .people-main .counter-number {
-            display: block;
-            font-size: 3rem;
-            font-weight: 600;
-            color: #000;
-            line-height: 1;
-        }
-
-        .people-main .counter-label {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        /* People Grid - More columns like Bookshelf */
-        .people-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1.25rem;
-        }
-
-        /* Adjust grid when sidebar is collapsed for more space */
-        .people-layout.sidebar-collapsed .people-grid {
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        }
-
-        /* Person Card */
-        .person-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .person-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .person-image-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            overflow: hidden;
-            background: #e8e4dc;
-            border: 1px solid #1a1a1a;
-        }
-
-        .person-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .person-card:hover .person-image {
-            transform: scale(1.05);
-        }
-
-        .person-info {
-            padding: 14px;
-        }
-
-        .person-name {
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin-bottom: 2px;
-            color: #000;
-        }
-
-        .person-title {
-            font-size: 0.75rem;
-            color: var(--secondary-color);
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .person-lesson {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            line-height: 1.5;
-            font-style: italic;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .person-lesson::before {
-            content: '"';
-        }
-
-        .person-lesson::after {
-            content: '"';
-        }
-
-        /* Category Section Headers */
-        .category-section {
-            margin-bottom: 40px;
-        }
-
-        .category-section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .people-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .people-sidebar {
-                display: none;
-            }
-
-            .people-main {
-                padding: 20px;
-            }
-
-            .people-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .people-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .person-info {
-                padding: 10px;
-            }
-
-            .person-name {
-                font-size: 0.85rem;
-            }
-
-            .person-lesson {
-                display: none;
-            }
-        }
-    </style>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://images.unsplash.com https://flagcdn.com https://*.ltrbxd.com data:; connect-src 'self' https://api.allorigins.win https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+    <meta name="description" content="A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://jevangoldsmith.com/people.html">
+    <link rel="alternate" type="application/json" href="api/v1/index.json" title="Agent API index">
+    <link rel="alternate" type="text/plain" href="llms.txt" title="Agent instructions">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="People Who Inspire Me">
+    <meta property="og:description" content="A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.">
+    <meta property="og:url" content="https://jevangoldsmith.com/people.html">
+    <meta property="og:site_name" content="Jevan Goldsmith">
+    <meta property="og:image" content="https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="People Who Inspire Me">
+    <meta name="twitter:description" content="A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.">
+    <meta name="twitter:image" content="https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://jevangoldsmith.com/#person","name":"Jevan Goldsmith","url":"https://jevangoldsmith.com/","email":"hello@jevangoldsmith.com","description":"Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.","jobTitle":"Writer and builder","image":"https://jevangoldsmith.com/images/generated/profile/profile-720.jpg","knowsAbout":["better thinking","books and reading","AI-assisted work","personal systems","real estate development","business building"],"sameAs":["https://x.com/JevanGoldsmith","https://youtube.com/@JevanGoldsmith","https://instagram.com/jevangoldsmith","https://linkedin.com/in/jevan-goldsmith-7b885a185","https://letterboxd.com/contentwatch"]},{"@type":"WebSite","@id":"https://jevangoldsmith.com/#website","name":"Jevan Goldsmith","url":"https://jevangoldsmith.com/","inLanguage":"en","publisher":{"@id":"https://jevangoldsmith.com/#person"},"potentialAction":{"@type":"SearchAction","target":"https://jevangoldsmith.com/search.html?q={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"BreadcrumbList","@id":"https://jevangoldsmith.com/people.html#breadcrumbs","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jevangoldsmith.com/"},{"@type":"ListItem","position":2,"name":"Taste","item":"https://jevangoldsmith.com/books.html"},{"@type":"ListItem","position":3,"name":"People Who Inspire Me","item":"https://jevangoldsmith.com/people.html"}]},{"@type":"CollectionPage","@id":"https://jevangoldsmith.com/people.html#page","url":"https://jevangoldsmith.com/people.html","name":"People Who Inspire Me","headline":"People Who Inspire Me","description":"A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.","image":{"@type":"ImageObject","url":"https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png","contentUrl":"https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png","caption":"People Who Inspire Me","width":1200,"height":630},"isPartOf":{"@id":"https://jevangoldsmith.com/#website"},"author":{"@id":"https://jevangoldsmith.com/#person"},"publisher":{"@id":"https://jevangoldsmith.com/#person"},"inLanguage":"en","dateModified":"2026-04-26","keywords":["people","Taste","Better Thinking","Books I Recommend & Notes From My Reading System","How I Read: A Practical Reading Philosophy","The Shelf: Tools, Objects & Gear That Earned Their Place","Essays on Thinking, Business, Culture & Personal Systems"],"audience":{"@type":"Audience","audienceType":"Readers looking for taste, recommendations, books, tools, and objects"},"about":["Taste","Better Thinking"],"breadcrumb":{"@id":"https://jevangoldsmith.com/people.html#breadcrumbs"},"mainEntity":{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"url":"https://jevangoldsmith.com/books.html","name":"Books I Recommend & Notes From My Reading System"},{"@type":"ListItem","position":2,"url":"https://jevangoldsmith.com/reading-philosophy.html","name":"How I Read: A Practical Reading Philosophy"},{"@type":"ListItem","position":3,"url":"https://jevangoldsmith.com/products.html","name":"The Shelf: Tools, Objects & Gear That Earned Their Place"},{"@type":"ListItem","position":4,"url":"https://jevangoldsmith.com/essays.html","name":"Essays on Thinking, Business, Culture & Personal Systems"},{"@type":"ListItem","position":5,"url":"https://jevangoldsmith.com/field-notes.html","name":"Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"},{"@type":"ListItem","position":6,"url":"https://jevangoldsmith.com/index.html","name":"Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"}]}}]}</script>
 </head>
-<body>
+<body class="nav-compact">
     <nav class="navbar">
         <div class="container">
             <div class="navbar-left">
                 <a href="index.html" class="logo">
-                    <img src="images/logo.png" alt="J.GOLDSMITH" class="logo-image logo-static" width="88" height="80" decoding="async">
-                    <video class="logo-image logo-video" poster="images/logo.png" muted playsinline loop preload="none" data-src="images/logo-animated.mp4"></video>
+                    <picture class="logo-static">
+                        <source type="image/avif" srcset="images/generated/logo/logo-nav-88.avif 1x, images/generated/logo/logo-nav-176.avif 2x, images/generated/logo/logo-nav-264.avif 3x, images/generated/logo/logo-nav-352.avif 4x">
+                        <source type="image/webp" srcset="images/generated/logo/logo-nav-88.webp 1x, images/generated/logo/logo-nav-176.webp 2x, images/generated/logo/logo-nav-264.webp 3x, images/generated/logo/logo-nav-352.webp 4x">
+                        <img src="images/generated/logo/logo-nav-176.png" srcset="images/generated/logo/logo-nav-88.png 1x, images/generated/logo/logo-nav-176.png 2x, images/generated/logo/logo-nav-264.png 3x, images/generated/logo/logo-nav-352.png 4x" alt="J.GOLDSMITH" class="logo-image" width="88" height="80" decoding="async">
+                    </picture>
+                    <video class="logo-image logo-video" poster="images/generated/logo/logo-nav-176.webp" muted playsinline loop preload="none" data-webm-1x="images/generated/video/logo-animated-176.webm" data-webm-2x="images/generated/video/logo-animated-352.webm" data-webm-3x="images/generated/video/logo-animated-528.webm" data-mp4-1x="images/generated/video/logo-animated-176.mp4" data-mp4-2x="images/generated/video/logo-animated-352.mp4" data-mp4-3x="images/generated/video/logo-animated-528.mp4"></video>
                 </a>
                 <div class="wisdom-ticker">
                     <div class="wisdom-ticker-track">
@@ -424,17 +51,18 @@
                 <li class="nav-dropdown">
                     <a href="#" class="dropdown-trigger">Explore</a>
                     <div class="dropdown-menu dropdown-menu-wide">
-                        <div class="dropdown-wide-header">What I Am About</div>
+                        <div class="dropdown-wide-header">A Collection of Thoughts</div>
                         <div class="dropdown-columns">
                             <div class="dropdown-column">
-                                <a href="north-star.html">North Star</a>
-                                <a href="my-roadmap.html">My Roadmap</a>
-                                <a href="about.html">About Me</a>
+                                <a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="people">Field Notes</a>
+                                <a href="essays.html" data-analytics="cta" data-cta-id="best-essays" data-cta-location="people">Essays</a>
+                                <a href="takes.html">Takes</a>
+                                <a href="problems.html">Problems</a>
                             </div>
                             <div class="dropdown-column">
+                                <a href="north-star.html">North Star</a>
+                                <a href="about.html">Website Purpose</a>
                                 <a href="health.html">Health</a>
-                                <a href="flaws.html">Flaws</a>
-                                <a href="dateme.html">Date Me</a>
                             </div>
                         </div>
                     </div>
@@ -442,19 +70,19 @@
                 <li class="nav-dropdown">
                     <a href="#" class="dropdown-trigger">Content</a>
                     <div class="dropdown-menu dropdown-menu-icons">
-                        <a href="https://youtube.com/@YourChannel" target="_blank" class="dropdown-icon-link" title="YouTube">
+                        <a href="https://youtube.com/@JevanGoldsmith" target="_blank" class="dropdown-icon-link" title="YouTube">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                         </a>
-                        <a href="https://instagram.com/YourHandle" target="_blank" class="dropdown-icon-link" title="Instagram">
+                        <a href="https://instagram.com/jevangoldsmith" target="_blank" class="dropdown-icon-link" title="Instagram">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                         </a>
                         <a href="https://x.com/JevanGoldsmith" target="_blank" class="dropdown-icon-link" title="X">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                         </a>
-                        <a href="https://linkedin.com/in/YourProfile" target="_blank" class="dropdown-icon-link" title="LinkedIn">
+                        <a href="https://linkedin.com/in/jevan-goldsmith-7b885a185" target="_blank" class="dropdown-icon-link" title="LinkedIn">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                         </a>
-                        <a href="mailto:newsletter@example.com" class="dropdown-icon-link" title="Newsletter">
+                        <a href="mailto:hello@jevangoldsmith.com?subject=Newsletter" class="dropdown-icon-link" title="Newsletter" data-analytics="contact" data-cta-location="people">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         </a>
                     </div>
@@ -467,39 +95,34 @@
                             <div class="dropdown-column">
                                 <a href="books.html">Reading</a>
                                 <a href="movies.html">Movies</a>
-                                <a href="music.html">Music</a>
                                 <a href="podcasts.html">Podcasts</a>
-                                <a href="products.html">Products</a>
                             </div>
                             <div class="dropdown-column">
+                                <a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="people">The Shelf</a>
                                 <a href="cool-shit.html">Cool Shit</a>
                                 <a href="people.html" class="active">People</a>
-                                <a href="food.html">Food</a>
-                                <a href="quotes.html">Quotes</a>
-                                <a href="interests.html">Interests</a>
                             </div>
                         </div>
                     </div>
                 </li>
                 <li><a href="adventures.html">Adventures</a></li>
                 <li class="nav-dropdown">
-                    <a href="#" class="dropdown-trigger">Experience</a>
+                    <a href="#" class="dropdown-trigger">Ventures</a>
                     <div class="dropdown-menu dropdown-menu-wide">
                         <div class="dropdown-wide-header">Things I think up, build and learn</div>
                         <div class="dropdown-columns">
                             <div class="dropdown-column">
-                                <a href="essays.html">Essays</a>
                                 <a href="projects.html">Projects</a>
                                 <a href="challenges.html">Challenges</a>
                             </div>
                             <div class="dropdown-column">
-                                <a href="skills.html">Skills</a>
+                                <a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="people">Resources</a>
                                 <a href="lesson-logger.html">Lesson Logger</a>
-                                <a href="important-or-not.html">Important or Not</a>
                             </div>
                         </div>
                     </div>
                 </li>
+                
             </ul>
             <div class="navbar-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -514,7 +137,7 @@
                     </div>
                 </button>
                 <div class="navbar-contact">
-                    <a href="meet.html" class="navbar-contact-btn">
+                    <a href="meet.html" class="navbar-contact-btn" data-analytics="contact" data-cta-location="people">
                         <span>Let's Chat</span>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </a>
@@ -524,11 +147,11 @@
                             <p>Scan to connect</p>
                         </div>
                         <div class="contact-dropdown-links">
-                            <a href="contact.html">
+                            <a href="contact.html" data-analytics="cta" data-cta-id="contact" data-cta-location="people">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                                 Contact Page
                             </a>
-                            <a href="mailto:hello@jevangoldsmith.com">
+                            <a href="mailto:hello@jevangoldsmith.com" data-analytics="contact" data-cta-location="people">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                                 Email Me
                             </a>
@@ -538,10 +161,9 @@
             </div>
         </div>
     </nav>
-
-    <main class="people-layout" id="people-layout">
+    <main class="people-layout sidebar-collapsed" id="people-layout">
         <!-- Sidebar -->
-        <aside class="people-sidebar" id="people-sidebar">
+        <aside class="people-sidebar collapsed" id="people-sidebar">
             <div class="sidebar-header">
                 <button class="sidebar-collapse-btn" onclick="togglePeopleSidebar()" title="Collapse sidebar">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -636,7 +258,10 @@
             <header class="main-header">
                 <div class="header-content">
                     <h1>People</h1>
-                    <p class="header-subtitle">Thinkers, builders, and creators who inspire me</p>
+                    <div class="philosophy-link-wrapper">
+                        <a href="people-philosophy.html" class="header-subtitle-link">My People Philosophy</a>
+                        <span class="read-first-note">← read this first</span>
+                    </div>
                 </div>
                 <div class="header-counter">
                     <span class="counter-number">12</span>
@@ -650,7 +275,7 @@
                     <!-- Naval Ravikant -->
                     <article class="person-card" data-category="writers">
                         <div class="person-image-container">
-                            <img src="images/people/naval-ravikant.jpg" alt="Naval Ravikant" class="person-image">
+                            <img src="images/generated/people/naval-ravikant-400.jpg" alt="Naval Ravikant" class="person-image" srcset="images/generated/people/naval-ravikant-200.jpg 200w, images/generated/people/naval-ravikant-400.jpg 400w, images/generated/people/naval-ravikant-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Naval Ravikant</h3>
@@ -662,7 +287,7 @@
                     <!-- Warren Buffett -->
                     <article class="person-card" data-category="business">
                         <div class="person-image-container">
-                            <img src="images/people/warren-buffett.jpg" alt="Warren Buffett" class="person-image">
+                            <img src="images/generated/people/warren-buffett-400.jpg" alt="Warren Buffett" class="person-image" srcset="images/generated/people/warren-buffett-200.jpg 200w, images/generated/people/warren-buffett-400.jpg 400w, images/generated/people/warren-buffett-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Warren Buffett</h3>
@@ -674,7 +299,7 @@
                     <!-- Ray Dalio -->
                     <article class="person-card" data-category="business">
                         <div class="person-image-container">
-                            <img src="images/people/ray-dalio.jpg" alt="Ray Dalio" class="person-image">
+                            <img src="images/generated/people/ray-dalio-400.jpg" alt="Ray Dalio" class="person-image" srcset="images/generated/people/ray-dalio-200.jpg 200w, images/generated/people/ray-dalio-400.jpg 400w, images/generated/people/ray-dalio-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Ray Dalio</h3>
@@ -686,7 +311,7 @@
                     <!-- Elon Musk -->
                     <article class="person-card" data-category="business">
                         <div class="person-image-container">
-                            <img src="images/people/elon-musk.jpg" alt="Elon Musk" class="person-image">
+                            <img src="images/generated/people/elon-musk-400.jpg" alt="Elon Musk" class="person-image" srcset="images/generated/people/elon-musk-200.jpg 200w, images/generated/people/elon-musk-400.jpg 400w, images/generated/people/elon-musk-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Elon Musk</h3>
@@ -698,7 +323,7 @@
                     <!-- Morgan Housel -->
                     <article class="person-card" data-category="writers">
                         <div class="person-image-container">
-                            <img src="images/people/morgan-housel.jpg" alt="Morgan Housel" class="person-image">
+                            <img src="images/generated/people/morgan-housel-400.jpg" alt="Morgan Housel" class="person-image" srcset="images/generated/people/morgan-housel-200.jpg 200w, images/generated/people/morgan-housel-400.jpg 400w, images/generated/people/morgan-housel-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Morgan Housel</h3>
@@ -710,7 +335,7 @@
                     <!-- James Clear -->
                     <article class="person-card" data-category="writers">
                         <div class="person-image-container">
-                            <img src="images/people/james-clear.jpg" alt="James Clear" class="person-image">
+                            <img src="images/generated/people/james-clear-400.jpg" alt="James Clear" class="person-image" srcset="images/generated/people/james-clear-200.jpg 200w, images/generated/people/james-clear-400.jpg 400w, images/generated/people/james-clear-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">James Clear</h3>
@@ -722,7 +347,7 @@
                     <!-- Ryan Holiday -->
                     <article class="person-card" data-category="writers">
                         <div class="person-image-container">
-                            <img src="images/people/ryan-holiday.jpg" alt="Ryan Holiday" class="person-image">
+                            <img src="images/generated/people/ryan-holiday-400.jpg" alt="Ryan Holiday" class="person-image" srcset="images/generated/people/ryan-holiday-200.jpg 200w, images/generated/people/ryan-holiday-400.jpg 400w, images/generated/people/ryan-holiday-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Ryan Holiday</h3>
@@ -734,7 +359,7 @@
                     <!-- Andrew Huberman -->
                     <article class="person-card" data-category="science">
                         <div class="person-image-container">
-                            <img src="images/people/andrew-huberman.jpg" alt="Andrew Huberman" class="person-image">
+                            <img src="images/generated/people/andrew-huberman-400.jpg" alt="Andrew Huberman" class="person-image" srcset="images/generated/people/andrew-huberman-200.jpg 200w, images/generated/people/andrew-huberman-400.jpg 400w, images/generated/people/andrew-huberman-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Andrew Huberman</h3>
@@ -746,7 +371,7 @@
                     <!-- Lex Fridman -->
                     <article class="person-card" data-category="science">
                         <div class="person-image-container">
-                            <img src="images/people/lex-fridman.jpg" alt="Lex Fridman" class="person-image">
+                            <img src="images/generated/people/lex-fridman-400.jpg" alt="Lex Fridman" class="person-image" srcset="images/generated/people/lex-fridman-200.jpg 200w, images/generated/people/lex-fridman-400.jpg 400w, images/generated/people/lex-fridman-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Lex Fridman</h3>
@@ -758,7 +383,7 @@
                     <!-- Richard Feynman -->
                     <article class="person-card" data-category="science">
                         <div class="person-image-container">
-                            <img src="images/people/richard-feynman.jpg" alt="Richard Feynman" class="person-image">
+                            <img src="images/generated/people/richard-feynman-400.jpg" alt="Richard Feynman" class="person-image" srcset="images/generated/people/richard-feynman-200.jpg 200w, images/generated/people/richard-feynman-400.jpg 400w, images/generated/people/richard-feynman-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Richard Feynman</h3>
@@ -770,7 +395,7 @@
                     <!-- Christopher Nolan -->
                     <article class="person-card" data-category="creators">
                         <div class="person-image-container">
-                            <img src="images/people/christopher-nolan.jpg" alt="Christopher Nolan" class="person-image">
+                            <img src="images/generated/people/christopher-nolan-400.jpg" alt="Christopher Nolan" class="person-image" srcset="images/generated/people/christopher-nolan-200.jpg 200w, images/generated/people/christopher-nolan-400.jpg 400w, images/generated/people/christopher-nolan-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Christopher Nolan</h3>
@@ -782,7 +407,7 @@
                     <!-- Rick Rubin -->
                     <article class="person-card" data-category="creators">
                         <div class="person-image-container">
-                            <img src="images/people/rick-rubin.jpg" alt="Rick Rubin" class="person-image">
+                            <img src="images/generated/people/rick-rubin-400.jpg" alt="Rick Rubin" class="person-image" srcset="images/generated/people/rick-rubin-200.jpg 200w, images/generated/people/rick-rubin-400.jpg 400w, images/generated/people/rick-rubin-800.jpg 800w" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
                         </div>
                         <div class="person-info">
                             <h3 class="person-name">Rick Rubin</h3>
@@ -793,57 +418,51 @@
                 </div>
             </div>
         </div>
-    </main>
+    <section class="seo-related-section" data-seo-related>
+        <p class="seo-related-eyebrow">Related thread</p>
+        <h2>Keep exploring this idea</h2>
+        <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
+        <div class="seo-related-grid">
+            <a class="seo-related-card" href="books.html">
+                <span>Books I Recommend &amp; Notes From My Reading System</span>
+                <p>A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems.</p>
+            </a>
+            <a class="seo-related-card" href="reading-philosophy.html">
+                <span>How I Read: A Practical Reading Philosophy</span>
+                <p>Notes on reading for judgment, taste, decision-making, and a better personal operating system.</p>
+            </a>
+            <a class="seo-related-card" href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="people">
+                <span>The Shelf: Tools, Objects &amp; Gear That Earned Their Place</span>
+                <p>A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced.</p>
+            </a>
+            <a class="seo-related-card" href="essays.html" data-analytics="cta" data-cta-id="best-essays" data-cta-location="people">
+                <span>Essays on Thinking, Business, Culture &amp; Personal Systems</span>
+                <p>Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems.</p>
+            </a>
+        </div>
+    </section>
+</main>
 
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+                <div>
+                    <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+                    <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
+                </div>
                 <ul class="footer-links">
                     <li><a href="index.html">Home</a></li>
+                    <li><a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="people">Field Notes</a></li>
+                    <li><a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="people">The Shelf</a></li>
+                    <li><a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="people">Resources</a></li>
                 </ul>
             </div>
         </div>
     </footer>
 
     <script src="js/theme.js"></script>
-    <script>
-        // Simple filtering functionality
-        function filterByCategory(category) {
-            const buttons = document.querySelectorAll('.sidebar-category');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.closest('.sidebar-category').classList.add('active');
-
-            const cards = document.querySelectorAll('.person-card');
-            cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        function filterPeople(searchTerm) {
-            const cards = document.querySelectorAll('.person-card');
-            const term = searchTerm.toLowerCase();
-            cards.forEach(card => {
-                const name = card.querySelector('.person-name').textContent.toLowerCase();
-                const title = card.querySelector('.person-title').textContent.toLowerCase();
-                if (name.includes(term) || title.includes(term)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        function togglePeopleSidebar() {
-            const layout = document.getElementById('people-layout');
-            const sidebar = document.getElementById('people-sidebar');
-            layout.classList.toggle('sidebar-collapsed');
-            sidebar.classList.toggle('collapsed');
-        }
-    </script>
+    <script src="js/grid-zoom.js"></script>
+    <script src="js/people.js"></script>
+    <script src="js/analytics.js"></script>
 </body>
 </html>

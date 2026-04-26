@@ -280,28 +280,28 @@
                 <div class="quick-actions">
                     <h2>Quick Actions</h2>
                     <div class="action-grid">
-                        <button class="action-card" onclick="navigateTo('books')">
+                        <button class="action-card" data-admin-action="navigate" data-section-target="books">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
                             <span>Add Book</span>
                         </button>
-                        <button class="action-card" onclick="navigateTo('essays')">
+                        <button class="action-card" data-admin-action="navigate" data-section-target="essays">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
                             <span>New Essay</span>
                         </button>
-                        <button class="action-card" onclick="navigateTo('photos')">
+                        <button class="action-card" data-admin-action="navigate" data-section-target="photos">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
                             <span>Upload Photos</span>
                         </button>
-                        <button class="action-card" onclick="navigateTo('quotes')">
+                        <button class="action-card" data-admin-action="navigate" data-section-target="quotes">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -352,7 +352,7 @@
                     </select>
                 </div>
                 <div class="toolbar-actions">
-                    <button class="btn-secondary" onclick="toggleImportPanel()">
+                    <button class="btn-secondary" data-admin-action="toggle-book-import">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="17 8 12 3 7 8"></polyline>
@@ -360,7 +360,7 @@
                         </svg>
                         Import Books
                     </button>
-                    <button class="btn-primary" onclick="showAddForm('books')">
+                    <button class="btn-primary" data-admin-action="show-add-form" data-content-type="books">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -374,7 +374,7 @@
             <div class="import-panel" id="book-import-panel" style="display: none;">
                 <div class="import-panel-header">
                     <h3>Import Books from File</h3>
-                    <button class="import-close-btn" onclick="toggleImportPanel()">&times;</button>
+                    <button class="import-close-btn" data-admin-action="toggle-book-import">&times;</button>
                 </div>
                 <div class="import-panel-body">
                     <div class="import-instructions">
@@ -394,7 +394,7 @@
                     </div>
 
                     <div class="import-dropzone" id="import-dropzone">
-                        <input type="file" id="book-file-input" accept=".csv,.xlsx,.xls" onchange="handleFileSelect(event)">
+                        <input type="file" id="book-file-input" accept=".csv,.xlsx,.xls" data-admin-action="book-file-select">
                         <div class="dropzone-content">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -409,7 +409,7 @@
                     <div class="import-preview" id="import-preview" style="display: none;">
                         <div class="preview-header">
                             <h4>Preview (<span id="preview-count">0</span> books)</h4>
-                            <button class="btn-text" onclick="clearImport()">Clear</button>
+                            <button class="btn-text" data-admin-action="clear-book-import">Clear</button>
                         </div>
                         <div class="preview-table-wrapper">
                             <table class="preview-table" id="preview-table">
@@ -434,7 +434,7 @@
                                 </label>
                             </div>
                             <div class="import-buttons">
-                                <button class="btn-secondary" onclick="downloadTemplate()">
+                                <button class="btn-secondary" data-admin-action="download-book-template">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -442,7 +442,7 @@
                                     </svg>
                                     Download Template
                                 </button>
-                                <button class="btn-primary" onclick="applyImport()">
+                                <button class="btn-primary" data-admin-action="apply-book-import">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg>
@@ -459,18 +459,18 @@
                                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
                             </svg>
                             <h4>Import Successful!</h4>
-                            <p id="result-message">Your books.js file has been generated.</p>
+                            <p id="result-message">Your books.json file has been generated.</p>
                         </div>
                         <div class="result-actions">
-                            <button class="btn-primary" onclick="downloadBooksJS()">
+                            <button class="btn-primary" data-admin-action="download-books-json">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                     <polyline points="7 10 12 15 17 10"></polyline>
                                     <line x1="12" y1="15" x2="12" y2="3"></line>
                                 </svg>
-                                Download books.js
+                                Download books.json
                             </button>
-                            <button class="btn-secondary" onclick="copyBooksJS()">
+                            <button class="btn-secondary" data-admin-action="copy-books-json">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -478,7 +478,7 @@
                                 Copy to Clipboard
                             </button>
                         </div>
-                        <p class="result-note">Replace your existing <code>js/books.js</code> file with the downloaded file to update your website.</p>
+                        <p class="result-note">Replace your existing <code>data/books.json</code> file with the downloaded file to update your website.</p>
                     </div>
                 </div>
             </div>
@@ -497,7 +497,7 @@
                     <button class="tab" data-filter="draft">Drafts</button>
                 </div>
                 <div class="toolbar-actions">
-                    <button class="btn-secondary" onclick="toggleEssayImportPanel()">
+                    <button class="btn-secondary" data-admin-action="toggle-essay-import">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="17 8 12 3 7 8"></polyline>
@@ -505,7 +505,7 @@
                         </svg>
                         Import Essays
                     </button>
-                    <button class="btn-primary" onclick="showAddForm('essays')">
+                    <button class="btn-primary" data-admin-action="show-add-form" data-content-type="essays">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -519,7 +519,7 @@
             <div class="import-panel" id="essay-import-panel" style="display: none;">
                 <div class="import-panel-header">
                     <h3>Import Essays from Markdown</h3>
-                    <button class="import-close-btn" onclick="toggleEssayImportPanel()">&times;</button>
+                    <button class="import-close-btn" data-admin-action="toggle-essay-import">&times;</button>
                 </div>
                 <div class="import-panel-body">
                     <div class="import-instructions">
@@ -535,7 +535,7 @@
                     </div>
 
                     <div class="import-dropzone" id="essay-import-dropzone">
-                        <input type="file" id="essay-file-input" accept=".md,.markdown" multiple onchange="handleEssayFileSelect(event)">
+                        <input type="file" id="essay-file-input" accept=".md,.markdown" multiple data-admin-action="essay-file-select">
                         <div class="dropzone-content">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -552,7 +552,7 @@
                     <div class="import-preview" id="essay-import-preview" style="display: none;">
                         <div class="preview-header">
                             <h4>Preview (<span id="essay-preview-count">0</span> essays)</h4>
-                            <button class="btn-text" onclick="clearEssayImport()">Clear</button>
+                            <button class="btn-text" data-admin-action="clear-essay-import">Clear</button>
                         </div>
                         <div class="preview-table-wrapper">
                             <table class="preview-table" id="essay-preview-table">
@@ -575,7 +575,7 @@
                                 </label>
                             </div>
                             <div class="import-buttons">
-                                <button class="btn-secondary" onclick="downloadEssayTemplate()">
+                                <button class="btn-secondary" data-admin-action="download-essay-template">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -583,7 +583,7 @@
                                     </svg>
                                     Download Template
                                 </button>
-                                <button class="btn-primary" onclick="applyEssayImport()">
+                                <button class="btn-primary" data-admin-action="apply-essay-import">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg>
@@ -603,7 +603,7 @@
                             <p id="essay-result-message">Your essays.json file has been generated.</p>
                         </div>
                         <div class="result-actions">
-                            <button class="btn-primary" onclick="downloadEssaysJSON()">
+                            <button class="btn-primary" data-admin-action="download-essays-json">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                     <polyline points="7 10 12 15 17 10"></polyline>
@@ -611,7 +611,7 @@
                                 </svg>
                                 Download essays.json
                             </button>
-                            <button class="btn-secondary" onclick="copyEssaysJSON()">
+                            <button class="btn-secondary" data-admin-action="copy-essays-json">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -633,7 +633,7 @@
         <section id="section-movies" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search movies..." id="movies-search">
-                <button class="btn-primary" onclick="showAddForm('movies')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="movies">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -650,14 +650,14 @@
                 </svg>
                 <h3>No movies yet</h3>
                 <p>Start adding movies to your collection</p>
-                <button class="btn-primary" onclick="showAddForm('movies')">Add Your First Movie</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="movies">Add Your First Movie</button>
             </div>
         </section>
 
         <section id="section-music" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search music..." id="music-search">
-                <button class="btn-primary" onclick="showAddForm('music')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="music">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -674,14 +674,14 @@
                 </svg>
                 <h3>No music yet</h3>
                 <p>Add albums and songs to your collection</p>
-                <button class="btn-primary" onclick="showAddForm('music')">Add Music</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="music">Add Music</button>
             </div>
         </section>
 
         <section id="section-podcasts" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search podcasts..." id="podcasts-search">
-                <button class="btn-primary" onclick="showAddForm('podcasts')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="podcasts">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -697,14 +697,14 @@
                 </svg>
                 <h3>No podcasts yet</h3>
                 <p>Share your favorite podcasts</p>
-                <button class="btn-primary" onclick="showAddForm('podcasts')">Add Podcast</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="podcasts">Add Podcast</button>
             </div>
         </section>
 
         <section id="section-products" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search products..." id="products-search">
-                <button class="btn-primary" onclick="showAddForm('products')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="products">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -720,14 +720,14 @@
                 </svg>
                 <h3>No products yet</h3>
                 <p>Share products you love</p>
-                <button class="btn-primary" onclick="showAddForm('products')">Add Product</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="products">Add Product</button>
             </div>
         </section>
 
         <section id="section-people" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search people..." id="people-search">
-                <button class="btn-primary" onclick="showAddForm('people')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="people">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -743,14 +743,14 @@
                 </svg>
                 <h3>No people yet</h3>
                 <p>Add people who inspire you</p>
-                <button class="btn-primary" onclick="showAddForm('people')">Add Person</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="people">Add Person</button>
             </div>
         </section>
 
         <section id="section-food" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search food..." id="food-search">
-                <button class="btn-primary" onclick="showAddForm('food')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="food">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -766,14 +766,14 @@
                 </svg>
                 <h3>No food yet</h3>
                 <p>Share your favorite places to eat</p>
-                <button class="btn-primary" onclick="showAddForm('food')">Add Food</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="food">Add Food</button>
             </div>
         </section>
 
         <section id="section-quotes" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search quotes..." id="quotes-search">
-                <button class="btn-primary" onclick="showAddForm('quotes')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="quotes">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -788,14 +788,14 @@
                 </svg>
                 <h3>No quotes yet</h3>
                 <p>Add quotes that inspire you</p>
-                <button class="btn-primary" onclick="showAddForm('quotes')">Add Quote</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="quotes">Add Quote</button>
             </div>
         </section>
 
         <section id="section-adventures" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search adventures..." id="adventures-search">
-                <button class="btn-primary" onclick="showAddForm('adventures')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="adventures">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -811,14 +811,14 @@
                 </svg>
                 <h3>No adventures yet</h3>
                 <p>Start documenting your journeys</p>
-                <button class="btn-primary" onclick="showAddForm('adventures')">Add Adventure</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="adventures">Add Adventure</button>
             </div>
         </section>
 
         <section id="section-projects" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search projects..." id="projects-search">
-                <button class="btn-primary" onclick="showAddForm('projects')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="projects">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -833,14 +833,14 @@
                 </svg>
                 <h3>No projects yet</h3>
                 <p>Share your work with the world</p>
-                <button class="btn-primary" onclick="showAddForm('projects')">Add Project</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="projects">Add Project</button>
             </div>
         </section>
 
         <section id="section-challenges" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search challenges..." id="challenges-search">
-                <button class="btn-primary" onclick="showAddForm('challenges')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="challenges">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -855,14 +855,14 @@
                 </svg>
                 <h3>No challenges yet</h3>
                 <p>Set and track your challenges</p>
-                <button class="btn-primary" onclick="showAddForm('challenges')">Add Challenge</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="challenges">Add Challenge</button>
             </div>
         </section>
 
         <section id="section-skills" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search skills..." id="skills-search">
-                <button class="btn-primary" onclick="showAddForm('skills')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="skills">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -877,14 +877,14 @@
                 </svg>
                 <h3>No skills yet</h3>
                 <p>Track your skill development</p>
-                <button class="btn-primary" onclick="showAddForm('skills')">Add Skill</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="skills">Add Skill</button>
             </div>
         </section>
 
         <section id="section-lessons" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search lessons..." id="lessons-search">
-                <button class="btn-primary" onclick="showAddForm('lessons')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="lessons">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -900,14 +900,14 @@
                 </svg>
                 <h3>No lessons yet</h3>
                 <p>Document what you've learned</p>
-                <button class="btn-primary" onclick="showAddForm('lessons')">Add Lesson</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="lessons">Add Lesson</button>
             </div>
         </section>
 
         <section id="section-photos" class="content-section">
             <div class="section-toolbar">
                 <input type="text" class="search-input" placeholder="Search photos..." id="photos-search">
-                <button class="btn-primary" onclick="showAddForm('photos')">
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="photos">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -924,7 +924,7 @@
                 </svg>
                 <h3>No photos yet</h3>
                 <p>Upload photos to your gallery</p>
-                <button class="btn-primary" onclick="showAddForm('photos')">Upload Photos</button>
+                <button class="btn-primary" data-admin-action="show-add-form" data-content-type="photos">Upload Photos</button>
             </div>
         </section>
 
@@ -963,7 +963,7 @@
                                     <h3>Generate Secret Key</h3>
                                 </div>
                                 <p>Generate a unique secret key to link your authenticator app.</p>
-                                <button class="btn-primary" onclick="generateTOTPSecret()">
+                                <button class="btn-primary" data-admin-action="generate-totp-secret">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
                                     </svg>
@@ -975,7 +975,7 @@
                                         <label>Your Secret Key (save this securely):</label>
                                         <div class="secret-value-box">
                                             <code id="generated-secret"></code>
-                                            <button class="btn-icon" onclick="copyToClipboard(document.getElementById('generated-secret').textContent, 'Secret key copied!')" title="Copy">
+                                            <button class="btn-icon" data-admin-action="copy-generated-secret" title="Copy">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -983,7 +983,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <button class="btn-secondary" onclick="showSetupStep(2)">Next: Add to Authenticator</button>
+                                    <button class="btn-secondary" data-admin-action="show-setup-step" data-step="2">Next: Add to Authenticator</button>
                                 </div>
                             </div>
 
@@ -1009,8 +1009,8 @@
                                 </div>
 
                                 <div class="step-actions">
-                                    <button class="btn-secondary" onclick="showSetupStep(1)">Back</button>
-                                    <button class="btn-primary" onclick="showSetupStep(3)">Next: Verify Code</button>
+                                    <button class="btn-secondary" data-admin-action="show-setup-step" data-step="1">Back</button>
+                                    <button class="btn-primary" data-admin-action="show-setup-step" data-step="3">Next: Verify Code</button>
                                 </div>
                             </div>
 
@@ -1022,14 +1022,14 @@
                                 </div>
                                 <p>Enter the 6-digit code from your authenticator app to verify:</p>
 
-                                <form id="verify-setup-form" onsubmit="verifySetupCode(event)">
+                                <form id="verify-setup-form" data-admin-form="verify-setup">
                                     <input type="text" id="setup-verify-code" class="code-input" placeholder="000000" maxlength="6" pattern="[0-9]*" inputmode="numeric" required>
                                     <button type="submit" class="btn-primary">Verify Code</button>
                                 </form>
                                 <div id="setup-verify-result" class="verify-result"></div>
 
                                 <div class="step-actions">
-                                    <button class="btn-secondary" onclick="showSetupStep(2)">Back</button>
+                                    <button class="btn-secondary" data-admin-action="show-setup-step" data-step="2">Back</button>
                                 </div>
                             </div>
 
@@ -1053,8 +1053,8 @@
                                 </div>
 
                                 <div class="step-actions">
-                                    <button class="btn-secondary" onclick="showSetupStep(3)">Back</button>
-                                    <button class="btn-primary" onclick="finishTwoFASetup()">Finish Setup</button>
+                                    <button class="btn-secondary" data-admin-action="show-setup-step" data-step="3">Back</button>
+                                    <button class="btn-primary" data-admin-action="finish-twofa-setup">Finish Setup</button>
                                 </div>
                             </div>
 
@@ -1087,7 +1087,7 @@
                             </div>
 
                             <div class="enabled-actions">
-                                <button class="btn-secondary" onclick="showReconfigureWarning()">
+                                <button class="btn-secondary" data-admin-action="show-reconfigure-warning">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
                                     </svg>
@@ -1123,7 +1123,7 @@
                                 <span class="session-value" id="session-expire-time">-</span>
                             </div>
                         </div>
-                        <button class="btn-danger" onclick="logout()">
+                        <button class="btn-danger" data-admin-action="logout-direct">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
@@ -1142,7 +1142,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modal-title">Add Item</h2>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <button class="modal-close" data-admin-action="close-modal">&times;</button>
             </div>
             <div class="modal-body" id="modal-body">
                 <!-- Form content will be dynamically inserted -->

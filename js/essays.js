@@ -4,6 +4,7 @@
 let allEssays = [];
 let filteredEssays = [];
 let currentSearchTerm = '';
+let currentIndex = 0;
 
 // Load and render essays
 async function loadEssays() {
@@ -32,21 +33,89 @@ async function loadEssays() {
     }
 }
 
-// Render essays to the page
-function renderEssays(essays) {
+// Render essays to the page (one at a time)
+function renderEssays(essays, startIndex = 0) {
+    filteredEssays = essays;
+    currentIndex = Math.max(0, Math.min(startIndex, essays.length - 1));
+    renderCurrentEssay();
+}
+
+function renderCurrentEssay() {
     const container = document.getElementById('essays-container');
     if (!container) return;
 
     container.innerHTML = '';
 
-    if (essays.length === 0) {
+    if (!filteredEssays.length) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 3rem;">No essays published yet.</p>';
         return;
     }
 
-    essays.forEach((essay) => {
-        const article = createEssayArticle(essay);
-        container.appendChild(article);
+    const essay = filteredEssays[currentIndex];
+    const article = createEssayArticle(essay);
+    container.appendChild(article);
+    container.appendChild(createEssayNav());
+    updateActiveSidebarLink(essay.id);
+}
+
+function createEssayNav() {
+    const nav = document.createElement('div');
+    nav.className = 'essay-nav';
+    const total = filteredEssays.length;
+    const atStart = currentIndex <= 0;
+    const atEnd = currentIndex >= total - 1;
+
+    const prevTitle = !atStart ? filteredEssays[currentIndex - 1].title : '';
+    const nextTitle = !atEnd ? filteredEssays[currentIndex + 1].title : '';
+
+    nav.innerHTML = `
+        <button class="essay-nav-btn essay-nav-prev" ${atStart ? 'disabled' : ''} onclick="prevEssay()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span class="essay-nav-label">
+                <span class="essay-nav-direction">Previous</span>
+                ${prevTitle ? `<span class="essay-nav-title">${escapeHTML(prevTitle)}</span>` : ''}
+            </span>
+        </button>
+        <span class="essay-nav-counter">${currentIndex + 1} / ${total}</span>
+        <button class="essay-nav-btn essay-nav-next" ${atEnd ? 'disabled' : ''} onclick="nextEssay()">
+            <span class="essay-nav-label essay-nav-label-right">
+                <span class="essay-nav-direction">Next</span>
+                ${nextTitle ? `<span class="essay-nav-title">${escapeHTML(nextTitle)}</span>` : ''}
+            </span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    `;
+    return nav;
+}
+
+function prevEssay() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderCurrentEssay();
+        scrollToTop();
+    }
+}
+
+function nextEssay() {
+    if (currentIndex < filteredEssays.length - 1) {
+        currentIndex++;
+        renderCurrentEssay();
+        scrollToTop();
+    }
+}
+
+function scrollToTop() {
+    const main = document.querySelector('.essays-main');
+    if (main) {
+        main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function updateActiveSidebarLink(essayId) {
+    document.querySelectorAll('.essay-link').forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${essayId}`);
     });
 }
 
@@ -195,26 +264,21 @@ function toggleCategory(category) {
     button.classList.add('active');
 }
 
-// Scroll to specific essay
+// Jump to specific essay (one-at-a-time view)
 function scrollToEssay(essayId, event) {
     if (event) event.preventDefault();
 
-    const element = document.getElementById(essayId);
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        // Highlight the essay briefly
-        element.style.background = '#FFF9E6';
-        setTimeout(() => {
-            element.style.background = '';
-        }, 2000);
-
-        // Update active link
-        document.querySelectorAll('.essay-link').forEach(link => {
-            link.classList.remove('active');
-        });
-        event.target.closest('.essay-link').classList.add('active');
+    const idx = filteredEssays.findIndex(e => e.id === essayId);
+    if (idx >= 0) {
+        currentIndex = idx;
+    } else {
+        const fullIdx = allEssays.findIndex(e => e.id === essayId);
+        if (fullIdx < 0) return;
+        filteredEssays = allEssays;
+        currentIndex = fullIdx;
     }
+    renderCurrentEssay();
+    scrollToTop();
 }
 
 // Format date in short form

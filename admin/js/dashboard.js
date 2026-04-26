@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSidebarToggle();
     initLogout();
     initModalClose();
+    initAdminActions();
 
     // Load books from main site data
     loadBooksFromData();
@@ -46,11 +47,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ==================== BOOKS DATA INTEGRATION ====================
 
-// Load books from the main site's booksData array
-function loadBooksFromData() {
-    // Check if booksData exists (loaded from ../js/books.js)
+// Load books through the public books runtime, which reads data/books.json.
+async function loadBooksFromData() {
+    if (typeof loadBooksData === 'function') {
+        try {
+            await loadBooksData();
+        } catch (error) {
+            console.warn('Unable to load books data', error);
+        }
+    }
+
+    // Check if booksData exists after ../js/books.js loads data/books.json.
     if (typeof booksData === 'undefined') {
-        console.warn('booksData not found - books.js may not be loaded');
+        console.warn('booksData not found - books runtime may not be loaded');
         return;
     }
 
@@ -114,7 +123,7 @@ function displayBooks(books) {
                 </div>
             </div>
             <div class="item-actions">
-                <button class="btn-edit" onclick="editBook('${escapeAttr(book.isbn)}')">Edit</button>
+                <button class="btn-edit" data-admin-action="edit-book" data-isbn="${escapeAttr(book.isbn)}">Edit</button>
             </div>
         </div>
     `).join('');
@@ -187,10 +196,10 @@ function editBook(isbn) {
             </div>
             ` : ''}
             <div class="form-hint" style="margin-top: 1rem; padding: 1rem; background: rgba(201, 168, 108, 0.1); border-radius: 8px;">
-                <strong>Note:</strong> Book data is stored in <code>js/books.js</code>. To edit books, modify that file directly and redeploy your site.
+                <strong>Note:</strong> Book data is stored in <code>data/books.json</code>. Use the importer to export a replacement JSON file, then redeploy your site.
             </div>
             <div class="form-actions">
-                <button type="button" class="btn-secondary" onclick="closeModal()">Close</button>
+                <button type="button" class="btn-secondary" data-admin-action="close-modal">Close</button>
             </div>
         </form>
     `;
@@ -365,7 +374,7 @@ function showAddForm(contentType) {
 function generateForm(contentType) {
     const forms = {
         books: `
-            <form id="add-book-form" onsubmit="handleFormSubmit(event, 'books')">
+            <form id="add-book-form" data-admin-form="content" data-content-type="books">
                 <div class="form-group">
                     <label for="book-title">Title *</label>
                     <input type="text" id="book-title" name="title" required>
@@ -409,13 +418,13 @@ function generateForm(contentType) {
                     <input type="url" id="book-cover" name="coverUrl" placeholder="https://...">
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-secondary" data-admin-action="close-modal">Cancel</button>
                     <button type="submit" class="btn-primary">Add Book</button>
                 </div>
             </form>
         `,
         essays: `
-            <form id="add-essay-form" onsubmit="handleFormSubmit(event, 'essays')">
+            <form id="add-essay-form" data-admin-form="content" data-content-type="essays">
                 <div class="form-group">
                     <label for="essay-title">Title *</label>
                     <input type="text" id="essay-title" name="title" required>
@@ -449,13 +458,13 @@ function generateForm(contentType) {
                     <textarea id="essay-excerpt" name="excerpt" placeholder="A brief summary..."></textarea>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-secondary" data-admin-action="close-modal">Cancel</button>
                     <button type="submit" class="btn-primary">Create Essay</button>
                 </div>
             </form>
         `,
         quotes: `
-            <form id="add-quote-form" onsubmit="handleFormSubmit(event, 'quotes')">
+            <form id="add-quote-form" data-admin-form="content" data-content-type="quotes">
                 <div class="form-group">
                     <label for="quote-text">Quote *</label>
                     <textarea id="quote-text" name="text" required placeholder="Enter the quote..."></textarea>
@@ -480,13 +489,13 @@ function generateForm(contentType) {
                     </select>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-secondary" data-admin-action="close-modal">Cancel</button>
                     <button type="submit" class="btn-primary">Add Quote</button>
                 </div>
             </form>
         `,
         movies: `
-            <form id="add-movie-form" onsubmit="handleFormSubmit(event, 'movies')">
+            <form id="add-movie-form" data-admin-form="content" data-content-type="movies">
                 <div class="form-group">
                     <label for="movie-title">Title *</label>
                     <input type="text" id="movie-title" name="title" required>
@@ -517,13 +526,13 @@ function generateForm(contentType) {
                     <textarea id="movie-review" name="review" placeholder="Your thoughts..."></textarea>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-secondary" data-admin-action="close-modal">Cancel</button>
                     <button type="submit" class="btn-primary">Add Movie</button>
                 </div>
             </form>
         `,
         adventures: `
-            <form id="add-adventure-form" onsubmit="handleFormSubmit(event, 'adventures')">
+            <form id="add-adventure-form" data-admin-form="content" data-content-type="adventures">
                 <div class="form-group">
                     <label for="adventure-title">Title *</label>
                     <input type="text" id="adventure-title" name="title" required>
@@ -547,16 +556,16 @@ function generateForm(contentType) {
                     <textarea id="adventure-description" name="description" placeholder="Describe your adventure..."></textarea>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-secondary" data-admin-action="close-modal">Cancel</button>
                     <button type="submit" class="btn-primary">Add Adventure</button>
                 </div>
             </form>
         `,
         photos: `
-            <form id="add-photos-form" onsubmit="handleFormSubmit(event, 'photos')">
+            <form id="add-photos-form" data-admin-form="content" data-content-type="photos">
                 <div class="form-group">
                     <label>Upload Photos</label>
-                    <div class="media-upload-area" onclick="document.getElementById('photo-input').click()">
+                    <div class="media-upload-area" data-admin-action="open-photo-input">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                             <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -573,7 +582,7 @@ function generateForm(contentType) {
                     <input type="text" id="photo-album" name="album" placeholder="e.g., Travel, Life, Work">
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-secondary" data-admin-action="close-modal">Cancel</button>
                     <button type="submit" class="btn-primary">Upload Photos</button>
                 </div>
             </form>
@@ -582,7 +591,7 @@ function generateForm(contentType) {
 
     // Default form for content types without specific forms
     const defaultForm = `
-        <form id="add-item-form" onsubmit="handleFormSubmit(event, '${contentType}')">
+        <form id="add-item-form" data-admin-form="content" data-content-type="${escapeAttr(contentType)}">
             <div class="form-group">
                 <label for="item-title">Title *</label>
                 <input type="text" id="item-title" name="title" required>
@@ -592,7 +601,7 @@ function generateForm(contentType) {
                 <textarea id="item-description" name="description" placeholder="Add a description..."></textarea>
             </div>
             <div class="form-actions">
-                <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button type="button" class="btn-secondary" data-admin-action="close-modal">Cancel</button>
                 <button type="submit" class="btn-primary">Add Item</button>
             </div>
         </form>
@@ -628,6 +637,68 @@ function initModalClose() {
     }
 }
 
+function initAdminActions() {
+    document.addEventListener('click', function(event) {
+        const control = event.target.closest('[data-admin-action]');
+        if (!control) return;
+
+        const action = control.dataset.adminAction;
+        const actionHandlers = {
+            navigate: () => navigateTo(control.dataset.sectionTarget),
+            'show-add-form': () => showAddForm(control.dataset.contentType),
+            'toggle-book-import': () => toggleImportPanel(),
+            'clear-book-import': () => clearImport(),
+            'download-book-template': () => downloadTemplate(),
+            'apply-book-import': () => applyImport(),
+            'download-books-json': () => downloadBooksJSON(),
+            'copy-books-json': () => copyBooksJSON(event),
+            'toggle-essay-import': () => toggleEssayImportPanel(),
+            'clear-essay-import': () => clearEssayImport(),
+            'download-essay-template': () => downloadEssayTemplate(),
+            'apply-essay-import': () => applyEssayImport(),
+            'download-essays-json': () => downloadEssaysJSON(),
+            'copy-essays-json': () => copyEssaysJSON(),
+            'generate-totp-secret': () => generateTOTPSecret(),
+            'copy-generated-secret': () => copyToClipboard(document.getElementById('generated-secret')?.textContent || '', 'Secret key copied!'),
+            'show-setup-step': () => showSetupStep(Number(control.dataset.step)),
+            'finish-twofa-setup': () => finishTwoFASetup(),
+            'show-reconfigure-warning': () => showReconfigureWarning(),
+            'logout-direct': () => logout(),
+            'close-modal': () => closeModal(),
+            'edit-book': () => editBook(control.dataset.isbn),
+            'edit-content': () => editContent(control.dataset.contentType, control.dataset.itemId),
+            'delete-content': () => deleteContent(control.dataset.contentType, control.dataset.itemId),
+            'dismiss-notification': () => control.closest('.admin-notification')?.remove(),
+            'open-photo-input': () => document.getElementById('photo-input')?.click()
+        };
+
+        const handler = actionHandlers[action];
+        if (!handler) return;
+        event.preventDefault();
+        handler();
+    });
+
+    document.addEventListener('change', function(event) {
+        const control = event.target.closest('[data-admin-action]');
+        if (!control) return;
+        if (control.dataset.adminAction === 'book-file-select') handleFileSelect(event);
+        if (control.dataset.adminAction === 'essay-file-select') handleEssayFileSelect(event);
+    });
+
+    document.addEventListener('submit', function(event) {
+        const form = event.target.closest('[data-admin-form]');
+        if (!form) return;
+
+        if (form.dataset.adminForm === 'verify-setup') {
+            verifySetupCode(event);
+            return;
+        }
+
+        const contentType = form.dataset.contentType;
+        if (contentType) handleFormSubmit(event, contentType);
+    });
+}
+
 // ==================== FORM SUBMISSION ====================
 
 function handleFormSubmit(event, contentType) {
@@ -636,6 +707,25 @@ function handleFormSubmit(event, contentType) {
     const form = event.target;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+
+    if (form.dataset.mode === 'edit') {
+        const id = form.dataset.itemId;
+        data.id = id;
+        data.updatedAt = new Date().toISOString();
+
+        const key = `admin_${contentType}`;
+        let items = JSON.parse(localStorage.getItem(key) || '[]');
+        const index = items.findIndex(i => i.id === id);
+        if (index > -1) {
+            items[index] = { ...items[index], ...data };
+            localStorage.setItem(key, JSON.stringify(items));
+        }
+
+        closeModal();
+        showNotification('Item updated successfully!', 'success');
+        loadSectionContent(contentType);
+        return;
+    }
 
     // Add timestamp
     data.createdAt = new Date().toISOString();
@@ -710,8 +800,8 @@ function loadSectionContent(contentType) {
                 </div>
             </div>
             <div class="item-actions">
-                <button class="btn-edit" onclick="editContent('${escapeAttr(contentType)}', '${escapeAttr(item.id)}')">Edit</button>
-                <button class="btn-delete" onclick="deleteContent('${escapeAttr(contentType)}', '${escapeAttr(item.id)}')">Delete</button>
+                <button class="btn-edit" data-admin-action="edit-content" data-content-type="${escapeAttr(contentType)}" data-item-id="${escapeAttr(item.id)}">Edit</button>
+                <button class="btn-delete" data-admin-action="delete-content" data-content-type="${escapeAttr(contentType)}" data-item-id="${escapeAttr(item.id)}">Delete</button>
             </div>
         </div>
     `).join('');
@@ -738,27 +828,8 @@ function editContent(contentType, id) {
                 }
             });
 
-            // Update form submission to edit instead of add
-            form.onsubmit = function(e) {
-                e.preventDefault();
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
-                data.id = id;
-                data.updatedAt = new Date().toISOString();
-
-                // Update in storage
-                const key = `admin_${contentType}`;
-                let items = JSON.parse(localStorage.getItem(key) || '[]');
-                const index = items.findIndex(i => i.id === id);
-                if (index > -1) {
-                    items[index] = { ...items[index], ...data };
-                    localStorage.setItem(key, JSON.stringify(items));
-                }
-
-                closeModal();
-                showNotification('Item updated successfully!', 'success');
-                loadSectionContent(contentType);
-            };
+            form.dataset.mode = 'edit';
+            form.dataset.itemId = id;
 
             // Update modal title
             const modalTitle = document.getElementById('modal-title');
@@ -807,7 +878,7 @@ function showNotification(message, type = 'info') {
     notification.className = `admin-notification ${type}`;
     notification.innerHTML = `
         <span>${escapeHTML(message)}</span>
-        <button onclick="this.parentElement.remove()">&times;</button>
+        <button data-admin-action="dismiss-notification">&times;</button>
     `;
 
     // Add styles if not already present
@@ -966,8 +1037,8 @@ function renderFilteredContent(contentType, items) {
                 </div>
             </div>
             <div class="item-actions">
-                <button class="btn-edit" onclick="editContent('${contentType}', '${item.id}')">Edit</button>
-                <button class="btn-delete" onclick="deleteContent('${contentType}', '${item.id}')">Delete</button>
+                <button class="btn-edit" data-admin-action="edit-content" data-content-type="${escapeAttr(contentType)}" data-item-id="${escapeAttr(item.id)}">Edit</button>
+                <button class="btn-delete" data-admin-action="delete-content" data-content-type="${escapeAttr(contentType)}" data-item-id="${escapeAttr(item.id)}">Delete</button>
             </div>
         </div>
     `).join('');

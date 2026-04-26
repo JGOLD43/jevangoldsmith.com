@@ -1,0 +1,158 @@
+.movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 3rem;
+        }
+
+        .movie-card {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .movie-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .movie-watch-badge {
+            background-color: #B91C1C;
+        }
+
+        .movie-watch-badge.status-active { background-color: #27ae60; }
+        .movie-watch-badge.status-completed { background-color: #2980b9; }
+        .movie-watch-badge.status-upcoming { background-color: #8e44ad; }
+
+        .movie-poster-wrapper {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            min-height: 188px;
+            padding: 0.75rem;
+        }
+
+        .movie-info {
+            padding: 0 0.5rem;
+        }
+
+        .movie-title-row {
+            align-items: baseline;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+        }
+
+        .movie-title {
+            color: #0F1111;
+            font-family: 'Chivo', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        .movie-description {
+            color: var(--text-color);
+            display: -webkit-box;
+            font-size: 0.9rem;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .movie-poster-wrapper {
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 0;
+            padding: 0;
+            margin-bottom: 0.85rem;
+            aspect-ratio: 16 / 10;
+        }
+
+        .podcast-cover-placeholder {
+            align-items: center;
+            border-radius: 8px;
+            color: #fff;
+            display: flex;
+            font-size: 3rem;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: auto;
+        }
+
+        .placeholder-learning { background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%); }
+        .placeholder-fitness { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); }
+        .placeholder-creative { background: linear-gradient(135deg, #9b59b6 0%, #6a3093 100%); }
+        .placeholder-financial { background: linear-gradient(135deg, #27ae60 0%, #145a32 100%); }
+
+        .podcast-category-badge {
+            background: var(--background);
+            border-radius: 999px;
+            color: var(--text-light);
+            display: inline-flex;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            padding: 0.25rem 0.65rem;
+            width: fit-content;
+        }
+
+        .challenge-card[hidden] {
+            display: none;
+        }
+
+        .challenge-progress {
+            margin: 0.5rem 0 0.75rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+            font-size: 0.78rem;
+            color: var(--text-light);
+        }
+
+        .progress-value {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 100px;
+            transition: width 0.5s ease;
+        }
+
+        #challenges-layout > .seo-related-section {
+            grid-column: 2;
+            margin: 1rem 3rem 3rem;
+            max-width: none;
+            width: auto;
+        }
+
+        @media (max-width: 1024px) {
+            #challenges-layout > .seo-related-section {
+                grid-column: 1;
+                margin: 3rem auto;
+                max-width: 1040px;
+                width: auto;
+            }
+        }

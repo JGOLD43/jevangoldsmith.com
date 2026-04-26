@@ -1,0 +1,43 @@
+name: Spotify - Capture Podcast Episodes
+
+on:
+  schedule:
+    # Hourly. Polls Spotify currently-playing endpoint and appends new episodes
+    # to data/podcast-episodes.json. Most runs commit nothing (no playback or
+    # duplicate of last entry within 30 min).
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: spotify-capture-episodes
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Capture currently-playing episode
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+        run: node scripts/spotify-capture-episode.js
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/podcast-episodes.json; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/podcast-episodes.json
+          git commit -m "chore: log podcast episode from Spotify"
+          git push

@@ -37,7 +37,7 @@
                     <button
                         type="button"
                         class="toggle-password"
-                        onclick="togglePassword()"
+                        id="toggle-password-btn"
                         title="Show/Hide Password"
                     >
                         <svg class="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -58,7 +58,7 @@
         <!-- Step 2: Two-Factor Authentication -->
         <div id="step-2fa" style="display: none;">
             <div class="twofa-header">
-                <button type="button" class="back-btn" onclick="goBackToPassword()">
+                <button type="button" class="back-btn" id="back-to-password-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="19" y1="12" x2="5" y2="12"></line>
                         <polyline points="12 19 5 12 12 5"></polyline>
@@ -98,7 +98,7 @@
 
             <div class="backup-section">
                 <p class="backup-text">Can't access your authenticator?</p>
-                <button type="button" class="btn-link" id="send-backup-btn" onclick="sendBackupCode()">
+                <button type="button" class="btn-link" id="send-backup-btn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                         <polyline points="22,6 12,13 2,6"></polyline>
@@ -118,6 +118,10 @@
     <script>
         // State
         let timerInterval = null;
+
+        document.getElementById('toggle-password-btn').addEventListener('click', togglePassword);
+        document.getElementById('back-to-password-btn').addEventListener('click', goBackToPassword);
+        document.getElementById('send-backup-btn').addEventListener('click', sendBackupCode);
 
         // Handle password form submission
         document.getElementById('login-form').addEventListener('submit', async function(e) {

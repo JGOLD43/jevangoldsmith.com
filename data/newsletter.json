@@ -1,0 +1,32 @@
+{
+  "name": "Field Notes",
+  "tagline": "One useful idea, object, book, question, or experiment each week.",
+  "frequency": "Weekly-ish",
+  "promise": "Short notes from the archive: what I am reading, using, building, noticing, and changing my mind about.",
+  "formAction": "https://formsubmit.co/hello@jevangoldsmith.com",
+  "ajaxEndpoint": "https://formsubmit.co/ajax/hello@jevangoldsmith.com",
+  "topics": [
+    "books",
+    "better thinking",
+    "business",
+    "real estate",
+    "AI-assisted work",
+    "tools",
+    "personal systems",
+    "taste"
+  ],
+  "examples": [
+    {
+      "title": "An object that earned its place",
+      "description": "A short note on a tool, why it stayed, and what it replaced."
+    },
+    {
+      "title": "A book idea I cannot shake",
+      "description": "One useful idea from the reading pile and where it applies."
+    },
+    {
+      "title": "A system I am testing",
+      "description": "A practical experiment in thinking, work, health, money, or attention."
+    }
+  ]
+}

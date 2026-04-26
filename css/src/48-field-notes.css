@@ -1,0 +1,89 @@
+.field-notes-hero {
+    max-width: 900px;
+    padding-bottom: 64px;
+}
+
+.field-notes-hero h1 {
+    color: var(--primary-color);
+    font-size: clamp(2.8rem, 7vw, 6.2rem);
+    line-height: 0.95;
+    margin: 14px 0 22px;
+}
+
+.field-notes-hero > p,
+.field-notes-final p {
+    color: var(--text-light);
+    font-size: 1.15rem;
+    line-height: 1.7;
+    max-width: 760px;
+}
+
+.field-notes-form-large {
+    grid-template-columns: minmax(240px, 420px) auto;
+    max-width: 640px;
+}
+
+.field-notes-section {
+    border-top: 1px solid var(--border-color);
+    padding: 54px 0;
+}
+
+.field-notes-example-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.field-notes-example-grid article {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 22px;
+}
+
+.field-notes-example-grid span {
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.field-notes-example-grid h3,
+.field-notes-final h2 {
+    color: var(--primary-color);
+}
+
+.field-notes-example-grid p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.field-notes-final {
+    background: var(--background-alt);
+    border-radius: 8px;
+    padding: 36px;
+}
+
+.field-notes-inline-cta {
+    background: var(--background-alt);
+    border-radius: 8px;
+    margin: 56px auto;
+    max-width: 860px;
+    padding: 34px;
+}
+
+.field-notes-inline-cta h2 {
+    color: var(--primary-color);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    margin: 8px 0 12px;
+}
+
+.field-notes-inline-cta p {
+    color: var(--text-light);
+    line-height: 1.7;
+    max-width: 680px;
+}
+
+@media (max-width: 760px) {
+    .field-notes-form-large,
+    .field-notes-example-grid {
+        grid-template-columns: 1fr;
+    }
+}

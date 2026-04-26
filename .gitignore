@@ -13,7 +13,45 @@ desktop.ini
 # Logs
 *.log
 npm-debug.log*
+node_modules/
 
 # Temporary files
 *.tmp
 .cache/
+
+# Local env / secrets
+.env
+.env.local
+.secrets/
+
+# Test artifacts
+test-results/
+playwright-report/
+.playwright-cli/
+.playwright-mcp/
+nav-*.png
+podcasts-after.png
+shelf-*.jpeg
+movies-full.jpeg
+*-1400.png
+*-after.png
+*-verify.png
+books-fixed.png
+books-page.png
+map-with-countries.png
+
+# Generated build output
+dist/
+.firebase/
+
+# Generated root artifacts from npm run build
+css/style.css
+css/page-*.css
+data/pages.json
+data/generated-manifest.json
+data/*.generated.json
+images/generated/
+images/source/remote/
+sitemap.xml
+llms.txt
+.gstack/

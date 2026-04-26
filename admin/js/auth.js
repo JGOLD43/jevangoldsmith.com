@@ -42,6 +42,15 @@ function requireAuth() {
             return;
         }
 
+        if (user.email !== ADMIN_EMAIL) {
+            sessionStorage.removeItem('twofaVerified');
+            sessionStorage.removeItem('twofaRequired');
+            auth.signOut().finally(() => {
+                window.location.href = 'index.html';
+            });
+            return;
+        }
+
         // Check if 2FA was completed for this session
         const twofaVerified = sessionStorage.getItem('twofaVerified');
         const twofaRequired = sessionStorage.getItem('twofaRequired');

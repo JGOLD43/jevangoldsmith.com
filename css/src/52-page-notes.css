@@ -1,0 +1,256 @@
+/* Notes Page Specific Styles */
+        .notes-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .notes-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-eyebrow {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .notes-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .notes-intro {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Notes Categories */
+        .notes-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Note Cards */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .note-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .note-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .note-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .note-category {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+            background: var(--background-alt);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .note-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .note-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .note-excerpt {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Featured Note */
+        .featured-note {
+            background: var(--background-alt);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .featured-note-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .featured-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #fff;
+            background: var(--secondary-color);
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        .featured-note h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .featured-note p {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .featured-note-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .featured-note-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Categories Filter */
+        .categories-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .category-tag {
+            padding: 0.5rem 1rem;
+            background: var(--background-alt);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .category-tag:hover,
+        .category-tag.active {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        /* Recent Notes List */
+        .recent-notes-section {
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .note-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .note-list-item:hover {
+            border-color: var(--secondary-color);
+            transform: translateX(4px);
+        }
+
+        .note-list-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .note-list-item .note-category {
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .note-list-title {
+            font-weight: 500;
+        }
+
+        .note-list-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .notes-title {
+                font-size: 2rem;
+            }
+
+            .note-list-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .note-list-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }

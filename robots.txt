@@ -1,15 +1,7 @@
-# robots.txt for jevangoldsmith.com
-
 User-agent: *
-# Block admin dashboard from search engines
-Disallow: /admin/
-# Block data directory
-Disallow: /data/
-# Block well-known directory
-Disallow: /.well-known/
-
-# Allow everything else
 Allow: /
 
-# Sitemap (optional - add when you create one)
-# Sitemap: https://jevangoldsmith.com/sitemap.xml
+Sitemap: https://jevangoldsmith.com/sitemap.xml
+
+AI-Agent-Index: https://jevangoldsmith.com/llms.txt
+Content-API: https://jevangoldsmith.com/api/v1/index.json

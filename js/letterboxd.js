@@ -3,13 +3,32 @@
 const LETTERBOXD_USERNAME = 'contentwatch';
 let allMovies = [];
 
+const movieMetadata = {
+    'What Dreams May Come': { genre: 'Drama', timesWatched: 1 },
+    'Before Sunset': { genre: 'Romance', timesWatched: 1 },
+    'Before Sunrise': { genre: 'Romance', timesWatched: 1 },
+    'Lawrence of Arabia': { genre: 'Drama', timesWatched: 2 },
+    "Breakfast at Tiffany's": { genre: 'Romance', timesWatched: 2 },
+    'The Place Beyond the Pines': { genre: 'Drama', timesWatched: 1 }
+};
+
 // Global filter state
 let currentStarFilter = 'all';
 let currentTimesWatchedFilter = 'all';
+let currentMovieSearch = '';
 
 // Get filtered movies based on current filters
 function getFilteredMovies() {
     let filtered = allMovies;
+
+    if (currentMovieSearch) {
+        const query = currentMovieSearch.toLowerCase();
+        filtered = filtered.filter(movie =>
+            movie.title.toLowerCase().includes(query) ||
+            (movie.genre && movie.genre.toLowerCase().includes(query)) ||
+            (movie.year && String(movie.year).includes(query))
+        );
+    }
 
     // Apply star filter
     if (currentStarFilter !== 'all') {
@@ -24,10 +43,50 @@ function getFilteredMovies() {
     return filtered;
 }
 
+function searchMovies(query) {
+    currentMovieSearch = query.trim();
+    const clearBtn = document.getElementById('movie-search-clear-btn');
+    if (clearBtn) {
+        clearBtn.style.display = currentMovieSearch ? 'flex' : 'none';
+    }
+
+    const filteredMovies = getFilteredMovies();
+    populateMoviesSidebar(filteredMovies);
+    displayMovies(filteredMovies);
+
+    document.querySelectorAll('.sidebar-category').forEach(btn => {
+        btn.classList.remove('active', 'expanded');
+    });
+    document.querySelectorAll('.genre-movies').forEach(div => {
+        div.classList.remove('expanded');
+    });
+    document.querySelector('[onclick*="toggleMovieGenre(\'all\')"]')?.classList.add('active');
+}
+
+function clearMovieSearch() {
+    currentMovieSearch = '';
+    const searchInput = document.getElementById('movie-search');
+    if (searchInput) searchInput.value = '';
+    const clearBtn = document.getElementById('movie-search-clear-btn');
+    if (clearBtn) clearBtn.style.display = 'none';
+
+    const filteredMovies = getFilteredMovies();
+    populateMoviesSidebar(filteredMovies);
+    displayMovies(filteredMovies);
+}
+
 async function fetchLetterboxdMovies() {
     const loadingEl = document.getElementById('loading');
     const errorEl = document.getElementById('error');
     const containerEl = document.getElementById('movies-container');
+
+    try {
+        const cachedMovies = await loadCachedMovies();
+        renderMovieCollection(cachedMovies);
+        if (!shouldFetchLiveLetterboxd()) return;
+    } catch (cacheError) {
+        console.warn('Cached movie data unavailable, trying Letterboxd feed:', cacheError);
+    }
 
     try {
         // Letterboxd RSS feed URL
@@ -85,21 +144,90 @@ async function fetchLetterboxdMovies() {
         const movies = movieItems
             .filter(item => item.description && !item.title.includes('created a list'))
             .map(item => parseMovieData(item));
+        if (movies.length === 0) {
+            throw new Error('No watch entries found in feed');
+        }
 
-        allMovies = movies;
-
-        // Update movie count
-        updateMovieCount(movies.length);
-
-        // Display movies and populate sidebar
-        displayMovies(movies);
-        populateMoviesSidebar(movies);
+        renderMovieCollection(movies);
 
     } catch (error) {
-        console.error('Error fetching Letterboxd data:', error);
-        loadingEl.style.display = 'none';
-        errorEl.style.display = 'block';
+        console.warn('Letterboxd feed unavailable, trying cached movies:', error);
+        try {
+            const fallbackMovies = await loadCachedMovies();
+            renderMovieCollection(fallbackMovies);
+        } catch (fallbackError) {
+            console.error('Error loading movie data:', fallbackError);
+            loadingEl.style.display = 'none';
+            errorEl.style.display = 'block';
+        }
     }
+}
+
+function shouldFetchLiveLetterboxd() {
+    return new URLSearchParams(window.location.search).get('source') === 'live';
+}
+
+async function loadCachedMovies() {
+    const response = await fetch('data/movies.json', { cache: 'no-store' });
+    if (!response.ok) {
+        throw new Error(`Failed to load cached movies: ${response.status}`);
+    }
+    const movies = await response.json();
+    if (!Array.isArray(movies) || movies.length === 0) {
+        throw new Error('Cached movie data is empty');
+    }
+    return movies.map(normalizeMovieData);
+}
+
+function renderMovieCollection(movies) {
+    const loadingEl = document.getElementById('loading');
+    const errorEl = document.getElementById('error');
+    const containerEl = document.getElementById('movies-container');
+
+    allMovies = movies.map(normalizeMovieData);
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'none';
+    if (containerEl) containerEl.style.display = 'grid';
+
+    updateMovieCount(allMovies.length);
+    displayMovies(allMovies);
+    populateMoviesSidebar(allMovies);
+    if (window.MovieStats && typeof window.MovieStats.render === 'function') {
+        window.MovieStats.render(allMovies);
+    }
+}
+
+function formatRuntime(minutes) {
+    const m = Number(minutes) || 0;
+    if (m <= 0) return '';
+    const h = Math.floor(m / 60);
+    const rem = m % 60;
+    if (h === 0) return `${rem} min`;
+    if (rem === 0) return `${h}h`;
+    return `${h}h ${rem}m`;
+}
+
+function normalizeMovieData(movie) {
+    const metadata = movieMetadata[movie.title] || {};
+    const starCount = Number(movie.starCount || metadata.starCount || 0);
+    return {
+        title: movie.title || 'Untitled',
+        date: movie.date || '',
+        link: movie.link || '#',
+        rating: movie.rating || (starCount ? `${'★'.repeat(starCount)}${'☆'.repeat(5 - starCount)}` : null),
+        starCount,
+        year: movie.year || null,
+        poster: movie.poster || null,
+        review: movie.review || null,
+        shortDescription: movie.shortDescription || null,
+        genre: metadata.genre || movie.genre || 'Uncategorized',
+        timesWatched: Number(movie.timesWatched || metadata.timesWatched || 1),
+        runtime: Number(movie.runtime || 0),
+        tmdbId: movie.tmdbId || null,
+        tmdbGenres: Array.isArray(movie.tmdbGenres) ? movie.tmdbGenres : [],
+        overview: movie.overview || null,
+        backdrop: movie.backdrop || null
+    };
 }
 
 function displayMovies(movies) {
@@ -114,20 +242,21 @@ function displayMovies(movies) {
 
 function createMovieCardFromData(movieData) {
     const card = document.createElement('div');
-    card.className = 'movie-card';
+    card.className = 'movie-card js-zoom-item';
     card.setAttribute('data-movie-title', movieData.title);
+    card.setAttribute('data-title', movieData.title);
+    card.setAttribute('data-id', movieData.title);
 
     // If there's a review, make the card clickable
     if (movieData.review) {
         card.classList.add('has-review');
         card.style.cursor = 'pointer';
-        card.onclick = () => openMovieModal(movieData);
     }
 
-    // Generate times watched display
-    let timesWatchedHTML = '';
+    // Generate times watched badge (top right corner)
+    let timesWatchedBadge = '';
     if (movieData.timesWatched > 1) {
-        timesWatchedHTML = `<div class="movie-timeswatched">🎬 ${movieData.timesWatched} Time${movieData.timesWatched === 1 ? '' : 's'} Watched</div>`;
+        timesWatchedBadge = `<div class="times-read-badge movie-watch-badge">${movieData.timesWatched}x Watched</div>`;
     }
 
     // Genre icon mapping (will use film-related icons)
@@ -150,17 +279,36 @@ function createMovieCardFromData(movieData) {
     };
 
     const genreIcon = genreIcons[movieData.genre] || '🎬';
+    const ratingNumber = movieData.starCount || '';
+
+    const detailHtml = movieData.review ? `
+        <div class="js-zoom-detail" aria-hidden="true">
+            <p class="zoom-detail-kicker">${escapeHTML(movieData.genre || 'Film')}${movieData.year ? ' · ' + escapeHTML(movieData.year) : ''}</p>
+            <p class="zoom-detail-title">${escapeHTML(movieData.title)}</p>
+            ${movieData.rating ? `<p class="zoom-detail-lead">${escapeHTML(movieData.rating)}</p>` : ''}
+            <p class="zoom-detail-line"><span>Review —</span> ${escapeHTML(movieData.review)}</p>
+            ${movieData.date ? `<p class="zoom-detail-line"><span>Watched —</span> ${escapeHTML(movieData.date)}</p>` : ''}
+            ${movieData.link && movieData.link !== '#' ? `<a class="zoom-detail-link" href="${escapeAttr(movieData.link)}" target="_blank" rel="noopener noreferrer">Letterboxd</a>` : ''}
+        </div>
+    ` : '';
 
     card.innerHTML = `
-        ${movieData.poster ? `<img src="${escapeAttr(movieData.poster)}" alt="${escapeAttr(movieData.title)}" class="movie-poster" loading="lazy" decoding="async">` : '<div class="movie-poster" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
-        <h3 class="movie-title">${escapeHTML(movieData.title)}</h3>
-        ${movieData.year ? `<p class="movie-year">${escapeHTML(movieData.year)}</p>` : ''}
-        ${movieData.rating ? `<div class="movie-rating">${escapeHTML(movieData.rating)}</div>` : ''}
-        ${movieData.genre ? `<div class="movie-genre-badge">${genreIcon} ${escapeHTML(movieData.genre)}</div>` : ''}
-        ${timesWatchedHTML}
-        ${movieData.shortDescription ? `<p class="movie-description">${escapeHTML(movieData.shortDescription)}</p>` : ''}
-        <p class="movie-date">Watched: ${escapeHTML(movieData.date)}</p>
-        ${movieData.review ? '<span class="read-review-badge">Click to read review</span>' : ''}
+        ${timesWatchedBadge}
+        <div class="movie-poster-wrapper">
+            ${movieData.poster ? `<img src="${escapeAttr(movieData.poster)}" alt="${escapeAttr(movieData.title)}" class="movie-poster" loading="lazy" decoding="async">` : `<div class="movie-poster-placeholder">${escapeHTML(movieData.title)}</div>`}
+        </div>
+        <div class="movie-info">
+            <div class="movie-title-row">
+                <h3 class="movie-title">${escapeHTML(movieData.title)}</h3>
+                ${movieData.year ? `<span class="movie-year">${escapeHTML(movieData.year)}</span>` : ''}
+            </div>
+            ${movieData.runtime ? `<div class="movie-runtime">${escapeHTML(formatRuntime(movieData.runtime))}</div>` : ''}
+            ${movieData.genre ? `<div class="movie-genre-badge">${genreIcon} ${escapeHTML(movieData.genre)}</div>` : ''}
+            ${movieData.rating ? `<div class="movie-rating">${ratingNumber ? `<span class="rating-number">${escapeHTML(ratingNumber)}</span>` : ''}${escapeHTML(movieData.rating)}</div>` : ''}
+            ${movieData.shortDescription ? `<p class="movie-description">${escapeHTML(movieData.shortDescription)}</p>` : ''}
+            ${movieData.date ? `<p class="movie-date">Watched: ${escapeHTML(movieData.date)}</p>` : ''}
+        </div>
+        ${detailHtml}
     `;
 
     return card;
@@ -227,8 +375,9 @@ function parseMovieData(item) {
         }
     }
 
-    // Set genre from item
-    data.genre = item.genre || 'Uncategorized';
+    const metadata = movieMetadata[data.title] || {};
+    data.genre = metadata.genre || item.genre || 'Uncategorized';
+    data.timesWatched = metadata.timesWatched || data.timesWatched;
 
     return data;
 }
@@ -635,6 +784,12 @@ function updateMovieCount(count) {
 
 // Clear all filters
 function clearAllFilters() {
+    // Clear search
+    currentMovieSearch = '';
+    const searchInput = document.getElementById('movie-search');
+    if (searchInput) searchInput.value = '';
+    const clearBtn = document.getElementById('movie-search-clear-btn');
+    if (clearBtn) clearBtn.style.display = 'none';
     // Clear star filter
     clearStarFilter();
     // Clear times watched filter
@@ -662,9 +817,33 @@ function toggleSidebar() {
     localStorage.setItem('movies-sidebar-collapsed', isCollapsed);
 }
 
+// Toggle list dropdown
+function toggleListDropdown() {
+    const dropdown = document.getElementById('list-dropdown');
+    if (dropdown) dropdown.classList.toggle('open');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('list-dropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+    }
+});
+
 // Load movies when page loads
 document.addEventListener('DOMContentLoaded', () => {
     fetchLetterboxdMovies();
     initStarFilter();
     initTimesWatchedFilter();
+    const moviesGrid = document.getElementById('movies-container');
+    if (moviesGrid && window.JGGridZoom) {
+        moviesGrid.classList.add('js-zoom-grid');
+        window.JGGridZoom.init({
+            grid: moviesGrid,
+            itemSelector: '.movie-card.has-review',
+            triggerSelector: '.movie-card.has-review',
+            eventName: 'movie_open'
+        });
+    }
 });

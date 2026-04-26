@@ -1,0 +1,44 @@
+{
+  "categories": [
+    { "id": "wishlist", "label": "To visit", "color": "#2b6cb0" },
+    { "id": "food", "label": "Good food", "color": "#dd6b20" },
+    { "id": "hike", "label": "Hike", "color": "#38a169" },
+    { "id": "view", "label": "Viewpoint", "color": "#805ad5" },
+    { "id": "dive", "label": "Dive site", "color": "#0987a0" }
+  ],
+  "places": [
+    {
+      "id": "patagonia",
+      "name": "Patagonia",
+      "location": "Argentina / Chile",
+      "lat": -49.3,
+      "lng": -73.05,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Torres del Paine, Fitz Roy, glacier trekking.",
+      "priority": "high"
+    },
+    {
+      "id": "iceland",
+      "name": "Iceland ring road",
+      "location": "Iceland",
+      "lat": 64.9631,
+      "lng": -19.0208,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Two-week loop. Waterfalls, glaciers, hot springs.",
+      "priority": "high"
+    },
+    {
+      "id": "morocco",
+      "name": "Morocco",
+      "location": "Marrakech & Sahara",
+      "lat": 31.6295,
+      "lng": -7.9811,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Atlas mountains, desert nights, medina markets.",
+      "priority": "medium"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "legacyRootPageSources": [
+    "about.html",
+    "adventures.html",
+    "books.html",
+    "challenges.html",
+    "contact.html",
+    "cool-shit.html",
+    "dateme.html",
+    "essays.html",
+    "food.html",
+    "health.html",
+    "important-or-not.html",
+    "lesson-logger.html",
+    "meet.html",
+    "movies.html",
+    "north-star.html",
+    "notes.html",
+    "people.html",
+    "podcasts.html",
+    "search.html",
+    "videos.html"
+  ],
+  "dataRenderedRoutes": [
+    "free-resources.html",
+    "products.html",
+    "projects.html",
+    "quotes.html"
+  ],
+  "dataRenderedPatterns": [
+    "^adventure-[a-z0-9-]+\\.html$",
+    "^topics/[a-z0-9-]+\\.html$"
+  ]
+}

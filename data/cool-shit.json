@@ -1,0 +1,201 @@
+{
+  "updated": "2026-04-23",
+  "categories": [
+    { "id": "tech", "label": "Tech", "emoji": "⚙️" },
+    { "id": "design", "label": "Design", "emoji": "🎨" },
+    { "id": "ideas", "label": "Ideas", "emoji": "💡" },
+    { "id": "tools", "label": "Tools", "emoji": "🛠️" },
+    { "id": "gear", "label": "Gear", "emoji": "📦" },
+    { "id": "content", "label": "Content", "emoji": "🎬" },
+    { "id": "random", "label": "Random", "emoji": "🎲" }
+  ],
+  "items": [
+    {
+      "id": "ai-agents-2026-04",
+      "date": "2026-04-18",
+      "type": "thought",
+      "category": "tech",
+      "title": "AI agents that actually work",
+      "body": "Crossed the threshold from neat demo to genuinely useful. Claude, the tool ecosystem, the way it reshapes a workday. I am using agents every day now and feeling the compounding.",
+      "image": "images/generated/remote/e26a01c8730400-800.jpg",
+      "source": "Personal log",
+      "url": ""
+    },
+    {
+      "id": "mech-keyboard-2026-04",
+      "date": "2026-04-12",
+      "type": "gear",
+      "category": "gear",
+      "title": "Down the mechanical keyboard rabbit hole",
+      "body": "Tactile feedback, sound profile, keycap sets. Went in skeptical, came out with a HHKB-layout board and opinions about switches.",
+      "image": "images/generated/remote/99174dbdbc2a7f-800.jpg",
+      "source": "Bookmarked",
+      "url": ""
+    },
+    {
+      "id": "inversion-2026-04",
+      "date": "2026-04-05",
+      "type": "quote",
+      "category": "ideas",
+      "title": "Inversion",
+      "body": "Instead of asking 'how do I succeed?' ask 'how do I fail?' Then avoid those things. Stupid simple, incredibly powerful.",
+      "image": "",
+      "source": "Mental model",
+      "url": ""
+    },
+    {
+      "id": "framework-laptop-2026-03",
+      "date": "2026-03-28",
+      "type": "link",
+      "category": "gear",
+      "title": "Framework Laptop",
+      "body": "A laptop you can actually repair and upgrade yourself. Modular ports, replaceable everything. This is how all tech should be made.",
+      "image": "images/generated/remote/4832bb3b4b80b9-800.jpg",
+      "source": "frame.work",
+      "url": "https://frame.work"
+    },
+    {
+      "id": "raycast-2026-03",
+      "date": "2026-03-20",
+      "type": "link",
+      "category": "tools",
+      "title": "Raycast",
+      "body": "Spotlight replacement on steroids. Snippets, window management, calculator, endless extensions. Mac only, worth buying a Mac for.",
+      "image": "",
+      "source": "raycast.com",
+      "url": "https://raycast.com"
+    },
+    {
+      "id": "observable-universe-2026-03",
+      "date": "2026-03-14",
+      "type": "thought",
+      "category": "ideas",
+      "title": "The observable universe",
+      "body": "There are more stars in the universe than grains of sand on Earth. And that's just the part we can see. What the actual fuck.",
+      "image": "images/generated/remote/2fda916e22c579-800.jpg",
+      "source": "Science",
+      "url": ""
+    },
+    {
+      "id": "obsidian-2026-03",
+      "date": "2026-03-07",
+      "type": "link",
+      "category": "tools",
+      "title": "Obsidian",
+      "body": "Where my second brain lives. Markdown files, local storage, insane plugin ecosystem. The graph view is beautiful but honestly I never use it.",
+      "image": "",
+      "source": "obsidian.md",
+      "url": "https://obsidian.md"
+    },
+    {
+      "id": "compound-skills-2026-02",
+      "date": "2026-02-24",
+      "type": "thought",
+      "category": "ideas",
+      "title": "Compound interest in skills",
+      "body": "Getting 1% better every day means you're 37x better after a year. The math checks out and it completely reframed how I think about learning.",
+      "image": "images/generated/remote/1b7453ddc53e08-800.jpg",
+      "source": "James Clear",
+      "url": ""
+    },
+    {
+      "id": "third-wave-coffee-2026-02",
+      "date": "2026-02-15",
+      "type": "thought",
+      "category": "random",
+      "title": "Third wave coffee",
+      "body": "Once you go specialty, you can't go back to Starbucks. Learning about origins, processing methods, and roast profiles is its own rabbit hole.",
+      "image": "images/generated/remote/324627bd455358-800.jpg",
+      "source": "Life",
+      "url": ""
+    },
+    {
+      "id": "claude-code-2026-02",
+      "date": "2026-02-08",
+      "type": "link",
+      "category": "tools",
+      "title": "Claude Code",
+      "body": "The AI coding assistant that actually understands context. Built this website with it. Yes, we're in a recursive situation here.",
+      "image": "",
+      "source": "claude.ai",
+      "url": "https://claude.ai"
+    },
+    {
+      "id": "plant-tree-2026-01",
+      "date": "2026-01-29",
+      "type": "quote",
+      "category": "ideas",
+      "title": "The best time to plant a tree",
+      "body": "The best time to plant a tree was 20 years ago. The second best time is now. This proverb lives rent-free in my head whenever I think about starting something new.",
+      "image": "",
+      "source": "Proverb",
+      "url": ""
+    },
+    {
+      "id": "figma-2026-01",
+      "date": "2026-01-20",
+      "type": "link",
+      "category": "design",
+      "title": "Figma dev mode",
+      "body": "Still the gold standard for design. Dev mode update made handoff so much smoother. Plus it runs in a browser which is wild.",
+      "image": "",
+      "source": "figma.com",
+      "url": "https://figma.com"
+    },
+    {
+      "id": "standing-desk-2026-01",
+      "date": "2026-01-10",
+      "type": "gear",
+      "category": "gear",
+      "title": "Standing desk setup",
+      "body": "Took me 3 iterations to get it right. Standing mat, monitor arms, cable management. Your back will thank you.",
+      "image": "images/generated/remote/7fa9de77a67263-800.jpg",
+      "source": "Workspace",
+      "url": ""
+    },
+    {
+      "id": "you-are-average-2025-12",
+      "date": "2025-12-18",
+      "type": "quote",
+      "category": "ideas",
+      "title": "You are the average",
+      "body": "You become the average of the 5 people you spend most time with. Choose wisely. This made me audit my relationships ruthlessly.",
+      "image": "images/generated/remote/098ebbf4c40038-800.jpg",
+      "source": "Jim Rohn",
+      "url": ""
+    },
+    {
+      "id": "lex-fridman-2025-12",
+      "date": "2025-12-05",
+      "type": "link",
+      "category": "content",
+      "title": "Lex Fridman Podcast",
+      "body": "Three-hour conversations with the most interesting people on the planet. Put it on 1.5x and go for a long walk.",
+      "image": "",
+      "source": "lexfridman.com",
+      "url": "https://lexfridman.com"
+    },
+    {
+      "id": "veritasium-2025-11",
+      "date": "2025-11-22",
+      "type": "link",
+      "category": "content",
+      "title": "Veritasium",
+      "body": "Derek makes science videos that make you feel smarter. Production quality insane, not afraid to go deep on complex topics.",
+      "image": "",
+      "source": "youtube.com/@veritasium",
+      "url": "https://youtube.com/@veritasium"
+    },
+    {
+      "id": "not-boring-2025-11",
+      "date": "2025-11-08",
+      "type": "link",
+      "category": "content",
+      "title": "Not Boring by Packy McCormick",
+      "body": "Best business/tech newsletter out there. Deep dives into companies and trends that make you smarter about the world.",
+      "image": "",
+      "source": "notboring.co",
+      "url": "https://notboring.co"
+    }
+  ]
+}

@@ -1,180 +1,49 @@
 // Book Library Data
-// Add your books here - each book can have an optional review
-// Covers will be fetched automatically from Open Library API using ISBN
-const booksData = [
-    {
-        title: "Atomic Habits",
-        author: "James Clear",
-        isbn: "9780735211292",
-        year: "2018",
-        rating: 5,
-        reReads: 2,
-        category: "Learning",
-        shortDescription: "A transformative guide to building good habits and breaking bad ones.",
-        review: `James Clear's "Atomic Habits" is one of the most practical books on behavior change I've ever read.
+// Source of truth: data/books.json
+let booksData = [];
 
-The framework is brilliantly simple: tiny changes compound over time. Clear doesn't promise overnight transformation—instead, he shows how 1% improvements, when stacked consistently, lead to remarkable results.
+async function loadBooksData() {
+    if (booksData.length > 0) return booksData;
 
-What I loved most:
-- The habit loop framework (cue, craving, response, reward) makes abstract concepts concrete
-- Real-world examples from athletes, artists, and entrepreneurs
-- The focus on systems over goals—a paradigm shift in how I approach personal development
+    booksData = await fetchJsonWithFallback(['data/books.generated.json', 'data/books.json']);
+    return booksData;
+}
 
-Key takeaway: You don't rise to the level of your goals, you fall to the level of your systems. This idea alone changed how I structure my daily routines.
-
-If you struggle with consistency or want to understand why you do what you do, read this book.`
-    },
-    {
-        title: "The Lean Startup",
-        author: "Eric Ries",
-        isbn: "9780307887894",
-        year: "2011",
-        rating: 4,
-        reReads: 0,
-        category: "Strategy and War",
-        shortDescription: "Essential reading for entrepreneurs on building successful startups.",
-        review: `Eric Ries codified what many successful founders learned the hard way: build, measure, learn, repeat.
-
-The core insight is simple but profound: most startups fail not because they can't build a product, but because they build something nobody wants. The solution? Validated learning through rapid experimentation.
-
-The MVP (Minimum Viable Product) concept has been overused and misunderstood since this book, but Ries's original formulation is spot-on: build the smallest thing that lets you start learning.
-
-My favorite chapters focus on pivot vs. persevere decisions. Knowing when to change course is an art, and Ries provides frameworks to make that call more scientific.
-
-If I have one criticism, it's that the book can feel repetitive. The key concepts could have been compressed. But for anyone building a product, this is required reading.`
-    },
-    {
-        title: "Thinking, Fast and Slow",
-        author: "Daniel Kahneman",
-        isbn: "9780374533557",
-        year: "2011",
-        rating: 5,
-        reReads: 1,
-        category: "Psychology Books",
-        shortDescription: "A masterpiece on human cognition and decision-making.",
-        review: `Kahneman's magnum opus is dense, challenging, and absolutely essential for understanding how humans think.
-
-The dual-system framework—System 1 (fast, intuitive, emotional) and System 2 (slow, deliberate, logical)—explains so much about human behavior. We like to think we're rational, but System 1 is running the show most of the time.
-
-What makes this book brilliant is the decades of rigorous research behind every claim. Kahneman doesn't just theorize; he shows you the experiments, the data, the replication studies.
-
-Key insights that stuck with me:
-- Anchoring effects are everywhere and impossible to avoid
-- Loss aversion drives more decisions than we realize
-- The experiencing self vs. the remembering self explains why we make choices that don't maximize happiness
-
-Warning: This book will make you question every decision you've ever made. You'll start seeing cognitive biases in yourself and others constantly. It's both enlightening and slightly disturbing.
-
-Required reading for anyone interested in psychology, economics, or making better decisions.`
-    },
-    {
-        title: "Zero to One",
-        author: "Peter Thiel",
-        isbn: "9780804139298",
-        year: "2014",
-        rating: 5,
-        reReads: 0,
-        category: "Out of the Box Thinking",
-        shortDescription: "Contrarian thinking about startups and creating the future.",
-        review: null // No review yet
-    },
-    {
-        title: "The Power of Now",
-        author: "Eckhart Tolle",
-        isbn: "9781577314806",
-        year: "1997",
-        rating: 4,
-        reReads: 0,
-        category: "Who Am I?",
-        shortDescription: "A spiritual guide to living in the present moment.",
-        review: null
-    },
-    {
-        title: "Principles",
-        author: "Ray Dalio",
-        isbn: "9781501124020",
-        year: "2017",
-        rating: 5,
-        reReads: 3,
-        category: "Patience and Clear Thinking",
-        shortDescription: "Life and work principles from one of the world's most successful investors.",
-        review: null
-    },
-    {
-        title: "Sapiens",
-        author: "Yuval Noah Harari",
-        isbn: "9780062316097",
-        year: "2011",
-        rating: 5,
-        reReads: 0,
-        category: "Big Ideas",
-        shortDescription: "A sweeping history of humankind.",
-        review: null
-    },
-    {
-        title: "The Hard Thing About Hard Things",
-        author: "Ben Horowitz",
-        isbn: "9780062273208",
-        year: "2014",
-        rating: 4,
-        reReads: 1,
-        category: "Strategy and War",
-        shortDescription: "Building a business when there are no easy answers.",
-        review: null
-    },
-    {
-        title: "Deep Work",
-        author: "Cal Newport",
-        isbn: "9781455586691",
-        year: "2016",
-        rating: 5,
-        reReads: 0,
-        category: "Learning",
-        shortDescription: "Rules for focused success in a distracted world.",
-        review: null
-    },
-    {
-        title: "The Mom Test",
-        author: "Rob Fitzpatrick",
-        isbn: "9781492180746",
-        year: "2013",
-        rating: 5,
-        reReads: 0,
-        category: "Strategy and War",
-        shortDescription: "How to talk to customers and learn if your business is a good idea.",
-        review: null
-    },
-    {
-        title: "Influence",
-        author: "Robert Cialdini",
-        isbn: "9780061241895",
-        year: "1984",
-        rating: 4,
-        reReads: 0,
-        category: "Persuasion",
-        shortDescription: "The psychology of persuasion.",
-        review: null
-    },
-    {
-        title: "Shoe Dog",
-        author: "Phil Knight",
-        isbn: "9781501135910",
-        year: "2016",
-        rating: 5,
-        reReads: 0,
-        category: "Autobiographies",
-        shortDescription: "A memoir by the creator of Nike.",
-        review: null
+async function fetchJsonWithFallback(urls) {
+    let lastError = null;
+    for (const url of urls) {
+        try {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) {
+                lastError = new Error(`Failed to load ${url}: ${response.status}`);
+                continue;
+            }
+            return await response.json();
+        } catch (error) {
+            lastError = error;
+        }
     }
-];
+    throw lastError || new Error('Failed to load books data');
+}
 
-// Get cover URL from ISBN using Open Library Covers API
-function getCoverUrl(isbn) {
-    if (!isbn) return null;
-    // Remove hyphens from ISBN
-    const cleanIsbn = isbn.replace(/-/g, '');
-    // Open Library Covers API - returns high quality covers
-    return `https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg`;
+// Prefer first-party generated covers; fall back to Open Library during local data edits.
+function getCoverUrl(bookOrIsbn, size = 'large') {
+    if (!bookOrIsbn) return null;
+    if (typeof bookOrIsbn === 'object') {
+        if (size === 'medium' && bookOrIsbn.coverImageMedium) return bookOrIsbn.coverImageMedium;
+        if (bookOrIsbn.coverImage) return bookOrIsbn.coverImage;
+        bookOrIsbn = bookOrIsbn.isbn;
+    }
+    const cleanIsbn = String(bookOrIsbn).replace(/[^0-9X]/gi, '');
+    return cleanIsbn ? `https://covers.openlibrary.org/b/isbn/${cleanIsbn}-${size === 'medium' ? 'M' : 'L'}.jpg` : null;
+}
+
+function bookCoverFallback() {
+    return "this.hidden=true;this.parentElement.classList.add('book-cover-missing');";
+}
+
+function allCategoryButton() {
+    return document.querySelector('.sidebar-category[data-category="all"]');
 }
 
 // Render books to the page
@@ -295,7 +164,7 @@ function populateSidebar() {
         if (!container || categories[catKey].length === 0) return;
 
         container.innerHTML = categories[catKey].map(book => `
-            <a href="#" class="book-link" onclick="scrollToBook('${escapeAttr(book.title)}', event)">
+            <a href="#" class="book-link" data-action="book-link" data-book-title="${escapeAttr(book.title)}">
                 <div>${escapeHTML(book.title)}</div>
                 <div class="book-link-author">${escapeHTML(book.author)}</div>
             </a>
@@ -306,16 +175,17 @@ function populateSidebar() {
 // Create a book card element
 function createBookCard(book) {
     const card = document.createElement('div');
-    card.className = 'book-card';
+    card.className = 'book-card js-zoom-item';
     card.setAttribute('data-isbn', book.isbn);
-    if (book.review) {
-        card.classList.add('has-review');
-        card.style.cursor = 'pointer';
-        card.onclick = () => openBookModal(book);
-    }
+    card.setAttribute('data-id', book.isbn || book.title);
+    card.setAttribute('data-title', book.title);
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.classList.add('has-review');
+    card.style.cursor = 'pointer';
 
     const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
-    const coverUrl = getCoverUrl(book.isbn);
+    const coverUrl = getCoverUrl(book);
 
     // Generate times read badge (top right corner)
     let timesReadBadge = '';
@@ -324,10 +194,22 @@ function createBookCard(book) {
         timesReadBadge = `<div class="times-read-badge">📖 ${timesRead}x Read</div>`;
     }
 
+    const detailBody = book.review || book.shortDescription || `${book.title} by ${book.author}`;
+    const detailLabel = book.review ? 'Review' : 'Notes';
+    const detailHtml = `
+        <div class="js-zoom-detail" aria-hidden="true">
+            <p class="zoom-detail-kicker">${escapeHTML(book.author)}${book.year ? ' · ' + escapeHTML(book.year) : ''}</p>
+            <p class="zoom-detail-title">${escapeHTML(book.title)}</p>
+            <p class="zoom-detail-lead">${stars}</p>
+            <p class="zoom-detail-line"><span>${detailLabel} —</span> ${escapeHTML(detailBody)}</p>
+        </div>
+    `;
+
     card.innerHTML = `
         ${timesReadBadge}
-        <div class="book-cover-wrapper">
-            <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" class="book-cover" loading="lazy" decoding="async" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.style.color='white'; this.style.fontWeight='bold'; this.style.padding='2rem'; this.style.textAlign='center'; this.textContent=this.alt;">
+        <div class="book-cover-wrapper" data-title="${escapeAttr(book.title)}">
+            <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" class="book-cover" loading="lazy" decoding="async" onerror="${bookCoverFallback()}">
+            ${detailHtml}
         </div>
         <div class="book-info">
             <div class="book-title-row">
@@ -337,7 +219,6 @@ function createBookCard(book) {
             <p class="book-author">by ${escapeHTML(book.author)}</p>
             <div class="book-rating"><span class="rating-number">${book.rating}</span> ${stars}</div>
             ${book.review ? `<p class="book-description">${escapeHTML(book.shortDescription)}</p>` : ''}
-            ${book.review ? '<button class="read-review-btn">Read My Review</button>' : ''}
         </div>
     `;
 
@@ -356,12 +237,18 @@ function openBookModal(book) {
     const modalReview = document.getElementById('modal-book-review');
 
     const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
-    const coverUrl = getCoverUrl(book.isbn);
+    const coverUrl = getCoverUrl(book);
 
     modalTitle.textContent = book.title;
     modalAuthor.textContent = `by ${book.author}${book.year ? ` (${book.year})` : ''}`;
     modalCover.src = coverUrl;
     modalCover.alt = book.title;
+    modalCover.onerror = () => {
+        modalCover.hidden = true;
+    };
+    modalCover.onload = () => {
+        modalCover.hidden = false;
+    };
     modalRating.textContent = stars;
     modalReview.textContent = book.review;
 
@@ -464,7 +351,7 @@ function setStarFilter(rating) {
         div.classList.remove('expanded');
     });
     // Activate "All Books"
-    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+    allCategoryButton()?.classList.add('active');
 }
 
 // Clear star filter to show all books
@@ -497,7 +384,7 @@ function clearStarFilter() {
         div.classList.remove('expanded');
     });
     // Activate "All Books"
-    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+    allCategoryButton()?.classList.add('active');
 }
 
 // Set re-reads filter
@@ -530,7 +417,7 @@ function setReReadsFilter(count) {
         div.classList.remove('expanded');
     });
     // Activate "All Books"
-    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+    allCategoryButton()?.classList.add('active');
 }
 
 // Clear re-reads filter (called by Show All link in star filter)
@@ -563,7 +450,7 @@ function clearReReadsFilter() {
         div.classList.remove('expanded');
     });
     // Activate "All Books"
-    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+    allCategoryButton()?.classList.add('active');
 }
 
 // Update times read filter slider visual state
@@ -676,7 +563,7 @@ function showArrowFlash(button, isExpanding) {
 }
 
 // Toggle book category expansion
-function toggleBookCategory(category) {
+function toggleBookCategory(category, sourceButton = null) {
     const filteredBooks = getFilteredBooks();
     activeCategory = category;
 
@@ -693,11 +580,12 @@ function toggleBookCategory(category) {
             div.classList.remove('expanded');
         });
         // Activate "All Books"
-        event.target.closest('.sidebar-category').classList.add('active');
+        if (sourceButton) sourceButton.classList.add('active');
         return;
     }
 
-    const button = event.target.closest('.sidebar-category');
+    const button = sourceButton;
+    if (!button) return;
     const container = document.getElementById(`category-${category}`);
 
     if (!container) return;
@@ -747,7 +635,7 @@ function toggleBookCategory(category) {
 }
 
 // Scroll to specific book
-function scrollToBook(bookTitle, event) {
+function scrollToBookByTitle(bookTitle, event) {
     if (event) event.preventDefault();
 
     // Find the book card by title
@@ -776,7 +664,7 @@ function scrollToBook(bookTitle, event) {
         document.querySelectorAll('.book-link').forEach(link => {
             link.classList.remove('active');
         });
-        event.target.closest('.book-link').classList.add('active');
+        event?.target?.closest('.book-link')?.classList.add('active');
     }
 }
 
@@ -835,7 +723,7 @@ function clearAllFilters() {
     // Clear category selection
     document.querySelectorAll('.sidebar-category').forEach(btn => btn.classList.remove('active', 'expanded'));
     document.querySelectorAll('.category-books').forEach(section => section.classList.remove('expanded'));
-    document.querySelector('[onclick*="toggleBookCategory(\'all\')"]')?.classList.add('active');
+    allCategoryButton()?.classList.add('active');
 
     // Show all books and update counter
     renderBooks();
@@ -869,7 +757,7 @@ document.addEventListener('click', function(e) {
 });
 
 // Scroll to a book in the grid
-function scrollToBook(isbn) {
+function scrollToBookByIsbn(isbn) {
     const bookCard = document.querySelector(`[data-isbn="${isbn}"]`);
     if (bookCard) {
         bookCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -893,19 +781,124 @@ function initCarousel() {
     const allBooks = [...recentBooks, ...recentBooks]; // Duplicate for seamless scrolling
 
     track.innerHTML = allBooks.map(book => {
-        const coverUrl = `https://covers.openlibrary.org/b/isbn/${escapeAttr(book.isbn)}-M.jpg`;
-        return `<img class="carousel-book" src="${coverUrl}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" onclick="scrollToBook('${escapeAttr(book.isbn)}')">`;
+        const coverUrl = getCoverUrl(book, 'medium');
+        return `<img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" onerror="this.remove()">`;
     }).join('');
 }
 
+function bindBooksUiEvents() {
+    document.addEventListener('click', (event) => {
+        const modalClose = event.target.closest('[data-action="close-book-modal"]');
+        if (modalClose) {
+            closeBookModal();
+            return;
+        }
+
+        const sidebarCollapse = event.target.closest('[data-action="toggle-sidebar"]');
+        if (sidebarCollapse) {
+            toggleSidebar();
+            return;
+        }
+
+        const listDropdown = event.target.closest('[data-action="toggle-list-dropdown"]');
+        if (listDropdown) {
+            toggleListDropdown();
+            return;
+        }
+
+        const searchClear = event.target.closest('[data-action="clear-search"]');
+        if (searchClear) {
+            clearSearch();
+            return;
+        }
+
+        const clearStars = event.target.closest('[data-action="clear-star-filter"]');
+        if (clearStars) {
+            event.preventDefault();
+            clearStarFilter();
+            return;
+        }
+
+        const categoryButton = event.target.closest('.sidebar-category[data-category]');
+        if (categoryButton) {
+            toggleBookCategory(categoryButton.dataset.category || 'all', categoryButton);
+            return;
+        }
+
+        const viewToggle = event.target.closest('[data-action="set-view-mode"]');
+        if (viewToggle) {
+            setViewMode(viewToggle.dataset.mode || 'list');
+            return;
+        }
+
+        const bookLink = event.target.closest('[data-action="book-link"]');
+        if (bookLink) {
+            scrollToBookByTitle(bookLink.dataset.bookTitle || '', event);
+            return;
+        }
+
+        const carouselBook = event.target.closest('[data-action="carousel-book"]');
+        if (carouselBook) {
+            scrollToBookByIsbn(carouselBook.dataset.isbn || '');
+            return;
+        }
+
+        const categoryModal = event.target.closest('[data-action="open-category-modal"]');
+        if (categoryModal) {
+            openCategoryModal(categoryModal.dataset.category || '');
+            return;
+        }
+
+        const closeCategory = event.target.closest('[data-action="close-category-modal"]');
+        if (closeCategory) {
+            closeCategoryModal();
+            return;
+        }
+
+        const openBookFromCategory = event.target.closest('[data-action="open-book-from-grid"]');
+        if (openBookFromCategory) {
+            openBookFromGrid(openBookFromCategory.dataset.isbn || '');
+        }
+    });
+
+    const searchInput = document.getElementById('book-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', () => searchBooks(searchInput.value));
+    }
+}
+
 // Initialize when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    renderBooks();
-    populateSidebar();
-    initStarFilter();
-    initReReadsFilter();
-    initCarousel();
-    updateBookCount(booksData.length, 'all');
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        bindBooksUiEvents();
+        await loadBooksData();
+        renderBooks();
+        populateSidebar();
+        initStarFilter();
+        initReReadsFilter();
+        initCarousel();
+        updateBookCount(booksData.length, 'all');
+        const booksGrid = document.getElementById('books-container');
+        if (booksGrid && window.JGGridZoom) {
+            booksGrid.classList.add('js-zoom-grid');
+            window.JGGridZoom.init({
+                grid: booksGrid,
+                itemSelector: '.book-card',
+                triggerSelector: '.book-card',
+                anchorSelector: '.book-cover',
+                fillW: 0.56,
+                fillH: 0.48,
+                maxScale: 3.4,
+                eventName: 'book_open'
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        const container = document.getElementById('books-container');
+        if (container) {
+            container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 3rem;">Books are unavailable right now.</p>';
+        }
+    }
 });
 
 // View mode state
@@ -961,6 +954,7 @@ function setViewMode(mode) {
         categoryGridView.style.display = 'block';
         sidebar.style.display = 'none';
         booksLayout.classList.add('grid-view-active');
+        booksLayout.classList.remove('sidebar-collapsed');
         renderCategoryGrid();
     } else {
         // Show list view, hide grid view
@@ -968,6 +962,9 @@ function setViewMode(mode) {
         categoryGridView.style.display = 'none';
         sidebar.style.display = 'block';
         booksLayout.classList.remove('grid-view-active');
+        if (sidebar.classList.contains('collapsed')) {
+            booksLayout.classList.add('sidebar-collapsed');
+        }
     }
 }
 
@@ -999,8 +996,8 @@ function renderCategoryGrid() {
         const displayName = categoryDisplayNames[category] || category;
 
         const bookCovers = previewBooks.map(book => {
-            const coverUrl = `https://covers.openlibrary.org/b/isbn/${escapeAttr(book.isbn)}-M.jpg`;
-            return `<img src="${coverUrl}" alt="${escapeAttr(book.title)}" loading="lazy" decoding="async">`;
+            const coverUrl = getCoverUrl(book, 'medium');
+            return `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" loading="lazy" decoding="async" onerror="this.remove()">`;
         }).join('');
 
         // Fill empty slots if less than 8 books
@@ -1009,7 +1006,7 @@ function renderCategoryGrid() {
             .join('');
 
         return `
-            <div class="category-card" onclick="openCategoryModal('${escapeAttr(category)}')">
+            <div class="category-card" data-action="open-category-modal" data-category="${escapeAttr(category)}">
                 <div class="category-card-books">
                     ${bookCovers}${emptySlots}
                 </div>
@@ -1038,18 +1035,18 @@ function openCategoryModal(category) {
     }
 
     modal.innerHTML = `
-        <div class="category-modal-backdrop" onclick="closeCategoryModal()"></div>
-        <div class="category-modal-content" onclick="event.stopPropagation()">
+        <div class="category-modal-backdrop" data-action="close-category-modal"></div>
+        <div class="category-modal-content">
             <div class="category-expanded-header">
                 <h2 class="category-expanded-title">${escapeHTML(displayName)}</h2>
-                <button class="category-expanded-close" onclick="closeCategoryModal()">&times;</button>
+                <button class="category-expanded-close" data-action="close-category-modal">&times;</button>
             </div>
             <div class="category-expanded-books">
                 ${books.map(book => {
-                    const coverUrl = `https://covers.openlibrary.org/b/isbn/${escapeAttr(book.isbn)}-L.jpg`;
+                    const coverUrl = getCoverUrl(book);
                     return `
-                        <div class="category-expanded-book" onclick="openBookFromGrid('${escapeAttr(book.isbn)}')">
-                            <img src="${coverUrl}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async">
+                        <div class="category-expanded-book" data-action="open-book-from-grid" data-isbn="${escapeAttr(book.isbn)}">
+                            <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" onerror="this.remove()">
                         </div>
                     `;
                 }).join('')}
