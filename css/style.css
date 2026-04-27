@@ -1510,6 +1510,7 @@ button[type="submit"]:hover {
     line-height: 1.6;
     font-weight: 300;
     font-family: 'Chivo', sans-serif;
+    max-width: 22rem;
 }
 
 .hero-cta-left {
@@ -1524,6 +1525,7 @@ button[type="submit"]:hover {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 28rem;
 }
 
 .hero-cta-left:hover {
@@ -12759,7 +12761,82 @@ body.shelf-experience {
         }
 
 /* css/src/52-page-challenges.css */
-.movies-grid {
+#challenges-layout .movies-main,
+        #projects-layout .movies-main {
+            padding: 2rem 3rem;
+            background: var(--background);
+        }
+
+        #challenges-layout .main-header,
+        #projects-layout .main-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        #challenges-layout .main-header .header-content,
+        #projects-layout .main-header .header-content {
+            flex: 1 1 320px;
+            min-width: 0;
+        }
+
+        #challenges-layout .main-header .header-content h1,
+        #projects-layout .main-header .header-content h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0 0 0.25rem;
+            color: var(--text-color);
+            font-family: 'Chivo', sans-serif;
+            line-height: 1.1;
+        }
+
+        #challenges-layout .main-header .header-content p,
+        #projects-layout .main-header .header-content p {
+            color: var(--text-light);
+            font-family: 'Chivo', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 300;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        #challenges-layout .header-counter,
+        #projects-layout .header-counter {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            text-align: center;
+            flex: 0 0 auto;
+        }
+
+        #challenges-layout .counter-number,
+        #projects-layout .counter-number {
+            font-family: 'Chivo', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--text-color);
+        }
+
+        #challenges-layout .counter-label,
+        #projects-layout .counter-label {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 1024px) {
+            #challenges-layout .movies-main,
+            #projects-layout .movies-main {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        .movies-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 1.25rem;
