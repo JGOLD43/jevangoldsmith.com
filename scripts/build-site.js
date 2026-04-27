@@ -1078,32 +1078,153 @@ function renderResourcesPage(file) {
   });
 }
 
+const PROJECT_CATEGORY_META = {
+  software: { label: 'Software', emoji: '💻', placeholder: 'placeholder-software' },
+  research: { label: 'Research', emoji: '📚', placeholder: 'placeholder-research' },
+  ai: { label: 'AI', emoji: '🤖', placeholder: 'placeholder-ai' },
+  writing: { label: 'Writing', emoji: '✍️', placeholder: 'placeholder-writing' },
+  'real-estate': { label: 'Real Estate', emoji: '🏠', placeholder: 'placeholder-real-estate' },
+  finance: { label: 'Finance', emoji: '💰', placeholder: 'placeholder-finance' }
+};
+
+const PROJECT_STATUS_META = {
+  active: { label: 'Active', emoji: '⚡' },
+  completed: { label: 'Completed', emoji: '✅' },
+  planned: { label: 'Planned', emoji: '📋' }
+};
+
+function projectCategoryMeta(category) {
+  const key = (category || '').toLowerCase();
+  return PROJECT_CATEGORY_META[key] || {
+    label: titleCase(category || 'General'),
+    emoji: '🛠️',
+    placeholder: 'placeholder-software'
+  };
+}
+
 function renderProjectsPage(file) {
   const publishedProjects = getPublicProjects();
-  const statusFilters = [
-    { id: 'all', label: 'All Projects' },
-    { id: 'active', label: 'Active' },
-    { id: 'completed', label: 'Completed' },
-    { id: 'planned', label: 'Planned' }
-  ];
+  const total = publishedProjects.length;
+
+  const statusCounts = { active: 0, completed: 0, planned: 0 };
+  const categoryCounts = new Map();
+  for (const project of publishedProjects) {
+    const status = (project.status || 'planned').toLowerCase();
+    if (statusCounts[status] !== undefined) statusCounts[status] += 1;
+    const cat = (project.category || '').toLowerCase();
+    if (cat) categoryCounts.set(cat, (categoryCounts.get(cat) || 0) + 1);
+  }
+
+  const statusButtons = ['active', 'completed', 'planned'].map((status) => {
+    const meta = PROJECT_STATUS_META[status];
+    return `<div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterProjects" data-action-args="${status}" data-action-this="true" data-tooltip="${escapeHtmlAttr(meta.label)}">
+                    <span class="category-icon">${meta.emoji}</span>
+                    <span class="category-name">${escapeHTML(meta.label)}</span>
+                    <span class="category-count" id="count-${status}">${statusCounts[status]}</span>
+                </button>
+            </div>`;
+  }).join('\n            ');
+
+  const categoryButtons = Array.from(categoryCounts.keys())
+    .sort()
+    .map((cat) => {
+      const meta = projectCategoryMeta(cat);
+      return `<div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterProjects" data-action-args="${escapeHtmlAttr(cat)}" data-action-this="true" data-tooltip="${escapeHtmlAttr(meta.label)}">
+                    <span class="category-icon">${meta.emoji}</span>
+                    <span class="category-name">${escapeHTML(meta.label)}</span>
+                    <span class="category-count" id="count-cat-${escapeHtmlAttr(cat)}">${categoryCounts.get(cat)}</span>
+                </button>
+            </div>`;
+    }).join('\n            ');
+
+  const main = `<main class="movies-layout sidebar-collapsed" id="projects-layout">
+        <aside class="movies-sidebar collapsed" id="projects-sidebar">
+            <div class="sidebar-header">
+                <button class="sidebar-collapse-btn" data-action="toggleProjectSidebar" title="Collapse sidebar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                    </svg>
+                </button>
+                <span class="sidebar-browse-label">Browse</span>
+            </div>
+
+            <div class="sidebar-list-selector">
+                <div class="list-dropdown" id="list-dropdown">
+                    <button class="list-dropdown-btn" data-action="toggleProjectListDropdown">
+                        <span id="current-list-name">Projects</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="list-dropdown-menu" id="list-dropdown-menu">
+                        <a href="projects.html" class="list-option active">Projects</a>
+                        <a href="challenges.html" class="list-option">Challenges</a>
+                        <a href="free-resources.html" class="list-option">Resources</a>
+                        <a href="lesson-logger.html" class="list-option">Lesson Logger</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-search">
+                <div class="search-input-wrapper search-bubble">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="project-search" class="movie-search-input" placeholder="Search projects..." data-action="searchProjects" data-action-event="input" data-action-value="true">
+                    <button class="search-clear-btn" id="project-search-clear-btn" data-action="clearProjectSearch" style="display: none;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category active" data-action="filterProjects" data-action-args="all" data-action-this="true" data-tooltip="All Projects">
+                    <span class="category-icon">🎯</span>
+                    <span class="category-name">All Projects</span>
+                    <span class="category-count" id="count-all-projects">${total}</span>
+                </button>
+            </div>
+
+            ${statusButtons}
+
+            ${categoryButtons}
+
+            <div class="sidebar-footer">
+                <p>Things I am building, exploring, and planning</p>
+            </div>
+        </aside>
+
+        <div class="movies-main">
+            <header class="main-header">
+                <div class="header-content">
+                    <h1>Projects</h1>
+                    <p>Things I am building, exploring, and learning in public.</p>
+                </div>
+                <div class="header-counter">
+                    <span class="counter-number" id="project-count">${total}</span>
+                    <span class="counter-label">Projects</span>
+                </div>
+            </header>
+
+            <div id="projects-container" class="movies-grid">
+                ${publishedProjects.map(renderProjectCard).join('\n                ')}
+            </div>
+        </div>
+    </main>`;
 
   return renderCollectionPage(file, {
     title: `Projects - ${site.siteName}`,
     description: 'Projects Jevan Goldsmith is building, exploring, and planning.',
-    scripts: '<script src="js/theme.js"></script>\n    <script src="js/collection-filters.js"></script>',
-    main: `<main class="experience-content projects-page">
-        <section class="experience-header">
-            <p class="experience-eyebrow">Build Documentary</p>
-            <h1 class="experience-title">Projects</h1>
-            <p class="experience-subtitle">Things I am building, exploring, and learning in public. Each one has the current question, evidence, and next move.</p>
-        </section>
-
-        ${renderFilterControls('projects', statusFilters, 'status')}
-
-        <div class="projects-grid project-documentary-list" id="projects-grid">
-            ${publishedProjects.map(renderProjectCard).join('\n            ')}
-        </div>
-    </main>`
+    bodyClass: 'nav-compact',
+    scripts: '<script src="js/grid-zoom.js"></script>\n    <script src="js/action-dispatcher.js"></script>\n    <script src="js/projects.js"></script>\n    <script src="js/theme.js"></script>\n    <script src="js/analytics.js"></script>',
+    main
   });
 }
 
@@ -1282,69 +1403,36 @@ function renderResourceCard(resource) {
 }
 
 function renderProjectCard(project) {
-  const status = project.status || 'planned';
-  const links = project.links || [];
-  const proofItems = [
-    ['What it is', project.whatItIs || project.description],
-    ['Why I made it', project.whyIMadeIt],
-    ['What I learned', project.whatILearned],
-    ['Next step', project.nextStep]
-  ].filter(([, value]) => value);
-  const artifacts = project.proofArtifacts || [];
-  const buildLog = project.buildLog || [];
-  return `<article class="project-card project-documentary-card" id="${escapeHtmlAttr(project.slug || project.id)}" data-status="${escapeHtmlAttr(status)}">
-                ${project.image ? `<div class="project-media"><img src="${escapeHtmlAttr(project.image)}" alt="${escapeHtmlAttr(project.imageAlt || project.title)}" class="project-image" width="600" height="400" loading="lazy" decoding="async"></div>` : ''}
-                <div class="project-content">
-                    <div class="project-card-header">
-                        <div>
-                            <div class="project-status ${escapeHtmlAttr(status)}">
-                                <span class="project-status-dot"></span>
-                                ${escapeHTML(statusLabel(status))}
-                            </div>
-                            <h3 class="project-name">${escapeHTML(project.title)}</h3>
-                        </div>
-                        ${project.category ? `<span class="project-category">${escapeHTML(titleCase(project.category))}</span>` : ''}
+  const status = (project.status || 'planned').toLowerCase();
+  const category = (project.category || '').toLowerCase();
+  const meta = projectCategoryMeta(category);
+  const statusLabelText = (PROJECT_STATUS_META[status] && PROJECT_STATUS_META[status].label) || statusLabel(status);
+  const description = project.shortDescription || project.description || '';
+  const searchTerms = [
+    project.title,
+    project.shortDescription,
+    project.description,
+    meta.label,
+    statusLabelText,
+    ...(project.tags || []),
+    ...(project.technologies || []),
+    ...(project.topics || [])
+  ].filter(Boolean).join(' ');
+  const dataCategory = [status, category].filter(Boolean).join(' ');
+
+  return `<div class="movie-card project-card js-zoom-item" data-status="${escapeHtmlAttr(status)}" data-category="${escapeHtmlAttr(dataCategory)}" data-search="${escapeHtmlAttr(searchTerms)}" id="${escapeHtmlAttr(project.slug || project.id)}">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder ${meta.placeholder}">${meta.emoji}</div>
                     </div>
-                    <p class="project-description">${escapeHTML(project.shortDescription || project.description)}</p>
-                    ${project.documentaryLead ? `<p class="project-documentary-lead">${escapeHTML(project.documentaryLead)}</p>` : ''}
-                    ${project.currentQuestion ? `<section class="project-current-question">
-                        <span>Current question</span>
-                        <p>${escapeHTML(project.currentQuestion)}</p>
-                    </section>` : ''}
-                    ${proofItems.length > 0 ? `<dl class="project-proof">
-                        ${proofItems.map(([label, value]) => `<div class="project-proof-item">
-                            <dt>${escapeHTML(label)}</dt>
-                            <dd>${escapeHTML(value)}</dd>
-                        </div>`).join('\n                        ')}
-                    </dl>` : ''}
-                    ${artifacts.length > 0 ? `<div class="project-artifacts">
-                        ${artifacts.map((artifact) => `<div class="project-artifact">
-                            <span>${escapeHTML(artifact.label)}</span>
-                            <p>${escapeHTML(artifact.value)}</p>
-                        </div>`).join('\n                        ')}
-                    </div>` : ''}
-                    ${buildLog.length > 0 ? `<div class="project-build-log">
-                        <h4>Build notes</h4>
-                        ${buildLog.map((entry) => `<article class="project-log-entry">
-                            <time datetime="${escapeHtmlAttr(entry.date || '')}">${escapeHTML(formatPlainDate(entry.date))}</time>
-                            <div>
-                                <h5>${escapeHTML(entry.title || 'Progress note')}</h5>
-                                <p>${escapeHTML(entry.note || '')}</p>
-                            </div>
-                        </article>`).join('\n                        ')}
-                    </div>` : ''}
-                    ${renderTagList(project.technologies || project.tags || [], 'project-tech', 'tech-tag')}
-                    ${links.length > 0 ? `<div class="project-links">
-                        ${links.map((link) => {
-                          const safeLinkUrl = sanitizeHref(link.url);
-                          return `<a href="${escapeHtmlAttr(safeLinkUrl)}" class="project-link"${externalLinkAttrs(safeLinkUrl)}>
-                            ${iconSvg(link.icon || 'external')}
-                            ${escapeHTML(link.label)}
-                        </a>`;
-                        }).join('\n                        ')}
-                    </div>` : ''}
-                </div>
-            </article>`;
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-${escapeHtmlAttr(status)}">${escapeHTML(statusLabelText)}</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">${escapeHTML(project.title)}</h3>
+                        </div>
+                        <div class="podcast-category-badge">${escapeHTML(meta.label)}</div>
+                        <p class="movie-description">${escapeHTML(description)}</p>
+                    </div>
+                </div>`;
 }
 
 function formatPlainDate(value) {

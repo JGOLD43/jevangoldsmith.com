@@ -72,7 +72,7 @@ const cssBundles = {
   'page-adventure-detail.css': ['core', 'adventures', 'adventureDetail'],
   'page-dateme.css': ['core', 'dateme'],
   'page-products-resources.css': ['core', 'productsResources'],
-  'page-projects.css': ['core', 'projects'],
+  'page-projects.css': ['core', 'essaysCore', 'tasteSidebar', 'challenges', 'projects'],
   'page-quotes.css': ['core', 'quotes'],
   'page-about.css': ['core', 'about'],
   'page-challenges.css': ['core', 'essaysCore', 'tasteSidebar', 'challenges'],
@@ -86,7 +86,7 @@ const cssBundles = {
   'page-contact.css': ['core'],
   'page-changed-my-mind.css': ['core'],
   'page-philosophy.css': ['core', 'reading'],
-  'page-problems.css': ['core', 'essays'],
+  'page-problems.css': ['core', 'essays', 'takes'],
   'page-takes.css': ['core', 'essays', 'takes']
 };
 
