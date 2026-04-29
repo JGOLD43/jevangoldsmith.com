@@ -1,5 +1,9 @@
+// Movies/letterboxd page orchestrator. Inlines js/letterboxd-state.js,
+// js/letterboxd-filters.js, js/letterboxd-modal.js, js/letterboxd-events.js,
+// js/letterboxd-render.js, js/letterboxd-view.js — those shards only ever
+// exposed window.JGLetterboxd* globals consumed here.
+
 const LETTERBOXD_USERNAME = 'contentwatch';
-const dataFetch = window.JGDataFetch;
 const movieMetadata = {
     'What Dreams May Come': { genre: 'Drama', timesWatched: 1 },
     'Before Sunset': { genre: 'Romance', timesWatched: 1 },
@@ -9,20 +13,416 @@ const movieMetadata = {
     'The Place Beyond the Pines': { genre: 'Drama', timesWatched: 1 }
 };
 
+// --- state ---
+const movieState = (function createState() {
+    const state = {
+        activeGenre: 'all',
+        movies: [],
+        searchQuery: '',
+        sidebarCollapsed: true,
+        starFilter: 'all',
+        timesWatchedFilter: 'all'
+    };
+    return {
+        clearSearchQuery() { state.searchQuery = ''; },
+        clearStarFilter() { state.starFilter = 'all'; },
+        clearTimesWatchedFilter() { state.timesWatchedFilter = 'all'; },
+        get() { return { ...state }; },
+        getMovies() { return state.movies; },
+        setActiveGenre(g) { state.activeGenre = g || 'all'; },
+        setMovies(m) { state.movies = Array.isArray(m) ? m : []; },
+        setSearchQuery(q) { state.searchQuery = String(q || '').trim(); },
+        setSidebarCollapsed(v) { state.sidebarCollapsed = Boolean(v); },
+        setStarFilter(r) { state.starFilter = r; },
+        setTimesWatchedFilter(c) { state.timesWatchedFilter = c; }
+    };
+}());
+
+// --- filters ---
+function normalizeGenreKey(genre) {
+    return String(genre || 'Uncategorized').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function filterMoviesData(movies, state) {
+    const query = String(state.searchQuery || '').toLowerCase();
+    return movies.filter((movie) => {
+        if (query) {
+            const matchesQuery = [movie.title, movie.genre || '', movie.year ? String(movie.year) : '']
+                .some((value) => String(value).toLowerCase().includes(query));
+            if (!matchesQuery) return false;
+        }
+        if (state.starFilter !== 'all' && Number(movie.starCount) < Number(state.starFilter)) return false;
+        if (state.timesWatchedFilter !== 'all' && Number(movie.timesWatched) < Number(state.timesWatchedFilter)) return false;
+        return true;
+    });
+}
+
+function getMoviesForGenre(movies, genre) {
+    if (genre === 'all') return movies;
+    return movies.filter((movie) => movie.genre === genre);
+}
+
+function groupMoviesByGenre(movies) {
+    return movies.reduce((groups, movie) => {
+        const genre = movie.genre || 'Uncategorized';
+        if (!groups[genre]) groups[genre] = [];
+        groups[genre].push(movie);
+        return groups;
+    }, {});
+}
+
+const movieFilters = {
+    filterMovies: filterMoviesData,
+    getMoviesForGenre,
+    groupMoviesByGenre,
+    normalizeGenreKey
+};
+
+// --- modal ---
+function createMovieModal() {
+    function close() {
+        const modal = document.getElementById('movie-modal');
+        if (!modal) return;
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    function open(movieData) {
+        const modal = document.getElementById('movie-modal');
+        if (!modal) return false;
+        document.getElementById('modal-movie-title').textContent = movieData.title;
+        document.getElementById('modal-movie-year').textContent = movieData.year || '';
+        document.getElementById('modal-movie-rating').textContent = movieData.rating || '';
+        document.getElementById('modal-movie-date').textContent = `Watched: ${movieData.date}`;
+        document.getElementById('modal-movie-review').textContent = movieData.review || 'No review available.';
+        document.getElementById('modal-letterboxd-link').href = movieData.link;
+        const posterImg = document.getElementById('modal-movie-poster');
+        if (movieData.poster) {
+            posterImg.src = movieData.poster;
+            posterImg.alt = movieData.title;
+            posterImg.style.display = 'block';
+        } else {
+            posterImg.style.display = 'none';
+        }
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        return true;
+    }
+    return { close, open };
+}
+
+// --- render ---
+const genreIcons = {
+    'Action': '💥', 'Adventure': '🗺️', 'Animation': '🎨', 'Comedy': '😂',
+    'Crime': '🔫', 'Documentary': '📹', 'Drama': '🎭', 'Fantasy': '🧙',
+    'Horror': '👻', 'Mystery': '🔍', 'Romance': '💕', 'Sci-Fi': '🚀',
+    'Thriller': '😱', 'Western': '🤠', 'Uncategorized': '🎬'
+};
+
+function formatRuntime(minutes) {
+    const totalMinutes = Number(minutes) || 0;
+    if (totalMinutes <= 0) return '';
+    const hours = Math.floor(totalMinutes / 60);
+    const remainder = totalMinutes % 60;
+    if (hours === 0) return `${remainder} min`;
+    if (remainder === 0) return `${hours}h`;
+    return `${hours}h ${remainder}m`;
+}
+
+function normalizeMovieData(movie) {
+    const metadata = movieMetadata[movie.title] || {};
+    const starCount = Number(movie.starCount || metadata.starCount || 0);
+    return {
+        title: movie.title || 'Untitled',
+        date: movie.date || '',
+        link: movie.link || '#',
+        rating: movie.rating || (starCount ? `${'★'.repeat(starCount)}${'☆'.repeat(5 - starCount)}` : null),
+        starCount,
+        year: movie.year || null,
+        poster: movie.poster || null,
+        review: movie.review || null,
+        shortDescription: movie.shortDescription || null,
+        genre: metadata.genre || movie.genre || 'Uncategorized',
+        timesWatched: Number(movie.timesWatched || metadata.timesWatched || 1),
+        runtime: Number(movie.runtime || 0),
+        tmdbId: movie.tmdbId || null,
+        tmdbGenres: Array.isArray(movie.tmdbGenres) ? movie.tmdbGenres : [],
+        overview: movie.overview || null,
+        backdrop: movie.backdrop || null
+    };
+}
+
+function createMovieCardFromData(movieData) {
+    const card = document.createElement('div');
+    card.className = 'movie-card js-zoom-item';
+    card.setAttribute('data-movie-title', movieData.title);
+    card.setAttribute('data-title', movieData.title);
+    card.setAttribute('data-id', movieData.title);
+    if (movieData.review) {
+        card.classList.add('has-review');
+        card.style.cursor = 'pointer';
+    }
+    const timesWatchedBadge = movieData.timesWatched > 1
+        ? `<div class="times-read-badge movie-watch-badge">${movieData.timesWatched}x Watched</div>`
+        : '';
+    const genreIcon = genreIcons[movieData.genre] || '🎬';
+    const ratingNumber = movieData.starCount || '';
+
+    const detailHtml = movieData.review ? `
+        <div class="js-zoom-detail" aria-hidden="true">
+            <p class="zoom-detail-kicker">${escapeHTML(movieData.genre || 'Film')}${movieData.year ? ' · ' + escapeHTML(movieData.year) : ''}</p>
+            <p class="zoom-detail-title">${escapeHTML(movieData.title)}</p>
+            ${movieData.rating ? `<p class="zoom-detail-lead">${escapeHTML(movieData.rating)}</p>` : ''}
+            <p class="zoom-detail-line"><span>Review —</span> ${escapeHTML(movieData.review)}</p>
+            ${movieData.date ? `<p class="zoom-detail-line"><span>Watched —</span> ${escapeHTML(movieData.date)}</p>` : ''}
+            ${movieData.link && movieData.link !== '#' ? `<a class="zoom-detail-link" href="${escapeAttr(movieData.link)}" target="_blank" rel="noopener noreferrer">Letterboxd</a>` : ''}
+        </div>
+    ` : '';
+
+    card.innerHTML = `
+        ${timesWatchedBadge}
+        <div class="movie-poster-wrapper">
+            ${movieData.poster ? `<img src="${escapeAttr(movieData.poster)}" alt="${escapeAttr(movieData.title)}" class="movie-poster" loading="lazy" decoding="async">` : `<div class="movie-poster-placeholder">${escapeHTML(movieData.title)}</div>`}
+        </div>
+        <div class="movie-info">
+            <div class="movie-title-row">
+                <h3 class="movie-title">${escapeHTML(movieData.title)}</h3>
+                ${movieData.year ? `<span class="movie-year">${escapeHTML(movieData.year)}</span>` : ''}
+            </div>
+            ${movieData.runtime ? `<div class="movie-runtime">${escapeHTML(formatRuntime(movieData.runtime))}</div>` : ''}
+            ${movieData.genre ? `<div class="movie-genre-badge">${genreIcon} ${escapeHTML(movieData.genre)}</div>` : ''}
+            ${movieData.rating ? `<div class="movie-rating">${ratingNumber ? `<span class="rating-number">${escapeHTML(ratingNumber)}</span>` : ''}${escapeHTML(movieData.rating)}</div>` : ''}
+            ${movieData.shortDescription ? `<p class="movie-description">${escapeHTML(movieData.shortDescription)}</p>` : ''}
+            ${movieData.date ? `<p class="movie-date">Watched: ${escapeHTML(movieData.date)}</p>` : ''}
+        </div>
+        ${detailHtml}
+    `;
+    return card;
+}
+
+function displayMovies(movies) {
+    const container = document.getElementById('movies-container');
+    if (!container) return;
+    container.innerHTML = '';
+    movies.forEach((movieData) => container.appendChild(createMovieCardFromData(movieData)));
+}
+
+function parseMovieData(item) {
+    const data = {
+        title: item.title,
+        date: new Date(item.pubDate).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        }),
+        link: item.link,
+        rating: null,
+        starCount: 0,
+        year: null,
+        poster: null,
+        review: null,
+        shortDescription: null,
+        genre: null,
+        timesWatched: 1
+    };
+    const ratingMatch = item.title.match(/★+/);
+    if (ratingMatch) {
+        const stars = ratingMatch[0].length;
+        data.starCount = stars;
+        data.rating = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+    }
+    const yearMatch = item.title.match(/,\s*(\d{4})/);
+    if (yearMatch) {
+        data.year = yearMatch[1];
+        data.title = item.title.replace(/,\s*\d{4}.*$/, '').trim();
+    }
+    const posterMatch = item.description.match(/<img[^>]+src="([^"]+)"/);
+    if (posterMatch) data.poster = posterMatch[1];
+    const reviewText = item.description
+        .replace(/<img[^>]*>/g, '')
+        .replace(/<[^>]+>/g, '')
+        .replace(/★+/g, '')
+        .replace(/Watched on.*$/i, '')
+        .trim();
+    if (reviewText.length > 10) {
+        data.review = reviewText;
+        data.shortDescription = reviewText.length > 150 ? `${reviewText.substring(0, 150)}...` : reviewText;
+    }
+    const metadata = movieMetadata[data.title] || {};
+    data.genre = metadata.genre || item.genre || 'Uncategorized';
+    data.timesWatched = metadata.timesWatched || data.timesWatched;
+    return data;
+}
+
+// --- view ---
+function setSidebarLoaded() {
+    const loadingSidebar = document.getElementById('loading-sidebar');
+    const sidebarContent = document.getElementById('sidebar-content');
+    const sidebarFooter = document.getElementById('sidebar-footer');
+    if (loadingSidebar) loadingSidebar.style.display = 'none';
+    if (sidebarContent) sidebarContent.style.display = 'block';
+    if (sidebarFooter) sidebarFooter.style.display = 'block';
+}
+
+function setMainLoaded() {
+    const loadingEl = document.getElementById('loading');
+    const errorEl = document.getElementById('error');
+    const containerEl = document.getElementById('movies-container');
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'none';
+    if (containerEl) containerEl.style.display = 'grid';
+}
+
+function setError() {
+    const loadingEl = document.getElementById('loading');
+    const errorEl = document.getElementById('error');
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'block';
+}
+
+function renderSidebar(genreGroups) {
+    setSidebarLoaded();
+    const countAllEl = document.getElementById('count-all-movies');
+    if (countAllEl) {
+        const total = Object.values(genreGroups).reduce((sum, movies) => sum + movies.length, 0);
+        countAllEl.textContent = total;
+    }
+    document.querySelectorAll('#sidebar-content .sidebar-section').forEach((section) => {
+        const button = section.querySelector('.sidebar-category[data-genre]');
+        const genre = button?.dataset.genre;
+        if (!genre || genre === 'all') return;
+        const key = normalizeGenreKey(genre);
+        const countEl = document.getElementById(`count-${key}`);
+        const container = document.getElementById(`genre-${key}`);
+        if (countEl) countEl.textContent = '0';
+        if (container) container.innerHTML = '';
+        section.style.display = 'none';
+    });
+    Object.keys(genreGroups).forEach((genre) => {
+        const key = normalizeGenreKey(genre);
+        const movies = genreGroups[genre];
+        const countEl = document.getElementById(`count-${key}`);
+        const section = countEl?.closest('.sidebar-section');
+        const container = document.getElementById(`genre-${key}`);
+        if (countEl) countEl.textContent = movies.length;
+        if (section) section.style.display = movies.length === 0 ? 'none' : 'block';
+        if (container) {
+            container.innerHTML = movies.map((movie) => `
+                <a href="#" class="movie-link" data-action="scrollToMovie" data-action-args="${encodeURIComponent(movie.title)}" data-action-eventobj="true">
+                    <div>${escapeHTML(movie.title)}</div>
+                    <div class="movie-link-year">${escapeHTML(movie.year || '')}</div>
+                </a>
+            `).join('');
+        }
+    });
+}
+
+function updateMovieCount(count) {
+    const countElement = document.getElementById('movie-count');
+    if (countElement) countElement.textContent = count;
+}
+
+function updateStarFilterDisplay(value) {
+    const stars = document.querySelectorAll('.filter-star');
+    const text = document.getElementById('filter-rating-text');
+    stars.forEach((star) => {
+        const starNumber = Number.parseInt(star.getAttribute('data-star'), 10);
+        star.classList.remove('full', 'half');
+        if (value === 'all') return;
+        if (starNumber <= value) star.classList.add('full');
+        else if (starNumber === value + 0.5) star.classList.add('half');
+    });
+    if (text) text.textContent = value === 'all' ? '' : (value >= 5 ? '★' : `${value}★+`);
+}
+
+function updateTimesWatchedFilterDisplay(value) {
+    const slider = document.getElementById('timeswatched-slider');
+    const text = document.getElementById('filter-timeswatched-text');
+    const normalized = value === 'all' ? 0 : Number(value);
+    if (slider) slider.value = normalized;
+    if (text) text.textContent = normalized > 0 ? (normalized >= 10 ? '10' : String(normalized)) : '';
+}
+
+function scrollToMovieByTitle(movieTitle, event) {
+    const movieCards = Array.from(document.querySelectorAll('.movie-card'));
+    const targetCard = movieCards.find((card) => card.getAttribute('data-movie-title') === movieTitle);
+    if (!targetCard) return;
+    window.JGCollectionUI.highlightAndScroll(targetCard, {
+        activeElement: event?.target?.closest('.movie-link'),
+        activeSelector: '.movie-link'
+    });
+}
+
+const movieView = {
+    renderSidebar,
+    scrollToMovie: scrollToMovieByTitle,
+    setError,
+    setMainLoaded,
+    updateMovieCount,
+    updateStarFilterDisplay,
+    updateTimesWatchedFilterDisplay
+};
+
+const movieRender = {
+    createMovieCardFromData,
+    displayMovies,
+    formatRuntime,
+    normalizeMovieData,
+    parseMovieData
+};
+
+// --- events ---
+function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilter, setTimesWatchedFilter }) {
+    let isDraggingStars = false;
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeMovieModal();
+    });
+
+    document.addEventListener('click', (event) => {
+        const modal = document.getElementById('movie-modal');
+        if (event.target === modal) {
+            closeMovieModal();
+            return;
+        }
+        window.JGCollectionUI.closeDropdownOnOutsideClick('list-dropdown', event);
+    });
+
+    const stars = Array.from(document.querySelectorAll('.filter-star'));
+    stars.forEach((star) => {
+        star.addEventListener('mousedown', () => {
+            isDraggingStars = true;
+            setStarFilter(Number.parseInt(star.getAttribute('data-star'), 10));
+        });
+        star.addEventListener('mouseenter', () => {
+            if (!isDraggingStars) return;
+            setStarFilter(Number.parseInt(star.getAttribute('data-star'), 10));
+        });
+        star.addEventListener('click', () => {
+            setStarFilter(Number.parseInt(star.getAttribute('data-star'), 10));
+        });
+    });
+
+    document.addEventListener('mouseup', () => { isDraggingStars = false; });
+
+    const slider = document.getElementById('timeswatched-slider');
+    if (slider) {
+        slider.addEventListener('input', (event) => {
+            const count = Number.parseInt(event.target.value, 10);
+            if (count === 0) {
+                clearTimesWatchedFilter();
+                return;
+            }
+            setTimesWatchedFilter(count);
+        });
+    }
+}
+
+// --- orchestrator ---
+const dataFetch = window.JGDataFetch;
 const collectionUi = window.JGCollectionUI;
-const movieFilters = window.JGLetterboxdFilters;
-const movieModal = window.JGLetterboxdModal.create();
-const movieRender = window.JGLetterboxdRender;
-const movieState = window.JGLetterboxdState.create();
-const movieView = window.JGLetterboxdView;
+const movieModal = createMovieModal();
 let moviesRuntime = null;
 
 function getFilteredMovies() {
     return movieFilters.filterMovies(movieState.getMovies(), movieState.get());
-}
-
-function getVisibleMovies() {
-    return movieFilters.getMoviesForGenre(getFilteredMovies(), movieState.get().activeGenre);
 }
 
 function renderFromState() {
@@ -35,7 +435,7 @@ function buildCollectionController() {
         getFilteredItems: () => getFilteredMovies(),
         getVisibleItems: (filteredMovies, state) => movieFilters.getMoviesForGenre(filteredMovies, state.activeGenre),
         groupItems: (filteredMovies) => movieFilters.groupMoviesByGenre(filteredMovies),
-        renderSidebar: (groups) => movieView.renderSidebar(groups, movieFilters),
+        renderSidebar: (groups) => movieView.renderSidebar(groups),
         renderVisibleItems: (visibleMovies) => {
             movieView.setMainLoaded();
             movieRender.displayMovies(visibleMovies);
@@ -52,7 +452,7 @@ function buildCollectionController() {
         group: {
             allButtonSelector: '[data-genre="all"]',
             buttonSelector: '.sidebar-category',
-            panelForValue: (genre) => genre === 'all' ? null : document.getElementById(`genre-${movieFilters.normalizeGenreKey(genre)}`),
+            panelForValue: (genre) => genre === 'all' ? null : document.getElementById(`genre-${normalizeGenreKey(genre)}`),
             panelSelector: '.genre-movies'
         },
         searchClearButtonId: 'movie-search-clear-btn',
@@ -64,20 +464,11 @@ function buildCollectionController() {
     });
 }
 
-function normalizeMovieData(movie) {
-    return movieRender.normalizeMovieData(movie, movieMetadata);
-}
-
-function parseMovieData(item) {
-    return movieRender.parseMovieData(item, movieMetadata);
-}
-
 async function loadCachedMovies() {
     const movies = await dataFetch.fetchJson('data/movies.json');
     if (!Array.isArray(movies) || movies.length === 0) {
         throw new Error('Cached movie data is empty');
     }
-
     return movies.map(normalizeMovieData);
 }
 
@@ -94,32 +485,22 @@ async function fetchLiveLetterboxdMovies() {
     const rssUrl = `https://letterboxd.com/${LETTERBOXD_USERNAME}/rss/`;
     const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
     const response = await fetch(proxyUrl);
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch RSS feed');
-    }
-
+    if (!response.ok) throw new Error('Failed to fetch RSS feed');
     const xmlText = await response.text();
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-    if (xmlDoc.querySelector('parsererror')) {
-        throw new Error('Error parsing RSS feed');
-    }
+    if (xmlDoc.querySelector('parsererror')) throw new Error('Error parsing RSS feed');
 
     const items = Array.from(xmlDoc.querySelectorAll('item')).slice(0, 20);
-    if (items.length === 0) {
-        throw new Error('No movies found in feed');
-    }
+    if (items.length === 0) throw new Error('No movies found in feed');
 
     const movieItems = items.map((item) => {
         const getElementText = (tagName) => {
             const el = item.querySelector(tagName);
             return el ? el.textContent : '';
         };
-
         const categories = Array.from(item.querySelectorAll('category')).map((cat) => cat.textContent);
         const genre = categories.length > 0 ? categories[0] : 'Uncategorized';
-
         return {
             description: getElementText('description'),
             genre,
@@ -132,11 +513,7 @@ async function fetchLiveLetterboxdMovies() {
     const movies = movieItems
         .filter((item) => item.description && !item.title.includes('created a list'))
         .map(parseMovieData);
-
-    if (movies.length === 0) {
-        throw new Error('No watch entries found in feed');
-    }
-
+    if (movies.length === 0) throw new Error('No watch entries found in feed');
     return movies;
 }
 
@@ -148,7 +525,6 @@ async function fetchLetterboxdMovies() {
     } catch (cacheError) {
         console.warn('Cached movie data unavailable, trying Letterboxd feed:', cacheError);
     }
-
     try {
         const liveMovies = await fetchLiveLetterboxdMovies();
         setMovies(liveMovies);
@@ -212,12 +588,8 @@ function toggleMovieGenre(genre, event) {
     moviesRuntime?.toggleGroup({
         value: genre,
         button,
-        onCollapse: () => {
-            movieState.setActiveGenre('all');
-        },
-        onExpand: () => {
-            movieState.setActiveGenre(genre);
-        }
+        onCollapse: () => { movieState.setActiveGenre('all'); },
+        onExpand: () => { movieState.setActiveGenre(genre); }
     });
 }
 
@@ -267,7 +639,6 @@ function openMovieByTitle(movieTitle) {
 function initMoviesZoom() {
     const moviesGrid = document.getElementById('movies-container');
     if (!moviesGrid || !window.JGGridZoom) return;
-
     moviesGrid.classList.add('js-zoom-grid');
     window.JGGridZoom.init({
         eventName: 'movie_open',
@@ -291,7 +662,7 @@ window.JGActions.register({
 document.addEventListener('DOMContentLoaded', () => {
     buildCollectionController();
     restoreSidebarState();
-    window.JGLetterboxdEvents.bind({
+    bindMovieEvents({
         clearTimesWatchedFilter,
         closeMovieModal,
         setStarFilter,

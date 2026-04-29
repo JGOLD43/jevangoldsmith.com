@@ -1,7 +1,7 @@
 const scriptTags = (files) => files.map((file) => `<script src="${file}"></script>`).join('');
 const coreCollectionScripts = ['js/grid-zoom.js', 'js/collection-ui.js', 'js/collection-runtime.js', 'js/data-fetch.js'];
 const booksScripts = scriptTags([...coreCollectionScripts, 'js/books.js?v=7', 'js/sanitize.js', 'js/theme.js', 'js/analytics.js']);
-const moviesScripts = scriptTags([...coreCollectionScripts, 'js/action-dispatcher.js', 'js/movie-stats.js', 'js/letterboxd-render.js', 'js/letterboxd-state.js', 'js/letterboxd-filters.js', 'js/letterboxd-modal.js', 'js/letterboxd-view.js', 'js/letterboxd-events.js', 'js/letterboxd.js', 'js/sanitize.js', 'js/theme.js', 'js/analytics.js']);
+const moviesScripts = scriptTags([...coreCollectionScripts, 'js/action-dispatcher.js', 'js/movie-stats.js', 'js/letterboxd.js', 'js/sanitize.js', 'js/theme.js', 'js/analytics.js']);
 const podcastsScripts = scriptTags([...coreCollectionScripts, 'js/sanitize.js', 'js/action-dispatcher.js', 'js/podcasts.js', 'js/theme.js', 'js/analytics.js']);
 const peopleScripts = scriptTags(['js/theme.js', ...coreCollectionScripts, 'js/sanitize.js', 'js/action-dispatcher.js', 'js/people.js', 'js/analytics.js']);
 const essaysScripts = scriptTags(['vendor/dompurify/purify.min.js', 'js/sanitize.js', 'js/collection-ui.js', 'js/collection-runtime.js', 'js/data-fetch.js', 'js/action-dispatcher.js', 'js/essays-state.js', 'js/essays-filters.js', 'js/essays-view.js', 'js/essays.js', 'js/theme.js', 'js/analytics.js']);
