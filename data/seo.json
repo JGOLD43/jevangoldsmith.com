@@ -35,7 +35,6 @@
       "schemaType": "CollectionPage"
     },
     "books.html": {
-      "title": "Books I Recommend & Notes From My Reading System",
       "description": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems.",
       "intent": "books-reading",
       "topics": [
@@ -91,7 +90,6 @@
       "schemaType": "CollectionPage"
     },
     "essays.html": {
-      "title": "Essays on Thinking, Business, Culture & Personal Systems",
       "description": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems.",
       "intent": "essays",
       "topics": [
@@ -113,7 +111,6 @@
       "schemaType": "CollectionPage"
     },
     "notes.html": {
-      "title": "Notes on Personal Systems, Learning & Better Thinking",
       "description": "A working notebook of Jevan Goldsmith's ideas on personal systems, learning, decisions, and useful experiments.",
       "intent": "notes",
       "topics": [
@@ -134,7 +131,6 @@
       "index": false
     },
     "search.html": {
-      "title": "Search Jevan Goldsmith's Archive",
       "description": "Search Jevan Goldsmith's archive of Field Notes, essays, books, resources, projects, skills, tools, and ideas.",
       "intent": "site-search",
       "topics": [
@@ -144,7 +140,6 @@
       "topicRequired": false
     },
     "contact.html": {
-      "title": "Contact Jevan Goldsmith",
       "description": "Contact Jevan Goldsmith about projects, ideas, useful resources, Field Notes, or collaboration.",
       "intent": "contact",
       "topics": [
@@ -154,7 +149,6 @@
       "topicRequired": false
     },
     "meet.html": {
-      "title": "Meet Jevan Goldsmith",
       "description": "A quick way to meet Jevan Goldsmith, scan contact details, and start a useful conversation.",
       "intent": "meet",
       "topics": [
@@ -164,7 +158,6 @@
       "topicRequired": false
     },
     "about.html": {
-      "title": "About Jevan Goldsmith",
       "description": "A short introduction to Jevan Goldsmith, the archive he is building, and the themes behind his work.",
       "intent": "about",
       "topics": [
@@ -174,7 +167,6 @@
       "schemaType": "AboutPage"
     },
     "adventures.html": {
-      "title": "Adventures, Travel Notes & Places Worth Remembering",
       "description": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored.",
       "intent": "adventures",
       "topics": [
@@ -239,7 +231,6 @@
       "schemaType": "Article"
     },
     "challenges.html": {
-      "title": "Challenges, Constraints & Personal Experiments",
       "description": "A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.",
       "intent": "challenges",
       "topics": [
@@ -249,7 +240,6 @@
       "schemaType": "CollectionPage"
     },
     "cool-shit.html": {
-      "title": "Cool Shit: Objects, Ideas & Useful Finds",
       "description": "A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith's attention.",
       "intent": "taste-archive",
       "topics": [
@@ -269,7 +259,6 @@
       "schemaType": "Article"
     },
     "health.html": {
-      "title": "Health, Performance & Energy Systems",
       "description": "Health and performance notes from Jevan Goldsmith on energy, recovery, habits, training, and better work.",
       "intent": "health-performance",
       "topics": [
@@ -279,7 +268,6 @@
       "schemaType": "CollectionPage"
     },
     "important-or-not.html": {
-      "title": "Important or Not: Decision Notes & Priority Filters",
       "description": "A decision-making page about separating what matters from noise, urgency, and attractive distractions.",
       "intent": "priority-filter",
       "topics": [
@@ -309,7 +297,6 @@
       "schemaType": "CollectionPage"
     },
     "lesson-logger.html": {
-      "title": "Lesson Logger: Capture Lessons Before They Vanish",
       "description": "A simple lesson-logging page for turning mistakes, wins, and observations into reusable judgment.",
       "intent": "lesson-logger",
       "topics": [
@@ -319,7 +306,6 @@
       "schemaType": "Article"
     },
     "movies.html": {
-      "title": "Movie Reviews, Watchlist & Taste Notes",
       "description": "A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste.",
       "intent": "movies",
       "topics": [
@@ -329,7 +315,6 @@
       "schemaType": "CollectionPage"
     },
     "north-star.html": {
-      "title": "North Star: Principles, Direction & Useful Ambition",
       "description": "A page about Jevan Goldsmith's north-star principles, long-term direction, and standards for useful ambition.",
       "intent": "north-star",
       "topics": [
@@ -339,7 +324,6 @@
       "schemaType": "Article"
     },
     "people.html": {
-      "title": "People Who Inspire Me",
       "description": "A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
       "intent": "people",
       "topics": [
@@ -349,7 +333,6 @@
       "schemaType": "CollectionPage"
     },
     "podcasts.html": {
-      "title": "Podcasts, Conversations & Audio Notes",
       "description": "A podcast archive of conversations, shows, and audio ideas Jevan Goldsmith returns to.",
       "intent": "podcasts",
       "topics": [
@@ -359,7 +342,6 @@
       "schemaType": "CollectionPage"
     },
     "videos.html": {
-      "title": "Videos, Channels & Useful Visual Learning",
       "description": "A video archive of talks, channels, clips, and visual lessons Jevan Goldsmith found useful.",
       "intent": "videos",
       "topics": [
@@ -376,7 +358,6 @@
       "topicRequired": false
     },
     "dateme.html": {
-      "title": "Date Me",
       "description": "A private, noindex personal page for date-me context, compatibility, and contact flow.",
       "index": false,
       "topicRequired": false,

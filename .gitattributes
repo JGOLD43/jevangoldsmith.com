@@ -3,3 +3,4 @@ data/countries.geo.json linguist-generated=true
 data/countries.slim.generated.json linguist-generated=true
 data/*.generated.json linguist-generated=true
 dist/** linguist-generated=true
+tests/visual-baselines/*.png binary linguist-generated=true
