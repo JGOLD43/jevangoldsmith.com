@@ -20,6 +20,7 @@ function createSourcePageHelpers({
   site,
   sourcePagesDir,
   renderNav,
+  renderFooter,
   escapeHtmlAttr
 }) {
   function titleFromHtml(html, file) {
@@ -126,7 +127,6 @@ function createSourcePageHelpers({
       return content;
     }
 
-    const footerPath = path.join(root, '_src', 'partials', 'footer.html');
     const bodyAttributes = data.bodyAttributes
       ? data.bodyAttributes
       : (data.bodyClass ? `class="${escapeHtmlAttr(data.bodyClass)}"` : '');
@@ -136,7 +136,7 @@ function createSourcePageHelpers({
       fontWeights: data.fontWeights || '300;400;600;700',
       bodyAttributes,
       nav: data.includeNav === 'false' ? '' : renderNav(file),
-      footer: data.includeFooter === 'false' ? '' : fs.readFileSync(footerPath, 'utf8').trim(),
+      footer: data.includeFooter === 'false' ? '' : renderFooter(file),
       content,
       scripts: data.scripts || '<script src="js/theme.js"></script>'
     };

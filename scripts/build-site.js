@@ -82,11 +82,13 @@ const sourcePageHelpers = createSourcePageHelpers({
   site,
   sourcePagesDir,
   renderNav,
+  renderFooter,
   escapeHtmlAttr
 });
 const {
   descriptionFromHtml,
   hasSourcePage,
+  parseSourcePage,
   renderSourcePage,
   sourcePagePath,
   titleFromHtml
@@ -163,6 +165,7 @@ function getPageEngines() {
       essays,
       skills,
       hasSourcePage,
+      parseSourcePage,
       renderSourcePage,
       adventureForFile,
       skillForFile,
@@ -175,6 +178,7 @@ function getPageEngines() {
       titleCase,
       renderDocument,
       renderNav,
+      renderFooter,
       seoFor,
       renderPageCtas,
       renderShelfItem,
@@ -512,6 +516,12 @@ function decorateTrackedLinks(file, html) {
     }
     return match;
   });
+}
+
+function renderFooter(file) {
+  const footerPath = path.join(root, '_src', 'partials', 'footer.html');
+  if (!fs.existsSync(footerPath)) return '';
+  return decorateTrackedLinks(file, fs.readFileSync(footerPath, 'utf8').trim());
 }
 
 function buildPages() {

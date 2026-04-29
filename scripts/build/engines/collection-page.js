@@ -17,6 +17,7 @@ function createCollectionPageEngine({
   titleCase,
   renderDocument,
   renderNav,
+  renderFooter,
   seoFor,
   renderPageCtas,
   renderShelfItem,
@@ -201,14 +202,10 @@ function createCollectionPageEngine({
   }
 
   function renderCollectionPage(file, options) {
-    const footer = fs.existsSync(path.join(root, '_src', 'partials', 'footer.html'))
-      ? fs.readFileSync(path.join(root, '_src', 'partials', 'footer.html'), 'utf8').trim()
-      : '';
-
     return renderCollectionDocument({
       ...options,
       nav: renderNav(file),
-      footer
+      footer: renderFooter(file)
     });
   }
 
@@ -332,9 +329,7 @@ function createCollectionPageEngine({
       title: `${topicSeo.title} - ${site.siteName}`,
       description: topicSeo.description || topic.description,
       nav: renderNav(file),
-      footer: fs.existsSync(path.join(root, '_src', 'partials', 'footer.html'))
-        ? fs.readFileSync(path.join(root, '_src', 'partials', 'footer.html'), 'utf8').trim()
-        : '',
+      footer: renderFooter(file),
       baseHref: '../',
       main: `<main class="resources-content topic-hub-page">
         <section class="resources-intro topic-hub-hero">
