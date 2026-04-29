@@ -246,6 +246,7 @@ function normalizePublicHtml(file) {
   next = injectPageMetadata(file, next);
   next = injectBreadcrumbs(file, next);
   next = injectFieldNotesCta(file, next);
+  if (file === 'index.html') next = injectHomeStats(next);
   next = injectRelatedInternalLinks(file, next);
   next = injectAnalyticsScript(next);
   next = decorateTrackedLinks(file, next);
@@ -419,6 +420,21 @@ function writeLocalizedPublicData() {
 function injectAnalyticsScript(html) {
   if (!html.includes('</body>') || html.includes('js/analytics.js')) return html;
   return html.replace('</body>', '    <script src="js/analytics.js"></script>\n</body>');
+}
+
+function injectHomeStats(html) {
+  const counts = {
+    essays: (essays.essays || []).filter((essay) => essay.status === 'published').length,
+    books: books.length,
+    projects: getPublicProjects().length,
+    resources: getPublicResources().length
+  };
+  return html.replace(
+    /<span class="stat-number" data-home-stat="([a-z]+)">[^<]*<\/span>/g,
+    (match, key) => Object.prototype.hasOwnProperty.call(counts, key)
+      ? `<span class="stat-number" data-home-stat="${key}">${counts[key]}</span>`
+      : match
+  );
 }
 
 function injectFieldNotesCta(file, html) {
