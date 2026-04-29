@@ -20,8 +20,11 @@ Purpose: `define reusable page shapes so new pages do not copy full HTML shells`
 
 | Source | Owns | Current Generated Page |
 |---|---|---|
-| `_src/layouts/base.html` | Shared standard page shell. | `reading-philosophy.html` |
-| `_src/pages/reading-philosophy.html` | Reading philosophy page metadata and body content. | `reading-philosophy.html` |
+| `_src/layouts/base.html` | Shared standard page shell. | All `_src/pages` routes except special cases. |
+| `_src/pages/*.html` | Page metadata, page-local body, and script requirements. | 34 public source pages. |
+| `scripts/build/engines/collection-page.js` | Collection, topic, project/resource, and task-list page shells. | Books, movies, essays, people, podcasts, products, resources, topics, projects, challenges, quotes. |
+| `scripts/build/render-adventure-page.js` | Adventure detail shell. | `adventure-*.html` in `dist/`. |
+| `scripts/build/render-skill-page.js` | Skill detail shell. | `skill-*.html` in `dist/`. |
 
 ## Migration Rule
 

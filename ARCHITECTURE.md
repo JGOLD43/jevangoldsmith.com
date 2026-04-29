@@ -20,17 +20,18 @@ There is no active Cloud Functions package and no `/api/**` rewrite.
 
 ## Source Shape
 
-The source model is intentionally transitional:
+The root-page migration is complete. Public route source now lives in `_src/`,
+collection renderers, and data files:
 
-- root-level `.html` files are the current authored public page source for
-  unmigrated pages
-- `_src/pages/*.html` files are source for migrated template-driven pages
-- `_src/layouts/base.html` owns the first shared source page layout
+- `_src/pages/*.html` files are source for template-driven pages
+- `_src/layouts/base.html` owns the shared source page layout
 - `_src/partials/nav.html` and `_src/partials/footer.html` own shared chrome
+- `_src/collections/*` owns collection-specific partials used by generated
+  collection pages
 - `css/src/*.css` owns CSS source; `css/style.css` is generated
 - `data/site.json` owns site identity, domain, social links, and core assets
 - `data/site.config.json` owns deploy, CSP, external allowlist, and budgets
-- `data/*.json` owns migrated collection content
+- `data/*.json` owns collection content and generated-data inputs
 - `js/` owns browser behavior
 - `vendor/leaflet/` owns self-hosted Leaflet runtime assets
 - `scripts/` owns build and validation logic
@@ -39,8 +40,9 @@ The source model is intentionally transitional:
 ## Build Flow
 
 ```text
-root HTML + _src pages/layouts/partials + css/src + data + js + vendor
+_src pages/layouts/partials/collections + collection renderers + data + css/src + js + vendor
   -> scripts/build-site.js
+  -> focused helpers in scripts/build/
   -> css/style.css
   -> data/pages.json
   -> sitemap.xml / robots.txt
@@ -93,20 +95,21 @@ checks as a backend authorization boundary. Any future write-capable admin
 actions should move behind Cloud Functions or another server-side API that
 verifies Firebase ID tokens and second-factor state before writing data.
 
-## Target Evolution
+## Evolution Rule
 
-The target architecture is:
+Move behavior into shared renderers and controllers one page family at a time.
+Generated output should remain visually and behaviorally equivalent unless a
+style/product change is explicitly requested.
+
+The collection runtime path is now:
 
 ```text
-_src/
-  pages/
-  layouts/
-  partials/
-  components/
-  content/
-  styles/
-dist/
+generated collection HTML
+  -> js/action-dispatcher.js
+  -> js/collection-runtime.js
+  -> page config modules such as js/projects.js, js/challenges.js, js/people.js
 ```
 
-Move one page type at a time. The generated output should remain visually and
-behaviorally equivalent unless a style/product change is explicitly requested.
+Use `js/collection-runtime.js` for simple searchable/filterable card grids.
+Keep page-specific modules for genuinely unique behavior such as books modals,
+movie stats, essay previous/next navigation, or adventure maps.

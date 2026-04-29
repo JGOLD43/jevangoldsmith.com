@@ -106,7 +106,14 @@ shared interaction primitives.
 - `scripts/build-site.js` is the build entrypoint and should stay mostly wiring.
 - `scripts/build/site-data.js` owns source-data loading.
 - `scripts/build/dist.js` owns final packaging into `dist/`.
-- `scripts/build/page-manifest.js` owns route metadata and CSS bundle ownership.
+- `scripts/build/route-manifest.js` owns route metadata.
+- `scripts/build/css-manifest.js` owns CSS layer groups and bundle ownership.
+- `scripts/build/page-manifest.js` remains a compatibility export for callers
+  that need both route and CSS metadata.
+- `scripts/build/page-index.js` owns `data/pages.json`, `sitemap.xml`,
+  `robots.txt`, and `llms.txt` generation.
+- `scripts/build/public-data.js` owns localized public collection JSON writes.
+- `scripts/build/remote-assets.js` owns generated remote asset reference syncing.
 - `scripts/build/pipeline.js` owns the build stage order.
 - `scripts/build/runtime-data-manifest.js` owns cache-version metadata for static JSON.
 - `scripts/build/source-pages.js` owns frontmatter parsing and source-page
@@ -126,6 +133,8 @@ For larger interactive pages, prefer this shape:
 
 Examples:
 
+- simple collections: `js/collection-runtime.js` + a tiny page config such as
+  `js/projects.js`, `js/challenges.js`, `js/people.js`, or `js/podcasts.js`
 - books: `js/books.js` + `js/books-view.js`
 - movies: `js/letterboxd.js` + `js/letterboxd-render.js`
 - date funnel: `js/dateme.js` + `js/dateme-content.js`
@@ -135,6 +144,8 @@ Examples:
 Prefer delegated `data-action` handlers over inline event attributes.
 
 - `js/action-dispatcher.js` handles `click`, `input`, and `submit`
+- `js/collection-runtime.js` handles simple searchable/filterable card grids
+  with sidebar persistence, counts, clear buttons, dropdowns, and optional zoom
 - `js/collection-ui.js` handles repeated collection behaviors like active state,
   expanding/collapsing groups, clear-button visibility, sidebar persistence,
   debounced inputs, and dropdown closing

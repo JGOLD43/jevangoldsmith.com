@@ -10,6 +10,8 @@ const requiredPages = [
   'adventures.html',
   'search.html',
   'products.html',
+  'projects.html',
+  'challenges.html',
   'meet.html',
   'adventure-japan-adventure.html'
 ];
@@ -27,6 +29,10 @@ const requiredApi = [
   'api/v1/quotes.json',
   'api/v1/products.json'
 ];
+const pageSpecificPatterns = {
+  'projects.html': [/task-list/, /data-action="filterProjects"/, /class="[^"]*project-card/],
+  'challenges.html': [/task-list/, /data-action="filterChallenges"/, /class="[^"]*challenge-card/]
+};
 
 let failed = false;
 
@@ -53,6 +59,9 @@ for (const page of requiredPages) {
 
   for (const pattern of patterns) {
     if (!pattern.test(html)) fail(`${page} is missing smoke pattern ${pattern}.`);
+  }
+  for (const pattern of pageSpecificPatterns[page] || []) {
+    if (!pattern.test(html)) fail(`${page} is missing page-specific smoke pattern ${pattern}.`);
   }
 }
 

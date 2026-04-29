@@ -14,7 +14,10 @@ const { createSeoHelpers } = require('./build/seo');
 const { createFileOps } = require('./build/io');
 const { loadSiteData } = require('./build/site-data');
 const { buildDist: packageDist } = require('./build/dist');
+const { buildPageArtifacts } = require('./build/page-index');
 const { runBuildPipeline } = require('./build/pipeline');
+const { localizeBooks: localizePublicBooks, writeLocalizedPublicData: writeLocalizedPublicDataArtifact } = require('./build/public-data');
+const { syncReferencedRemoteAssets: syncReferencedRemoteAssetsArtifact } = require('./build/remote-assets');
 const { buildRuntimeDataManifest } = require('./build/runtime-data-manifest');
 const {
   escapeHTML,
@@ -22,7 +25,6 @@ const {
   formatDateRange,
   escapeRegExp,
   escapeHtmlAttr,
-  sanitizeHref,
   stripHtml,
   wordCount
 } = require('./build/html-utils');
@@ -40,6 +42,8 @@ const { createPageEngines } = require('./build/engines');
 const { createSourcePageHelpers } = require('./build/source-pages');
 const { createCards } = require('./build/cards');
 const { createTopicRelated } = require('./build/topic-related');
+const { createPageEnhancements } = require('./build/page-enhancements');
+const { createChromeRenderer } = require('./build/chrome');
 const countriesVisited = require('./build/countries-visited');
 const routesFromGpx = require('./build/routes-from-gpx');
 
@@ -72,7 +76,6 @@ const {
 const generated = new Map();
 const fileOps = createFileOps({ root, verify, generated });
 const {
-  generatedPath,
   writeGenerated,
   copyFile,
   copyDirectory: baseCopyDirectory
@@ -84,6 +87,24 @@ const rootStaticDirs = ['.well-known'];
 let sitePages = [];
 let cssBundleFiles = [];
 const seoReviewedAt = '2026-04-22';
+let chromeRenderer = null;
+let pageEnhancements = null;
+
+function renderNav(file) {
+  return chromeRenderer.renderNav(file);
+}
+
+function renderFooter(file) {
+  return chromeRenderer.renderFooter(file);
+}
+
+function replaceSharedChrome(file, html) {
+  return chromeRenderer.replaceSharedChrome(file, html);
+}
+
+function checkChromeDrift() {
+  return chromeRenderer.checkChromeDrift();
+}
 
 const sourcePageHelpers = createSourcePageHelpers({
   root,
@@ -140,15 +161,8 @@ const {
   isIndexable,
   metaDescriptionFromHtml,
   titleForSeoPath,
-  descriptionForSeoPath,
-  prioritySeoPages
+  descriptionForSeoPath
 } = seoHelpers;
-
-function publicCsp() {
-  return Object.entries(deployConfig.csp)
-    .map(([directive, values]) => `${directive} ${values.join(' ')}`)
-    .join('; ');
-}
 
 function copyDirectory(sourceDir, targetDir) {
   baseCopyDirectory(sourceDir, targetDir, {
@@ -268,208 +282,76 @@ function localizeRemoteStrings(value) {
 }
 
 function localizeBooks(bookList) {
-  return bookList.map((book) => {
-    const isbn = String(book.isbn || '').replace(/[^0-9X]/gi, '');
-    const coverUrl = isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg` : '';
-    return {
-      ...book,
-      coverImage: coverUrl ? remoteAssetFor(coverUrl, 360) : book.coverImage,
-      coverImageMedium: coverUrl ? remoteAssetFor(coverUrl, 240) : book.coverImageMedium
-    };
-  });
+  return localizePublicBooks({ books: bookList, remoteAssetFor });
 }
 
 function writeLocalizedPublicData() {
-  writeGenerated(path.join(distDir, 'data', 'adventures.json'), `${JSON.stringify(localizeRemoteStrings(adventures), null, 2)}\n`);
-  writeGenerated(path.join(distDir, 'data', 'projects.json'), `${JSON.stringify(localizeRemoteStrings(projects), null, 2)}\n`);
-  const localizedBooks = `${JSON.stringify(localizeBooks(books), null, 2)}\n`;
-  writeGenerated(path.join('data', 'books.generated.json'), localizedBooks);
-  writeGenerated(path.join(distDir, 'data', 'books.json'), localizedBooks);
-  writeGenerated(path.join(distDir, 'data', 'books.generated.json'), localizedBooks);
-}
-
-function injectAnalyticsScript(html) {
-  if (!html.includes('</body>') || html.includes('js/analytics.js')) return html;
-  return html.replace('</body>', '    <script src="js/analytics.js"></script>\n</body>');
-}
-
-function injectHomeStats(html) {
-  const counts = {
-    essays: (essays.essays || []).filter((essay) => essay.status === 'published').length,
-    books: books.length,
-    projects: getPublicProjects().length,
-    resources: getPublicResources().length
-  };
-  return html.replace(
-    /<span class="stat-number" data-home-stat="([a-z]+)">[^<]*<\/span>/g,
-    (match, key) => Object.prototype.hasOwnProperty.call(counts, key)
-      ? `<span class="stat-number" data-home-stat="${key}">${counts[key]}</span>`
-      : match
-  );
-}
-
-function formatAdventureDateRange(start, end) {
-  const startDate = new Date(start);
-  const endDate = new Date(end);
-  const opts = { month: 'short', year: 'numeric' };
-  if (startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear()) {
-    return startDate.toLocaleDateString('en-US', opts);
-  }
-  if (startDate.getFullYear() === endDate.getFullYear()) {
-    return `${startDate.toLocaleDateString('en-US', { month: 'short' })} - ${endDate.toLocaleDateString('en-US', opts)}`;
-  }
-  return `${startDate.toLocaleDateString('en-US', opts)} - ${endDate.toLocaleDateString('en-US', opts)}`;
-}
-
-function injectAdventureListing(html) {
-  const cards = (adventures.adventures || [])
-    .filter((adventure) => adventure.status === 'published')
-    .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
-    .map((adventure) => {
-      const heroLocal = remoteAssetFor(adventure.heroImage, 800);
-      const dateLabel = formatAdventureDateRange(adventure.startDate, adventure.endDate);
-      const meta = [dateLabel, adventure.duration].filter(Boolean).join(' · ');
-      return `<div class="adventure-compact-card" id="card-${escapeHtmlAttr(adventure.id)}" data-adventure-id="${escapeHtmlAttr(adventure.id)}">
-                    <img src="${escapeHtmlAttr(heroLocal)}" alt="${escapeHtmlAttr(adventure.title)}" class="adventure-compact-image" width="800" height="533" loading="lazy" decoding="async">
-                    <div class="adventure-compact-info">
-                        <div class="adventure-compact-location">${escapeHTML(adventure.location)}</div>
-                        <h3 class="adventure-compact-title">${escapeHTML(adventure.title)}</h3>
-                        <div class="adventure-compact-meta">${escapeHTML(meta)}</div>
-                    </div>
-                </div>`;
-    })
-    .join('\n                ');
-  return html.replace('<!-- ADVENTURES_LIST -->', `\n                ${cards}\n            `);
-}
-
-function injectFieldNotesCta(file, html) {
-  const eligible = file === 'essays.html' || file === 'reading-philosophy.html';
-  if (!eligible || html.includes('data-field-notes-inline')) return html;
-  const block = `<section class="field-notes-inline-cta" data-field-notes-inline>
-        <p class="archive-kicker">Field Notes</p>
-        <h2>Want more notes like this?</h2>
-        <p>Field Notes is where I send useful ideas before they become polished essays: books, objects, questions, and experiments worth keeping.</p>
-        <a href="field-notes.html" class="btn-primary" data-analytics="cta" data-cta-id="newsletter" data-cta-location="${escapeHtmlAttr(file.replace(/\.html$/, ''))}-inline">Get Field Notes</a>
-    </section>`;
-  return html.replace('</main>', `    ${block}\n</main>`);
-}
-
-function injectRelatedInternalLinks(file, html) {
-  let nextHtml = html.replace(/\n?\s*<section class=["']seo-related-section["'] data-seo-related>[\s\S]*?<\/section>\n*/gi, '\n');
-  const pageSeo = seoFor(file);
-  if (pageSeo.index === false || pageSeo.contentDepth === 'utility') return nextHtml;
-  const related = (pageSeo.relatedPages || [])
-    .filter((href) => href !== file)
-    .map((href) => ({
-      href,
-      title: titleForSeoPath(href),
-      description: descriptionForSeoPath(href)
-    }))
-    .filter((item) => item.title && item.href)
-    .slice(0, 4);
-  if (related.length < 2) return nextHtml;
-
-  const section = `<section class="seo-related-section" data-seo-related>
-        <p class="seo-related-eyebrow">Related thread</p>
-        <h2>Keep exploring this idea</h2>
-        <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
-        <div class="seo-related-grid">
-            ${related.map((item) => `<a class="seo-related-card" href="${escapeHtmlAttr(item.href)}">
-                <span>${escapeHTML(item.title)}</span>
-                <p>${escapeHTML(item.description)}</p>
-            </a>`).join('\n            ')}
-        </div>
-    </section>`;
-  if (nextHtml.includes('</main>')) return nextHtml.replace('</main>', `    ${section}\n</main>`);
-  if (nextHtml.includes('<footer class="footer"')) return nextHtml.replace('<footer class="footer"', `${section}\n\n    <footer class="footer"`);
-  return nextHtml.replace('</body>', `    ${section}\n</body>`);
-}
-
-function decorateTrackedLinks(file, html) {
-  const ctaByHref = new Map((ctas.ctas || []).map((cta) => [cta.href, cta]));
-  return html.replace(/<a\b([^>]*?)href=(["'])([^"']+)\2([^>]*)>/gi, (match, before, quote, href, after) => {
-    if (/data-analytics=/.test(match)) return match;
-    const cta = ctaByHref.get(href);
-    const location = ctaLocationFor(file);
-    if (cta) {
-      return `<a${before}href=${quote}${href}${quote}${after} data-analytics="cta" data-cta-id="${escapeHtmlAttr(cta.id)}" data-cta-location="${escapeHtmlAttr(location)}">`;
-    }
-    if (/^mailto:/i.test(href) || href.includes('contact.html') || href.includes('meet.html')) {
-      return `<a${before}href=${quote}${href}${quote}${after} data-analytics="contact" data-cta-location="${escapeHtmlAttr(location)}">`;
-    }
-    return match;
+  writeLocalizedPublicDataArtifact({
+    distDir,
+    adventures,
+    projects,
+    books,
+    localizeRemoteStrings,
+    remoteAssetFor,
+    writeGenerated
   });
-}
-
-function renderFooter(file) {
-  const footerPath = path.join(root, '_src', 'partials', 'footer.html');
-  if (!fs.existsSync(footerPath)) return '';
-  return decorateTrackedLinks(file, fs.readFileSync(footerPath, 'utf8').trim());
 }
 
 function buildPages() {
-  const pages = publicHtmlFiles.map((file) => {
-    const html = normalizePublicHtml(file);
-    const title = pageTitleFor(file, html);
-    const pageSeo = seoFor(file);
-    const cta = pageCtaFor(file);
-    return {
-      path: file,
-      url: file === 'index.html' ? '/' : `/${file}`,
-      title,
-      description: pageDescriptionFor(file, html, title),
-      intent: pageSeo.intent || sectionFor(file),
-      topics: pageSeo.topics || [],
-      index: isIndexable(file),
-      schemaType: pageSeo.schemaType || 'WebPage',
-      primaryKeyword: pageSeo.primaryKeyword,
-      secondaryKeywords: pageSeo.secondaryKeywords || [],
-      audience: pageSeo.audience,
-      searchIntent: pageSeo.searchIntent,
-      contentDepth: pageSeo.contentDepth,
-      relatedPages: pageSeo.relatedPages || [],
-      lastReviewed: pageSeo.lastReviewed,
-      section: sectionFor(file),
-      generatedFrom: generatedFromFor(file),
-      journeyStage: cta.journeyStage,
-      primaryCta: cta.primaryCta,
-      secondaryCtas: cta.secondaryCtas,
-      ctaOptional: cta.optional || false
-    };
+  const pages = buildPageArtifacts({
+    publicHtmlFiles,
+    normalizePublicHtml,
+    pageTitleFor,
+    seoFor,
+    pageCtaFor,
+    pageDescriptionFor,
+    isIndexable,
+    sectionFor,
+    generatedFromFor,
+    writeGenerated,
+    site,
+    lastModifiedDate,
+    renderLlmsTxt
   });
-
-  writeGenerated(
-    path.join('data', 'pages.json'),
-    `${JSON.stringify(pages, null, 2)}\n`
-  );
-
-  const urls = pages.filter((page) => page.index !== false).map((page) => `  <url>
-    <loc>https://${site.domain}${page.url}</loc>
-    <lastmod>${lastModifiedDate(page.path)}</lastmod>
-  </url>`).join('\n');
-  writeGenerated('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls}
-</urlset>
-`);
-
-  writeGenerated('robots.txt', `User-agent: *
-Allow: /
-
-Sitemap: https://${site.domain}/sitemap.xml
-
-AI-Agent-Index: https://${site.domain}/llms.txt
-Content-API: https://${site.domain}/api/v1/index.json
-`);
-
-  writeGenerated('llms.txt', renderLlmsTxt(pages));
-
   sitePages = pages;
   return pages;
 }
 
 const ctaHelpers = createCtaHelpers({ ctas, sectionFor: (file) => sectionFor(file), escapeHTML, escapeHtmlAttr });
-const { pageCtaFor, ctaById, renderCtaLink, renderPageCtas, ctaLocationFor } = ctaHelpers;
+const { pageCtaFor, renderPageCtas, ctaLocationFor } = ctaHelpers;
+
+pageEnhancements = createPageEnhancements({
+  adventures,
+  books,
+  ctas,
+  essays,
+  getPublicProjects,
+  getPublicResources,
+  seoFor,
+  titleForSeoPath,
+  descriptionForSeoPath,
+  ctaLocationFor,
+  remoteAssetFor: (url, w) => remoteAssetFor(url, w),
+  escapeHTML,
+  escapeHtmlAttr
+});
+const {
+  decorateTrackedLinks,
+  injectAdventureListing,
+  injectAnalyticsScript,
+  injectFieldNotesCta,
+  injectHomeStats,
+  injectRelatedInternalLinks
+} = pageEnhancements;
+
+chromeRenderer = createChromeRenderer({
+  fs,
+  path,
+  root,
+  decorateTrackedLinks,
+  escapeRegExp,
+  sectionFor: (file) => sectionFor(file)
+});
 
 function sectionFor(file) {
   return pageMetaFor(file).section;
@@ -489,84 +371,6 @@ function generatedFromFor(file) {
 // Collection rendering
 function buildPartials() {
   checkChromeDrift();
-}
-
-function replaceSharedChrome(file, html) {
-  if (file === 'meet.html') return html;
-
-  const navPath = path.join('_src', 'partials', 'nav.html');
-  const footerPath = path.join('_src', 'partials', 'footer.html');
-  if (!fs.existsSync(navPath) || !fs.existsSync(footerPath)) return html;
-
-  let next = html;
-  if (/<nav class=["']navbar["']>/.test(next)) {
-    if (/<nav class=["']navbar["']>[\s\S]*?<\/nav>/.test(next)) {
-      next = next.replace(/<nav class=["']navbar["']>[\s\S]*?<\/nav>/, renderNav(file));
-    } else {
-      next = replaceUnclosedNav(next, renderNav(file));
-    }
-  }
-  if (/<footer class=["']footer["']>/.test(next)) {
-    next = next.replace(/<footer class=["']footer["']>[\s\S]*?<\/footer>/, fs.readFileSync(footerPath, 'utf8').trim());
-  }
-  return next;
-}
-
-function replaceUnclosedNav(html, nav) {
-  const navStart = html.search(/<nav class=["']navbar["']>/);
-  if (navStart < 0) return html;
-
-  const contentMarkers = [
-    '\n    <header',
-    '\n    <main',
-    '\n    <section',
-    '\n    <div class="page',
-    '\n    <div class="hero',
-    '\n        <div class="projects-grid"'
-  ];
-  const contentStart = contentMarkers
-    .map((marker) => html.indexOf(marker, navStart))
-    .filter((index) => index > navStart)
-    .sort((a, b) => a - b)[0];
-
-  if (!contentStart) return html;
-  return `${html.slice(0, navStart)}${nav.trim()}\n\n${html.slice(contentStart).trimStart()}`;
-}
-
-function renderNav(file) {
-  const nav = fs.readFileSync(path.join('_src', 'partials', 'nav.html'), 'utf8');
-  const cleared = nav
-    .replace(/\sclass="active"/g, '')
-    .replace(/\sclass="dropdown-trigger active"/g, ' class="dropdown-trigger"');
-
-  const section = sectionFor(file);
-  let activeHref = file;
-  if (file.startsWith('adventure-')) activeHref = 'adventures.html';
-
-  const navLinksStart = cleared.indexOf('<ul class="nav-links">');
-  let next = cleared;
-  if (navLinksStart >= 0) {
-    const beforeLinks = cleared.slice(0, navLinksStart);
-    const navLinks = cleared.slice(navLinksStart).replace(
-      new RegExp(`<a href="${escapeRegExp(activeHref)}">`),
-      `<a href="${activeHref}" class="active">`
-    );
-    next = beforeLinks + navLinks;
-  }
-
-  const triggerBySection = {
-    explore: 'Explore',
-    taste: 'Taste',
-    experience: 'Experience'
-  };
-  if (triggerBySection[section]) {
-    next = next.replace(
-      `class="dropdown-trigger">${triggerBySection[section]}</a>`,
-      `class="dropdown-trigger active">${triggerBySection[section]}</a>`
-    );
-  }
-
-  return next.trim();
 }
 
 function adventureForFile(file) {
@@ -595,7 +399,6 @@ const skillPageRenderer = createSkillPageRenderer({
 });
 
 const renderSkillPage = skillPageRenderer.renderSkillPage;
-const categoryPageForSkill = skillPageRenderer.categoryPageForSkill;
 
 function getPublicProjects() {
   return collectPublicProjects(projects);
@@ -729,58 +532,8 @@ function lastModifiedDate(file) {
   return stat.mtime.toISOString().slice(0, 10);
 }
 
-function walkFiles(dir, files = []) {
-  if (!fs.existsSync(dir)) return files;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      walkFiles(fullPath, files);
-    } else if (entry.isFile()) {
-      files.push(fullPath);
-    }
-  }
-  return files;
-}
-
-function textDistFiles() {
-  const textExtensions = new Set(['.html', '.css', '.js', '.json', '.xml', '.txt']);
-  return walkFiles(distDir).filter((file) => textExtensions.has(path.extname(file).toLowerCase()));
-}
-
-function referencedRemoteAssetPaths() {
-  const refs = new Set();
-  const pattern = /images\/generated\/remote\/[A-Za-z0-9._/-]+\.(?:jpg|jpeg|png|webp|avif)/gi;
-  for (const file of textDistFiles()) {
-    const text = fs.readFileSync(file, 'utf8');
-    for (const match of text.matchAll(pattern)) refs.add(match[0].replace(/\\/g, '/'));
-  }
-  return refs;
-}
-
 function syncReferencedRemoteAssets() {
-  const refs = referencedRemoteAssetPaths();
-  const targetDir = path.join(distDir, 'images', 'generated', 'remote');
-  for (const relative of refs) {
-    const source = path.join(root, relative);
-    if (!fs.existsSync(source)) {
-      console.error(`${relative} is referenced but missing. Run npm run assets:optimize.`);
-      process.exitCode = 1;
-      continue;
-    }
-    copyFile(source, path.join(distDir, relative));
-  }
-
-  const deployed = walkFiles(targetDir);
-  for (const file of deployed) {
-    const relative = path.relative(distDir, file).replace(/\\/g, '/');
-    if (refs.has(relative)) continue;
-    if (verify) {
-      console.error(`${relative} is not referenced by dist output. Run npm run build.`);
-      process.exitCode = 1;
-    } else {
-      fs.rmSync(file, { force: true });
-    }
-  }
+  syncReferencedRemoteAssetsArtifact({ root, distDir, verify, copyFile });
 }
 
 function buildGeneratedManifest() {
@@ -792,16 +545,6 @@ function buildGeneratedManifest() {
     files
   };
   writeGenerated(path.join('data', 'generated-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
-}
-
-// Verification
-function checkChromeDrift() {
-  const nav = fs.existsSync(path.join('_src', 'partials', 'nav.html'));
-  const footer = fs.existsSync(path.join('_src', 'partials', 'footer.html'));
-  if (!nav || !footer) {
-    console.error('Shared chrome partials are missing. Run npm run build.');
-    process.exitCode = 1;
-  }
 }
 
 runBuildPipeline({

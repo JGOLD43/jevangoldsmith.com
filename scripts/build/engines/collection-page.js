@@ -48,6 +48,19 @@ function createCollectionPageEngine({
     return fs.readFileSync(absolutePath, 'utf8').trim();
   }
 
+  function renderSidebarHeader(collapseAction) {
+    const actionAttr = collapseAction ? ` data-action="${escapeHtmlAttr(collapseAction)}"` : '';
+    return `<div class="sidebar-header">
+                <button class="sidebar-collapse-btn"${actionAttr} title="Collapse sidebar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                    </svg>
+                </button>
+                <span class="sidebar-browse-label">Browse</span>
+            </div>`;
+  }
+
   function renderAttrs(attrs = {}, extraClass = '') {
     const entries = Object.entries(attrs)
       .filter(([, value]) => value !== '' && value != null)
@@ -122,7 +135,8 @@ function createCollectionPageEngine({
 
   function renderSection(item) {
     const attrs = renderAttrs(item.attrs || {}, 'sidebar-category');
-    const icon = item.icon.trim().startsWith('<') ? item.icon : escapeHTML(item.icon);
+    const iconSource = item.iconKey ? iconSvg(item.iconKey) : (item.icon || '');
+    const icon = iconSource.trim().startsWith('<') ? iconSource : escapeHTML(iconSource);
     const countIdAttr = item.countId ? ` id="${escapeHtmlAttr(item.countId)}"` : '';
     const panel = item.panelId
       ? `\n                <div class="${escapeHtmlAttr(item.panelClass || '')}" id="${escapeHtmlAttr(item.panelId)}"></div>`
@@ -176,15 +190,7 @@ function createCollectionPageEngine({
       scripts: config.scripts,
       main: `<main class="${escapeHtmlAttr(config.layout.className)}" id="${escapeHtmlAttr(config.layout.id)}">
         <aside class="${escapeHtmlAttr(config.sidebar.className)}" id="${escapeHtmlAttr(config.sidebar.id)}">
-            <div class="sidebar-header">
-                <button class="sidebar-collapse-btn"${config.sidebar.collapseAction ? ` data-action="${escapeHtmlAttr(config.sidebar.collapseAction)}"` : ''} title="Collapse sidebar">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="9" y1="3" x2="9" y2="21"></line>
-                    </svg>
-                </button>
-                <span class="sidebar-browse-label">Browse</span>
-            </div>
+            ${renderSidebarHeader(config.sidebar.collapseAction)}
             ${renderListDropdown(config.sidebar)}
             ${renderSearch(config.sidebar)}
             ${readPartial(config.sidebar.extraPath)}
@@ -388,14 +394,6 @@ function createCollectionPageEngine({
       .map((category) => renderSidebarButton(category, opts.categoryMetaFor(category), categoryCounts.get(category) || 0, `count-cat-${category}`))
       .join('\n            ');
 
-    const listOptions = opts.listOptions
-      .map((option) => {
-        const classAttr = option.active ? 'list-option active' : 'list-option';
-        const extra = option.extraAttrs ? ` ${option.extraAttrs}` : '';
-        return `<a href="${escapeHtmlAttr(option.href)}" class="${classAttr}"${extra}>${escapeHTML(option.label)}</a>`;
-      })
-      .join('\n                        ');
-
     return renderCollectionPage(file, {
       title: opts.title,
       description: opts.description,
@@ -403,45 +401,26 @@ function createCollectionPageEngine({
       scripts: opts.scripts,
       main: `<main class="movies-layout sidebar-collapsed" id="${escapeHtmlAttr(opts.layoutId)}">
         <aside class="movies-sidebar collapsed" id="${escapeHtmlAttr(opts.sidebarId)}">
-            <div class="sidebar-header">
-                <button class="sidebar-collapse-btn" data-action="${escapeHtmlAttr(opts.toggleSidebarAction)}" title="Collapse sidebar">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="9" y1="3" x2="9" y2="21"></line>
-                    </svg>
-                </button>
-                <span class="sidebar-browse-label">Browse</span>
-            </div>
+            ${renderSidebarHeader(opts.toggleSidebarAction)}
 
-            <div class="sidebar-list-selector">
-                <div class="list-dropdown" id="list-dropdown">
-                    <button class="list-dropdown-btn" data-action="${escapeHtmlAttr(opts.toggleListDropdownAction)}">
-                        <span id="current-list-name">${escapeHTML(opts.listCurrentName)}</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="list-dropdown-menu" id="list-dropdown-menu">
-                        ${listOptions}
-                    </div>
-                </div>
-            </div>
+            ${renderListDropdown({
+              listAction: opts.toggleListDropdownAction,
+              currentListName: opts.listCurrentName,
+              listOptions: opts.listOptions
+            })}
 
-            <div class="sidebar-search">
-                <div class="search-input-wrapper search-bubble">
-                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="text" id="${escapeHtmlAttr(opts.searchInputId)}" class="movie-search-input" placeholder="${escapeHtmlAttr(opts.searchPlaceholder)}" data-action="${escapeHtmlAttr(opts.searchAction)}" data-action-event="input" data-action-value="true">
-                    <button class="search-clear-btn" id="${escapeHtmlAttr(opts.searchClearButtonId)}" data-action="${escapeHtmlAttr(opts.searchClearAction)}" style="display: none;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+            ${renderSearch({
+              search: {
+                inputId: opts.searchInputId,
+                inputClass: 'movie-search-input',
+                placeholder: opts.searchPlaceholder,
+                clearButtonId: opts.searchClearButtonId,
+                clearAction: opts.searchClearAction,
+                searchAction: opts.searchAction,
+                searchEvent: 'input',
+                searchUsesValue: true
+              }
+            })}
 
             <div class="sidebar-section">
                 <button class="sidebar-category active" data-action="${escapeHtmlAttr(opts.filterAction)}" data-action-args="all" data-action-this="true" data-tooltip="${escapeHtmlAttr(opts.allLabel)}">

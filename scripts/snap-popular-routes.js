@@ -22,6 +22,7 @@ const POLITE_DELAY_MS = 1100;
 const REQUEST_TIMEOUT_MS = 20000;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const serializeRoutes = (json) => `${JSON.stringify(json)}\n`;
 
 async function snap(coords, profile) {
   const coordStr = coords.map(([lng, lat]) => `${lng},${lat}`).join(';');
@@ -76,7 +77,7 @@ async function main() {
       route._snapped = profile;
       snapped++;
       console.log(`  ✓ ${route.id} (${profile}, ${result.distanceKm} km)`);
-      fs.writeFileSync(FILE, JSON.stringify(json, null, 2) + '\n'); // checkpoint per success
+      fs.writeFileSync(FILE, serializeRoutes(json)); // checkpoint per success
     } catch (err) {
       failed++;
       console.warn(`  ✗ ${route.id}: ${err.message} — keeping waypoints`);

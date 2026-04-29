@@ -12,6 +12,7 @@ const PARALLEL_PHASE = [
   'check:deadcode',
   'check:content',
   'check:links',
+  'check:interactions',
   'check:deploy',
   'check:api',
   'check:performance',

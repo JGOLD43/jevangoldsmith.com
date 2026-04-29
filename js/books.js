@@ -1,11 +1,10 @@
 const collectionUi = window.JGCollectionUI;
-const collectionControllerFactory = window.JGCollectionController;
 const dataFetch = window.JGDataFetch;
 const booksFilters = window.JGBooksFilters;
 const booksState = window.JGBooksState.create();
 const booksModal = window.JGBooksModal.create({ getCoverUrl });
 let booksView = null;
-let collectionController = null;
+let booksRuntime = null;
 
 async function loadBooksData() {
     if (booksState.getBooks().length > 0) {
@@ -58,11 +57,11 @@ function resetSidebarSelection() {
 }
 
 function renderFromState() {
-    collectionController?.render();
+    booksRuntime?.render();
 }
 
 function buildCollectionController() {
-    collectionController = collectionControllerFactory.create({
+    booksRuntime = window.JGCollectionRuntime.create({
         getState: () => booksState.get(),
         getFilteredItems: () => getFilteredBooks(),
         getVisibleItems: (filteredBooks, state) => booksFilters.getBooksForCategory(filteredBooks, state.activeCategory),
@@ -83,41 +82,39 @@ function buildCollectionController() {
         },
         searchClearButtonId: 'search-clear-btn',
         searchInputId: 'book-search',
-        sidebar: {
-            storageKey: 'books-sidebar-collapsed',
-            layoutId: 'books-layout',
-            sidebarId: 'books-sidebar',
-            defaultCollapsed: true
-        }
+        storageKey: 'books-sidebar-collapsed',
+        layoutId: 'books-layout',
+        sidebarId: 'books-sidebar',
+        defaultCollapsed: true
     });
 }
 
 function searchBooks(query) {
     booksState.setSearchQuery(query);
     booksState.setActiveCategory('all');
-    collectionController?.resetGrouping();
+    booksRuntime?.resetGrouping();
     renderFromState();
 }
 
 function clearSearch() {
-    collectionController?.clearSearchInput();
+    booksRuntime?.clearSearchInput();
     booksState.clearSearchQuery();
     booksState.setActiveCategory('all');
-    collectionController?.resetGrouping();
+    booksRuntime?.resetGrouping();
     renderFromState();
 }
 
 function setStarFilter(rating) {
     booksState.setStarFilter(rating);
     booksState.setActiveCategory('all');
-    collectionController?.resetGrouping();
+    booksRuntime?.resetGrouping();
     renderFromState();
 }
 
 function clearStarFilter() {
     booksState.clearStarFilter();
     booksState.setActiveCategory('all');
-    collectionController?.resetGrouping();
+    booksRuntime?.resetGrouping();
     renderFromState();
 }
 
@@ -129,12 +126,12 @@ function setReReadsFilter(count) {
     }
 
     booksState.setActiveCategory('all');
-    collectionController?.resetGrouping();
+    booksRuntime?.resetGrouping();
     renderFromState();
 }
 
 function toggleBookCategory(category, button) {
-    collectionController?.toggleGroup({
+    booksRuntime?.toggleGroup({
         value: category,
         button,
         onCollapse: () => {
@@ -148,17 +145,17 @@ function toggleBookCategory(category, button) {
 }
 
 function toggleSidebar() {
-    const isCollapsed = collectionController?.toggleSidebar();
+    const isCollapsed = booksRuntime?.toggleSidebar();
     booksState.setSidebarCollapsed(isCollapsed);
 }
 
 function restoreSidebarState() {
-    const isCollapsed = collectionController?.restoreSidebar();
+    const isCollapsed = booksRuntime?.restoreSidebar();
     booksState.setSidebarCollapsed(isCollapsed);
 }
 
 function toggleListDropdown() {
-    collectionController?.toggleListDropdown();
+    booksRuntime?.toggleListDropdown();
 }
 
 function setViewMode(mode) {

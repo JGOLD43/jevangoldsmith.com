@@ -45,7 +45,7 @@ test('dateme landing and rejection restart work', async ({ page }) => {
 });
 
 test('search sanitizes unsafe result URLs', async ({ page }) => {
-  await page.route('**/api/v1/search-index.json', async (route) => {
+  await page.route('**/api/v1/search-index.json*', async (route) => {
     await route.fulfill({
       contentType: 'application/json',
       body: JSON.stringify({
@@ -105,6 +105,39 @@ test('people filters use delegated handlers', async ({ page }) => {
   await expect(page.locator('.person-card[data-category="science"]').first()).toBeVisible();
   await page.locator('#people-search').fill('Huberman');
   await expect(page.locator('.person-card:visible')).toHaveCount(1);
+});
+
+test('projects shared collection runtime filters and clears cards', async ({ page }) => {
+  await page.goto('/projects.html');
+  await page.locator('[data-action="toggleProjectSidebar"]').click();
+  await page.locator('[data-action="filterProjects"][data-action-args="ai"]').click();
+  await expect(page.locator('.project-card:visible')).toHaveCount(2);
+  await page.locator('#project-search').fill('writing');
+  await expect(page.locator('#project-search-clear-btn')).toBeVisible();
+  await page.locator('#project-search-clear-btn').click();
+  await expect(page.locator('.project-card:visible')).toHaveCount(5);
+});
+
+test('challenges shared collection runtime filters and clears cards', async ({ page }) => {
+  await page.goto('/challenges.html');
+  await page.locator('[data-action="toggleChallengeSidebar"]').click();
+  await page.locator('[data-action="filterChallenges"][data-action-args="fitness"]').click();
+  await expect(page.locator('.challenge-card:visible')).toHaveCount(1);
+  await page.locator('#challenge-search').fill('learning');
+  await expect(page.locator('#challenge-search-clear-btn')).toBeVisible();
+  await page.locator('#challenge-search-clear-btn').click();
+  await expect(page.locator('.challenge-card:visible')).toHaveCount(4);
+});
+
+test('podcasts shared collection runtime preserves curated card filtering', async ({ page }) => {
+  await page.goto('/podcasts.html');
+  await page.locator('[data-action="togglePodcastSidebar"]').click();
+  await page.locator('[data-action="filterPodcasts"][data-action-args="business"]').click();
+  await expect(page.locator('#podcasts-container .podcast-card:visible')).toHaveCount(3);
+  await page.locator('#podcast-search').fill('huberman');
+  await expect(page.locator('#podcast-search-clear-btn')).toBeVisible();
+  await page.locator('#podcast-search-clear-btn').click();
+  await expect(page.locator('#podcasts-container .podcast-card:visible')).toHaveCount(10);
 });
 
 test('books page keeps working on mobile viewport', async ({ page }) => {

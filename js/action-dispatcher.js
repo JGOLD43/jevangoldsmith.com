@@ -1,4 +1,14 @@
 (function () {
+    const registry = Object.create(null);
+
+    function register(actions) {
+        Object.assign(registry, actions || {});
+    }
+
+    function resolveAction(name) {
+        return registry[name] || window[name];
+    }
+
     function defaultEventType(el) {
         const tag = (el.tagName || '').toLowerCase();
         if (tag === 'input' || tag === 'textarea' || tag === 'select') return 'input';
@@ -28,7 +38,7 @@
         if (actionEvent !== eventType) return;
 
         const fnName = el.dataset.action;
-        const fn = window[fnName];
+        const fn = resolveAction(fnName);
         if (typeof fn !== 'function') return;
 
         const args = parseArgs(el.dataset.actionArgs);
@@ -53,4 +63,6 @@
     document.addEventListener('submit', function (event) {
         runAction(event, 'submit');
     });
+
+    window.JGActions = { register };
 }());

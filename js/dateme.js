@@ -404,14 +404,16 @@ function submitForm(event) {
         });
 }
 
-window.renderLanding = renderLanding;
-window.startStage1 = startStage1;
-window.startStage2 = startStage2;
-window.selectAnswer = selectAnswer;
-window.submitTextAnswer = submitTextAnswer;
-window.renderContactForm = renderContactForm;
-window.updateTone = updateTone;
-window.submitForm = submitForm;
+window.JGActions.register({
+    renderContactForm,
+    renderLanding,
+    selectAnswer,
+    startStage1,
+    startStage2,
+    submitForm,
+    submitTextAnswer,
+    updateTone
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     funnelContainer = document.getElementById('funnel-container');

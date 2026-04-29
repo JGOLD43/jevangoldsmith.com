@@ -45,7 +45,11 @@ const adminReferenceFiles = walk(path.join(root, 'admin'), {
   predicate: (file) => file.endsWith('.html') || file.endsWith('.js') || file.endsWith('.md')
 }).map((file) => path.relative(root, file).replace(/\\/g, '/'));
 const adminReferenceText = allTextFrom(adminReferenceFiles);
-const cssBuildText = `${read('scripts/build/css.js')}\n${read('scripts/build/page-manifest.js')}`;
+const cssBuildText = [
+  'scripts/build/css.js',
+  'scripts/build/css-manifest.js',
+  'scripts/build/page-manifest.js'
+].map(read).join('\n');
 
 for (const file of listFiles('js', '.js')) {
   if (countLiteral(publicReferenceText, file) === 0) {

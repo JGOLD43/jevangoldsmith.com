@@ -1,13 +1,5 @@
-const collectionUi = window.JGCollectionUI;
-const collectionControllerFactory = window.JGCollectionController;
 const dataFetch = window.JGDataFetch;
-const state = {
-    category: 'all',
-    searchQuery: '',
-    sidebarCollapsed: true
-};
-let collectionController = null;
-let updatePodcastViewDeferred = null;
+let podcastRuntime = null;
 
 function escapeValue(value) {
     return String(value || '').replace(/[&<>"']/g, (char) => ({
@@ -51,84 +43,26 @@ async function renderCuratedPodcasts() {
     container.appendChild(fragment);
 }
 
-function getPodcastCards() {
-    return Array.from(document.querySelectorAll('.podcast-card'));
-}
-
-function updatePodcastView() {
-    collectionController?.render();
-}
-
-function getFilteredPodcastCards(currentState = state) {
-    const query = currentState.searchQuery.toLowerCase();
-    return getPodcastCards().filter((card) => {
-        const matchesCategory = currentState.category === 'all' || card.dataset.category === currentState.category;
-        const matchesSearch = !query || (card.dataset.search || '').toLowerCase().includes(query);
-        return matchesCategory && matchesSearch;
-    });
-}
-
 function buildCollectionController() {
-    collectionController = collectionControllerFactory.create({
-        getState: () => ({ ...state }),
-        getFilteredItems: (currentState) => getFilteredPodcastCards(currentState),
-        renderVisibleItems: (visibleCards) => {
-            const visibleSet = new Set(visibleCards);
-            getPodcastCards().forEach((card) => {
-                card.hidden = !visibleSet.has(card);
-            });
+    podcastRuntime = window.JGCollectionRuntime.create({
+        actions: {
+            clearSearch: 'clearPodcastSearch',
+            filter: 'filterPodcasts',
+            search: 'searchPodcasts',
+            toggleDropdown: 'togglePodcastListDropdown',
+            toggleSidebar: 'togglePodcastSidebar'
         },
-        updateCount: (visibleCards) => {
-            const counter = document.getElementById('podcast-count');
-            if (counter) counter.textContent = visibleCards.length;
-        },
-        updateControls: (currentState) => {
-            collectionController?.syncSearchClearButton(Boolean(currentState.searchQuery));
-        },
-        group: {
-            allButtonSelector: '.sidebar-category[data-podcast-category="all"]',
-            buttonSelector: '.sidebar-category'
-        },
+        allButtonSelector: '.sidebar-category[data-podcast-category="all"]',
+        buttonSelector: '.sidebar-category',
+        cardSelector: '.podcast-card',
+        categoryMode: 'exact',
+        counterId: 'podcast-count',
+        layoutId: 'podcasts-layout',
         searchClearButtonId: 'podcast-search-clear-btn',
         searchInputId: 'podcast-search',
-        sidebar: {
-            storageKey: 'podcasts-sidebar-collapsed',
-            layoutId: 'podcasts-layout',
-            sidebarId: 'podcasts-sidebar',
-            defaultCollapsed: true
-        }
+        sidebarId: 'podcasts-sidebar',
+        storageKey: 'podcasts-sidebar-collapsed'
     });
-    updatePodcastViewDeferred = collectionUi?.debounce ? collectionUi.debounce(updatePodcastView, 120) : updatePodcastView;
-}
-
-function filterPodcasts(category, buttonEl) {
-    state.category = category || buttonEl?.dataset.podcastCategory || 'all';
-    collectionController?.toggleGroup({
-        value: state.category,
-        button: buttonEl || document.querySelector(`.sidebar-category[data-podcast-category="${state.category}"]`),
-        onCollapse: () => {
-            state.category = 'all';
-        }
-    });
-}
-
-function searchPodcasts(query) {
-    state.searchQuery = query.trim();
-    updatePodcastViewDeferred();
-}
-
-function clearPodcastSearch() {
-    state.searchQuery = '';
-    collectionController?.clearSearchInput();
-    updatePodcastView();
-}
-
-function togglePodcastSidebar() {
-    state.sidebarCollapsed = Boolean(collectionController?.toggleSidebar());
-}
-
-function togglePodcastListDropdown() {
-    collectionController?.toggleListDropdown();
 }
 
 function formatEpisodeDuration(ms) {
@@ -262,13 +196,8 @@ async function renderSpotifyFollowedShows() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     buildCollectionController();
-    state.sidebarCollapsed = Boolean(collectionController?.restoreSidebar());
-    document.addEventListener('click', (event) => {
-        collectionController?.closeDropdownOnOutsideClick(event);
-    });
-
     await renderCuratedPodcasts();
-    updatePodcastView();
+    podcastRuntime.init();
 
     const grid = document.getElementById('podcasts-container');
     if (grid && window.JGGridZoom) {

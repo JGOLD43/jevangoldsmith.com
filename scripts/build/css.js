@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { transform } = require('lightningcss');
-const { cssBundles, cssLayerGroups } = require('./page-manifest');
+const { cssBundles, cssLayerGroups } = require('./css-manifest');
 
 function renderCssLayer(root, file) {
   const fullPath = path.join('css', 'src', file);

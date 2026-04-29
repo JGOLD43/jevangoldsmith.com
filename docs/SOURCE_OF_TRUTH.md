@@ -23,14 +23,15 @@ Purpose: `define which files own each part of the website`
 | Primary calls to action | `data/ctas.json` | `dist/api/v1/ctas.json`, future page CTA modules |
 | Field Notes audience model | `data/newsletter.json`, `_src/pages/field-notes.html` | `field-notes.html`, `dist/api/v1/newsletter.json` |
 | Topic taxonomy | `data/topics.json` | `dist/api/v1/topics.json`, search/topic trails |
+| Popular route geometry | `data/popular-routes.json` compact JSON | `dist/data/popular-routes.json`, adventures map |
 
 Never hand-edit generated `dist/` files.
 
 Generated root artifacts such as `css/style.css`, `css/page-*.css`,
 `data/pages.json`, `data/generated-manifest.json`, `sitemap.xml`, and
-`llms.txt` are recreated by `npm run build`. Public source now lives in
-`_src/pages/` plus collection renderers; root-level public HTML checked into
-the repo is generated output, not authored input. `npm run check:repo`
+`llms.txt` are recreated by `npm run build`. Public source lives in
+`_src/pages/` plus collection renderers; topic pages are generated into
+`dist/topics/` from `data/topics.json` and SEO metadata. `npm run check:repo`
 prevents generated files from being accidentally staged for commit,
 `npm run check:source` protects route ownership, and `npm run check:structure`
 keeps legacy CSS, local screenshots, and retired admin workflow text from
@@ -58,6 +59,7 @@ Raw `images/products/` files remain source assets and should not ship to `dist/`
 | Commercial action model | `data/ctas.json` |
 | Field Notes newsletter model | `data/newsletter.json` |
 | Topic taxonomy | `data/topics.json` |
+| Popular route geometry | `data/popular-routes.json`, kept compact because it is machine-sized route geometry |
 | Page journey stage and CTA routing | `data/ctas.json`, with generated defaults in `scripts/build-site.js` |
 | Public route ownership map | `data/source-ownership.json` |
 | Browser behavior | `js/` |

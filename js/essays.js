@@ -1,10 +1,9 @@
 const collectionUi = window.JGCollectionUI;
-const collectionControllerFactory = window.JGCollectionController;
 const dataFetch = window.JGDataFetch;
 const essaysFilters = window.JGEssaysFilters;
 const essaysState = window.JGEssaysState.create();
 const essaysView = window.JGEssaysView;
-let collectionController = null;
+let essaysRuntime = null;
 
 async function loadEssays() {
     try {
@@ -40,11 +39,11 @@ function getVisibleEssayState(filteredEssays) {
 }
 
 function renderFromState() {
-    collectionController?.render();
+    essaysRuntime?.render();
 }
 
 function buildCollectionController() {
-    collectionController = collectionControllerFactory.create({
+    essaysRuntime = window.JGCollectionRuntime.create({
         getState: () => essaysState.get(),
         getFilteredItems: () => getDerivedEssays(),
         getVisibleItems: (filteredEssays) => getVisibleEssayState(filteredEssays),
@@ -61,12 +60,10 @@ function buildCollectionController() {
         },
         searchClearButtonId: 'search-clear-btn',
         searchInputId: 'essay-search',
-        sidebar: {
-            storageKey: 'essays-sidebar-collapsed',
-            layoutId: 'essays-layout',
-            sidebarId: 'essays-sidebar',
-            defaultCollapsed: false
-        }
+        storageKey: 'essays-sidebar-collapsed',
+        layoutId: 'essays-layout',
+        sidebarId: 'essays-sidebar',
+        defaultCollapsed: false
     });
 }
 
@@ -74,7 +71,7 @@ function toggleCategory(category, event) {
     const button = event?.target?.closest('.sidebar-category');
     const panel = category === 'all' ? null : document.getElementById(`category-${category}`);
 
-    collectionController?.toggleGroup({
+    essaysRuntime?.toggleGroup({
         value: category,
         button,
         panel,
@@ -93,16 +90,16 @@ const searchEssays = collectionUi.debounce((term) => {
     essaysState.setSearchTerm(term);
     essaysState.setActiveCategory('all');
     essaysState.setCurrentIndex(0);
-    collectionController?.resetGrouping();
+    essaysRuntime?.resetGrouping();
     renderFromState();
 });
 
 function clearEssaySearch() {
-    collectionController?.clearSearchInput();
+    essaysRuntime?.clearSearchInput();
     essaysState.clearSearchTerm();
     essaysState.setActiveCategory('all');
     essaysState.setCurrentIndex(0);
-    collectionController?.resetGrouping();
+    essaysRuntime?.resetGrouping();
     renderFromState();
 }
 
@@ -139,39 +136,41 @@ function scrollToEssay(essayId, event) {
 
     essaysState.setActiveCategory('all');
     essaysState.setCurrentIndex(fullIndex);
-    collectionController?.resetGrouping();
+    essaysRuntime?.resetGrouping();
     renderFromState();
     essaysView.scrollToTop();
 }
 
 function toggleEssaysSidebar() {
-    const isCollapsed = collectionController?.toggleSidebar();
+    const isCollapsed = essaysRuntime?.toggleSidebar();
     essaysState.setSidebarCollapsed(isCollapsed);
 }
 
 function restoreSidebarState() {
-    const isCollapsed = collectionController?.restoreSidebar();
+    const isCollapsed = essaysRuntime?.restoreSidebar();
     essaysState.setSidebarCollapsed(isCollapsed);
 }
 
 function toggleListDropdown() {
-    collectionController?.toggleListDropdown();
+    essaysRuntime?.toggleListDropdown();
 }
 
-window.toggleCategory = toggleCategory;
-window.searchEssays = searchEssays;
-window.clearEssaySearch = clearEssaySearch;
-window.prevEssay = prevEssay;
-window.nextEssay = nextEssay;
-window.scrollToEssay = scrollToEssay;
-window.toggleEssaysSidebar = toggleEssaysSidebar;
-window.toggleListDropdown = toggleListDropdown;
+window.JGActions.register({
+    clearEssaySearch,
+    nextEssay,
+    prevEssay,
+    scrollToEssay,
+    searchEssays,
+    toggleCategory,
+    toggleEssaysSidebar,
+    toggleListDropdown
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     buildCollectionController();
     restoreSidebarState();
     document.addEventListener('click', (event) => {
-        collectionController?.closeDropdownOnOutsideClick(event);
+        essaysRuntime?.closeDropdownOnOutsideClick(event);
     });
     loadEssays();
 });

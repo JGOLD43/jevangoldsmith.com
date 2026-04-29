@@ -1,20 +1,13 @@
-const collectionUi = window.JGCollectionUI;
-const collectionControllerFactory = window.JGCollectionController;
 const dataFetch = window.JGDataFetch;
 
-const peopleState = {
-    activeCategory: 'all',
-    searchQuery: '',
-    sidebarCollapsed: true
-};
-
 let peopleCards = [];
-let collectionController = null;
+let peopleRuntime = null;
 
 function createPersonCard(person) {
     const article = document.createElement('article');
     article.className = 'person-card js-zoom-item';
     article.dataset.category = person.category || '';
+    article.dataset.search = person.searchText || `${person.name} ${person.title} ${person.lesson}`;
     article.innerHTML = `
         <div class="person-image-container">
             <img src="${escapeAttr(person.image)}" alt="${escapeAttr(person.name)}" class="person-image" srcset="${escapeAttr(person.srcset || '')}" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
@@ -49,91 +42,6 @@ async function loadPeopleCards() {
     }
 }
 
-function getState() {
-    return { ...peopleState };
-}
-
-function getFilteredPeople() {
-    return peopleCards.filter(({ category, searchText }) => {
-        const categoryMatches = peopleState.activeCategory === 'all' || category === peopleState.activeCategory;
-        const searchMatches = !peopleState.searchQuery || searchText.includes(peopleState.searchQuery);
-        return categoryMatches && searchMatches;
-    });
-}
-
-function renderPeople(visiblePeople) {
-    const visibleCards = new Set(visiblePeople.map(({ card }) => card));
-    peopleCards.forEach(({ card }) => {
-        card.style.display = visibleCards.has(card) ? 'block' : 'none';
-    });
-}
-
-function updatePeopleCount(visiblePeople) {
-    const count = document.getElementById('people-count');
-    if (count) count.textContent = visiblePeople.length;
-}
-
-function buildCollectionController() {
-    collectionController = collectionControllerFactory.create({
-        getState,
-        getFilteredItems: () => getFilteredPeople(),
-        renderVisibleItems: renderPeople,
-        updateCount: updatePeopleCount,
-        updateControls: (state) => collectionUi.toggleClearButton('people-search-clear-btn', Boolean(state.searchQuery), 'block'),
-        group: {
-            allButtonSelector: '[data-action="filterByCategory"][data-action-args="all"]',
-            buttonSelector: '.sidebar-category'
-        },
-        searchClearButtonId: 'people-search-clear-btn',
-        searchInputId: 'people-search',
-        sidebar: {
-            storageKey: 'people-sidebar-collapsed',
-            layoutId: 'people-layout',
-            sidebarId: 'people-sidebar',
-            defaultCollapsed: true
-        }
-    });
-}
-
-function filterByCategory(category, event) {
-    peopleState.activeCategory = category || 'all';
-
-    const buttons = Array.from(document.querySelectorAll('.sidebar-category'));
-    const button = event?.target?.closest('.sidebar-category');
-    if (peopleState.activeCategory === 'all') {
-        collectionController?.resetGrouping();
-    } else {
-        collectionUi.activateOnly(buttons, button);
-    }
-
-    collectionController?.render();
-}
-
-const filterPeople = collectionUi.debounce((searchTerm) => {
-    peopleState.searchQuery = String(searchTerm || '').trim().toLowerCase();
-    peopleState.activeCategory = 'all';
-    collectionController?.resetGrouping();
-    collectionController?.render();
-});
-
-function clearPeopleSearch() {
-    collectionController?.clearSearchInput();
-    peopleState.searchQuery = '';
-    peopleState.activeCategory = 'all';
-    collectionController?.resetGrouping();
-    collectionController?.render();
-}
-
-function togglePeopleSidebar() {
-    const isCollapsed = collectionController?.toggleSidebar();
-    peopleState.sidebarCollapsed = Boolean(isCollapsed);
-}
-
-function restorePeopleSidebar() {
-    const isCollapsed = collectionController?.restoreSidebar();
-    peopleState.sidebarCollapsed = Boolean(isCollapsed);
-}
-
 function initPeopleZoom() {
     const grid = document.querySelector('.people-grid');
     if (!grid || !window.JGGridZoom) return;
@@ -151,16 +59,29 @@ function initPeopleZoom() {
     });
 }
 
-window.filterByCategory = filterByCategory;
-window.filterPeople = filterPeople;
-window.clearPeopleSearch = clearPeopleSearch;
-window.togglePeopleSidebar = togglePeopleSidebar;
-
 async function initPeoplePage() {
-    buildCollectionController();
-    restorePeopleSidebar();
+    peopleRuntime = window.JGCollectionRuntime.create({
+        actions: {
+            clearSearch: 'clearPeopleSearch',
+            filter: 'filterByCategory',
+            search: 'filterPeople',
+            toggleSidebar: 'togglePeopleSidebar'
+        },
+        allButtonSelector: '[data-action="filterByCategory"][data-action-args="all"]',
+        buttonSelector: '.sidebar-category',
+        cardSelector: '.person-card',
+        categoryMode: 'exact',
+        counterId: 'people-count',
+        layoutId: 'people-layout',
+        searchClearButtonId: 'people-search-clear-btn',
+        searchClearDisplay: 'block',
+        searchInputId: 'people-search',
+        sidebarId: 'people-sidebar',
+        storageKey: 'people-sidebar-collapsed',
+        useDisplayStyle: true
+    });
     await loadPeopleCards();
-    collectionController?.render();
+    peopleRuntime.init();
     initPeopleZoom();
 }
 

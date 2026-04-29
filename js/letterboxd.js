@@ -1,5 +1,4 @@
 const LETTERBOXD_USERNAME = 'contentwatch';
-const collectionControllerFactory = window.JGCollectionController;
 const dataFetch = window.JGDataFetch;
 const movieMetadata = {
     'What Dreams May Come': { genre: 'Drama', timesWatched: 1 },
@@ -16,7 +15,7 @@ const movieModal = window.JGLetterboxdModal.create();
 const movieRender = window.JGLetterboxdRender;
 const movieState = window.JGLetterboxdState.create();
 const movieView = window.JGLetterboxdView;
-let collectionController = null;
+let moviesRuntime = null;
 
 function getFilteredMovies() {
     return movieFilters.filterMovies(movieState.getMovies(), movieState.get());
@@ -27,11 +26,11 @@ function getVisibleMovies() {
 }
 
 function renderFromState() {
-    collectionController?.render();
+    moviesRuntime?.render();
 }
 
 function buildCollectionController() {
-    collectionController = collectionControllerFactory.create({
+    moviesRuntime = window.JGCollectionRuntime.create({
         getState: () => movieState.get(),
         getFilteredItems: () => getFilteredMovies(),
         getVisibleItems: (filteredMovies, state) => movieFilters.getMoviesForGenre(filteredMovies, state.activeGenre),
@@ -58,12 +57,10 @@ function buildCollectionController() {
         },
         searchClearButtonId: 'movie-search-clear-btn',
         searchInputId: 'movie-search',
-        sidebar: {
-            storageKey: 'movies-sidebar-collapsed',
-            layoutId: 'movies-layout',
-            sidebarId: 'movies-sidebar',
-            defaultCollapsed: true
-        }
+        storageKey: 'movies-sidebar-collapsed',
+        layoutId: 'movies-layout',
+        sidebarId: 'movies-sidebar',
+        defaultCollapsed: true
     });
 }
 
@@ -170,49 +167,49 @@ async function fetchLetterboxdMovies() {
 function searchMovies(query) {
     movieState.setSearchQuery(query);
     movieState.setActiveGenre('all');
-    collectionController?.resetGrouping();
+    moviesRuntime?.resetGrouping();
     renderFromState();
 }
 
 function clearMovieSearch() {
-    collectionController?.clearSearchInput();
+    moviesRuntime?.clearSearchInput();
     movieState.clearSearchQuery();
     movieState.setActiveGenre('all');
-    collectionController?.resetGrouping();
+    moviesRuntime?.resetGrouping();
     renderFromState();
 }
 
 function setStarFilter(rating) {
     movieState.setStarFilter(rating);
     movieState.setActiveGenre('all');
-    collectionController?.resetGrouping();
+    moviesRuntime?.resetGrouping();
     renderFromState();
 }
 
 function clearStarFilter() {
     movieState.clearStarFilter();
     movieState.setActiveGenre('all');
-    collectionController?.resetGrouping();
+    moviesRuntime?.resetGrouping();
     renderFromState();
 }
 
 function setTimesWatchedFilter(count) {
     movieState.setTimesWatchedFilter(count);
     movieState.setActiveGenre('all');
-    collectionController?.resetGrouping();
+    moviesRuntime?.resetGrouping();
     renderFromState();
 }
 
 function clearTimesWatchedFilter() {
     movieState.clearTimesWatchedFilter();
     movieState.setActiveGenre('all');
-    collectionController?.resetGrouping();
+    moviesRuntime?.resetGrouping();
     renderFromState();
 }
 
 function toggleMovieGenre(genre, event) {
     const button = event?.target?.closest('.sidebar-category');
-    collectionController?.toggleGroup({
+    moviesRuntime?.toggleGroup({
         value: genre,
         button,
         onCollapse: () => {
@@ -230,27 +227,27 @@ function scrollToMovie(movieTitle, event) {
 }
 
 function clearAllFilters() {
-    collectionController?.clearSearchInput();
+    moviesRuntime?.clearSearchInput();
     movieState.clearSearchQuery();
     movieState.clearStarFilter();
     movieState.clearTimesWatchedFilter();
     movieState.setActiveGenre('all');
-    collectionController?.resetGrouping();
+    moviesRuntime?.resetGrouping();
     renderFromState();
 }
 
 function toggleSidebar() {
-    const isCollapsed = collectionController?.toggleSidebar();
+    const isCollapsed = moviesRuntime?.toggleSidebar();
     movieState.setSidebarCollapsed(isCollapsed);
 }
 
 function restoreSidebarState() {
-    const isCollapsed = collectionController?.restoreSidebar();
+    const isCollapsed = moviesRuntime?.restoreSidebar();
     movieState.setSidebarCollapsed(isCollapsed);
 }
 
 function toggleListDropdown() {
-    collectionController?.toggleListDropdown();
+    moviesRuntime?.toggleListDropdown();
 }
 
 function openMovieModal(movieData) {
@@ -280,24 +277,26 @@ function initMoviesZoom() {
     });
 }
 
-window.searchMovies = searchMovies;
-window.clearMovieSearch = clearMovieSearch;
-window.clearAllFilters = clearAllFilters;
-window.toggleMovieGenre = toggleMovieGenre;
-window.scrollToMovie = scrollToMovie;
-window.toggleSidebar = toggleSidebar;
-window.toggleListDropdown = toggleListDropdown;
-window.closeMovieModal = closeMovieModal;
+window.JGActions.register({
+    clearAllFilters,
+    clearMovieSearch,
+    closeMovieModal,
+    scrollToMovie,
+    searchMovies,
+    toggleListDropdown,
+    toggleMovieGenre,
+    toggleSidebar
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     buildCollectionController();
     restoreSidebarState();
-        window.JGLetterboxdEvents.bind({
-            clearTimesWatchedFilter,
-            closeMovieModal,
-            setStarFilter,
-            setTimesWatchedFilter
-        });
+    window.JGLetterboxdEvents.bind({
+        clearTimesWatchedFilter,
+        closeMovieModal,
+        setStarFilter,
+        setTimesWatchedFilter
+    });
     fetchLetterboxdMovies();
     initMoviesZoom();
 });
