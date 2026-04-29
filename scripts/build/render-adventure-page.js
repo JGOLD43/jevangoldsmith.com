@@ -80,81 +80,16 @@ function renderAdventurePageTemplate({
         <div class="lightbox-counter" id="lightbox-counter"></div>
     </div>`;
 
+  const detailData = JSON.stringify({
+    mapCenter: { lat: Number(adventure.mapCenter?.lat || 0), lng: Number(adventure.mapCenter?.lng || 0) },
+    mapZoom: Number(adventure.mapZoom || 8),
+    photoMarkers,
+    galleryImages: lightboxImages
+  });
   const scripts = `<script src="vendor/leaflet/leaflet.js"></script>
     <script src="js/theme.js"></script>
-    <script>
-        const map = L.map('adventure-map').setView([${Number(adventure.mapCenter?.lat || 0)}, ${Number(adventure.mapCenter?.lng || 0)}], ${Number(adventure.mapZoom || 8)});
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
-
-        const photos = ${JSON.stringify(photoMarkers, null, 12)};
-
-        photos.forEach(photo => {
-            L.circleMarker([photo.lat, photo.lng], {
-                radius: 8, fillColor: '#C9A86C', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.9
-            }).addTo(map).bindPopup(photo.caption);
-        });
-
-        const galleryImages = ${JSON.stringify(lightboxImages, null, 12)};
-        let currentIndex = 0;
-
-        function openLightbox(index) {
-            currentIndex = index;
-            updateLightbox();
-            document.getElementById('lightbox').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        function nextImage() {
-            currentIndex = (currentIndex + 1) % galleryImages.length;
-            updateLightbox();
-        }
-
-        function prevImage() {
-            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-            updateLightbox();
-        }
-
-        function updateLightbox() {
-            document.getElementById('lightbox-image').src = galleryImages[currentIndex].src;
-            document.getElementById('lightbox-caption').textContent = galleryImages[currentIndex].caption;
-            document.getElementById('lightbox-counter').textContent = \`\${currentIndex + 1} / \${galleryImages.length}\`;
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (!document.getElementById('lightbox').classList.contains('active')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowRight') nextImage();
-            if (e.key === 'ArrowLeft') prevImage();
-        });
-
-        document.addEventListener('click', (e) => {
-            const trigger = e.target.closest('[data-action]');
-            if (!trigger) return;
-
-            const action = trigger.dataset.action;
-            if (action === 'open-lightbox') {
-                const idx = Number.parseInt(trigger.dataset.index || '0', 10);
-                openLightbox(Number.isNaN(idx) ? 0 : idx);
-                return;
-            }
-            if (action === 'lightbox-close') {
-                closeLightbox();
-                return;
-            }
-            if (action === 'lightbox-next') {
-                nextImage();
-                return;
-            }
-            if (action === 'lightbox-prev') {
-                prevImage();
-            }
-        });
-    </script>`;
+    <script type="application/json" id="adventure-detail-data">${detailData.replace(/</g, '\\u003c')}</script>
+    <script src="js/adventure-detail.js" defer></script>`;
 
   return renderDocument({
     title: `${adventure.title} - ${siteName}`,
