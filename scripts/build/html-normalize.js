@@ -13,6 +13,20 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
     return setHtmlAttribute(tag, name, value);
   }
 
+  // Wrap an optimized <img> in <picture> with AVIF + WebP sources.
+  // jpgSrcset/sizes already on the inner img; we generate sibling avif/webp srcsets
+  // by swapping the extension on each entry. Variants must exist on disk
+  // (scripts/optimize-assets.js generates avif/webp alongside every jpg).
+  function wrapInPicture(imgTag, jpgSrcset, sizes, hasAvif = true, hasWebp = true) {
+    if (!jpgSrcset) return imgTag;
+    const avifSrcset = jpgSrcset.replace(/\.(jpg|jpeg|png)\b/gi, '.avif');
+    const webpSrcset = jpgSrcset.replace(/\.(jpg|jpeg|png)\b/gi, '.webp');
+    const sizesAttr = sizes ? ` sizes="${escapeHtmlAttr(sizes)}"` : '';
+    const avifSource = hasAvif ? `<source type="image/avif" srcset="${escapeHtmlAttr(avifSrcset)}"${sizesAttr}>` : '';
+    const webpSource = hasWebp ? `<source type="image/webp" srcset="${escapeHtmlAttr(webpSrcset)}"${sizesAttr}>` : '';
+    return `<picture>${avifSource}${webpSource}${imgTag}</picture>`;
+  }
+
   function optimizeGeneratedRaster(tag, original, replacement, srcset, sizes) {
     if (!tag.includes(`src="${original}"`) && !tag.includes(`src='${original}'`)) return tag;
     if (/srcset=/i.test(tag)) return tag;
@@ -22,6 +36,20 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
     next = ensureHtmlAttribute(next, 'loading', 'lazy');
     next = ensureHtmlAttribute(next, 'decoding', 'async');
     return next;
+  }
+
+  // Extract srcset + sizes from a final <img> tag and wrap it in <picture>
+  // with AVIF + WebP sources. Skipped if the tag is already wrapped or has no srcset.
+  function wrapImgIfHasSrcset(imgTag) {
+    if (!/^<img\b/i.test(imgTag)) return imgTag;
+    const srcsetMatch = imgTag.match(/\ssrcset=(["'])([^"']+)\1/i);
+    if (!srcsetMatch) return imgTag;
+    const srcset = srcsetMatch[2];
+    // Only wrap if srcset references raster formats we have alternates for
+    if (!/\.(jpg|jpeg|png)\b/i.test(srcset)) return imgTag;
+    const sizesMatch = imgTag.match(/\ssizes=(["'])([^"']+)\1/i);
+    const sizes = sizesMatch ? sizesMatch[2] : '';
+    return wrapInPicture(imgTag, srcset, sizes, true, true);
   }
 
   function remoteAssetFor(url, preferredWidth = 800, format = 'jpg') {
@@ -74,7 +102,7 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
           remote = setHtmlAttribute(remote, 'sizes', /covers\.openlibrary\.org/i.test(url) ? '(max-width: 768px) 38vw, 180px' : '(max-width: 768px) 92vw, 640px');
           remote = ensureHtmlAttribute(remote, 'loading', 'lazy');
           remote = ensureHtmlAttribute(remote, 'decoding', 'async');
-          return remote;
+          return wrapImgIfHasSrcset(remote);
         }
       }
 
@@ -88,7 +116,7 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
         people = ensureHtmlAttribute(people, 'height', '400');
         people = ensureHtmlAttribute(people, 'loading', 'lazy');
         people = ensureHtmlAttribute(people, 'decoding', 'async');
-        return people;
+        return wrapImgIfHasSrcset(people);
       }
 
       let next = optimizeGeneratedRaster(
@@ -116,7 +144,11 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
         'images/generated/content/zen-nature-320.jpg 320w, images/generated/content/zen-nature-480.jpg 480w, images/generated/content/zen-nature-720.jpg 720w, images/generated/content/zen-nature-960.jpg 960w, images/generated/content/zen-nature-1200.jpg 1200w',
         '(max-width: 768px) 92vw, 640px'
       );
-      return next;
+      // Wrap any final <img> that has a srcset so modern browsers prefer AVIF/WebP.
+      // Already-wrapped <img> inside <picture> are passed through unchanged because
+      // the <picture> tags surround the <img> in the source HTML and our regex only
+      // matches <img> tags directly.
+      return wrapImgIfHasSrcset(next);
     });
   }
 

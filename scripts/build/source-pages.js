@@ -12,7 +12,8 @@ const FRONTMATTER_SCHEMA = {
   section: 'string',
   includeNav: 'boolean-string',
   includeFooter: 'boolean-string',
-  fontWeights: 'string'
+  fontWeights: 'string',
+  extraHead: 'string'
 };
 
 function createSourcePageHelpers({
@@ -138,7 +139,8 @@ function createSourcePageHelpers({
       nav: data.includeNav === 'false' ? '' : renderNav(file),
       footer: data.includeFooter === 'false' ? '' : renderFooter(file),
       content,
-      scripts: data.scripts || '<script src="js/theme.js"></script>'
+      scripts: data.scripts || '<script src="js/theme.js"></script>',
+      extraHead: data.extraHead || ''
     };
 
     let html = fs.readFileSync(layoutPath, 'utf8');
