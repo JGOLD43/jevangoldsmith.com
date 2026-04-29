@@ -2,114 +2,107 @@
 // Adventures Page Data + Map Runtime
 // ============================================
 
-async function loadAdventures() {
+async function fetchJson(url, fallback = null) {
     try {
-        const response = await fetch(ADVENTURES_DATA_URL);
-        if (!response.ok) throw new Error('Failed to load adventures');
-
-        const data = await response.json();
-        allAdventures = data.adventures.filter((item) => item.status === 'published');
-        allAdventures.sort((left, right) => new Date(right.startDate) - new Date(left.startDate));
-
-        renderAdventures(allAdventures);
-        populateSidebar(allAdventures);
-        setupWorldMapLazyLoad(allAdventures);
-        updateAdventureCount(allAdventures.length);
-    } catch (error) {
-        console.error('Error loading adventures:', error);
-        showErrorMessage();
-    }
-}
-
-async function loadPlacesOfInterest() {
-    try {
-        const response = await fetch(PLACES_DATA_URL);
-        if (!response.ok) return;
-        const data = await response.json();
-        allPlaces = Array.isArray(data.places) ? data.places : [];
-        placeCategories = Array.isArray(data.categories) ? data.categories : [];
-        for (const category of placeCategories) {
-            if (mapFilters.poiCategories[category.id] === undefined) {
-                mapFilters.poiCategories[category.id] = true;
-            }
-        }
-        saveFilters();
-    } catch (error) {
-        console.error('Error loading places of interest:', error);
-    }
-}
-
-async function loadCountriesData() {
-    try {
-        const [geoRes, visRes] = await Promise.all([
-            fetch(COUNTRIES_GEO_URL),
-            fetch(COUNTRIES_VISITED_URL)
-        ]);
-        if (geoRes.ok) countryGeo = await geoRes.json();
-        if (visRes.ok) {
-            const visited = await visRes.json();
-            visitedIso = new Set(Array.isArray(visited.iso) ? visited.iso : []);
-        }
-    } catch (error) {
-        console.error('Error loading country data:', error);
-    }
-}
-
-async function loadRoutes() {
-    const merged = [];
-    try {
-        const response = await fetch(ROUTES_DATA_URL);
-        if (response.ok) {
-            const data = await response.json();
-            if (Array.isArray(data.routes)) merged.push(...data.routes);
-        }
+        const response = await fetch(url);
+        if (!response.ok) return fallback;
+        return await response.json();
     } catch (_error) {
+        return fallback;
     }
-    try {
-        const response = await fetch(POPULAR_ROUTES_URL);
-        if (response.ok) {
-            const data = await response.json();
-            if (Array.isArray(data.routes)) merged.push(...data.routes);
+}
+
+function injectVendorBundle({ cssHrefs = [], scriptSrc, marker }) {
+    return new Promise((resolve, reject) => {
+        if (marker && !document.querySelector(`link[${marker}]`)) {
+            cssHrefs.forEach((href, index) => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = href;
+                if (index === 0) link.setAttribute(marker, 'true');
+                document.head.appendChild(link);
+            });
+        } else if (!marker) {
+            cssHrefs.forEach((href) => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = href;
+                document.head.appendChild(link);
+            });
         }
-    } catch (_error) {
-    }
-    allRoutes = merged;
-}
-
-async function loadPhotos() {
-    try {
-        const response = await fetch(PHOTOS_DATA_URL);
-        if (!response.ok) return;
-        const data = await response.json();
-        allPhotos = Array.isArray(data.photos) ? data.photos : [];
-    } catch (_error) {
-        allPhotos = [];
-    }
-}
-
-function loadMarkerCluster() {
-    if (window.L && window.L.markerClusterGroup) return Promise.resolve();
-    if (markerClusterPromise) return markerClusterPromise;
-
-    markerClusterPromise = new Promise((resolve, reject) => {
-        const linkBase = document.createElement('link');
-        linkBase.rel = 'stylesheet';
-        linkBase.href = 'vendor/leaflet.markercluster/MarkerCluster.css';
-        document.head.appendChild(linkBase);
-
-        const linkDef = document.createElement('link');
-        linkDef.rel = 'stylesheet';
-        linkDef.href = 'vendor/leaflet.markercluster/MarkerCluster.Default.css';
-        document.head.appendChild(linkDef);
-
         const script = document.createElement('script');
-        script.src = 'vendor/leaflet.markercluster/leaflet.markercluster.js';
+        script.src = scriptSrc;
         script.defer = true;
         script.onload = () => resolve();
         script.onerror = reject;
         document.head.appendChild(script);
     });
+}
 
+async function loadAdventures() {
+    const data = await fetchJson(ADVENTURES_DATA_URL);
+    if (!data || !Array.isArray(data.adventures)) {
+        console.error('Error loading adventures');
+        showErrorMessage();
+        return;
+    }
+    allAdventures = data.adventures.filter((item) => item.status === 'published');
+    allAdventures.sort((left, right) => new Date(right.startDate) - new Date(left.startDate));
+
+    renderAdventures(allAdventures);
+    populateSidebar(allAdventures);
+    setupWorldMapLazyLoad(allAdventures);
+    updateAdventureCount(allAdventures.length);
+}
+
+async function loadPlacesOfInterest() {
+    const data = await fetchJson(PLACES_DATA_URL);
+    if (!data) return;
+    allPlaces = Array.isArray(data.places) ? data.places : [];
+    placeCategories = Array.isArray(data.categories) ? data.categories : [];
+    for (const category of placeCategories) {
+        if (mapFilters.poiCategories[category.id] === undefined) {
+            mapFilters.poiCategories[category.id] = true;
+        }
+    }
+    saveFilters();
+}
+
+async function loadCountriesData() {
+    const [geo, visited] = await Promise.all([
+        fetchJson(COUNTRIES_GEO_URL),
+        fetchJson(COUNTRIES_VISITED_URL)
+    ]);
+    if (geo) countryGeo = geo;
+    if (visited) visitedIso = new Set(Array.isArray(visited.iso) ? visited.iso : []);
+}
+
+async function loadRoutes() {
+    const [primary, popular] = await Promise.all([
+        fetchJson(ROUTES_DATA_URL, { routes: [] }),
+        fetchJson(POPULAR_ROUTES_URL, { routes: [] })
+    ]);
+    allRoutes = [
+        ...(Array.isArray(primary?.routes) ? primary.routes : []),
+        ...(Array.isArray(popular?.routes) ? popular.routes : [])
+    ];
+}
+
+async function loadPhotos() {
+    const data = await fetchJson(PHOTOS_DATA_URL, { photos: [] });
+    allPhotos = Array.isArray(data?.photos) ? data.photos : [];
+}
+
+function loadMarkerCluster() {
+    if (window.L && window.L.markerClusterGroup) return Promise.resolve();
+    if (markerClusterPromise) return markerClusterPromise;
+    markerClusterPromise = injectVendorBundle({
+        cssHrefs: [
+            'vendor/leaflet.markercluster/MarkerCluster.css',
+            'vendor/leaflet.markercluster/MarkerCluster.Default.css'
+        ],
+        scriptSrc: 'vendor/leaflet.markercluster/leaflet.markercluster.js'
+    });
     return markerClusterPromise;
 }
 
@@ -123,24 +116,11 @@ function nearestWrappedLongitude(lng, referenceLng) {
 function loadLeaflet() {
     if (window.L) return Promise.resolve(window.L);
     if (leafletPromise) return leafletPromise;
-
-    leafletPromise = new Promise((resolve, reject) => {
-        if (!document.querySelector('link[data-leaflet-css]')) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = 'vendor/leaflet/leaflet.css';
-            link.dataset.leafletCss = 'true';
-            document.head.appendChild(link);
-        }
-
-        const script = document.createElement('script');
-        script.src = 'vendor/leaflet/leaflet.js';
-        script.defer = true;
-        script.onload = () => resolve(window.L);
-        script.onerror = reject;
-        document.head.appendChild(script);
-    });
-
+    leafletPromise = injectVendorBundle({
+        cssHrefs: ['vendor/leaflet/leaflet.css'],
+        scriptSrc: 'vendor/leaflet/leaflet.js',
+        marker: 'data-leaflet-css'
+    }).then(() => window.L);
     return leafletPromise;
 }
 
