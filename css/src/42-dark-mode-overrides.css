@@ -52,15 +52,6 @@
     color: #fff;
 }
 
-[data-theme="dark"] .read-review-btn {
-    background-color: var(--secondary-color);
-    color: #1a1a1a;
-}
-
-[data-theme="dark"] .read-review-btn:hover {
-    background-color: #D4B87A;
-}
-
 [data-theme="dark"] .times-read-badge {
     background-color: var(--secondary-color);
     color: #1a1a1a;
@@ -126,19 +117,6 @@
     background: var(--background);
 }
 
-[data-theme="dark"] .category-grid-section h2 {
-    color: #fff;
-}
-
-[data-theme="dark"] .category-grid-section {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Book shelf styling - Dark Mode */
-[data-theme="dark"] .book-shelf {
-    background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 100%);
-}
-
 /* Modal - Dark Mode */
 [data-theme="dark"] .modal-content {
     background-color: #1a1a1a;
@@ -151,24 +129,6 @@
 
 [data-theme="dark"] .modal-title {
     color: #fff;
-}
-
-[data-theme="dark"] .review-content {
-    color: var(--text-color);
-}
-
-/* Header shelf display - Dark Mode */
-[data-theme="dark"] .header-shelf {
-    background: #1a1a1a;
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .shelf-book {
-    opacity: 0.9;
-}
-
-[data-theme="dark"] .shelf-book:hover {
-    opacity: 1;
 }
 
 [data-theme="dark"] .category-count {

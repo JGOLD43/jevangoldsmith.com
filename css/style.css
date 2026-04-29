@@ -4072,29 +4072,6 @@ body.meet-page {
     border-radius: 2px;
 }
 
-.read-review-btn {
-    width: 100%;
-    background-color: #0F1111;
-    color: white;
-    border: none;
-    padding: 0.6rem 1rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    font-family: 'Chivo', sans-serif;
-}
-
-.read-review-btn:hover {
-    background-color: #333;
-}
-
-/* Legacy badge support */
-.read-review-badge {
-    display: none;
-}
-
 /* Header Right - View Toggle + Counter */
 .header-right {
     display: flex;
@@ -4365,44 +4342,6 @@ body.meet-page {
     color: #059669;
     min-width: 3rem;
     text-align: right;
-}
-
-/* Re-reads display on book cards */
-.book-rereads {
-    font-size: 0.85rem;
-    color: #059669;
-    font-weight: 600;
-    margin: 0.5rem 0;
-    padding: 0.35rem 0.75rem;
-    background: #D1FAE5;
-    border-radius: 4px;
-    display: inline-block;
-    line-height: 1;
-}
-
-.clear-filter-btn {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.75rem;
-    border: 1px solid var(--border-color);
-    background: white;
-    color: var(--text-color);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-    align-self: flex-start;
-}
-
-.clear-filter-btn:hover {
-    background: #F5F5F4;
-    border-color: var(--accent-color);
-    color: var(--accent-color);
-}
-
-.clear-filter-btn.active {
-    background: var(--accent-color);
-    color: white;
-    border-color: var(--accent-color);
 }
 
 .sidebar-footer {
@@ -9643,15 +9582,6 @@ body.meet-page {
     color: #fff;
 }
 
-[data-theme="dark"] .read-review-btn {
-    background-color: var(--secondary-color);
-    color: #1a1a1a;
-}
-
-[data-theme="dark"] .read-review-btn:hover {
-    background-color: #D4B87A;
-}
-
 [data-theme="dark"] .times-read-badge {
     background-color: var(--secondary-color);
     color: #1a1a1a;
@@ -9717,19 +9647,6 @@ body.meet-page {
     background: var(--background);
 }
 
-[data-theme="dark"] .category-grid-section h2 {
-    color: #fff;
-}
-
-[data-theme="dark"] .category-grid-section {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Book shelf styling - Dark Mode */
-[data-theme="dark"] .book-shelf {
-    background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 100%);
-}
-
 /* Modal - Dark Mode */
 [data-theme="dark"] .modal-content {
     background-color: #1a1a1a;
@@ -9742,24 +9659,6 @@ body.meet-page {
 
 [data-theme="dark"] .modal-title {
     color: #fff;
-}
-
-[data-theme="dark"] .review-content {
-    color: var(--text-color);
-}
-
-/* Header shelf display - Dark Mode */
-[data-theme="dark"] .header-shelf {
-    background: #1a1a1a;
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .shelf-book {
-    opacity: 0.9;
-}
-
-[data-theme="dark"] .shelf-book:hover {
-    opacity: 1;
 }
 
 [data-theme="dark"] .category-count {
