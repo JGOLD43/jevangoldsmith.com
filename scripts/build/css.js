@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { transform } = require('lightningcss');
 const { cssBundles, cssLayerGroups } = require('./page-manifest');
 
 function renderCssLayer(root, file) {
@@ -7,12 +8,22 @@ function renderCssLayer(root, file) {
   return `/* ${fullPath} */\n${fs.readFileSync(path.join(root, fullPath), 'utf8').trim()}\n`;
 }
 
+function minifyCss(css, filename) {
+  const { code } = transform({
+    filename,
+    code: Buffer.from(css),
+    minify: true,
+    sourceMap: false
+  });
+  return code.toString();
+}
+
 function buildCss({ root, writeGenerated }) {
   const files = fs.readdirSync(path.join(root, 'css', 'src'))
     .filter((file) => file.endsWith('.css'))
     .sort();
   const css = files.map((file) => renderCssLayer(root, file)).join('\n');
-  writeGenerated(path.join('css', 'style.css'), `${css}\n`);
+  writeGenerated(path.join('css', 'style.css'), `${minifyCss(css, 'style.css')}\n`);
 
   const cssBundleFiles = [];
   for (const [bundleFile, groups] of Object.entries(cssBundles)) {
@@ -25,7 +36,7 @@ function buildCss({ root, writeGenerated }) {
     }
     const bundleCss = bundleLayers.map((file) => renderCssLayer(root, file)).join('\n');
     const target = path.join('css', bundleFile);
-    writeGenerated(target, `${bundleCss}\n`);
+    writeGenerated(target, `${minifyCss(bundleCss, bundleFile)}\n`);
     cssBundleFiles.push(target);
   }
 

@@ -13,10 +13,6 @@ function trackedFiles() {
   return output ? output.split('\n') : [];
 }
 
-const legacyCss = exists('css/src/legacy.css') ? read('css/src/legacy.css').trim() : '';
-const legacyLines = legacyCss ? legacyCss.split('\n').length : 0;
-if (legacyLines > 5) reporter.fail(`css/src/legacy.css has ${legacyLines} lines. Keep legacy overrides at or below 5 lines.`);
-
 const tracked = trackedFiles();
 for (const file of tracked.filter((file) => (
   /^nav-[^/]+\.png$/.test(file) || file === 'podcasts-after.png' ||

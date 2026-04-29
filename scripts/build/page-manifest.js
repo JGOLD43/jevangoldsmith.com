@@ -56,8 +56,7 @@ const cssLayerGroups = {
     '39-responsive.css',
     '40-nav-extras.css',
     '42-dark-mode-overrides.css',
-    '43-mobile-overrides.css',
-    'legacy.css'
+    '43-mobile-overrides.css'
   ],
   pageContent: ['12-page-content.css'],
   forms: ['13-modals-forms.css'],

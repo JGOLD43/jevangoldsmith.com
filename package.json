@@ -9,7 +9,7 @@
     "build": "npm run snap:routes && npm run assets:optimize && node scripts/build-site.js",
     "dev": "npm run build && npx http-server dist -p 3000 -c-1",
     "check": "node scripts/check/run-all.js",
-    "check:sequential": "npm run check:repo && npm run check:source && npm run check:structure && npm run check:build && npm run check:seo && npm run check:js && npm run check:lint && npm run check:deadcode && npm run check:content && npm run check:links && npm run check:deploy && npm run check:api && npm run check:performance && npm run check:assets && npm run check:page-baselines && npm run check:docs && npm run check:smoke",
+    "check:sequential": "npm run check:repo && npm run check:source && npm run check:structure && npm run check:build && npm run check:seo && npm run check:js && npm run check:lint && npm run check:deadcode && npm run check:content && npm run check:links && npm run check:interactions && npm run check:deploy && npm run check:api && npm run check:performance && npm run check:assets && npm run check:page-baselines && npm run check:docs && npm run check:smoke",
     "check:repo": "node scripts/check-repo.js",
     "check:source": "node scripts/check-source-ownership.js",
     "check:structure": "node scripts/check-structure.js",
@@ -20,6 +20,7 @@
     "check:deadcode": "node scripts/check-deadcode.js",
     "check:content": "node scripts/check-content.js",
     "check:links": "node scripts/check-links.js",
+    "check:interactions": "node scripts/check-interactions.js",
     "check:deploy": "node scripts/check-deploy.js",
     "check:api": "node scripts/check-api-contract.js",
     "check:performance": "node scripts/check-performance-budget.js",
@@ -40,6 +41,7 @@
     "@biomejs/biome": "^2.4.12",
     "@playwright/test": "^1.59.1",
     "http-server": "^14.1.1",
+    "lightningcss": "^1.32.0",
     "sharp": "^0.34.5"
   },
   "dependencies": {
