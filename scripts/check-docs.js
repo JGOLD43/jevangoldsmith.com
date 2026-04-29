@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = require('path');
+const { readText, createReporter } = require('./check/harness');
 
 const requiredDocs = [
   'docs/START_HERE.md',
@@ -18,10 +18,7 @@ const requiredDocs = [
   'docs/AGENT_GUIDE.md'
 ];
 
-const requiredSourcePaths = [
-  '_src/layouts/base.html',
-  '_src/pages/reading-philosophy.html'
-];
+const requiredSourcePaths = ['_src/layouts/base.html', '_src/pages/reading-philosophy.html'];
 
 const requiredPhrases = new Map([
   ['docs/START_HERE.md', ['Do not hand-edit `dist/`', 'npm run check']],
@@ -33,51 +30,31 @@ const requiredPhrases = new Map([
   ['docs/AGENT_GUIDE.md', ['Preserve current style', 'Preserve current behavior']]
 ]);
 
-let failed = false;
+const reporter = createReporter('check-docs');
 
 for (const file of requiredDocs) {
   if (!fs.existsSync(file)) {
-    console.error(`${file} is missing.`);
-    failed = true;
+    reporter.fail(`${file} is missing.`);
     continue;
   }
-
-  const source = fs.readFileSync(file, 'utf8');
+  const source = readText(file);
   for (const header of ['Status:', 'Audience:', 'Purpose:']) {
-    if (!source.includes(header)) {
-      console.error(`${file} is missing ${header}`);
-      failed = true;
-    }
+    if (!source.includes(header)) reporter.fail(`${file} is missing ${header}`);
   }
-
-  const phrases = requiredPhrases.get(file) || [];
-  for (const phrase of phrases) {
-    if (!source.includes(phrase)) {
-      console.error(`${file} is missing required phrase: ${phrase}`);
-      failed = true;
-    }
+  for (const phrase of requiredPhrases.get(file) || []) {
+    if (!source.includes(phrase)) reporter.fail(`${file} is missing required phrase: ${phrase}`);
   }
 }
 
 for (const file of requiredSourcePaths) {
-  if (!fs.existsSync(file)) {
-    console.error(`${file} is missing.`);
-    failed = true;
-  }
+  if (!fs.existsSync(file)) reporter.fail(`${file} is missing.`);
 }
 
-const readme = fs.readFileSync('README.md', 'utf8');
-if (readme.includes('Firebase Hosting serves the repository root')) {
-  console.error('README.md still says Firebase Hosting serves the repository root.');
-  failed = true;
+if (readText('README.md', '').includes('Firebase Hosting serves the repository root')) {
+  reporter.fail('README.md still says Firebase Hosting serves the repository root.');
+}
+if (readText('ARCHITECTURE.md', '').includes('directly from the repository root')) {
+  reporter.fail('ARCHITECTURE.md still says Firebase serves directly from the repository root.');
 }
 
-const architecture = fs.existsSync('ARCHITECTURE.md') ? fs.readFileSync('ARCHITECTURE.md', 'utf8') : '';
-if (architecture.includes('directly from the repository root')) {
-  console.error('ARCHITECTURE.md still says Firebase serves directly from the repository root.');
-  failed = true;
-}
-
-if (failed) process.exit(1);
-
-console.log(`Docs OK (${requiredDocs.length} canonical docs).`);
+reporter.ok(`Docs OK (${requiredDocs.length} canonical docs).`);
