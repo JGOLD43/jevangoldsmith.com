@@ -101,15 +101,22 @@ Move behavior into shared renderers and controllers one page family at a time.
 Generated output should remain visually and behaviorally equivalent unless a
 style/product change is explicitly requested.
 
+Generated collection page configuration is split by concern:
+
+- `scripts/build/collection-config.js` owns page-level layout and script wiring
+- `scripts/build/collection-sections.js` owns sidebar section data and icon keys
+- `scripts/build/task-list-config.js` owns projects/challenges task-list config
+
 The collection runtime path is now:
 
 ```text
 generated collection HTML
   -> js/action-dispatcher.js
   -> js/collection-runtime.js
-  -> page config modules such as js/projects.js, js/challenges.js, js/people.js
+  -> page modules such as js/projects.js, js/challenges.js, js/people.js,
+     js/podcasts.js, js/books.js, js/letterboxd.js, or js/essays.js
 ```
 
-Use `js/collection-runtime.js` for simple searchable/filterable card grids.
-Keep page-specific modules for genuinely unique behavior such as books modals,
-movie stats, essay previous/next navigation, or adventure maps.
+Use `js/collection-runtime.js` for searchable/filterable card grids and managed
+data collections. Keep page-specific modules for genuinely unique behavior such
+as books modals, movie stats, essay previous/next navigation, or adventure maps.

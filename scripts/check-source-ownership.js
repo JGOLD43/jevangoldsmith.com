@@ -10,7 +10,7 @@ const sourcePages = fs.existsSync(sourcePagesDir)
   : [];
 const ownership = readJson('data/source-ownership.json', { legacyRootPageSources: [], dataRenderedRoutes: [], dataRenderedPatterns: [] });
 
-const rootHtml = walkHtml(root, { skipDirs: new Set(['.git', 'node_modules', 'dist', 'admin', 'test-results', 'playwright-report', '.firebase', '.gstack', '.playwright-cli', '.playwright-mcp']) })
+const rootHtml = walkHtml(root, { skipDirs: new Set(['.git', 'node_modules', 'dist', 'dist-baseline', 'admin', 'test-results', 'playwright-report', '.firebase', '.gstack', '.playwright-cli', '.playwright-mcp']) })
   .map((file) => path.relative(root, file))
   .filter((file) => !file.startsWith('_src/'))
   .sort();

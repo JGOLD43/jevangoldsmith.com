@@ -39,6 +39,24 @@ for (const file of tracked.filter((file) => file.startsWith('js/') && file.endsW
   }
 }
 
+if (exists('js/collection-controller.js')) {
+  reporter.fail('js/collection-controller.js is retired. Use js/collection-runtime.js for collection pages.');
+}
+
+if (exists('scripts/build/collection-config.js')) {
+  const collectionConfig = read('scripts/build/collection-config.js');
+  const collectionConfigLines = collectionConfig.trim().split('\n').length;
+  if (collectionConfigLines > 260) {
+    reporter.fail(`scripts/build/collection-config.js has ${collectionConfigLines} lines. Keep page config lean and move section/task data to focused manifests.`);
+  }
+  if (/icon:\s*['"`]<svg/.test(collectionConfig)) {
+    reporter.fail('scripts/build/collection-config.js contains inline SVG. Use iconKey plus the shared build icon registry.');
+  }
+  if (/bodyHtml:\s*['"`]/.test(collectionConfig)) {
+    reporter.fail('scripts/build/collection-config.js contains inline body HTML. Use bodyPath partials for collection page bodies.');
+  }
+}
+
 for (const file of adminTextFiles) {
   const text = read(file);
   if (text.includes('Book data is stored in <code>js/books.js</code>')) {
@@ -49,4 +67,4 @@ for (const file of adminTextFiles) {
   }
 }
 
-reporter.ok('Structure OK (legacy CSS, local artifacts, admin handler ratchet, and stale admin source notes).');
+reporter.ok('Structure OK (legacy CSS, local artifacts, admin handler ratchet, collection manifests, and stale admin source notes).');

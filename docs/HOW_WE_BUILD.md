@@ -82,8 +82,8 @@ build.
 `_src/pages/`. `data/source-ownership.json` remains the contract for route
 ownership, even though legacy root page source has been cleared out. One page,
 one owner. `npm run check:structure` ratchets legacy CSS, local screenshot
-artifacts, stale admin workflow notes, and the remaining admin inline-handler
-budget.
+artifacts, stale admin workflow notes, collection manifest size/inline-HTML
+rules, and the remaining admin inline-handler budget.
 
 ## Refactor Method
 
@@ -112,6 +112,10 @@ shared interaction primitives.
   that need both route and CSS metadata.
 - `scripts/build/page-index.js` owns `data/pages.json`, `sitemap.xml`,
   `robots.txt`, and `llms.txt` generation.
+- `scripts/build/collection-sections.js` owns reusable sidebar section data and
+  icon keys for generated collection pages.
+- `scripts/build/task-list-config.js` owns task-list collection config for
+  projects and challenges.
 - `scripts/build/public-data.js` owns localized public collection JSON writes.
 - `scripts/build/remote-assets.js` owns generated remote asset reference syncing.
 - `scripts/build/pipeline.js` owns the build stage order.
@@ -133,10 +137,12 @@ For larger interactive pages, prefer this shape:
 
 Examples:
 
-- simple collections: `js/collection-runtime.js` + a tiny page config such as
-  `js/projects.js`, `js/challenges.js`, `js/people.js`, or `js/podcasts.js`
-- books: `js/books.js` + `js/books-view.js`
-- movies: `js/letterboxd.js` + `js/letterboxd-render.js`
+- collection pages: `js/collection-runtime.js` + a page module such as
+  `js/projects.js`, `js/challenges.js`, `js/people.js`, `js/podcasts.js`,
+  `js/books.js`, `js/letterboxd.js`, or `js/essays.js`
+- rich collections keep page render/state modules only where behavior is unique,
+  such as `js/books-view.js`, `js/letterboxd-render.js`, or
+  `js/essays-view.js`
 - date funnel: `js/dateme.js` + `js/dateme-content.js`
 
 ### Events
@@ -144,8 +150,9 @@ Examples:
 Prefer delegated `data-action` handlers over inline event attributes.
 
 - `js/action-dispatcher.js` handles `click`, `input`, and `submit`
-- `js/collection-runtime.js` handles simple searchable/filterable card grids
-  with sidebar persistence, counts, clear buttons, dropdowns, and optional zoom
+- `js/collection-runtime.js` handles searchable/filterable card grids and
+  managed data collections with sidebar persistence, counts, clear buttons,
+  grouped panels, dropdowns, and optional zoom
 - `js/collection-ui.js` handles repeated collection behaviors like active state,
   expanding/collapsing groups, clear-button visibility, sidebar persistence,
   debounced inputs, and dropdown closing

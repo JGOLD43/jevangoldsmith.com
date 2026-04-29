@@ -44,6 +44,8 @@ map-with-countries.png
 
 # Generated build output
 dist/
+dist-baseline/
+dist-eleventy/
 .firebase/
 
 # Generated root artifacts from npm run build
