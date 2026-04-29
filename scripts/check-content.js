@@ -29,7 +29,7 @@ for (const file of requiredJson) {
 }
 
 const pages = JSON.parse(fs.readFileSync('data/pages.json', 'utf8'));
-const htmlFiles = fs.readdirSync('.').filter((file) => file.endsWith('.html')).sort();
+const htmlFiles = fs.existsSync('dist') ? fs.readdirSync('dist').filter((file) => file.endsWith('.html')).sort() : [];
 const pagePaths = new Set(pages.map((page) => page.path));
 
 for (const file of htmlFiles) {
@@ -116,8 +116,8 @@ if (!Array.isArray(products.resources)) {
 
 const productSlugs = products.products.map((product) => product.slug).filter(Boolean);
 const resourceSlugs = (products.resources || []).map((resource) => resource.slug).filter(Boolean);
-const productsHtml = fs.existsSync('products.html') ? fs.readFileSync('products.html', 'utf8') : '';
-const resourcesHtml = fs.existsSync('free-resources.html') ? fs.readFileSync('free-resources.html', 'utf8') : '';
+const productsHtml = fs.existsSync('dist/products.html') ? fs.readFileSync('dist/products.html', 'utf8') : '';
+const resourcesHtml = fs.existsSync('dist/free-resources.html') ? fs.readFileSync('dist/free-resources.html', 'utf8') : '';
 const distApiRoot = path.join('dist', 'api', 'v1');
 
 for (const slug of productSlugs) {
@@ -210,7 +210,7 @@ if (!Array.isArray(projects.projects)) {
   failed = true;
 } else {
   validateCollectionItems('projects', projects.projects, {
-    htmlFile: 'projects.html',
+    htmlFile: 'dist/projects.html',
     itemApiDir: 'projects',
     required: ['id', 'slug', 'title', 'status', 'shortDescription', 'tags']
   });
@@ -356,7 +356,7 @@ if (!Array.isArray(quotes.fullQuotes)) {
   failed = true;
 } else {
   validateCollectionItems('quotes', quotes.fullQuotes, {
-    htmlFile: 'quotes.html',
+    htmlFile: 'dist/quotes.html',
     required: ['id', 'slug', 'text', 'author', 'category', 'status', 'tags']
   });
 }

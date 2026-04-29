@@ -1,11 +1,6 @@
 {
   "legacyRootPageSources": [],
-  "dataRenderedRoutes": [
-    "free-resources.html",
-    "products.html",
-    "projects.html",
-    "quotes.html"
-  ],
+  "dataRenderedRoutes": [],
   "dataRenderedPatterns": [
     "^adventure-[a-z0-9-]+\\.html$",
     "^topics/[a-z0-9-]+\\.html$"

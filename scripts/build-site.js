@@ -60,7 +60,6 @@ const {
 } = loadSiteData({ root });
 const {
   adventurePageFiles,
-  htmlFiles,
   publicHtmlFiles,
   skillPageFiles,
   sourcePagesDir,
@@ -655,10 +654,10 @@ function generatedFromFor(file) {
   if (adventureForFile(file)) return 'data/adventures.json';
   if (skillForFile(file)) return 'data/skills.json';
   if (topicForFile(file)) return 'data/topics.json';
+  if (hasSourcePage(file)) return '_src/pages';
   if (file === 'products.html' || file === 'free-resources.html') return 'data/products.json';
   if (file === 'projects.html') return 'data/projects.json';
   if (file === 'quotes.html') return 'data/quotes.json';
-  if (hasSourcePage(file)) return '_src/pages';
   return 'root-html';
 }
 
