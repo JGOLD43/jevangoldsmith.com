@@ -1,17 +1,3 @@
-/* Movie Times Watched Filter */
-/* Times Watched display on movie cards */
-.movie-timeswatched {
-    font-size: 0.85rem;
-    color: #DC2626;
-    font-weight: 600;
-    margin: 0.5rem 0;
-    padding: 0.35rem 0.75rem;
-    background: #FEE2E2;
-    border-radius: 4px;
-    display: inline-block;
-    line-height: 1;
-}
-
 /* Movie genre badge */
 .movie-genre-badge {
     font-size: 0.75rem;

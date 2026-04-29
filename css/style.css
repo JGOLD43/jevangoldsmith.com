@@ -1656,11 +1656,6 @@ button[type="submit"]:hover {
     font-weight: 600;
 }
 
-.skill-meta-value {
-    font-weight: 600;
-    color: var(--text-color);
-}
-
 .proficiency-bar {
     display: flex;
     align-items: center;
@@ -1703,33 +1698,6 @@ button[type="submit"]:hover {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-}
-
-.activity-active {
-    background: rgba(72, 187, 120, 0.15);
-    color: #48BB78;
-}
-
-.activity-active .activity-dot {
-    background: #48BB78;
-}
-
-.activity-maintained {
-    background: rgba(236, 201, 75, 0.15);
-    color: #D69E2E;
-}
-
-.activity-maintained .activity-dot {
-    background: #ECC94B;
-}
-
-.activity-dormant {
-    background: rgba(160, 174, 192, 0.15);
-    color: #718096;
-}
-
-.activity-dormant .activity-dot {
-    background: #A0AEC0;
 }
 
 .skill-detail-content {
@@ -3710,28 +3678,6 @@ button[type="submit"]:hover {
     color: var(--text-color);
 }
 
-.essay-image,
-.essay-video {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 2rem 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: block;
-}
-
-.essay-image {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.essay-video {
-    width: 100%;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 /* css/src/33-meet.css */
 /* ============================================
    MEET PAGE - Lead Capture
@@ -5058,20 +5004,6 @@ body.meet-page {
 }
 
 /* css/src/35-movies.css */
-/* Movie Times Watched Filter */
-/* Times Watched display on movie cards */
-.movie-timeswatched {
-    font-size: 0.85rem;
-    color: #DC2626;
-    font-weight: 600;
-    margin: 0.5rem 0;
-    padding: 0.35rem 0.75rem;
-    background: #FEE2E2;
-    border-radius: 4px;
-    display: inline-block;
-    line-height: 1;
-}
-
 /* Movie genre badge */
 .movie-genre-badge {
     font-size: 0.75rem;
@@ -8393,20 +8325,8 @@ body.meet-page {
         font-size: 1.5rem;
     }
 
-    .hero-tagline {
-        font-size: 1rem;
-    }
-
-    .hero-bio {
-        font-size: 0.9rem;
-    }
-
     .hero-image {
         max-width: 400px;
-    }
-
-    .posts-grid {
-        grid-template-columns: 1fr;
     }
 
     h1 { font-size: 2rem; }
@@ -8728,10 +8648,6 @@ body.meet-page {
 @media (max-width: 900px) {
     .navbar-right {
         gap: 0.75rem;
-    }
-    
-    .navbar-qr {
-        display: none;
     }
 }
 
@@ -10477,10 +10393,6 @@ body.meet-page {
         font-size: 1.75rem;
     }
 
-    .value-prop-cards {
-        grid-template-columns: 1fr;
-    }
-
     /* Credibility Section */
     .credibility-bar {
         flex-direction: column;
@@ -11494,10 +11406,6 @@ body.shelf-experience {
     text-align: center;
 }
 
-body.shelf-open {
-    overflow: hidden;
-}
-
 @keyframes shelf-rise {
     from {
         opacity: 0;
@@ -11515,11 +11423,6 @@ body.shelf-open {
     .shelf-page {
         background-size: 50vw 100%, 100% 260px;
         padding: 108px 12px 34px;
-    }
-
-    .shelf-chrome {
-        grid-template-columns: 38px minmax(0, 1fr) 38px;
-        padding: 8px 8px 0;
     }
 
     .shelf-filter {
@@ -13694,28 +13597,6 @@ body.shelf-experience {
             line-height: 1.6;
         }
 
-        /* Section Divider */
-        .section-divider {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 2.5rem 0 1.5rem;
-        }
-
-        .section-divider-line {
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        .section-divider-text {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-light);
-        }
-
         /* Counter Stats */
         .ion-stats {
             display: flex;
@@ -15064,19 +14945,6 @@ body.shelf-experience {
 .person-lesson::before,
 .person-lesson::after {
     content: '"';
-}
-
-.category-section {
-    margin-bottom: 40px;
-}
-
-.category-section-title {
-    border-bottom: 1px solid var(--border-color);
-    color: var(--primary-color);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
 }
 
 @media (max-width: 900px) {

@@ -39,11 +39,6 @@
     font-weight: 600;
 }
 
-.skill-meta-value {
-    font-weight: 600;
-    color: var(--text-color);
-}
-
 .proficiency-bar {
     display: flex;
     align-items: center;
@@ -86,33 +81,6 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-}
-
-.activity-active {
-    background: rgba(72, 187, 120, 0.15);
-    color: #48BB78;
-}
-
-.activity-active .activity-dot {
-    background: #48BB78;
-}
-
-.activity-maintained {
-    background: rgba(236, 201, 75, 0.15);
-    color: #D69E2E;
-}
-
-.activity-maintained .activity-dot {
-    background: #ECC94B;
-}
-
-.activity-dormant {
-    background: rgba(160, 174, 192, 0.15);
-    color: #718096;
-}
-
-.activity-dormant .activity-dot {
-    background: #A0AEC0;
 }
 
 .skill-detail-content {

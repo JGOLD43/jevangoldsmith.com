@@ -154,19 +154,6 @@
     content: '"';
 }
 
-.category-section {
-    margin-bottom: 40px;
-}
-
-.category-section-title {
-    border-bottom: 1px solid var(--border-color);
-    color: var(--primary-color);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-}
-
 @media (max-width: 900px) {
     .people-layout {
         grid-template-columns: 1fr;

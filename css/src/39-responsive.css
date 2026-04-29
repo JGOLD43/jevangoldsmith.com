@@ -39,20 +39,8 @@
         font-size: 1.5rem;
     }
 
-    .hero-tagline {
-        font-size: 1rem;
-    }
-
-    .hero-bio {
-        font-size: 0.9rem;
-    }
-
     .hero-image {
         max-width: 400px;
-    }
-
-    .posts-grid {
-        grid-template-columns: 1fr;
     }
 
     h1 { font-size: 2rem; }

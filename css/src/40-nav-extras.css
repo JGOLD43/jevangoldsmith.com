@@ -271,10 +271,6 @@
     .navbar-right {
         gap: 0.75rem;
     }
-    
-    .navbar-qr {
-        display: none;
-    }
 }
 
 @media (max-width: 768px) {

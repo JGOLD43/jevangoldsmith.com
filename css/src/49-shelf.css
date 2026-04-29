@@ -325,10 +325,6 @@ body.shelf-experience {
     text-align: center;
 }
 
-body.shelf-open {
-    overflow: hidden;
-}
-
 @keyframes shelf-rise {
     from {
         opacity: 0;
@@ -346,11 +342,6 @@ body.shelf-open {
     .shelf-page {
         background-size: 50vw 100%, 100% 260px;
         padding: 108px 12px 34px;
-    }
-
-    .shelf-chrome {
-        grid-template-columns: 38px minmax(0, 1fr) 38px;
-        padding: 8px 8px 0;
     }
 
     .shelf-filter {
