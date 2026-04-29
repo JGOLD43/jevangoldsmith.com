@@ -60,12 +60,6 @@ Verify live Firebase output (without requiring custom domain cutover):
 npm run check:live:firebase
 ```
 
-Sync repeated site-wide links from `data/site.json`:
-
-```bash
-npm run sync:site
-```
-
 Enrich `data/movies.json` with TMDB metadata (runtime, genres, overview,
 backdrop). Idempotent — only fetches entries missing `runtime`/`tmdbId`. Reads
 `TMDB_API_KEY` from environment or `.env.local` (gitignored). Get a free key at

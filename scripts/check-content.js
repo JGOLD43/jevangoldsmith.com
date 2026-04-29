@@ -1,42 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+const { readJson, readText, distRoot, walkHtml, createReporter, validateCollection } = require('./check/harness');
 
-const requiredJson = [
-  'data/adventures.json',
-  'data/books.json',
-  'data/ctas.json',
-  'data/newsletter.json',
-  'data/essays.json',
-  'data/pages.json',
-  'data/products.json',
-  'data/projects.json',
-  'data/quotes.json',
-  'data/site.config.json',
-  'data/site.json',
-  'data/skills.json',
-  'data/topics.json'
-];
+const reporter = createReporter('check-content');
 
-let failed = false;
-
-for (const file of requiredJson) {
-  try {
-    JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch (error) {
-    console.error(`${file} is not valid JSON: ${error.message}`);
-    failed = true;
-  }
-}
-
-const pages = JSON.parse(fs.readFileSync('data/pages.json', 'utf8'));
-const htmlFiles = fs.existsSync('dist') ? fs.readdirSync('dist').filter((file) => file.endsWith('.html')).sort() : [];
+const pages = readJson('data/pages.json');
+const dist = distRoot();
+const distApiRoot = path.join(dist, 'api', 'v1');
+const htmlFiles = walkHtml(dist).map((file) => path.relative(dist, file)).sort();
 const pagePaths = new Set(pages.map((page) => page.path));
 
 for (const file of htmlFiles) {
-  if (!pagePaths.has(file)) {
-    console.error(`${file} is missing from data/pages.json`);
-    failed = true;
-  }
+  if (!pagePaths.has(file)) reporter.fail(`${file} is missing from data/pages.json`);
 }
 
 const sourcePageDir = '_src/pages';
@@ -45,322 +20,208 @@ if (fs.existsSync(sourcePageDir)) {
   for (const file of sourcePages) {
     const page = pages.find((candidate) => candidate.path === file);
     if (!page) {
-      console.error(`${sourcePageDir}/${file} is missing from data/pages.json`);
-      failed = true;
+      reporter.fail(`${sourcePageDir}/${file} is missing from data/pages.json`);
       continue;
     }
     if (page.generatedFrom !== '_src/pages') {
-      console.error(`${file} should be marked generatedFrom "_src/pages" in data/pages.json`);
-      failed = true;
+      reporter.fail(`${file} should be marked generatedFrom "_src/pages" in data/pages.json`);
     }
-    if (!fs.existsSync(path.join('dist', file))) {
-      console.error(`dist/${file} was not generated from ${sourcePageDir}/${file}`);
-      failed = true;
+    if (!fs.existsSync(path.join(dist, file))) {
+      reporter.fail(`dist/${file} was not generated from ${sourcePageDir}/${file}`);
     }
   }
 }
 
-const sitemap = fs.readFileSync('sitemap.xml', 'utf8');
-const distSitemap = fs.existsSync('dist/sitemap.xml') ? fs.readFileSync('dist/sitemap.xml', 'utf8') : '';
+const sitemap = readText('sitemap.xml', '');
+const distSitemap = readText(path.join(dist, 'sitemap.xml'), '');
 for (const page of pages) {
   if (page.index === false) continue;
   const expected = page.url === '/' ? 'https://jevangoldsmith.com/' : `https://jevangoldsmith.com${page.url}`;
-  if (!sitemap.includes(`<loc>${expected}</loc>`)) {
-    console.error(`sitemap.xml is missing ${expected}`);
-    failed = true;
-  }
-  if (distSitemap && !distSitemap.includes(`<loc>${expected}</loc>`)) {
-    console.error(`dist/sitemap.xml is missing ${expected}`);
-    failed = true;
-  }
+  if (!sitemap.includes(`<loc>${expected}</loc>`)) reporter.fail(`sitemap.xml is missing ${expected}`);
+  if (distSitemap && !distSitemap.includes(`<loc>${expected}</loc>`)) reporter.fail(`dist/sitemap.xml is missing ${expected}`);
 }
 
-const books = JSON.parse(fs.readFileSync('data/books.json', 'utf8'));
+const books = readJson('data/books.json');
 for (const [index, book] of books.entries()) {
   for (const field of ['title', 'author', 'isbn', 'category']) {
-    if (!book[field]) {
-      console.error(`data/books.json item ${index} is missing ${field}`);
-      failed = true;
-    }
+    if (!book[field]) reporter.fail(`data/books.json item ${index} is missing ${field}`);
   }
 }
 
-const products = JSON.parse(fs.readFileSync('data/products.json', 'utf8'));
+const products = readJson('data/products.json');
 if (!Array.isArray(products.products)) {
-  console.error('data/products.json must contain a products array');
-  failed = true;
+  reporter.fail('data/products.json must contain a products array');
 } else {
   for (const [index, product] of products.products.entries()) {
-    for (const field of ['id', 'slug', 'title', 'type', 'status', 'shortDescription', 'ctaLabel', 'tags']) {
-      if (!product[field] || (Array.isArray(product[field]) && product[field].length === 0)) {
-        console.error(`data/products.json item ${index} is missing ${field}`);
-        failed = true;
+    for (const field of ['id', 'slug', 'title', 'type', 'status', 'shortDescription', 'tags']) {
+      const value = product[field];
+      if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+        reporter.fail(`data/products.json item ${index} is missing ${field}`);
       }
     }
   }
 }
 
 if (!Array.isArray(products.resources)) {
-  console.error('data/products.json must contain a resources array');
-  failed = true;
+  reporter.fail('data/products.json must contain a resources array');
 } else {
   for (const [index, resource] of products.resources.entries()) {
     for (const field of ['id', 'slug', 'title', 'type', 'resourceType', 'status', 'shortDescription', 'ctaLabel', 'tags']) {
-      if (!resource[field] || (Array.isArray(resource[field]) && resource[field].length === 0)) {
-        console.error(`data/products.json resource ${index} is missing ${field}`);
-        failed = true;
+      const value = resource[field];
+      if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+        reporter.fail(`data/products.json resource ${index} is missing ${field}`);
       }
     }
   }
 }
 
-const productSlugs = products.products.map((product) => product.slug).filter(Boolean);
+const productSlugs = (products.products || []).map((product) => product.slug).filter(Boolean);
 const resourceSlugs = (products.resources || []).map((resource) => resource.slug).filter(Boolean);
-const productsHtml = fs.existsSync('dist/products.html') ? fs.readFileSync('dist/products.html', 'utf8') : '';
-const resourcesHtml = fs.existsSync('dist/free-resources.html') ? fs.readFileSync('dist/free-resources.html', 'utf8') : '';
-const distApiRoot = path.join('dist', 'api', 'v1');
+const productsHtml = readText(path.join(dist, 'products.html'), '');
+const resourcesHtml = readText(path.join(dist, 'free-resources.html'), '');
 
 for (const slug of productSlugs) {
-  if (!productsHtml.includes(`id="${slug}"`)) {
-    console.error(`products.html is missing product anchor ${slug}`);
-    failed = true;
-  }
+  if (!productsHtml.includes(`id="${slug}"`)) reporter.fail(`products.html is missing product anchor ${slug}`);
   if (fs.existsSync(distApiRoot) && !fs.existsSync(path.join(distApiRoot, 'products', `${slug}.json`))) {
-    console.error(`dist/api/v1/products/${slug}.json is missing`);
-    failed = true;
+    reporter.fail(`dist/api/v1/products/${slug}.json is missing`);
   }
 }
 
 for (const slug of resourceSlugs) {
-  if (!resourcesHtml.includes(`id="${slug}"`)) {
-    console.error(`free-resources.html is missing resource anchor ${slug}`);
-    failed = true;
-  }
+  if (!resourcesHtml.includes(`id="${slug}"`)) reporter.fail(`free-resources.html is missing resource anchor ${slug}`);
   if (fs.existsSync(distApiRoot) && !fs.existsSync(path.join(distApiRoot, 'resources', `${slug}.json`))) {
-    console.error(`dist/api/v1/resources/${slug}.json is missing`);
-    failed = true;
+    reporter.fail(`dist/api/v1/resources/${slug}.json is missing`);
   }
 }
 
 if (fs.existsSync(distApiRoot)) {
   for (const file of ['pages/products.json', 'pages/free-resources.json', 'pages/projects.json', 'pages/quotes.json', 'resources.json', 'projects.json']) {
-    if (!fs.existsSync(path.join(distApiRoot, file))) {
-      console.error(`dist/api/v1/${file} is missing`);
-      failed = true;
-    }
+    if (!fs.existsSync(path.join(distApiRoot, file))) reporter.fail(`dist/api/v1/${file} is missing`);
   }
 }
 
-const statuses = new Set(['draft', 'preview', 'available', 'active', 'completed', 'planned', 'retired']);
+const allowedStatuses = new Set(['draft', 'preview', 'available', 'active', 'completed', 'planned', 'retired']);
 const existingTargets = new Set([
   ...htmlFiles,
   ...pages.map((page) => page.path),
   ...pages.map((page) => page.url.replace(/^\//, ''))
 ]);
 
-function validateCollectionItems(collectionName, items, options = {}) {
-  const seen = new Set();
-  const htmlFile = options.htmlFile;
-  const html = htmlFile && fs.existsSync(htmlFile) ? fs.readFileSync(htmlFile, 'utf8') : '';
-
-  for (const [index, item] of items.entries()) {
-    for (const field of options.required || []) {
-      if (!item[field] || (Array.isArray(item[field]) && item[field].length === 0)) {
-        console.error(`${collectionName} item ${index} is missing ${field}`);
-        failed = true;
-      }
-    }
-
-    if (item.slug) {
-      if (seen.has(item.slug)) {
-        console.error(`${collectionName} has duplicate slug ${item.slug}`);
-        failed = true;
-      }
-      seen.add(item.slug);
-
-      if (html && !html.includes(`id="${item.slug}"`)) {
-        console.error(`${htmlFile} is missing ${collectionName} anchor ${item.slug}`);
-        failed = true;
-      }
-
-      if (options.itemApiDir && fs.existsSync(distApiRoot) && !fs.existsSync(path.join(distApiRoot, options.itemApiDir, `${item.slug}.json`))) {
-        console.error(`dist/api/v1/${options.itemApiDir}/${item.slug}.json is missing`);
-        failed = true;
-      }
-    }
-
-    if (item.status && !statuses.has(item.status)) {
-      console.error(`${collectionName} item ${item.slug || index} has invalid status ${item.status}`);
-      failed = true;
-    }
-
-    for (const target of item.relatedContent || []) {
-      const cleanTarget = String(target).split('#')[0];
-      if (cleanTarget && !existingTargets.has(cleanTarget)) {
-        console.error(`${collectionName} item ${item.slug || index} references missing relatedContent target ${target}`);
-        failed = true;
-      }
-    }
-  }
-}
-
-const projects = JSON.parse(fs.readFileSync('data/projects.json', 'utf8'));
+const projects = readJson('data/projects.json');
 if (!Array.isArray(projects.projects)) {
-  console.error('data/projects.json must contain a projects array');
-  failed = true;
+  reporter.fail('data/projects.json must contain a projects array');
 } else {
-  validateCollectionItems('projects', projects.projects, {
-    htmlFile: 'dist/projects.html',
+  validateCollection(reporter, 'projects', projects.projects, {
+    htmlFile: path.join(dist, 'projects.html'),
+    distApiRoot,
     itemApiDir: 'projects',
-    required: ['id', 'slug', 'title', 'status', 'shortDescription', 'tags']
+    required: ['id', 'slug', 'title', 'status', 'shortDescription', 'tags'],
+    allowedStatuses,
+    existingTargets
   });
 }
 
-const ctas = JSON.parse(fs.readFileSync('data/ctas.json', 'utf8'));
-if (!ctas.primary?.id) {
-  console.error('data/ctas.json must define primary.id');
-  failed = true;
-}
+const ctas = readJson('data/ctas.json');
+if (!ctas.primary?.id) reporter.fail('data/ctas.json must define primary.id');
+
 if (!Array.isArray(ctas.ctas) || ctas.ctas.length === 0) {
-  console.error('data/ctas.json must contain a non-empty ctas array');
-  failed = true;
+  reporter.fail('data/ctas.json must contain a non-empty ctas array');
 } else {
-  validateCollectionItems('ctas', ctas.ctas, {
-    required: ['id', 'label', 'href', 'intent', 'priority', 'description']
+  validateCollection(reporter, 'ctas', ctas.ctas, {
+    required: ['id', 'label', 'href', 'intent', 'priority', 'description'],
+    allowedStatuses
   });
 
   const ctaIds = new Set(ctas.ctas.map((cta) => cta.id));
   if (ctas.primary?.id && !ctaIds.has(ctas.primary.id)) {
-    console.error(`data/ctas.json primary references missing CTA ${ctas.primary.id}`);
-    failed = true;
+    reporter.fail(`data/ctas.json primary references missing CTA ${ctas.primary.id}`);
   }
-
   for (const cta of ctas.ctas) {
     const target = String(cta.href || '').split('#')[0];
     if (target && !/^https?:\/\//i.test(target) && !existingTargets.has(target)) {
-      console.error(`data/ctas.json CTA ${cta.id} references missing href ${cta.href}`);
-      failed = true;
+      reporter.fail(`data/ctas.json CTA ${cta.id} references missing href ${cta.href}`);
     }
   }
 }
 
 if (!Array.isArray(ctas.sections)) {
-  console.error('data/ctas.json must contain a sections array');
-  failed = true;
+  reporter.fail('data/ctas.json must contain a sections array');
 } else {
   const ctaIds = new Set((ctas.ctas || []).map((cta) => cta.id));
   for (const section of ctas.sections) {
     for (const field of ['section', 'primaryCta']) {
-      if (!section[field]) {
-        console.error(`data/ctas.json section is missing ${field}`);
-        failed = true;
-      }
+      if (!section[field]) reporter.fail(`data/ctas.json section is missing ${field}`);
     }
     for (const id of [section.primaryCta, ...(section.secondaryCtas || [])].filter(Boolean)) {
-      if (!ctaIds.has(id)) {
-        console.error(`data/ctas.json section ${section.section || '(unknown)'} references missing CTA ${id}`);
-        failed = true;
-      }
+      if (!ctaIds.has(id)) reporter.fail(`data/ctas.json section ${section.section || '(unknown)'} references missing CTA ${id}`);
     }
   }
 }
 
 const journeyStages = new Set(['orientation', 'authority', 'trust', 'lead', 'commerce', 'contact']);
 if (!Array.isArray(ctas.pages)) {
-  console.error('data/ctas.json must contain a pages array');
-  failed = true;
+  reporter.fail('data/ctas.json must contain a pages array');
 } else {
   const ctaIds = new Set((ctas.ctas || []).map((cta) => cta.id));
   const pageEntries = new Map(ctas.pages.map((page) => [page.path, page]));
   for (const [index, page] of ctas.pages.entries()) {
     for (const field of ['path', 'journeyStage', 'primaryCta']) {
-      if (!page[field]) {
-        console.error(`data/ctas.json page ${index} is missing ${field}`);
-        failed = true;
-      }
+      if (!page[field]) reporter.fail(`data/ctas.json page ${index} is missing ${field}`);
     }
     if (page.path && !existingTargets.has(page.path)) {
-      console.error(`data/ctas.json page ${page.path} references missing page`);
-      failed = true;
+      reporter.fail(`data/ctas.json page ${page.path} references missing page`);
     }
     if (page.journeyStage && !journeyStages.has(page.journeyStage)) {
-      console.error(`data/ctas.json page ${page.path || index} has invalid journeyStage ${page.journeyStage}`);
-      failed = true;
+      reporter.fail(`data/ctas.json page ${page.path || index} has invalid journeyStage ${page.journeyStage}`);
     }
     for (const id of [page.primaryCta, ...(page.secondaryCtas || [])].filter(Boolean)) {
-      if (!ctaIds.has(id)) {
-        console.error(`data/ctas.json page ${page.path || index} references missing CTA ${id}`);
-        failed = true;
-      }
+      if (!ctaIds.has(id)) reporter.fail(`data/ctas.json page ${page.path || index} references missing CTA ${id}`);
     }
   }
-
   for (const publicPage of ['index.html', 'products.html', 'free-resources.html', 'contact.html', 'meet.html', 'essays.html', 'field-notes.html']) {
-    if (!pageEntries.has(publicPage)) {
-      console.error(`data/ctas.json is missing page CTA metadata for ${publicPage}`);
-      failed = true;
-    }
+    if (!pageEntries.has(publicPage)) reporter.fail(`data/ctas.json is missing page CTA metadata for ${publicPage}`);
   }
 }
 
-const newsletter = JSON.parse(fs.readFileSync('data/newsletter.json', 'utf8'));
+const newsletter = readJson('data/newsletter.json');
 for (const field of ['name', 'tagline', 'promise', 'formAction', 'ajaxEndpoint']) {
-  if (!newsletter[field]) {
-    console.error(`data/newsletter.json is missing ${field}`);
-    failed = true;
-  }
+  if (!newsletter[field]) reporter.fail(`data/newsletter.json is missing ${field}`);
 }
 
-const topics = JSON.parse(fs.readFileSync('data/topics.json', 'utf8'));
+const topics = readJson('data/topics.json');
 if (!Array.isArray(topics.topics) || topics.topics.length === 0) {
-  console.error('data/topics.json must contain a non-empty topics array');
-  failed = true;
+  reporter.fail('data/topics.json must contain a non-empty topics array');
 } else {
   const topicIds = new Set();
   for (const [index, topic] of topics.topics.entries()) {
     for (const field of ['id', 'label', 'description']) {
-      if (!topic[field]) {
-        console.error(`data/topics.json topic ${index} is missing ${field}`);
-        failed = true;
-      }
+      if (!topic[field]) reporter.fail(`data/topics.json topic ${index} is missing ${field}`);
     }
-    if (topic.id && topicIds.has(topic.id)) {
-      console.error(`data/topics.json has duplicate topic ${topic.id}`);
-      failed = true;
-    }
+    if (topic.id && topicIds.has(topic.id)) reporter.fail(`data/topics.json has duplicate topic ${topic.id}`);
     topicIds.add(topic.id);
   }
-
   for (const product of products.products || []) {
     for (const topic of product.topics || []) {
-      if (!topicIds.has(topic)) {
-        console.error(`data/products.json product ${product.slug || product.id} references missing topic ${topic}`);
-        failed = true;
-      }
+      if (!topicIds.has(topic)) reporter.fail(`data/products.json product ${product.slug || product.id} references missing topic ${topic}`);
     }
   }
-
   for (const resource of products.resources || []) {
     for (const topic of resource.topics || []) {
-      if (!topicIds.has(topic)) {
-        console.error(`data/products.json resource ${resource.slug || resource.id} references missing topic ${topic}`);
-        failed = true;
-      }
+      if (!topicIds.has(topic)) reporter.fail(`data/products.json resource ${resource.slug || resource.id} references missing topic ${topic}`);
     }
   }
 }
 
-const quotes = JSON.parse(fs.readFileSync('data/quotes.json', 'utf8'));
+const quotes = readJson('data/quotes.json');
 if (!Array.isArray(quotes.fullQuotes)) {
-  console.error('data/quotes.json must contain a fullQuotes array');
-  failed = true;
+  reporter.fail('data/quotes.json must contain a fullQuotes array');
 } else {
-  validateCollectionItems('quotes', quotes.fullQuotes, {
-    htmlFile: 'dist/quotes.html',
-    required: ['id', 'slug', 'text', 'author', 'category', 'status', 'tags']
+  validateCollection(reporter, 'quotes', quotes.fullQuotes, {
+    htmlFile: path.join(dist, 'quotes.html'),
+    required: ['id', 'slug', 'text', 'author', 'category', 'status', 'tags'],
+    allowedStatuses,
+    existingTargets
   });
 }
 
-if (failed) process.exit(1);
-
-console.log(`Content OK (${pages.length} pages, ${books.length} books).`);
+reporter.ok(`Content OK (${pages.length} pages, ${books.length} books).`);

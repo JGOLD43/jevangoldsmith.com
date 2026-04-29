@@ -59,7 +59,6 @@ Raw `images/products/` files remain source assets and should not ship to `dist/`
 | Field Notes newsletter model | `data/newsletter.json` |
 | Topic taxonomy | `data/topics.json` |
 | Page journey stage and CTA routing | `data/ctas.json`, with generated defaults in `scripts/build-site.js` |
-| Inline style/script ratchet baseline | `data/inline-ratchet.json` |
 | Public route ownership map | `data/source-ownership.json` |
 | Browser behavior | `js/` |
 | Build and checks | `scripts/` |

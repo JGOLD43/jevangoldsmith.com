@@ -248,6 +248,7 @@ function normalizePublicHtml(file) {
   next = injectBreadcrumbs(file, next);
   next = injectFieldNotesCta(file, next);
   if (file === 'index.html') next = injectHomeStats(next);
+  if (file === 'adventures.html') next = injectAdventureListing(next);
   next = injectRelatedInternalLinks(file, next);
   next = injectAnalyticsScript(next);
   next = decorateTrackedLinks(file, next);
@@ -304,6 +305,40 @@ function injectHomeStats(html) {
       ? `<span class="stat-number" data-home-stat="${key}">${counts[key]}</span>`
       : match
   );
+}
+
+function formatAdventureDateRange(start, end) {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const opts = { month: 'short', year: 'numeric' };
+  if (startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear()) {
+    return startDate.toLocaleDateString('en-US', opts);
+  }
+  if (startDate.getFullYear() === endDate.getFullYear()) {
+    return `${startDate.toLocaleDateString('en-US', { month: 'short' })} - ${endDate.toLocaleDateString('en-US', opts)}`;
+  }
+  return `${startDate.toLocaleDateString('en-US', opts)} - ${endDate.toLocaleDateString('en-US', opts)}`;
+}
+
+function injectAdventureListing(html) {
+  const cards = (adventures.adventures || [])
+    .filter((adventure) => adventure.status === 'published')
+    .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
+    .map((adventure) => {
+      const heroLocal = remoteAssetFor(adventure.heroImage, 800);
+      const dateLabel = formatAdventureDateRange(adventure.startDate, adventure.endDate);
+      const meta = [dateLabel, adventure.duration].filter(Boolean).join(' · ');
+      return `<div class="adventure-compact-card" id="card-${escapeHtmlAttr(adventure.id)}" data-adventure-id="${escapeHtmlAttr(adventure.id)}">
+                    <img src="${escapeHtmlAttr(heroLocal)}" alt="${escapeHtmlAttr(adventure.title)}" class="adventure-compact-image" width="800" height="533" loading="lazy" decoding="async">
+                    <div class="adventure-compact-info">
+                        <div class="adventure-compact-location">${escapeHTML(adventure.location)}</div>
+                        <h3 class="adventure-compact-title">${escapeHTML(adventure.title)}</h3>
+                        <div class="adventure-compact-meta">${escapeHTML(meta)}</div>
+                    </div>
+                </div>`;
+    })
+    .join('\n                ');
+  return html.replace('<!-- ADVENTURES_LIST -->', `\n                ${cards}\n            `);
 }
 
 function injectFieldNotesCta(file, html) {

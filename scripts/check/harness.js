@@ -78,6 +78,49 @@ function createReporter(label) {
   return { fail, ok, errors };
 }
 
+function validateCollection(reporter, name, items, options = {}) {
+  const seen = new Set();
+  const html = options.htmlFile && fs.existsSync(options.htmlFile)
+    ? fs.readFileSync(options.htmlFile, 'utf8')
+    : '';
+  const distApiRoot = options.distApiRoot;
+  const statuses = options.allowedStatuses;
+  const existingTargets = options.existingTargets;
+
+  for (const [index, item] of items.entries()) {
+    for (const field of options.required || []) {
+      const value = item[field];
+      if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+        reporter.fail(`${name} item ${item.slug || item.id || index} is missing ${field}`);
+      }
+    }
+
+    if (item.slug) {
+      if (seen.has(item.slug)) reporter.fail(`${name} has duplicate slug ${item.slug}`);
+      seen.add(item.slug);
+      if (html && !html.includes(`id="${item.slug}"`)) {
+        reporter.fail(`${options.htmlFile} is missing ${name} anchor ${item.slug}`);
+      }
+      if (options.itemApiDir && distApiRoot && fs.existsSync(distApiRoot) && !fs.existsSync(path.join(distApiRoot, options.itemApiDir, `${item.slug}.json`))) {
+        reporter.fail(`${distApiRoot}/${options.itemApiDir}/${item.slug}.json is missing`);
+      }
+    }
+
+    if (statuses && item.status && !statuses.has(item.status)) {
+      reporter.fail(`${name} item ${item.slug || index} has invalid status ${item.status}`);
+    }
+
+    if (existingTargets) {
+      for (const target of item.relatedContent || []) {
+        const cleanTarget = String(target).split('#')[0];
+        if (cleanTarget && !existingTargets.has(cleanTarget)) {
+          reporter.fail(`${name} item ${item.slug || index} references missing relatedContent target ${target}`);
+        }
+      }
+    }
+  }
+}
+
 module.exports = {
   root,
   readJson,
@@ -86,5 +129,6 @@ module.exports = {
   walkHtml,
   distRoot,
   distHtmlFiles,
-  createReporter
+  createReporter,
+  validateCollection
 };

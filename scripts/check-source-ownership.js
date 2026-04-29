@@ -1,33 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 const { manifestCoversRoute } = require('./build/page-manifest');
+const { root, readJson, walkHtml, createReporter } = require('./check/harness');
 
-const root = process.cwd();
+const reporter = createReporter('check-source-ownership');
 const sourcePagesDir = path.join(root, '_src', 'pages');
-const ownershipPath = path.join(root, 'data', 'source-ownership.json');
 const sourcePages = fs.existsSync(sourcePagesDir)
   ? fs.readdirSync(sourcePagesDir).filter((file) => file.endsWith('.html')).sort()
   : [];
-const ownership = fs.existsSync(ownershipPath)
-  ? JSON.parse(fs.readFileSync(ownershipPath, 'utf8'))
-  : { legacyRootPageSources: [], dataRenderedRoutes: [], dataRenderedPatterns: [] };
+const ownership = readJson('data/source-ownership.json', { legacyRootPageSources: [], dataRenderedRoutes: [], dataRenderedPatterns: [] });
 
-function walkHtml(dir, prefix = '') {
-  if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const relative = prefix ? `${prefix}/${entry.name}` : entry.name;
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      if (['admin', 'dist', 'node_modules'].includes(entry.name)) return [];
-      if (entry.name.startsWith('.')) return [];
-      return walkHtml(fullPath, relative);
-    }
-    return entry.isFile() && entry.name.endsWith('.html') ? [relative] : [];
-  });
-}
-
-const duplicated = sourcePages.filter((file) => fs.existsSync(path.join(root, file)));
-const rootHtml = walkHtml(root)
+const rootHtml = walkHtml(root, { skipDirs: new Set(['.git', 'node_modules', 'dist', 'admin', 'test-results', 'playwright-report', '.firebase', '.gstack', '.playwright-cli', '.playwright-mcp']) })
+  .map((file) => path.relative(root, file))
   .filter((file) => !file.startsWith('_src/'))
   .sort();
 const sourcePageSet = new Set(sourcePages);
@@ -43,38 +27,24 @@ function isOwnedRootHtml(file) {
   return dataRenderedPatterns.some((pattern) => pattern.test(file));
 }
 
-const unknownRootHtml = rootHtml.filter((file) => !sourcePageSet.has(file) && !isOwnedRootHtml(file));
-const missingLegacySources = [...legacyRootSources].filter((file) => !fs.existsSync(path.join(root, file)));
-const missingDataRoutes = [...dataRenderedRoutes].filter((file) => !fs.existsSync(path.join(root, file)));
-const missingManifestRoutes = [...new Set([
-  ...sourcePages,
-  ...rootHtml.filter((file) => isOwnedRootHtml(file))
-])].filter((file) => !manifestCoversRoute(file));
-
-if (duplicated.length) {
-  console.error('HTML source ownership is ambiguous. Keep each page in one source location:');
-  for (const file of duplicated) {
-    console.error(`- ${file} exists in both / and _src/pages/`);
-  }
-  process.exit(1);
+for (const file of sourcePages.filter((file) => fs.existsSync(path.join(root, file)))) {
+  reporter.fail(`HTML source ambiguous: ${file} exists in both / and _src/pages/`);
 }
 
-if (unknownRootHtml.length) {
-  console.error('Root HTML files are not classified in data/source-ownership.json:');
-  for (const file of unknownRootHtml) console.error(`- ${file}`);
-  process.exit(1);
+for (const file of rootHtml.filter((file) => !sourcePageSet.has(file) && !isOwnedRootHtml(file))) {
+  reporter.fail(`Root HTML file not classified in data/source-ownership.json: ${file}`);
 }
 
-if (missingLegacySources.length || missingDataRoutes.length) {
-  console.error('data/source-ownership.json lists routes that do not exist:');
-  for (const file of [...missingLegacySources, ...missingDataRoutes]) console.error(`- ${file}`);
-  process.exit(1);
+for (const file of [...legacyRootSources].filter((file) => !fs.existsSync(path.join(root, file)))) {
+  reporter.fail(`data/source-ownership.json legacy source missing: ${file}`);
+}
+for (const file of [...dataRenderedRoutes].filter((file) => !fs.existsSync(path.join(root, file)))) {
+  reporter.fail(`data/source-ownership.json data-rendered route missing: ${file}`);
 }
 
-if (missingManifestRoutes.length) {
-  console.error('Page manifest is missing route entries for:');
-  for (const file of missingManifestRoutes) console.error(`- ${file}`);
-  process.exit(1);
+const allCoveredRoutes = new Set([...sourcePages, ...rootHtml.filter((file) => isOwnedRootHtml(file))]);
+for (const file of [...allCoveredRoutes].filter((file) => !manifestCoversRoute(file))) {
+  reporter.fail(`Page manifest is missing route entry for: ${file}`);
 }
 
-console.log(`Source ownership OK (${sourcePages.length} _src pages, ${legacyRootSources.size} legacy root sources).`);
+reporter.ok(`Source ownership OK (${sourcePages.length} _src pages, ${legacyRootSources.size} legacy root sources).`);

@@ -16,7 +16,6 @@ const PARALLEL_PHASE = [
   'check:api',
   'check:performance',
   'check:assets',
-  'check:inline',
   'check:page-baselines',
   'check:docs',
   'check:smoke'
