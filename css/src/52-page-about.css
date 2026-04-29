@@ -90,115 +90,6 @@
             margin-top: 1rem;
         }
 
-        /* Interests Grid */
-        .interests-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-        }
-
-        .interest-tag {
-            padding: 0.5rem 1rem;
-            background: var(--background-alt);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            transition: all 0.2s ease;
-        }
-
-        .interest-tag:hover {
-            border-color: var(--secondary-color);
-            color: var(--secondary-color);
-        }
-
-        /* Values List */
-        .values-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .value-item {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-
-        .value-icon {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            border-radius: 10px;
-            background: var(--background-alt);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary-color);
-        }
-
-        .value-icon svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .value-content h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .value-content p {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            line-height: 1.5;
-        }
-
-        /* Connect Section */
-        .connect-links {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .connect-link {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 1.25rem;
-            background: var(--background-alt);
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            color: var(--text-color);
-            text-decoration: none;
-        }
-
-        .connect-link:hover {
-            background: var(--secondary-color);
-            color: #fff;
-            transform: translateX(4px);
-        }
-
-        .connect-link svg {
-            width: 20px;
-            height: 20px;
-            min-width: 20px;
-        }
-
-        .connect-link span {
-            font-weight: 500;
-        }
-
-        .connect-link .connect-handle {
-            margin-left: auto;
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-
         /* Responsive: collapse side images on narrow screens */
         @media (max-width: 900px) {
             .about-layout {
@@ -208,9 +99,5 @@
 
             .about-col-images {
                 display: none;
-            }
-
-            .values-list {
-                grid-template-columns: 1fr;
             }
         }

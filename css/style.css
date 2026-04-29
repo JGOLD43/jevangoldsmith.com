@@ -6750,12 +6750,6 @@ body.meet-page {
     margin-bottom: 2rem;
 }
 
-.funnel-disclaimer {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    margin-top: 1.5rem;
-}
-
 /* CTA Button */
 .funnel-cta {
     display: inline-block;
@@ -6782,14 +6776,6 @@ body.meet-page {
     margin-bottom: 2rem;
 }
 
-.funnel-progress-label {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
-}
-
 .funnel-progress-bar {
     height: 4px;
     background-color: var(--border-color);
@@ -6803,11 +6789,6 @@ body.meet-page {
     background-color: var(--secondary-color);
     border-radius: 2px;
     transition: width 0.3s ease;
-}
-
-.funnel-progress-count {
-    font-size: 0.85rem;
-    color: var(--text-light);
 }
 
 /* Question Screen */
@@ -7008,12 +6989,6 @@ body.meet-page {
     color: var(--text-color);
 }
 
-.funnel-label-hint {
-    font-weight: 400;
-    color: var(--text-light);
-    font-size: 0.9rem;
-}
-
 .funnel-textarea {
     width: 100%;
     padding: 1rem;
@@ -7085,31 +7060,6 @@ body.meet-page {
     font-weight: 600;
     margin-bottom: 1.5rem;
     letter-spacing: 0.02em;
-}
-
-/* Value Props */
-.funnel-value-props {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin: 2rem 0;
-    text-align: left;
-    max-width: 320px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.funnel-prop {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.95rem;
-    color: var(--text-color);
-}
-
-.funnel-prop-icon {
-    font-size: 1.2rem;
-    flex-shrink: 0;
 }
 
 /* Social Proof */
@@ -7390,13 +7340,6 @@ body.meet-page {
     font-size: 0.85rem;
 }
 
-.funnel-field-hint {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--text-light);
-    margin-top: 0.25rem;
-}
-
 .funnel-form-row {
     display: flex;
     gap: 1rem;
@@ -7507,10 +7450,6 @@ body.meet-page {
     .funnel-trust-signals {
         flex-direction: column;
         gap: 0.5rem;
-    }
-
-    .funnel-value-props {
-        max-width: 100%;
     }
 
     .funnel-personality-card {
@@ -7637,12 +7576,6 @@ body.meet-page {
     margin-bottom: 1rem;
 }
 
-.tone-slider-title {
-    font-weight: 600;
-    color: var(--primary-color);
-    font-size: 0.95rem;
-}
-
 .tone-indicator {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -7700,14 +7633,6 @@ body.meet-page {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.tone-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-    color: var(--text-light);
-}
-
 /* ============================================
    GUARANTEE SECTION
    ============================================ */
@@ -7743,11 +7668,6 @@ body.meet-page {
     25% { transform: translateX(-3px) rotate(-1deg); }
     50% { transform: translateX(3px) rotate(1deg); }
     75% { transform: translateX(-2px) rotate(-0.5deg); }
-}
-
-/* Desperate mode title pulsing */
-.desperate-pulse {
-    animation: desperate-pulse 1s ease-in-out infinite;
 }
 
 @keyframes desperate-pulse {
@@ -7799,10 +7719,6 @@ body.meet-page {
         padding: 1.25rem;
     }
 
-    .tone-labels {
-        font-size: 0.7rem;
-    }
-
     .funnel-guarantee {
         flex-direction: column;
         text-align: center;
@@ -7812,36 +7728,6 @@ body.meet-page {
 /* ============================================
 
 /* css/src/38-products-resources.css */
-.products-hero {
-    text-align: center;
-    padding: 60px 0 40px;
-}
-
-.products-hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 16px;
-}
-
-.products-hero p {
-    color: var(--text-light);
-    font-size: 1.1rem;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.product-category {
-    margin-bottom: 60px;
-}
-
-.category-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--border-color);
-}
-
 .resource-icon,
 .request-icon {
     width: 48px;
@@ -7859,11 +7745,6 @@ body.meet-page {
 .request-icon svg {
     width: 24px;
     height: 24px;
-}
-
-.category-header h2 {
-    font-size: 1.5rem;
-    margin: 0;
 }
 
 .products-grid,
@@ -7893,38 +7774,6 @@ body.meet-page {
     box-shadow: var(--shadow-hover);
 }
 
-.product-image {
-    height: 180px;
-    background: var(--background-alt);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.product-image-placeholder {
-    font-size: 3rem;
-    opacity: 0.78;
-}
-
-.product-badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--secondary-color);
-    color: #fff;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.product-content {
-    padding: 20px;
-}
-
 .product-brand,
 .resource-category,
 .resources-eyebrow,
@@ -7949,23 +7798,10 @@ body.meet-page {
     color: var(--primary-color);
 }
 
-.product-rating {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 12px;
-}
-
 .stars {
     color: #b98500;
     font-size: 0.9rem;
     letter-spacing: 1px;
-}
-
-.rating-value {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    font-weight: 600;
 }
 
 .product-description,
@@ -8206,7 +8042,6 @@ body.meet-page {
 }
 
 @media (max-width: 768px) {
-    .products-hero h1,
     .resources-title {
         font-size: 2rem;
     }
@@ -11808,115 +11643,6 @@ body.shelf-experience {
             margin-top: 1rem;
         }
 
-        /* Interests Grid */
-        .interests-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-        }
-
-        .interest-tag {
-            padding: 0.5rem 1rem;
-            background: var(--background-alt);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            transition: all 0.2s ease;
-        }
-
-        .interest-tag:hover {
-            border-color: var(--secondary-color);
-            color: var(--secondary-color);
-        }
-
-        /* Values List */
-        .values-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .value-item {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-
-        .value-icon {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            border-radius: 10px;
-            background: var(--background-alt);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary-color);
-        }
-
-        .value-icon svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .value-content h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .value-content p {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            line-height: 1.5;
-        }
-
-        /* Connect Section */
-        .connect-links {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .connect-link {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 1.25rem;
-            background: var(--background-alt);
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            color: var(--text-color);
-            text-decoration: none;
-        }
-
-        .connect-link:hover {
-            background: var(--secondary-color);
-            color: #fff;
-            transform: translateX(4px);
-        }
-
-        .connect-link svg {
-            width: 20px;
-            height: 20px;
-            min-width: 20px;
-        }
-
-        .connect-link span {
-            font-weight: 500;
-        }
-
-        .connect-link .connect-handle {
-            margin-left: auto;
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-
         /* Responsive: collapse side images on narrow screens */
         @media (max-width: 900px) {
             .about-layout {
@@ -11926,10 +11652,6 @@ body.shelf-experience {
 
             .about-col-images {
                 display: none;
-            }
-
-            .values-list {
-                grid-template-columns: 1fr;
             }
         }
 

@@ -58,12 +58,6 @@
     margin-bottom: 2rem;
 }
 
-.funnel-disclaimer {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    margin-top: 1.5rem;
-}
-
 /* CTA Button */
 .funnel-cta {
     display: inline-block;
@@ -90,14 +84,6 @@
     margin-bottom: 2rem;
 }
 
-.funnel-progress-label {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
-}
-
 .funnel-progress-bar {
     height: 4px;
     background-color: var(--border-color);
@@ -111,11 +97,6 @@
     background-color: var(--secondary-color);
     border-radius: 2px;
     transition: width 0.3s ease;
-}
-
-.funnel-progress-count {
-    font-size: 0.85rem;
-    color: var(--text-light);
 }
 
 /* Question Screen */
@@ -316,12 +297,6 @@
     color: var(--text-color);
 }
 
-.funnel-label-hint {
-    font-weight: 400;
-    color: var(--text-light);
-    font-size: 0.9rem;
-}
-
 .funnel-textarea {
     width: 100%;
     padding: 1rem;
@@ -393,31 +368,6 @@
     font-weight: 600;
     margin-bottom: 1.5rem;
     letter-spacing: 0.02em;
-}
-
-/* Value Props */
-.funnel-value-props {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin: 2rem 0;
-    text-align: left;
-    max-width: 320px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.funnel-prop {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.95rem;
-    color: var(--text-color);
-}
-
-.funnel-prop-icon {
-    font-size: 1.2rem;
-    flex-shrink: 0;
 }
 
 /* Social Proof */
@@ -698,13 +648,6 @@
     font-size: 0.85rem;
 }
 
-.funnel-field-hint {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--text-light);
-    margin-top: 0.25rem;
-}
-
 .funnel-form-row {
     display: flex;
     gap: 1rem;
@@ -815,10 +758,6 @@
     .funnel-trust-signals {
         flex-direction: column;
         gap: 0.5rem;
-    }
-
-    .funnel-value-props {
-        max-width: 100%;
     }
 
     .funnel-personality-card {
@@ -945,12 +884,6 @@
     margin-bottom: 1rem;
 }
 
-.tone-slider-title {
-    font-weight: 600;
-    color: var(--primary-color);
-    font-size: 0.95rem;
-}
-
 .tone-indicator {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -1008,14 +941,6 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.tone-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-    color: var(--text-light);
-}
-
 /* ============================================
    GUARANTEE SECTION
    ============================================ */
@@ -1051,11 +976,6 @@
     25% { transform: translateX(-3px) rotate(-1deg); }
     50% { transform: translateX(3px) rotate(1deg); }
     75% { transform: translateX(-2px) rotate(-0.5deg); }
-}
-
-/* Desperate mode title pulsing */
-.desperate-pulse {
-    animation: desperate-pulse 1s ease-in-out infinite;
 }
 
 @keyframes desperate-pulse {
@@ -1105,10 +1025,6 @@
 
     .tone-slider-container {
         padding: 1.25rem;
-    }
-
-    .tone-labels {
-        font-size: 0.7rem;
     }
 
     .funnel-guarantee {
