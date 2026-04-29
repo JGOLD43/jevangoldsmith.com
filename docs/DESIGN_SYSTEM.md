@@ -83,7 +83,6 @@ Use these pages as style regression canaries:
 - `movies.html`
 - `adventures.html`
 - one `adventure-*.html` detail page
-- `skills.html`
 - `people.html`
 - `products.html`
 

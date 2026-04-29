@@ -12,6 +12,7 @@ const logoWidths = [88, 176, 264, 352];
 const profileWidths = [360, 520, 720, 960, 1200];
 const contentWidths = [320, 480, 720, 960, 1200];
 const peopleWidths = [200, 400, 800];
+const productWidths = [240, 400, 640, 800];
 const remoteWidths = [320, 480, 800, 1200];
 const coverWidths = [160, 240, 360, 480];
 const videoWidths = [176, 352, 528];
@@ -264,6 +265,20 @@ async function main() {
         basename,
         widths: peopleWidths,
         jpeg: true
+      });
+    }
+  }
+
+  const productsDir = path.join(root, 'images', 'products');
+  if (fs.existsSync(productsDir)) {
+    for (const file of fs.readdirSync(productsDir).filter((entry) => /\.(png|jpe?g|webp)$/i.test(entry))) {
+      const basename = path.parse(file).name;
+      await generateRasterSet({
+        input: path.join(productsDir, file),
+        outDir: generatedPath('products'),
+        basename,
+        widths: productWidths,
+        jpeg: /\.(jpe?g)$/i.test(file)
       });
     }
   }

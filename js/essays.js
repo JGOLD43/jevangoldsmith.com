@@ -1,367 +1,177 @@
-// Essay rendering logic
-// Loads essays from JSON and renders them dynamically
+const collectionUi = window.JGCollectionUI;
+const collectionControllerFactory = window.JGCollectionController;
+const dataFetch = window.JGDataFetch;
+const essaysFilters = window.JGEssaysFilters;
+const essaysState = window.JGEssaysState.create();
+const essaysView = window.JGEssaysView;
+let collectionController = null;
 
-let allEssays = [];
-let filteredEssays = [];
-let currentSearchTerm = '';
-let currentIndex = 0;
-
-// Load and render essays
 async function loadEssays() {
     try {
-        const response = await fetch('data/essays.json');
-        if (!response.ok) {
-            throw new Error('Failed to load essays');
-        }
+        const data = await dataFetch.fetchJson('data/essays.json');
+        const publishedEssays = data.essays
+            .filter((essay) => essay.status === 'published')
+            .sort((left, right) => new Date(right.date) - new Date(left.date));
 
-        const data = await response.json();
-
-        // Only show published essays on public site
-        const publishedEssays = data.essays.filter(e => e.status === 'published');
-
-        // Sort by date, newest first
-        publishedEssays.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        allEssays = publishedEssays;
-        filteredEssays = publishedEssays;
-        renderEssays(publishedEssays);
-        populateSidebar(publishedEssays);
-        updateEssayCount(publishedEssays.length);
+        essaysState.setEssays(publishedEssays);
+        essaysState.setFilteredEssays(publishedEssays);
+        renderFromState();
     } catch (error) {
         console.error('Error loading essays:', error);
-        showErrorMessage();
+        essaysView.showErrorMessage();
     }
 }
 
-// Render essays to the page (one at a time)
-function renderEssays(essays, startIndex = 0) {
-    filteredEssays = essays;
-    currentIndex = Math.max(0, Math.min(startIndex, essays.length - 1));
-    renderCurrentEssay();
+function getDerivedEssays() {
+    const state = essaysState.get();
+    const categoryFiltered = essaysFilters.filterByCategory(state.essays, state.activeCategory);
+    return essaysFilters.filterBySearch(categoryFiltered, state.searchTerm);
 }
 
-function renderCurrentEssay() {
-    const container = document.getElementById('essays-container');
-    if (!container) return;
-
-    container.innerHTML = '';
-
-    if (!filteredEssays.length) {
-        container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 3rem;">No essays published yet.</p>';
-        return;
-    }
-
-    const essay = filteredEssays[currentIndex];
-    const article = createEssayArticle(essay);
-    container.appendChild(article);
-    container.appendChild(createEssayNav());
-    updateActiveSidebarLink(essay.id);
+function getVisibleEssayState(filteredEssays) {
+    const state = essaysState.get();
+    const currentIndex = Math.max(0, Math.min(state.currentIndex, Math.max(filteredEssays.length - 1, 0)));
+    essaysState.setFilteredEssays(filteredEssays);
+    essaysState.setCurrentIndex(currentIndex);
+    return {
+        essays: filteredEssays,
+        currentIndex
+    };
 }
 
-function createEssayNav() {
-    const nav = document.createElement('div');
-    nav.className = 'essay-nav';
-    const total = filteredEssays.length;
-    const atStart = currentIndex <= 0;
-    const atEnd = currentIndex >= total - 1;
+function renderFromState() {
+    collectionController?.render();
+}
 
-    const prevTitle = !atStart ? filteredEssays[currentIndex - 1].title : '';
-    const nextTitle = !atEnd ? filteredEssays[currentIndex + 1].title : '';
+function buildCollectionController() {
+    collectionController = collectionControllerFactory.create({
+        getState: () => essaysState.get(),
+        getFilteredItems: () => getDerivedEssays(),
+        getVisibleItems: (filteredEssays) => getVisibleEssayState(filteredEssays),
+        renderSidebar: () => essaysView.renderSidebar(essaysFilters.groupByCategory(essaysState.get().essays)),
+        groupItems: () => essaysFilters.groupByCategory(essaysState.get().essays),
+        renderVisibleItems: (visibleState) => essaysView.renderCurrentEssay(visibleState.essays, visibleState.currentIndex),
+        updateCount: (visibleState) => essaysView.updateEssayCount(visibleState.essays.length),
+        updateControls: (state) => collectionUi.toggleClearButton('search-clear-btn', Boolean(state.searchTerm), 'block'),
+        group: {
+            allButtonSelector: '[data-action="toggleCategory"][data-action-args="all"]',
+            buttonSelector: '.sidebar-category',
+            panelForValue: (category) => category === 'all' ? null : document.getElementById(`category-${category}`),
+            panelSelector: '.category-essays'
+        },
+        searchClearButtonId: 'search-clear-btn',
+        searchInputId: 'essay-search',
+        sidebar: {
+            storageKey: 'essays-sidebar-collapsed',
+            layoutId: 'essays-layout',
+            sidebarId: 'essays-sidebar',
+            defaultCollapsed: false
+        }
+    });
+}
 
-    nav.innerHTML = `
-        <button class="essay-nav-btn essay-nav-prev" ${atStart ? 'disabled' : ''} onclick="prevEssay()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            <span class="essay-nav-label">
-                <span class="essay-nav-direction">Previous</span>
-                ${prevTitle ? `<span class="essay-nav-title">${escapeHTML(prevTitle)}</span>` : ''}
-            </span>
-        </button>
-        <span class="essay-nav-counter">${currentIndex + 1} / ${total}</span>
-        <button class="essay-nav-btn essay-nav-next" ${atEnd ? 'disabled' : ''} onclick="nextEssay()">
-            <span class="essay-nav-label essay-nav-label-right">
-                <span class="essay-nav-direction">Next</span>
-                ${nextTitle ? `<span class="essay-nav-title">${escapeHTML(nextTitle)}</span>` : ''}
-            </span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-    `;
-    return nav;
+function toggleCategory(category, event) {
+    const button = event?.target?.closest('.sidebar-category');
+    const panel = category === 'all' ? null : document.getElementById(`category-${category}`);
+
+    collectionController?.toggleGroup({
+        value: category,
+        button,
+        panel,
+        onCollapse: () => {
+            essaysState.setActiveCategory('all');
+            essaysState.setCurrentIndex(0);
+        },
+        onExpand: () => {
+            essaysState.setActiveCategory(category);
+            essaysState.setCurrentIndex(0);
+        }
+    });
+}
+
+const searchEssays = collectionUi.debounce((term) => {
+    essaysState.setSearchTerm(term);
+    essaysState.setActiveCategory('all');
+    essaysState.setCurrentIndex(0);
+    collectionController?.resetGrouping();
+    renderFromState();
+});
+
+function clearEssaySearch() {
+    collectionController?.clearSearchInput();
+    essaysState.clearSearchTerm();
+    essaysState.setActiveCategory('all');
+    essaysState.setCurrentIndex(0);
+    collectionController?.resetGrouping();
+    renderFromState();
 }
 
 function prevEssay() {
-    if (currentIndex > 0) {
-        currentIndex--;
-        renderCurrentEssay();
-        scrollToTop();
-    }
+    const state = essaysState.get();
+    if (state.currentIndex <= 0) return;
+    essaysState.setCurrentIndex(state.currentIndex - 1);
+    renderFromState();
+    essaysView.scrollToTop();
 }
 
 function nextEssay() {
-    if (currentIndex < filteredEssays.length - 1) {
-        currentIndex++;
-        renderCurrentEssay();
-        scrollToTop();
-    }
+    const state = essaysState.get();
+    if (state.currentIndex >= state.filteredEssays.length - 1) return;
+    essaysState.setCurrentIndex(state.currentIndex + 1);
+    renderFromState();
+    essaysView.scrollToTop();
 }
 
-function scrollToTop() {
-    const main = document.querySelector('.essays-main');
-    if (main) {
-        main.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-}
-
-function updateActiveSidebarLink(essayId) {
-    document.querySelectorAll('.essay-link').forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === `#${essayId}`);
-    });
-}
-
-// Create an essay article element
-function createEssayArticle(essay) {
-    const article = document.createElement('article');
-    article.className = 'article-full';
-    article.id = essay.id;
-
-    const formattedDate = formatDate(essay.date);
-
-    article.innerHTML = `
-        <div class="post-meta">
-            <span class="post-date">${escapeHTML(formattedDate)}</span>
-            <span class="post-category">${escapeHTML(essay.category)}</span>
-        </div>
-        <h2>${escapeHTML(essay.title)}</h2>
-        ${essay.subtitle ? `<p><em>${escapeHTML(essay.subtitle)}</em></p>` : ''}
-        ${sanitizeHTML(essay.content)}
-    `;
-
-    return article;
-}
-
-// Format date to readable string
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
-}
-
-// Show error message if essays fail to load
-function showErrorMessage() {
-    const container = document.getElementById('essays-container');
-    if (!container) return;
-
-    container.innerHTML = `
-        <div style="text-align: center; padding: 3rem;">
-            <p style="color: var(--accent-color); font-size: 1.2rem; margin-bottom: 1rem;">
-                Unable to load essays
-            </p>
-            <p style="color: var(--text-light);">
-                Please try refreshing the page.
-            </p>
-        </div>
-    `;
-}
-
-// Populate sidebar with essay links
-function populateSidebar(essays) {
-    // Group essays by category
-    const categories = {
-        philosophy: [],
-        management: [],
-        technology: [],
-        personal: [],
-        finance: [],
-        writing: []
-    };
-
-    essays.forEach(essay => {
-        const cat = essay.category.toLowerCase();
-        if (categories[cat]) {
-            categories[cat].push(essay);
-        }
-    });
-
-    // Update counts
-    document.getElementById('count-all').textContent = essays.length;
-    Object.keys(categories).forEach(cat => {
-        const count = categories[cat].length;
-        const countEl = document.getElementById(`count-${cat}`);
-        if (countEl) {
-            countEl.textContent = count;
-            // Hide category if no essays
-            if (count === 0) {
-                countEl.closest('.sidebar-section').style.display = 'none';
-            }
-        }
-    });
-
-    // Populate category lists
-    Object.keys(categories).forEach(cat => {
-        const container = document.getElementById(`category-${cat}`);
-        if (!container || categories[cat].length === 0) return;
-
-        container.innerHTML = categories[cat].map(essay => `
-            <a href="#${escapeAttr(essay.id)}" class="essay-link" onclick="scrollToEssay('${escapeAttr(essay.id)}', event)">
-                <div>${escapeHTML(essay.title)}</div>
-                <div class="essay-link-date">${escapeHTML(formatDateShort(essay.date))}</div>
-            </a>
-        `).join('');
-    });
-}
-
-// Toggle category expansion
-function toggleCategory(category) {
-    if (category === 'all') {
-        // Show all essays
-        renderEssays(allEssays);
-        // Remove active from all categories
-        document.querySelectorAll('.sidebar-category').forEach(btn => {
-            btn.classList.remove('active', 'expanded');
-        });
-        document.querySelectorAll('.category-essays').forEach(div => {
-            div.classList.remove('expanded');
-        });
-        // Activate "All Essays"
-        event.target.closest('.sidebar-category').classList.add('active');
-        return;
-    }
-
-    const button = event.target.closest('.sidebar-category');
-    const container = document.getElementById(`category-${category}`);
-
-    if (!container) return;
-
-    // Toggle expansion
-    const isExpanded = container.classList.contains('expanded');
-
-    if (isExpanded) {
-        container.classList.remove('expanded');
-        button.classList.remove('expanded');
-    } else {
-        // Collapse all others
-        document.querySelectorAll('.category-essays').forEach(div => {
-            div.classList.remove('expanded');
-        });
-        document.querySelectorAll('.sidebar-category').forEach(btn => {
-            btn.classList.remove('expanded');
-        });
-
-        // Expand this one
-        container.classList.add('expanded');
-        button.classList.add('expanded');
-
-        // Filter essays by category
-        const filtered = allEssays.filter(e => e.category.toLowerCase() === category);
-        renderEssays(filtered);
-    }
-
-    // Update active state
-    document.querySelectorAll('.sidebar-category').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    button.classList.add('active');
-}
-
-// Jump to specific essay (one-at-a-time view)
 function scrollToEssay(essayId, event) {
-    if (event) event.preventDefault();
+    event?.preventDefault();
 
-    const idx = filteredEssays.findIndex(e => e.id === essayId);
-    if (idx >= 0) {
-        currentIndex = idx;
-    } else {
-        const fullIdx = allEssays.findIndex(e => e.id === essayId);
-        if (fullIdx < 0) return;
-        filteredEssays = allEssays;
-        currentIndex = fullIdx;
-    }
-    renderCurrentEssay();
-    scrollToTop();
-}
-
-// Format date in short form
-function formatDateShort(dateString) {
-    const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
-}
-
-// Update essay count display
-function updateEssayCount(count) {
-    const countEl = document.getElementById('essay-count');
-    if (countEl) {
-        countEl.textContent = count;
-    }
-}
-
-// Search essays
-function searchEssays(term) {
-    currentSearchTerm = term.toLowerCase().trim();
-    const clearBtn = document.getElementById('search-clear-btn');
-
-    if (clearBtn) {
-        clearBtn.style.display = term ? 'block' : 'none';
-    }
-
-    if (!term) {
-        filteredEssays = allEssays;
-        renderEssays(allEssays);
-        updateEssayCount(allEssays.length);
+    const state = essaysState.get();
+    const filteredIndex = essaysFilters.findEssayIndex(state.filteredEssays, essayId);
+    if (filteredIndex >= 0) {
+        essaysState.setCurrentIndex(filteredIndex);
+        renderFromState();
+        essaysView.scrollToTop();
         return;
     }
 
-    filteredEssays = allEssays.filter(essay => {
-        const searchable = [
-            essay.title,
-            essay.subtitle || '',
-            essay.category,
-            essay.content || ''
-        ].join(' ').toLowerCase();
+    const fullIndex = essaysFilters.findEssayIndex(state.essays, essayId);
+    if (fullIndex < 0) return;
 
-        return searchable.includes(currentSearchTerm);
-    });
-
-    renderEssays(filteredEssays);
-    updateEssayCount(filteredEssays.length);
+    essaysState.setActiveCategory('all');
+    essaysState.setCurrentIndex(fullIndex);
+    collectionController?.resetGrouping();
+    renderFromState();
+    essaysView.scrollToTop();
 }
 
-// Clear essay search
-function clearEssaySearch() {
-    const searchInput = document.getElementById('essay-search');
-    if (searchInput) {
-        searchInput.value = '';
-        searchEssays('');
-    }
-}
-
-// Toggle essays sidebar
 function toggleEssaysSidebar() {
-    const sidebar = document.getElementById('essays-sidebar');
-    const layout = document.getElementById('essays-layout');
-
-    if (sidebar && layout) {
-        sidebar.classList.toggle('collapsed');
-        layout.classList.toggle('sidebar-collapsed');
-    }
+    const isCollapsed = collectionController?.toggleSidebar();
+    essaysState.setSidebarCollapsed(isCollapsed);
 }
 
-// Toggle list dropdown
+function restoreSidebarState() {
+    const isCollapsed = collectionController?.restoreSidebar();
+    essaysState.setSidebarCollapsed(isCollapsed);
+}
+
 function toggleListDropdown() {
-    const dropdown = document.getElementById('list-dropdown');
-    if (dropdown) {
-        dropdown.classList.toggle('open');
-    }
+    collectionController?.toggleListDropdown();
 }
 
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-    const dropdown = document.getElementById('list-dropdown');
-    if (dropdown && !dropdown.contains(e.target)) {
-        dropdown.classList.remove('open');
-    }
-});
+window.toggleCategory = toggleCategory;
+window.searchEssays = searchEssays;
+window.clearEssaySearch = clearEssaySearch;
+window.prevEssay = prevEssay;
+window.nextEssay = nextEssay;
+window.scrollToEssay = scrollToEssay;
+window.toggleEssaysSidebar = toggleEssaysSidebar;
+window.toggleListDropdown = toggleListDropdown;
 
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', loadEssays);
+document.addEventListener('DOMContentLoaded', () => {
+    buildCollectionController();
+    restoreSidebarState();
+    document.addEventListener('click', (event) => {
+        collectionController?.closeDropdownOnOutsideClick(event);
+    });
+    loadEssays();
+});

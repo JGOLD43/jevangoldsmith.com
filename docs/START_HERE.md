@@ -12,10 +12,9 @@ The public runtime is intentionally simple: Firebase Hosting serves generated
 HTML, CSS, JavaScript, JSON, images, and vendor assets from `dist/`. There is no
 active server-side API surface.
 
-The source model is currently transitional:
+The source model is now steady-state:
 
-- root-level `.html` files are the current authored page source for unmigrated pages
-- `_src/pages/` owns migrated template-driven page source
+- `_src/pages/` owns authored template-driven public page source
 - `_src/partials/` owns shared nav/footer chrome
 - `css/src/` owns source CSS layers
 - `data/` owns static content and site/deploy configuration
@@ -41,9 +40,15 @@ The source model is currently transitional:
 ```bash
 npm run build
 npm run check
+npm run test:browser
 ```
 
 Use `npm run check` as the default health gate before considering work done.
+Use `npm run test:browser` when changing interaction-heavy pages.
+
+If Playwright is running locally on macOS, the repo now prefers the installed
+Google Chrome channel automatically when available, which avoids the headless
+shell launch issue seen in some sandboxed environments.
 
 ## Non-Negotiables
 
@@ -59,9 +64,8 @@ Use `npm run check` as the default health gate before considering work done.
 
 ## Current Highest-Leverage Next Refactors
 
-1. Continue moving root HTML source into `_src/pages/` one page type at a time.
-2. Replace inline `onclick` handlers with delegated module JS page-by-page, starting with books/essays/adventures.
-3. Expand browser smoke coverage to include at least one topic route and one content-heavy mobile route.
-4. Add visual regression snapshots for the key page types.
-5. Ratchet performance budgets down after each safe cleanup.
-6. Keep API contract, search-index, and page-baseline checks green as content grows.
+1. Replace remaining inline handler patterns with delegated page JS where practical.
+2. Expand browser smoke coverage to include at least one topic route and one content-heavy mobile route.
+3. Add visual regression snapshots for the key page types.
+4. Ratchet performance budgets down after each safe cleanup.
+5. Keep API contract, search-index, and page-baseline checks green as content grows.

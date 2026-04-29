@@ -11,10 +11,9 @@ Purpose: `define reusable page shapes so new pages do not copy full HTML shells`
 | `base` | Shared head, nav, footer, scripts. | Most pages | Should own shared shell. |
 | `home` | Homepage-specific hero, snapshot, newsletter, carousels. | `index.html` | Preserve side-nav and snapshot behavior. |
 | `editorial` | Long-form static page with sections. | `about.html`, `north-star.html` | Move inline CSS to page/component layers first. |
-| `collection-sidebar` | Sidebar/category/filter layout. | `books.html`, `movies.html`, `essays.html`, `skills.html` | Needs interaction contracts before JS cleanup. |
+| `collection-sidebar` | Sidebar/category/filter layout. | `books.html`, `movies.html`, `essays.html` | Interaction contracts now follow the shared collection-page pattern. |
 | `map-gallery` | Interactive map plus cards/gallery/lightbox. | `adventures.html` | Leaflet is self-hosted. Keep map behavior. |
 | `detail-adventure` | Adventure story/detail page. | `adventure-*.html` | Strong candidate for data-driven generation. |
-| `detail-skill` | Skill detail page. | `skill-*.html` | Strong candidate for data-driven generation. |
 | `utility` | Contact/meeting/simple CTA flows. | `contact.html`, `meet.html` | Keep lightweight. |
 
 ## Active Template Sources

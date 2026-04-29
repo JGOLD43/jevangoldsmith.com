@@ -1,3 +1,5 @@
+const { renderDocument } = require('./document');
+
 function renderAdventurePageTemplate({
   nav,
   footer,
@@ -10,23 +12,7 @@ function renderAdventurePageTemplate({
   escapeHTML,
   escapeHtmlAttr
 }) {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHTML(`${adventure.title} - ${siteName}`)}</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-</head>
-<body class="nav-compact">
-    ${nav}
-
-    <main class="adventure-detail-page">
+  const main = `<main class="adventure-detail-page">
         <div class="adventure-hero">
             <img src="${escapeHtmlAttr(adventure.heroImage)}" alt="${escapeHtmlAttr(adventure.title)}" width="1200" height="800" decoding="async" fetchpriority="high">
             <div class="adventure-hero-overlay">
@@ -92,11 +78,9 @@ function renderAdventurePageTemplate({
         <span class="lightbox-next" data-action="lightbox-next">&#10095;</span>
         <div class="lightbox-caption" id="lightbox-caption"></div>
         <div class="lightbox-counter" id="lightbox-counter"></div>
-    </div>
+    </div>`;
 
-    ${footer}
-
-    <script src="vendor/leaflet/leaflet.js"></script>
+  const scripts = `<script src="vendor/leaflet/leaflet.js"></script>
     <script src="js/theme.js"></script>
     <script>
         const map = L.map('adventure-map').setView([${Number(adventure.mapCenter?.lat || 0)}, ${Number(adventure.mapCenter?.lng || 0)}], ${Number(adventure.mapZoom || 8)});
@@ -170,10 +154,17 @@ function renderAdventurePageTemplate({
                 prevImage();
             }
         });
-    </script>
-</body>
-</html>
-`;
+    </script>`;
+
+  return renderDocument({
+    title: `${adventure.title} - ${siteName}`,
+    nav,
+    main,
+    footer,
+    scripts,
+    bodyAttributes: 'class="nav-compact"',
+    extraHead: '<link rel="stylesheet" href="vendor/leaflet/leaflet.css" />'
+  });
 }
 
 module.exports = { renderAdventurePageTemplate };

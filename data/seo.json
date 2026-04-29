@@ -258,17 +258,6 @@
       ],
       "schemaType": "CollectionPage"
     },
-    "food.html": {
-      "title": "Food, Restaurants & Culinary Taste Notes",
-      "description": "A food archive of cuisines, comfort dishes, restaurants, cooking tools, and culinary notes that shaped Jevan Goldsmith's taste.",
-      "intent": "food",
-      "topics": [
-        "taste",
-        "health-performance",
-        "tools-objects"
-      ],
-      "schemaType": "CollectionPage"
-    },
     "changed-my-mind.html": {
       "title": "Changed My Mind: Belief Updates & Public Learning Log",
       "description": "A public record of ideas Jevan Goldsmith has updated, softened, reversed, or stopped believing.",
@@ -416,6 +405,26 @@
       "description": "How Jevan Goldsmith thinks about friendships, partnerships, and the relationships that compound over a lifetime versus the ones that quietly drain you.",
       "intent": "philosophy",
       "topics": [
+        "personal-systems"
+      ],
+      "schemaType": "Article"
+    },
+    "living-manifesto.html": {
+      "title": "Living Manifesto: Principles, Standards & Long-Horizon Bets",
+      "description": "Jevan Goldsmith's living manifesto: principles, standards, and long-horizon bets for time, work, relationships, and better decisions.",
+      "intent": "manifesto",
+      "topics": [
+        "personal-systems",
+        "better-thinking"
+      ],
+      "schemaType": "Article"
+    },
+    "speeches.html": {
+      "title": "Speeches, Talks & Remarks by Jevan Goldsmith",
+      "description": "A running archive of speeches, talks, and remarks by Jevan Goldsmith, written for delivery and kept as a record of what was said and why.",
+      "intent": "speeches",
+      "topics": [
+        "better-thinking",
         "personal-systems"
       ],
       "schemaType": "Article"

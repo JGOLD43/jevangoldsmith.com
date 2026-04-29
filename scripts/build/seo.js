@@ -195,7 +195,7 @@ function createSeoHelpers({
   }
 
   function inferredSchemaTypeFor(file) {
-    if (['books.html', 'essays.html', 'free-resources.html', 'products.html', 'projects.html', 'quotes.html', 'skills.html'].includes(file)) return 'CollectionPage';
+    if (['books.html', 'essays.html', 'free-resources.html', 'products.html', 'projects.html', 'quotes.html'].includes(file)) return 'CollectionPage';
     if (file.startsWith('skill-') || file === 'reading-philosophy.html' || file === 'weekly-review-template.html') return 'Article';
     return 'WebPage';
   }

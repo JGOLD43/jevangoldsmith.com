@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { manifestCoversRoute } = require('./build/page-manifest');
 
 const root = process.cwd();
 const sourcePagesDir = path.join(root, '_src', 'pages');
@@ -45,6 +46,10 @@ function isOwnedRootHtml(file) {
 const unknownRootHtml = rootHtml.filter((file) => !sourcePageSet.has(file) && !isOwnedRootHtml(file));
 const missingLegacySources = [...legacyRootSources].filter((file) => !fs.existsSync(path.join(root, file)));
 const missingDataRoutes = [...dataRenderedRoutes].filter((file) => !fs.existsSync(path.join(root, file)));
+const missingManifestRoutes = [...new Set([
+  ...sourcePages,
+  ...rootHtml.filter((file) => isOwnedRootHtml(file))
+])].filter((file) => !manifestCoversRoute(file));
 
 if (duplicated.length) {
   console.error('HTML source ownership is ambiguous. Keep each page in one source location:');
@@ -63,6 +68,12 @@ if (unknownRootHtml.length) {
 if (missingLegacySources.length || missingDataRoutes.length) {
   console.error('data/source-ownership.json lists routes that do not exist:');
   for (const file of [...missingLegacySources, ...missingDataRoutes]) console.error(`- ${file}`);
+  process.exit(1);
+}
+
+if (missingManifestRoutes.length) {
+  console.error('Page manifest is missing route entries for:');
+  for (const file of missingManifestRoutes) console.error(`- ${file}`);
   process.exit(1);
 }
 

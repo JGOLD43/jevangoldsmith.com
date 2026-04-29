@@ -50,6 +50,15 @@ if (adminInlineHandlers > maxAdminInlineHandlers) {
   issues.push(`admin source has ${adminInlineHandlers} inline event handler attributes. Keep it at or below ${maxAdminInlineHandlers}.`);
 }
 
+const publicJsFiles = trackedFiles().filter((file) => file.startsWith('js/') && file.endsWith('.js') && exists(file));
+for (const file of publicJsFiles) {
+  const text = read(file);
+  const localStaticNoStore = /fetch\((['"])(data\/|api\/)[^'"]+\1[\s\S]{0,160}?cache:\s*['"]no-store['"]/i.test(text);
+  if (localStaticNoStore) {
+    issues.push(`${file} disables caching for local static JSON. Use versioned URLs instead of cache: 'no-store'.`);
+  }
+}
+
 for (const file of adminTextFiles) {
   const text = read(file);
   if (text.includes('Book data is stored in <code>js/books.js</code>')) {

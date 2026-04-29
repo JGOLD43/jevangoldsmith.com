@@ -19,25 +19,6 @@
     }
 }
 
-@media (max-width: 1024px) {
-    .essays-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .essays-sidebar {
-        position: relative;
-        top: 0;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        padding: 1rem 0;
-    }
-
-    .essays-main {
-        padding: 2rem 1rem;
-    }
-}
-
 @media (max-width: 768px) {
     .container {
         padding: 0 1rem;
@@ -119,4 +100,3 @@
         padding: 1.5rem;
     }
 }
-

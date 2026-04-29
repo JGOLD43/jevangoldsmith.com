@@ -9,10 +9,11 @@ Purpose: `define which files own each part of the website`
 | Concern | Source Of Truth | Generated/Consumed By |
 |---|---|---|
 | Firebase deploy output | Source files plus `scripts/build-site.js` | `dist/` |
-| Public HTML output | exactly one source per route: root `.html`, `_src/pages/*.html`, or collection renderer | `dist/*.html` |
+| Public HTML output | exactly one source per route: `_src/pages/*.html` or collection renderer | `dist/*.html` |
 | Shared CSS output | `css/src/*.css` | `css/style.css`, `dist/assets/css/*` |
-| Per-page CSS bundles | `css/src/*.css`, `scripts/build-site.js` bundle map | `css/page-*.css`, `dist/assets/css/*` |
-| Hashed asset paths | `scripts/build-site.js` | `dist/asset-manifest.json` |
+| Per-page CSS bundles | `css/src/*.css`, `scripts/build/page-manifest.js` | `css/page-*.css`, `dist/assets/css/*` |
+| Hashed asset paths | `scripts/build/assets.js` | `dist/asset-manifest.json` |
+| Versioned static JSON paths | generated `dist/data/*.json`, `dist/api/v1/*.json` | `dist/data/runtime-data-manifest.json` |
 | Generated file manifest | `scripts/build-site.js` | `data/generated-manifest.json` |
 | Route ownership allowlist | `data/source-ownership.json` | `npm run check:source` |
 | Page index | public page sources, `_src/pages/`, collection data | `data/pages.json`, `dist/data/pages.json` |
@@ -27,14 +28,16 @@ Never hand-edit generated `dist/` files.
 
 Generated root artifacts such as `css/style.css`, `css/page-*.css`,
 `data/pages.json`, `data/generated-manifest.json`, `sitemap.xml`, and
-`llms.txt` are recreated by `npm run build`. Treat tracked legacy root HTML as
-source only until that page is migrated to `_src/pages/` or a collection
-renderer. After migration, the root copy is removed and only `dist/*.html` is
-generated. `npm run check:repo` prevents generated files from being
-accidentally staged for commit, `npm run check:source` prevents root and
-`_src/pages/` from owning the same route, and `npm run check:structure` keeps
-legacy CSS, local screenshots, and retired admin workflow text from creeping
-back in.
+`llms.txt` are recreated by `npm run build`. Public source now lives in
+`_src/pages/` plus collection renderers; root-level public HTML checked into
+the repo is generated output, not authored input. `npm run check:repo`
+prevents generated files from being accidentally staged for commit,
+`npm run check:source` protects route ownership, and `npm run check:structure`
+keeps legacy CSS, local screenshots, and retired admin workflow text from
+creeping back in.
+
+Production-safe product media is generated into `images/generated/products/`.
+Raw `images/products/` files remain source assets and should not ship to `dist/`.
 
 ## Source Ownership
 
@@ -46,7 +49,7 @@ back in.
 | Shared footer | `_src/partials/footer.html` |
 | CSS source layers | `css/src/` |
 | Shared base page layout | `_src/layouts/base.html` |
-| Public page source | root `.html` files or `_src/pages/`, never both for the same route |
+| Public page source | `_src/pages/` or collection renderers, never both for the same route |
 | Books content | `data/books.json` |
 | Adventures content | `data/adventures.json` |
 | Essays content | `data/essays.json` |
@@ -63,9 +66,9 @@ back in.
 | Admin source | `admin/`, excluded from Hosting |
 | Leaflet vendor runtime | `vendor/leaflet/` |
 
-## Migration Direction
+## Source Model
 
-The target source model is:
+The active source model is:
 
 ```text
 _src/
@@ -77,15 +80,6 @@ _src/
   styles/
 ```
 
-Root `.html` files remain valid source until a page has been migrated into
-`_src/pages/` and the generated output is proven equivalent. Once migrated, the
-root source file is deleted; the build still emits the route into `dist/`.
-
-Currently migrated:
-
-- `reading-philosophy.html` is sourced from `_src/pages/reading-philosophy.html`
-  through `_src/layouts/base.html`.
-- `start-here.html` is sourced from `_src/pages/start-here.html` through
-  `_src/layouts/base.html`.
-- `index.html`, `field-notes.html`, and `weekly-review-template.html` are now
-  sourced from `_src/pages/` through `_src/layouts/base.html`.
+Public routes are now sourced from `_src/pages/` and collection renderers, then
+emitted into `dist/`. Shared chrome flows through `_src/layouts/base.html` plus
+the shared partials. The old root-page migration is complete.

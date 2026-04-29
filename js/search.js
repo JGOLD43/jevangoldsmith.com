@@ -1,5 +1,7 @@
 (function() {
     'use strict';
+    const dataFetch = window.JGDataFetch;
+    const debounce = window.JGCollectionUI?.debounce || ((fn) => fn);
 
     const state = {
         records: [],
@@ -17,6 +19,7 @@
     }
 
     function recordText(record) {
+        if (record.searchText) return normalize(record.searchText);
         return normalize([
             record.title,
             record.summary,
@@ -78,9 +81,10 @@
 
     function bindEvents() {
         if (input) {
+            const debouncedRender = debounce(() => renderResults(), 120);
             input.addEventListener('input', () => {
                 state.query = input.value;
-                renderResults();
+                debouncedRender();
             });
         }
 
@@ -98,9 +102,7 @@
     async function initSearch() {
         if (!results || !count) return;
         try {
-            const response = await fetch('api/v1/search-index.json');
-            if (!response.ok) throw new Error(`Search index returned ${response.status}`);
-            const payload = await response.json();
+            const payload = await dataFetch.fetchJson('api/v1/search-index.json');
             state.records = Array.isArray(payload.records) ? payload.records : [];
             applyUrlQuery();
             renderFilters();

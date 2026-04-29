@@ -14,7 +14,7 @@ Purpose: `define current and target content ownership`
 | Books | `data/books.json` | `js/books.js`, `books.html` |
 | Adventures | `data/adventures.json` plus detail HTML | `js/adventures.js`, `adventures.html`, `adventure-*.html` |
 | Essays | `data/essays.json` plus page HTML | `js/essays.js`, `essays.html` |
-| Skills | `data/skills.json` plus skill pages | `js/skills.js`, skill pages |
+| Skills | `data/skills.json` | Reserved for future use; no live skills pages currently ship. |
 | Quotes | `data/quotes.json` | `js/theme.js` |
 | People/products/projects/music/etc. | mostly page HTML | individual pages |
 

@@ -49,4 +49,8 @@
     document.addEventListener('input', function (event) {
         runAction(event, 'input');
     });
+
+    document.addEventListener('submit', function (event) {
+        runAction(event, 'submit');
+    });
 }());

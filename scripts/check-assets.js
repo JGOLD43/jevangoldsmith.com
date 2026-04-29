@@ -55,6 +55,14 @@ if (!fs.existsSync(distDir)) {
     fail('dist/images/source must not be deployed.');
   }
 
+  if (fs.existsSync(path.join(distDir, 'images', 'products'))) {
+    fail('dist/images/products must not be deployed. Use images/generated/products instead.');
+  }
+
+  if (!fs.existsSync(path.join(distDir, 'data', 'runtime-data-manifest.json'))) {
+    fail('dist/data/runtime-data-manifest.json is missing.');
+  }
+
   const publicTextFiles = textFiles(distDir).filter((file) => !file.includes(`${path.sep}admin${path.sep}`));
   const forbiddenRuntimeHosts = [
     'cdn.jsdelivr.net/npm/dompurify',

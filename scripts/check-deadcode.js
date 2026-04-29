@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = process.cwd();
+const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 
 function walk(dir, predicate, files = []) {
   if (!fs.existsSync(dir)) return files;
@@ -27,11 +28,7 @@ function allTextFrom(files) {
 }
 
 function listFiles(dir, extension) {
-  if (!fs.existsSync(path.join(root, dir))) return [];
-  return fs.readdirSync(path.join(root, dir))
-    .filter((file) => file.endsWith(extension))
-    .map((file) => `${dir}/${file}`)
-    .sort();
+  return walk(path.join(root, dir), (file) => file.endsWith(extension)).sort();
 }
 
 function countLiteral(haystack, needle) {
@@ -54,7 +51,7 @@ const htmlAndBuildFiles = walk(root, (file) => (
 const publicReferenceText = allTextFrom(htmlAndBuildFiles);
 const adminReferenceFiles = walk(path.join(root, 'admin'), (file) => file.endsWith('.html') || file.endsWith('.js') || file.endsWith('.md'));
 const adminReferenceText = allTextFrom(adminReferenceFiles);
-const cssBuildText = read('scripts/build/css.js');
+const cssBuildText = `${read('scripts/build/css.js')}\n${read('scripts/build/page-manifest.js')}`;
 
 const issues = [];
 
@@ -74,7 +71,22 @@ for (const file of listFiles('admin/js', '.js')) {
 for (const file of listFiles('css/src', '.css')) {
   const cssFile = path.basename(file);
   if (countLiteral(cssBuildText, cssFile) === 0) {
-    issues.push(`${file} is not included in scripts/build/css.js.`);
+    issues.push(`${file} is not included in the CSS bundle manifest.`);
+  }
+}
+
+const dependencyScanFiles = walk(root, (file) => (
+  (file.endsWith('.js') || file.endsWith('.html') || file.endsWith('.json') || file.endsWith('.md')) &&
+  !file.startsWith('dist/') &&
+  !file.startsWith('node_modules/') &&
+  file !== 'package-lock.json'
+));
+const dependencyText = allTextFrom(dependencyScanFiles);
+for (const name of Object.keys(packageJson.dependencies || {})) {
+  const packageNeedle = new RegExp(`(^|[^a-zA-Z0-9_./-])${escapeRegExp(name)}([^a-zA-Z0-9_./-]|$)`);
+  const binaryNeedle = new RegExp(`(^|[^a-zA-Z0-9_-])${escapeRegExp(name.split('/').pop())}([^a-zA-Z0-9_-]|$)`);
+  if (!packageNeedle.test(dependencyText) && !binaryNeedle.test(dependencyText)) {
+    issues.push(`dependency ${name} in package.json is not referenced by source, docs, or scripts.`);
   }
 }
 
@@ -85,3 +97,7 @@ if (issues.length) {
 }
 
 console.log('Dead-code check OK (referenced JS files and CSS layers).');
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}

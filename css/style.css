@@ -1083,6 +1083,537 @@ button[type="submit"]:hover {
     box-shadow: var(--shadow-hover);
 }
 
+/* css/src/14-collection-layout.css */
+/* Shared collection page layout shell */
+.collection-layout {
+    display: grid;
+    grid-template-columns: var(--collection-sidebar-width, 280px) minmax(0, 1fr);
+    gap: 0;
+    min-height: calc(100vh - var(--nav-height, 70px));
+    width: 100%;
+    background: var(--background);
+}
+
+.collection-layout.sidebar-collapsed {
+    grid-template-columns: var(--collection-sidebar-collapsed-width, 48px) minmax(0, 1fr);
+}
+
+.collection-sidebar {
+    align-self: start;
+    background: var(--collection-sidebar-bg, var(--background));
+    border-right: 1px solid var(--collection-sidebar-border, var(--border-color));
+    height: calc(100vh - var(--nav-height, 70px));
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: var(--collection-sidebar-padding, 0.75rem 0);
+    position: sticky;
+    scrollbar-color: var(--collection-sidebar-scrollbar, #ccc) transparent;
+    scrollbar-width: thin;
+    top: var(--nav-height, 70px);
+}
+
+.collection-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.collection-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.collection-sidebar::-webkit-scrollbar-thumb {
+    background: var(--collection-sidebar-scrollbar, #ccc);
+    border-radius: 4px;
+}
+
+.collection-sidebar.collapsed {
+    min-width: var(--collection-sidebar-collapsed-width, 48px);
+    padding: var(--collection-sidebar-collapsed-padding, 0.75rem 0);
+    width: var(--collection-sidebar-collapsed-width, 48px);
+}
+
+.collection-main {
+    background: var(--background);
+    min-width: 0;
+    padding: 2rem 3rem;
+}
+
+@media (max-width: 1024px) {
+    .collection-layout,
+    .collection-layout.sidebar-collapsed {
+        display: block;
+        min-height: auto;
+    }
+
+    .collection-sidebar,
+    .collection-sidebar.collapsed {
+        border-bottom: 1px solid var(--collection-sidebar-border, var(--border-color));
+        border-right: 0;
+        height: auto;
+        max-height: none;
+        min-width: 0;
+        padding: 1rem 0;
+        position: relative;
+        top: 0;
+        width: auto;
+    }
+
+    .collection-main {
+        padding: 2rem 1rem;
+    }
+}
+
+/* css/src/15-collection-sidebar.css */
+/* Shared collection page sidebar primitives */
+.collection-sidebar .sidebar-header {
+    align-items: center;
+    border-bottom: 1px solid var(--collection-sidebar-divider, var(--border-color));
+    display: flex;
+    gap: 0.75rem;
+    margin: 0;
+    padding: var(--collection-sidebar-header-padding, 0.5rem 1.5rem 0.5rem 10px);
+}
+
+.collection-sidebar .sidebar-browse-label {
+    color: var(--collection-sidebar-browse-color, var(--text-color));
+    flex: 1;
+    font-size: var(--collection-sidebar-browse-size, 1.1rem);
+    font-weight: 600;
+}
+
+.sidebar-collapse-btn {
+    align-items: center;
+    background: none;
+    border: 1px solid var(--collection-collapse-border, transparent);
+    border-radius: var(--collection-collapse-radius, 4px);
+    color: var(--collection-collapse-color, var(--text-light));
+    cursor: pointer;
+    display: inline-flex;
+    flex: 0 0 28px;
+    height: 28px;
+    justify-content: center;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    width: 28px;
+}
+
+.sidebar-collapse-btn:hover {
+    color: var(--collection-collapse-hover-color, var(--text-color));
+}
+
+.collection-sidebar .sidebar-list-selector,
+.collection-sidebar .sidebar-search {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.collection-sidebar .sidebar-list-selector {
+    margin-top: 0.65rem;
+}
+
+.collection-sidebar .sidebar-search {
+    margin: 0.75rem 0;
+}
+
+.collection-sidebar .list-dropdown {
+    position: relative;
+}
+
+.collection-sidebar .list-dropdown-btn {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    font-size: 1.05rem;
+    font-weight: 600;
+    gap: 0.5rem;
+    padding: 0;
+}
+
+.collection-sidebar .list-dropdown-btn:hover {
+    color: var(--secondary-color);
+}
+
+.collection-sidebar .list-dropdown-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.collection-sidebar .list-dropdown.open .list-dropdown-btn svg {
+    transform: rotate(180deg);
+}
+
+.collection-sidebar .list-dropdown-menu {
+    background: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    left: 0;
+    min-width: 150px;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    visibility: hidden;
+    z-index: 100;
+}
+
+.collection-sidebar .list-dropdown.open .list-dropdown-menu {
+    opacity: 1;
+    transform: translateY(4px);
+    visibility: visible;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option {
+    color: var(--text-color);
+    display: block;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option:hover {
+    background: var(--border-color);
+}
+
+.collection-sidebar .list-dropdown-menu .list-option.active {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.collection-sidebar .search-input-wrapper {
+    align-items: center;
+    display: flex;
+    position: relative;
+}
+
+.collection-sidebar .search-input-wrapper.search-bubble {
+    background: var(--collection-search-bubble-bg, var(--border-color));
+    border: var(--collection-search-bubble-border, none);
+    border-radius: 20px;
+    padding: 0 12px;
+}
+
+.collection-sidebar .search-bubble .search-icon {
+    color: var(--text-light);
+    flex-shrink: 0;
+    margin-right: 8px;
+    opacity: 0.6;
+    position: static;
+}
+
+.collection-search-input {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: var(--text-color);
+    font-family: 'Chivo', sans-serif;
+    font-size: 0.85rem;
+    height: 36px;
+    min-width: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.collection-search-input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.collection-search-input::placeholder {
+    color: var(--text-light);
+}
+
+.search-clear-btn {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--text-light);
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    padding: 0.25rem;
+    position: static;
+    transform: none;
+}
+
+.search-clear-btn:hover {
+    color: var(--text-color);
+}
+
+.collection-sidebar .sidebar-section {
+    margin: 0;
+}
+
+.collection-sidebar .sidebar-category {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--collection-category-color, #222);
+    cursor: pointer;
+    display: flex;
+    font-family: 'Chivo', sans-serif;
+    font-size: 0.9rem;
+    gap: 0.75rem;
+    line-height: 1.15;
+    min-height: 36px;
+    padding: var(--collection-category-padding, 0.58rem 1.5rem);
+    position: relative;
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+    width: 100%;
+}
+
+.collection-sidebar .category-icon {
+    align-items: center;
+    display: flex;
+    flex: 0 0 24px;
+    height: 24px;
+    justify-content: center;
+    width: 24px;
+}
+
+.collection-sidebar .category-icon svg {
+    height: 18px;
+    stroke: currentColor;
+    width: 18px;
+}
+
+.collection-sidebar .category-name {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
+.collection-sidebar .category-count {
+    align-items: center;
+    border-radius: 10px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-size: 0.7rem;
+    font-weight: 700;
+    justify-content: center;
+    min-width: 18px;
+    padding: 0.12rem 0.42rem;
+}
+
+.collection-sidebar .expand-icon {
+    color: inherit;
+    flex: 0 0 auto;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+.collection-sidebar.collapsed .sidebar-header {
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    padding: var(--collection-sidebar-collapsed-header-padding, 0.5rem 0);
+}
+
+.collection-sidebar.collapsed .sidebar-list-selector,
+.collection-sidebar.collapsed .sidebar-search,
+.collection-sidebar.collapsed .sidebar-browse-label,
+.collection-sidebar.collapsed .category-name,
+.collection-sidebar.collapsed .category-count,
+.collection-sidebar.collapsed .expand-icon,
+.collection-sidebar.collapsed .category-books,
+.collection-sidebar.collapsed .category-movies,
+.collection-sidebar.collapsed .category-essays,
+.collection-sidebar.collapsed .genre-movies {
+    display: none !important;
+}
+
+.collection-sidebar.collapsed .sidebar-collapse-btn {
+    margin: 0 auto;
+}
+
+.collection-sidebar.collapsed .sidebar-category {
+    gap: 0;
+    justify-content: center;
+    min-height: 38px;
+    padding: var(--collection-sidebar-collapsed-category-padding, 0.5rem 0);
+}
+
+.collection-sidebar.collapsed .category-icon {
+    height: 20px;
+    width: 20px;
+}
+
+.collection-sidebar.collapsed .category-icon svg {
+    height: 18px;
+    width: 18px;
+}
+
+/* css/src/16-collection-header.css */
+/* Shared collection page header */
+.collection-header {
+    align-items: flex-start;
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.collection-header .header-content h1,
+.collection-header .header-content .bookshelf-view-title {
+    color: #000;
+    font-family: 'Chivo', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 3rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+}
+
+.collection-header .header-content p,
+.collection-header .header-subtitle-link {
+    color: var(--text-color);
+    font-family: 'Chivo', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+.header-subtitle-link {
+    border-bottom: 1px solid var(--text-light);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.header-subtitle-link:hover {
+    border-bottom-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.philosophy-link-wrapper {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.read-first-note {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    font-style: italic;
+    font-weight: 400;
+}
+
+.collection-header-counter {
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+.collection-counter-number {
+    color: #000;
+    display: block;
+    font-family: 'Chivo', sans-serif;
+    font-size: 3rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.collection-counter-label {
+    color: var(--text-light);
+    display: block;
+    font-family: 'Chivo', sans-serif;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 900px) {
+    .collection-header {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .collection-header-counter {
+        padding: 0;
+        text-align: left;
+    }
+}
+
+/* css/src/17-collection-taste-cards.css */
+/* Shared grid/card shell for books, movies, and podcasts */
+.books-grid,
+.movies-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    margin-bottom: 3rem;
+}
+
+.collection-layout.sidebar-collapsed .books-grid,
+.collection-layout.sidebar-collapsed .movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.book-card,
+.movie-card {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.book-card:hover,
+.movie-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.book-info,
+.movie-info {
+    padding: 0 0.5rem;
+}
+
+.book-title-row,
+.movie-title-row {
+    align-items: baseline;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+}
+
+.book-title,
+.movie-title {
+    color: #0F1111;
+    font-family: 'Chivo', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.book-description,
+.movie-description {
+    color: var(--text-color);
+    display: -webkit-box;
+    font-size: 0.9rem;
+    -webkit-box-orient: vertical;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.book-description {
+    -webkit-line-clamp: 2;
+}
+
+.movie-description {
+    -webkit-line-clamp: 3;
+}
+
 /* css/src/20-search.css */
 /* Public static search page backed by api/v1/search-index.json. */
 .search-page {
@@ -2584,341 +3115,71 @@ button[type="submit"]:hover {
 }
 
 /* css/src/32-essays.css */
-/* Essays Page - Obsidian-Inspired Sidebar Layout */
-.essays-layout {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 0;
-    max-width: 1400px;
+/* Essays Page - collection shell variables and essay-specific sidebar behavior */
+.essays-layout.collection-layout {
+    --collection-sidebar-collapsed-width: 70px;
+    --collection-sidebar-width: 200px;
     margin: 0 auto;
-    min-height: calc(100vh - 400px);
+    max-width: 1400px;
 }
 
-.essays-sidebar {
-    background: var(--background);
-    border-right: 1px solid var(--border-color);
-    padding: 1.25rem 0;
-    position: sticky;
-    top: 70px;
-    height: calc(100vh - 70px);
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #ccc transparent;
+.essays-sidebar.collection-sidebar {
+    --collection-collapse-color: var(--text-light);
+    --collection-collapse-hover-color: var(--text-color);
+    --collection-search-bubble-bg: var(--border-color);
+    --collection-sidebar-bg: var(--background);
+    --collection-sidebar-border: var(--border-color);
+    --collection-sidebar-browse-color: var(--text-light);
+    --collection-sidebar-browse-size: 0.75rem;
+    --collection-sidebar-padding: 1.25rem 0;
+    --collection-sidebar-scrollbar: #ccc;
     font-size: 0.875rem;
 }
 
-.essays-sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.essays-sidebar::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 3px;
-}
-
-.essays-sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.sidebar-header {
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    align-items: center;
+.essays-sidebar .sidebar-category {
+    font-size: 0.8125rem;
     gap: 0.5rem;
+    padding: 0.45rem 1rem;
 }
 
-.sidebar-header h3 {
+.essays-sidebar .sidebar-category .category-icon svg {
+    stroke: #999;
+}
+
+.essays-sidebar .sidebar-category:hover {
+    background: #D4D4D4;
+}
+
+.essays-sidebar .sidebar-category:hover:not(.active) .category-icon svg,
+.essays-sidebar .sidebar-category:hover:not(.active) .category-name {
+    color: #000;
+    stroke: #000;
+}
+
+.essays-sidebar .sidebar-category.active {
+    background: #000;
+    color: #fff;
+    font-weight: 500;
+}
+
+.essays-sidebar .sidebar-category.active .category-name {
+    color: #fff;
+}
+
+.essays-sidebar .sidebar-category.active .category-count {
+    background: #333;
+    color: #fff;
+}
+
+.essays-sidebar .sidebar-category.active .category-icon svg {
+    stroke: #fff;
+}
+
+.essays-sidebar .category-count {
+    background: #E5E5E5;
+    color: #666;
     font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-light);
-    font-weight: 600;
-    margin: 0;
-    flex: 1;
-}
-
-.sidebar-header .show-all-link {
-    font-size: 0.75rem;
-    color: var(--text-light);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.sidebar-header .show-all-link:hover {
-    color: var(--secondary-color);
-}
-
-/* Browse Label */
-.sidebar-browse-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-light);
-    font-weight: 600;
-    flex: 1;
-}
-
-/* List Selector Dropdown */
-.sidebar-list-selector {
-    padding: 0.5rem 1rem 0.5rem;
-}
-
-.list-dropdown {
-    position: relative;
-}
-
-.list-dropdown-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text-color);
-    padding: 0;
-}
-
-.list-dropdown-btn:hover {
-    color: var(--secondary-color);
-}
-
-.list-dropdown-btn svg {
-    transition: transform 0.2s ease;
-}
-
-.list-dropdown.open .list-dropdown-btn svg {
-    transform: rotate(180deg);
-}
-
-.list-dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: var(--background);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    min-width: 150px;
-    z-index: 100;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.2s ease;
-}
-
-.list-dropdown.open .list-dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(4px);
-}
-
-.list-dropdown-menu .list-option {
-    display: block;
-    padding: 0.6rem 1rem;
-    color: var(--text-color);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: background 0.2s ease;
-}
-
-.list-dropdown-menu .list-option:first-child {
-    border-radius: 8px 8px 0 0;
-}
-
-.list-dropdown-menu .list-option:last-child {
-    border-radius: 0 0 8px 8px;
-}
-
-.list-dropdown-menu .list-option:hover {
-    background: var(--border-color);
-}
-
-.list-dropdown-menu .list-option.active {
-    font-weight: 600;
-    color: var(--secondary-color);
-}
-
-/* Sidebar Search Bar */
-.sidebar-search {
-    padding: 0.5rem 1rem 0.75rem;
-}
-
-.search-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-/* Bubble style search bar */
-.search-input-wrapper.search-bubble {
-    background: var(--border-color);
-    border-radius: 20px;
-    padding: 0 12px;
-}
-
-.search-bubble .search-icon {
-    position: static;
-    margin-right: 8px;
-    flex-shrink: 0;
-}
-
-.search-bubble .book-search-input {
-    border: none;
-    border-bottom: none;
-    padding: 8px 0;
-    background: transparent;
-}
-
-.search-bubble .book-search-input:focus {
-    border-bottom: none;
-}
-
-.search-bubble .search-clear-btn {
-    position: static;
-    margin-left: 4px;
-}
-
-.search-icon {
-    position: absolute;
-    left: 0;
-    color: var(--text-light);
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-.book-search-input {
-    width: 100%;
-    padding: 6px 24px 6px 24px;
-    border: none;
-    border-bottom: 1px solid var(--border-color);
-    border-radius: 0;
-    font-size: 0.8rem;
-    background: transparent;
-    color: var(--text-color);
-    transition: border-color 0.2s ease;
-}
-
-.book-search-input:focus {
-    outline: none;
-    border-bottom-color: var(--text-color);
-}
-
-.book-search-input::placeholder {
-    color: var(--text-light);
-    font-size: 0.8rem;
-}
-
-.search-clear-btn {
-    position: absolute;
-    right: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    color: var(--text-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s ease;
-}
-
-.search-clear-btn:hover {
-    color: var(--text-color);
-}
-
-.books-sidebar.collapsed .sidebar-search {
-    display: none;
-}
-
-.books-sidebar.collapsed .sidebar-list-selector {
-    display: none;
-}
-
-.books-sidebar.collapsed .sidebar-browse-label {
-    display: none;
-}
-
-/* Sidebar collapse button */
-.sidebar-collapse-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    color: var(--text-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s ease;
-    flex-shrink: 0;
-}
-
-.sidebar-collapse-btn:hover {
-    color: var(--text-color);
-}
-
-/* Collapsed sidebar state */
-.books-sidebar.collapsed {
-    width: 48px;
-    min-width: 48px;
-    padding: 0;
-}
-
-.books-sidebar.collapsed .sidebar-header {
-    padding: 0.5rem 0 0.5rem 15px;
-    margin-bottom: 0;
-    border-bottom: none;
-}
-
-.books-sidebar.collapsed .sidebar-header h3,
-.books-sidebar.collapsed .sidebar-header .show-all-link,
-.books-sidebar.collapsed .filter-label,
-.books-sidebar.collapsed .filter-rating-text,
-.books-sidebar.collapsed .timesread-slider-wrapper,
-.books-sidebar.collapsed .filter-timesread-icon,
-.books-sidebar.collapsed .sidebar-filter-section,
-.books-sidebar.collapsed .sidebar-footer,
-.books-sidebar.collapsed .category-name,
-.books-sidebar.collapsed .category-count,
-.books-sidebar.collapsed .category-arrow,
-.books-sidebar.collapsed .expand-icon,
-.books-sidebar.collapsed .category-books {
-    display: none;
-}
-
-.books-sidebar.collapsed .sidebar-collapse-btn {
-    margin: 0;
-}
-
-.books-sidebar.collapsed .sidebar-section {
-    margin-bottom: 0;
-}
-
-.books-sidebar.collapsed .sidebar-category {
-    justify-content: flex-start;
-    padding: 0.5rem 0 0.5rem 15px;
-    gap: 0;
-}
-
-.books-sidebar.collapsed .category-icon {
-    width: 20px;
-    height: 20px;
-}
-
-.books-sidebar.collapsed .category-icon svg {
-    width: 18px;
-    height: 18px;
-}
-
-/* Layout adjustment when sidebar is collapsed */
-.books-layout.sidebar-collapsed {
-    grid-template-columns: 48px 1fr;
-}
-
-.books-layout.sidebar-collapsed .books-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    font-weight: 500;
 }
 
 .sidebar-section {
@@ -3413,23 +3674,6 @@ button[type="submit"]:hover {
 }
 
 /* Essays main header */
-.essays-main .main-header {
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.essays-main .main-header .header-content h1 {
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #000;
-    font-family: 'Chivo', sans-serif;
-}
-
 .essays-main .header-subtitle {
     font-size: 1rem;
     color: var(--text-light);
@@ -3455,21 +3699,15 @@ button[type="submit"]:hover {
 }
 
 .essays-sidebar.collapsed .sidebar-header {
-    justify-content: center;
     padding: 0.75rem;
 }
 
 .essays-sidebar.collapsed .sidebar-category {
-    justify-content: center;
     padding: 0.75rem;
 }
 
 .essays-sidebar.collapsed .category-icon {
     margin: 0;
-}
-
-.essays-layout.sidebar-collapsed {
-    grid-template-columns: 70px 1fr;
 }
 
 .essays-layout.sidebar-collapsed .essays-main .content-section {
@@ -3478,6 +3716,137 @@ button[type="submit"]:hover {
 
 .essays-sidebar.collapsed .sidebar-collapse-btn {
     transform: rotate(180deg);
+}
+
+/* Essay pagination nav */
+.essay-nav {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 3rem 0 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    font-family: 'Chivo', sans-serif;
+}
+
+.essay-nav-btn {
+    flex: 1 1 0;
+    max-width: 360px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.125rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-color);
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.essay-nav-btn:hover:not(:disabled) {
+    border-color: var(--secondary-color);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+}
+
+.essay-nav-btn:hover:not(:disabled) .essay-nav-direction {
+    color: var(--secondary-color);
+}
+
+.essay-nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.essay-nav-next {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.essay-nav-btn svg {
+    flex-shrink: 0;
+    color: var(--text-light);
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.essay-nav-btn:hover:not(:disabled) svg {
+    color: var(--secondary-color);
+}
+
+.essay-nav-prev:hover:not(:disabled) svg {
+    transform: translateX(-3px);
+}
+
+.essay-nav-next:hover:not(:disabled) svg {
+    transform: translateX(3px);
+}
+
+.essay-nav-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.essay-nav-label-right {
+    align-items: flex-end;
+}
+
+.essay-nav-direction {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-light);
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.essay-nav-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-color);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.essay-nav-counter {
+    align-self: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    padding: 0 0.5rem;
+}
+
+@media (max-width: 640px) {
+    .essay-nav {
+        flex-wrap: wrap;
+        gap: 0.625rem;
+    }
+
+    .essay-nav-btn {
+        flex: 1 1 calc(50% - 0.625rem);
+        padding: 0.75rem 0.875rem;
+    }
+
+    .essay-nav-counter {
+        order: -1;
+        flex-basis: 100%;
+        text-align: center;
+    }
+
+    .essay-nav-title {
+        -webkit-line-clamp: 1;
+    }
 }
 
 /* css/src/33-meet.css */
@@ -3737,26 +4106,6 @@ body.meet-page {
 
 /* css/src/34-books.css */
 /* Book Reviews */
-.books-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 3rem;
-}
-
-.book-card {
-    background-color: #fff;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1rem;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.book-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
 /* Times Read Badge */
 .times-read-badge {
     position: absolute;
@@ -3808,27 +4157,6 @@ body.meet-page {
     padding: 1rem;
     text-align: center;
     width: 150px;
-}
-
-.book-info {
-    padding: 0 0.5rem;
-}
-
-.book-title-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-
-.book-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #0F1111;
-    margin: 0;
-    line-height: 1.3;
-    font-family: 'Chivo', sans-serif;
 }
 
 .book-year {
@@ -3938,63 +4266,6 @@ body.meet-page {
     display: none;
 }
 
-.books-main {
-    padding: 2rem 3rem;
-    background: var(--background);
-}
-
-.main-header {
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.main-header .header-content h1,
-.main-header .header-content .bookshelf-view-title {
-    font-size: 3rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #000;
-    font-family: 'Chivo', sans-serif;
-    line-height: 1.1;
-}
-
-.main-header .header-content p {
-    font-size: 1.1rem;
-    color: var(--text-color);
-    font-family: 'Chivo', sans-serif;
-    font-weight: 300;
-}
-
-.header-subtitle-link {
-    font-size: 1.1rem;
-    color: var(--text-color);
-    font-family: 'Chivo', sans-serif;
-    font-weight: 300;
-    text-decoration: none;
-    border-bottom: 1px solid var(--text-light);
-    transition: all 0.2s ease;
-}
-
-.header-subtitle-link:hover {
-    color: var(--secondary-color);
-    border-bottom-color: var(--secondary-color);
-}
-
-.philosophy-link-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.read-first-note {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    font-style: italic;
-    font-weight: 400;
-}
-
 /* Header Right - View Toggle + Counter */
 .header-right {
     display: flex;
@@ -4036,28 +4307,6 @@ body.meet-page {
 .view-toggle-btn.active {
     background: #000;
     color: #fff;
-}
-
-.header-counter {
-    text-align: center;
-    padding: 1rem 2rem;
-}
-
-.counter-number {
-    display: block;
-    font-size: 3rem;
-    font-weight: 600;
-    color: #000;
-    font-family: 'Chivo', sans-serif;
-    line-height: 1;
-}
-
-.counter-label {
-    display: block;
-    font-size: 0.9rem;
-    color: var(--text-light);
-    font-family: 'Chivo', sans-serif;
-    margin-top: 0.25rem;
 }
 
 /* Recent Books Carousel */
@@ -4554,329 +4803,50 @@ body.meet-page {
 }
 
 /* css/src/34-taste-sidebar.css */
-/* Shared Books/Movies taste browser sidebar */
-.main-header .header-content h1,
-.main-header .header-content .bookshelf-view-title {
-    font-size: 3rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #000;
-    font-family: 'Chivo', sans-serif;
-    line-height: 1.1;
+/* Taste browser variables and filter/sidebar behavior */
+.books-layout.collection-layout,
+.movies-layout.collection-layout,
+.podcasts-layout.collection-layout {
+    --collection-sidebar-width: 280px;
+    --collection-sidebar-collapsed-width: 48px;
 }
 
-.main-header .header-content p {
-    font-size: 1.1rem;
-    color: var(--text-color);
-    font-family: 'Chivo', sans-serif;
-    font-weight: 300;
+.books-sidebar.collection-sidebar--taste,
+.movies-sidebar.collection-sidebar--taste {
+    --collection-collapse-border: #8a8a8a;
+    --collection-collapse-color: #111;
+    --collection-collapse-hover-color: #111;
+    --collection-search-bubble-bg: var(--background);
+    --collection-search-bubble-border: 1px solid var(--border-color);
+    --collection-sidebar-bg: #fafaf9;
+    --collection-sidebar-border: #111;
+    --collection-sidebar-browse-color: var(--text-color);
+    --collection-sidebar-header-padding: 0.5rem 1.5rem 0.5rem 10px;
+    --collection-sidebar-scrollbar: #d1d5db;
 }
 
-.books-layout,
-.movies-layout {
-    display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
-    gap: 0;
-    width: 100%;
-    min-height: calc(100vh - var(--nav-height, 70px));
-    transition: grid-template-columns 0.25s ease;
-}
-
-.books-layout.sidebar-collapsed,
-.movies-layout.sidebar-collapsed {
-    grid-template-columns: 48px minmax(0, 1fr);
-}
-
-.books-sidebar,
-.movies-sidebar {
-    --taste-accent: #111;
-    --taste-accent-soft: #f5f5f4;
-    --taste-slider-soft: #e7e5e4;
-    background: #fafaf9;
-    border-right: 1px solid #111;
-    padding: 0.75rem 0;
-    position: sticky;
-    top: var(--nav-height, 70px);
-    height: calc(100vh - var(--nav-height, 70px));
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: #c7c7c7 transparent;
-    align-self: start;
-}
-
-.books-sidebar {
+.books-sidebar.collection-sidebar--taste {
     --taste-accent: #059669;
     --taste-accent-soft: #d1fae5;
     --taste-slider-soft: #d1fae5;
 }
 
-.movies-sidebar {
+.movies-sidebar.collection-sidebar--taste {
     --taste-accent: #dc2626;
     --taste-accent-soft: #fee2e2;
     --taste-slider-soft: #fee2e2;
 }
 
-.books-sidebar::-webkit-scrollbar,
-.movies-sidebar::-webkit-scrollbar {
-    width: 8px;
-}
-
-.books-sidebar::-webkit-scrollbar-track,
-.movies-sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.books-sidebar::-webkit-scrollbar-thumb,
-.movies-sidebar::-webkit-scrollbar-thumb {
-    background: #d1d5db;
-    border-radius: 4px;
-}
-
-.books-sidebar .sidebar-header,
-.movies-sidebar .sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0.5rem 1.5rem 0.5rem 10px; /* align toggle with collapsed state */
-    border-bottom: 1px solid #e5e5e5;
-    margin: 0;
-}
-
-.books-sidebar .sidebar-header h3,
-.movies-sidebar .sidebar-header h3 {
-    margin: 0;
-    flex: 1;
-    color: var(--text-color);
-    font-family: 'Chivo', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    line-height: 1.1;
-}
-
-.sidebar-collapse-btn {
-    width: 28px;
-    height: 28px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 28px;
-    border: 1px solid #8a8a8a;
-    border-radius: 4px;
-    background: transparent;
-    color: #111;
-    cursor: pointer;
-}
-
-.books-sidebar .sidebar-list-selector,
-.movies-sidebar .sidebar-list-selector,
-.books-sidebar .sidebar-search,
-.movies-sidebar .sidebar-search {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-}
-
-.books-sidebar .sidebar-list-selector,
-.movies-sidebar .sidebar-list-selector {
-    margin-top: 0.65rem;
-}
-
-.books-sidebar .sidebar-list-selector select,
-.movies-sidebar .sidebar-list-selector select {
-    max-width: 100%;
-}
-
-.books-sidebar .sidebar-search,
-.movies-sidebar .sidebar-search {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    margin: 0.75rem 0;
-}
-
-.books-sidebar .sidebar-search input,
-.movies-sidebar .sidebar-search input {
-    min-width: 0;
-    width: 100%;
-}
-
-.books-sidebar .sidebar-browse-label,
-.movies-sidebar .sidebar-browse-label {
-    color: var(--text-color);
-    flex: 1;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.list-dropdown {
-    position: relative;
-}
-
-.list-dropdown-btn {
-    align-items: center;
-    background: none;
-    border: 0;
-    color: var(--text-color);
-    cursor: pointer;
-    display: flex;
-    font-size: 1.1rem;
-    font-weight: 600;
-    gap: 0.5rem;
-    padding: 0;
-}
-
-.list-dropdown-btn:hover {
-    color: var(--secondary-color);
-}
-
-.list-dropdown-btn svg {
-    transition: transform 0.2s ease;
-}
-
-.list-dropdown.open .list-dropdown-btn svg {
-    transform: rotate(180deg);
-}
-
-.list-dropdown-menu {
-    background: var(--background);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    left: 0;
-    min-width: 150px;
-    opacity: 0;
-    position: absolute;
-    top: 100%;
-    transform: translateY(-10px);
-    transition: all 0.2s ease;
-    visibility: hidden;
-    z-index: 100;
-}
-
-.list-dropdown.open .list-dropdown-menu {
-    opacity: 1;
-    transform: translateY(4px);
-    visibility: visible;
-}
-
-.list-dropdown-menu .list-option {
-    color: var(--text-color);
-    display: block;
-    font-size: 0.9rem;
-    padding: 0.6rem 1rem;
-    text-decoration: none;
-    transition: background 0.2s ease;
-}
-
-.list-dropdown-menu .list-option:first-child {
-    border-radius: 8px 8px 0 0;
-}
-
-.list-dropdown-menu .list-option:last-child {
-    border-radius: 0 0 8px 8px;
-}
-
-.list-dropdown-menu .list-option:hover {
-    background: var(--border-color);
-}
-
-.list-dropdown-menu .list-option.active {
-    color: var(--secondary-color);
-    font-weight: 600;
-}
-
-.search-input-wrapper {
-    align-items: center;
-    display: flex;
-    position: relative;
-}
-
-.search-input-wrapper.search-bubble {
-    background: var(--border-color);
-    border-radius: 20px;
-    padding: 0 12px;
-}
-
-.search-bubble .search-icon {
-    flex-shrink: 0;
-    margin-right: 8px;
-    position: static;
-}
-
-.search-bubble .book-search-input,
-.search-bubble .movie-search-input {
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    height: 36px;
-    padding: 0;
-}
-
-.search-bubble .book-search-input:focus,
-.search-bubble .movie-search-input:focus {
-    box-shadow: none;
-    outline: none;
-}
-
-.search-bubble .search-clear-btn {
-    flex-shrink: 0;
-    position: static;
-    transform: none;
-}
-
-.book-search-input,
-.movie-search-input {
-    background: var(--background);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    color: var(--text-color);
-    font-family: 'Chivo', sans-serif;
-    font-size: 0.85rem;
-    padding: 0.6rem 2.5rem 0.6rem 2.5rem;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    width: 100%;
-}
-
-.book-search-input:focus,
-.movie-search-input:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(201, 168, 108, 0.1);
-    outline: none;
-}
-
-.book-search-input::placeholder,
-.movie-search-input::placeholder {
-    color: var(--text-light);
-}
-
-.search-clear-btn {
-    align-items: center;
-    background: none;
-    border: 0;
-    color: var(--text-light);
-    cursor: pointer;
-    display: flex;
-    padding: 0.25rem;
-    position: absolute;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.search-clear-btn:hover {
-    color: var(--text-color);
-}
-
 .sidebar-filter-section {
-    padding: 0.95rem 1.5rem;
     border-bottom: 1px solid #e5e5e5;
+    padding: 0.95rem 1.5rem;
 }
 
 .filter-header {
-    display: flex;
     align-items: center;
-    justify-content: space-between;
+    display: flex;
     gap: 0.75rem;
+    justify-content: space-between;
     margin-bottom: 0.65rem;
 }
 
@@ -4902,8 +4872,8 @@ body.meet-page {
 }
 
 .star-filter-container {
-    display: flex;
     align-items: center;
+    display: flex;
     gap: 0.22rem;
     min-height: 34px;
 }
@@ -4940,8 +4910,8 @@ body.meet-page {
 
 .timesread-filter-container,
 .timeswatched-filter-container {
-    display: flex;
     align-items: center;
+    display: flex;
     gap: 0.75rem;
 }
 
@@ -5030,29 +5000,9 @@ body.meet-page {
     text-align: right;
 }
 
-.books-sidebar .sidebar-section,
-.movies-sidebar .sidebar-section {
-    margin: 0;
-}
-
 .books-sidebar .sidebar-category,
 .movies-sidebar .sidebar-category {
-    align-items: center;
-    background: transparent;
-    border: 0;
     color: #222;
-    cursor: pointer;
-    display: flex;
-    font-family: 'Chivo', sans-serif;
-    font-size: 0.9rem;
-    gap: 0.75rem;
-    line-height: 1.15;
-    min-height: 36px;
-    padding: 0.58rem 1.5rem;
-    position: relative;
-    text-align: left;
-    transition: background 0.15s ease, color 0.15s ease;
-    width: 100%;
 }
 
 .books-sidebar .sidebar-category:hover,
@@ -5067,41 +5017,11 @@ body.meet-page {
     font-weight: 700;
 }
 
-.category-icon {
-    align-items: center;
-    display: flex;
-    flex: 0 0 24px;
-    height: 24px;
-    justify-content: center;
-    width: 24px;
-}
-
-.category-icon svg {
-    height: 18px;
-    stroke: currentColor;
-    width: 18px;
-}
-
-.category-name,
-.genre-name {
-    flex: 1;
-    min-width: 0;
-    overflow-wrap: anywhere;
-}
-
-.category-count,
-.genre-count {
-    align-items: center;
+.books-sidebar .category-count,
+.movies-sidebar .category-count,
+.movies-sidebar .genre-count {
     background: #e7e5e4;
-    border-radius: 9px;
     color: #555;
-    display: inline-flex;
-    flex: 0 0 auto;
-    font-size: 0.7rem;
-    font-weight: 700;
-    justify-content: center;
-    min-width: 18px;
-    padding: 0.12rem 0.42rem;
 }
 
 .books-sidebar .sidebar-category.active .category-count,
@@ -5109,6 +5029,13 @@ body.meet-page {
 .movies-sidebar .sidebar-category.active .genre-count {
     background: #333;
     color: #fff;
+}
+
+.category-name,
+.genre-name {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .expand-icon,
@@ -5184,68 +5111,24 @@ body.meet-page {
     margin: 0;
 }
 
-.books-sidebar.collapsed,
-.movies-sidebar.collapsed {
-    min-width: 48px;
-    padding: 0.75rem 0;
-    width: 48px;
-}
-
-.books-sidebar.collapsed .sidebar-header,
-.movies-sidebar.collapsed .sidebar-header {
-    justify-content: center;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem 0;
-}
-
-.books-sidebar.collapsed .sidebar-header h3,
 .books-sidebar.collapsed .show-all-link,
-.books-sidebar.collapsed .sidebar-list-selector,
-.books-sidebar.collapsed .sidebar-search,
-.books-sidebar.collapsed .sidebar-browse-label,
 .books-sidebar.collapsed .filter-label,
 .books-sidebar.collapsed .filter-rating-text,
 .books-sidebar.collapsed .timesread-slider-wrapper,
 .books-sidebar.collapsed .filter-timesread-icon,
 .books-sidebar.collapsed .sidebar-filter-section,
 .books-sidebar.collapsed .sidebar-footer,
-.books-sidebar.collapsed .category-name,
-.books-sidebar.collapsed .category-count,
-.books-sidebar.collapsed .expand-icon,
-.books-sidebar.collapsed .category-books,
-.movies-sidebar.collapsed .sidebar-header h3,
 .movies-sidebar.collapsed .show-all-link,
-.movies-sidebar.collapsed .sidebar-list-selector,
-.movies-sidebar.collapsed .sidebar-search,
-.movies-sidebar.collapsed .sidebar-browse-label,
 .movies-sidebar.collapsed .filter-label,
 .movies-sidebar.collapsed .filter-rating-text,
 .movies-sidebar.collapsed .timeswatched-slider-wrapper,
 .movies-sidebar.collapsed .filter-timeswatched-icon,
 .movies-sidebar.collapsed .sidebar-filter-section,
 .movies-sidebar.collapsed .sidebar-footer,
-.movies-sidebar.collapsed .category-name,
-.movies-sidebar.collapsed .category-count,
 .movies-sidebar.collapsed .genre-name,
 .movies-sidebar.collapsed .genre-count,
-.movies-sidebar.collapsed .expand-icon,
-.movies-sidebar.collapsed .genre-arrow,
-.movies-sidebar.collapsed .category-movies,
-.movies-sidebar.collapsed .genre-movies {
+.movies-sidebar.collapsed .genre-arrow {
     display: none !important;
-}
-
-.books-sidebar.collapsed .sidebar-collapse-btn,
-.movies-sidebar.collapsed .sidebar-collapse-btn {
-    margin: 0 auto;
-}
-
-.books-sidebar.collapsed .sidebar-category,
-.movies-sidebar.collapsed .sidebar-category {
-    gap: 0;
-    justify-content: center;
-    min-height: 38px;
-    padding: 0.5rem 0;
 }
 
 .books-sidebar.collapsed .sidebar-category:hover::after,
@@ -5268,387 +5151,31 @@ body.meet-page {
     z-index: 1000;
 }
 
-.books-main,
-.movies-main {
-    min-width: 0;
-}
-
-@media (max-width: 1024px) {
-    .books-layout,
-    .movies-layout {
-        display: block;
-        min-height: auto;
-    }
-
-    .books-sidebar,
-    .movies-sidebar {
-        border-bottom: 1px solid #111;
-        border-right: 0;
-        height: auto;
-        max-height: none;
-        padding: 1rem 0;
-        position: relative;
-        top: 0;
-    }
-
-    .books-layout.sidebar-collapsed,
-    .movies-layout.sidebar-collapsed {
-        display: block;
-    }
-}
-
-/* css/src/35-food.css */
-.food-hero {
-    text-align: center;
-    padding: 60px 0 40px;
-}
-
-.food-hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 16px;
-}
-
-.food-hero p {
-    color: var(--text-light);
-    font-size: 1.1rem;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.food-philosophy {
-    background: linear-gradient(135deg, var(--secondary-color), #4a7c10);
-    border-radius: 20px;
-    padding: 40px;
-    margin-bottom: 50px;
-    color: white;
-    text-align: center;
-}
-
-.food-philosophy h2 {
-    font-size: 1.8rem;
-    margin-bottom: 16px;
-}
-
-.food-philosophy p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    max-width: 700px;
-    margin: 0 auto;
-    opacity: 0.95;
-}
-
-.food-section {
-    margin-bottom: 50px;
-}
-
-.section-header {
-    display: flex;
+.books-sidebar.collapsed .category-count,
+.movies-sidebar.collapsed .genre-count {
     align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--border-color);
-}
-
-.section-header h2 {
-    font-size: 1.5rem;
-    margin: 0;
-}
-
-.cuisines-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
-}
-
-.cuisine-card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.cuisine-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-}
-
-.cuisine-image {
-    height: 160px;
-    display: flex;
-    align-items: center;
+    background: #666;
+    border-radius: 7px;
+    color: #fff;
+    display: flex !important;
+    font-size: 0.6rem;
+    height: 14px;
     justify-content: center;
-    font-size: 4rem;
+    line-height: 1;
+    min-width: 14px;
+    padding: 0 3px;
+    position: absolute;
+    right: 8px;
+    top: 2px;
 }
 
-.cuisine-content {
-    padding: 20px;
-}
-
-.cuisine-name {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: var(--primary-color);
-}
-
-.cuisine-desc {
-    font-size: 0.9rem;
-    color: var(--text-light);
-    line-height: 1.6;
-    margin-bottom: 12px;
-}
-
-.cuisine-favorites {
-    font-size: 0.85rem;
-    color: var(--secondary-color);
-    font-weight: 600;
-}
-
-.dishes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-.dish-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid var(--border-color);
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.dish-card:hover {
-    transform: translateY(-4px);
-}
-
-.dish-emoji {
-    font-size: 3rem;
-    margin-bottom: 12px;
-}
-
-.dish-name {
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: var(--primary-color);
-}
-
-.dish-type {
-    font-size: 0.8rem;
-    color: var(--text-light);
-}
-
-.restaurants-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.restaurant-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid var(--border-color);
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
-
-.restaurant-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    flex-shrink: 0;
-}
-
-.restaurant-info {
-    flex: 1;
-}
-
-.restaurant-name {
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: var(--primary-color);
-}
-
-.restaurant-location {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    margin-bottom: 6px;
-}
-
-.restaurant-note {
-    font-size: 0.9rem;
-    color: var(--secondary-color);
-}
-
-.cooking-section {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 30px;
-    border: 1px solid var(--border-color);
-}
-
-.cooking-section h2 {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.cooking-items {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 16px;
-}
-
-.cooking-item {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    padding: 16px;
-    background: var(--background);
-    border-radius: 10px;
-}
-
-.cooking-item-icon {
-    font-size: 1.5rem;
-}
-
-.cooking-item-text h4 {
-    font-size: 0.95rem;
-    margin-bottom: 2px;
-    color: var(--primary-color);
-}
-
-.cooking-item-text p {
-    font-size: 0.8rem;
-    color: var(--text-light);
-}
-
-@media (max-width: 768px) {
-    .food-hero h1 {
-        font-size: 2rem;
-    }
-
-    .cuisines-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .restaurant-card {
-        flex-direction: column;
-        text-align: center;
-    }
+.books-sidebar.collapsed .sidebar-category.active .category-count,
+.movies-sidebar.collapsed .sidebar-category.active .genre-count {
+    background: #000;
 }
 
 /* css/src/35-movies.css */
 /* Movie Times Watched Filter */
-.timeswatched-filter {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.timeswatched-filter-container {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.filter-timeswatched-icon {
-    font-size: 1.5rem;
-    line-height: 1;
-    user-select: none;
-}
-
-.timeswatched-slider-wrapper {
-    flex: 1;
-    position: relative;
-    padding: 0.5rem 0;
-}
-
-.timeswatched-slider {
-    width: 100%;
-    height: 6px;
-    background: #FEE2E2;
-    border-radius: 3px;
-    outline: none;
-    -webkit-appearance: none;
-    appearance: none;
-    cursor: pointer;
-    position: relative;
-    z-index: 2;
-}
-
-.timeswatched-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    background: #DC2626;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.timeswatched-slider::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    background: #DC2626;
-    border-radius: 50%;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.timeswatched-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-}
-
-.timeswatched-slider::-moz-range-thumb:hover {
-    transform: scale(1.2);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-}
-
-.timeswatched-ticks {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 6px;
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
-    transform: translateY(-50%);
-    z-index: 1;
-}
-
-.timeswatched-ticks .tick {
-    width: 2px;
-    height: 12px;
-    background: #EF4444;
-    border-radius: 1px;
-}
-
-.filter-timeswatched-text {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #DC2626;
-    min-width: 3rem;
-    text-align: right;
-}
-
 /* Times Watched display on movie cards */
 .movie-timeswatched {
     font-size: 0.85rem;
@@ -5686,21 +5213,6 @@ body.meet-page {
 .genre-movies.expanded {
     max-height: 500px;
     overflow-y: auto;
-}
-
-.movies-layout.sidebar-collapsed .movies-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-}
-
-.movies-main {
-    padding: 2rem 3rem;
-    background: var(--background);
-}
-
-@media (max-width: 1024px) {
-    .movies-main {
-        padding: 2rem 1rem;
-    }
 }
 
 /* css/src/36-adventures.css */
@@ -8975,25 +8487,6 @@ body.meet-page {
 
     .hero-title {
         font-size: 1.75rem;
-    }
-}
-
-@media (max-width: 1024px) {
-    .essays-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .essays-sidebar {
-        position: relative;
-        top: 0;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        padding: 1rem 0;
-    }
-
-    .essays-main {
-        padding: 2rem 1rem;
     }
 }
 
@@ -15406,393 +14899,208 @@ body.shelf-experience {
         }
 
 /* css/src/52-page-people-extras.css */
-/* People Page Layout - Similar to Essays */
-        .people-layout {
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            min-height: calc(100vh - 80px);
-            background: var(--background);
-        }
+/* People page collection-specific treatment */
+.people-layout.collection-layout {
+    --collection-sidebar-collapsed-width: 48px;
+    --collection-sidebar-width: 240px;
+}
 
-        /* Collapsed sidebar - matches Books page pattern */
-        .people-layout.sidebar-collapsed {
-            grid-template-columns: 48px 1fr;
-        }
+.people-sidebar.collection-sidebar {
+    --collection-collapse-color: var(--text-light);
+    --collection-collapse-hover-color: #000;
+    --collection-search-bubble-bg: #fff;
+    --collection-search-bubble-border: 1px solid var(--border-color);
+    --collection-sidebar-bg: var(--background);
+    --collection-sidebar-border: var(--border-color);
+    --collection-sidebar-browse-color: var(--text-light);
+    --collection-sidebar-browse-size: 0.75rem;
+    --collection-sidebar-collapsed-header-padding: 0.5rem 0 0.5rem 15px;
+    --collection-sidebar-collapsed-padding: 0;
+    --collection-sidebar-collapsed-category-padding: 0.5rem 0 0.5rem 15px;
+    --collection-sidebar-header-padding: 0.75rem 1.5rem;
+    --collection-sidebar-padding: 2rem 0;
+    --collection-sidebar-scrollbar: #ccc;
+}
 
-        .people-sidebar.collapsed {
-            width: 48px;
-            min-width: 48px;
-            padding: 0;
-        }
+.people-sidebar .sidebar-category {
+    gap: 0.75rem;
+    padding: 0.65rem 1.5rem;
+}
 
-        .people-sidebar.collapsed .sidebar-header {
-            padding: 0.5rem 0 0.5rem 15px;
-            margin-bottom: 0;
-            border-bottom: none;
-        }
+.people-sidebar .sidebar-category .category-icon svg {
+    stroke: #999;
+}
 
-        .people-sidebar.collapsed .sidebar-browse-label,
-        .people-sidebar.collapsed .sidebar-search,
-        .people-sidebar.collapsed .category-name,
-        .people-sidebar.collapsed .category-count {
-            display: none;
-        }
+.people-sidebar .sidebar-category:hover {
+    background: #D4D4D4;
+}
 
-        .people-sidebar.collapsed .sidebar-section {
-            margin-bottom: 0;
-        }
+.people-sidebar .sidebar-category:hover:not(.active) .category-icon svg,
+.people-sidebar .sidebar-category:hover:not(.active) .category-name {
+    color: #000;
+    stroke: #000;
+}
 
-        .people-sidebar.collapsed .sidebar-category {
-            justify-content: flex-start;
-            padding: 0.5rem 0 0.5rem 15px;
-            gap: 0;
-        }
+.people-sidebar .sidebar-category.active {
+    background: #000;
+    color: #fff;
+    font-weight: 500;
+}
 
-        .people-sidebar.collapsed .sidebar-collapse-btn {
-            margin: 0;
-        }
+.people-sidebar .sidebar-category.active .category-name {
+    color: #fff;
+}
 
-        /* Sidebar - matches Essays sidebar style */
-        .people-sidebar {
-            background: var(--background);
-            border-right: 1px solid var(--border-color);
-            padding: 2rem 0;
-            position: sticky;
-            top: 80px;
-            height: calc(100vh - 80px);
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #ccc transparent;
-        }
+.people-sidebar .category-icon {
+    color: var(--text-light);
+}
 
-        .people-sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
+.people-sidebar .category-name {
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: all 0.2s ease;
+}
 
-        .people-sidebar::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 3px;
-        }
+.people-sidebar .category-count {
+    background: #E5E5E5;
+    color: #666;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
 
-        .people-sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
+.people-sidebar .sidebar-category.active .category-count {
+    background: #333;
+    color: #fff;
+}
 
-        .people-sidebar .sidebar-header {
-            padding: 0.75rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
+.people-sidebar .sidebar-category.active .category-icon svg {
+    stroke: #fff;
+}
 
-        .people-sidebar .sidebar-collapse-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-            color: var(--text-light);
-            transition: color 0.2s ease;
-        }
+.people-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
 
-        .people-sidebar .sidebar-collapse-btn:hover {
-            color: #000;
-        }
+.people-layout.sidebar-collapsed .people-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
 
-        .people-sidebar .sidebar-browse-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-light);
-            font-weight: 600;
-        }
+.person-card {
+    background: var(--card-bg);
+    border-radius: 0;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-        /* Sidebar Search */
-        .people-sidebar .sidebar-search {
-            padding: 1rem 1.5rem;
-        }
+.person-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px);
+}
 
-        .people-sidebar .search-bubble {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #fff;
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 8px 14px;
-        }
+.person-image-container {
+    aspect-ratio: 1 / 1;
+    background: #e8e4dc;
+    border: 1px solid #1a1a1a;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
 
-        .people-sidebar .search-bubble input {
-            flex: 1;
-            border: none;
-            background: none;
-            outline: none;
-            font-size: 0.9rem;
-            color: var(--text-color);
-        }
+.person-image {
+    filter: grayscale(100%);
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    width: 100%;
+}
 
-        .people-sidebar .search-icon {
-            color: var(--text-light);
-        }
+.person-card:hover .person-image {
+    transform: scale(1.05);
+}
 
-        /* Sidebar Categories */
-        .people-sidebar .sidebar-section {
-            margin-bottom: 0;
-        }
+.person-info {
+    padding: 14px;
+}
 
-        .people-sidebar .sidebar-category {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.65rem 1.5rem;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-            position: relative;
-        }
+.person-name {
+    color: #000;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
 
-        .people-sidebar .sidebar-category .category-icon svg {
-            stroke: #999;
-        }
+.person-title {
+    color: var(--secondary-color);
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
 
-        .people-sidebar .sidebar-category:hover {
-            background: #D4D4D4;
-        }
+.person-lesson {
+    color: var(--text-light);
+    display: -webkit-box;
+    font-size: 0.8rem;
+    font-style: italic;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-height: 1.5;
+    overflow: hidden;
+}
 
-        .people-sidebar .sidebar-category:hover:not(.active) .category-icon svg {
-            stroke: #000;
-        }
+.person-lesson::before,
+.person-lesson::after {
+    content: '"';
+}
 
-        .people-sidebar .sidebar-category:hover:not(.active) .category-name {
-            color: #000;
-        }
+.category-section {
+    margin-bottom: 40px;
+}
 
-        .people-sidebar .sidebar-category.active {
-            background: #000;
-            color: #fff;
-            font-weight: 500;
-        }
+.category-section-title {
+    border-bottom: 1px solid var(--border-color);
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
 
-        .people-sidebar .sidebar-category.active .category-name {
-            color: #fff;
-        }
+@media (max-width: 900px) {
+    .people-layout {
+        grid-template-columns: 1fr;
+    }
 
-        .people-sidebar .sidebar-category.active .category-count {
-            background: #333;
-            color: #fff;
-        }
+    .people-sidebar {
+        display: none;
+    }
 
-        .people-sidebar .sidebar-category.active .category-icon svg {
-            stroke: #fff;
-        }
+    .people-grid {
+        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+}
 
-        .people-sidebar .category-icon {
-            color: var(--text-light);
-        }
+@media (max-width: 480px) {
+    .people-grid {
+        gap: 12px;
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-        .people-sidebar .category-name {
-            flex: 1;
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #666;
-            transition: all 0.2s ease;
-        }
+    .person-info {
+        padding: 10px;
+    }
 
-        .people-sidebar .category-count {
-            font-size: 0.75rem;
-            color: #666;
-            background: #E5E5E5;
-            padding: 0.15rem 0.5rem;
-            border-radius: 10px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
+    .person-name {
+        font-size: 0.85rem;
+    }
 
-        /* Main Content */
-        .people-main {
-            padding: 2rem 3rem;
-            background: var(--background);
-        }
-
-        .people-main .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-        }
-
-        .people-main .header-content h1 {
-            font-size: 3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #000;
-            font-family: 'Chivo', sans-serif;
-        }
-
-        .people-main .header-subtitle {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            font-family: 'Chivo', sans-serif;
-            font-weight: 300;
-        }
-
-        .people-main .header-counter {
-            text-align: center;
-            padding: 1rem 2rem;
-        }
-
-        .people-main .counter-number {
-            display: block;
-            font-size: 3rem;
-            font-weight: 600;
-            color: #000;
-            line-height: 1;
-        }
-
-        .people-main .counter-label {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        /* People Grid - More columns like Bookshelf */
-        .people-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1.25rem;
-        }
-
-        /* Adjust grid when sidebar is collapsed for more space */
-        .people-layout.sidebar-collapsed .people-grid {
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        }
-
-        /* Person Card */
-        .person-card {
-            background: var(--card-bg);
-            border-radius: 0;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .person-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .person-image-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            overflow: hidden;
-            background: #e8e4dc;
-            border: 1px solid #1a1a1a;
-        }
-
-        .person-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .person-card:hover .person-image {
-            transform: scale(1.05);
-        }
-
-        .person-info {
-            padding: 14px;
-        }
-
-        .person-name {
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin-bottom: 2px;
-            color: #000;
-        }
-
-        .person-title {
-            font-size: 0.75rem;
-            color: var(--secondary-color);
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .person-lesson {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            line-height: 1.5;
-            font-style: italic;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .person-lesson::before {
-            content: '"';
-        }
-
-        .person-lesson::after {
-            content: '"';
-        }
-
-        /* Category Section Headers */
-        .category-section {
-            margin-bottom: 40px;
-        }
-
-        .category-section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .people-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .people-sidebar {
-                display: none;
-            }
-
-            .people-main {
-                padding: 20px;
-            }
-
-            .people-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .people-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .person-info {
-                padding: 10px;
-            }
-
-            .person-name {
-                font-size: 0.85rem;
-            }
-
-            .person-lesson {
-                display: none;
-            }
-        }
+    .person-lesson {
+        display: none;
+    }
+}
 
 /* css/src/52-page-podcasts-extras.css */
 .movies-grid {

@@ -1,0 +1,250 @@
+---
+title: "Challenges, Constraints &amp; Personal Experiments"
+description: "A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life."
+layout: "base"
+bodyClass: "nav-compact"
+scripts: "<script src=\"js/grid-zoom.js\"></script><script src=\"js/action-dispatcher.js\"></script><script src=\"js/challenges.js\"></script><script src=\"js/theme.js\"></script><script src=\"js/analytics.js\"></script>"
+---
+<main class="movies-layout sidebar-collapsed" id="challenges-layout">
+        <aside class="movies-sidebar collapsed" id="challenges-sidebar">
+            <div class="sidebar-header">
+                <button class="sidebar-collapse-btn" data-action="toggleChallengeSidebar" title="Collapse sidebar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                    </svg>
+                </button>
+                <span class="sidebar-browse-label">Browse</span>
+            </div>
+
+            <div class="sidebar-list-selector">
+                <div class="list-dropdown" id="list-dropdown">
+                    <button class="list-dropdown-btn" data-action="toggleChallengeListDropdown">
+                        <span id="current-list-name">Challenges</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="list-dropdown-menu" id="list-dropdown-menu">
+                        <a href="projects.html" class="list-option">Projects</a>
+                        <a href="challenges.html" class="list-option active">Challenges</a>
+                        <a href="free-resources.html" class="list-option" data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges">Resources</a>
+                        <a href="lesson-logger.html" class="list-option">Lesson Logger</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-search">
+                <div class="search-input-wrapper search-bubble">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="challenge-search" class="movie-search-input" placeholder="Search challenges..." data-action="searchChallenges" data-action-event="input" data-action-value="true">
+                    <button class="search-clear-btn" id="challenge-search-clear-btn" data-action="clearChallengeSearch" style="display: none;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category active" data-action="filterChallenges" data-action-args="all" data-action-this="true" data-tooltip="All Challenges">
+                    <span class="category-icon">🎯</span>
+                    <span class="category-name">All Challenges</span>
+                    <span class="category-count" id="count-all-challenges">4</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="active" data-action-this="true" data-tooltip="Active">
+                    <span class="category-icon">⚡</span>
+                    <span class="category-name">Active</span>
+                    <span class="category-count" id="count-active">2</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="upcoming" data-action-this="true" data-tooltip="Upcoming">
+                    <span class="category-icon">📋</span>
+                    <span class="category-name">Upcoming</span>
+                    <span class="category-count" id="count-upcoming">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="completed" data-action-this="true" data-tooltip="Completed">
+                    <span class="category-icon">✅</span>
+                    <span class="category-name">Completed</span>
+                    <span class="category-count" id="count-completed">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="learning" data-action-this="true" data-tooltip="Learning">
+                    <span class="category-icon">📚</span>
+                    <span class="category-name">Learning</span>
+                    <span class="category-count" id="count-learning">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="fitness" data-action-this="true" data-tooltip="Fitness">
+                    <span class="category-icon">💪</span>
+                    <span class="category-name">Fitness</span>
+                    <span class="category-count" id="count-fitness">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="creative" data-action-this="true" data-tooltip="Creative">
+                    <span class="category-icon">✍️</span>
+                    <span class="category-name">Creative</span>
+                    <span class="category-count" id="count-creative">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="financial" data-action-this="true" data-tooltip="Financial">
+                    <span class="category-icon">💰</span>
+                    <span class="category-name">Financial</span>
+                    <span class="category-count" id="count-financial">1</span>
+                </button>
+            </div>
+
+            <div class="sidebar-footer">
+                <p>Personal challenges, constraints, and experiments</p>
+            </div>
+        </aside>
+
+        <div class="movies-main">
+            <header class="main-header">
+                <div class="header-content">
+                    <h1>Challenges</h1>
+                    <p>Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.</p>
+                </div>
+                <div class="header-counter">
+                    <span class="counter-number" id="challenge-count">4</span>
+                    <span class="counter-label">Challenges</span>
+                </div>
+            </header>
+
+            <div id="challenges-container" class="movies-grid">
+                <div class="movie-card challenge-card js-zoom-item" data-status="active" data-category="active learning" data-search="52 Books 2026 reading learning books year week business philosophy biography fiction">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder placeholder-learning">📚</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-active">Active</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">52 Books in 2026</h3>
+                        </div>
+                        <div class="podcast-category-badge">Learning · Jan 1 – Dec 31, 2026</div>
+                        <p class="movie-description">Reading one book per week for the year. A mix of business, philosophy, biography, and fiction.</p>
+                        <div class="challenge-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-value">5 / 52 books</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 10%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="movie-card challenge-card js-zoom-item" data-status="active" data-category="active fitness" data-search="Morning Routine wake 6am exercise meditate write plan habits compound">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder placeholder-fitness">🌅</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-active">Active</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">Morning Routine</h3>
+                        </div>
+                        <div class="podcast-category-badge">Fitness · Ongoing</div>
+                        <p class="movie-description">Wake at 6am. Exercise, meditate, write, and plan the day before any screens. Habits that compound.</p>
+                        <div class="challenge-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Current streak</span>
+                                <span class="progress-value">23 days</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 77%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="movie-card challenge-card js-zoom-item" data-status="upcoming" data-category="upcoming creative" data-search="100 Days Writing essay tweet reflection daily publish consistent practice">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder placeholder-creative">✍️</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-upcoming">Upcoming</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">100 Days of Writing</h3>
+                        </div>
+                        <div class="podcast-category-badge">Creative · Starting Q2 2026</div>
+                        <p class="movie-description">Write and publish something every day for 100 days. Essay, thread, or short reflection. Building a consistent writing practice.</p>
+                    </div>
+                </div>
+
+                <div class="movie-card challenge-card js-zoom-item" data-status="completed" data-category="completed financial" data-search="No-Spend Month January 2026 essential spending money consumption restaurants subscriptions impulse">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder placeholder-financial">💰</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-completed">Completed</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">No-Spend Month</h3>
+                        </div>
+                        <div class="podcast-category-badge">Financial · January 2026</div>
+                        <p class="movie-description">One month of essential spending only. No restaurants, no subscriptions, no impulse buys. Saved $1,240 over 31 days.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <section class="seo-related-section" data-seo-related>
+        <p class="seo-related-eyebrow">Related thread</p>
+        <h2>Keep exploring this idea</h2>
+        <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
+        <div class="seo-related-grid">
+            <a class="seo-related-card" href="essays.html" data-analytics="cta" data-cta-id="best-essays" data-cta-location="challenges">
+                <span>Essays on Thinking, Business, Culture &amp; Personal Systems</span>
+                <p>Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems.</p>
+            </a>
+            <a class="seo-related-card" href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="challenges">
+                <span>Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments</span>
+                <p>One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive.</p>
+            </a>
+            <a class="seo-related-card" href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges">
+                <span>Useful Resources for Thinking, Building &amp; Learning</span>
+                <p>Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work.</p>
+            </a>
+            <a class="seo-related-card" href="reading-philosophy.html">
+                <span>How I Read: A Practical Reading Philosophy</span>
+                <p>Notes on reading for judgment, taste, decision-making, and a better personal operating system.</p>
+            </a>
+        </div>
+    </section>
+</main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+                    <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="challenges">Field Notes</a></li>
+                    <li><a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="challenges">The Shelf</a></li>
+                    <li><a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges">Resources</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>

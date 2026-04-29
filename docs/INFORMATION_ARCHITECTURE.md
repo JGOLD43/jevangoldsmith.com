@@ -11,9 +11,9 @@ Purpose: `map the public website and the jobs each area performs`
 | Home | Introduce Jevan, current focus, newsletter, and key paths. | `index.html` |
 | Explore | Personal operating context and self-description. | `north-star.html`, `about.html`, `health.html`, `dateme.html` |
 | Content | External content and newsletter/social surfaces. | YouTube, X, Instagram, LinkedIn, newsletter mailto |
-| Taste | Books, movies, music, podcasts, products, people, food, quotes, interests. | `books.html`, `movies.html`, `people.html`, `quotes.html` |
+| Taste | Books, movies, music, podcasts, products, people, quotes, interests. | `books.html`, `movies.html`, `people.html`, `quotes.html` |
 | Adventures | Travel/adventure map, galleries, and detail pages. | `adventures.html`, `adventure-*.html` |
-| Experience | Essays, projects, challenges, skills, lessons, decision frameworks. | `essays.html`, `projects.html`, `skills.html`, `lesson-logger.html` |
+| Experience | Essays, projects, challenges, lessons, decision frameworks. | `essays.html`, `projects.html`, `lesson-logger.html` |
 
 ## Page Type Map
 
@@ -21,8 +21,8 @@ Purpose: `map the public website and the jobs each area performs`
 |---|---|---|
 | Home | `index.html` | Highest visual regression sensitivity. |
 | Simple editorial page | `about.html`, `north-star.html`, `wealth.html`, etc. | Often has inline page CSS today. |
-| Collection page | `books.html`, `movies.html`, `essays.html`, `skills.html` | Has filters, sidebars, or generated lists. |
-| Detail page | `skill-*.html`, `adventure-*.html` | Best candidates for templating. |
+| Collection page | `books.html`, `movies.html`, `essays.html` | Has filters, sidebars, or generated lists. |
+| Detail page | `adventure-*.html` | Best candidates for templating. |
 | Map/gallery page | `adventures.html`, `adventure-*.html` | Depends on Leaflet and lightbox behavior. |
 | Utility/CTA page | `contact.html`, `meet.html` | Should remain simple and reliable. |
 

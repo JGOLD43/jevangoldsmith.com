@@ -1,0 +1,280 @@
+---
+title: "Cool Shit: Objects, Ideas &amp; Useful Finds"
+description: "A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith's attention."
+layout: "base"
+bodyClass: "nav-compact"
+scripts: "<script src=\"js/theme.js\"></script><script src=\"js/analytics.js\"></script><script src=\"js/cool-shit.js\"></script>"
+---
+<main class="cool-page" data-active="feed">
+        <aside class="cool-sidebar" aria-label="Timeline">
+            <div class="timeline-head">
+                <span class="timeline-title">Timeline</span>
+                <button type="button" class="timeline-toggle-all" id="timeline-toggle-all" aria-label="Collapse or expand all months">Collapse all</button>
+            </div>
+            <nav class="timeline" id="timeline"></nav>
+        </aside>
+
+        <div class="cool-content">
+            <div class="container">
+                <header class="cool-page-header">
+                    <p class="feed-eyebrow">Field Archive · Cool Shit</p>
+                    <h1>Cool Shit</h1>
+                    <p>Interesting objects, tools, ideas, links, and finds that earned a permanent place in my attention.</p>
+                </header>
+                <div class="cool-tabs" role="tablist">
+                    <button class="cool-tab" data-tab="timeline" role="tab">Timeline</button>
+                    <button class="cool-tab active" data-tab="feed" role="tab">Feed</button>
+                </div>
+
+                <div class="cool-layout">
+                    <section class="cool-col-feed" aria-label="Feed">
+                        <div class="feed-head">
+                            <span class="feed-eyebrow">Field Archive · Cool Shit</span>
+                            <span class="feed-count" id="feed-count"></span>
+                        </div>
+                        <div class="feed" id="feed"></div>
+                        <div class="cool-empty" id="feed-empty" hidden>Nothing in this category yet.</div>
+                    </section>
+                    <aside class="cool-col-rail" aria-label="Filter by category">
+                        <div class="cool-rail-head"><span>Filter</span></div>
+                        <nav class="cool-tag-rail" id="tag-rail"></nav>
+                        <div class="cool-rail-stats">
+                            <span id="hero-count">—</span> finds · <span id="hero-cats">—</span> cats · last <span id="hero-updated">—</span>
+                        </div>
+                    </aside>
+                </div>
+
+        <section class="cool-section" hidden>
+            <div class="cool-section-header">
+                <span class="section-emoji">🔥</span>
+                <h2>Current Obsessions</h2>
+            </div>
+            <div class="cool-grid">
+                <div class="cool-card featured">
+                    <img src="images/generated/remote/e26a01c8730400-800.jpg" alt="AI" class="cool-card-image" srcset="images/generated/remote/e26a01c8730400-320.jpg 320w, images/generated/remote/e26a01c8730400-480.jpg 480w, images/generated/remote/e26a01c8730400-800.jpg 800w, images/generated/remote/e26a01c8730400-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px" loading="lazy" decoding="async">
+                    <div class="cool-card-content">
+                        <span class="cool-card-tag">Tech</span>
+                        <h3 class="cool-card-title">AI Agents That Actually Work</h3>
+                        <p class="cool-card-desc">We've crossed the threshold from "neat demo" to "genuinely useful." Claude, GPT-4, and the ecosystem of tools being built on top are changing how I work every single day.</p>
+                        <a href="#" class="cool-card-link">My AI Setup →</a>
+                    </div>
+                </div>
+                <div class="cool-card text-only">
+                    <span class="cool-card-tag">Philosophy</span>
+                    <h3 class="cool-card-title">"The best time to plant a tree was 20 years ago. The second best time is now."</h3>
+                    <p class="cool-card-desc">This proverb lives rent-free in my head whenever I think about starting something new.</p>
+                </div>
+                <div class="cool-card">
+                    <img src="images/generated/remote/99174dbdbc2a7f-800.jpg" alt="Mechanical Keyboard" class="cool-card-image" srcset="images/generated/remote/99174dbdbc2a7f-320.jpg 320w, images/generated/remote/99174dbdbc2a7f-480.jpg 480w, images/generated/remote/99174dbdbc2a7f-800.jpg 800w, images/generated/remote/99174dbdbc2a7f-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px" loading="lazy" decoding="async">
+                    <div class="cool-card-content">
+                        <span class="cool-card-tag">Gear</span>
+                        <h3 class="cool-card-title">Mechanical Keyboards</h3>
+                        <p class="cool-card-desc">Yes, I'm one of those people now. The tactile feedback, the sound, the customization. It's a rabbit hole and I'm deep in it.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="cool-stats" hidden>
+            <div class="cool-stat">
+                <div class="cool-stat-number">127+</div>
+                <div class="cool-stat-label">Cool Finds</div>
+            </div>
+            <div class="cool-stat">
+                <div class="cool-stat-number">23</div>
+                <div class="cool-stat-label">Categories</div>
+            </div>
+            <div class="cool-stat">
+                <div class="cool-stat-number">$4k</div>
+                <div class="cool-stat-label">Saved (or Spent)</div>
+            </div>
+            <div class="cool-stat">
+                <div class="cool-stat-number">Daily</div>
+                <div class="cool-stat-label">Updated</div>
+            </div>
+        </div>
+
+        <section class="cool-section" hidden>
+            <div class="cool-section-header">
+                <span class="section-emoji">🛠️</span>
+                <h2>Tools I Can't Live Without</h2>
+            </div>
+            <div class="finds-list">
+                <div class="find-item">
+                    <div class="find-emoji">⌨️</div>
+                    <div class="find-content">
+                        <h3 class="find-title">Raycast</h3>
+                        <p class="find-desc">Spotlight replacement on steroids. Snippets, window management, emoji picker, calculator, and endless extensions. Mac only, but worth buying a Mac for.</p>
+                    </div>
+                    <a href="https://raycast.com" target="_blank" class="find-link">raycast.com →</a>
+                </div>
+                <div class="find-item">
+                    <div class="find-emoji">📝</div>
+                    <div class="find-content">
+                        <h3 class="find-title">Obsidian</h3>
+                        <p class="find-desc">Where my second brain lives. Markdown files, local storage, insane plugin ecosystem. The graph view is beautiful but honestly I never use it.</p>
+                    </div>
+                    <a href="https://obsidian.md" target="_blank" class="find-link">obsidian.md →</a>
+                </div>
+                <div class="find-item">
+                    <div class="find-emoji">🎨</div>
+                    <div class="find-content">
+                        <h3 class="find-title">Figma</h3>
+                        <p class="find-desc">Still the gold standard for design. The dev mode update made the handoff process so much smoother. Plus it runs in a browser which is wild.</p>
+                    </div>
+                    <a href="https://figma.com" target="_blank" class="find-link">figma.com →</a>
+                </div>
+                <div class="find-item">
+                    <div class="find-emoji">🤖</div>
+                    <div class="find-content">
+                        <h3 class="find-title">Claude Code</h3>
+                        <p class="find-desc">The AI coding assistant that actually understands context. Built this website with it. Yes, we're in a bit of a recursive situation here.</p>
+                    </div>
+                    <a href="https://claude.ai" target="_blank" class="find-link">claude.ai →</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="cool-section" hidden>
+            <div class="cool-section-header">
+                <span class="section-emoji">💡</span>
+                <h2>Ideas That Broke My Brain</h2>
+            </div>
+            <div class="cool-grid">
+                <div class="cool-card">
+                    <img src="images/generated/remote/2fda916e22c579-800.jpg" alt="Space" class="cool-card-image" srcset="images/generated/remote/2fda916e22c579-320.jpg 320w, images/generated/remote/2fda916e22c579-480.jpg 480w, images/generated/remote/2fda916e22c579-800.jpg 800w, images/generated/remote/2fda916e22c579-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px" loading="lazy" decoding="async">
+                    <div class="cool-card-content">
+                        <span class="cool-card-tag">Science</span>
+                        <h3 class="cool-card-title">The Observable Universe</h3>
+                        <p class="cool-card-desc">There are more stars in the universe than grains of sand on Earth. And that's just the part we can see. What the actual fuck.</p>
+                    </div>
+                </div>
+                <div class="cool-card">
+                    <img src="images/generated/remote/1b7453ddc53e08-800.jpg" alt="Code" class="cool-card-image" srcset="images/generated/remote/1b7453ddc53e08-320.jpg 320w, images/generated/remote/1b7453ddc53e08-480.jpg 480w, images/generated/remote/1b7453ddc53e08-800.jpg 800w, images/generated/remote/1b7453ddc53e08-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px" loading="lazy" decoding="async">
+                    <div class="cool-card-content">
+                        <span class="cool-card-tag">Tech</span>
+                        <h3 class="cool-card-title">Compound Interest in Skills</h3>
+                        <p class="cool-card-desc">Getting 1% better every day means you're 37x better after a year. The math checks out and it completely reframed how I think about learning.</p>
+                    </div>
+                </div>
+                <div class="cool-card text-only">
+                    <span class="cool-card-tag">Mental Model</span>
+                    <h3 class="cool-card-title">Inversion</h3>
+                    <p class="cool-card-desc">Instead of asking "how do I succeed?" ask "how do I fail?" Then avoid those things. Stupid simple but incredibly powerful.</p>
+                </div>
+                <div class="cool-card">
+                    <img src="images/generated/remote/098ebbf4c40038-800.jpg" alt="People" class="cool-card-image" srcset="images/generated/remote/098ebbf4c40038-320.jpg 320w, images/generated/remote/098ebbf4c40038-480.jpg 480w, images/generated/remote/098ebbf4c40038-800.jpg 800w, images/generated/remote/098ebbf4c40038-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px" loading="lazy" decoding="async">
+                    <div class="cool-card-content">
+                        <span class="cool-card-tag">Psychology</span>
+                        <h3 class="cool-card-title">You Are The Average</h3>
+                        <p class="cool-card-desc">You become the average of the 5 people you spend most time with. Choose wisely. This made me audit my relationships ruthlessly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cool-section" hidden>
+            <div class="cool-section-header">
+                <span class="section-emoji">🎬</span>
+                <h2>Content That Slaps</h2>
+            </div>
+            <div class="finds-list">
+                <div class="find-item">
+                    <div class="find-emoji">🎙️</div>
+                    <div class="find-content">
+                        <h3 class="find-title">Lex Fridman Podcast</h3>
+                        <p class="find-desc">3-hour conversations with the most interesting people on the planet. Put it on 1.5x and go for a long walk.</p>
+                    </div>
+                    <a href="#" class="find-link">Listen →</a>
+                </div>
+                <div class="find-item">
+                    <div class="find-emoji">📺</div>
+                    <div class="find-content">
+                        <h3 class="find-title">Veritasium</h3>
+                        <p class="find-desc">Derek makes science videos that make you feel smarter. The production quality is insane and he's not afraid to go deep on complex topics.</p>
+                    </div>
+                    <a href="#" class="find-link">Watch →</a>
+                </div>
+                <div class="find-item">
+                    <div class="find-emoji">📧</div>
+                    <div class="find-content">
+                        <h3 class="find-title">Not Boring by Packy McCormick</h3>
+                        <p class="find-desc">The best business/tech newsletter out there. Deep dives into companies and trends that actually make you smarter about the world.</p>
+                    </div>
+                    <a href="#" class="find-link">Subscribe →</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="cool-section" hidden>
+            <div class="cool-section-header">
+                <span class="section-emoji">🎲</span>
+                <h2>Random Cool Finds</h2>
+            </div>
+            <div class="cool-grid">
+                <div class="cool-card">
+                    <img src="images/generated/remote/4832bb3b4b80b9-800.jpg" alt="Tech" class="cool-card-image" srcset="images/generated/remote/4832bb3b4b80b9-320.jpg 320w, images/generated/remote/4832bb3b4b80b9-480.jpg 480w, images/generated/remote/4832bb3b4b80b9-800.jpg 800w, images/generated/remote/4832bb3b4b80b9-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px" loading="lazy" decoding="async">
+                    <div class="cool-card-content">
+                        <span class="cool-card-tag">Hardware</span>
+                        <h3 class="cool-card-title">Framework Laptop</h3>
+                        <p class="cool-card-desc">A laptop you can actually repair and upgrade yourself. Modular ports, replaceable everything. This is how all tech should be made.</p>
+                        <a href="https://frame.work" target="_blank" class="cool-card-link">Check it out →</a>
+                    </div>
+                </div>
+                <div class="cool-card">
+                    <img src="images/generated/remote/324627bd455358-800.jpg" alt="Coffee" class="cool-card-image" srcset="images/generated/remote/324627bd455358-320.jpg 320w, images/generated/remote/324627bd455358-480.jpg 480w, images/generated/remote/324627bd455358-800.jpg 800w, images/generated/remote/324627bd455358-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px" loading="lazy" decoding="async">
+                    <div class="cool-card-content">
+                        <span class="cool-card-tag">Life</span>
+                        <h3 class="cool-card-title">Third Wave Coffee</h3>
+                        <p class="cool-card-desc">Once you go specialty, you can't go back to Starbucks. Learning about origins, processing methods, and roast profiles is its own rabbit hole.</p>
+                    </div>
+                </div>
+                <div class="cool-card">
+                    <img src="images/generated/remote/7fa9de77a67263-800.jpg" alt="Workspace" class="cool-card-image" srcset="images/generated/remote/7fa9de77a67263-320.jpg 320w, images/generated/remote/7fa9de77a67263-480.jpg 480w, images/generated/remote/7fa9de77a67263-800.jpg 800w, images/generated/remote/7fa9de77a67263-1200.jpg 1200w" sizes="(max-width: 768px) 92vw, 640px" loading="lazy" decoding="async">
+                    <div class="cool-card-content">
+                        <span class="cool-card-tag">Productivity</span>
+                        <h3 class="cool-card-title">Standing Desk Setup</h3>
+                        <p class="cool-card-desc">Took me 3 iterations to get it right. Standing mat, monitor arms, cable management. Your back will thank you.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+            </div>
+        </div>
+    <section class="seo-related-section" data-seo-related>
+        <p class="seo-related-eyebrow">Related thread</p>
+        <h2>Keep exploring this idea</h2>
+        <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
+        <div class="seo-related-grid">
+            <a class="seo-related-card" href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="cool-shit">
+                <span>The Shelf: Tools, Objects &amp; Gear That Earned Their Place</span>
+                <p>A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced.</p>
+            </a>
+            <a class="seo-related-card" href="movies.html">
+                <span>Movie Reviews, Watchlist &amp; Taste Notes</span>
+                <p>A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste.</p>
+            </a>
+            <a class="seo-related-card" href="books.html">
+                <span>Books I Recommend &amp; Notes From My Reading System</span>
+                <p>A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems.</p>
+            </a>
+        </div>
+    </section>
+</main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+                    <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="cool-shit">Field Notes</a></li>
+                    <li><a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="cool-shit">The Shelf</a></li>
+                    <li><a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="cool-shit">Resources</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>

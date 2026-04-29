@@ -1,68 +1,134 @@
-let currentPodcastCategory = 'all';
-let currentPodcastSearch = '';
+const collectionUi = window.JGCollectionUI;
+const collectionControllerFactory = window.JGCollectionController;
+const dataFetch = window.JGDataFetch;
+const state = {
+    category: 'all',
+    searchQuery: '',
+    sidebarCollapsed: true
+};
+let collectionController = null;
+let updatePodcastViewDeferred = null;
+
+function escapeValue(value) {
+    return String(value || '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+}
+
+function buildCuratedPodcastCard(podcast) {
+    const card = document.createElement('div');
+    card.className = `movie-card podcast-card js-zoom-item${podcast.badge ? ' has-review' : ''}`;
+    card.dataset.category = podcast.category || 'all';
+    card.dataset.search = podcast.searchText || '';
+    card.innerHTML = `
+        ${podcast.badge ? `<div class="times-read-badge movie-watch-badge">${escapeValue(podcast.badge)}</div>` : ''}
+        <div class="movie-poster-wrapper">
+            <img src="${escapeValue(podcast.image)}" alt="${escapeValue(podcast.host || podcast.title)}" class="podcast-cover" width="150" height="150" loading="lazy" decoding="async">
+        </div>
+        <div class="movie-info">
+            <div class="movie-title-row">
+                <h3 class="movie-title">${escapeValue(podcast.title)}</h3>
+            </div>
+            <div class="podcast-category-badge">${escapeValue(podcast.host)}</div>
+            <p class="movie-description">${escapeValue(podcast.description)}</p>
+        </div>
+    `;
+    return card;
+}
+
+async function renderCuratedPodcasts() {
+    const data = await dataFetch.fetchJson('data/podcasts.json');
+    const podcasts = Array.isArray(data.podcasts) ? data.podcasts : [];
+    const container = document.getElementById('podcasts-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    podcasts.forEach((podcast) => fragment.appendChild(buildCuratedPodcastCard(podcast)));
+    container.appendChild(fragment);
+}
 
 function getPodcastCards() {
     return Array.from(document.querySelectorAll('.podcast-card'));
 }
 
 function updatePodcastView() {
-    const query = currentPodcastSearch.toLowerCase();
-    let visibleCount = 0;
+    collectionController?.render();
+}
 
-    getPodcastCards().forEach((card) => {
-        const matchesCategory = currentPodcastCategory === 'all' || card.dataset.category === currentPodcastCategory;
+function getFilteredPodcastCards(currentState = state) {
+    const query = currentState.searchQuery.toLowerCase();
+    return getPodcastCards().filter((card) => {
+        const matchesCategory = currentState.category === 'all' || card.dataset.category === currentState.category;
         const matchesSearch = !query || (card.dataset.search || '').toLowerCase().includes(query);
-        const visible = matchesCategory && matchesSearch;
-        card.hidden = !visible;
-        if (visible) visibleCount += 1;
+        return matchesCategory && matchesSearch;
     });
+}
 
-    const counter = document.getElementById('podcast-count');
-    if (counter) counter.textContent = visibleCount;
+function buildCollectionController() {
+    collectionController = collectionControllerFactory.create({
+        getState: () => ({ ...state }),
+        getFilteredItems: (currentState) => getFilteredPodcastCards(currentState),
+        renderVisibleItems: (visibleCards) => {
+            const visibleSet = new Set(visibleCards);
+            getPodcastCards().forEach((card) => {
+                card.hidden = !visibleSet.has(card);
+            });
+        },
+        updateCount: (visibleCards) => {
+            const counter = document.getElementById('podcast-count');
+            if (counter) counter.textContent = visibleCards.length;
+        },
+        updateControls: (currentState) => {
+            collectionController?.syncSearchClearButton(Boolean(currentState.searchQuery));
+        },
+        group: {
+            allButtonSelector: '.sidebar-category[data-podcast-category="all"]',
+            buttonSelector: '.sidebar-category'
+        },
+        searchClearButtonId: 'podcast-search-clear-btn',
+        searchInputId: 'podcast-search',
+        sidebar: {
+            storageKey: 'podcasts-sidebar-collapsed',
+            layoutId: 'podcasts-layout',
+            sidebarId: 'podcasts-sidebar',
+            defaultCollapsed: true
+        }
+    });
+    updatePodcastViewDeferred = collectionUi?.debounce ? collectionUi.debounce(updatePodcastView, 120) : updatePodcastView;
 }
 
 function filterPodcasts(category, buttonEl) {
-    currentPodcastCategory = category;
-
-    document.querySelectorAll('.sidebar-category').forEach((button) => {
-        button.classList.remove('active');
+    state.category = category || buttonEl?.dataset.podcastCategory || 'all';
+    collectionController?.toggleGroup({
+        value: state.category,
+        button: buttonEl || document.querySelector(`.sidebar-category[data-podcast-category="${state.category}"]`),
+        onCollapse: () => {
+            state.category = 'all';
+        }
     });
-
-    if (buttonEl) buttonEl.classList.add('active');
-    updatePodcastView();
 }
 
 function searchPodcasts(query) {
-    currentPodcastSearch = query.trim();
-    const clearButton = document.getElementById('podcast-search-clear-btn');
-    if (clearButton) clearButton.style.display = currentPodcastSearch ? 'flex' : 'none';
-
-    updatePodcastView();
+    state.searchQuery = query.trim();
+    updatePodcastViewDeferred();
 }
 
 function clearPodcastSearch() {
-    currentPodcastSearch = '';
-    const searchInput = document.getElementById('podcast-search');
-    if (searchInput) searchInput.value = '';
-
-    const clearButton = document.getElementById('podcast-search-clear-btn');
-    if (clearButton) clearButton.style.display = 'none';
-
+    state.searchQuery = '';
+    collectionController?.clearSearchInput();
     updatePodcastView();
 }
 
 function togglePodcastSidebar() {
-    const layout = document.getElementById('podcasts-layout');
-    const sidebar = document.getElementById('podcasts-sidebar');
-    if (!layout || !sidebar) return;
-    layout.classList.toggle('sidebar-collapsed');
-    sidebar.classList.toggle('collapsed');
-    localStorage.setItem('podcasts-sidebar-collapsed', sidebar.classList.contains('collapsed'));
+    state.sidebarCollapsed = Boolean(collectionController?.toggleSidebar());
 }
 
 function togglePodcastListDropdown() {
-    const dropdown = document.getElementById('list-dropdown');
-    if (dropdown) dropdown.classList.toggle('open');
+    collectionController?.toggleListDropdown();
 }
 
 function formatEpisodeDuration(ms) {
@@ -146,9 +212,7 @@ function buildSpotifyShowCard(show) {
 
 async function loadJSON(url) {
     try {
-        const res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) return null;
-        return await res.json();
+        return await dataFetch.fetchJson(url);
     } catch {
         return null;
     }
@@ -178,7 +242,7 @@ async function renderSpotifyRecentEpisodes() {
     recent.forEach((ep) => frag.appendChild(buildSpotifyEpisodeCard(ep)));
     container.appendChild(frag);
     section.hidden = false;
-    renderSpotifyMeta('spotify-recent-meta', data.generatedAt, recent.length, recent.length === 1 ? 'episode' : 'episodes');
+    renderSpotifyMeta('spotify-recent-meta', data.generatedAt, recent.length, recent.length === 1 ? 'recent episode' : 'recent episodes');
 }
 
 async function renderSpotifyFollowedShows() {
@@ -196,14 +260,14 @@ async function renderSpotifyFollowedShows() {
     renderSpotifyMeta('spotify-shows-meta', data.generatedAt, data.shows.length, data.shows.length === 1 ? 'show' : 'shows');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    buildCollectionController();
+    state.sidebarCollapsed = Boolean(collectionController?.restoreSidebar());
     document.addEventListener('click', (event) => {
-        const dropdown = document.getElementById('list-dropdown');
-        if (dropdown && !dropdown.contains(event.target)) {
-            dropdown.classList.remove('open');
-        }
+        collectionController?.closeDropdownOnOutsideClick(event);
     });
 
+    await renderCuratedPodcasts();
     updatePodcastView();
 
     const grid = document.getElementById('podcasts-container');

@@ -1,0 +1,291 @@
+/* Shared collection page sidebar primitives */
+.collection-sidebar .sidebar-header {
+    align-items: center;
+    border-bottom: 1px solid var(--collection-sidebar-divider, var(--border-color));
+    display: flex;
+    gap: 0.75rem;
+    margin: 0;
+    padding: var(--collection-sidebar-header-padding, 0.5rem 1.5rem 0.5rem 10px);
+}
+
+.collection-sidebar .sidebar-browse-label {
+    color: var(--collection-sidebar-browse-color, var(--text-color));
+    flex: 1;
+    font-size: var(--collection-sidebar-browse-size, 1.1rem);
+    font-weight: 600;
+}
+
+.sidebar-collapse-btn {
+    align-items: center;
+    background: none;
+    border: 1px solid var(--collection-collapse-border, transparent);
+    border-radius: var(--collection-collapse-radius, 4px);
+    color: var(--collection-collapse-color, var(--text-light));
+    cursor: pointer;
+    display: inline-flex;
+    flex: 0 0 28px;
+    height: 28px;
+    justify-content: center;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    width: 28px;
+}
+
+.sidebar-collapse-btn:hover {
+    color: var(--collection-collapse-hover-color, var(--text-color));
+}
+
+.collection-sidebar .sidebar-list-selector,
+.collection-sidebar .sidebar-search {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.collection-sidebar .sidebar-list-selector {
+    margin-top: 0.65rem;
+}
+
+.collection-sidebar .sidebar-search {
+    margin: 0.75rem 0;
+}
+
+.collection-sidebar .list-dropdown {
+    position: relative;
+}
+
+.collection-sidebar .list-dropdown-btn {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    font-size: 1.05rem;
+    font-weight: 600;
+    gap: 0.5rem;
+    padding: 0;
+}
+
+.collection-sidebar .list-dropdown-btn:hover {
+    color: var(--secondary-color);
+}
+
+.collection-sidebar .list-dropdown-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.collection-sidebar .list-dropdown.open .list-dropdown-btn svg {
+    transform: rotate(180deg);
+}
+
+.collection-sidebar .list-dropdown-menu {
+    background: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    left: 0;
+    min-width: 150px;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    visibility: hidden;
+    z-index: 100;
+}
+
+.collection-sidebar .list-dropdown.open .list-dropdown-menu {
+    opacity: 1;
+    transform: translateY(4px);
+    visibility: visible;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option {
+    color: var(--text-color);
+    display: block;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option:hover {
+    background: var(--border-color);
+}
+
+.collection-sidebar .list-dropdown-menu .list-option.active {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.collection-sidebar .search-input-wrapper {
+    align-items: center;
+    display: flex;
+    position: relative;
+}
+
+.collection-sidebar .search-input-wrapper.search-bubble {
+    background: var(--collection-search-bubble-bg, var(--border-color));
+    border: var(--collection-search-bubble-border, none);
+    border-radius: 20px;
+    padding: 0 12px;
+}
+
+.collection-sidebar .search-bubble .search-icon {
+    color: var(--text-light);
+    flex-shrink: 0;
+    margin-right: 8px;
+    opacity: 0.6;
+    position: static;
+}
+
+.collection-search-input {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: var(--text-color);
+    font-family: 'Chivo', sans-serif;
+    font-size: 0.85rem;
+    height: 36px;
+    min-width: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.collection-search-input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.collection-search-input::placeholder {
+    color: var(--text-light);
+}
+
+.search-clear-btn {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--text-light);
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    padding: 0.25rem;
+    position: static;
+    transform: none;
+}
+
+.search-clear-btn:hover {
+    color: var(--text-color);
+}
+
+.collection-sidebar .sidebar-section {
+    margin: 0;
+}
+
+.collection-sidebar .sidebar-category {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--collection-category-color, #222);
+    cursor: pointer;
+    display: flex;
+    font-family: 'Chivo', sans-serif;
+    font-size: 0.9rem;
+    gap: 0.75rem;
+    line-height: 1.15;
+    min-height: 36px;
+    padding: var(--collection-category-padding, 0.58rem 1.5rem);
+    position: relative;
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+    width: 100%;
+}
+
+.collection-sidebar .category-icon {
+    align-items: center;
+    display: flex;
+    flex: 0 0 24px;
+    height: 24px;
+    justify-content: center;
+    width: 24px;
+}
+
+.collection-sidebar .category-icon svg {
+    height: 18px;
+    stroke: currentColor;
+    width: 18px;
+}
+
+.collection-sidebar .category-name {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
+.collection-sidebar .category-count {
+    align-items: center;
+    border-radius: 10px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-size: 0.7rem;
+    font-weight: 700;
+    justify-content: center;
+    min-width: 18px;
+    padding: 0.12rem 0.42rem;
+}
+
+.collection-sidebar .expand-icon {
+    color: inherit;
+    flex: 0 0 auto;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+.collection-sidebar.collapsed .sidebar-header {
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    padding: var(--collection-sidebar-collapsed-header-padding, 0.5rem 0);
+}
+
+.collection-sidebar.collapsed .sidebar-list-selector,
+.collection-sidebar.collapsed .sidebar-search,
+.collection-sidebar.collapsed .sidebar-browse-label,
+.collection-sidebar.collapsed .category-name,
+.collection-sidebar.collapsed .category-count,
+.collection-sidebar.collapsed .expand-icon,
+.collection-sidebar.collapsed .category-books,
+.collection-sidebar.collapsed .category-movies,
+.collection-sidebar.collapsed .category-essays,
+.collection-sidebar.collapsed .genre-movies {
+    display: none !important;
+}
+
+.collection-sidebar.collapsed .sidebar-collapse-btn {
+    margin: 0 auto;
+}
+
+.collection-sidebar.collapsed .sidebar-category {
+    gap: 0;
+    justify-content: center;
+    min-height: 38px;
+    padding: var(--collection-sidebar-collapsed-category-padding, 0.5rem 0);
+}
+
+.collection-sidebar.collapsed .category-icon {
+    height: 20px;
+    width: 20px;
+}
+
+.collection-sidebar.collapsed .category-icon svg {
+    height: 18px;
+    width: 18px;
+}

@@ -4,6 +4,19 @@ const path = require('path');
 
 const { escapeRegExp } = require('./html-utils');
 
+function walkFiles(dir, predicate, files = []) {
+  if (!fs.existsSync(dir)) return files;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkFiles(fullPath, predicate, files);
+      continue;
+    }
+    if (entry.isFile() && predicate(fullPath)) files.push(fullPath);
+  }
+  return files;
+}
+
 function hashedName(file, content) {
   const parsed = path.parse(file);
   const hash = crypto.createHash('sha256').update(content).digest('hex').slice(0, 10);
@@ -21,9 +34,8 @@ function buildAssetManifest({
   const manifest = {};
   const candidates = [
     ...cssBundleFiles,
-    ...(fs.existsSync(path.join(root, 'js'))
-      ? fs.readdirSync(path.join(root, 'js')).filter((file) => file.endsWith('.js')).map((file) => path.join('js', file))
-      : []),
+    ...walkFiles(path.join(root, 'js'), (file) => file.endsWith('.js'))
+      .map((file) => path.relative(root, file)),
     path.join('vendor', 'dompurify', 'purify.min.js'),
     path.join('vendor', 'leaflet', 'leaflet.css'),
     path.join('vendor', 'leaflet', 'leaflet.js')

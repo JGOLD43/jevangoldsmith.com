@@ -41,11 +41,9 @@
     "@biomejs/biome": "^2.4.12",
     "@playwright/test": "^1.59.1",
     "http-server": "^14.1.1",
-    "leaflet.markercluster": "^1.5.3",
     "sharp": "^0.34.5"
   },
   "dependencies": {
-    "@fontsource/chivo": "^5.2.8",
     "@tmcw/togeojson": "^7.1.2",
     "@turf/boolean-point-in-polygon": "^7.3.5",
     "@turf/length": "^7.3.5",

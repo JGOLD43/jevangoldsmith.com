@@ -11,6 +11,10 @@ const {
 } = require('./build/collections');
 const { createSeoHelpers } = require('./build/seo');
 const { createFileOps } = require('./build/io');
+const { loadSiteData } = require('./build/site-data');
+const { buildDist: packageDist } = require('./build/dist');
+const { runBuildPipeline } = require('./build/pipeline');
+const { buildRuntimeDataManifest } = require('./build/runtime-data-manifest');
 const {
   escapeHTML,
   decodeHtmlEntities,
@@ -22,27 +26,33 @@ const {
   wordCount
 } = require('./build/html-utils');
 const { applyPageCssBundle } = require('./build/page-routes');
+const { pageManifestFor, pageMetaFor } = require('./build/page-meta');
 const { discoverPages } = require('./build/page-discovery');
 const { renderAdventurePageTemplate } = require('./build/render-adventure-page');
+const { renderDocument } = require('./build/document');
+const { createPageEngines } = require('./build/engines');
+const { createSourcePageHelpers } = require('./build/source-pages');
 const countriesVisited = require('./build/countries-visited');
 const routesFromGpx = require('./build/routes-from-gpx');
 
 const root = process.cwd();
 const verify = process.argv.includes('--verify');
-const site = JSON.parse(fs.readFileSync(path.join(root, 'data', 'site.json'), 'utf8'));
-const deployConfig = JSON.parse(fs.readFileSync(path.join(root, 'data', 'site.config.json'), 'utf8'));
-const products = readJson(path.join(root, 'data', 'products.json'), { products: [] });
-const projects = readJson(path.join(root, 'data', 'projects.json'), { projects: [] });
-const ctas = readJson(path.join(root, 'data', 'ctas.json'), { primary: {}, sections: [], ctas: [] });
-const newsletter = readJson(path.join(root, 'data', 'newsletter.json'), {});
-const topics = readJson(path.join(root, 'data', 'topics.json'), { topics: [] });
-const seo = readJson(path.join(root, 'data', 'seo.json'), { defaults: {}, pages: {}, topicPages: {} });
-const adventures = readJson(path.join(root, 'data', 'adventures.json'), { adventures: [] });
-const essays = readJson(path.join(root, 'data', 'essays.json'), { essays: [] });
-const skills = readJson(path.join(root, 'data', 'skills.json'), { skills: [] });
-const books = readJson(path.join(root, 'data', 'books.json'), []);
-const quotes = readJson(path.join(root, 'data', 'quotes.json'), {});
-const remoteAssets = readJson(path.join(root, 'data', 'remote-assets.generated.json'), {});
+const {
+  site,
+  deployConfig,
+  products,
+  projects,
+  ctas,
+  newsletter,
+  topics,
+  seo,
+  adventures,
+  essays,
+  skills,
+  books,
+  quotes,
+  remoteAssets
+} = loadSiteData({ root });
 const {
   adventurePageFiles,
   htmlFiles,
@@ -66,6 +76,23 @@ const rootStaticDirs = ['.well-known'];
 let sitePages = [];
 let cssBundleFiles = [];
 const seoReviewedAt = '2026-04-22';
+
+const sourcePageHelpers = createSourcePageHelpers({
+  root,
+  site,
+  sourcePagesDir,
+  renderNav,
+  escapeHtmlAttr
+});
+const {
+  descriptionFromHtml,
+  hasSourcePage,
+  renderSourcePage,
+  sourcePagePath,
+  titleFromHtml
+} = sourcePageHelpers;
+
+let pageEngines = null;
 
 const seoHelpers = createSeoHelpers({
   site,
@@ -91,11 +118,6 @@ const {
   prioritySeoPages
 } = seoHelpers;
 
-function readJson(file, fallback) {
-  if (!fs.existsSync(file)) return fallback;
-  return JSON.parse(fs.readFileSync(file, 'utf8'));
-}
-
 function publicCsp() {
   return Object.entries(deployConfig.csp)
     .map(([directive, values]) => `${directive} ${values.join(' ')}`)
@@ -113,6 +135,7 @@ function copyDirectory(sourceDir, targetDir) {
     skipPrefixList: [
       'images/source',
       'images/people',
+      'images/products',
       'images/generated/remote'
     ],
     skipExactFiles: [
@@ -126,110 +149,63 @@ function copyDirectory(sourceDir, targetDir) {
 }
 
 // Page normalization
-function titleFromHtml(html, file) {
-  const title = html.match(/<title>([^<]+)<\/title>/i)?.[1]?.trim();
-  if (title) return decodeHtmlEntities(title).replace(/\s*[-|]\s*Jevan Goldsmith.*$/i, '').trim();
-  return file.replace(/\.html$/, '').replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-}
 
-function descriptionFromHtml(html, title) {
-  const description = metaDescriptionFromHtml(html);
-  return description ? decodeHtmlEntities(description) : `${title} on ${site.siteName}.`;
-}
+function getPageEngines() {
+  if (!pageEngines) {
+    pageEngines = createPageEngines({
+      fs,
+      root,
+      site,
+      products,
+      quotes,
+      topics,
+      seo,
+      essays,
+      skills,
+      hasSourcePage,
+      renderSourcePage,
+      adventureForFile,
+      skillForFile,
+      topicForFile,
+      renderAdventurePage,
+      renderSkillPage,
+      escapeHTML,
+      escapeHtmlAttr,
+      stripHtml,
+      titleCase,
+      renderDocument,
+      renderNav,
+      seoFor,
+      renderPageCtas,
+      renderShelfItem,
+      renderResourceCard,
+      renderProjectCard,
+      renderQuoteCard,
+      renderFilterControls,
+      quoteCategories,
+      iconSvg,
+      getPublicProducts,
+      getPublicResources,
+      getPublicProjects,
+      getPublicQuotes
+    });
+  }
 
-function sourcePagePath(file) {
-  return path.join(sourcePagesDir, file);
-}
-
-function hasSourcePage(file) {
-  return fs.existsSync(sourcePagePath(file));
+  return pageEngines;
 }
 
 function readPublicHtmlSource(file) {
-  const adventure = adventureForFile(file);
-  if (adventure) return renderAdventurePage(file, adventure);
-  const skill = skillForFile(file);
-  if (skill) return renderSkillPage(file, skill);
-  const topic = topicForFile(file);
-  if (topic) return renderTopicPage(file, topic);
-  if (file === 'products.html') return renderProductsPage(file);
-  if (file === 'free-resources.html') return renderResourcesPage(file);
-  if (file === 'projects.html') return renderProjectsPage(file);
-  if (file === 'quotes.html') return renderQuotesPage(file);
+  const entry = pageManifestFor(file) || null;
+  if (entry) {
+    const rendered = getPageEngines().renderPage({ file, entry });
+    if (typeof rendered === 'string') return rendered;
+  }
   if (hasSourcePage(file)) return renderSourcePage(file);
   return fs.readFileSync(file, 'utf8');
 }
 
-function parseSourcePage(file) {
-  const source = fs.readFileSync(sourcePagePath(file), 'utf8');
-  const match = source.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
-  if (!match) {
-    return {
-      data: {
-        title: titleFromHtml(source, file),
-        layout: 'base'
-      },
-      content: source.trim()
-    };
-  }
-
-  return {
-    data: parseFrontMatter(match[1], file),
-    content: match[2].trim()
-  };
-}
-
-function parseFrontMatter(source, file) {
-  const data = {};
-  for (const line of source.split('\n')) {
-    if (!line.trim()) continue;
-    const separator = line.indexOf(':');
-    if (separator < 0) {
-      console.error(`${sourcePagePath(file)} has invalid front matter line: ${line}`);
-      process.exitCode = 1;
-      continue;
-    }
-    const key = line.slice(0, separator).trim();
-    let value = line.slice(separator + 1).trim();
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-      value = value.slice(1, -1);
-    }
-    data[key] = value;
-  }
-  return data;
-}
-
-function renderSourcePage(file) {
-  const { data, content } = parseSourcePage(file);
-  const layoutName = data.layout || 'base';
-  const layoutPath = path.join(root, '_src', 'layouts', `${layoutName}.html`);
-  if (!fs.existsSync(layoutPath)) {
-    console.error(`${file} references missing layout: ${layoutName}`);
-    process.exitCode = 1;
-    return content;
-  }
-
-  const footerPath = path.join(root, '_src', 'partials', 'footer.html');
-  const tokens = {
-    title: data.title || titleFromHtml(content, file),
-    metaDescription: data.description ? `<meta name="description" content="${escapeHtmlAttr(data.description)}">` : '',
-    fontWeights: data.fontWeights || '300;400;600;700',
-    bodyAttributes: data.bodyClass ? ` class="${escapeHtmlAttr(data.bodyClass)}"` : '',
-    nav: data.includeNav === 'false' ? '' : fs.readFileSync(path.join(root, '_src', 'partials', 'nav.html'), 'utf8').trim(),
-    footer: data.includeFooter === 'false' ? '' : fs.readFileSync(footerPath, 'utf8').trim(),
-    content,
-    scripts: data.scripts || '<script src="js/theme.js"></script>'
-  };
-
-  let html = fs.readFileSync(layoutPath, 'utf8');
-  for (const [key, value] of Object.entries(tokens)) {
-    html = html.split(`{{ ${key} }}`).join(value);
-  }
-  return `${html.trim()}\n`;
-}
-
 function shouldWriteRootHtml(file) {
-  return !hasSourcePage(file);
+  return !hasSourcePage(file) && fs.existsSync(path.join(root, file));
 }
 
 function normalizePublicHtml(file) {
@@ -645,14 +621,7 @@ function ctaLocationFor(file) {
 }
 
 function sectionFor(file) {
-  if (file === 'index.html') return 'home';
-  if (file.startsWith('topics/')) return 'topics';
-  if (file === 'field-notes.html') return 'experience';
-  if (file.startsWith('adventure-') || file === 'adventures.html') return 'adventures';
-  if (['books.html', 'reading-philosophy.html', 'movies.html', 'podcasts.html', 'products.html', 'people.html', 'quotes.html', 'cool-shit.html'].includes(file)) return 'taste';
-  if (['essays.html', 'projects.html', 'challenges.html', 'free-resources.html', 'lesson-logger.html', 'important-or-not.html', 'changed-my-mind.html'].includes(file)) return 'experience';
-  if (['north-star.html', 'about.html', 'health.html', 'dateme.html'].includes(file)) return 'explore';
-  return 'page';
+  return pageMetaFor(file).section;
 }
 
 function generatedFromFor(file) {
@@ -722,8 +691,6 @@ function renderNav(file) {
   const section = sectionFor(file);
   let activeHref = file;
   if (file.startsWith('adventure-')) activeHref = 'adventures.html';
-  if (file.startsWith('skill-')) activeHref = 'skills.html';
-  if (file === 'learning-skills.html' || file === 'technical-skills.html' || file === 'applied-skills.html') activeHref = 'skills.html';
 
   const navLinksStart = cleared.indexOf('<ul class="nav-links">');
   let next = cleared;
@@ -776,7 +743,7 @@ function categoryPageForSkill(skill) {
     technical: 'technical-skills.html',
     learning: 'learning-skills.html'
   };
-  return pageMap[skill.category] || 'skills.html';
+  return pageMap[skill.category] || 'index.html';
 }
 
 function renderSkillPage(file, skill) {
@@ -884,40 +851,6 @@ function renderStaticActivityBadge(skill, activity) {
     </div>`;
 }
 
-function renderTopicPage(file, topic) {
-  const topicSeo = seoFor(file);
-  const related = topicRelatedContent(topic.id);
-  return renderCollectionDocument({
-    title: `${topicSeo.title} - ${site.siteName}`,
-    description: topicSeo.description || topic.description,
-    nav: renderNav(file),
-    footer: fs.existsSync(path.join(root, '_src', 'partials', 'footer.html'))
-      ? fs.readFileSync(path.join(root, '_src', 'partials', 'footer.html'), 'utf8').trim()
-      : '',
-    baseHref: '../',
-    main: `<main class="resources-content topic-hub-page">
-        <section class="resources-intro topic-hub-hero">
-            <p class="resources-eyebrow">Topic Hub</p>
-            <h1 class="resources-title">${escapeHTML(topic.label)}</h1>
-            <p class="resources-subtitle">${escapeHTML(topicSeo.thesis || topic.description)}</p>
-            ${renderPageCtas(file, `topic-${topic.id}`)}
-        </section>
-
-        ${renderTopicSection('Best first reads', related.firstReads)}
-        ${renderTopicSection('Field Notes and essays', related.notes)}
-        ${renderTopicSection('Books and resources', related.resources)}
-        ${renderTopicSection('Skills, projects, and objects', related.objects)}
-
-        <section class="resources-section topic-subscribe">
-            <p class="section-eyebrow">Field Notes</p>
-            <h2 class="section-title">Follow this thread</h2>
-            <p class="section-text">I send the useful pieces before they become polished essays: books, tools, questions, experiments, and notes worth keeping.</p>
-            <a href="field-notes.html" class="btn-primary" data-analytics="cta" data-cta-id="newsletter" data-cta-location="topic-${escapeHtmlAttr(topic.id)}">Get Field Notes</a>
-        </section>
-    </main>`
-  });
-}
-
 function topicRelatedContent(topicId) {
   const pageMatches = sitePagesForTopic(topicId);
   const essayMatches = (essays.essays || [])
@@ -994,90 +927,6 @@ function itemMatchesTopic(item, topicId) {
   return needles.some((needle) => haystack.some((value) => value.includes(needle)));
 }
 
-function renderTopicSection(title, items) {
-  if (!items.length) return '';
-  return `<section class="resources-section topic-hub-section">
-            <p class="section-eyebrow">${escapeHTML(title)}</p>
-            <div class="topic-link-grid">
-                ${items.map((item) => `<a class="topic-link-card" href="${escapeHtmlAttr(item.href)}">
-                    <span>${escapeHTML(item.title)}</span>
-                    <p>${escapeHTML(item.description || '')}</p>
-                </a>`).join('\n                ')}
-            </div>
-        </section>`;
-}
-
-function renderProductsPage(file) {
-  const publishedProducts = getPublicProducts();
-  const categories = products.productCategories || [];
-  const filters = [{ id: 'all', title: 'All' }, ...categories];
-
-  return renderCollectionPage(file, {
-    title: `The Shelf - ${site.siteName}`,
-    description: 'Objects, tools, and products that earned a place in Jevan Goldsmith\'s life.',
-    bodyClass: 'shelf-experience nav-compact',
-    scripts: '<script src="js/theme.js"></script>\n    <script src="js/grid-zoom.js"></script>\n    <script src="js/shelf.js"></script>',
-    main: `<main class="shelf-page">
-        <h1 class="sr-only">The Shelf: Tools, Objects &amp; Gear That Earned Their Place</h1>
-
-        <div class="shelf-filter" data-shelf-filter aria-label="Shelf filters">
-            ${filters.map((filter, index) => `<button type="button" class="${index === 0 ? 'active' : ''}" data-shelf-category="${escapeHtmlAttr(filter.id)}">${escapeHTML(filter.title)}</button>`).join('\n            ')}
-        </div>
-
-        <section class="shelf-grid" aria-label="Objects on the shelf">
-            ${publishedProducts.map((product, index) => renderShelfItem(product, index)).join('\n            ')}
-        </section>
-
-        <div class="shelf-disclosure">
-            <p>No paid placements. Some links may eventually be affiliate links, but the rule is simple: only things I actually use or would recommend to a friend.</p>
-        </div>
-    </main>`
-  });
-}
-
-function renderResourcesPage(file) {
-  const publishedResources = getPublicResources();
-
-  return renderCollectionPage(file, {
-    title: `Useful Resources - ${site.siteName}`,
-    description: 'Guides, templates, and tools from Jevan Goldsmith for thinking better, working smarter, and living well.',
-    main: `<main class="resources-content">
-        <section class="resources-intro">
-            <p class="resources-eyebrow">Useful Resources</p>
-            <h1 class="resources-title">Practical artifacts from the archive.</h1>
-            <p class="resources-subtitle">Templates, guides, and tools I use or am shaping into something useful. Start with the weekly review.</p>
-            ${renderPageCtas(file, 'resources-hero')}
-        </section>
-
-        <div class="resources-grid">
-            ${publishedResources.map(renderResourceCard).join('\n            ')}
-        </div>
-
-        <section class="resources-section">
-            <p class="section-eyebrow">Philosophy</p>
-            <h2 class="section-title">Why Free?</h2>
-            <p class="section-text">I create these resources because organizing my own thinking makes the thinking better. If they help others along the way, that is the whole point. No fake scarcity, no hard sell, just useful tools available to anyone who wants them.</p>
-        </section>
-
-        <section class="resources-section">
-            <p class="section-eyebrow">Suggestions</p>
-            <h2 class="section-title">Request a Resource</h2>
-            <div class="request-card">
-                <div class="request-icon">${iconSvg('message')}</div>
-                <div class="request-content">
-                    <h4>Have an idea?</h4>
-                    <p>If there's a template, guide, or tool you'd find useful, let me know. I'm always looking for ways to create practical resources.</p>
-                    <a href="contact.html" class="request-link" data-analytics="cta" data-cta-id="contact" data-cta-location="resources-request">
-                        Send a suggestion
-                        ${iconSvg('arrow')}
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>`
-  });
-}
-
 const PROJECT_CATEGORY_META = {
   software: { label: 'Software', emoji: '💻', placeholder: 'placeholder-software' },
   research: { label: 'Research', emoji: '📚', placeholder: 'placeholder-research' },
@@ -1102,213 +951,6 @@ function projectCategoryMeta(category) {
   };
 }
 
-function renderProjectsPage(file) {
-  const publishedProjects = getPublicProjects();
-  const total = publishedProjects.length;
-
-  const statusCounts = { active: 0, completed: 0, planned: 0 };
-  const categoryCounts = new Map();
-  for (const project of publishedProjects) {
-    const status = (project.status || 'planned').toLowerCase();
-    if (statusCounts[status] !== undefined) statusCounts[status] += 1;
-    const cat = (project.category || '').toLowerCase();
-    if (cat) categoryCounts.set(cat, (categoryCounts.get(cat) || 0) + 1);
-  }
-
-  const statusButtons = ['active', 'completed', 'planned'].map((status) => {
-    const meta = PROJECT_STATUS_META[status];
-    return `<div class="sidebar-section">
-                <button class="sidebar-category" data-action="filterProjects" data-action-args="${status}" data-action-this="true" data-tooltip="${escapeHtmlAttr(meta.label)}">
-                    <span class="category-icon">${meta.emoji}</span>
-                    <span class="category-name">${escapeHTML(meta.label)}</span>
-                    <span class="category-count" id="count-${status}">${statusCounts[status]}</span>
-                </button>
-            </div>`;
-  }).join('\n            ');
-
-  const categoryButtons = Array.from(categoryCounts.keys())
-    .sort()
-    .map((cat) => {
-      const meta = projectCategoryMeta(cat);
-      return `<div class="sidebar-section">
-                <button class="sidebar-category" data-action="filterProjects" data-action-args="${escapeHtmlAttr(cat)}" data-action-this="true" data-tooltip="${escapeHtmlAttr(meta.label)}">
-                    <span class="category-icon">${meta.emoji}</span>
-                    <span class="category-name">${escapeHTML(meta.label)}</span>
-                    <span class="category-count" id="count-cat-${escapeHtmlAttr(cat)}">${categoryCounts.get(cat)}</span>
-                </button>
-            </div>`;
-    }).join('\n            ');
-
-  const main = `<main class="movies-layout sidebar-collapsed" id="projects-layout">
-        <aside class="movies-sidebar collapsed" id="projects-sidebar">
-            <div class="sidebar-header">
-                <button class="sidebar-collapse-btn" data-action="toggleProjectSidebar" title="Collapse sidebar">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="9" y1="3" x2="9" y2="21"></line>
-                    </svg>
-                </button>
-                <span class="sidebar-browse-label">Browse</span>
-            </div>
-
-            <div class="sidebar-list-selector">
-                <div class="list-dropdown" id="list-dropdown">
-                    <button class="list-dropdown-btn" data-action="toggleProjectListDropdown">
-                        <span id="current-list-name">Projects</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="list-dropdown-menu" id="list-dropdown-menu">
-                        <a href="projects.html" class="list-option active">Projects</a>
-                        <a href="challenges.html" class="list-option">Challenges</a>
-                        <a href="free-resources.html" class="list-option">Resources</a>
-                        <a href="lesson-logger.html" class="list-option">Lesson Logger</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-search">
-                <div class="search-input-wrapper search-bubble">
-                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="text" id="project-search" class="movie-search-input" placeholder="Search projects..." data-action="searchProjects" data-action-event="input" data-action-value="true">
-                    <button class="search-clear-btn" id="project-search-clear-btn" data-action="clearProjectSearch" style="display: none;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <button class="sidebar-category active" data-action="filterProjects" data-action-args="all" data-action-this="true" data-tooltip="All Projects">
-                    <span class="category-icon">🎯</span>
-                    <span class="category-name">All Projects</span>
-                    <span class="category-count" id="count-all-projects">${total}</span>
-                </button>
-            </div>
-
-            ${statusButtons}
-
-            ${categoryButtons}
-
-            <div class="sidebar-footer">
-                <p>Things I am building, exploring, and planning</p>
-            </div>
-        </aside>
-
-        <div class="movies-main">
-            <header class="main-header">
-                <div class="header-content">
-                    <h1>Projects</h1>
-                    <p>Things I am building, exploring, and learning in public.</p>
-                </div>
-                <div class="header-counter">
-                    <span class="counter-number" id="project-count">${total}</span>
-                    <span class="counter-label">Projects</span>
-                </div>
-            </header>
-
-            <div id="projects-container" class="movies-grid">
-                ${publishedProjects.map(renderProjectCard).join('\n                ')}
-            </div>
-        </div>
-    </main>`;
-
-  return renderCollectionPage(file, {
-    title: `Projects - ${site.siteName}`,
-    description: 'Projects Jevan Goldsmith is building, exploring, and planning.',
-    bodyClass: 'nav-compact',
-    scripts: '<script src="js/grid-zoom.js"></script>\n    <script src="js/action-dispatcher.js"></script>\n    <script src="js/projects.js"></script>\n    <script src="js/theme.js"></script>\n    <script src="js/analytics.js"></script>',
-    main
-  });
-}
-
-function renderQuotesPage(file) {
-  const publishedQuotes = getPublicQuotes();
-  const categories = quoteCategories(publishedQuotes);
-  const featured = quotes.featuredQuote || {
-    text: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.',
-    author: 'Aristotle (via Will Durant)'
-  };
-
-  return renderCollectionPage(file, {
-    title: `Quotes - ${site.siteName}`,
-    description: 'Quotes and ideas that have shaped how Jevan Goldsmith thinks about life, business, growth, and decision-making.',
-    scripts: '<script src="js/theme.js"></script>\n    <script src="js/collection-filters.js"></script>',
-    main: `<main>
-        <section class="quotes-hero">
-            <h1>Words That Shaped My Thinking</h1>
-            <p>A collection of quotes that have influenced how I see the world, make decisions, and approach life. These are ideas I return to regularly.</p>
-        </section>
-
-        <section class="featured-quote">
-            <blockquote>&ldquo;${escapeHTML(featured.text)}&rdquo;</blockquote>
-            ${featured.author ? `<cite>- ${escapeHTML(featured.author)}</cite>` : ''}
-        </section>
-
-        ${renderFilterControls('quotes', [{ id: 'all', label: 'All Quotes' }, ...categories], 'category')}
-
-        <div class="quotes-container">
-            <div class="quotes-grid" id="quotes-grid">
-                ${publishedQuotes.map(renderQuoteCard).join('\n                ')}
-            </div>
-        </div>
-
-        <div class="submit-quote-section">
-            <h2>Share a Quote</h2>
-            <p>Have a quote that changed how you think? I'd love to hear it.</p>
-            <a href="contact.html" class="btn-primary">
-                ${iconSvg('send')}
-                Send me a quote
-            </a>
-        </div>
-    </main>`
-  });
-}
-
-function renderCollectionPage(file, options) {
-  const footer = fs.existsSync(path.join(root, '_src', 'partials', 'footer.html'))
-    ? fs.readFileSync(path.join(root, '_src', 'partials', 'footer.html'), 'utf8').trim()
-    : '';
-  return renderCollectionDocument({
-    ...options,
-    nav: renderNav(file),
-    footer
-  });
-}
-
-function renderCollectionDocument({ title, description, nav, footer, main, scripts = '<script src="js/theme.js"></script>', baseHref = '', bodyClass = '' }) {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHTML(title)}</title>
-    ${baseHref ? `<base href="${escapeHtmlAttr(baseHref)}">` : ''}
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <meta name="description" content="${escapeHtmlAttr(description)}">
-</head>
-<body${bodyClass ? ` class="${escapeHtmlAttr(bodyClass)}"` : ''}>
-    ${nav}
-
-    ${main}
-
-    ${footer}
-    ${scripts}
-</body>
-</html>
-`;
-}
-
 function renderShelfItem(product, index = 0) {
   const verdict = product.verdict || product.shortDescription || product.description || '';
   const why = product.whyItStayed || product.description || product.shortDescription || '';
@@ -1316,9 +958,9 @@ function renderShelfItem(product, index = 0) {
   const replaced = product.replaced || '';
   const brand = product.brand || '';
   const checkoutUrl = product.checkoutUrl || '';
-  const productImage = productImagePath(product.slug || product.id);
+  const productImage = productImageAsset(product);
   const markContent = productImage
-    ? `<img class="shelf-object-photo" src="${escapeHtmlAttr(productImage)}" alt="${escapeHtmlAttr(product.title)}" width="800" height="800" loading="lazy" decoding="async">`
+    ? `<img class="shelf-object-photo" src="${escapeHtmlAttr(productImage.src)}"${productImage.srcset ? ` srcset="${escapeHtmlAttr(productImage.srcset)}"` : ''}${productImage.sizes ? ` sizes="${escapeHtmlAttr(productImage.sizes)}"` : ''} alt="${escapeHtmlAttr(product.title)}" width="${escapeHtmlAttr(String(productImage.width || 800))}" height="${escapeHtmlAttr(String(productImage.height || 800))}" loading="lazy" decoding="async">`
     : escapeHTML(productIcon(product.icon));
   return `<article class="shelf-item" id="${escapeHtmlAttr(product.slug || product.id)}" data-shelf-card data-category="${escapeHtmlAttr(product.category)}" style="--shelf-index: ${index}">
                 <button class="shelf-object" type="button"
@@ -1333,7 +975,7 @@ function renderShelfItem(product, index = 0) {
                     data-replaced="${escapeHtmlAttr(replaced)}"
                     data-usage="${escapeHtmlAttr(product.usage || '')}"
                     data-icon="${escapeHtmlAttr(productIcon(product.icon))}"
-                    data-image="${escapeHtmlAttr(productImage || '')}"
+                    data-image="${escapeHtmlAttr(productImage?.src || '')}"
                     data-related="${escapeHtmlAttr((product.relatedContent || []).join('|'))}"
                     data-link="${escapeHtmlAttr(checkoutUrl)}">
                     <span class="shelf-object-stage${productImage ? ' has-photo' : ''}" aria-hidden="true">
@@ -1486,7 +1128,10 @@ function renderRating(value) {
 }
 
 function getPublicProducts() {
-  return collectPublicProducts(products);
+  return collectPublicProducts(products).map((product) => {
+    const image = productImageAsset(product);
+    return image ? { ...product, image: image.src } : product;
+  });
 }
 
 function getPublicResources() {
@@ -1514,12 +1159,51 @@ function externalLinkAttrs(url) {
   return /^https?:\/\//i.test(url) ? ' target="_blank" rel="noopener noreferrer"' : '';
 }
 
-function productImagePath(slug) {
+function generatedProductImageAsset(slug) {
   if (!slug) return null;
-  const exts = ['.jpg', '.jpeg', '.png', '.webp'];
-  for (const ext of exts) {
+  const widths = [240, 400, 640, 800];
+  for (const ext of ['jpg', 'png']) {
+    const candidate = `images/generated/products/${slug}-640.${ext}`;
+    if (!fs.existsSync(path.join(root, candidate))) continue;
+    return {
+      src: candidate,
+      srcset: widths
+        .filter((width) => fs.existsSync(path.join(root, `images/generated/products/${slug}-${width}.${ext}`)))
+        .map((width) => `images/generated/products/${slug}-${width}.${ext} ${width}w`)
+        .join(', '),
+      sizes: '(max-width: 768px) 78vw, 320px',
+      width: 800,
+      height: 800
+    };
+  }
+  return null;
+}
+
+function productImageAsset(product) {
+  if (!product) return null;
+  const slug = product.slug || product.id;
+  const generated = generatedProductImageAsset(slug);
+  if (generated) return generated;
+  if (product.image && fs.existsSync(path.join(root, product.image))) {
+    return {
+      src: product.image,
+      srcset: '',
+      sizes: '',
+      width: 800,
+      height: 800
+    };
+  }
+  for (const ext of ['.jpg', '.jpeg', '.png', '.webp']) {
     const rel = `images/products/${slug}${ext}`;
-    if (fs.existsSync(path.join(root, rel))) return rel;
+    if (fs.existsSync(path.join(root, rel))) {
+      return {
+        src: rel,
+        srcset: '',
+        sizes: '',
+        width: 800,
+        height: 800
+      };
+    }
   }
   return null;
 }
@@ -1930,7 +1614,7 @@ function buildAgentApi(pages) {
       adventures: localizedAdventures,
       quotes,
       projects: localizedProjects,
-      products: products.products || [],
+      products: getPublicProducts(),
       resources: products.resources || [],
       ctas: ctas.ctas || [],
       newsletter,
@@ -2118,6 +1802,13 @@ function buildSearchIndex(pageRecords, collectionEndpoints, updatedAt) {
     updatedAt,
     guidance: 'Static search/discovery index. Fetch candidate URLs from this file, then fetch canonical collection endpoints or HTML for detail.',
     records: [...pageItems, ...collectionItems]
+      .map((record) => ({
+        ...record,
+        searchText: [record.title, record.summary, record.section, record.type, ...(record.tags || [])]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+      }))
       .filter((record) => record.title && record.url)
       .sort((a, b) => `${a.type}:${a.title}`.localeCompare(`${b.type}:${b.title}`))
   };
@@ -2272,61 +1963,6 @@ function syncReferencedRemoteAssets() {
   }
 }
 
-// Dist packaging
-function buildDist() {
-  if (!verify) {
-    fs.rmSync(distDir, { recursive: true, force: true });
-    fs.mkdirSync(distDir, { recursive: true });
-  }
-
-  const manifest = buildAssetManifest({
-    root,
-    distDir,
-    cssBundleFiles,
-    copyFile,
-    copyDirectory,
-    writeGenerated
-  });
-
-  for (const dir of assetDirs) {
-    if (dir === 'css' || dir === 'js') continue;
-    if (dir === 'vendor') {
-      // dompurify is loaded via static <script> tags rewritten by
-      // rewriteAssetReferences to hashed paths in dist/assets/vendor/, so the
-      // unhashed copy is dead. leaflet + leaflet.markercluster are injected at
-      // runtime by js/adventures.js using hardcoded unhashed paths, so they
-      // must remain at vendor/<name>/.
-      const runtimeVendor = ['leaflet', 'leaflet.markercluster'];
-      for (const sub of runtimeVendor) {
-        const source = path.join(root, dir, sub);
-        if (fs.existsSync(source)) {
-          copyDirectory(source, path.join(distDir, dir, sub));
-        }
-      }
-      continue;
-    }
-    copyDirectory(path.join(root, dir), path.join(distDir, dir));
-  }
-  writeLocalizedPublicData();
-
-  for (const file of rootStaticFiles) {
-    if (fs.existsSync(file)) copyFile(file, path.join(distDir, file));
-  }
-
-  for (const dir of rootStaticDirs) {
-    copyDirectory(path.join(root, dir), path.join(distDir, dir));
-  }
-
-  buildAgentApi(sitePages);
-
-  for (const file of publicHtmlFiles) {
-    const html = rewriteAssetReferences(applyPageCssBundle(file, normalizePublicHtml(file)), manifest);
-    writeGenerated(path.join(distDir, file), html);
-  }
-
-  syncReferencedRemoteAssets();
-}
-
 function buildGeneratedManifest() {
   const files = Array.from(generated.keys()).map((file) => file.replace(/\\/g, '/')).sort();
   const manifest = {
@@ -2348,16 +1984,42 @@ function checkChromeDrift() {
   }
 }
 
-for (const file of publicHtmlFiles) normalizePublicHtml(file);
-buildPages();
-buildPartials();
-for (const file of publicHtmlFiles) normalizePublicHtml(file);
-countriesVisited.build({ root, writeGenerated, log: (m) => console.log(m) });
-routesFromGpx.build({ root, writeGenerated, log: (m) => console.log(m) });
-cssBundleFiles = buildCss({ root, writeGenerated });
-buildDist();
-buildGeneratedManifest();
-if (verify) checkChromeDrift();
+runBuildPipeline({
+  publicHtmlFiles,
+  normalizePublicHtml,
+  buildPages,
+  buildPartials,
+  buildCountriesVisited: () => countriesVisited.build({ root, writeGenerated, log: (m) => console.log(m) }),
+  buildRoutesFromGpx: () => routesFromGpx.build({ root, writeGenerated, log: (m) => console.log(m) }),
+  buildCssBundles: () => {
+    cssBundleFiles = buildCss({ root, writeGenerated });
+  },
+  packageDist: () => packageDist({
+    root,
+    verify,
+    distDir,
+    cssBundleFiles,
+    assetDirs,
+    rootStaticFiles,
+    rootStaticDirs,
+    publicHtmlFiles,
+    copyFile,
+    copyDirectory,
+    writeGenerated,
+    buildAssetManifest,
+    rewriteAssetReferences,
+    writeLocalizedPublicData,
+    buildAgentApi,
+    sitePages,
+    applyPageCssBundle,
+    normalizePublicHtml,
+    syncReferencedRemoteAssets
+  }),
+  buildRuntimeDataManifest: () => buildRuntimeDataManifest({ distDir, writeGenerated }),
+  buildGeneratedManifest,
+  checkChromeDrift,
+  verify
+});
 
 if (!process.exitCode) {
   console.log(`${verify ? 'Verified' : 'Built'} site metadata, sitemap, shared chrome partials, CSS bundle, and dist output.`);

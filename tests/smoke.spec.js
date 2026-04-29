@@ -5,10 +5,11 @@ const pages = [
   { path: '/books.html', chrome: 'shared' },
   { path: '/essays.html', chrome: 'shared' },
   { path: '/adventures.html', chrome: 'shared' },
-  { path: '/skills.html', chrome: 'shared' },
+  { path: '/people.html', chrome: 'shared' },
   { path: '/products.html', chrome: 'shared' },
   { path: '/meet.html', chrome: 'minimal' },
-  { path: '/adventure-japan-adventure.html', chrome: 'shared' }
+  { path: '/adventure-japan-adventure.html', chrome: 'shared' },
+  { path: '/topics/better-thinking.html', chrome: 'shared' }
 ];
 
 for (const { path, chrome } of pages) {
