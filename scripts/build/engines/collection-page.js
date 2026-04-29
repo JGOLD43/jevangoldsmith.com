@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { collectionPageConfigFor } = require('../collection-config');
+const { collectionPageConfigFor, taskListConfigFor } = require('../collection-config');
 
 function createCollectionPageEngine({
   root,
@@ -20,14 +20,8 @@ function createCollectionPageEngine({
   renderFooter,
   seoFor,
   renderPageCtas,
-  renderShelfItem,
-  renderResourceCard,
-  renderProjectCard,
-  renderChallengeCard,
-  renderQuoteCard,
-  renderFilterControls,
-  quoteCategories,
-  iconSvg,
+  cards,
+  topicRelated,
   getPublicProducts,
   getPublicResources,
   getPublicProjects,
@@ -35,6 +29,18 @@ function createCollectionPageEngine({
   getPublicQuotes,
   topicForFile
 }) {
+  const {
+    renderShelfItem,
+    renderResourceCard,
+    renderProjectCard,
+    renderChallengeCard,
+    renderQuoteCard,
+    renderFilterControls,
+    quoteCategories,
+    iconSvg
+  } = cards;
+  const { topicRelatedContent } = topicRelated;
+
   function readPartial(relativePath) {
     if (!relativePath) return '';
     const absolutePath = path.join(root, relativePath);
@@ -231,82 +237,6 @@ function createCollectionPageEngine({
       baseHref,
       bodyAttributes: bodyClass ? `class="${escapeHtmlAttr(bodyClass)}"` : ''
     });
-  }
-
-  function sitePagesForTopic(topicId) {
-    return Object.entries(seo.pages || {})
-      .filter(([, pageSeo]) => pageSeo.index !== false && (pageSeo.topics || []).includes(topicId))
-      .map(([pathName, pageSeo]) => ({
-        title: pageSeo.title || titleCase(pathName.replace(/\.html$/, '')),
-        description: pageSeo.description || '',
-        href: pathName
-      }));
-  }
-
-  function itemMatchesTopic(item, topicId) {
-    const haystack = [
-      ...(item.topics || []),
-      ...(item.tags || []),
-      item.category,
-      item.type,
-      item.title,
-      item.shortDescription,
-      item.description
-    ].filter(Boolean).map((value) => String(value).toLowerCase());
-    const topic = (topics.topics || []).find((candidate) => candidate.id === topicId);
-    const needles = [topicId, topic?.label].filter(Boolean).map((value) => String(value).toLowerCase());
-    return needles.some((needle) => haystack.some((value) => value.includes(needle)));
-  }
-
-  function topicRelatedContent(topicId) {
-    const pageMatches = sitePagesForTopic(topicId);
-    const essayMatches = (essays.essays || [])
-      .filter((essay) => essay.status === 'published' && itemMatchesTopic(essay, topicId))
-      .slice(0, 4)
-      .map((essay) => ({
-        title: essay.title,
-        description: stripHtml(essay.subtitle || essay.content).slice(0, 150),
-        href: `essays.html#${essay.id}`
-      }));
-    const resourceMatches = getPublicResources()
-      .filter((resource) => itemMatchesTopic(resource, topicId))
-      .slice(0, 4)
-      .map((resource) => ({
-        title: resource.title,
-        description: resource.shortDescription || resource.description,
-        href: `free-resources.html#${resource.slug || resource.id}`
-      }));
-    const productMatches = getPublicProducts()
-      .filter((product) => itemMatchesTopic(product, topicId))
-      .slice(0, 4)
-      .map((product) => ({
-        title: product.title,
-        description: product.verdict || product.shortDescription || product.description,
-        href: `products.html#${product.slug || product.id}`
-      }));
-    const skillMatches = (skills.skills || [])
-      .filter((skill) => skill.status !== 'draft' && itemMatchesTopic(skill, topicId))
-      .slice(0, 4)
-      .map((skill) => ({
-        title: skill.title,
-        description: skill.shortDescription || skill.tagline,
-        href: `skill-${skill.id}.html`
-      }));
-    const projectMatches = getPublicProjects()
-      .filter((project) => itemMatchesTopic(project, topicId))
-      .slice(0, 3)
-      .map((project) => ({
-        title: project.title,
-        description: project.shortDescription || project.description,
-        href: `projects.html#${project.slug || project.id}`
-      }));
-
-    return {
-      firstReads: pageMatches.slice(0, 5),
-      notes: [...pageMatches.filter((item) => /field-notes|essays|reading|weekly/i.test(item.href)), ...essayMatches].slice(0, 6),
-      resources: [...resourceMatches, ...pageMatches.filter((item) => /books|resources|template/i.test(item.href))].slice(0, 6),
-      objects: [...skillMatches, ...projectMatches, ...productMatches].slice(0, 6)
-    };
   }
 
   function renderTopicSection(title, items) {
@@ -548,112 +478,30 @@ function createCollectionPageEngine({
     });
   }
 
-  function renderProjectsPage(file) {
-    const projectCategoryMap = {
-      software: { label: 'Software', emoji: '💻' },
-      research: { label: 'Research', emoji: '📚' },
-      ai: { label: 'AI', emoji: '🤖' },
-      writing: { label: 'Writing', emoji: '✍️' },
-      'real-estate': { label: 'Real Estate', emoji: '🏠' },
-      finance: { label: 'Finance', emoji: '💰' }
+  const TASK_LIST_VIEW_BINDINGS = {
+    projects: { getItems: getPublicProjects, renderCard: renderProjectCard },
+    challenges: { getItems: getPublicChallenges, renderCard: renderChallengeCard }
+  };
+
+  function renderTaskListView(view, file) {
+    const config = taskListConfigFor(view);
+    const binding = TASK_LIST_VIEW_BINDINGS[view];
+    if (!config || !binding) return null;
+
+    const categoryMetaFor = (category) => {
+      const key = (category || '').toLowerCase();
+      return config.categoryMap[key] || {
+        label: titleCase(category || 'General'),
+        emoji: config.categoryFallback.emoji
+      };
     };
 
     return renderTaskListPage(file, {
-      items: getPublicProjects(),
-      defaultStatus: 'planned',
-      statusOrder: ['active', 'completed', 'planned'],
-      statusMeta: {
-        active: { label: 'Active', emoji: '⚡' },
-        completed: { label: 'Completed', emoji: '✅' },
-        planned: { label: 'Planned', emoji: '📋' }
-      },
-      categoryMetaFor: (category) => projectCategoryMap[(category || '').toLowerCase()] || {
-        label: titleCase(category || 'General'),
-        emoji: '🛠️'
-      },
-      filterAction: 'filterProjects',
-      listOptions: [
-        { href: 'projects.html', label: 'Projects', active: true },
-        { href: 'challenges.html', label: 'Challenges' },
-        { href: 'free-resources.html', label: 'Resources' },
-        { href: 'lesson-logger.html', label: 'Lesson Logger' }
-      ],
-      listCurrentName: 'Projects',
-      toggleSidebarAction: 'toggleProjectSidebar',
-      toggleListDropdownAction: 'toggleProjectListDropdown',
-      layoutId: 'projects-layout',
-      sidebarId: 'projects-sidebar',
-      searchInputId: 'project-search',
-      searchPlaceholder: 'Search projects...',
-      searchAction: 'searchProjects',
-      searchClearButtonId: 'project-search-clear-btn',
-      searchClearAction: 'clearProjectSearch',
-      allLabel: 'All Projects',
-      allCountId: 'count-all-projects',
-      sidebarFooter: 'Things I am building, exploring, and planning',
-      headerTitle: 'Projects',
-      headerSubtitle: 'Things I am building, exploring, and learning in public.',
-      counterId: 'project-count',
-      counterLabel: 'Projects',
-      gridId: 'projects-container',
-      renderCard: renderProjectCard,
-      title: `Projects - ${site.siteName}`,
-      description: 'Projects Jevan Goldsmith is building, exploring, and planning.',
-      scripts: '<script src="js/grid-zoom.js"></script>\n    <script src="js/action-dispatcher.js"></script>\n    <script src="js/projects.js"></script>\n    <script src="js/theme.js"></script>\n    <script src="js/analytics.js"></script>'
-    });
-  }
-
-  function renderChallengesPage(file) {
-    const challengeCategoryMap = {
-      learning: { label: 'Learning', emoji: '📚' },
-      fitness: { label: 'Fitness', emoji: '💪' },
-      creative: { label: 'Creative', emoji: '✍️' },
-      financial: { label: 'Financial', emoji: '💰' }
-    };
-
-    return renderTaskListPage(file, {
-      items: getPublicChallenges(),
-      defaultStatus: 'upcoming',
-      statusOrder: ['active', 'upcoming', 'completed'],
-      statusMeta: {
-        active: { label: 'Active', emoji: '⚡' },
-        upcoming: { label: 'Upcoming', emoji: '📋' },
-        completed: { label: 'Completed', emoji: '✅' }
-      },
-      categoryOrder: ['learning', 'fitness', 'creative', 'financial'],
-      categoryMetaFor: (category) => challengeCategoryMap[(category || '').toLowerCase()] || {
-        label: titleCase(category || 'General'),
-        emoji: '🎯'
-      },
-      filterAction: 'filterChallenges',
-      listOptions: [
-        { href: 'projects.html', label: 'Projects' },
-        { href: 'challenges.html', label: 'Challenges', active: true },
-        { href: 'free-resources.html', label: 'Resources', extraAttrs: 'data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges"' },
-        { href: 'lesson-logger.html', label: 'Lesson Logger' }
-      ],
-      listCurrentName: 'Challenges',
-      toggleSidebarAction: 'toggleChallengeSidebar',
-      toggleListDropdownAction: 'toggleChallengeListDropdown',
-      layoutId: 'challenges-layout',
-      sidebarId: 'challenges-sidebar',
-      searchInputId: 'challenge-search',
-      searchPlaceholder: 'Search challenges...',
-      searchAction: 'searchChallenges',
-      searchClearButtonId: 'challenge-search-clear-btn',
-      searchClearAction: 'clearChallengeSearch',
-      allLabel: 'All Challenges',
-      allCountId: 'count-all-challenges',
-      sidebarFooter: 'Personal challenges, constraints, and experiments',
-      headerTitle: 'Challenges',
-      headerSubtitle: "Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.",
-      counterId: 'challenge-count',
-      counterLabel: 'Challenges',
-      gridId: 'challenges-container',
-      renderCard: renderChallengeCard,
-      title: `Challenges, Constraints & Personal Experiments - ${site.siteName}`,
-      description: 'A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.',
-      scripts: '<script src="js/grid-zoom.js"></script>\n    <script src="js/action-dispatcher.js"></script>\n    <script src="js/challenges.js"></script>\n    <script src="js/theme.js"></script>\n    <script src="js/analytics.js"></script>'
+      ...config,
+      items: binding.getItems(),
+      categoryMetaFor,
+      renderCard: binding.renderCard,
+      title: `${config.titleSuffix} - ${site.siteName}`
     });
   }
 
@@ -707,8 +555,9 @@ function createCollectionPageEngine({
       if (entry.engineView === 'topic') return renderTopicPage(file);
       if (entry.engineView === 'products') return renderProductsPage(file);
       if (entry.engineView === 'resources') return renderResourcesPage(file);
-      if (entry.engineView === 'projects') return renderProjectsPage(file);
-      if (entry.engineView === 'challenges') return renderChallengesPage(file);
+      if (entry.engineView === 'projects' || entry.engineView === 'challenges') {
+        return renderTaskListView(entry.engineView, file);
+      }
       if (entry.engineView === 'quotes') return renderQuotesPage(file);
       return null;
     }
