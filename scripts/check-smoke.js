@@ -30,8 +30,8 @@ const requiredApi = [
   'api/v1/products.json'
 ];
 const pageSpecificPatterns = {
-  'projects.html': [/task-list/, /data-action="filterProjects"/, /class="[^"]*project-card/],
-  'challenges.html': [/task-list/, /data-action="filterChallenges"/, /class="[^"]*challenge-card/]
+  'projects.html': [/page-projects\.[a-f0-9]+\.js/, /data-action="filterProjects"/, /class="[^"]*project-card/],
+  'challenges.html': [/page-challenges\.[a-f0-9]+\.js/, /data-action="filterChallenges"/, /class="[^"]*challenge-card/]
 };
 
 let failed = false;

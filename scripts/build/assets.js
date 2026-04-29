@@ -27,6 +27,7 @@ function buildAssetManifest({
   root,
   distDir,
   cssBundleFiles,
+  jsBundleFiles = {},
   copyFile,
   copyDirectory,
   writeGenerated
@@ -48,6 +49,13 @@ function buildAssetManifest({
     const target = path.join('assets', path.dirname(file), hashedName(file, content));
     manifest[file] = target.replace(/\\/g, '/');
     copyFile(file, path.join(distDir, target));
+  }
+
+  for (const [file, content] of Object.entries(jsBundleFiles)) {
+    const sourceContent = Buffer.from(content);
+    const target = path.join('assets', path.dirname(file), hashedName(file, sourceContent));
+    manifest[file] = target.replace(/\\/g, '/');
+    writeGenerated(path.join(distDir, target), sourceContent);
   }
 
   copyDirectory(

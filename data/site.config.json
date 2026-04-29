@@ -59,7 +59,9 @@
   "budgets": {
     "maxHtmlBytes": 90000,
     "maxCssBytes": 105000,
-    "maxJsBytes": 60000,
+    "maxJsBytes": 95000,
+    "maxExternalScriptsPerPage": 2,
+    "maxAdventureDetailScripts": 4,
     "maxInlineScripts": 16,
     "maxInlineHandlers": 116,
     "maxAdminInlineHandlers": 0,

@@ -37,6 +37,7 @@ const CATEGORY_MAP = {
     'Autobiographies': 'autobiographies',
     'Big Ideas': 'bigideas',
     'Learning': 'learning',
+    'Mental Endurance': 'mentalendurance',
     'Out of the Box Thinking': 'outofthebox',
     'Patience and Clear Thinking': 'patience',
     'Persuasion': 'persuasion',
@@ -55,13 +56,21 @@ const CATEGORY_NAME_BY_KEY = Object.entries(CATEGORY_MAP).reduce((lookup, [name,
 function filterBooks(books, state) {
     const query = String(state.searchQuery || '').toLowerCase();
     return books.filter((book) => {
+        const isUnread = book.read === false;
+        const ratingValue = Number(book.rating || 0);
         if (query) {
             const matchesQuery = [book.title, book.author, book.category || '']
                 .some((value) => String(value).toLowerCase().includes(query));
             if (!matchesQuery) return false;
         }
-        if (state.starFilter !== 'all' && Number(book.rating) < Number(state.starFilter)) return false;
-        if (state.reReadsFilter !== 'all' && Number(book.reReads || 0) < Number(state.reReadsFilter)) return false;
+        if (state.starFilter !== 'all') {
+            if (isUnread || ratingValue <= 0) return false;
+            if (ratingValue < Number(state.starFilter)) return false;
+        }
+        if (state.reReadsFilter !== 'all') {
+            if (isUnread) return false;
+            if (Number(book.reReads || 0) < Number(state.reReadsFilter)) return false;
+        }
         return true;
     });
 }
@@ -102,7 +111,8 @@ function createBooksModal({ getCoverUrl }) {
         const modalRating = document.getElementById('modal-book-rating');
         const modalReview = document.getElementById('modal-book-review');
         if (!modal || !modalTitle || !modalAuthor || !modalCover || !modalRating || !modalReview) return false;
-        const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
+        const isUnread = book.read === false;
+        const stars = isUnread ? '' : '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
         const coverUrl = getCoverUrl(book);
         modalTitle.textContent = book.title;
         modalAuthor.textContent = `by ${book.author}${book.year ? ` (${book.year})` : ''}`;
@@ -110,7 +120,7 @@ function createBooksModal({ getCoverUrl }) {
         modalCover.alt = book.title;
         modalCover.onerror = () => { modalCover.hidden = true; };
         modalCover.onload = () => { modalCover.hidden = false; };
-        modalRating.textContent = stars;
+        modalRating.textContent = isUnread ? 'To Read' : stars;
         modalReview.textContent = book.review;
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -129,8 +139,9 @@ const categoryDisplayNames = {
     'The Great Books': 'The Great Books',
     'Lee Kuan Yew': 'Lee Kuan Yew',
     'Learning': 'Learning',
+    'Mental Endurance': 'Mental Endurance',
     'Out of the Box Thinking': 'Out Of The Box Thinking',
-    'Patience and Clear Thinking': 'Mental Endurance...',
+    'Patience and Clear Thinking': 'Patience & Clear Thinking',
     'Persuasion': 'Persuasion',
     'Psychology Books': 'Psychology',
     'Science': 'Science',
@@ -144,6 +155,9 @@ function createBooksView(controller) {
 
     function createBookCard(book) {
         const card = document.createElement('div');
+        const isUnread = book.read === false;
+        const ratingValue = Number(book.rating || 0);
+        const hasRating = !isUnread && ratingValue > 0;
         card.className = 'book-card js-zoom-item';
         card.setAttribute('data-isbn', book.isbn);
         card.setAttribute('data-id', book.isbn || book.title);
@@ -151,25 +165,34 @@ function createBooksView(controller) {
         card.setAttribute('role', 'button');
         card.setAttribute('tabindex', '0');
         card.style.cursor = 'pointer';
+        if (isUnread) card.classList.add('is-unread');
         if (book.review) card.classList.add('has-review');
 
-        const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
+        const stars = hasRating ? '★'.repeat(ratingValue) + '☆'.repeat(5 - ratingValue) : '';
         const coverUrl = controller.getCoverUrl(book);
         const timesRead = Number(book.reReads || 0) + 1;
-        const timesReadBadge = timesRead > 1
-            ? `<div class="times-read-badge">📖 ${timesRead}x Read</div>`
-            : '';
+        let topBadge = '';
+        if (isUnread) topBadge = '<div class="to-read-badge">📚 To Read</div>';
+        else if (timesRead > 1) topBadge = `<div class="times-read-badge">📖 ${timesRead}x Read</div>`;
         const detailBody = book.review || book.shortDescription || `${book.title} by ${book.author}`;
         const detailLabel = book.review ? 'Review' : 'Notes';
+        let zoomLead = `<p class="zoom-detail-lead">${stars}</p>`;
+        if (isUnread) zoomLead = '<p class="zoom-detail-lead zoom-detail-unread">To Read</p>';
+        else if (!hasRating) zoomLead = '<p class="zoom-detail-lead zoom-detail-unread">Read</p>';
+
+        let ratingBlock;
+        if (isUnread) ratingBlock = '<div class="book-rating book-rating-unread">Not yet read</div>';
+        else if (!hasRating) ratingBlock = '<div class="book-rating book-rating-unrated">Read</div>';
+        else ratingBlock = `<div class="book-rating"><span class="rating-number">${ratingValue}</span> ${stars}</div>`;
 
         card.innerHTML = `
-            ${timesReadBadge}
+            ${topBadge}
             <div class="book-cover-wrapper" data-title="${escapeAttr(book.title)}">
                 <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" class="book-cover" loading="lazy" decoding="async" data-book-cover-fallback="true">
                 <div class="js-zoom-detail" aria-hidden="true">
                     <p class="zoom-detail-kicker">${escapeHTML(book.author)}${book.year ? ' · ' + escapeHTML(book.year) : ''}</p>
                     <p class="zoom-detail-title">${escapeHTML(book.title)}</p>
-                    <p class="zoom-detail-lead">${stars}</p>
+                    ${zoomLead}
                     <p class="zoom-detail-line"><span>${detailLabel} —</span> ${escapeHTML(detailBody)}</p>
                 </div>
             </div>
@@ -179,7 +202,7 @@ function createBooksView(controller) {
                     ${book.year ? `<span class="book-year">${escapeHTML(book.year)}</span>` : ''}
                 </div>
                 <p class="book-author">by ${escapeHTML(book.author)}</p>
-                <div class="book-rating"><span class="rating-number">${book.rating}</span> ${stars}</div>
+                ${ratingBlock}
                 ${book.review ? `<p class="book-description">${escapeHTML(book.shortDescription)}</p>` : ''}
             </div>
         `;
@@ -256,8 +279,8 @@ function createBooksView(controller) {
         if (countElement) countElement.textContent = count;
         if (labelElement) {
             labelElement.textContent = categoryName && categoryName !== 'all'
-                ? 'Books Read'
-                : 'Total Books Read';
+                ? 'Books'
+                : 'Total Books';
         }
     }
 

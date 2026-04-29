@@ -52,6 +52,7 @@ const bookSections = [
     ['The Great Books', 'greatbooks', 'openBook', 'The Great Books'],
     ['Out of the Box Thinking', 'outofthebox', 'grid', 'Out of the Box'],
     ['Patience and Clear Thinking', 'patience', 'clock', 'Patience'],
+    ['Mental Endurance', 'mentalendurance', 'heart', 'Mental Endurance'],
     ['Learning', 'learning', 'graduation'],
     ['Persuasion', 'persuasion', 'target'],
     ['Psychology Books', 'psychology', 'brain', 'Psychology'],

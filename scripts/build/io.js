@@ -14,15 +14,16 @@ function createFileOps({ root, verify, generated }) {
 
   function writeGenerated(file, content) {
     generated.set(generatedPath(file), content);
-    const current = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
-    if (current === content) return;
+    const next = Buffer.isBuffer(content) ? content : Buffer.from(String(content));
+    const current = fs.existsSync(file) ? fs.readFileSync(file) : null;
+    if (current && Buffer.compare(current, next) === 0) return;
     if (verify) {
       console.error(`${file} is out of date. Run npm run build.`);
       process.exitCode = 1;
       return;
     }
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, content);
+    fs.writeFileSync(file, next);
   }
 
   function copyFile(source, target) {

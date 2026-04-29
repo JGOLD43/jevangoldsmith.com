@@ -6,6 +6,7 @@ function buildDist({
   verify,
   distDir,
   cssBundleFiles,
+  jsBundleFiles,
   assetDirs,
   rootStaticFiles,
   rootStaticDirs,
@@ -19,6 +20,7 @@ function buildDist({
   buildAgentApi,
   sitePages,
   applyPageCssBundle,
+  applyPageJsBundle,
   normalizePublicHtml,
   syncReferencedRemoteAssets
 }) {
@@ -31,6 +33,7 @@ function buildDist({
     root,
     distDir,
     cssBundleFiles,
+    jsBundleFiles,
     copyFile,
     copyDirectory,
     writeGenerated
@@ -64,7 +67,7 @@ function buildDist({
   buildAgentApi(sitePages);
 
   for (const file of publicHtmlFiles) {
-    const html = rewriteAssetReferences(applyPageCssBundle(file, normalizePublicHtml(file)), manifest);
+    const html = rewriteAssetReferences(applyPageJsBundle(file, applyPageCssBundle(file, normalizePublicHtml(file))), manifest);
     writeGenerated(path.join(distDir, file), html);
   }
 

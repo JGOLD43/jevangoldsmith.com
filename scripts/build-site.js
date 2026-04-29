@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { buildAssetManifest, rewriteAssetReferences } = require('./build/assets');
 const { buildCss } = require('./build/css');
+const { buildJsBundles } = require('./build/js-bundles');
+const { applyPageJsBundle } = require('./build/js-manifest');
 const {
   publicProjects: collectPublicProjects,
   publicChallenges: collectPublicChallenges,
@@ -86,6 +88,7 @@ const rootStaticFiles = ['robots.txt', 'sitemap.xml', 'llms.txt'];
 const rootStaticDirs = ['.well-known'];
 let sitePages = [];
 let cssBundleFiles = [];
+let jsBundleFiles = {};
 const seoReviewedAt = '2026-04-22';
 let chromeRenderer = null;
 let pageEnhancements = null;
@@ -557,11 +560,15 @@ runBuildPipeline({
   buildCssBundles: () => {
     cssBundleFiles = buildCss({ root, writeGenerated });
   },
+  buildJsBundles: () => {
+    jsBundleFiles = buildJsBundles({ root });
+  },
   packageDist: () => packageDist({
     root,
     verify,
     distDir,
     cssBundleFiles,
+    jsBundleFiles,
     assetDirs,
     rootStaticFiles,
     rootStaticDirs,
@@ -575,6 +582,7 @@ runBuildPipeline({
     buildAgentApi,
     sitePages,
     applyPageCssBundle,
+    applyPageJsBundle,
     normalizePublicHtml,
     syncReferencedRemoteAssets
   }),

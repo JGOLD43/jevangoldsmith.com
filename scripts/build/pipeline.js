@@ -6,6 +6,7 @@ function runBuildPipeline({
   buildCountriesVisited,
   buildRoutesFromGpx,
   buildCssBundles,
+  buildJsBundles,
   packageDist,
   buildRuntimeDataManifest,
   buildGeneratedManifest,
@@ -24,6 +25,7 @@ function runBuildPipeline({
     buildCountriesVisited,
     buildRoutesFromGpx,
     buildCssBundles,
+    buildJsBundles,
     packageDist,
     buildRuntimeDataManifest,
     buildGeneratedManifest

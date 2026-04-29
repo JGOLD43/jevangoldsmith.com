@@ -20,6 +20,13 @@ for (const file of htmlFiles) {
   if (size > budgets.maxHtmlBytes) reporter.fail(`${file} is ${size} bytes, above ${budgets.maxHtmlBytes}.`);
 
   totals.inlineScripts += (html.match(/<script(?![^>]*\bsrc=)(?![^>]*type=["']application\/ld\+json["'])[^>]*>/gi) || []).length;
+  const externalScripts = (html.match(/<script\s+src=/gi) || []).length;
+  const maxExternalScripts = /^adventure-.+\.html$/.test(file)
+    ? (budgets.maxAdventureDetailScripts || 4)
+    : (budgets.maxExternalScriptsPerPage || 4);
+  if (externalScripts > maxExternalScripts) {
+    reporter.fail(`${file} has ${externalScripts} external scripts, above ${maxExternalScripts}.`);
+  }
   totals.inlineHandlers += (html.match(/\son[a-z]+=/gi) || []).length;
   totals.inlineStyles += (html.match(/<style\b/gi) || []).length;
 
