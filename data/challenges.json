@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0",
+  "challenges": [
+    {
+      "id": "52-books-2026",
+      "slug": "52-books-2026",
+      "title": "52 Books in 2026",
+      "status": "active",
+      "category": "learning",
+      "timeframe": "Jan 1 – Dec 31, 2026",
+      "shortDescription": "Reading one book per week for the year. A mix of business, philosophy, biography, and fiction.",
+      "progress": {
+        "label": "Progress",
+        "value": "5 / 52 books",
+        "percent": 10
+      },
+      "searchTerms": ["52 Books 2026 reading learning books year week business philosophy biography fiction"]
+    },
+    {
+      "id": "morning-routine",
+      "slug": "morning-routine",
+      "title": "Morning Routine",
+      "status": "active",
+      "category": "fitness",
+      "icon": "🌅",
+      "timeframe": "Ongoing",
+      "shortDescription": "Wake at 6am. Exercise, meditate, write, and plan the day before any screens. Habits that compound.",
+      "progress": {
+        "label": "Current streak",
+        "value": "23 days",
+        "percent": 77
+      },
+      "searchTerms": ["Morning Routine wake 6am exercise meditate write plan habits compound"]
+    },
+    {
+      "id": "100-days-writing",
+      "slug": "100-days-writing",
+      "title": "100 Days of Writing",
+      "status": "upcoming",
+      "category": "creative",
+      "timeframe": "Starting Q2 2026",
+      "shortDescription": "Write and publish something every day for 100 days. Essay, thread, or short reflection. Building a consistent writing practice.",
+      "searchTerms": ["100 Days Writing essay tweet reflection daily publish consistent practice"]
+    },
+    {
+      "id": "no-spend-month",
+      "slug": "no-spend-month",
+      "title": "No-Spend Month",
+      "status": "completed",
+      "category": "financial",
+      "timeframe": "January 2026",
+      "shortDescription": "One month of essential spending only. No restaurants, no subscriptions, no impulse buys. Saved $1,240 over 31 days.",
+      "searchTerms": ["No-Spend Month January 2026 essential spending money consumption restaurants subscriptions impulse"]
+    }
+  ]
+}

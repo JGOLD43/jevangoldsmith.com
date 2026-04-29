@@ -27,7 +27,7 @@ const PAGE_MANIFEST = [
   { id: 'adventure-detail', prefix: 'adventure-', cssBundle: 'css/page-adventure-detail.css', section: 'adventures', engine: 'detail', engineView: 'adventure' },
   { id: 'skill-detail', prefix: 'skill-', cssBundle: 'css/page-skill.css', section: 'page', engine: 'detail', engineView: 'skill' },
   { id: 'about', route: 'about.html', cssBundle: 'css/page-about.css', section: 'explore', engine: 'content' },
-  { id: 'challenges', route: 'challenges.html', cssBundle: 'css/page-challenges.css', section: 'experience', engine: 'content' },
+  { id: 'challenges', route: 'challenges.html', cssBundle: 'css/page-challenges.css', section: 'experience', engine: 'collection', engineView: 'challenges' },
   { id: 'cool-shit', route: 'cool-shit.html', cssBundle: 'css/page-cool-shit.css', section: 'taste', engine: 'content' },
   { id: 'health', route: 'health.html', cssBundle: 'css/page-health.css', section: 'explore', engine: 'content' },
   { id: 'important-or-not', route: 'important-or-not.html', cssBundle: 'css/page-important-or-not.css', section: 'experience', engine: 'content' },

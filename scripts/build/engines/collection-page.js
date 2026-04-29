@@ -23,6 +23,7 @@ function createCollectionPageEngine({
   renderShelfItem,
   renderResourceCard,
   renderProjectCard,
+  renderChallengeCard,
   renderQuoteCard,
   renderFilterControls,
   quoteCategories,
@@ -30,6 +31,7 @@ function createCollectionPageEngine({
   getPublicProducts,
   getPublicResources,
   getPublicProjects,
+  getPublicChallenges,
   getPublicQuotes,
   topicForFile
 }) {
@@ -570,6 +572,137 @@ function createCollectionPageEngine({
     });
   }
 
+  function renderChallengesPage(file) {
+    const publishedChallenges = getPublicChallenges();
+    const total = publishedChallenges.length;
+
+    const statusMeta = {
+      active: { label: 'Active', emoji: '⚡' },
+      upcoming: { label: 'Upcoming', emoji: '📋' },
+      completed: { label: 'Completed', emoji: '✅' }
+    };
+    const categoryMetaMap = {
+      learning: { label: 'Learning', emoji: '📚' },
+      fitness: { label: 'Fitness', emoji: '💪' },
+      creative: { label: 'Creative', emoji: '✍️' },
+      financial: { label: 'Financial', emoji: '💰' }
+    };
+
+    const statusCounts = { active: 0, upcoming: 0, completed: 0 };
+    const categoryCounts = new Map();
+    for (const challenge of publishedChallenges) {
+      const status = (challenge.status || 'upcoming').toLowerCase();
+      if (statusCounts[status] !== undefined) statusCounts[status] += 1;
+      const category = (challenge.category || '').toLowerCase();
+      if (category) categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
+    }
+
+    const categoryMetaFor = (category) => categoryMetaMap[(category || '').toLowerCase()] || {
+      label: titleCase(category || 'General'),
+      emoji: '🎯'
+    };
+
+    const statusButtons = ['active', 'upcoming', 'completed', 'learning', 'fitness', 'creative', 'financial'].map((key) => {
+      const isStatus = statusMeta[key];
+      const isCategory = categoryMetaMap[key];
+      const meta = isStatus || isCategory;
+      if (!meta) return '';
+      const count = isStatus ? statusCounts[key] : (categoryCounts.get(key) || 0);
+      const countId = isStatus ? `count-${key}` : `count-cat-${key}`;
+      return `<div class="sidebar-section">
+                <button class="sidebar-category" data-action="filterChallenges" data-action-args="${escapeHtmlAttr(key)}" data-action-this="true" data-tooltip="${escapeHtmlAttr(meta.label)}">
+                    <span class="category-icon">${meta.emoji}</span>
+                    <span class="category-name">${escapeHTML(meta.label)}</span>
+                    <span class="category-count" id="${escapeHtmlAttr(countId)}">${count}</span>
+                </button>
+            </div>`;
+    }).join('\n            ');
+
+    return renderCollectionPage(file, {
+      title: `Challenges, Constraints & Personal Experiments - ${site.siteName}`,
+      description: 'A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.',
+      bodyClass: 'nav-compact',
+      scripts: '<script src="js/grid-zoom.js"></script>\n    <script src="js/action-dispatcher.js"></script>\n    <script src="js/challenges.js"></script>\n    <script src="js/theme.js"></script>\n    <script src="js/analytics.js"></script>',
+      main: `<main class="movies-layout sidebar-collapsed" id="challenges-layout">
+        <aside class="movies-sidebar collapsed" id="challenges-sidebar">
+            <div class="sidebar-header">
+                <button class="sidebar-collapse-btn" data-action="toggleChallengeSidebar" title="Collapse sidebar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                    </svg>
+                </button>
+                <span class="sidebar-browse-label">Browse</span>
+            </div>
+
+            <div class="sidebar-list-selector">
+                <div class="list-dropdown" id="list-dropdown">
+                    <button class="list-dropdown-btn" data-action="toggleChallengeListDropdown">
+                        <span id="current-list-name">Challenges</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="list-dropdown-menu" id="list-dropdown-menu">
+                        <a href="projects.html" class="list-option">Projects</a>
+                        <a href="challenges.html" class="list-option active">Challenges</a>
+                        <a href="free-resources.html" class="list-option" data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges">Resources</a>
+                        <a href="lesson-logger.html" class="list-option">Lesson Logger</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-search">
+                <div class="search-input-wrapper search-bubble">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="challenge-search" class="movie-search-input" placeholder="Search challenges..." data-action="searchChallenges" data-action-event="input" data-action-value="true">
+                    <button class="search-clear-btn" id="challenge-search-clear-btn" data-action="clearChallengeSearch" style="display: none;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="sidebar-category active" data-action="filterChallenges" data-action-args="all" data-action-this="true" data-tooltip="All Challenges">
+                    <span class="category-icon">🎯</span>
+                    <span class="category-name">All Challenges</span>
+                    <span class="category-count" id="count-all-challenges">${total}</span>
+                </button>
+            </div>
+
+            ${statusButtons}
+
+            <div class="sidebar-footer">
+                <p>Personal challenges, constraints, and experiments</p>
+            </div>
+        </aside>
+
+        <div class="movies-main">
+            <header class="main-header">
+                <div class="header-content">
+                    <h1>Challenges</h1>
+                    <p>Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.</p>
+                </div>
+                <div class="header-counter">
+                    <span class="counter-number" id="challenge-count">${total}</span>
+                    <span class="counter-label">Challenges</span>
+                </div>
+            </header>
+
+            <div id="challenges-container" class="movies-grid">
+                ${publishedChallenges.map(renderChallengeCard).join('\n                ')}
+            </div>
+        </div>
+    </main>`
+    });
+  }
+
   function renderQuotesPage(file) {
     const publishedQuotes = getPublicQuotes();
     const categories = quoteCategories(publishedQuotes);
@@ -621,6 +754,7 @@ function createCollectionPageEngine({
       if (entry.engineView === 'products') return renderProductsPage(file);
       if (entry.engineView === 'resources') return renderResourcesPage(file);
       if (entry.engineView === 'projects') return renderProjectsPage(file);
+      if (entry.engineView === 'challenges') return renderChallengesPage(file);
       if (entry.engineView === 'quotes') return renderQuotesPage(file);
       return null;
     }

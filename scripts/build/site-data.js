@@ -12,6 +12,7 @@ function loadSiteData({ root }) {
     deployConfig: readJson(path.join(root, 'data', 'site.config.json'), {}),
     products: readJson(path.join(root, 'data', 'products.json'), { products: [] }),
     projects: readJson(path.join(root, 'data', 'projects.json'), { projects: [] }),
+    challenges: readJson(path.join(root, 'data', 'challenges.json'), { challenges: [] }),
     ctas: readJson(path.join(root, 'data', 'ctas.json'), { primary: {}, sections: [], ctas: [] }),
     newsletter: readJson(path.join(root, 'data', 'newsletter.json'), {}),
     topics: readJson(path.join(root, 'data', 'topics.json'), { topics: [] }),

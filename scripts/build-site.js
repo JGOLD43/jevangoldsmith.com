@@ -4,6 +4,7 @@ const { buildAssetManifest, rewriteAssetReferences } = require('./build/assets')
 const { buildCss } = require('./build/css');
 const {
   publicProjects: collectPublicProjects,
+  publicChallenges: collectPublicChallenges,
   publicQuotes: collectPublicQuotes,
   publicProducts: collectPublicProducts,
   publicResources: collectPublicResources,
@@ -42,6 +43,7 @@ const {
   deployConfig,
   products,
   projects,
+  challenges,
   ctas,
   newsletter,
   topics,
@@ -184,6 +186,7 @@ function getPageEngines() {
       renderShelfItem,
       renderResourceCard,
       renderProjectCard,
+      renderChallengeCard,
       renderQuoteCard,
       renderFilterControls,
       quoteCategories,
@@ -191,6 +194,7 @@ function getPageEngines() {
       getPublicProducts,
       getPublicResources,
       getPublicProjects,
+      getPublicChallenges,
       getPublicQuotes
     });
   }
@@ -952,12 +956,34 @@ const PROJECT_STATUS_META = {
   planned: { label: 'Planned', emoji: '📋' }
 };
 
+const CHALLENGE_CATEGORY_META = {
+  learning: { label: 'Learning', emoji: '📚', placeholder: 'placeholder-learning' },
+  fitness: { label: 'Fitness', emoji: '💪', placeholder: 'placeholder-fitness' },
+  creative: { label: 'Creative', emoji: '✍️', placeholder: 'placeholder-creative' },
+  financial: { label: 'Financial', emoji: '💰', placeholder: 'placeholder-financial' }
+};
+
+const CHALLENGE_STATUS_META = {
+  active: { label: 'Active', emoji: '⚡' },
+  upcoming: { label: 'Upcoming', emoji: '📋' },
+  completed: { label: 'Completed', emoji: '✅' }
+};
+
 function projectCategoryMeta(category) {
   const key = (category || '').toLowerCase();
   return PROJECT_CATEGORY_META[key] || {
     label: titleCase(category || 'General'),
     emoji: '🛠️',
     placeholder: 'placeholder-software'
+  };
+}
+
+function challengeCategoryMeta(category) {
+  const key = (category || '').toLowerCase();
+  return CHALLENGE_CATEGORY_META[key] || {
+    label: titleCase(category || 'General'),
+    emoji: '🎯',
+    placeholder: 'placeholder-learning'
   };
 }
 
@@ -1087,6 +1113,56 @@ function renderProjectCard(project) {
                 </div>`;
 }
 
+function renderChallengeCard(challenge) {
+  const status = (challenge.status || 'upcoming').toLowerCase();
+  const category = (challenge.category || '').toLowerCase();
+  const meta = challengeCategoryMeta(category);
+  const statusMeta = CHALLENGE_STATUS_META[status] || { label: titleCase(status) };
+  const description = challenge.shortDescription || challenge.description || '';
+  const timeframe = challenge.timeframe || '';
+  const categoryLine = [meta.label, timeframe].filter(Boolean).join(' · ');
+  const searchTerms = [
+    challenge.title,
+    challenge.shortDescription,
+    challenge.description,
+    meta.label,
+    statusMeta.label,
+    timeframe,
+    ...(challenge.tags || []),
+    ...(challenge.searchTerms || [])
+  ].filter(Boolean).join(' ');
+  const dataCategory = [status, category].filter(Boolean).join(' ');
+  const progress = challenge.progress;
+  const progressHtml = progress
+    ? `<div class="challenge-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">${escapeHTML(progress.label || 'Progress')}</span>
+                                <span class="progress-value">${escapeHTML(progress.value || '')}</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${Number(progress.percent) || 0}%;"></div>
+                            </div>
+                        </div>`
+    : '';
+
+  const icon = challenge.icon || meta.emoji;
+
+  return `<div class="movie-card challenge-card js-zoom-item" data-status="${escapeHtmlAttr(status)}" data-category="${escapeHtmlAttr(dataCategory)}" data-search="${escapeHtmlAttr(searchTerms)}" id="${escapeHtmlAttr(challenge.slug || challenge.id)}">
+                    <div class="movie-poster-wrapper">
+                        <div class="podcast-cover-placeholder ${meta.placeholder}">${icon}</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="times-read-badge movie-watch-badge status-${escapeHtmlAttr(status)}">${escapeHTML(statusMeta.label)}</div>
+                        <div class="movie-title-row">
+                            <h3 class="movie-title">${escapeHTML(challenge.title)}</h3>
+                        </div>
+                        <div class="podcast-category-badge">${escapeHTML(categoryLine)}</div>
+                        <p class="movie-description">${escapeHTML(description)}</p>
+                        ${progressHtml}
+                    </div>
+                </div>`;
+}
+
 function formatPlainDate(value) {
   if (!value) return '';
   const date = new Date(`${value}T00:00:00`);
@@ -1120,6 +1196,10 @@ function renderTagList(tags, listClass, itemClass) {
 
 function getPublicProjects() {
   return collectPublicProjects(projects);
+}
+
+function getPublicChallenges() {
+  return collectPublicChallenges(challenges);
 }
 
 function getPublicQuotes() {
