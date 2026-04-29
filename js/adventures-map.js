@@ -12,6 +12,17 @@ async function fetchJson(url, fallback = null) {
     }
 }
 
+function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, popupAnchor, popupHtml, onClick, riseOnHover = false, layer }) {
+    const iconOpts = { className: iconClass, html: iconHtml, iconSize };
+    if (iconAnchor) iconOpts.iconAnchor = iconAnchor;
+    if (popupAnchor) iconOpts.popupAnchor = popupAnchor;
+    const marker = L.marker([lat, lng], { icon: L.divIcon(iconOpts), riseOnHover });
+    if (popupHtml) marker.bindPopup(popupHtml);
+    if (onClick) marker.on('click', onClick);
+    if (layer) marker.addTo(layer);
+    return marker;
+}
+
 function injectVendorBundle({ cssHrefs = [], scriptSrc, marker }) {
     return new Promise((resolve, reject) => {
         if (marker && !document.querySelector(`link[${marker}]`)) {
@@ -273,22 +284,19 @@ function initWorldMap(adventures) {
         `;
 
         worldCopyOffsets.forEach((offset, index) => {
-            const marker = L.marker(
-                [adventure.mapCenter.lat, adventure.mapCenter.lng + offset],
-                {
-                    icon: L.divIcon({
-                        className: 'adventure-marker-icon',
-                        html: '<span class="adv-marker-pulse"></span><span class="adv-marker-ring"></span><span class="adv-marker-dot"></span>',
-                        iconSize: [28, 28],
-                        iconAnchor: [14, 14],
-                        popupAnchor: [0, -14]
-                    }),
-                    riseOnHover: true
-                }
-            ).addTo(worldMap);
-
-            marker.bindPopup(popupHtml);
-            marker.on('click', () => selectAdventure(adventure.id));
+            const marker = createMapMarker({
+                lat: adventure.mapCenter.lat,
+                lng: adventure.mapCenter.lng + offset,
+                iconClass: 'adventure-marker-icon',
+                iconHtml: '<span class="adv-marker-pulse"></span><span class="adv-marker-ring"></span><span class="adv-marker-dot"></span>',
+                iconSize: [28, 28],
+                iconAnchor: [14, 14],
+                popupAnchor: [0, -14],
+                popupHtml,
+                onClick: () => selectAdventure(adventure.id),
+                riseOnHover: true,
+                layer: worldMap
+            });
             if (index === 1) adventureMarkers[adventure.id] = marker;
         });
     });
@@ -370,20 +378,18 @@ function renderPlaceMarkers() {
         `;
 
         worldCopyOffsets.forEach((offset) => {
-            const marker = L.marker(
-                [place.lat, place.lng + offset],
-                {
-                    icon: L.divIcon({
-                        className: 'place-marker-icon',
-                        html: `<span class="place-marker-ring" style="--marker-color:${color}"></span><span class="place-marker-dot"></span>`,
-                        iconSize: [18, 18],
-                        iconAnchor: [9, 9],
-                        popupAnchor: [0, -9]
-                    }),
-                    riseOnHover: true
-                }
-            ).addTo(worldMap);
-            marker.bindPopup(popupHtml);
+            const marker = createMapMarker({
+                lat: place.lat,
+                lng: place.lng + offset,
+                iconClass: 'place-marker-icon',
+                iconHtml: `<span class="place-marker-ring" style="--marker-color:${color}"></span><span class="place-marker-dot"></span>`,
+                iconSize: [18, 18],
+                iconAnchor: [9, 9],
+                popupAnchor: [0, -9],
+                popupHtml,
+                riseOnHover: true,
+                layer: worldMap
+            });
             placeMarkers.push(marker);
         });
     });
@@ -573,20 +579,20 @@ function renderPhotoLayer() {
 
             const thumb = photo.thumb || photoUrl(photo.driveId, 200);
             const full = photo.full || photoUrl(photo.driveId, 1600);
-            const marker = L.marker([photo.lat, photo.lng], {
-                icon: L.divIcon({
-                    className: 'photo-marker',
-                    html: `<div class="photo-marker-bubble" style="background-image:url('${escapeAttr(thumb)}')"></div>`,
-                    iconSize: [36, 36]
-                })
-            });
-            marker.bindPopup(`
+            const marker = createMapMarker({
+                lat: photo.lat,
+                lng: photo.lng,
+                iconClass: 'photo-marker',
+                iconHtml: `<div class="photo-marker-bubble" style="background-image:url('${escapeAttr(thumb)}')"></div>`,
+                iconSize: [36, 36],
+                popupHtml: `
                 <div class="photo-popup">
                     <img src="${escapeAttr(full)}" alt="${escapeAttr(photo.caption || '')}" style="max-width:260px;max-height:200px;display:block;border-radius:6px;">
                     ${photo.caption ? `<p style="margin:0.4rem 0 0;font-size:0.8rem;color:#444;">${escapeHTML(photo.caption)}</p>` : ''}
                 </div>
-            `);
-            marker.on('click', () => openPhotoLightbox(index));
+            `,
+                onClick: () => openPhotoLightbox(index)
+            });
             cluster.addLayer(marker);
         });
 
