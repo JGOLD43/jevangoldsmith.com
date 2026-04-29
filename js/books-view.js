@@ -8,8 +8,9 @@
         'The Great Books': 'The Great Books',
         'Lee Kuan Yew': 'Lee Kuan Yew',
         'Learning': 'Learning',
+        'Mental Endurance': 'Mental Endurance',
         'Out of the Box Thinking': 'Out Of The Box Thinking',
-        'Patience and Clear Thinking': 'Mental Endurance...',
+        'Patience and Clear Thinking': 'Patience and Clear Thinking',
         'Persuasion': 'Persuasion',
         'Psychology Books': 'Psychology',
         'Science': 'Science',
@@ -35,23 +36,31 @@
                 card.classList.add('has-review');
             }
 
-            const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
+            const isRead = book.read !== false;
+            if (!isRead) {
+                card.classList.add('book-card-unread');
+            }
+
+            const ratingNumber = Number(book.rating) || 0;
+            const stars = '★'.repeat(ratingNumber) + '☆'.repeat(Math.max(0, 5 - ratingNumber));
             const coverUrl = controller.getCoverUrl(book);
             const timesRead = Number(book.reReads || 0) + 1;
-            const timesReadBadge = timesRead > 1
-                ? `<div class="times-read-badge">📖 ${timesRead}x Read</div>`
-                : '';
+            const cornerBadge = !isRead
+                ? '<div class="to-read-badge">📚 To Read</div>'
+                : (timesRead > 1
+                    ? `<div class="times-read-badge">📖 ${timesRead}x Read</div>`
+                    : '');
             const detailBody = book.review || book.shortDescription || `${book.title} by ${book.author}`;
             const detailLabel = book.review ? 'Review' : 'Notes';
 
             card.innerHTML = `
-                ${timesReadBadge}
+                ${cornerBadge}
                 <div class="book-cover-wrapper" data-title="${escapeAttr(book.title)}">
                     <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" class="book-cover" loading="lazy" decoding="async" data-book-cover-fallback="true">
                     <div class="js-zoom-detail" aria-hidden="true">
                         <p class="zoom-detail-kicker">${escapeHTML(book.author)}${book.year ? ' · ' + escapeHTML(book.year) : ''}</p>
                         <p class="zoom-detail-title">${escapeHTML(book.title)}</p>
-                        <p class="zoom-detail-lead">${stars}</p>
+                        ${isRead ? `<p class="zoom-detail-lead">${stars}</p>` : '<p class="zoom-detail-lead zoom-detail-toread">To Read</p>'}
                         <p class="zoom-detail-line"><span>${detailLabel} —</span> ${escapeHTML(detailBody)}</p>
                     </div>
                 </div>
@@ -61,7 +70,7 @@
                         ${book.year ? `<span class="book-year">${escapeHTML(book.year)}</span>` : ''}
                     </div>
                     <p class="book-author">by ${escapeHTML(book.author)}</p>
-                    <div class="book-rating"><span class="rating-number">${book.rating}</span> ${stars}</div>
+                    ${isRead ? `<div class="book-rating"><span class="rating-number">${ratingNumber}</span> ${stars}</div>` : '<div class="book-status-toread">To Read</div>'}
                     ${book.review ? `<p class="book-description">${escapeHTML(book.shortDescription)}</p>` : ''}
                 </div>
             `;
@@ -159,8 +168,8 @@
 
             if (labelElement) {
                 labelElement.textContent = categoryName && categoryName !== 'all'
-                    ? 'Books Read'
-                    : 'Total Books Read';
+                    ? 'Books in Category'
+                    : 'Total Books';
             }
         }
 

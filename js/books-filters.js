@@ -4,6 +4,7 @@
         'Autobiographies': 'autobiographies',
         'Big Ideas': 'bigideas',
         'Learning': 'learning',
+        'Mental Endurance': 'mentalendurance',
         'Out of the Box Thinking': 'outofthebox',
         'Patience and Clear Thinking': 'patience',
         'Persuasion': 'persuasion',
