@@ -158,8 +158,8 @@ a:hover {
     src: url('/fonts/chivo/chivo-latin-700-normal.woff2') format('woff2');
 }
 
-/* css/src/10-navigation.css */
-/* Global navigation, dropdowns, logo, and homepage side navigation. */
+/* css/src/09-side-nav.css */
+/* Homepage right-side dot navigation. Only loaded on the home bundle. */
 .side-nav {
     position: fixed;
     right: 2rem;
@@ -249,6 +249,14 @@ a:hover {
     }
 }
 
+@media (max-width: 768px) {
+    body:has(.nav-links.mobile-open) .side-nav {
+        display: none !important;
+    }
+}
+
+/* css/src/10-navigation.css */
+/* Global navigation, dropdowns, logo. Side-nav split to 09-side-nav.css. */
 .navbar {
     border-bottom: 1px solid #000;
     padding: 1.5rem 0;
@@ -10192,11 +10200,6 @@ body.meet-page {
         z-index: 10005;
         background: transparent;
         border-radius: 8px;
-    }
-
-    /* Hide side-nav when mobile menu is open */
-    body:has(.nav-links.mobile-open) .side-nav {
-        display: none !important;
     }
 
     /* Hide nav links by default, show as overlay below navbar when open */

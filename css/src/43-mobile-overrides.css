@@ -176,11 +176,6 @@
         border-radius: 8px;
     }
 
-    /* Hide side-nav when mobile menu is open */
-    body:has(.nav-links.mobile-open) .side-nav {
-        display: none !important;
-    }
-
     /* Hide nav links by default, show as overlay below navbar when open */
     .nav-links {
         position: fixed !important;

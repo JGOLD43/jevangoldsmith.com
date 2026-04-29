@@ -62,6 +62,7 @@ const cssLayerGroups = {
   pageContent: ['12-page-content.css'],
   forms: ['13-modals-forms.css'],
   gridZoom: ['50-grid-zoom.css'],
+  sideNav: ['09-side-nav.css'],
   search: ['20-search.css'],
   skillDetail: ['20-skill-detail.css'],
   collectionLayout: ['14-collection-layout.css'],
@@ -104,7 +105,7 @@ const cssLayerGroups = {
 
 const cssBundles = {
   'page-default.css': ['core'],
-  'page-home.css': ['core', 'forms', 'home'],
+  'page-home.css': ['core', 'sideNav', 'forms', 'home'],
   'page-field-notes.css': ['core', 'forms', 'fieldNotes'],
   'page-resource-detail.css': ['core', 'resourceDetail'],
   'page-search.css': ['core', 'search'],
