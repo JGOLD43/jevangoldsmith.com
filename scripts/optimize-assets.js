@@ -9,6 +9,13 @@ const sourceDir = path.join(root, 'images', 'source');
 const generatedDir = path.join(root, 'images', 'generated');
 
 const logoWidths = [88, 176, 264, 352];
+// Width sets cap at 1200 because the canonical source images
+// (profile.png 713px, zen-nature.png 1191px, remote Unsplash sources up
+// to 1200px) are not 4K-native. The 1200w variant is already served
+// on 4K viewports via responsive srcset; adding 1600/1920 widths
+// would force sharp to emit copies labeled at higher widths than the
+// source resolution allows, which is misleading. To support true 4K,
+// drop higher-resolution source files into images/source/.
 const profileWidths = [360, 520, 720, 960, 1200];
 const contentWidths = [320, 480, 720, 960, 1200];
 const peopleWidths = [200, 400, 800];

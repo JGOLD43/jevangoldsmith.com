@@ -14,9 +14,8 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
   }
 
   // Wrap an optimized <img> in <picture> with AVIF + WebP sources.
-  // jpgSrcset/sizes already on the inner img; we generate sibling avif/webp srcsets
-  // by swapping the extension on each entry. Variants must exist on disk
-  // (scripts/optimize-assets.js generates avif/webp alongside every jpg).
+  // Variants on disk are sibling files at the same width set; we generate the
+  // alternate srcsets by swapping the extension on each entry.
   function wrapInPicture(imgTag, jpgSrcset, sizes, hasAvif = true, hasWebp = true) {
     if (!jpgSrcset) return imgTag;
     const avifSrcset = jpgSrcset.replace(/\.(jpg|jpeg|png)\b/gi, '.avif');
@@ -38,14 +37,14 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
     return next;
   }
 
-  // Extract srcset + sizes from a final <img> tag and wrap it in <picture>
-  // with AVIF + WebP sources. Skipped if the tag is already wrapped or has no srcset.
+  // Extract srcset + sizes from an <img> tag and wrap it in <picture>
+  // with AVIF + WebP sources. Skipped if the tag has no srcset or no
+  // raster format we have alternates for.
   function wrapImgIfHasSrcset(imgTag) {
     if (!/^<img\b/i.test(imgTag)) return imgTag;
     const srcsetMatch = imgTag.match(/\ssrcset=(["'])([^"']+)\1/i);
     if (!srcsetMatch) return imgTag;
     const srcset = srcsetMatch[2];
-    // Only wrap if srcset references raster formats we have alternates for
     if (!/\.(jpg|jpeg|png)\b/i.test(srcset)) return imgTag;
     const sizesMatch = imgTag.match(/\ssizes=(["'])([^"']+)\1/i);
     const sizes = sizesMatch ? sizesMatch[2] : '';
@@ -91,7 +90,20 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
   }
 
   function optimizeLocalImageReferences(html) {
-    return html.replace(/<img\b[^>]*>/gi, (tag) => {
+    // Compute byte ranges for every existing <picture>...</picture> block so we
+    // can skip <img> tags inside them (they're already wrapped — wrapping again
+    // would produce <picture><picture>).
+    const pictureRanges = [];
+    {
+      const re = /<picture\b[\s\S]*?<\/picture>/gi;
+      let m;
+      while ((m = re.exec(html)) !== null) pictureRanges.push([m.index, m.index + m[0].length]);
+    }
+    const insidePicture = (offset) => pictureRanges.some(([s, e]) => offset >= s && offset < e);
+
+    return html.replace(/<img\b[^>]*>/gi, (tag, offset) => {
+      if (insidePicture(offset)) return tag;
+
       const remoteMatch = tag.match(/\ssrc=(["'])(https:\/\/(?:images\.unsplash\.com|covers\.openlibrary\.org)\/[^"']+)\1/i);
       if (remoteMatch && !/srcset=/i.test(tag)) {
         const url = remoteMatch[2].replace(/&amp;/g, '&');
@@ -144,10 +156,8 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
         'images/generated/content/zen-nature-320.jpg 320w, images/generated/content/zen-nature-480.jpg 480w, images/generated/content/zen-nature-720.jpg 720w, images/generated/content/zen-nature-960.jpg 960w, images/generated/content/zen-nature-1200.jpg 1200w',
         '(max-width: 768px) 92vw, 640px'
       );
-      // Wrap any final <img> that has a srcset so modern browsers prefer AVIF/WebP.
-      // Already-wrapped <img> inside <picture> are passed through unchanged because
-      // the <picture> tags surround the <img> in the source HTML and our regex only
-      // matches <img> tags directly.
+      // Final pass: any <img> not inside an existing <picture> that has a srcset
+      // gets wrapped so modern browsers prefer AVIF/WebP fallbacks.
       return wrapImgIfHasSrcset(next);
     });
   }
