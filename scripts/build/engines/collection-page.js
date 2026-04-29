@@ -426,74 +426,55 @@ function createCollectionPageEngine({
     });
   }
 
-  function renderProjectsPage(file) {
-    const publishedProjects = getPublicProjects();
-    const total = publishedProjects.length;
-
-    const statusCounts = { active: 0, completed: 0, planned: 0 };
+  function renderTaskListPage(file, opts) {
+    const items = opts.items;
+    const total = items.length;
+    const statusCounts = {};
+    for (const status of opts.statusOrder) statusCounts[status] = 0;
     const categoryCounts = new Map();
-    for (const project of publishedProjects) {
-      const status = (project.status || 'planned').toLowerCase();
+    for (const item of items) {
+      const status = (item.status || opts.defaultStatus || '').toLowerCase();
       if (statusCounts[status] !== undefined) statusCounts[status] += 1;
-      const category = (project.category || '').toLowerCase();
+      const category = (item.category || '').toLowerCase();
       if (category) categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
     }
 
-    const statusMeta = {
-      active: { label: 'Active', emoji: '⚡' },
-      completed: { label: 'Completed', emoji: '✅' },
-      planned: { label: 'Planned', emoji: '📋' }
-    };
-
-    const categoryMetaFor = (category) => {
-      const meta = {
-        software: { label: 'Software', emoji: '💻' },
-        research: { label: 'Research', emoji: '📚' },
-        ai: { label: 'AI', emoji: '🤖' },
-        writing: { label: 'Writing', emoji: '✍️' },
-        'real-estate': { label: 'Real Estate', emoji: '🏠' },
-        finance: { label: 'Finance', emoji: '💰' }
-      };
-
-      return meta[(category || '').toLowerCase()] || {
-        label: titleCase(category || 'General'),
-        emoji: '🛠️'
-      };
-    };
-
-    const statusButtons = ['active', 'completed', 'planned'].map((status) => {
-      const meta = statusMeta[status];
-      return `<div class="sidebar-section">
-                <button class="sidebar-category" data-action="filterProjects" data-action-args="${status}" data-action-this="true" data-tooltip="${escapeHtmlAttr(meta.label)}">
+    const renderSidebarButton = (key, meta, count, countId) => `<div class="sidebar-section">
+                <button class="sidebar-category" data-action="${escapeHtmlAttr(opts.filterAction)}" data-action-args="${escapeHtmlAttr(key)}" data-action-this="true" data-tooltip="${escapeHtmlAttr(meta.label)}">
                     <span class="category-icon">${meta.emoji}</span>
                     <span class="category-name">${escapeHTML(meta.label)}</span>
-                    <span class="category-count" id="count-${status}">${statusCounts[status]}</span>
+                    <span class="category-count" id="${escapeHtmlAttr(countId)}">${count}</span>
                 </button>
             </div>`;
-    }).join('\n            ');
 
-    const categoryButtons = Array.from(categoryCounts.keys())
-      .sort()
-      .map((category) => {
-        const meta = categoryMetaFor(category);
-        return `<div class="sidebar-section">
-                <button class="sidebar-category" data-action="filterProjects" data-action-args="${escapeHtmlAttr(category)}" data-action-this="true" data-tooltip="${escapeHtmlAttr(meta.label)}">
-                    <span class="category-icon">${meta.emoji}</span>
-                    <span class="category-name">${escapeHTML(meta.label)}</span>
-                    <span class="category-count" id="count-cat-${escapeHtmlAttr(category)}">${categoryCounts.get(category)}</span>
-                </button>
-            </div>`;
-      }).join('\n            ');
+    const statusButtons = opts.statusOrder
+      .map((status) => renderSidebarButton(status, opts.statusMeta[status], statusCounts[status] || 0, `count-${status}`))
+      .join('\n            ');
+
+    const categoryKeys = opts.categoryOrder
+      ? opts.categoryOrder.filter((category) => categoryCounts.has(category))
+      : Array.from(categoryCounts.keys()).sort();
+    const categoryButtons = categoryKeys
+      .map((category) => renderSidebarButton(category, opts.categoryMetaFor(category), categoryCounts.get(category) || 0, `count-cat-${category}`))
+      .join('\n            ');
+
+    const listOptions = opts.listOptions
+      .map((option) => {
+        const classAttr = option.active ? 'list-option active' : 'list-option';
+        const extra = option.extraAttrs ? ` ${option.extraAttrs}` : '';
+        return `<a href="${escapeHtmlAttr(option.href)}" class="${classAttr}"${extra}>${escapeHTML(option.label)}</a>`;
+      })
+      .join('\n                        ');
 
     return renderCollectionPage(file, {
-      title: `Projects - ${site.siteName}`,
-      description: 'Projects Jevan Goldsmith is building, exploring, and planning.',
+      title: opts.title,
+      description: opts.description,
       bodyClass: 'nav-compact',
-      scripts: '<script src="js/grid-zoom.js"></script>\n    <script src="js/action-dispatcher.js"></script>\n    <script src="js/projects.js"></script>\n    <script src="js/theme.js"></script>\n    <script src="js/analytics.js"></script>',
-      main: `<main class="movies-layout sidebar-collapsed" id="projects-layout">
-        <aside class="movies-sidebar collapsed" id="projects-sidebar">
+      scripts: opts.scripts,
+      main: `<main class="movies-layout sidebar-collapsed" id="${escapeHtmlAttr(opts.layoutId)}">
+        <aside class="movies-sidebar collapsed" id="${escapeHtmlAttr(opts.sidebarId)}">
             <div class="sidebar-header">
-                <button class="sidebar-collapse-btn" data-action="toggleProjectSidebar" title="Collapse sidebar">
+                <button class="sidebar-collapse-btn" data-action="${escapeHtmlAttr(opts.toggleSidebarAction)}" title="Collapse sidebar">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="9" y1="3" x2="9" y2="21"></line>
@@ -504,17 +485,14 @@ function createCollectionPageEngine({
 
             <div class="sidebar-list-selector">
                 <div class="list-dropdown" id="list-dropdown">
-                    <button class="list-dropdown-btn" data-action="toggleProjectListDropdown">
-                        <span id="current-list-name">Projects</span>
+                    <button class="list-dropdown-btn" data-action="${escapeHtmlAttr(opts.toggleListDropdownAction)}">
+                        <span id="current-list-name">${escapeHTML(opts.listCurrentName)}</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </button>
                     <div class="list-dropdown-menu" id="list-dropdown-menu">
-                        <a href="projects.html" class="list-option active">Projects</a>
-                        <a href="challenges.html" class="list-option">Challenges</a>
-                        <a href="free-resources.html" class="list-option">Resources</a>
-                        <a href="lesson-logger.html" class="list-option">Lesson Logger</a>
+                        ${listOptions}
                     </div>
                 </div>
             </div>
@@ -525,8 +503,8 @@ function createCollectionPageEngine({
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    <input type="text" id="project-search" class="movie-search-input" placeholder="Search projects..." data-action="searchProjects" data-action-event="input" data-action-value="true">
-                    <button class="search-clear-btn" id="project-search-clear-btn" data-action="clearProjectSearch" style="display: none;">
+                    <input type="text" id="${escapeHtmlAttr(opts.searchInputId)}" class="movie-search-input" placeholder="${escapeHtmlAttr(opts.searchPlaceholder)}" data-action="${escapeHtmlAttr(opts.searchAction)}" data-action-event="input" data-action-value="true">
+                    <button class="search-clear-btn" id="${escapeHtmlAttr(opts.searchClearButtonId)}" data-action="${escapeHtmlAttr(opts.searchClearAction)}" style="display: none;">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -536,170 +514,146 @@ function createCollectionPageEngine({
             </div>
 
             <div class="sidebar-section">
-                <button class="sidebar-category active" data-action="filterProjects" data-action-args="all" data-action-this="true" data-tooltip="All Projects">
+                <button class="sidebar-category active" data-action="${escapeHtmlAttr(opts.filterAction)}" data-action-args="all" data-action-this="true" data-tooltip="${escapeHtmlAttr(opts.allLabel)}">
                     <span class="category-icon">🎯</span>
-                    <span class="category-name">All Projects</span>
-                    <span class="category-count" id="count-all-projects">${total}</span>
+                    <span class="category-name">${escapeHTML(opts.allLabel)}</span>
+                    <span class="category-count" id="${escapeHtmlAttr(opts.allCountId)}">${total}</span>
                 </button>
             </div>
 
-            ${statusButtons}
-
-            ${categoryButtons}
+            ${statusButtons}${categoryButtons ? `\n\n            ${categoryButtons}` : ''}
 
             <div class="sidebar-footer">
-                <p>Things I am building, exploring, and planning</p>
+                <p>${escapeHTML(opts.sidebarFooter)}</p>
             </div>
         </aside>
 
         <div class="movies-main">
             <header class="main-header">
                 <div class="header-content">
-                    <h1>Projects</h1>
-                    <p>Things I am building, exploring, and learning in public.</p>
+                    <h1>${escapeHTML(opts.headerTitle)}</h1>
+                    <p>${escapeHTML(opts.headerSubtitle)}</p>
                 </div>
                 <div class="header-counter">
-                    <span class="counter-number" id="project-count">${total}</span>
-                    <span class="counter-label">Projects</span>
+                    <span class="counter-number" id="${escapeHtmlAttr(opts.counterId)}">${total}</span>
+                    <span class="counter-label">${escapeHTML(opts.counterLabel)}</span>
                 </div>
             </header>
 
-            <div id="projects-container" class="movies-grid">
-                ${publishedProjects.map(renderProjectCard).join('\n                ')}
+            <div id="${escapeHtmlAttr(opts.gridId)}" class="movies-grid">
+                ${items.map(opts.renderCard).join('\n                ')}
             </div>
         </div>
     </main>`
     });
   }
 
-  function renderChallengesPage(file) {
-    const publishedChallenges = getPublicChallenges();
-    const total = publishedChallenges.length;
-
-    const statusMeta = {
-      active: { label: 'Active', emoji: '⚡' },
-      upcoming: { label: 'Upcoming', emoji: '📋' },
-      completed: { label: 'Completed', emoji: '✅' }
+  function renderProjectsPage(file) {
+    const projectCategoryMap = {
+      software: { label: 'Software', emoji: '💻' },
+      research: { label: 'Research', emoji: '📚' },
+      ai: { label: 'AI', emoji: '🤖' },
+      writing: { label: 'Writing', emoji: '✍️' },
+      'real-estate': { label: 'Real Estate', emoji: '🏠' },
+      finance: { label: 'Finance', emoji: '💰' }
     };
-    const categoryMetaMap = {
+
+    return renderTaskListPage(file, {
+      items: getPublicProjects(),
+      defaultStatus: 'planned',
+      statusOrder: ['active', 'completed', 'planned'],
+      statusMeta: {
+        active: { label: 'Active', emoji: '⚡' },
+        completed: { label: 'Completed', emoji: '✅' },
+        planned: { label: 'Planned', emoji: '📋' }
+      },
+      categoryMetaFor: (category) => projectCategoryMap[(category || '').toLowerCase()] || {
+        label: titleCase(category || 'General'),
+        emoji: '🛠️'
+      },
+      filterAction: 'filterProjects',
+      listOptions: [
+        { href: 'projects.html', label: 'Projects', active: true },
+        { href: 'challenges.html', label: 'Challenges' },
+        { href: 'free-resources.html', label: 'Resources' },
+        { href: 'lesson-logger.html', label: 'Lesson Logger' }
+      ],
+      listCurrentName: 'Projects',
+      toggleSidebarAction: 'toggleProjectSidebar',
+      toggleListDropdownAction: 'toggleProjectListDropdown',
+      layoutId: 'projects-layout',
+      sidebarId: 'projects-sidebar',
+      searchInputId: 'project-search',
+      searchPlaceholder: 'Search projects...',
+      searchAction: 'searchProjects',
+      searchClearButtonId: 'project-search-clear-btn',
+      searchClearAction: 'clearProjectSearch',
+      allLabel: 'All Projects',
+      allCountId: 'count-all-projects',
+      sidebarFooter: 'Things I am building, exploring, and planning',
+      headerTitle: 'Projects',
+      headerSubtitle: 'Things I am building, exploring, and learning in public.',
+      counterId: 'project-count',
+      counterLabel: 'Projects',
+      gridId: 'projects-container',
+      renderCard: renderProjectCard,
+      title: `Projects - ${site.siteName}`,
+      description: 'Projects Jevan Goldsmith is building, exploring, and planning.',
+      scripts: '<script src="js/grid-zoom.js"></script>\n    <script src="js/action-dispatcher.js"></script>\n    <script src="js/projects.js"></script>\n    <script src="js/theme.js"></script>\n    <script src="js/analytics.js"></script>'
+    });
+  }
+
+  function renderChallengesPage(file) {
+    const challengeCategoryMap = {
       learning: { label: 'Learning', emoji: '📚' },
       fitness: { label: 'Fitness', emoji: '💪' },
       creative: { label: 'Creative', emoji: '✍️' },
       financial: { label: 'Financial', emoji: '💰' }
     };
 
-    const statusCounts = { active: 0, upcoming: 0, completed: 0 };
-    const categoryCounts = new Map();
-    for (const challenge of publishedChallenges) {
-      const status = (challenge.status || 'upcoming').toLowerCase();
-      if (statusCounts[status] !== undefined) statusCounts[status] += 1;
-      const category = (challenge.category || '').toLowerCase();
-      if (category) categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
-    }
-
-    const categoryMetaFor = (category) => categoryMetaMap[(category || '').toLowerCase()] || {
-      label: titleCase(category || 'General'),
-      emoji: '🎯'
-    };
-
-    const statusButtons = ['active', 'upcoming', 'completed', 'learning', 'fitness', 'creative', 'financial'].map((key) => {
-      const isStatus = statusMeta[key];
-      const isCategory = categoryMetaMap[key];
-      const meta = isStatus || isCategory;
-      if (!meta) return '';
-      const count = isStatus ? statusCounts[key] : (categoryCounts.get(key) || 0);
-      const countId = isStatus ? `count-${key}` : `count-cat-${key}`;
-      return `<div class="sidebar-section">
-                <button class="sidebar-category" data-action="filterChallenges" data-action-args="${escapeHtmlAttr(key)}" data-action-this="true" data-tooltip="${escapeHtmlAttr(meta.label)}">
-                    <span class="category-icon">${meta.emoji}</span>
-                    <span class="category-name">${escapeHTML(meta.label)}</span>
-                    <span class="category-count" id="${escapeHtmlAttr(countId)}">${count}</span>
-                </button>
-            </div>`;
-    }).join('\n            ');
-
-    return renderCollectionPage(file, {
+    return renderTaskListPage(file, {
+      items: getPublicChallenges(),
+      defaultStatus: 'upcoming',
+      statusOrder: ['active', 'upcoming', 'completed'],
+      statusMeta: {
+        active: { label: 'Active', emoji: '⚡' },
+        upcoming: { label: 'Upcoming', emoji: '📋' },
+        completed: { label: 'Completed', emoji: '✅' }
+      },
+      categoryOrder: ['learning', 'fitness', 'creative', 'financial'],
+      categoryMetaFor: (category) => challengeCategoryMap[(category || '').toLowerCase()] || {
+        label: titleCase(category || 'General'),
+        emoji: '🎯'
+      },
+      filterAction: 'filterChallenges',
+      listOptions: [
+        { href: 'projects.html', label: 'Projects' },
+        { href: 'challenges.html', label: 'Challenges', active: true },
+        { href: 'free-resources.html', label: 'Resources', extraAttrs: 'data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges"' },
+        { href: 'lesson-logger.html', label: 'Lesson Logger' }
+      ],
+      listCurrentName: 'Challenges',
+      toggleSidebarAction: 'toggleChallengeSidebar',
+      toggleListDropdownAction: 'toggleChallengeListDropdown',
+      layoutId: 'challenges-layout',
+      sidebarId: 'challenges-sidebar',
+      searchInputId: 'challenge-search',
+      searchPlaceholder: 'Search challenges...',
+      searchAction: 'searchChallenges',
+      searchClearButtonId: 'challenge-search-clear-btn',
+      searchClearAction: 'clearChallengeSearch',
+      allLabel: 'All Challenges',
+      allCountId: 'count-all-challenges',
+      sidebarFooter: 'Personal challenges, constraints, and experiments',
+      headerTitle: 'Challenges',
+      headerSubtitle: "Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.",
+      counterId: 'challenge-count',
+      counterLabel: 'Challenges',
+      gridId: 'challenges-container',
+      renderCard: renderChallengeCard,
       title: `Challenges, Constraints & Personal Experiments - ${site.siteName}`,
       description: 'A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.',
-      bodyClass: 'nav-compact',
-      scripts: '<script src="js/grid-zoom.js"></script>\n    <script src="js/action-dispatcher.js"></script>\n    <script src="js/challenges.js"></script>\n    <script src="js/theme.js"></script>\n    <script src="js/analytics.js"></script>',
-      main: `<main class="movies-layout sidebar-collapsed" id="challenges-layout">
-        <aside class="movies-sidebar collapsed" id="challenges-sidebar">
-            <div class="sidebar-header">
-                <button class="sidebar-collapse-btn" data-action="toggleChallengeSidebar" title="Collapse sidebar">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="9" y1="3" x2="9" y2="21"></line>
-                    </svg>
-                </button>
-                <span class="sidebar-browse-label">Browse</span>
-            </div>
-
-            <div class="sidebar-list-selector">
-                <div class="list-dropdown" id="list-dropdown">
-                    <button class="list-dropdown-btn" data-action="toggleChallengeListDropdown">
-                        <span id="current-list-name">Challenges</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="list-dropdown-menu" id="list-dropdown-menu">
-                        <a href="projects.html" class="list-option">Projects</a>
-                        <a href="challenges.html" class="list-option active">Challenges</a>
-                        <a href="free-resources.html" class="list-option" data-analytics="cta" data-cta-id="free-resources" data-cta-location="challenges">Resources</a>
-                        <a href="lesson-logger.html" class="list-option">Lesson Logger</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-search">
-                <div class="search-input-wrapper search-bubble">
-                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="text" id="challenge-search" class="movie-search-input" placeholder="Search challenges..." data-action="searchChallenges" data-action-event="input" data-action-value="true">
-                    <button class="search-clear-btn" id="challenge-search-clear-btn" data-action="clearChallengeSearch" style="display: none;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <button class="sidebar-category active" data-action="filterChallenges" data-action-args="all" data-action-this="true" data-tooltip="All Challenges">
-                    <span class="category-icon">🎯</span>
-                    <span class="category-name">All Challenges</span>
-                    <span class="category-count" id="count-all-challenges">${total}</span>
-                </button>
-            </div>
-
-            ${statusButtons}
-
-            <div class="sidebar-footer">
-                <p>Personal challenges, constraints, and experiments</p>
-            </div>
-        </aside>
-
-        <div class="movies-main">
-            <header class="main-header">
-                <div class="header-content">
-                    <h1>Challenges</h1>
-                    <p>Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.</p>
-                </div>
-                <div class="header-counter">
-                    <span class="counter-number" id="challenge-count">${total}</span>
-                    <span class="counter-label">Challenges</span>
-                </div>
-            </header>
-
-            <div id="challenges-container" class="movies-grid">
-                ${publishedChallenges.map(renderChallengeCard).join('\n                ')}
-            </div>
-        </div>
-    </main>`
+      scripts: '<script src="js/grid-zoom.js"></script>\n    <script src="js/action-dispatcher.js"></script>\n    <script src="js/challenges.js"></script>\n    <script src="js/theme.js"></script>\n    <script src="js/analytics.js"></script>'
     });
   }
 
