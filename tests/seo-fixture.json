@@ -297,7 +297,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-austin-adventure.html",
-          "wordCount": 244
+          "wordCount": 246
         }
       ]
     }
@@ -456,7 +456,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-ayr-adventure.html",
-          "wordCount": 245
+          "wordCount": 247
         }
       ]
     }
@@ -615,7 +615,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-japan-adventure.html",
-          "wordCount": 230
+          "wordCount": 232
         }
       ]
     }
@@ -773,7 +773,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-sample-adventure.html",
-          "wordCount": 209
+          "wordCount": 211
         }
       ]
     }
@@ -932,7 +932,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-sydney-adventure.html",
-          "wordCount": 231
+          "wordCount": 233
         }
       ]
     }
@@ -1091,7 +1091,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-uluru-adventure.html",
-          "wordCount": 231
+          "wordCount": 233
         }
       ]
     }
@@ -1250,7 +1250,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-vietnam-adventure.html",
-          "wordCount": 266
+          "wordCount": 268
         }
       ]
     }
@@ -2052,7 +2052,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/changed-my-mind.html",
-          "wordCount": 427
+          "wordCount": 429
         }
       ]
     }
@@ -3456,7 +3456,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/important-or-not.html",
-          "wordCount": 820
+          "wordCount": 822
         }
       ]
     }
@@ -3762,7 +3762,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/lesson-logger.html",
-          "wordCount": 561
+          "wordCount": 563
         }
       ]
     }
@@ -3917,7 +3917,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/living-manifesto.html",
-          "wordCount": 2134
+          "wordCount": 2136
         }
       ]
     }
@@ -4208,7 +4208,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/movie-philosophy.html",
-          "wordCount": 315
+          "wordCount": 317
         }
       ]
     }
@@ -4554,7 +4554,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/north-star.html",
-          "wordCount": 823
+          "wordCount": 825
         }
       ]
     }
@@ -4886,28 +4886,28 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people-philosophy.html",
-          "wordCount": 322
+          "wordCount": 324
         }
       ]
     }
   },
   "people.html": {
-    "title": "People Who Inspire Me | Jevan Goldsmith",
-    "description": "A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
+    "title": "People of History | Jevan Goldsmith",
+    "description": "A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
     "robots": "index, follow, max-image-preview:large",
     "canonical": "https://jevangoldsmith.com/people.html",
     "og": {
       "og:type": "website",
-      "og:title": "People Who Inspire Me",
-      "og:description": "A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
+      "og:title": "People of History",
+      "og:description": "A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
       "og:url": "https://jevangoldsmith.com/people.html",
       "og:site_name": "Jevan Goldsmith",
       "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
-      "twitter:title": "People Who Inspire Me",
-      "twitter:description": "A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
+      "twitter:title": "People of History",
+      "twitter:description": "A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
       "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
     },
     "alternate": [
@@ -4986,7 +4986,7 @@
             {
               "@type": "ListItem",
               "item": "https://jevangoldsmith.com/people.html",
-              "name": "People Who Inspire Me",
+              "name": "People of History",
               "position": 3
             }
           ]
@@ -5008,12 +5008,12 @@
           "breadcrumb": {
             "@id": "https://jevangoldsmith.com/people.html#breadcrumbs"
           },
-          "dateModified": "2026-04-29",
-          "description": "A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
-          "headline": "People Who Inspire Me",
+          "dateModified": "2026-04-30",
+          "description": "A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
+          "headline": "People of History",
           "image": {
             "@type": "ImageObject",
-            "caption": "People Who Inspire Me",
+            "caption": "People of History",
             "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
             "height": 630,
             "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
@@ -5024,7 +5024,7 @@
             "@id": "https://jevangoldsmith.com/#website"
           },
           "keywords": [
-            "people",
+            "people of history",
             "Taste",
             "Better Thinking",
             "Books",
@@ -5073,7 +5073,7 @@
               }
             ]
           },
-          "name": "People Who Inspire Me",
+          "name": "People of History",
           "publisher": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -10749,7 +10749,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/reading-philosophy.html",
-          "wordCount": 307
+          "wordCount": 309
         }
       ]
     }
@@ -11046,7 +11046,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/speeches.html",
-          "wordCount": 223
+          "wordCount": 225
         }
       ]
     }
@@ -11565,7 +11565,7 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/weekly-review-template.html",
-          "wordCount": 236
+          "wordCount": 238
         }
       ]
     }
