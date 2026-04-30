@@ -1,12 +1,11 @@
-const { pageMetaFor } = require('./page-meta');
+const SITE_CSS_BUNDLE = 'css/style.css';
 
-function cssBundleForPage(file) {
-  return pageMetaFor(file).cssBundle;
+function cssBundleForPage() {
+  return SITE_CSS_BUNDLE;
 }
 
-function applyPageCssBundle(file, html) {
-  const bundle = cssBundleForPage(file);
-  return html.replace(/(["'])css\/style\.css(?:\?v=\d+)?\1/g, `$1${bundle}$1`);
+function applyPageCssBundle(_file, html) {
+  return html;
 }
 
 module.exports = {
