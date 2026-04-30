@@ -23,7 +23,13 @@
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
-const { google } = require('googleapis');
+let google;
+try {
+  ({ google } = require('googleapis'));
+} catch {
+  console.error('sync-photos: googleapis is not installed. Run `npm i googleapis` first.');
+  process.exit(1);
+}
 
 const ROOT = process.cwd();
 const OUT_FILE = path.join(ROOT, 'data', 'photos.generated.json');

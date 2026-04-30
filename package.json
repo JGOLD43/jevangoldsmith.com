@@ -36,7 +36,9 @@
     "@turf/length": "^7.3.5",
     "@turf/simplify": "^7.3.5",
     "@xmldom/xmldom": "^0.9.10",
-    "dotenv": "^17.4.2",
+    "dotenv": "^17.4.2"
+  },
+  "optionalDependencies": {
     "googleapis": "^171.4.0"
   }
 }
