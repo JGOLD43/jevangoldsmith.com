@@ -243,8 +243,9 @@ function createBooksView(controller) {
     function renderCarousel(books) {
         const track = document.getElementById('carousel-track');
         if (!track) return;
-        const recentBooks = books.slice(0, 6);
+        const recentBooks = books.slice(-20).reverse();
         const carouselBooks = [...recentBooks, ...recentBooks];
+        track.style.animationDuration = `${recentBooks.length * 3}s`;
         track.innerHTML = carouselBooks.map((book) => {
             const coverUrl = controller.getCoverUrl(book, 'medium');
             return `<img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
