@@ -4,6 +4,7 @@
 // exposed window.JGLetterboxd* globals consumed here.
 
 const LETTERBOXD_USERNAME = 'contentwatch';
+let linkedMovieHandled = false;
 const movieMetadata = {
     'What Dreams May Come': { genre: 'Drama', timesWatched: 1 },
     'Before Sunset': { genre: 'Romance', timesWatched: 1 },
@@ -461,6 +462,7 @@ function shouldFetchLiveLetterboxd() {
 function setMovies(movies) {
     movieState.setMovies(movies.map(normalizeMovieData));
     renderFromState();
+    handleLinkedMovie();
 }
 
 async function fetchLiveLetterboxdMovies() {
@@ -578,6 +580,16 @@ function toggleMovieGenre(genre, event) {
 function scrollToMovie(movieTitle, event) {
     event?.preventDefault();
     movieView.scrollToMovie(movieTitle, event);
+}
+
+function handleLinkedMovie() {
+    if (linkedMovieHandled) return;
+    const linkedMovieTitle = new URLSearchParams(window.location.search).get('movie');
+    if (!linkedMovieTitle) return;
+    linkedMovieHandled = true;
+    window.requestAnimationFrame(() => {
+        scrollToMovie(linkedMovieTitle);
+    });
 }
 
 function clearAllFilters() {
