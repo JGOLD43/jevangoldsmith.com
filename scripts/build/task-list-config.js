@@ -1,8 +1,10 @@
 const scriptTags = (files) => files.map((file) => `<script src="${file}"></script>`).join('');
+
 const taskListScriptFiles = {
   projects: ['js/grid-zoom.js', 'js/collection-ui.js', 'js/collection-runtime.js', 'js/action-dispatcher.js', 'js/task-list.js', 'js/projects.js', 'js/theme.js', 'js/analytics.js'],
   challenges: ['js/grid-zoom.js', 'js/collection-ui.js', 'js/collection-runtime.js', 'js/action-dispatcher.js', 'js/task-list.js', 'js/challenges.js', 'js/theme.js', 'js/analytics.js']
 };
+
 const taskListScripts = (file) => scriptTags(taskListScriptFiles[file]);
 
 const TASK_LIST_CONFIG = {
@@ -111,4 +113,6 @@ function taskListConfigFor(view) {
   return TASK_LIST_CONFIG[view] || null;
 }
 
-module.exports = { taskListConfigFor };
+module.exports = {
+  taskListConfigFor
+};

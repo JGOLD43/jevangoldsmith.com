@@ -13,7 +13,7 @@ const jsBundles = {
   'js/bundles/page-adventures.js': ['js/action-dispatcher.js', 'js/adventures-runtime.js', 'js/adventures-ui.js', 'js/adventures-map.js', 'js/adventures.js', 'vendor/dompurify/purify.min.js', 'js/sanitize.js', 'js/theme.js', 'js/analytics.js'],
   'js/bundles/page-books.js': [...collectionCore, 'js/books.js?v=7', 'js/sanitize.js', 'js/theme.js', 'js/analytics.js'],
   'js/bundles/page-movies.js': [...collectionCore, 'js/action-dispatcher.js', 'js/movie-stats.js', 'js/letterboxd.js', 'js/sanitize.js', 'js/theme.js', 'js/analytics.js'],
-  'js/bundles/page-essays.js': ['vendor/dompurify/purify.min.js', 'js/sanitize.js', 'js/collection-ui.js', 'js/collection-runtime.js', 'js/data-fetch.js', 'js/action-dispatcher.js', 'js/essays-state.js', 'js/essays-filters.js', 'js/essays-view.js', 'js/essays.js', 'js/theme.js', 'js/analytics.js'],
+  'js/bundles/page-essays.js': ['vendor/dompurify/purify.min.js', 'js/sanitize.js', 'js/collection-ui.js', 'js/collection-runtime.js', 'js/data-fetch.js', 'js/action-dispatcher.js', 'js/essays.js', 'js/theme.js', 'js/analytics.js'],
   'js/bundles/page-people.js': ['js/theme.js', ...collectionCore, 'js/sanitize.js', 'js/action-dispatcher.js', 'js/people.js', 'js/analytics.js'],
   'js/bundles/page-podcasts.js': [...collectionCore, 'js/sanitize.js', 'js/action-dispatcher.js', 'js/podcasts.js', 'js/theme.js', 'js/analytics.js'],
   'js/bundles/page-projects.js': ['js/grid-zoom.js', 'js/collection-ui.js', 'js/collection-runtime.js', 'js/action-dispatcher.js', 'js/task-list.js', 'js/projects.js', 'js/theme.js', 'js/analytics.js'],

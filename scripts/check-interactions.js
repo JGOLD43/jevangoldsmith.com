@@ -7,7 +7,7 @@ const jsSources = [
   'js/action-dispatcher.js',
   'js/adventures-ui.js',
   'js/dateme.js',
-  'js/essays-view.js',
+  'js/essays.js',
   'js/task-list.js',
   'scripts/build/js-manifest.js'
 ].map((file) => readText(file, '')).join('\n');

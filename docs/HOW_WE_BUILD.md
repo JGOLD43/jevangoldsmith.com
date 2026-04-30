@@ -98,8 +98,8 @@ Use behavior-preserving vertical slices:
 
 ## Current Engineering Pattern
 
-The codebase now follows a clearer split between orchestration, rendering, and
-shared interaction primitives.
+The codebase now follows a clearer split between build-time configuration,
+page-owned orchestration, and shared interaction primitives.
 
 ### Build
 
@@ -108,6 +108,9 @@ shared interaction primitives.
 - `scripts/build/dist.js` owns final packaging into `dist/`.
 - `scripts/build/route-manifest.js` owns route metadata.
 - `scripts/build/css-manifest.js` owns CSS layer groups and bundle ownership.
+- `scripts/build/js-manifest.js` owns page-level JS bundle inputs and routes.
+- `scripts/build/js-bundles.js` owns static concatenation into hashed per-page
+  browser bundles.
 - `scripts/build/page-manifest.js` remains a compatibility export for callers
   that need both route and CSS metadata.
 - `scripts/build/page-index.js` owns `data/pages.json`, `sitemap.xml`,
@@ -131,8 +134,10 @@ of growing the entrypoint.
 For larger interactive pages, prefer this shape:
 
 - page coordinator: fetch/init/wire lifecycle
-- render module: DOM rendering only
-- content/config module: static question sets, labels, or mappings
+- render module: DOM rendering only when reused or large enough to justify the
+  extra file
+- content/config module: static question sets, labels, or mappings when they are
+  shared or truly independent
 - shared UI helper: repeated collection/sidebar interactions
 
 Examples:
@@ -140,10 +145,15 @@ Examples:
 - collection pages: `js/collection-runtime.js` + a page module such as
   `js/projects.js`, `js/challenges.js`, `js/people.js`, `js/podcasts.js`,
   `js/books.js`, `js/letterboxd.js`, or `js/essays.js`
-- rich collections keep page render/state modules only where behavior is unique,
-  such as `js/books-view.js`, `js/letterboxd-render.js`, or
-  `js/essays-view.js`
-- date funnel: `js/dateme.js` + `js/dateme-content.js`
+- rich collections should keep page behavior in one page module unless a split
+  removes real duplication or isolates a reusable concern
+- date funnel: `js/dateme.js`
+
+Authored source can stay simple even when output is optimized. The generated
+site replaces page script groups with hashed `js/bundles/page-*.js` files during
+`npm run build`, so normal public pages should ship one external page bundle.
+Adventure detail pages intentionally keep Leaflet separate because bundling that
+vendor runtime makes the page bundle much larger.
 
 ### Events
 

@@ -12,6 +12,7 @@ The public runtime contains:
 
 - generated `.html` pages
 - hashed CSS/JS/vendor assets under `dist/assets/`
+- hashed per-page JS bundles under `dist/assets/js/bundles/`
 - static JSON data under `dist/data/`
 - static images under `dist/images/`
 - `sitemap.xml` and `robots.txt`
@@ -106,12 +107,14 @@ Generated collection page configuration is split by concern:
 - `scripts/build/collection-config.js` owns page-level layout and script wiring
 - `scripts/build/collection-sections.js` owns sidebar section data and icon keys
 - `scripts/build/task-list-config.js` owns projects/challenges task-list config
+- `scripts/build/js-manifest.js` owns the source scripts that become per-page JS
+  bundles in generated output
 
 The collection runtime path is now:
 
 ```text
 generated collection HTML
-  -> js/action-dispatcher.js
+  -> dist/assets/js/bundles/page-*.js
   -> js/collection-runtime.js
   -> page modules such as js/projects.js, js/challenges.js, js/people.js,
      js/podcasts.js, js/books.js, js/letterboxd.js, or js/essays.js
