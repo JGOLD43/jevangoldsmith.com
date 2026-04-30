@@ -2516,6 +2516,70 @@
     stroke: #fff;
 }
 
+.people-source-filter {
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.8rem 1.5rem 1rem;
+}
+
+.people-source-filter-list {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.people-source-filter-btn {
+    align-items: center;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    justify-content: space-between;
+    min-height: 34px;
+    padding: 0.35rem 0.55rem;
+    text-align: left;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    width: 100%;
+}
+
+.people-source-filter-btn:hover {
+    background: #D4D4D4;
+    border-color: #bdbdbd;
+    color: #000;
+}
+
+.people-source-filter-btn.active {
+    background: #000;
+    border-color: #000;
+    color: #fff;
+}
+
+.people-source-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.people-source-count {
+    background: #E5E5E5;
+    color: #666;
+    font-size: 0.72rem;
+    font-weight: 700;
+    min-width: 1.55rem;
+    padding: 0.1rem 0.35rem;
+    text-align: center;
+}
+
+.people-source-filter-btn.active .people-source-count {
+    background: #333;
+    color: #fff;
+}
+
+.people-sidebar.collapsed .people-source-filter {
+    display: none;
+}
+
 .people-grid {
     display: grid;
     gap: 1.25rem;
@@ -2562,6 +2626,16 @@
 
 .person-info {
     padding: 14px;
+}
+
+.person-source-type {
+    color: var(--accent-color);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    line-height: 1.2;
+    margin: 0 0 0.45rem;
+    text-transform: uppercase;
 }
 
 .person-name {

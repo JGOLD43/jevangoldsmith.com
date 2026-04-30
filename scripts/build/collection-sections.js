@@ -105,6 +105,7 @@ function peopleSection([label, key, iconKey, count]) {
   return section({
     label,
     iconKey,
+    countId: `count-people-${key}`,
     count,
     attrs: {
       'data-action': 'filterByCategory',
@@ -115,12 +116,12 @@ function peopleSection([label, key, iconKey, count]) {
 }
 
 const peopleSections = [
-  section({ label: 'All People', iconKey: 'users', count: '12', attrs: { 'data-action': 'filterByCategory', 'data-action-args': 'all', 'data-action-eventobj': 'true', class: 'active' } }),
+  section({ label: 'All People', iconKey: 'users', countId: 'count-people-all', count: '0', attrs: { 'data-action': 'filterByCategory', 'data-action-args': 'all', 'data-action-eventobj': 'true', class: 'active' } }),
   ...[
-    ['Business & Investing', 'business', 'dollar', '3'],
-    ['Writers & Thinkers', 'writers', 'edit', '4'],
-    ['Science & Technology', 'science', 'globe', '3'],
-    ['Creators & Artists', 'creators', 'star', '2']
+    ['Business & Investing', 'business', 'dollar', '0'],
+    ['Writers & Thinkers', 'writers', 'edit', '0'],
+    ['Science & Technology', 'science', 'globe', '0'],
+    ['Creators & Artists', 'creators', 'star', '0']
   ].map(peopleSection)
 ];
 

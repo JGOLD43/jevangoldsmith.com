@@ -24,7 +24,7 @@ function tasteListOptions(active, location) {
     option('movies.html', 'Movies', active === 'movies'),
     option('podcasts.html', 'Podcasts', active === 'podcasts'),
     option('products.html', 'Products', active === 'products', { 'data-analytics': 'cta', 'data-cta-id': 'product-recommendations', 'data-cta-location': location }),
-    option('people.html', 'People', active === 'people')
+    option('people.html', 'People of History', active === 'people')
   ];
 }
 
@@ -158,8 +158,8 @@ const COLLECTION_PAGE_CONFIG = {
     afterMainPath: '_src/collections/podcasts/after-main.html'
   },
   people: {
-    title: 'People Who Inspire Me',
-    description: 'A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith\'s taste and judgment.',
+    title: 'People of History',
+    description: 'A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith\'s taste and judgment.',
     bodyClass: 'nav-compact',
     scripts: peopleScripts,
     layout: {
@@ -181,11 +181,12 @@ const COLLECTION_PAGE_CONFIG = {
         searchEvent: 'input',
         wrapperClass: 'search-bubble'
       },
+      extraPath: '_src/collections/people/sidebar-filters.html',
       sections: peopleSections
     },
     main: {
       className: 'people-main collection-main',
-      title: 'People',
+      title: 'People of History',
       subtitleHtml: '<div class="philosophy-link-wrapper"><a href="people-philosophy.html" class="header-subtitle-link">My People Philosophy</a><span class="read-first-note">← read this first</span></div>',
       counterId: 'people-count',
       counterLabel: 'People Listed',

@@ -324,8 +324,8 @@
       "schemaType": "Article"
     },
     "people.html": {
-      "description": "A people archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
-      "intent": "people",
+      "description": "A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
+      "intent": "people of history",
       "topics": [
         "taste",
         "better-thinking"

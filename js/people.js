@@ -42,6 +42,63 @@ const BOOK_PEOPLE = {
     'Zero to One': ['Peter Thiel']
 };
 
+const MOVIE_PEOPLE = {
+    'Before Sunrise': [
+        {
+            name: 'Jesse Wallace',
+            title: 'Fictional Writer, Before Sunrise',
+            lesson: 'Stay awake to the rare conversation in front of you',
+            category: 'writers',
+            bio: 'Jesse Wallace is a fictional traveler and writer from the Before trilogy, useful as a study in romantic attention, restlessness, and the stories people tell to make sense of their lives.'
+        },
+        {
+            name: 'Céline',
+            title: 'Fictional Character, Before Sunrise',
+            lesson: 'Meet life with candor and curiosity',
+            category: 'creators',
+            bio: 'Céline is a fictional character from the Before trilogy whose conversations with Jesse turn ordinary time into a serious inquiry into love, choice, memory, and identity.'
+        }
+    ],
+    'Before Sunset': ['Jesse Wallace', 'Céline'],
+    'Breakfast at Tiffany\'s': [
+        {
+            name: 'Holly Golightly',
+            title: 'Fictional Character, Breakfast at Tiffany\'s',
+            lesson: 'Charm cannot outrun self-knowledge forever',
+            category: 'creators',
+            bio: 'Holly Golightly is a fictional New York socialite whose style, evasions, and vulnerability make her a useful character study in reinvention, loneliness, and performance.'
+        }
+    ],
+    'The Place Beyond the Pines': [
+        {
+            name: 'Luke Glanton',
+            title: 'Fictional Character, The Place Beyond the Pines',
+            lesson: 'Short-term escape can become inherited consequence',
+            category: 'creators',
+            bio: 'Luke Glanton is a fictional motorcycle rider whose choices turn personal desperation into a longer chain of family, moral, and generational consequences.'
+        }
+    ],
+    'What Dreams May Come': [
+        {
+            name: 'Chris Nielsen',
+            title: 'Fictional Character, What Dreams May Come',
+            lesson: 'Love chooses presence when comfort would leave',
+            category: 'creators',
+            bio: 'Chris Nielsen is a fictional character whose story frames devotion as an active willingness to enter another person\'s pain rather than merely admire them from safety.'
+        }
+    ],
+    'Lawrence of Arabia': [
+        {
+            name: 'T. E. Lawrence',
+            title: 'Officer, Writer',
+            lesson: 'Mythmaking can outrun the person beneath it',
+            category: 'business',
+            sourceType: 'nonfiction',
+            bio: 'T. E. Lawrence was a British officer and writer whose World War I role in the Arab Revolt made him both a historical actor and a case study in charisma, identity, strategy, and myth.'
+        }
+    ]
+};
+
 const GENERATED_PERSON_META = {
     'Andrew Wilkinson': {
         category: 'business',
@@ -126,6 +183,7 @@ const GENERATED_PERSON_META = {
     'Sherlock Holmes': {
         category: 'creators',
         lesson: 'Observe before you infer',
+        sourceType: 'fiction',
         title: 'Fictional Detective'
     },
     'Victor O. Schwab': {
@@ -168,6 +226,8 @@ const PERSON_BIOS = {
     'Warren Buffett': 'Warren Buffett is the chairman of Berkshire Hathaway and one of the most influential investors in history, known for patience, temperament, and business quality.'
 };
 
+let peopleSourceFilter = 'all';
+
 function normalizePersonName(name) {
     return String(name || '')
         .normalize('NFD')
@@ -209,19 +269,46 @@ function attachBook(person, book) {
     }
 }
 
+function movieLabel(movie) {
+    return movie.year ? `${movie.title} (${movie.year})` : movie.title;
+}
+
+function attachMovie(person, movie) {
+    if (!person.movies) person.movies = [];
+    if (!person.movies.some((entry) => entry.title === movie.title)) {
+        person.movies.push({
+            coverImage: movie.poster || '',
+            href: `movies.html?movie=${encodeURIComponent(movie.title)}`,
+            label: movieLabel(movie),
+            title: movie.title,
+            year: movie.year || ''
+        });
+    }
+}
+
+function normalizeSubject(subject) {
+    return typeof subject === 'string' ? { name: subject } : subject;
+}
+
 function profileForName(profiles, name) {
     const id = normalizePersonName(name);
     return profiles.find((profile) => profile.id === id || profile.name === name) || null;
 }
 
-function mergeBookPeople(people, books, profiles = []) {
+function sourceTypeFor(person) {
+    return person.sourceType || (person.title?.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
+}
+
+function mergeBookPeople(people, books, movies = [], profiles = []) {
     const byName = new Map();
     people.forEach((person) => {
         const profile = profileForName(profiles, person.name);
         byName.set(person.name, {
             ...person,
             bio: profile?.bio || PERSON_BIOS[person.name] || person.lesson || '',
+            movies: [],
             profileHref: profile ? `people/${profile.id}.html` : '',
+            sourceType: sourceTypeFor(person),
             thesis: profile?.thesis || person.lesson || '',
             books: []
         });
@@ -242,8 +329,10 @@ function mergeBookPeople(people, books, profiles = []) {
                 image: imageMeta.image,
                 lesson: meta.lesson || 'Learn from the life behind the work',
                 name,
+                movies: [],
                 profileHref: profile ? `people/${profile.id}.html` : '',
                 srcset: imageMeta.srcset,
+                sourceType: meta.sourceType || 'nonfiction',
                 thesis: profile?.thesis || meta.lesson || '',
                 title: meta.title || 'Subject'
             };
@@ -253,11 +342,55 @@ function mergeBookPeople(people, books, profiles = []) {
                 ...meta,
                 bio: person.bio || profile?.bio || meta.bio || PERSON_BIOS[name] || '',
                 image: person.image || imageMeta.image,
+                movies: person.movies || [],
                 profileHref: person.profileHref || (profile ? `people/${profile.id}.html` : ''),
                 srcset: person.srcset || imageMeta.srcset,
+                sourceType: person.sourceType || meta.sourceType || 'nonfiction',
                 thesis: person.thesis || profile?.thesis || meta.lesson || ''
             });
             attachBook(byName.get(name), book);
+        });
+    });
+
+    movies.forEach((movie) => {
+        const subjects = MOVIE_PEOPLE[movie.title];
+        if (!subjects) return;
+
+        subjects.map(normalizeSubject).forEach((subject) => {
+            const name = subject.name;
+            if (!name) return;
+            const existing = byName.get(name);
+            const profile = profileForName(profiles, name);
+            const meta = GENERATED_PERSON_META[name] || {};
+            const imageMeta = generatedImageForPerson(name);
+            const sourceType = subject.sourceType || meta.sourceType || 'fiction';
+            const person = existing || {
+                bio: profile?.bio || subject.bio || meta.bio || PERSON_BIOS[name] || '',
+                category: subject.category || meta.category || 'creators',
+                image: subject.image || movie.poster || imageMeta.image,
+                lesson: subject.lesson || meta.lesson || 'Study the character under pressure',
+                name,
+                profileHref: profile ? `people/${profile.id}.html` : '',
+                sourceType,
+                srcset: subject.srcset || '',
+                thesis: profile?.thesis || subject.lesson || meta.lesson || '',
+                title: subject.title || meta.title || 'Fictional Character'
+            };
+
+            byName.set(name, {
+                ...person,
+                ...subject,
+                bio: person.bio || profile?.bio || subject.bio || meta.bio || PERSON_BIOS[name] || '',
+                books: person.books || [],
+                category: person.category || subject.category || meta.category || 'creators',
+                image: person.image || subject.image || movie.poster || imageMeta.image,
+                movies: person.movies || [],
+                profileHref: person.profileHref || (profile ? `people/${profile.id}.html` : ''),
+                sourceType: person.sourceType || sourceType,
+                srcset: person.srcset || subject.srcset || '',
+                thesis: person.thesis || profile?.thesis || subject.lesson || meta.lesson || ''
+            });
+            attachMovie(byName.get(name), movie);
         });
     });
 
@@ -266,14 +399,18 @@ function mergeBookPeople(people, books, profiles = []) {
             ...person,
             bio: person.bio || PERSON_BIOS[person.name] || person.lesson || '',
             books: person.books || [],
+            movies: person.movies || [],
+            sourceType: sourceTypeFor(person),
             searchText: [
                 person.name,
                 person.title,
                 person.lesson,
-                ...(person.books || []).map((book) => book.label)
+                sourceTypeFor(person) === 'fiction' ? 'fiction fictional character' : 'non-fiction nonfiction real historical',
+                ...(person.books || []).map((book) => book.label),
+                ...(person.movies || []).map((movie) => movie.label)
             ].join(' ')
         }))
-        .sort((a, b) => (b.books.length - a.books.length) || a.name.localeCompare(b.name));
+        .sort((a, b) => ((b.books.length + b.movies.length) - (a.books.length + a.movies.length)) || a.name.localeCompare(b.name));
 }
 
 function createPersonCard(person) {
@@ -282,6 +419,7 @@ function createPersonCard(person) {
     article.dataset.category = person.category || '';
     article.dataset.personId = normalizePersonName(person.name);
     article.dataset.search = person.searchText || `${person.name} ${person.title} ${person.lesson}`;
+    article.dataset.sourceType = sourceTypeFor(person);
     article.setAttribute('role', 'button');
     article.setAttribute('tabindex', '0');
     article.innerHTML = `
@@ -290,6 +428,7 @@ function createPersonCard(person) {
         </div>
         <div class="person-info">
             <h3 class="person-name">${escapeHTML(person.name)}</h3>
+            <p class="person-source-type">${sourceTypeFor(person) === 'fiction' ? 'Fiction' : 'Non-fiction'}</p>
             <p class="person-title">${escapeHTML(person.title)}</p>
             <p class="person-lesson">${escapeHTML(person.lesson)}</p>
         </div>
@@ -301,23 +440,88 @@ function buildPeopleRecords(people) {
     return people.map((person) => ({
         category: person.category || '',
         card: createPersonCard(person),
-        searchText: String(person.searchText || `${person.name} ${person.title} ${person.lesson}`).toLowerCase()
+        searchText: String(person.searchText || `${person.name} ${person.title} ${person.lesson}`).toLowerCase(),
+        sourceType: sourceTypeFor(person)
     }));
 }
 
+function sourceMatches(card) {
+    return peopleSourceFilter === 'all' || card.dataset.sourceType === peopleSourceFilter;
+}
+
+function updatePeopleSourceButtons() {
+    document.querySelectorAll('.people-source-filter-btn').forEach((button) => {
+        button.classList.toggle('active', button.dataset.actionArgs === peopleSourceFilter);
+    });
+}
+
+function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = String(value);
+}
+
+function updatePeopleFilterCounts(allCards) {
+    const sourceCards = peopleSourceFilter === 'all'
+        ? allCards
+        : allCards.filter((card) => card.dataset.sourceType === peopleSourceFilter);
+    const sourceCounts = allCards.reduce((counts, card) => {
+        const source = card.dataset.sourceType || 'nonfiction';
+        counts[source] = (counts[source] || 0) + 1;
+        return counts;
+    }, { fiction: 0, nonfiction: 0 });
+    const categoryCounts = sourceCards.reduce((counts, card) => {
+        const category = card.dataset.category || '';
+        counts[category] = (counts[category] || 0) + 1;
+        return counts;
+    }, {});
+
+    setText('people-source-count-all', allCards.length);
+    setText('people-source-count-nonfiction', sourceCounts.nonfiction || 0);
+    setText('people-source-count-fiction', sourceCounts.fiction || 0);
+    setText('count-people-all', sourceCards.length);
+    ['business', 'writers', 'science', 'creators'].forEach((category) => {
+        setText(`count-people-${category}`, categoryCounts[category] || 0);
+    });
+}
+
+function applyPeopleSourceFilter({ allCards, visibleCards }) {
+    const categorySearchVisible = new Set(visibleCards);
+    const finalVisible = [];
+    allCards.forEach((card) => {
+        const visible = categorySearchVisible.has(card) && sourceMatches(card);
+        card.style.display = visible ? 'block' : 'none';
+        if (visible) finalVisible.push(card);
+    });
+    setText('people-count', finalVisible.length);
+    updatePeopleFilterCounts(allCards);
+    updatePeopleSourceButtons();
+}
+
+function filterPeopleSource(source, event) {
+    peopleSourceFilter = source || 'all';
+    const button = event?.target?.closest('.people-source-filter-btn');
+    if (button) {
+        document.querySelectorAll('.people-source-filter-btn').forEach((item) => item.classList.remove('active'));
+        button.classList.add('active');
+    }
+    peopleRuntime?.render();
+}
+
 async function loadPeopleCards() {
-    const [data, booksData, profilesData] = await Promise.all([
+    const [data, booksData, moviesData, profilesData] = await Promise.all([
         dataFetch.fetchJson('data/people.json'),
         dataFetch.fetchJsonWithFallback(['data/books.generated.json', 'data/books.json']),
+        dataFetch.fetchJson('data/movies.json').catch(() => []),
         dataFetch.fetchJson('data/people.profiles.json').catch(() => ({ profiles: [] }))
     ]);
     const people = Array.isArray(data.people) ? data.people : [];
     const books = Array.isArray(booksData) ? booksData : booksData.books || [];
+    const movies = Array.isArray(moviesData) ? moviesData : moviesData.movies || [];
     const profiles = Array.isArray(profilesData.profiles) ? profilesData.profiles : [];
     const grid = document.getElementById('people-grid');
     if (grid) {
         const fragment = document.createDocumentFragment();
-        const mergedPeople = mergeBookPeople(people, books, profiles);
+        const mergedPeople = mergeBookPeople(people, books, movies, profiles);
         peopleById = new Map(mergedPeople.map((person) => [normalizePersonName(person.name), person]));
         peopleCards = buildPeopleRecords(mergedPeople);
         peopleCards.forEach(({ card }) => fragment.appendChild(card));
@@ -326,24 +530,29 @@ async function loadPeopleCards() {
     }
 }
 
-function createBooksMarkup(person) {
-    if (!person.books?.length) return '';
+function createMediaMarkup(person, key, label) {
+    const entries = person[key] || [];
+    if (!entries.length) return '';
     return `
         <div class="person-detail-books">
-            <p class="person-detail-section-label">Books</p>
+            <p class="person-detail-section-label">${escapeHTML(label)}</p>
             <div class="person-detail-book-list">
-                ${person.books.map((book) => `
-                    <a class="person-detail-book-link" href="${escapeAttr(book.href)}">
-                        ${book.coverImage ? `<img class="person-detail-book-cover" src="${escapeAttr(book.coverImage)}" alt="${escapeAttr(book.title)} cover" loading="lazy" decoding="async">` : '<span class="person-detail-book-cover person-detail-book-cover-fallback" aria-hidden="true"></span>'}
+                ${entries.map((item) => `
+                    <a class="person-detail-book-link" href="${escapeAttr(item.href)}">
+                        ${item.coverImage ? `<img class="person-detail-book-cover" src="${escapeAttr(item.coverImage)}" alt="${escapeAttr(item.title)} cover" loading="lazy" decoding="async">` : '<span class="person-detail-book-cover person-detail-book-cover-fallback" aria-hidden="true"></span>'}
                         <span class="person-detail-book-meta">
-                            <span class="person-detail-book-title">${escapeHTML(book.label)}</span>
-                            ${book.author ? `<span class="person-detail-book-author">${escapeHTML(book.author)}</span>` : ''}
+                            <span class="person-detail-book-title">${escapeHTML(item.label)}</span>
+                            ${item.author ? `<span class="person-detail-book-author">${escapeHTML(item.author)}</span>` : ''}
                         </span>
                     </a>
                 `).join('')}
             </div>
         </div>
     `;
+}
+
+function createBooksMarkup(person) {
+    return `${createMediaMarkup(person, 'books', 'Books')}${createMediaMarkup(person, 'movies', 'Movies')}`;
 }
 
 function ensurePeopleDetailModal() {
@@ -444,9 +653,11 @@ async function initPeoplePage() {
         searchInputId: 'people-search',
         sidebarId: 'people-sidebar',
         storageKey: 'people-sidebar-collapsed',
+        onRender: applyPeopleSourceFilter,
         useDisplayStyle: true
     });
     await loadPeopleCards();
+    window.JGActions?.register({ filterPeopleSource });
     peopleRuntime.init();
     initPeopleDetail();
 }
