@@ -15,6 +15,8 @@ function createPageEngines(deps) {
     escapeHtmlAttr,
     adventureForFile,
     renderAdventurePage,
+    personForFile,
+    renderPersonPage,
     skillForFile,
     renderSkillPage
   } = deps;
@@ -58,6 +60,10 @@ function createPageEngines(deps) {
     if (entry.engineView === 'skill') {
       const skill = skillForFile(file);
       return skill ? renderSkillPage(file, skill) : null;
+    }
+    if (entry.engineView === 'person') {
+      const person = personForFile(file);
+      return person ? renderPersonPage(file, person) : null;
     }
     return null;
   }

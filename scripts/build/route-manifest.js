@@ -14,6 +14,7 @@ const PAGE_MANIFEST = [
   { id: 'books', route: 'books.html', section: 'taste', engine: 'collection', engineView: 'books' },
   { id: 'movies', route: 'movies.html', section: 'taste', engine: 'collection', engineView: 'movies' },
   { id: 'people', route: 'people.html', section: 'taste', engine: 'collection', engineView: 'people' },
+  { id: 'person-detail', prefix: 'people/', section: 'taste', engine: 'detail', engineView: 'person' },
   { id: 'podcasts', route: 'podcasts.html', section: 'taste', engine: 'collection', engineView: 'podcasts' },
   { id: 'reading-philosophy', route: 'reading-philosophy.html', section: 'taste', engine: 'content' },
   { id: 'dateme', route: 'dateme.html', section: 'explore', engine: 'content' },

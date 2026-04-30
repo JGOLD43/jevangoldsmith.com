@@ -33,6 +33,7 @@ const {
 const { pageManifestFor, pageMetaFor } = require('./build/route-manifest');
 const { discoverPages } = require('./build/page-discovery');
 const { renderAdventurePageTemplate } = require('./build/render-adventure-page');
+const { renderPersonPageTemplate } = require('./build/render-person-page');
 const { createSkillPageRenderer } = require('./build/render-skill-page');
 const { createAgentApiBuilder } = require('./build/agent-api');
 const { createPageMetadataInjector } = require('./build/page-metadata');
@@ -62,6 +63,7 @@ const {
   seo,
   adventures,
   essays,
+  peopleProfiles,
   skills,
   books,
   quotes,
@@ -69,11 +71,12 @@ const {
 } = loadSiteData({ root });
 const {
   adventurePageFiles,
+  peopleProfilePageFiles,
   publicHtmlFiles,
   skillPageFiles,
   sourcePagesDir,
   topicPageFiles
-} = discoverPages({ root, adventures, skills, topics, seo });
+} = discoverPages({ root, adventures, skills, topics, seo, peopleProfiles });
 const generated = new Map();
 const fileOps = createFileOps({ root, verify, generated });
 const {
@@ -208,9 +211,11 @@ function getPageEngines() {
       parseSourcePage,
       renderSourcePage,
       adventureForFile,
+      personForFile,
       skillForFile,
       topicForFile,
       renderAdventurePage,
+      renderPersonPage,
       renderSkillPage,
       escapeHTML,
       escapeHtmlAttr,
@@ -361,6 +366,7 @@ function sectionFor(file) {
 
 function generatedFromFor(file) {
   if (adventureForFile(file)) return 'data/adventures.json';
+  if (personForFile(file)) return 'data/people.profiles.json';
   if (skillForFile(file)) return 'data/skills.json';
   if (topicForFile(file)) return 'data/topics.json';
   if (hasSourcePage(file)) return '_src/pages';
@@ -385,6 +391,12 @@ function skillForFile(file) {
   const match = file.match(/^skill-(.+)\.html$/);
   if (!match) return null;
   return skills.skills.find((skill) => skill.id === match[1] && skill.status !== 'draft') || null;
+}
+
+function personForFile(file) {
+  const match = file.match(/^people\/(.+)\.html$/);
+  if (!match) return null;
+  return (peopleProfiles.profiles || []).find((profile) => profile.id === match[1] && profile.status !== 'draft') || null;
 }
 
 function topicForFile(file) {
@@ -453,6 +465,31 @@ function renderAdventurePage(file, adventure) {
     lightboxImages,
     siteName: site.siteName,
     formatDateRange,
+    escapeHTML,
+    escapeHtmlAttr
+  });
+}
+
+function renderPersonPage(file, person) {
+  const nav = renderNav(file);
+  const footer = fs.existsSync(path.join(root, '_src', 'partials', 'footer.html'))
+    ? fs.readFileSync(path.join(root, '_src', 'partials', 'footer.html'), 'utf8').trim()
+    : '';
+  const localPerson = {
+    ...person,
+    image: `images/generated/people/${person.id}-400.jpg`,
+    srcset: [
+      `images/generated/people/${person.id}-200.jpg 200w`,
+      `images/generated/people/${person.id}-400.jpg 400w`,
+      `images/generated/people/${person.id}-800.jpg 800w`
+    ].join(', ')
+  };
+  return renderPersonPageTemplate({
+    person: localPerson,
+    books,
+    siteName: site.siteName,
+    nav,
+    footer,
     escapeHTML,
     escapeHtmlAttr
   });
@@ -528,6 +565,7 @@ function lastModifiedDate(file) {
   let source = file;
   if (hasSourcePage(file)) source = sourcePagePath(file);
   if (adventureForFile(file)) source = path.join(root, 'data', 'adventures.json');
+  if (personForFile(file)) source = path.join(root, 'data', 'people.profiles.json');
   if (skillForFile(file)) source = path.join(root, 'data', 'skills.json');
   if (topicForFile(file)) source = path.join(root, 'data', 'topics.json');
   const stat = fs.statSync(source);

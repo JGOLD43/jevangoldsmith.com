@@ -318,7 +318,7 @@ function createAgentApiBuilder({
     const searchIndex = buildSearchIndex(pageRecords, collectionEndpoints, updatedAt);
 
     writeGenerated(path.join(apiDir, 'schema.json'), `${JSON.stringify(schema, null, 2)}\n`);
-    writeGenerated(path.join(apiDir, 'search-index.json'), `${JSON.stringify(searchIndex, null, 2)}\n`);
+    writeGenerated(path.join(apiDir, 'search-index.json'), `${JSON.stringify(searchIndex)}\n`);
     writeGenerated(path.join(apiDir, 'index.json'), `${JSON.stringify(index, null, 2)}\n`);
     writeGenerated(path.join(apiDir, 'pages.json'), `${JSON.stringify(pageRecords, null, 2)}\n`);
     writeGenerated(path.join(apiDir, 'content.json'), `${JSON.stringify(content, null, 2)}\n`);

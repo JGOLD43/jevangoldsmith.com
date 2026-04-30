@@ -19,6 +19,7 @@ function loadSiteData({ root }) {
     seo: readJson(path.join(root, 'data', 'seo.json'), { defaults: {}, pages: {}, topicPages: {} }),
     adventures: readJson(path.join(root, 'data', 'adventures.json'), { adventures: [] }),
     essays: readJson(path.join(root, 'data', 'essays.json'), { essays: [] }),
+    peopleProfiles: readJson(path.join(root, 'data', 'people.profiles.json'), { profiles: [] }),
     skills: readJson(path.join(root, 'data', 'skills.json'), { skills: [] }),
     books: readJson(path.join(root, 'data', 'books.json'), []),
     quotes: readJson(path.join(root, 'data', 'quotes.json'), {}),

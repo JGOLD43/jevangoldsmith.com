@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function discoverPages({ root, adventures, skills, topics, seo }) {
+function discoverPages({ root, adventures, skills, topics, seo, peopleProfiles = { profiles: [] } }) {
   const sourcePagesDir = path.join(root, '_src', 'pages');
   const sourcePageFiles = fs.existsSync(sourcePagesDir)
     ? fs.readdirSync(sourcePagesDir).filter((file) => file.endsWith('.html')).sort()
@@ -15,11 +15,15 @@ function discoverPages({ root, adventures, skills, topics, seo }) {
   const topicPageFiles = (topics.topics || [])
     .filter((topic) => seo.topicPages?.[topic.id])
     .map((topic) => `topics/${topic.id}.html`);
+  const peopleProfilePageFiles = (peopleProfiles.profiles || [])
+    .filter((profile) => profile.id && profile.status !== 'draft')
+    .map((profile) => `people/${profile.id}.html`);
   const publicHtmlFiles = Array.from(new Set([
     ...sourcePageFiles,
     ...adventurePageFiles,
     ...skillPageFiles,
-    ...topicPageFiles
+    ...topicPageFiles,
+    ...peopleProfilePageFiles
   ])).sort();
 
   return {
@@ -28,7 +32,8 @@ function discoverPages({ root, adventures, skills, topics, seo }) {
     skillPageFiles,
     sourcePageFiles,
     sourcePagesDir,
-    topicPageFiles
+    topicPageFiles,
+    peopleProfilePageFiles
   };
 }
 

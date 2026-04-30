@@ -668,6 +668,12 @@ function scrollToBookByTitle(bookTitle, event) {
     booksView?.scrollToBookByTitle(bookTitle, event);
 }
 
+function scrollToLinkedBook() {
+    const linkedBookTitle = new URLSearchParams(window.location.search).get('book');
+    if (!linkedBookTitle) return;
+    scrollToBookByTitle(linkedBookTitle);
+}
+
 function scrollToBookByIsbn(isbn) { booksView?.scrollToBookByIsbn(isbn); }
 function openCategoryModal(category) { booksView?.openCategoryModal(category); }
 function closeCategoryModal() { booksView?.closeCategoryModal(); }
@@ -729,6 +735,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         booksView?.renderCarousel(booksState.getBooks());
         renderFromState();
         initBooksZoom();
+        scrollToLinkedBook();
     } catch (error) {
         console.error(error);
         showBooksUnavailable();
