@@ -1,5 +1,5 @@
 const commonScripts = ['js/theme.js', 'js/analytics.js'];
-const collectionCore = ['js/grid-zoom.js', 'js/collection-ui.js', 'js/collection-runtime.js', 'js/data-fetch.js'];
+const collectionCore = ['js/grid-zoom.js', 'js/collection-ui.js', 'js/collection-runtime.js', 'js/collection-helpers.js', 'js/data-fetch.js'];
 
 const jsBundles = {
   'js/bundles/page-common.js': commonScripts,

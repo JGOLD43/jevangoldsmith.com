@@ -370,11 +370,8 @@ const movieRender = {
 
 // --- events ---
 function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilter, setTimesWatchedFilter }) {
-    let isDraggingStars = false;
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') closeMovieModal();
-    });
+    const helpers = window.JGCollectionHelpers;
+    helpers.installEscapeCloser(closeMovieModal);
 
     document.addEventListener('click', (event) => {
         const modal = document.getElementById('movie-modal');
@@ -385,22 +382,7 @@ function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilt
         window.JGCollectionUI.closeDropdownOnOutsideClick('list-dropdown', event);
     });
 
-    const stars = Array.from(document.querySelectorAll('.filter-star'));
-    stars.forEach((star) => {
-        star.addEventListener('mousedown', () => {
-            isDraggingStars = true;
-            setStarFilter(Number.parseInt(star.getAttribute('data-star'), 10));
-        });
-        star.addEventListener('mouseenter', () => {
-            if (!isDraggingStars) return;
-            setStarFilter(Number.parseInt(star.getAttribute('data-star'), 10));
-        });
-        star.addEventListener('click', () => {
-            setStarFilter(Number.parseInt(star.getAttribute('data-star'), 10));
-        });
-    });
-
-    document.addEventListener('mouseup', () => { isDraggingStars = false; });
+    helpers.bindStarRatingDrag(document, setStarFilter);
 
     const slider = document.getElementById('timeswatched-slider');
     if (slider) {

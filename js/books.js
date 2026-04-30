@@ -452,14 +452,6 @@ function createBooksView(controller) {
 }
 
 // --- events ---
-function getStarRatingFromEvent(star, event) {
-    const starNumber = Number.parseInt(star.getAttribute('data-star'), 10);
-    const rect = star.getBoundingClientRect();
-    const clickX = event.clientX - rect.left;
-    const isLeftHalf = clickX < rect.width / 2;
-    return isLeftHalf ? starNumber - 0.5 : starNumber;
-}
-
 function bindBooksEvents(handlers) {
     const {
         clearSearch, clearStarFilter, closeBookModal, closeCategoryModal,
@@ -468,24 +460,11 @@ function bindBooksEvents(handlers) {
         setReReadsFilter, setStarFilter, setViewMode,
         toggleListDropdown, toggleSidebar
     } = handlers;
-    let isDraggingStars = false;
+    const helpers = window.JGCollectionHelpers;
 
-    document.addEventListener('error', (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLImageElement)) return;
-        if (target.dataset.bookCoverFallback === 'true') {
-            target.hidden = true;
-            target.parentElement?.classList.add('book-cover-missing');
-            return;
-        }
-        if (target.dataset.removeOnError === 'true') target.remove();
-    }, true);
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key !== 'Escape') return;
-        closeBookModal();
-        closeCategoryModal();
-    });
+    helpers.installImageErrorHandler();
+    helpers.installEscapeCloser(closeBookModal);
+    helpers.installEscapeCloser(closeCategoryModal);
 
     document.addEventListener('click', (event) => {
         const modal = document.getElementById('book-modal');
@@ -535,23 +514,11 @@ function bindBooksEvents(handlers) {
         });
     }
 
-    const starContainer = document.getElementById('star-filter-container');
-    if (!starContainer) return;
-    const stars = Array.from(starContainer.querySelectorAll('.filter-star'));
-    stars.forEach((star) => {
-        star.addEventListener('click', (event) => {
-            setStarFilter(getStarRatingFromEvent(star, event));
-        });
-        star.addEventListener('mousedown', (event) => {
-            isDraggingStars = true;
-            setStarFilter(getStarRatingFromEvent(star, event));
-        });
-        star.addEventListener('mouseenter', (event) => {
-            if (!isDraggingStars) return;
-            setStarFilter(getStarRatingFromEvent(star, event));
-        });
-    });
-    document.addEventListener('mouseup', () => { isDraggingStars = false; });
+    helpers.bindStarRatingDrag(
+        document.getElementById('star-filter-container'),
+        setStarFilter,
+        { halfStars: true }
+    );
 }
 
 // --- orchestrator ---
