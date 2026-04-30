@@ -52,6 +52,12 @@ function isFresh(output, input) {
 }
 
 async function generateRasterSet({ input, outDir, basename, widths, jpeg = false }) {
+  try {
+    await sharp(input).metadata();
+  } catch (err) {
+    console.warn(`optimize-assets: skipping ${input} (not a valid image: ${err.message})`);
+    return;
+  }
   for (const width of widths) {
     await image(input, path.join(outDir, `${basename}-${width}.avif`), width, 'avif', {
       quality: jpeg ? 72 : 82,
