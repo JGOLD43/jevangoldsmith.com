@@ -19,7 +19,6 @@ function buildDist({
   writeLocalizedPublicData,
   buildAgentApi,
   sitePages,
-  applyPageCssBundle,
   applyPageJsBundle,
   normalizePublicHtml,
   syncReferencedRemoteAssets
@@ -67,7 +66,7 @@ function buildDist({
   buildAgentApi(sitePages);
 
   for (const file of publicHtmlFiles) {
-    const html = rewriteAssetReferences(applyPageJsBundle(file, applyPageCssBundle(file, normalizePublicHtml(file))), manifest);
+    const html = rewriteAssetReferences(applyPageJsBundle(file, normalizePublicHtml(file)), manifest);
     writeGenerated(path.join(distDir, file), html);
   }
 

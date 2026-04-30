@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { collectionPageConfigFor, taskListConfigFor } = require('../collection-config');
+const { collectionPageConfigFor, taskListConfigFor } = require('./collection-config');
 
 function createCollectionPageEngine({
   root,

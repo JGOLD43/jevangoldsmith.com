@@ -30,8 +30,7 @@ const {
   stripHtml,
   wordCount
 } = require('./build/html-utils');
-const { applyPageCssBundle } = require('./build/page-routes');
-const { pageManifestFor, pageMetaFor } = require('./build/page-meta');
+const { pageManifestFor, pageMetaFor } = require('./build/route-manifest');
 const { discoverPages } = require('./build/page-discovery');
 const { renderAdventurePageTemplate } = require('./build/render-adventure-page');
 const { createSkillPageRenderer } = require('./build/render-skill-page');
@@ -581,7 +580,6 @@ runBuildPipeline({
     writeLocalizedPublicData,
     buildAgentApi,
     sitePages,
-    applyPageCssBundle,
     applyPageJsBundle,
     normalizePublicHtml,
     syncReferencedRemoteAssets
