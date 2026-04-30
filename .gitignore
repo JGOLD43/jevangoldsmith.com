@@ -29,28 +29,19 @@ test-results/
 playwright-report/
 .playwright-cli/
 .playwright-mcp/
-nav-*.png
-podcasts-after.png
-shelf-*.jpeg
-movies-full.jpeg
-*-1400.png
-*-after.png
-*-verify.png
-*-now.png
-*-new.png
-books-fixed.png
-books-page.png
-map-with-countries.png
+# Root-level debug screenshots (live in tests/ if needed long-term)
+/*.png
+/*.jpeg
+/*.jpg
+!/CNAME
+!/llms.txt
 
 # Generated build output
 dist/
-dist-baseline/
-dist-eleventy/
 .firebase/
 
 # Generated root artifacts from npm run build
 css/style.css
-css/page-*.css
 data/pages.json
 data/generated-manifest.json
 data/*.generated.json
