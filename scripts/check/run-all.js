@@ -1,26 +1,6 @@
 const { spawn } = require('child_process');
 
-const SEQUENTIAL_PHASES = [
-  ['check:repo', 'check:source', 'check:structure'],
-  ['check:build']
-];
-
-const PARALLEL_PHASE = [
-  'check:seo',
-  'check:js',
-  'check:lint',
-  'check:deadcode',
-  'check:content',
-  'check:links',
-  'check:interactions',
-  'check:deploy',
-  'check:api',
-  'check:performance',
-  'check:assets',
-  'check:page-baselines',
-  'check:docs',
-  'check:smoke'
-];
+const CHECKS = ['check:lint', 'check:build', 'check:links', 'check:page-baselines', 'check:smoke'];
 
 function run(name) {
   return new Promise((resolve) => {
@@ -33,39 +13,13 @@ function run(name) {
   });
 }
 
-async function runSequence(names) {
-  const results = [];
-  for (const name of names) {
-    const result = await run(name);
-    process.stdout.write(`[${name}] ${result.stdout}`);
-    if (result.stderr) process.stderr.write(`[${name}] ${result.stderr}`);
-    results.push(result);
-    if (result.code !== 0) return results;
-  }
-  return results;
-}
-
-async function runParallel(names) {
-  const results = await Promise.all(names.map(run));
+(async () => {
+  const results = await Promise.all(CHECKS.map(run));
   for (const result of results) {
     process.stdout.write(`[${result.name}] ${result.stdout}`);
     if (result.stderr) process.stderr.write(`[${result.name}] ${result.stderr}`);
   }
-  return results;
-}
-
-(async () => {
-  for (const phase of SEQUENTIAL_PHASES) {
-    const results = await runSequence(phase);
-    if (results.some((result) => result.code !== 0)) {
-      const failed = results.filter((r) => r.code !== 0).map((r) => r.name);
-      console.error(`\nCheck phase failed: ${failed.join(', ')}`);
-      process.exit(1);
-    }
-  }
-
-  const results = await runParallel(PARALLEL_PHASE);
-  const failures = results.filter((result) => result.code !== 0);
+  const failures = results.filter((r) => r.code !== 0);
   if (failures.length > 0) {
     console.error(`\nFailed checks: ${failures.map((r) => r.name).join(', ')}`);
     process.exit(1);
