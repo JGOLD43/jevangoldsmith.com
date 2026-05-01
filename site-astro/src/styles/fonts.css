@@ -1,0 +1,42 @@
+/* Self-hosted Chivo font. Same files served from /fonts/chivo/ as the legacy
+ * site. Phase 9 will move these to src/assets/ for Astro's font optimization. */
+
+@font-face {
+  font-family: 'Chivo';
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url('/fonts/chivo/chivo-latin-100-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Chivo';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/chivo/chivo-latin-300-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Chivo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/chivo/chivo-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Chivo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/chivo/chivo-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Chivo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/chivo/chivo-latin-700-normal.woff2') format('woff2');
+}

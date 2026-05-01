@@ -1,4 +1,16 @@
-/* Tailwind v4 entry. Phase 1: import tailwind so the build pipeline links up.
-   Phase 2 will add @theme tokens ported from css/src/01-tokens.css and replace
-   the legacy chrome stylesheet wholesale. */
+/* Site-wide stylesheet, imported once from src/layouts/Base.astro.
+ *
+ * Order matters:
+ *   1. tailwindcss   — utility engine + reset.
+ *   2. tokens        — :root vars + Tailwind @theme + base typography.
+ *   3. fonts         — @font-face declarations.
+ *   4. chrome-legacy — verbatim port of css/src/{02-chrome,05-overrides}.css
+ *                      (~2.4k lines). Owns navbar, footer, theme toggle, etc.
+ *                      Phase 11 will rewrite this in Tailwind utilities.
+ *
+ * New page styles should use Tailwind utilities, not append to chrome-legacy.
+ */
 @import "tailwindcss";
+@import "./tokens.css";
+@import "./fonts.css";
+@import "./chrome-legacy.css";
