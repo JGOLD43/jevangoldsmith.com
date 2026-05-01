@@ -2,7 +2,7 @@
 
 Status: `canonical`
 Audience: `engineering`, `agents`
-Purpose: `describe the current static-site architecture and target evolution`
+Purpose: `describe the current static-site architecture (Astro 6 + Tailwind v4)`
 
 ## Runtime Shape
 
@@ -10,45 +10,47 @@ Firebase Hosting serves generated files from `dist/`.
 
 The public runtime contains:
 
-- generated `.html` pages
-- hashed CSS/JS/vendor assets under `dist/assets/`
-- hashed per-page JS bundles under `dist/assets/js/bundles/`
+- `*.html` pages built by Astro from `site-astro/src/pages/`
+- hashed CSS bundle under `dist/_astro/`
 - static JSON data under `dist/data/`
-- static images under `dist/images/`
-- `sitemap.xml` and `robots.txt`
+- static images under `dist/images/` (symlinked from project-root `images/`)
+- self-hosted Chivo fonts under `dist/fonts/`
+- self-hosted Leaflet under `dist/vendor/leaflet/`
+- `sitemap-index.xml` + `sitemap-0.xml`, `rss.xml`, `robots.txt`, `llms.txt`
 
 There is no active Cloud Functions package and no `/api/**` rewrite.
 
 ## Source Shape
 
-The root-page migration is complete. Public route source now lives in `_src/`,
-collection renderers, and data files:
+The site is an Astro project rooted at `site-astro/`:
 
-- `_src/pages/*.html` files are source for template-driven pages
-- `_src/layouts/base.html` owns the shared source page layout
-- `_src/partials/nav.html` and `_src/partials/footer.html` own shared chrome
-- `_src/collections/*` owns collection-specific partials used by generated
-  collection pages
-- `css/src/*.css` owns CSS source; `css/style.css` is generated
-- `data/site.json` owns site identity, domain, social links, and core assets
-- `data/site.config.json` owns deploy, CSP, external allowlist, and budgets
-- `data/*.json` owns collection content and generated-data inputs
-- `js/` owns browser behavior
-- `vendor/leaflet/` owns self-hosted Leaflet runtime assets
-- `scripts/` owns build and validation logic
-- `admin/` is source for a browser-based admin interface, excluded from Hosting
+- `site-astro/src/pages/*.astro` — public page sources
+  - top-level pages: `about.astro`, `books.astro`, `essays.astro`, etc.
+  - dynamic routes: `people/[slug].astro`, `adventure-[slug].astro`, `topics/[slug].astro`
+  - `rss.xml.ts` for the essays RSS feed
+- `site-astro/src/layouts/Base.astro` — shared HTML layout (head, nav, footer, JSON-LD)
+- `site-astro/src/components/` — Nav, Footer, JsonLd, AdventureMap, BookCard, MovieCard, PersonCard, PodcastCard, EssayCard
+- `site-astro/src/content.config.ts` — Zod schemas + custom loaders that read `../data/*.json` directly (no copy)
+- `site-astro/src/lib/seo.ts` — schema.org Person / WebSite descriptors
+- `site-astro/src/styles/` — Tailwind v4 entry, design tokens, fonts, transitional chrome-legacy.css and pages-legacy.css
+- `data/*.json` — source of truth for books, movies, people, essays, podcasts, adventures, etc. Read by both Astro and the (archived) legacy build
+- `images/` — source + generated image variants (symlinked into `site-astro/public/images/`)
+- `fonts/chivo/` — self-hosted Chivo font (symlinked into `site-astro/public/fonts/`)
+- `vendor/leaflet/` — self-hosted Leaflet (copied into `site-astro/public/vendor/`)
+- `scripts/` — enrichment + sync scripts (Letterboxd, Spotify, TMDB), plus parity check harness in `scripts/check/`
+- `scripts/legacy-build/` — archived hand-rolled SSG (build-site.js + 38 helper modules). Available via `npm run build:legacy` for emergency rollback. Removed in Phase 11 cleanup.
+- `admin/` — browser-based admin interface, excluded from Hosting
 
 ## Build Flow
 
 ```text
-_src pages/layouts/partials/collections + collection renderers + data + css/src + js + vendor
-  -> scripts/build-site.js
-  -> focused helpers in scripts/build/
-  -> css/style.css
-  -> data/pages.json
-  -> sitemap.xml / robots.txt
-  -> dist/
+data/*.json + site-astro/src/* + images/ + fonts/ + vendor/
+  -> Astro 6 build (npm run build)
+  -> Tailwind v4 (via @tailwindcss/vite)
+  -> dist/<route>.html, dist/_astro/<hash>.css, dist/sitemap-*.xml, dist/rss.xml
 ```
+
+Build time: ~4s for 82 routes. Legacy was ~30s.
 
 `dist/` is generated and should not be hand-edited.
 
@@ -63,17 +65,16 @@ npm run check
 The check suite validates:
 
 - generated build output
-- JavaScript syntax
+- JavaScript syntax (Biome)
 - content JSON and sitemap coverage
 - local links inside `dist/`
 - Firebase deploy-surface safety
-- performance budgets
 - canonical docs presence and key source-of-truth rules
 
 ## Parity Harness
 
-`tests/` contains a four-layer parity harness used to detect regressions during
-the in-progress Astro migration (see `docs/MIGRATION-ASTRO.md`):
+`tests/` contains a four-layer parity harness used to detect regressions
+between builds (legacy ↔ Astro, or Astro release ↔ release):
 
 | Fixture | Locks | Capture | Check |
 |---|---|---|---|
@@ -90,24 +91,16 @@ npm run check:parity:capture
 
 ## Site-Wide Config
 
-After editing `data/site.json`, run:
-
-```bash
-node scripts/sync-site-config.js
-```
-
-After editing deploy/security/performance rules in `data/site.config.json`, run:
-
-```bash
-npm run build
-npm run check
-```
+`data/site.json` owns site identity (domain, social links, core assets).
+`data/site.config.json` owns deploy / CSP / external allowlist (consumed by
+the legacy build; the Astro build embeds the relevant subset directly in
+`site-astro/src/lib/seo.ts` and `firebase.json`).
 
 ## Security Boundary
 
-Firebase Hosting is the public serving layer. `admin/**` is intentionally ignored
-by Hosting deploys. Firestore denies all non-admin documents and only allows the
-configured admin email to access `/admin/**`.
+Firebase Hosting is the public serving layer. `admin/**` is intentionally
+ignored by Hosting deploys. Firestore denies all non-admin documents and only
+allows the configured admin email to access `/admin/**`.
 
 The admin UI still runs in the browser. Do not treat client-side two-factor
 checks as a backend authorization boundary. Any future write-capable admin
@@ -116,28 +109,10 @@ verifies Firebase ID tokens and second-factor state before writing data.
 
 ## Evolution Rule
 
-Move behavior into shared renderers and controllers one page family at a time.
-Generated output should remain visually and behaviorally equivalent unless a
-style/product change is explicitly requested.
+After Phase 11 cleanup, retire `chrome-legacy.css` and `pages-legacy.css`
+(currently inlined for visual parity) by migrating every chrome rule to
+Tailwind utilities or `@layer components` in `site-astro/src/styles/`.
+That cuts the CSS bundle from ~166KB to a target of ~15KB.
 
-Generated collection page configuration is split by concern:
-
-- `scripts/build/collection-config.js` owns page-level layout and script wiring
-- `scripts/build/collection-sections.js` owns sidebar section data and icon keys
-- `scripts/build/task-list-config.js` owns projects/challenges task-list config
-- `scripts/build/js-manifest.js` owns the source scripts that become per-page JS
-  bundles in generated output
-
-The collection runtime path is now:
-
-```text
-generated collection HTML
-  -> dist/assets/js/bundles/page-*.js
-  -> js/collection-runtime.js
-  -> page modules such as js/projects.js, js/challenges.js, js/people.js,
-     js/podcasts.js, js/books.js, js/letterboxd.js, or js/essays.js
-```
-
-Use `js/collection-runtime.js` for searchable/filterable card grids and managed
-data collections. Keep page-specific modules for genuinely unique behavior such
-as books modals, movie stats, essay previous/next navigation, or adventure maps.
+For new pages, write Astro components that use Tailwind utilities directly.
+Do not append to the legacy stylesheets.

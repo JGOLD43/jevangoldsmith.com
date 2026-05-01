@@ -3,12 +3,13 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-// In-progress migration. Outputs to ../dist-astro/ so the legacy build (writes
-// to ../dist/) and this build coexist until Phase 10 swap-and-archive.
+// As of Phase 10 (dist swap), Astro is the default build. Output goes to
+// ../dist/ which Firebase Hosting serves. The legacy scripts/legacy-build/
+// is kept for emergency rollback; npm run build:legacy still works.
 export default defineConfig({
   site: 'https://jevangoldsmith.com',
   output: 'static',
-  outDir: '../dist-astro',
+  outDir: '../dist',
   trailingSlash: 'never',
   build: {
     format: 'file'

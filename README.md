@@ -1,44 +1,49 @@
 # Jevan Goldsmith Website
 
 Static personal website for `jevangoldsmith.com`, hosted on Firebase Hosting.
-The public experience is now organized as a living archive, with Field Notes as
-the recurring audience thread.
+The public experience is organized as a living archive, with Field Notes as the
+recurring audience thread.
 
-The public runtime is framework-free: generated HTML, CSS, JavaScript, JSON,
-images, and vendor assets are served from `dist/`. The source remains a
-transitioning static-site system with root HTML pages, shared partials, source
-CSS layers, content data, and build/check scripts.
+As of the Astro migration (May 2026), the build is **Astro 6 + Tailwind v4**.
+`npm run build` invokes Astro under the hood and writes generated HTML / CSS /
+JS to `dist/`, which Firebase Hosting serves. The legacy hand-rolled SSG is
+preserved at `scripts/legacy-build/` for emergency rollback (`npm run
+build:legacy`); Phase 11 cleanup will retire it once parity is fully verified.
 
 ## Start Here
 
 Read [docs/START_HERE.md](docs/START_HERE.md) first. It links to the active
-engineering, product, design, content, and release docs.
+engineering, product, design, content, and release docs. The migration plan
+lives at [docs/MIGRATION-ASTRO.md](docs/MIGRATION-ASTRO.md).
 
 ## Structure
 
 ```text
 .
-├── *.html                  # Public page source/output during migration
-├── _src/layouts/           # Shared HTML layouts for migrated pages
-├── _src/pages/             # Migrated page source
-├── _src/partials/          # Shared source nav/footer chrome
+├── site-astro/             # Astro project (current build target)
+│   ├── src/
+│   │   ├── layouts/        # Base.astro
+│   │   ├── components/     # Nav, Footer, Card components, JsonLd, AdventureMap
+│   │   ├── pages/          # Astro pages → dist/<route>.html
+│   │   ├── styles/         # Tailwind + tokens + transitional chrome-legacy.css
+│   │   └── content.config.ts  # Zod schemas for ../data/*.json
+│   ├── public/             # Static passthrough (images symlinked, fonts symlinked)
+│   └── astro.config.mjs    # Site URL, output → ../dist/, integrations
+├── data/                   # Source-of-truth JSON for every collection
+├── images/                 # Source + generated images (symlinked into site-astro/public/)
+├── fonts/                  # Self-hosted Chivo (symlinked into site-astro/public/)
+├── tests/                  # Parity harness fixtures + Playwright tests
+├── scripts/
+│   ├── check/              # Parity harness (SEO, content, perf, visual)
+│   ├── legacy-build/       # Archived hand-rolled SSG (rollback only)
+│   └── *.js                # Enrichment + sync scripts (Letterboxd, Spotify, TMDB)
 ├── admin/                  # Admin source, excluded from public Hosting deploys
-├── css/src/                # CSS source layers
-├── css/style.css           # Generated shared CSS bundle; do not hand-edit
-├── css/page-*.css          # Generated per-page CSS bundles; do not hand-edit
-├── data/                   # Static content plus site/deploy config
 ├── dist/                   # Generated Firebase Hosting output; ignored
-├── docs/                   # Canonical project/product/design docs
-├── images/                 # Static images and media
-├── js/                     # Browser JavaScript
-├── scripts/                # Build, validation, and sync scripts
-├── vendor/                 # Self-hosted third-party runtime assets
 ├── firebase.json           # Firebase Hosting and Firestore config
 └── firestore.rules         # Firestore access rules
 ```
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the current architecture and
-recommended evolution path.
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the current architecture.
 
 ## Common Commands
 

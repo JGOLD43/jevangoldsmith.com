@@ -4,14 +4,10 @@
       {
         "level": 1,
         "text": "How I Got Here"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 31,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -20,7 +16,7 @@
       "total": 8,
       "withAlt": 2
     },
-    "wordCount": 328,
+    "wordCount": 179,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -38,37 +34,20 @@
       {
         "level": 3,
         "text": "Trip Highlights"
-      },
-      {
-        "level": 3,
-        "text": "Photo Locations"
-      },
-      {
-        "level": 3,
-        "text": "Photo Gallery"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 7,
-      "withAlt": 6
+      "total": 3,
+      "withAlt": 3
     },
-    "wordCount": 369,
-    "dataActions": [
-      "lightbox-close",
-      "lightbox-next",
-      "lightbox-prev",
-      "open-lightbox"
-    ],
+    "wordCount": 207,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -85,37 +64,20 @@
       {
         "level": 3,
         "text": "Trip Highlights"
-      },
-      {
-        "level": 3,
-        "text": "Photo Locations"
-      },
-      {
-        "level": 3,
-        "text": "Photo Gallery"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 7,
-      "withAlt": 6
+      "total": 3,
+      "withAlt": 3
     },
-    "wordCount": 370,
-    "dataActions": [
-      "lightbox-close",
-      "lightbox-next",
-      "lightbox-prev",
-      "open-lightbox"
-    ],
+    "wordCount": 209,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -132,37 +94,20 @@
       {
         "level": 3,
         "text": "Trip Highlights"
-      },
-      {
-        "level": 3,
-        "text": "Photo Locations"
-      },
-      {
-        "level": 3,
-        "text": "Photo Gallery"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 7,
-      "withAlt": 6
+      "total": 3,
+      "withAlt": 3
     },
-    "wordCount": 359,
-    "dataActions": [
-      "lightbox-close",
-      "lightbox-next",
-      "lightbox-prev",
-      "open-lightbox"
-    ],
+    "wordCount": 194,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -179,14 +124,6 @@
       {
         "level": 3,
         "text": "Trip Highlights"
-      },
-      {
-        "level": 3,
-        "text": "Photo Locations"
-      },
-      {
-        "level": 3,
-        "text": "Photo Gallery"
       }
     ],
     "links": {
@@ -196,16 +133,11 @@
       "anchor": 4
     },
     "images": {
-      "total": 7,
-      "withAlt": 6
+      "total": 3,
+      "withAlt": 3
     },
-    "wordCount": 199,
-    "dataActions": [
-      "lightbox-close",
-      "lightbox-next",
-      "lightbox-prev",
-      "open-lightbox"
-    ],
+    "wordCount": 187,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -222,37 +154,20 @@
       {
         "level": 3,
         "text": "Trip Highlights"
-      },
-      {
-        "level": 3,
-        "text": "Photo Locations"
-      },
-      {
-        "level": 3,
-        "text": "Photo Gallery"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 7,
-      "withAlt": 6
+      "total": 3,
+      "withAlt": 3
     },
-    "wordCount": 357,
-    "dataActions": [
-      "lightbox-close",
-      "lightbox-next",
-      "lightbox-prev",
-      "open-lightbox"
-    ],
+    "wordCount": 196,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -269,37 +184,20 @@
       {
         "level": 3,
         "text": "Trip Highlights"
-      },
-      {
-        "level": 3,
-        "text": "Photo Locations"
-      },
-      {
-        "level": 3,
-        "text": "Photo Gallery"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 7,
-      "withAlt": 6
+      "total": 3,
+      "withAlt": 3
     },
-    "wordCount": 361,
-    "dataActions": [
-      "lightbox-close",
-      "lightbox-next",
-      "lightbox-prev",
-      "open-lightbox"
-    ],
+    "wordCount": 202,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -316,37 +214,20 @@
       {
         "level": 3,
         "text": "Trip Highlights"
-      },
-      {
-        "level": 3,
-        "text": "Photo Locations"
-      },
-      {
-        "level": 3,
-        "text": "Photo Gallery"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 7,
-      "withAlt": 6
+      "total": 3,
+      "withAlt": 3
     },
-    "wordCount": 382,
-    "dataActions": [
-      "lightbox-close",
-      "lightbox-next",
-      "lightbox-prev",
-      "open-lightbox"
-    ],
+    "wordCount": 216,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -390,26 +271,17 @@
       }
     ],
     "links": {
-      "internal": 27,
+      "internal": 35,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 10,
+      "total": 9,
       "withAlt": 9
     },
-    "wordCount": 202,
-    "dataActions": [
-      "closeAdventureDetail",
-      "closeLightbox",
-      "nextImage",
-      "prevImage",
-      "resetFilters",
-      "switchMobileView",
-      "toggleFilter",
-      "togglePlacesOfInterest"
-    ],
+    "wordCount": 185,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -420,41 +292,510 @@
   "books.html": {
     "headings": [
       {
-        "level": 2,
-        "text": "Bookshelf"
-      },
-      {
         "level": 1,
-        "text": "Bookshelf"
+        "text": "Books I've Read"
       },
       {
         "level": 3,
-        "text": "My Review"
+        "text": "7 Powers: The Foundations of Business Strategy"
       },
       {
-        "level": 2,
-        "text": "Keep exploring this idea"
+        "level": 3,
+        "text": "A Few Lessons for Investors and Managers from Warren Buffett"
+      },
+      {
+        "level": 3,
+        "text": "A Few Lessons from Sherlock Holmes"
+      },
+      {
+        "level": 3,
+        "text": "A Man for All Markets"
+      },
+      {
+        "level": 3,
+        "text": "Against the Odds"
+      },
+      {
+        "level": 3,
+        "text": "All I Want to Know is Where I'm Going to Die So I'll Never Go There"
+      },
+      {
+        "level": 3,
+        "text": "Am I Being Too Subtle?"
+      },
+      {
+        "level": 3,
+        "text": "Atomic Habits"
+      },
+      {
+        "level": 3,
+        "text": "Autobiography of a Restless Mind"
+      },
+      {
+        "level": 3,
+        "text": "Bartlett's Familiar Quotations"
+      },
+      {
+        "level": 3,
+        "text": "Becoming Steve Jobs"
+      },
+      {
+        "level": 3,
+        "text": "Benjamin Franklin"
+      },
+      {
+        "level": 3,
+        "text": "Benjamin Franklin"
+      },
+      {
+        "level": 3,
+        "text": "Benjamin Franklin: An American Life"
+      },
+      {
+        "level": 3,
+        "text": "Berkshire Hathaway Letters to Shareholders 1965-2023"
+      },
+      {
+        "level": 3,
+        "text": "Bird by Bird"
+      },
+      {
+        "level": 3,
+        "text": "Bloomberg by Bloomberg"
+      },
+      {
+        "level": 3,
+        "text": "Bruce Lee: Wisdom for the Way"
+      },
+      {
+        "level": 3,
+        "text": "Can't Hurt Me"
+      },
+      {
+        "level": 3,
+        "text": "Choices, Values, and Frames"
+      },
+      {
+        "level": 3,
+        "text": "Churchill"
+      },
+      {
+        "level": 3,
+        "text": "Churchill: Walking with Destiny"
+      },
+      {
+        "level": 3,
+        "text": "Confessions of an Advertising Man"
+      },
+      {
+        "level": 3,
+        "text": "Copywriting Secrets"
+      },
+      {
+        "level": 3,
+        "text": "Creativity, Inc."
+      },
+      {
+        "level": 3,
+        "text": "Damn Right!: Behind the Scenes with Berkshire Hathaway Billionaire Charlie Munger"
+      },
+      {
+        "level": 3,
+        "text": "Deep Work"
+      },
+      {
+        "level": 3,
+        "text": "Disney's Land"
+      },
+      {
+        "level": 3,
+        "text": "Distant Force: A Memoir of the Teledyne Corporation"
+      },
+      {
+        "level": 3,
+        "text": "Evolutionary Psychology: The New Science of the Mind"
+      },
+      {
+        "level": 3,
+        "text": "Hackers & Painters"
+      },
+      {
+        "level": 3,
+        "text": "Hard Drive: Bill Gates and the Making of the Microsoft Empire"
+      },
+      {
+        "level": 3,
+        "text": "High Performance Habits"
+      },
+      {
+        "level": 3,
+        "text": "Hitler"
+      },
+      {
+        "level": 3,
+        "text": "How to Lie with Statistics"
+      },
+      {
+        "level": 3,
+        "text": "How to Read a Book"
+      },
+      {
+        "level": 3,
+        "text": "How to Take Smart Notes"
+      },
+      {
+        "level": 3,
+        "text": "How to Write a Good Advertisement"
+      },
+      {
+        "level": 3,
+        "text": "Incerto"
+      },
+      {
+        "level": 3,
+        "text": "Influence"
+      },
+      {
+        "level": 3,
+        "text": "Insanely Simple"
+      },
+      {
+        "level": 3,
+        "text": "Is This Anything?"
+      },
+      {
+        "level": 3,
+        "text": "Judgment in Managerial Decision Making"
+      },
+      {
+        "level": 3,
+        "text": "Letters from John D. Rockefeller to His Son"
+      },
+      {
+        "level": 3,
+        "text": "Made to Stick"
+      },
+      {
+        "level": 3,
+        "text": "Mastery"
+      },
+      {
+        "level": 3,
+        "text": "Napoleon: A Concise Biography"
+      },
+      {
+        "level": 3,
+        "text": "Never Enough"
+      },
+      {
+        "level": 3,
+        "text": "Nonviolent Communication"
+      },
+      {
+        "level": 3,
+        "text": "Ogilvy on Advertising"
+      },
+      {
+        "level": 3,
+        "text": "On Writing Well"
+      },
+      {
+        "level": 3,
+        "text": "One From Many: VISA and the Rise of Chaordic Organization"
+      },
+      {
+        "level": 3,
+        "text": "Only the Paranoid Survive"
+      },
+      {
+        "level": 3,
+        "text": "Pieces of the Action"
+      },
+      {
+        "level": 3,
+        "text": "Poor Charlie's Almanack"
+      },
+      {
+        "level": 3,
+        "text": "Poor Richard's Almanack"
+      },
+      {
+        "level": 3,
+        "text": "Predictable Revenue"
+      },
+      {
+        "level": 3,
+        "text": "Principles"
+      },
+      {
+        "level": 3,
+        "text": "Profit First"
+      },
+      {
+        "level": 3,
+        "text": "Pushing to the Front"
+      },
+      {
+        "level": 3,
+        "text": "Quotations of David Ogilvy"
+      },
+      {
+        "level": 3,
+        "text": "Random Reminiscences of Men and Events"
+      },
+      {
+        "level": 3,
+        "text": "Sam Walton: Made in America"
+      },
+      {
+        "level": 3,
+        "text": "Sapiens"
+      },
+      {
+        "level": 3,
+        "text": "Screw It, Let's Do It"
+      },
+      {
+        "level": 3,
+        "text": "Seeking Wisdom: From Darwin to Munger"
+      },
+      {
+        "level": 3,
+        "text": "Shoe Dog"
+      },
+      {
+        "level": 3,
+        "text": "Steve Jobs"
+      },
+      {
+        "level": 3,
+        "text": "Steve Jobs and the NeXT Big Thing"
+      },
+      {
+        "level": 3,
+        "text": "Striking Thoughts"
+      },
+      {
+        "level": 3,
+        "text": "Summerhill: A Radical Approach to Child Rearing"
+      },
+      {
+        "level": 3,
+        "text": "Surely You're Joking, Mr. Feynman!"
+      },
+      {
+        "level": 3,
+        "text": "Tao of Charlie Munger"
+      },
+      {
+        "level": 3,
+        "text": "Tested Advertising Methods"
+      },
+      {
+        "level": 3,
+        "text": "The Adweek Copywriting Handbook"
+      },
+      {
+        "level": 3,
+        "text": "The Almanack of Naval Ravikant"
+      },
+      {
+        "level": 3,
+        "text": "The Art of Thinking Clearly"
+      },
+      {
+        "level": 3,
+        "text": "The Art of Worldly Wisdom"
+      },
+      {
+        "level": 3,
+        "text": "The Autobiography of Andrew Carnegie"
+      },
+      {
+        "level": 3,
+        "text": "The Autobiography of Benjamin Franklin"
+      },
+      {
+        "level": 3,
+        "text": "The Bed of Procrustes"
+      },
+      {
+        "level": 3,
+        "text": "The Checklist Manifesto"
+      },
+      {
+        "level": 3,
+        "text": "The Chemistry Book (Big Ideas Simply Explained)"
+      },
+      {
+        "level": 3,
+        "text": "The Coming Wave"
+      },
+      {
+        "level": 3,
+        "text": "The Education of a Bodybuilder"
+      },
+      {
+        "level": 3,
+        "text": "The Great Mental Models"
+      },
+      {
+        "level": 3,
+        "text": "The Great Mental Models Volume 1: General Thinking Concepts"
+      },
+      {
+        "level": 3,
+        "text": "The Habit of Labor"
+      },
+      {
+        "level": 3,
+        "text": "The Hard Thing About Hard Things"
+      },
+      {
+        "level": 3,
+        "text": "The King of Madison Avenue: David Ogilvy and the Making of Modern Advertising"
+      },
+      {
+        "level": 3,
+        "text": "The Lean Startup"
+      },
+      {
+        "level": 3,
+        "text": "The Lessons of History"
+      },
+      {
+        "level": 3,
+        "text": "The Mind of Napoleon: A Selection of His Written and Spoken Words"
+      },
+      {
+        "level": 3,
+        "text": "The Mom Test"
+      },
+      {
+        "level": 3,
+        "text": "The Narrow Road"
+      },
+      {
+        "level": 3,
+        "text": "The One Sentence Persuasion Course"
+      },
+      {
+        "level": 3,
+        "text": "The Philosophy Book (Big Ideas Simply Explained)"
+      },
+      {
+        "level": 3,
+        "text": "The Physics Book (Big Ideas Simply Explained)"
+      },
+      {
+        "level": 3,
+        "text": "The Power of Now"
+      },
+      {
+        "level": 3,
+        "text": "The Psychology Book (Big Ideas Simply Explained)"
+      },
+      {
+        "level": 3,
+        "text": "The Remains of the Day"
+      },
+      {
+        "level": 3,
+        "text": "The River of Doubt"
+      },
+      {
+        "level": 3,
+        "text": "The Road Less Stupid"
+      },
+      {
+        "level": 3,
+        "text": "The Sales Acceleration Formula"
+      },
+      {
+        "level": 3,
+        "text": "The Singapore Story"
+      },
+      {
+        "level": 3,
+        "text": "The Snowball: Warren Buffett and the Business of Life"
+      },
+      {
+        "level": 3,
+        "text": "The Taste of Luxury"
+      },
+      {
+        "level": 3,
+        "text": "The Ultimate Blueprint for an Insanely Successful Business"
+      },
+      {
+        "level": 3,
+        "text": "The Wit and Wisdom of Lee Kuan Yew"
+      },
+      {
+        "level": 3,
+        "text": "Thinking and Deciding"
+      },
+      {
+        "level": 3,
+        "text": "Thinking, Fast and Slow"
+      },
+      {
+        "level": 3,
+        "text": "Titan: The Life of John D. Rockefeller, Sr."
+      },
+      {
+        "level": 3,
+        "text": "To Pixar and Beyond"
+      },
+      {
+        "level": 3,
+        "text": "Ultralearning"
+      },
+      {
+        "level": 3,
+        "text": "Unbroken"
+      },
+      {
+        "level": 3,
+        "text": "Walt Disney: The Triumph of the American Imagination"
+      },
+      {
+        "level": 3,
+        "text": "What I Talk About When I Talk About Running"
+      },
+      {
+        "level": 3,
+        "text": "What It Takes"
+      },
+      {
+        "level": 3,
+        "text": "What We Owe the Future"
+      },
+      {
+        "level": 3,
+        "text": "Who Moved My Cheese?"
+      },
+      {
+        "level": 3,
+        "text": "Who: The A Method for Hiring"
+      },
+      {
+        "level": 3,
+        "text": "Zero to One"
       }
     ],
     "links": {
-      "internal": 38,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
-      "anchor": 5
+      "anchor": 4
     },
     "images": {
-      "total": 3,
-      "withAlt": 2
+      "total": 117,
+      "withAlt": 117
     },
-    "wordCount": 381,
-    "dataActions": [
-      "clear-search",
-      "clear-star-filter",
-      "close-book-modal",
-      "set-view-mode",
-      "toggle-list-dropdown",
-      "toggle-sidebar"
-    ],
+    "wordCount": 2867,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -463,34 +804,9 @@
     }
   },
   "challenges.html": {
-    "headings": [
-      {
-        "level": 1,
-        "text": "Challenges"
-      },
-      {
-        "level": 3,
-        "text": "52 Books in 2026"
-      },
-      {
-        "level": 3,
-        "text": "Morning Routine"
-      },
-      {
-        "level": 3,
-        "text": "100 Days of Writing"
-      },
-      {
-        "level": 3,
-        "text": "No-Spend Month"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
-      }
-    ],
+    "headings": [],
     "links": {
-      "internal": 35,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -499,19 +815,13 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 426,
-    "dataActions": [
-      "clearChallengeSearch",
-      "filterChallenges",
-      "searchChallenges",
-      "toggleChallengeListDropdown",
-      "toggleChallengeSidebar"
-    ],
+    "wordCount": 136,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
-      "main": true,
+      "main": false,
       "footer": true,
-      "header": true
+      "header": false
     }
   },
   "changed-my-mind.html": {
@@ -543,14 +853,10 @@
       {
         "level": 2,
         "text": "Still updating"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -559,7 +865,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 572,
+    "wordCount": 455,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -570,10 +876,6 @@
   },
   "contact.html": {
     "headings": [
-      {
-        "level": 1,
-        "text": "Get in Touch"
-      },
       {
         "level": 3,
         "text": "Or reach out directly:"
@@ -589,13 +891,13 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 137,
+    "wordCount": 128,
     "dataActions": [],
     "landmarks": {
       "nav": true,
-      "main": true,
+      "main": false,
       "footer": true,
-      "header": true
+      "header": false
     }
   },
   "cool-shit.html": {
@@ -610,7 +912,7 @@
       }
     ],
     "links": {
-      "internal": 35,
+      "internal": 34,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -619,13 +921,39 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 327,
+    "wordCount": 348,
     "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
       "footer": true,
       "header": true
+    }
+  },
+  "data-smoke.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Content collections smoke test"
+      }
+    ],
+    "links": {
+      "internal": 27,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 177,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
     }
   },
   "dateme.html": {
@@ -645,7 +973,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 132,
+    "wordCount": 156,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -662,15 +990,19 @@
       },
       {
         "level": 2,
-        "text": "Want more notes like this?"
+        "text": "Feed My Addiction"
       },
       {
         "level": 2,
-        "text": "Keep exploring this idea"
+        "text": "The Beginning is the End and the End is the Beginning"
+      },
+      {
+        "level": 2,
+        "text": "Hot Spas Never go out of Style - A lesson on Culture"
       }
     ],
     "links": {
-      "internal": 36,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -679,14 +1011,8 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 329,
-    "dataActions": [
-      "clearEssaySearch",
-      "searchEssays",
-      "toggleCategory",
-      "toggleEssaysSidebar",
-      "toggleListDropdown"
-    ],
+    "wordCount": 795,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -723,14 +1049,10 @@
       {
         "level": 2,
         "text": "Want the next dispatch?"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 39,
+      "internal": 35,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -739,7 +1061,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 410,
+    "wordCount": 295,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -749,54 +1071,9 @@
     }
   },
   "free-resources.html": {
-    "headings": [
-      {
-        "level": 1,
-        "text": "Practical artifacts from the archive."
-      },
-      {
-        "level": 3,
-        "text": "Book Notes Collection"
-      },
-      {
-        "level": 3,
-        "text": "Weekly Review Template"
-      },
-      {
-        "level": 3,
-        "text": "Personal Finance Tracker"
-      },
-      {
-        "level": 3,
-        "text": "Decision Making Framework"
-      },
-      {
-        "level": 3,
-        "text": "Reading Operating System"
-      },
-      {
-        "level": 3,
-        "text": "First Principles Decision Template"
-      },
-      {
-        "level": 2,
-        "text": "Why Free?"
-      },
-      {
-        "level": 2,
-        "text": "Request a Resource"
-      },
-      {
-        "level": 4,
-        "text": "Have an idea?"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
-      }
-    ],
+    "headings": [],
     "links": {
-      "internal": 41,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -805,11 +1082,11 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 497,
+    "wordCount": 130,
     "dataActions": [],
     "landmarks": {
       "nav": true,
-      "main": true,
+      "main": false,
       "footer": true,
       "header": false
     }
@@ -899,14 +1176,10 @@
       {
         "level": 4,
         "text": "Books that shaped this"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -915,7 +1188,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 1409,
+    "wordCount": 1260,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1001,14 +1274,10 @@
       {
         "level": 3,
         "text": "Having a 5-year plan"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 31,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1017,7 +1286,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 963,
+    "wordCount": 814,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1030,102 +1299,26 @@
     "headings": [
       {
         "level": 1,
-        "text": "Hi I'm Jevan."
-      },
-      {
-        "level": 2,
-        "text": "What took me months to figure out, in 5 minutes"
-      },
-      {
-        "level": 2,
-        "text": "Things I have been up to"
-      },
-      {
-        "level": 3,
-        "text": "Temples & Cherry Blossoms"
-      },
-      {
-        "level": 3,
-        "text": "Feed My Addiction"
-      },
-      {
-        "level": 3,
-        "text": "Development AI"
-      },
-      {
-        "level": 3,
-        "text": "AI agents that actually work"
-      },
-      {
-        "level": 3,
-        "text": "Mountain Exploration"
-      },
-      {
-        "level": 2,
-        "text": "I think too much about things most people ignore"
-      },
-      {
-        "level": 2,
-        "text": "Things I've Written"
-      },
-      {
-        "level": 3,
-        "text": "Feed My Addiction: The Way of Modern Life"
-      },
-      {
-        "level": 3,
-        "text": "The Beginning is the End"
-      },
-      {
-        "level": 3,
-        "text": "Hot Spas Never Go Out of Style"
-      },
-      {
-        "level": 2,
-        "text": "Where My Attention Lives"
-      },
-      {
-        "level": 3,
-        "text": "Real Estate Development"
-      },
-      {
-        "level": 3,
-        "text": "Writing"
-      },
-      {
-        "level": 3,
-        "text": "How Organizations Work"
-      },
-      {
-        "level": 3,
-        "text": "Software & Tools"
-      },
-      {
-        "level": 2,
-        "text": "Let's Talk"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
+        "text": "Jevan Goldsmith"
       }
     ],
     "links": {
-      "internal": 48,
-      "external": 9,
+      "internal": 27,
+      "external": 4,
       "mailto": 2,
-      "anchor": 10
+      "anchor": 4
     },
     "images": {
-      "total": 10,
-      "withAlt": 10
+      "total": 2,
+      "withAlt": 2
     },
-    "wordCount": 753,
+    "wordCount": 112,
     "dataActions": [],
     "landmarks": {
       "nav": true,
-      "main": false,
+      "main": true,
       "footer": true,
-      "header": true
+      "header": false
     }
   },
   "lesson-logger.html": {
@@ -1173,7 +1366,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 551,
+    "wordCount": 584,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1184,10 +1377,6 @@
   },
   "living-manifesto.html": {
     "headings": [
-      {
-        "level": 1,
-        "text": "Living Manifesto"
-      },
       {
         "level": 2,
         "text": "Why a Living Manifesto"
@@ -1279,14 +1468,10 @@
       {
         "level": 2,
         "text": "Where to Go Next"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 34,
+      "internal": 30,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1295,13 +1480,13 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 2283,
+    "wordCount": 2117,
     "dataActions": [],
     "landmarks": {
       "nav": true,
-      "main": true,
+      "main": false,
       "footer": true,
-      "header": true
+      "header": false
     }
   },
   "meet.html": {
@@ -1355,14 +1540,10 @@
       {
         "level": 2,
         "text": "Where to Go Next"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1371,7 +1552,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 462,
+    "wordCount": 346,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1384,41 +1565,45 @@
     "headings": [
       {
         "level": 1,
-        "text": "My Movie Reviews"
-      },
-      {
-        "level": 2,
-        "text": "Watch stats"
+        "text": "Movies I've Watched"
       },
       {
         "level": 3,
-        "text": "My Review"
+        "text": "What Dreams May Come"
       },
       {
-        "level": 2,
-        "text": "Keep exploring this idea"
+        "level": 3,
+        "text": "Breakfast at Tiffany's"
+      },
+      {
+        "level": 3,
+        "text": "Before Sunrise"
+      },
+      {
+        "level": 3,
+        "text": "Before Sunset"
+      },
+      {
+        "level": 3,
+        "text": "Lawrence of Arabia"
+      },
+      {
+        "level": 3,
+        "text": "The Place Beyond the Pines"
       }
     ],
     "links": {
-      "internal": 37,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
-      "anchor": 6
+      "anchor": 4
     },
     "images": {
-      "total": 3,
-      "withAlt": 2
+      "total": 8,
+      "withAlt": 8
     },
-    "wordCount": 370,
-    "dataActions": [
-      "clearAllFilters",
-      "clearMovieSearch",
-      "closeMovieModal",
-      "searchMovies",
-      "toggleListDropdown",
-      "toggleMovieGenre",
-      "toggleSidebar"
-    ],
+    "wordCount": 206,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -1487,14 +1672,10 @@
       {
         "level": 2,
         "text": "What I Avoid"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 31,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1503,7 +1684,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 967,
+    "wordCount": 818,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1545,14 +1726,10 @@
       {
         "level": 2,
         "text": "All Notes"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 31,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 13
@@ -1561,7 +1738,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 501,
+    "wordCount": 354,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1595,14 +1772,10 @@
       {
         "level": 2,
         "text": "Where to Go Next"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1611,7 +1784,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 468,
+    "wordCount": 351,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1627,28 +1800,66 @@
         "text": "People of History"
       },
       {
-        "level": 2,
-        "text": "Keep exploring this idea"
+        "level": 3,
+        "text": "Andrew Huberman"
+      },
+      {
+        "level": 3,
+        "text": "Christopher Nolan"
+      },
+      {
+        "level": 3,
+        "text": "Elon Musk"
+      },
+      {
+        "level": 3,
+        "text": "James Clear"
+      },
+      {
+        "level": 3,
+        "text": "Lex Fridman"
+      },
+      {
+        "level": 3,
+        "text": "Morgan Housel"
+      },
+      {
+        "level": 3,
+        "text": "Naval Ravikant"
+      },
+      {
+        "level": 3,
+        "text": "Ray Dalio"
+      },
+      {
+        "level": 3,
+        "text": "Richard Feynman"
+      },
+      {
+        "level": 3,
+        "text": "Rick Rubin"
+      },
+      {
+        "level": 3,
+        "text": "Ryan Holiday"
+      },
+      {
+        "level": 3,
+        "text": "Warren Buffett"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 2,
-      "withAlt": 2
+      "total": 14,
+      "withAlt": 14
     },
-    "wordCount": 297,
-    "dataActions": [
-      "clearPeopleSearch",
-      "filterByCategory",
-      "filterPeople",
-      "filterPeopleSource",
-      "togglePeopleSidebar"
-    ],
+    "wordCount": 236,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -1685,14 +1896,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1701,7 +1908,7 @@
       "total": 3,
       "withAlt": 3
     },
-    "wordCount": 411,
+    "wordCount": 267,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1739,14 +1946,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1755,7 +1958,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 409,
+    "wordCount": 265,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1793,14 +1996,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1809,7 +2008,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 408,
+    "wordCount": 264,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1847,14 +2046,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1863,7 +2058,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 411,
+    "wordCount": 267,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1901,14 +2096,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1917,7 +2108,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 410,
+    "wordCount": 266,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -1955,14 +2146,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -1971,7 +2158,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 409,
+    "wordCount": 265,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2013,14 +2200,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 37,
+      "internal": 33,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2029,7 +2212,7 @@
       "total": 7,
       "withAlt": 7
     },
-    "wordCount": 481,
+    "wordCount": 337,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2067,14 +2250,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2083,7 +2262,7 @@
       "total": 3,
       "withAlt": 3
     },
-    "wordCount": 399,
+    "wordCount": 255,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2121,14 +2300,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2137,7 +2312,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 409,
+    "wordCount": 265,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2179,14 +2354,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 34,
+      "internal": 30,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2195,7 +2366,7 @@
       "total": 5,
       "withAlt": 5
     },
-    "wordCount": 426,
+    "wordCount": 282,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2233,14 +2404,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2249,7 +2416,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 409,
+    "wordCount": 265,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2287,14 +2454,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2303,7 +2466,7 @@
       "total": 3,
       "withAlt": 3
     },
-    "wordCount": 406,
+    "wordCount": 262,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2341,14 +2504,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2357,7 +2516,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 401,
+    "wordCount": 257,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2395,14 +2554,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2411,7 +2566,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 399,
+    "wordCount": 255,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2465,14 +2620,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 35,
+      "internal": 31,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2481,7 +2632,7 @@
       "total": 6,
       "withAlt": 6
     },
-    "wordCount": 510,
+    "wordCount": 366,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2519,14 +2670,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 34,
+      "internal": 30,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2535,7 +2682,7 @@
       "total": 5,
       "withAlt": 5
     },
-    "wordCount": 422,
+    "wordCount": 278,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2573,14 +2720,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2589,7 +2732,7 @@
       "total": 3,
       "withAlt": 3
     },
-    "wordCount": 402,
+    "wordCount": 258,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2627,14 +2770,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2643,7 +2782,7 @@
       "total": 3,
       "withAlt": 3
     },
-    "wordCount": 398,
+    "wordCount": 254,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2685,14 +2824,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2701,7 +2836,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 421,
+    "wordCount": 277,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2743,14 +2878,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2759,7 +2890,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 417,
+    "wordCount": 273,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2801,14 +2932,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2817,7 +2944,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 411,
+    "wordCount": 267,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2859,14 +2986,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2875,7 +2998,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 418,
+    "wordCount": 274,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2913,14 +3036,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2929,7 +3048,7 @@
       "total": 3,
       "withAlt": 3
     },
-    "wordCount": 405,
+    "wordCount": 261,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -2963,14 +3082,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -2979,7 +3094,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 392,
+    "wordCount": 248,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3017,14 +3132,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3033,7 +3144,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 399,
+    "wordCount": 255,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3071,14 +3182,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3087,7 +3194,7 @@
       "total": 3,
       "withAlt": 3
     },
-    "wordCount": 410,
+    "wordCount": 266,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3125,14 +3232,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 34,
+      "internal": 30,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3141,7 +3244,7 @@
       "total": 5,
       "withAlt": 5
     },
-    "wordCount": 427,
+    "wordCount": 283,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3179,14 +3282,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3195,7 +3294,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 412,
+    "wordCount": 268,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3233,14 +3332,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3249,7 +3344,7 @@
       "total": 4,
       "withAlt": 4
     },
-    "wordCount": 409,
+    "wordCount": 265,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3291,14 +3386,10 @@
       {
         "level": 2,
         "text": "What I Am Taking From This Person"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 35,
+      "internal": 31,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3307,7 +3398,7 @@
       "total": 5,
       "withAlt": 5
     },
-    "wordCount": 455,
+    "wordCount": 311,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3324,39 +3415,61 @@
       },
       {
         "level": 2,
-        "text": "Recently Listened on Spotify"
-      },
-      {
-        "level": 2,
-        "text": "Shows I Follow on Spotify"
-      },
-      {
-        "level": 2,
         "text": "Curated Picks"
       },
       {
-        "level": 2,
-        "text": "Keep exploring this idea"
+        "level": 3,
+        "text": "Acquired"
+      },
+      {
+        "level": 3,
+        "text": "All-In Podcast"
+      },
+      {
+        "level": 3,
+        "text": "Principles for Dealing with the Changing World Order"
+      },
+      {
+        "level": 3,
+        "text": "Huberman Lab"
+      },
+      {
+        "level": 3,
+        "text": "Invest Like the Best"
+      },
+      {
+        "level": 3,
+        "text": "The Knowledge Project"
+      },
+      {
+        "level": 3,
+        "text": "Lex Fridman Podcast"
+      },
+      {
+        "level": 3,
+        "text": "Naval Ravikant - How to Get Rich"
+      },
+      {
+        "level": 3,
+        "text": "The Psychology of Money"
+      },
+      {
+        "level": 3,
+        "text": "The Tim Ferriss Show"
       }
     ],
     "links": {
-      "internal": 36,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 2,
-      "withAlt": 2
+      "total": 12,
+      "withAlt": 12
     },
-    "wordCount": 333,
-    "dataActions": [
-      "clearPodcastSearch",
-      "filterPodcasts",
-      "searchPodcasts",
-      "togglePodcastListDropdown",
-      "togglePodcastSidebar"
-    ],
+    "wordCount": 329,
+    "dataActions": [],
     "landmarks": {
       "nav": true,
       "main": true,
@@ -3377,14 +3490,10 @@
       {
         "level": 2,
         "text": "Open Questions"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 31,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3393,7 +3502,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 314,
+    "wordCount": 200,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3403,68 +3512,30 @@
     }
   },
   "products.html": {
-    "headings": [
-      {
-        "level": 1,
-        "text": "The Shelf: Tools, Objects & Gear That Earned Their Place"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
-      }
-    ],
+    "headings": [],
     "links": {
-      "internal": 31,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
     },
     "images": {
-      "total": 5,
-      "withAlt": 5
+      "total": 2,
+      "withAlt": 2
     },
-    "wordCount": 544,
+    "wordCount": 130,
     "dataActions": [],
     "landmarks": {
       "nav": true,
-      "main": true,
+      "main": false,
       "footer": true,
       "header": false
     }
   },
   "projects.html": {
-    "headings": [
-      {
-        "level": 1,
-        "text": "Projects"
-      },
-      {
-        "level": 3,
-        "text": "Personal Website"
-      },
-      {
-        "level": 3,
-        "text": "People of History"
-      },
-      {
-        "level": 3,
-        "text": "Openclaw Agents"
-      },
-      {
-        "level": 3,
-        "text": "Development AI"
-      },
-      {
-        "level": 3,
-        "text": "Field Notes"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
-      }
-    ],
+    "headings": [],
     "links": {
-      "internal": 35,
+      "internal": 27,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3473,47 +3544,32 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 402,
-    "dataActions": [
-      "clearProjectSearch",
-      "filterProjects",
-      "searchProjects",
-      "toggleProjectListDropdown",
-      "toggleProjectSidebar"
-    ],
-    "landmarks": {
-      "nav": true,
-      "main": true,
-      "footer": true,
-      "header": true
-    }
-  },
-  "quotes.html": {
-    "headings": [
-      {
-        "level": 1,
-        "text": "Words That Shaped My Thinking"
-      },
-      {
-        "level": 2,
-        "text": "Share a Quote"
-      }
-    ],
-    "links": {
-      "internal": 28,
-      "external": 4,
-      "mailto": 2,
-      "anchor": 4
-    },
-    "images": {
-      "total": 2,
-      "withAlt": 2
-    },
-    "wordCount": 503,
+    "wordCount": 124,
     "dataActions": [],
     "landmarks": {
       "nav": true,
-      "main": true,
+      "main": false,
+      "footer": true,
+      "header": false
+    }
+  },
+  "quotes.html": {
+    "headings": [],
+    "links": {
+      "internal": 27,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 130,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": false,
       "footer": true,
       "header": false
     }
@@ -3543,18 +3599,10 @@
       {
         "level": 2,
         "text": "Where to Go Next"
-      },
-      {
-        "level": 2,
-        "text": "Want more notes like this?"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 34,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3563,7 +3611,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 488,
+    "wordCount": 334,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3589,7 +3637,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 136,
+    "wordCount": 163,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3601,24 +3649,16 @@
   "speeches.html": {
     "headings": [
       {
-        "level": 1,
-        "text": "Speeches"
-      },
-      {
         "level": 2,
         "text": "Why a Speeches Page"
       },
       {
         "level": 2,
         "text": "The Collection"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 32,
+      "internal": 28,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3627,13 +3667,13 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 370,
+    "wordCount": 207,
     "dataActions": [],
     "landmarks": {
       "nav": true,
-      "main": true,
+      "main": false,
       "footer": true,
-      "header": true
+      "header": false
     }
   },
   "takes.html": {
@@ -3649,14 +3689,10 @@
       {
         "level": 2,
         "text": "Changed My Mind"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3665,7 +3701,33 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 332,
+    "wordCount": 218,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/adventure.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Adventure"
+      }
+    ],
+    "links": {
+      "internal": 29,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 123,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3679,18 +3741,10 @@
       {
         "level": 1,
         "text": "AI-Assisted Work"
-      },
-      {
-        "level": 2,
-        "text": "Follow this thread"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 39,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3699,7 +3753,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 427,
+    "wordCount": 125,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3713,18 +3767,10 @@
       {
         "level": 1,
         "text": "Better Thinking"
-      },
-      {
-        "level": 2,
-        "text": "Follow this thread"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 49,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3733,7 +3779,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 629,
+    "wordCount": 121,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3747,18 +3793,10 @@
       {
         "level": 1,
         "text": "Books & Reading"
-      },
-      {
-        "level": 2,
-        "text": "Follow this thread"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 45,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3767,7 +3805,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 565,
+    "wordCount": 123,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3781,18 +3819,10 @@
       {
         "level": 1,
         "text": "Business & Building"
-      },
-      {
-        "level": 2,
-        "text": "Follow this thread"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 41,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3801,7 +3831,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 458,
+    "wordCount": 123,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3815,18 +3845,10 @@
       {
         "level": 1,
         "text": "Health & Performance"
-      },
-      {
-        "level": 2,
-        "text": "Follow this thread"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 35,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3835,7 +3857,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 319,
+    "wordCount": 128,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3849,18 +3871,10 @@
       {
         "level": 1,
         "text": "Personal Systems"
-      },
-      {
-        "level": 2,
-        "text": "Follow this thread"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 49,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3869,7 +3883,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 638,
+    "wordCount": 122,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3883,18 +3897,10 @@
       {
         "level": 1,
         "text": "Real Estate Development"
-      },
-      {
-        "level": 2,
-        "text": "Follow this thread"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 35,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3903,7 +3909,33 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 336,
+    "wordCount": 123,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/taste.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Taste"
+      }
+    ],
+    "links": {
+      "internal": 29,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 120,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3917,18 +3949,10 @@
       {
         "level": 1,
         "text": "Tools & Objects"
-      },
-      {
-        "level": 2,
-        "text": "Follow this thread"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 43,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 4
@@ -3937,7 +3961,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 517,
+    "wordCount": 123,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -3967,7 +3991,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 308,
+    "wordCount": 344,
     "dataActions": [],
     "landmarks": {
       "nav": true,
@@ -4005,14 +4029,10 @@
       {
         "level": 2,
         "text": "Why this exists"
-      },
-      {
-        "level": 2,
-        "text": "Keep exploring this idea"
       }
     ],
     "links": {
-      "internal": 33,
+      "internal": 29,
       "external": 4,
       "mailto": 2,
       "anchor": 5
@@ -4021,7 +4041,7 @@
       "total": 2,
       "withAlt": 2
     },
-    "wordCount": 381,
+    "wordCount": 262,
     "dataActions": [],
     "landmarks": {
       "nav": true,

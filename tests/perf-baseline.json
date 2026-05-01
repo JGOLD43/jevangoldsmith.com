@@ -2,1423 +2,1477 @@
   "about": {
     "timing": {
       "ttfb": 2,
-      "domReady": 163,
-      "load": 183
+      "domReady": 14,
+      "load": 37
     },
     "bytes": {
-      "html": 25996,
-      "css": 190155,
-      "js": 13752,
-      "image": 44877,
-      "font": 45656,
-      "json": 8186,
+      "html": 16645,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 30552,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 328622,
-    "requestCount": 13
+    "totalBytes": 228274,
+    "requestCount": 6
   },
   "adventure-austin-adventure": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 122,
-      "load": 487
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 117
     },
     "bytes": {
-      "html": 30566,
-      "css": 204961,
-      "js": 164555,
-      "image": 271433,
+      "html": 16832,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
-      "other": 165987
+      "json": 0,
+      "other": 256318
     },
-    "totalBytes": 891344,
-    "requestCount": 26
+    "totalBytes": 499883,
+    "requestCount": 8
   },
   "adventure-ayr-adventure": {
     "timing": {
       "ttfb": 2,
-      "domReady": 41,
-      "load": 96
+      "domReady": 8,
+      "load": 67
     },
     "bytes": {
-      "html": 30609,
-      "css": 204961,
-      "js": 164555,
-      "image": 296035,
+      "html": 16806,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
-      "other": 103813
+      "json": 0,
+      "other": 145023
     },
-    "totalBytes": 853815,
-    "requestCount": 27
+    "totalBytes": 388562,
+    "requestCount": 8
   },
   "adventure-japan-adventure": {
     "timing": {
-      "ttfb": 3,
-      "domReady": 60,
-      "load": 139
+      "ttfb": 2,
+      "domReady": 7,
+      "load": 68
     },
     "bytes": {
-      "html": 30557,
-      "css": 204961,
-      "js": 164555,
-      "image": 322204,
+      "html": 16813,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
-      "other": 207183
+      "json": 0,
+      "other": 274091
     },
-    "totalBytes": 983302,
-    "requestCount": 31
+    "totalBytes": 517637,
+    "requestCount": 8
   },
   "adventure-sample-adventure": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 41,
-      "load": 137
+      "ttfb": 1,
+      "domReady": 5,
+      "load": 52
     },
     "bytes": {
-      "html": 28380,
-      "css": 204961,
-      "js": 164555,
-      "image": 286771,
+      "html": 0,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
-      "other": 269824
+      "json": 0,
+      "other": 136662
     },
-    "totalBytes": 1008333,
-    "requestCount": 31
+    "totalBytes": 363395,
+    "requestCount": 7
   },
   "adventure-sydney-adventure": {
     "timing": {
       "ttfb": 2,
-      "domReady": 44,
-      "load": 137
+      "domReady": 8,
+      "load": 64
     },
     "bytes": {
-      "html": 30620,
-      "css": 204961,
-      "js": 164555,
-      "image": 277653,
+      "html": 16706,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
-      "other": 124352
+      "json": 0,
+      "other": 270370
     },
-    "totalBytes": 855983,
-    "requestCount": 27
+    "totalBytes": 513809,
+    "requestCount": 8
   },
   "adventure-uluru-adventure": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 33,
-      "load": 152
+      "ttfb": 1,
+      "domReady": 8,
+      "load": 78
     },
     "bytes": {
-      "html": 30485,
-      "css": 204961,
-      "js": 164555,
-      "image": 233542,
+      "html": 16807,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
-      "other": 192478
+      "json": 0,
+      "other": 258321
     },
-    "totalBytes": 879863,
-    "requestCount": 34
+    "totalBytes": 501861,
+    "requestCount": 8
   },
   "adventure-vietnam-adventure": {
     "timing": {
       "ttfb": 1,
-      "domReady": 33,
-      "load": 103
+      "domReady": 7,
+      "load": 61
     },
     "bytes": {
-      "html": 30785,
-      "css": 204961,
-      "js": 164555,
-      "image": 300974,
+      "html": 16946,
+      "css": 0,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
-      "other": 130361
+      "json": 0,
+      "other": 206646
     },
-    "totalBytes": 885478,
-    "requestCount": 27
+    "totalBytes": 280865,
+    "requestCount": 7
   },
   "adventures": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 38,
-      "load": 48
+      "ttfb": 3,
+      "domReady": 57,
+      "load": 82
     },
     "bytes": {
-      "html": 29539,
-      "css": 204961,
-      "js": 235814,
-      "image": 1039241,
+      "html": 21421,
+      "css": 184266,
+      "js": 147552,
+      "image": 25452,
       "font": 45656,
-      "json": 2268515,
-      "other": 146175
+      "json": 0,
+      "other": 0
     },
-    "totalBytes": 3969901,
-    "requestCount": 45
+    "totalBytes": 424347,
+    "requestCount": 12
   },
   "books": {
     "timing": {
       "ttfb": 1,
-      "domReady": 37,
-      "load": 172
+      "domReady": 10,
+      "load": 17
     },
     "bytes": {
-      "html": 44713,
-      "css": 190155,
-      "js": 74484,
-      "image": 1163458,
-      "font": 61132,
-      "json": 11420,
-      "other": 53207
+      "html": 123876,
+      "css": 169460,
+      "js": 0,
+      "image": 309378,
+      "font": 45656,
+      "json": 0,
+      "other": 0
     },
-    "totalBytes": 1598569,
-    "requestCount": 70
+    "totalBytes": 648370,
+    "requestCount": 16
   },
   "challenges": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 37,
-      "load": 41
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 15
     },
     "bytes": {
-      "html": 35037,
-      "css": 190155,
-      "js": 39417,
-      "image": 13419,
-      "font": 61132,
-      "json": 8186,
+      "html": 14538,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 30552,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 347346,
-    "requestCount": 11
+    "totalBytes": 226167,
+    "requestCount": 6
   },
   "changed-my-mind": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 34,
-      "load": 35
+      "ttfb": 3,
+      "domReady": 8,
+      "load": 10
     },
     "bytes": {
-      "html": 26098,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
+      "html": 17974,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 297266,
-    "requestCount": 10
+    "totalBytes": 244707,
+    "requestCount": 7
   },
   "contact": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 18,
-      "load": 28
+      "ttfb": 3,
+      "domReady": 7,
+      "load": 8
     },
     "bytes": {
-      "html": 21774,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
-      "font": 61132,
-      "json": 8186,
+      "html": 16739,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 30552,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 308418,
-    "requestCount": 11
+    "totalBytes": 228368,
+    "requestCount": 6
   },
   "cool-shit": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 29,
-      "load": 49
+      "ttfb": 1,
+      "domReady": 6,
+      "load": 16
     },
     "bytes": {
-      "html": 24818,
-      "css": 190155,
-      "js": 24873,
-      "image": 289728,
+      "html": 18179,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 15652,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 590882,
-    "requestCount": 17
+    "totalBytes": 244912,
+    "requestCount": 7
+  },
+  "data-smoke": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 6,
+      "load": 8
+    },
+    "bytes": {
+      "html": 15013,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 241746,
+    "requestCount": 7
   },
   "dateme": {
     "timing": {
       "ttfb": 1,
-      "domReady": 21,
-      "load": 32
+      "domReady": 7,
+      "load": 9
     },
     "bytes": {
-      "html": 19682,
-      "css": 190155,
-      "js": 54654,
-      "image": 13419,
+      "html": 15022,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 331752,
-    "requestCount": 10
+    "totalBytes": 241755,
+    "requestCount": 7
   },
   "essays": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 43,
-      "load": 438
+      "ttfb": 3,
+      "domReady": 8,
+      "load": 16
     },
     "bytes": {
-      "html": 31773,
-      "css": 190155,
-      "js": 73681,
-      "image": 13419,
-      "font": 61132,
-      "json": 11420,
-      "other": 5471
+      "html": 19600,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 30552,
+      "json": 0,
+      "other": 0
     },
-    "totalBytes": 387051,
-    "requestCount": 13
+    "totalBytes": 231229,
+    "requestCount": 6
   },
   "field-notes": {
     "timing": {
       "ttfb": 1,
-      "domReady": 18,
-      "load": 28
+      "domReady": 5,
+      "load": 7
     },
     "bytes": {
-      "html": 25674,
-      "css": 190155,
-      "js": 15644,
-      "image": 13419,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 298734,
-    "requestCount": 10
-  },
-  "free-resources": {
-    "timing": {
-      "ttfb": 1,
-      "domReady": 46,
-      "load": 47
-    },
-    "bytes": {
-      "html": 31188,
-      "css": 190155,
-      "js": 20991,
-      "image": 13419,
+      "html": 17769,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
       "json": 0,
       "other": 0
     },
-    "totalBytes": 301409,
-    "requestCount": 9
+    "totalBytes": 244502,
+    "requestCount": 7
+  },
+  "free-resources": {
+    "timing": {
+      "ttfb": 3,
+      "domReady": 11,
+      "load": 14
+    },
+    "bytes": {
+      "html": 14610,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 30552,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 226239,
+    "requestCount": 6
   },
   "health": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 24,
-      "load": 32
+      "ttfb": 3,
+      "domReady": 7,
+      "load": 9
     },
     "bytes": {
-      "html": 32484,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
+      "html": 23309,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 303652,
-    "requestCount": 10
+    "totalBytes": 250042,
+    "requestCount": 7
   },
   "important-or-not": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 23,
-      "load": 35
+      "ttfb": 3,
+      "domReady": 7,
+      "load": 10
     },
     "bytes": {
-      "html": 31387,
-      "css": 190155,
-      "js": 14448,
-      "image": 13419,
+      "html": 24235,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 303251,
-    "requestCount": 10
+    "totalBytes": 250968,
+    "requestCount": 7
   },
   "index": {
     "timing": {
       "ttfb": 1,
-      "domReady": 73,
-      "load": 88
+      "domReady": 9,
+      "load": 13
     },
     "bytes": {
-      "html": 49637,
-      "css": 190155,
-      "js": 23666,
-      "image": 354169,
-      "font": 61132,
-      "json": 8186,
+      "html": 13963,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 30552,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 686945,
-    "requestCount": 18
+    "totalBytes": 225592,
+    "requestCount": 6
   },
   "lesson-logger": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 19,
-      "load": 34
+      "ttfb": 1,
+      "domReady": 11,
+      "load": 15
     },
     "bytes": {
-      "html": 28934,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
+      "html": 22500,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 300102,
-    "requestCount": 10
+    "totalBytes": 249233,
+    "requestCount": 7
   },
   "living-manifesto": {
     "timing": {
       "ttfb": 2,
-      "domReady": 53,
-      "load": 55
+      "domReady": 9,
+      "load": 16
     },
     "bytes": {
-      "html": 37386,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
+      "html": 29197,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 61132,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 323984,
-    "requestCount": 12
+    "totalBytes": 271406,
+    "requestCount": 8
   },
   "meet": {
     "timing": {
       "ttfb": 2,
-      "domReady": 10,
-      "load": 25
+      "domReady": 7,
+      "load": 15
     },
     "bytes": {
-      "html": 8644,
-      "css": 190155,
-      "js": 13752,
-      "image": 3569,
+      "html": 6833,
+      "css": 169460,
+      "js": 0,
+      "image": 5974,
       "font": 46028,
       "json": 0,
       "other": 0
     },
-    "totalBytes": 262148,
-    "requestCount": 7
+    "totalBytes": 228295,
+    "requestCount": 6
   },
   "movie-philosophy": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 19,
-      "load": 30
+      "ttfb": 1,
+      "domReady": 10,
+      "load": 22
     },
     "bytes": {
-      "html": 23127,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
-      "font": 61132,
-      "json": 8186,
+      "html": 16354,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 46028,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 309771,
-    "requestCount": 11
+    "totalBytes": 243459,
+    "requestCount": 7
   },
   "movies": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 51,
-      "load": 53
+      "ttfb": 2,
+      "domReady": 8,
+      "load": 15
     },
     "bytes": {
-      "html": 35153,
-      "css": 190155,
-      "js": 86011,
-      "image": 338969,
-      "font": 61132,
-      "json": 11420,
-      "other": 5189
+      "html": 19415,
+      "css": 169460,
+      "js": 0,
+      "image": 337167,
+      "font": 30552,
+      "json": 0,
+      "other": 0
     },
-    "totalBytes": 728029,
-    "requestCount": 19
+    "totalBytes": 556594,
+    "requestCount": 12
   },
   "north-star": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 22,
-      "load": 30
+      "ttfb": 1,
+      "domReady": 6,
+      "load": 8
     },
     "bytes": {
-      "html": 31581,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
+      "html": 23511,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 302749,
-    "requestCount": 10
+    "totalBytes": 250244,
+    "requestCount": 7
   },
   "notes": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 36,
-      "load": 47
+      "ttfb": 1,
+      "domReady": 6,
+      "load": 19
     },
     "bytes": {
-      "html": 25938,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
+      "html": 18141,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 297106,
-    "requestCount": 10
+    "totalBytes": 244874,
+    "requestCount": 7
   },
   "people": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 34,
-      "load": 36
+      "ttfb": 2,
+      "domReady": 13,
+      "load": 21
     },
     "bytes": {
-      "html": 29038,
-      "css": 190155,
-      "js": 81703,
-      "image": 1137371,
-      "font": 61132,
-      "json": 11420,
-      "other": 87122
+      "html": 24110,
+      "css": 169460,
+      "js": 0,
+      "image": 93423,
+      "font": 45656,
+      "json": 0,
+      "other": 0
     },
-    "totalBytes": 1597941,
-    "requestCount": 60
+    "totalBytes": 332649,
+    "requestCount": 19
   },
   "people-philosophy": {
     "timing": {
       "ttfb": 1,
-      "domReady": 30,
-      "load": 31
+      "domReady": 9,
+      "load": 12
     },
     "bytes": {
-      "html": 23355,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
-      "font": 61132,
-      "json": 8186,
+      "html": 16518,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 46028,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 309999,
-    "requestCount": 11
+    "totalBytes": 243623,
+    "requestCount": 7
   },
   "people/andrew-huberman": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 22,
-      "load": 33
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 15
     },
     "bytes": {
-      "html": 25026,
-      "css": 190155,
-      "js": 13706,
-      "image": 14966,
+      "html": 17339,
+      "css": 169460,
+      "js": 0,
+      "image": 15544,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 297695,
-    "requestCount": 12
+    "totalBytes": 247999,
+    "requestCount": 8
   },
   "people/andrew-wilkinson": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 32,
-      "load": 33
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 14
     },
     "bytes": {
-      "html": 25454,
-      "css": 190155,
-      "js": 13706,
-      "image": 37680,
+      "html": 17585,
+      "css": 169460,
+      "js": 0,
+      "image": 48080,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 320837,
-    "requestCount": 13
+    "totalBytes": 280781,
+    "requestCount": 9
   },
   "people/anne-lamott": {
     "timing": {
       "ttfb": 1,
-      "domReady": 49,
-      "load": 62
+      "domReady": 7,
+      "load": 15
     },
     "bytes": {
-      "html": 25188,
-      "css": 190155,
-      "js": 13706,
-      "image": 52914,
+      "html": 17422,
+      "css": 169460,
+      "js": 0,
+      "image": 61951,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 335805,
-    "requestCount": 13
+    "totalBytes": 294489,
+    "requestCount": 9
   },
   "people/atul-gawande": {
     "timing": {
-      "ttfb": 3,
-      "domReady": 43,
-      "load": 46
+      "ttfb": 2,
+      "domReady": 8,
+      "load": 15
     },
     "bytes": {
-      "html": 25320,
-      "css": 190155,
-      "js": 13706,
-      "image": 47991,
+      "html": 17523,
+      "css": 169460,
+      "js": 0,
+      "image": 59409,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 331014,
-    "requestCount": 13
+    "totalBytes": 292048,
+    "requestCount": 9
   },
   "people/baltasar-gracian": {
     "timing": {
       "ttfb": 1,
-      "domReady": 33,
-      "load": 35
+      "domReady": 6,
+      "load": 7
     },
     "bytes": {
-      "html": 25505,
-      "css": 190155,
-      "js": 13706,
-      "image": 120879,
+      "html": 17656,
+      "css": 169460,
+      "js": 0,
+      "image": 105357,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 404087,
-    "requestCount": 13
+    "totalBytes": 338129,
+    "requestCount": 9
   },
   "people/cal-newport": {
     "timing": {
-      "ttfb": 4,
-      "domReady": 31,
-      "load": 48
+      "ttfb": 1,
+      "domReady": 5,
+      "load": 7
     },
     "bytes": {
-      "html": 25243,
-      "css": 190155,
-      "js": 13706,
-      "image": 31753,
+      "html": 17537,
+      "css": 169460,
+      "js": 0,
+      "image": 31724,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 314699,
-    "requestCount": 13
+    "totalBytes": 264377,
+    "requestCount": 9
   },
   "people/charlie-munger": {
     "timing": {
       "ttfb": 1,
-      "domReady": 34,
-      "load": 42
+      "domReady": 7,
+      "load": 14
     },
     "bytes": {
-      "html": 27986,
-      "css": 190155,
-      "js": 13706,
-      "image": 78981,
+      "html": 19610,
+      "css": 169460,
+      "js": 0,
+      "image": 88303,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 364670,
-    "requestCount": 16
+    "totalBytes": 323029,
+    "requestCount": 12
   },
   "people/christopher-nolan": {
     "timing": {
       "ttfb": 2,
-      "domReady": 17,
-      "load": 23
+      "domReady": 8,
+      "load": 15
     },
     "bytes": {
-      "html": 25016,
-      "css": 190155,
-      "js": 13706,
-      "image": 42061,
+      "html": 17303,
+      "css": 169460,
+      "js": 0,
+      "image": 51011,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 324780,
-    "requestCount": 12
+    "totalBytes": 283430,
+    "requestCount": 8
   },
   "people/david-goggins": {
     "timing": {
       "ttfb": 1,
-      "domReady": 45,
-      "load": 53
+      "domReady": 5,
+      "load": 7
     },
     "bytes": {
-      "html": 25308,
-      "css": 190155,
-      "js": 13706,
-      "image": 44694,
+      "html": 17464,
+      "css": 169460,
+      "js": 0,
+      "image": 47126,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 327705,
-    "requestCount": 13
+    "totalBytes": 279706,
+    "requestCount": 9
   },
   "people/david-ogilvy": {
     "timing": {
-      "ttfb": 3,
-      "domReady": 48,
-      "load": 97
+      "ttfb": 1,
+      "domReady": 6,
+      "load": 8
     },
     "bytes": {
-      "html": 26107,
-      "css": 190155,
-      "js": 13706,
-      "image": 48106,
+      "html": 18089,
+      "css": 169460,
+      "js": 0,
+      "image": 47682,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 331916,
-    "requestCount": 14
+    "totalBytes": 280887,
+    "requestCount": 10
   },
   "people/eckhart-tolle": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 19,
-      "load": 31
+      "ttfb": 2,
+      "domReady": 7,
+      "load": 9
     },
     "bytes": {
-      "html": 25306,
-      "css": 190155,
-      "js": 13706,
-      "image": 76857,
+      "html": 17478,
+      "css": 169460,
+      "js": 0,
+      "image": 73702,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 359866,
-    "requestCount": 13
+    "totalBytes": 306296,
+    "requestCount": 9
   },
   "people/elon-musk": {
     "timing": {
       "ttfb": 2,
-      "domReady": 31,
-      "load": 32
+      "domReady": 7,
+      "load": 9
     },
     "bytes": {
-      "html": 24727,
-      "css": 190155,
-      "js": 13706,
-      "image": 31428,
+      "html": 17198,
+      "css": 169460,
+      "js": 0,
+      "image": 38270,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 313858,
-    "requestCount": 12
+    "totalBytes": 270584,
+    "requestCount": 8
   },
   "people/eric-ries": {
     "timing": {
       "ttfb": 1,
-      "domReady": 20,
-      "load": 33
+      "domReady": 6,
+      "load": 16
     },
     "bytes": {
-      "html": 25140,
-      "css": 190155,
-      "js": 13706,
-      "image": 44473,
+      "html": 17484,
+      "css": 169460,
+      "js": 0,
+      "image": 52963,
       "font": 45656,
       "json": 0,
       "other": 0
     },
-    "totalBytes": 319130,
-    "requestCount": 12
+    "totalBytes": 285563,
+    "requestCount": 9
   },
   "people/james-clear": {
     "timing": {
       "ttfb": 2,
-      "domReady": 28,
-      "load": 53
+      "domReady": 7,
+      "load": 17
     },
     "bytes": {
-      "html": 25168,
-      "css": 190155,
-      "js": 13706,
-      "image": 34891,
+      "html": 17282,
+      "css": 169460,
+      "js": 0,
+      "image": 34867,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 317762,
-    "requestCount": 13
+    "totalBytes": 267265,
+    "requestCount": 9
   },
   "people/john-d-rockefeller": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 95,
-      "load": 97
+      "ttfb": 1,
+      "domReady": 12,
+      "load": 15
     },
     "bytes": {
-      "html": 28058,
-      "css": 190155,
-      "js": 13706,
-      "image": 60748,
+      "html": 19411,
+      "css": 169460,
+      "js": 0,
+      "image": 69601,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 346509,
-    "requestCount": 15
+    "totalBytes": 304128,
+    "requestCount": 11
   },
   "people/keith-j-cunningham": {
     "timing": {
       "ttfb": 1,
-      "domReady": 18,
-      "load": 27
+      "domReady": 7,
+      "load": 16
     },
     "bytes": {
-      "html": 26145,
-      "css": 190155,
-      "js": 13706,
-      "image": 57091,
+      "html": 18130,
+      "css": 169460,
+      "js": 0,
+      "image": 47930,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 340939,
-    "requestCount": 14
+    "totalBytes": 281176,
+    "requestCount": 10
   },
   "people/lex-fridman": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 17,
-      "load": 26
+      "ttfb": 3,
+      "domReady": 8,
+      "load": 10
     },
     "bytes": {
-      "html": 24791,
-      "css": 190155,
-      "js": 13706,
-      "image": 28606,
+      "html": 17172,
+      "css": 169460,
+      "js": 0,
+      "image": 37943,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 311100,
-    "requestCount": 12
+    "totalBytes": 270231,
+    "requestCount": 8
   },
   "people/morgan-housel": {
     "timing": {
       "ttfb": 1,
-      "domReady": 18,
-      "load": 28
+      "domReady": 7,
+      "load": 14
     },
     "bytes": {
-      "html": 24845,
-      "css": 190155,
-      "js": 13706,
-      "image": 15014,
+      "html": 17176,
+      "css": 169460,
+      "js": 0,
+      "image": 16121,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 297562,
-    "requestCount": 12
+    "totalBytes": 248413,
+    "requestCount": 8
   },
   "people/naval-ravikant": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 34,
-      "load": 35
+      "ttfb": 2,
+      "domReady": 8,
+      "load": 18
     },
     "bytes": {
-      "html": 25736,
-      "css": 190155,
-      "js": 13706,
-      "image": 74350,
+      "html": 17788,
+      "css": 169460,
+      "js": 0,
+      "image": 78223,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 357789,
-    "requestCount": 13
+    "totalBytes": 311127,
+    "requestCount": 9
   },
   "people/peter-thiel": {
     "timing": {
       "ttfb": 1,
-      "domReady": 24,
-      "load": 31
+      "domReady": 6,
+      "load": 16
     },
     "bytes": {
-      "html": 25510,
-      "css": 190155,
-      "js": 13706,
-      "image": 41394,
+      "html": 17591,
+      "css": 169460,
+      "js": 0,
+      "image": 46442,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 324607,
-    "requestCount": 13
+    "totalBytes": 279149,
+    "requestCount": 9
   },
   "people/ray-dalio": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 32,
-      "load": 33
+      "ttfb": 2,
+      "domReady": 8,
+      "load": 11
     },
     "bytes": {
-      "html": 25431,
-      "css": 190155,
-      "js": 13706,
-      "image": 30023,
+      "html": 17546,
+      "css": 169460,
+      "js": 0,
+      "image": 31019,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 313157,
-    "requestCount": 13
+    "totalBytes": 263681,
+    "requestCount": 9
   },
   "people/richard-feynman": {
     "timing": {
-      "ttfb": 1,
-      "domReady": 46,
-      "load": 53
+      "ttfb": 2,
+      "domReady": 9,
+      "load": 16
     },
     "bytes": {
-      "html": 25787,
-      "css": 190155,
-      "js": 13706,
-      "image": 51384,
+      "html": 17828,
+      "css": 169460,
+      "js": 0,
+      "image": 58776,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 334874,
-    "requestCount": 13
+    "totalBytes": 291720,
+    "requestCount": 9
   },
   "people/rick-rubin": {
     "timing": {
-      "ttfb": 3,
-      "domReady": 32,
-      "load": 35
+      "ttfb": 1,
+      "domReady": 6,
+      "load": 7
     },
     "bytes": {
-      "html": 24705,
-      "css": 190155,
-      "js": 13706,
-      "image": 15265,
+      "html": 17021,
+      "css": 0,
+      "js": 0,
+      "image": 16101,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 297673,
-    "requestCount": 12
+    "totalBytes": 78778,
+    "requestCount": 7
   },
   "people/rob-fitzpatrick": {
     "timing": {
-      "ttfb": 4,
-      "domReady": 37,
-      "load": 69
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 15
     },
     "bytes": {
-      "html": 25063,
-      "css": 190155,
-      "js": 13706,
-      "image": 51540,
+      "html": 17334,
+      "css": 169460,
+      "js": 0,
+      "image": 50458,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 334306,
-    "requestCount": 13
+    "totalBytes": 282908,
+    "requestCount": 9
   },
   "people/robert-cialdini": {
     "timing": {
       "ttfb": 1,
-      "domReady": 28,
-      "load": 29
+      "domReady": 11,
+      "load": 14
     },
     "bytes": {
-      "html": 25387,
-      "css": 190155,
-      "js": 13706,
-      "image": 46352,
+      "html": 17605,
+      "css": 169460,
+      "js": 0,
+      "image": 52748,
       "font": 45656,
       "json": 0,
       "other": 0
     },
-    "totalBytes": 321256,
-    "requestCount": 12
+    "totalBytes": 285469,
+    "requestCount": 9
   },
   "people/ryan-holiday": {
     "timing": {
       "ttfb": 1,
-      "domReady": 17,
-      "load": 24
+      "domReady": 6,
+      "load": 9
     },
     "bytes": {
-      "html": 24865,
-      "css": 190155,
-      "js": 13706,
-      "image": 14888,
+      "html": 17227,
+      "css": 169460,
+      "js": 0,
+      "image": 15568,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 297456,
-    "requestCount": 12
+    "totalBytes": 247911,
+    "requestCount": 8
   },
   "people/shane-parrish": {
     "timing": {
       "ttfb": 1,
-      "domReady": 23,
-      "load": 35
+      "domReady": 7,
+      "load": 14
     },
     "bytes": {
-      "html": 25982,
-      "css": 190155,
-      "js": 13706,
-      "image": 35292,
+      "html": 17974,
+      "css": 0,
+      "js": 0,
+      "image": 18318,
       "font": 45656,
       "json": 0,
       "other": 0
     },
-    "totalBytes": 310791,
-    "requestCount": 13
+    "totalBytes": 81948,
+    "requestCount": 6
   },
   "people/sherlock-holmes": {
     "timing": {
       "ttfb": 2,
-      "domReady": 35,
-      "load": 36
+      "domReady": 7,
+      "load": 8
     },
     "bytes": {
-      "html": 25461,
-      "css": 190155,
-      "js": 13706,
-      "image": 35572,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 318736,
-    "requestCount": 13
-  },
-  "people/victor-o-schwab": {
-    "timing": {
-      "ttfb": 23,
-      "domReady": 142,
-      "load": 196
-    },
-    "bytes": {
-      "html": 25467,
-      "css": 190155,
-      "js": 13706,
-      "image": 43464,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 326634,
-    "requestCount": 13
-  },
-  "people/warren-buffett": {
-    "timing": {
-      "ttfb": 4,
-      "domReady": 78,
-      "load": 81
-    },
-    "bytes": {
-      "html": 26888,
-      "css": 190155,
-      "js": 13706,
-      "image": 58628,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 343219,
-    "requestCount": 14
-  },
-  "podcasts": {
-    "timing": {
-      "ttfb": 1,
-      "domReady": 53,
-      "load": 63
-    },
-    "bytes": {
-      "html": 29324,
-      "css": 190155,
-      "js": 54071,
-      "image": 536159,
-      "font": 61132,
-      "json": 11420,
-      "other": 4390
-    },
-    "totalBytes": 886651,
-    "requestCount": 22
-  },
-  "problems": {
-    "timing": {
-      "ttfb": 2,
-      "domReady": 30,
-      "load": 32
-    },
-    "bytes": {
-      "html": 22538,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 293706,
-    "requestCount": 10
-  },
-  "products": {
-    "timing": {
-      "ttfb": 1,
-      "domReady": 40,
-      "load": 50
-    },
-    "bytes": {
-      "html": 33098,
-      "css": 190155,
-      "js": 20991,
-      "image": 69282,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 367368,
-    "requestCount": 13
-  },
-  "projects": {
-    "timing": {
-      "ttfb": 2,
-      "domReady": 69,
-      "load": 77
-    },
-    "bytes": {
-      "html": 34966,
-      "css": 190155,
-      "js": 39387,
-      "image": 13419,
-      "font": 61132,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 347245,
-    "requestCount": 11
-  },
-  "quotes": {
-    "timing": {
-      "ttfb": 2,
-      "domReady": 25,
-      "load": 48
-    },
-    "bytes": {
-      "html": 34152,
-      "css": 190155,
-      "js": 14785,
-      "image": 13419,
-      "font": 61132,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 321829,
-    "requestCount": 11
-  },
-  "reading-philosophy": {
-    "timing": {
-      "ttfb": 2,
-      "domReady": 36,
-      "load": 53
-    },
-    "bytes": {
-      "html": 23879,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
-      "font": 61132,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 310477,
-    "requestCount": 12
-  },
-  "search": {
-    "timing": {
-      "ttfb": 2,
-      "domReady": 75,
-      "load": 94
-    },
-    "bytes": {
-      "html": 20887,
-      "css": 190155,
-      "js": 27412,
-      "image": 13419,
-      "font": 45656,
-      "json": 11420,
-      "other": 130257
-    },
-    "totalBytes": 439206,
-    "requestCount": 12
-  },
-  "speeches": {
-    "timing": {
-      "ttfb": 1,
-      "domReady": 36,
-      "load": 58
-    },
-    "bytes": {
-      "html": 22218,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
-      "font": 61132,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 308816,
-    "requestCount": 12
-  },
-  "takes": {
-    "timing": {
-      "ttfb": 2,
-      "domReady": 22,
-      "load": 32
-    },
-    "bytes": {
-      "html": 22690,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 293858,
-    "requestCount": 10
-  },
-  "topics/ai-assisted-work": {
-    "timing": {
-      "ttfb": 1,
-      "domReady": 38,
-      "load": 40
-    },
-    "bytes": {
-      "html": 25455,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 296577,
-    "requestCount": 11
-  },
-  "topics/better-thinking": {
-    "timing": {
-      "ttfb": 2,
-      "domReady": 34,
-      "load": 41
-    },
-    "bytes": {
-      "html": 28924,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 300046,
-    "requestCount": 11
-  },
-  "topics/books-reading": {
-    "timing": {
-      "ttfb": 2,
-      "domReady": 19,
-      "load": 29
-    },
-    "bytes": {
-      "html": 27795,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 298917,
-    "requestCount": 11
-  },
-  "topics/business-building": {
-    "timing": {
-      "ttfb": 1,
-      "domReady": 16,
-      "load": 26
-    },
-    "bytes": {
-      "html": 0,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
-      "font": 45656,
-      "json": 8186,
-      "other": 0
-    },
-    "totalBytes": 271122,
-    "requestCount": 10
-  },
-  "topics/health-performance": {
-    "timing": {
-      "ttfb": 2,
-      "domReady": 29,
-      "load": 37
-    },
-    "bytes": {
-      "html": 23810,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
+      "html": 17599,
+      "css": 169460,
+      "js": 0,
+      "image": 38795,
       "font": 45656,
       "json": 0,
       "other": 0
     },
-    "totalBytes": 286746,
-    "requestCount": 10
+    "totalBytes": 271510,
+    "requestCount": 9
+  },
+  "people/victor-o-schwab": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 14
+    },
+    "bytes": {
+      "html": 17613,
+      "css": 169460,
+      "js": 0,
+      "image": 45431,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 278160,
+    "requestCount": 9
+  },
+  "people/warren-buffett": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 22
+    },
+    "bytes": {
+      "html": 18732,
+      "css": 169460,
+      "js": 0,
+      "image": 68341,
+      "font": 0,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 256533,
+    "requestCount": 7
+  },
+  "podcasts": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 14,
+      "load": 31
+    },
+    "bytes": {
+      "html": 22042,
+      "css": 169460,
+      "js": 0,
+      "image": 534357,
+      "font": 30552,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 756411,
+    "requestCount": 13
+  },
+  "problems": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 14
+    },
+    "bytes": {
+      "html": 15251,
+      "css": 0,
+      "js": 0,
+      "image": 0,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 60907,
+    "requestCount": 4
+  },
+  "products": {
+    "timing": {
+      "ttfb": 3,
+      "domReady": 8,
+      "load": 15
+    },
+    "bytes": {
+      "html": 14548,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 30552,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 226177,
+    "requestCount": 6
+  },
+  "projects": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 8,
+      "load": 15
+    },
+    "bytes": {
+      "html": 14307,
+      "css": 0,
+      "js": 0,
+      "image": 11617,
+      "font": 30552,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 56476,
+    "requestCount": 5
+  },
+  "quotes": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 6,
+      "load": 9
+    },
+    "bytes": {
+      "html": 14423,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 30552,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 226052,
+    "requestCount": 6
+  },
+  "reading-philosophy": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 8,
+      "load": 15
+    },
+    "bytes": {
+      "html": 16273,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 46028,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 243378,
+    "requestCount": 7
+  },
+  "search": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 6,
+      "load": 7
+    },
+    "bytes": {
+      "html": 16001,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 242734,
+    "requestCount": 7
+  },
+  "speeches": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 8,
+      "load": 15
+    },
+    "bytes": {
+      "html": 15038,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 46028,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 242143,
+    "requestCount": 7
+  },
+  "takes": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 5,
+      "load": 7
+    },
+    "bytes": {
+      "html": 15416,
+      "css": 0,
+      "js": 0,
+      "image": 0,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 61072,
+    "requestCount": 4
+  },
+  "topics/adventure": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 15
+    },
+    "bytes": {
+      "html": 14357,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 241090,
+    "requestCount": 7
+  },
+  "topics/ai-assisted-work": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 10,
+      "load": 14
+    },
+    "bytes": {
+      "html": 14557,
+      "css": 0,
+      "js": 0,
+      "image": 0,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 60213,
+    "requestCount": 4
+  },
+  "topics/better-thinking": {
+    "timing": {
+      "ttfb": 3,
+      "domReady": 8,
+      "load": 16
+    },
+    "bytes": {
+      "html": 14522,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 241255,
+    "requestCount": 7
+  },
+  "topics/books-reading": {
+    "timing": {
+      "ttfb": 3,
+      "domReady": 8,
+      "load": 16
+    },
+    "bytes": {
+      "html": 14494,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 241227,
+    "requestCount": 7
+  },
+  "topics/business-building": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 5,
+      "load": 7
+    },
+    "bytes": {
+      "html": 14569,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 241302,
+    "requestCount": 7
+  },
+  "topics/health-performance": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 8,
+      "load": 15
+    },
+    "bytes": {
+      "html": 14654,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 241387,
+    "requestCount": 7
   },
   "topics/personal-systems": {
     "timing": {
       "ttfb": 2,
-      "domReady": 30,
-      "load": 36
+      "domReady": 8,
+      "load": 15
     },
     "bytes": {
-      "html": 29346,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
+      "html": 14522,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 300468,
-    "requestCount": 11
+    "totalBytes": 241255,
+    "requestCount": 7
   },
   "topics/real-estate-development": {
     "timing": {
-      "ttfb": 10,
-      "domReady": 78,
-      "load": 102
+      "ttfb": 1,
+      "domReady": 10,
+      "load": 16
     },
     "bytes": {
-      "html": 24237,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
+      "html": 14672,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 295359,
-    "requestCount": 11
+    "totalBytes": 241405,
+    "requestCount": 7
+  },
+  "topics/taste": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 9,
+      "load": 13
+    },
+    "bytes": {
+      "html": 14342,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 241075,
+    "requestCount": 7
   },
   "topics/tools-objects": {
     "timing": {
       "ttfb": 1,
-      "domReady": 46,
-      "load": 60
+      "domReady": 6,
+      "load": 13
     },
     "bytes": {
-      "html": 27003,
-      "css": 190155,
-      "js": 13706,
-      "image": 13419,
+      "html": 14409,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 298125,
-    "requestCount": 11
+    "totalBytes": 241142,
+    "requestCount": 7
   },
   "videos": {
     "timing": {
-      "ttfb": 2,
-      "domReady": 61,
-      "load": 70
+      "ttfb": 1,
+      "domReady": 7,
+      "load": 15
     },
     "bytes": {
-      "html": 23725,
-      "css": 190155,
-      "js": 20396,
-      "image": 13419,
-      "font": 61132,
-      "json": 8186,
+      "html": 17897,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
+      "font": 46028,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 317013,
-    "requestCount": 11
+    "totalBytes": 245002,
+    "requestCount": 7
   },
   "weekly-review-template": {
     "timing": {
       "ttfb": 1,
-      "domReady": 38,
-      "load": 40
+      "domReady": 7,
+      "load": 14
     },
     "bytes": {
-      "html": 23762,
-      "css": 190155,
-      "js": 13752,
-      "image": 13419,
+      "html": 16587,
+      "css": 169460,
+      "js": 0,
+      "image": 11617,
       "font": 45656,
-      "json": 8186,
+      "json": 0,
       "other": 0
     },
-    "totalBytes": 294930,
-    "requestCount": 10
+    "totalBytes": 243320,
+    "requestCount": 7
   }
 }
