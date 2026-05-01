@@ -11236,6 +11236,1526 @@
       ]
     }
   },
+  "topics/ai-assisted-work.html": {
+    "title": "AI-Assisted Work: Notes, Tools &amp; Practical Systems | Jevan Goldsmith",
+    "description": "A topic hub for AI-assisted work: how Jevan Goldsmith uses AI for research, writing, coding, systems, and better work without outsourcing taste.",
+    "robots": "index, follow, max-image-preview:large",
+    "canonical": "https://jevangoldsmith.com/topics/ai-assisted-work.html",
+    "og": {
+      "og:type": "website",
+      "og:title": "AI-Assisted Work: Notes, Tools &amp; Practical Systems",
+      "og:description": "A topic hub for AI-assisted work: how Jevan Goldsmith uses AI for research, writing, coding, systems, and better work without outsourcing taste.",
+      "og:url": "https://jevangoldsmith.com/topics/ai-assisted-work.html",
+      "og:site_name": "Jevan Goldsmith",
+      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "AI-Assisted Work: Notes, Tools &amp; Practical Systems",
+      "twitter:description": "A topic hub for AI-assisted work: how Jevan Goldsmith uses AI for research, writing, coding, systems, and better work without outsourcing taste.",
+      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "alternate": [
+      {
+        "href": "api/v1/index.json",
+        "type": "application/json",
+        "title": "Agent API index",
+        "hreflang": null
+      },
+      {
+        "href": "llms.txt",
+        "type": "text/plain",
+        "title": "Agent instructions",
+        "hreflang": null
+      }
+    ],
+    "jsonLd": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@id": "https://jevangoldsmith.com/#person",
+          "@type": "Person",
+          "description": "Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.",
+          "email": "hello@jevangoldsmith.com",
+          "image": "https://jevangoldsmith.com/images/generated/profile/profile-720.jpg",
+          "jobTitle": "Writer and builder",
+          "knowsAbout": [
+            "better thinking",
+            "books and reading",
+            "AI-assisted work",
+            "personal systems",
+            "real estate development",
+            "business building"
+          ],
+          "name": "Jevan Goldsmith",
+          "sameAs": [
+            "https://x.com/JevanGoldsmith",
+            "https://youtube.com/@JevanGoldsmith",
+            "https://instagram.com/jevangoldsmith",
+            "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+            "https://letterboxd.com/contentwatch"
+          ],
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/#website",
+          "@type": "WebSite",
+          "inLanguage": "en",
+          "name": "Jevan Goldsmith",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "query-input": "required name=search_term_string",
+            "target": "https://jevangoldsmith.com/search.html?q={search_term_string}"
+          },
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/ai-assisted-work.html#breadcrumbs",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/",
+              "name": "Home",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/better-thinking.html",
+              "name": "Topics",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/ai-assisted-work.html",
+              "name": "AI-Assisted Work: Notes, Tools & Practical Systems",
+              "position": 3
+            }
+          ]
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/ai-assisted-work.html#page",
+          "@type": "CollectionPage",
+          "about": [
+            "AI-Assisted Work",
+            "AI-Assisted Work"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Readers exploring a focused topic trail"
+          },
+          "author": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "breadcrumb": {
+            "@id": "https://jevangoldsmith.com/topics/ai-assisted-work.html#breadcrumbs"
+          },
+          "dateModified": "2026-04-22",
+          "description": "A topic hub for AI-assisted work: how Jevan Goldsmith uses AI for research, writing, coding, systems, and better work without outsourcing taste.",
+          "headline": "AI-Assisted Work: Notes, Tools & Practical Systems",
+          "image": {
+            "@type": "ImageObject",
+            "caption": "AI-Assisted Work: Notes, Tools & Practical Systems",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "height": 630,
+            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "width": 1200
+          },
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://jevangoldsmith.com/#website"
+          },
+          "keywords": [
+            "ai-assisted work",
+            "AI-Assisted Work",
+            "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+            "Projects Jevan Goldsmith Is Building & Exploring",
+            "The Shelf: Tools, Objects & Gear That Earned Their Place",
+            "Books"
+          ],
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+                "position": 1,
+                "url": "https://jevangoldsmith.com/index.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Projects Jevan Goldsmith Is Building & Exploring",
+                "position": 2,
+                "url": "https://jevangoldsmith.com/projects.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "The Shelf: Tools, Objects & Gear That Earned Their Place",
+                "position": 3,
+                "url": "https://jevangoldsmith.com/products.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Books",
+                "position": 4,
+                "url": "https://jevangoldsmith.com/books.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Essays",
+                "position": 5,
+                "url": "https://jevangoldsmith.com/essays.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+                "position": 6,
+                "url": "https://jevangoldsmith.com/field-notes.html"
+              }
+            ]
+          },
+          "name": "AI-Assisted Work: Notes, Tools & Practical Systems",
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/topics/ai-assisted-work.html"
+        }
+      ]
+    }
+  },
+  "topics/better-thinking.html": {
+    "title": "Better Thinking: Field Notes, Essays, Books &amp; Tools | Jevan Goldsmith",
+    "description": "A topic hub for better thinking: first principles, decision-making, mental models, reflection, books, essays, resources, and Field Notes.",
+    "robots": "index, follow, max-image-preview:large",
+    "canonical": "https://jevangoldsmith.com/topics/better-thinking.html",
+    "og": {
+      "og:type": "website",
+      "og:title": "Better Thinking: Field Notes, Essays, Books &amp; Tools",
+      "og:description": "A topic hub for better thinking: first principles, decision-making, mental models, reflection, books, essays, resources, and Field Notes.",
+      "og:url": "https://jevangoldsmith.com/topics/better-thinking.html",
+      "og:site_name": "Jevan Goldsmith",
+      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Better Thinking: Field Notes, Essays, Books &amp; Tools",
+      "twitter:description": "A topic hub for better thinking: first principles, decision-making, mental models, reflection, books, essays, resources, and Field Notes.",
+      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "alternate": [
+      {
+        "href": "api/v1/index.json",
+        "type": "application/json",
+        "title": "Agent API index",
+        "hreflang": null
+      },
+      {
+        "href": "llms.txt",
+        "type": "text/plain",
+        "title": "Agent instructions",
+        "hreflang": null
+      }
+    ],
+    "jsonLd": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@id": "https://jevangoldsmith.com/#person",
+          "@type": "Person",
+          "description": "Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.",
+          "email": "hello@jevangoldsmith.com",
+          "image": "https://jevangoldsmith.com/images/generated/profile/profile-720.jpg",
+          "jobTitle": "Writer and builder",
+          "knowsAbout": [
+            "better thinking",
+            "books and reading",
+            "AI-assisted work",
+            "personal systems",
+            "real estate development",
+            "business building"
+          ],
+          "name": "Jevan Goldsmith",
+          "sameAs": [
+            "https://x.com/JevanGoldsmith",
+            "https://youtube.com/@JevanGoldsmith",
+            "https://instagram.com/jevangoldsmith",
+            "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+            "https://letterboxd.com/contentwatch"
+          ],
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/#website",
+          "@type": "WebSite",
+          "inLanguage": "en",
+          "name": "Jevan Goldsmith",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "query-input": "required name=search_term_string",
+            "target": "https://jevangoldsmith.com/search.html?q={search_term_string}"
+          },
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/better-thinking.html#breadcrumbs",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/",
+              "name": "Home",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/better-thinking.html",
+              "name": "Topics",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/better-thinking.html",
+              "name": "Better Thinking: Field Notes, Essays, Books & Tools",
+              "position": 3
+            }
+          ]
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/better-thinking.html#page",
+          "@type": "CollectionPage",
+          "about": [
+            "Better Thinking",
+            "Better Thinking"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Readers exploring a focused topic trail"
+          },
+          "author": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "breadcrumb": {
+            "@id": "https://jevangoldsmith.com/topics/better-thinking.html#breadcrumbs"
+          },
+          "dateModified": "2026-04-22",
+          "description": "A topic hub for better thinking: first principles, decision-making, mental models, reflection, books, essays, resources, and Field Notes.",
+          "headline": "Better Thinking: Field Notes, Essays, Books & Tools",
+          "image": {
+            "@type": "ImageObject",
+            "caption": "Better Thinking: Field Notes, Essays, Books & Tools",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "height": 630,
+            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "width": 1200
+          },
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://jevangoldsmith.com/#website"
+          },
+          "keywords": [
+            "better thinking",
+            "Better Thinking",
+            "Books",
+            "Essays",
+            "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+            "How I Read: A Practical Reading Philosophy"
+          ],
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Books",
+                "position": 1,
+                "url": "https://jevangoldsmith.com/books.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Essays",
+                "position": 2,
+                "url": "https://jevangoldsmith.com/essays.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+                "position": 3,
+                "url": "https://jevangoldsmith.com/field-notes.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "How I Read: A Practical Reading Philosophy",
+                "position": 4,
+                "url": "https://jevangoldsmith.com/reading-philosophy.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+                "position": 5,
+                "url": "https://jevangoldsmith.com/index.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Useful Resources for Thinking, Building & Learning",
+                "position": 6,
+                "url": "https://jevangoldsmith.com/free-resources.html"
+              }
+            ]
+          },
+          "name": "Better Thinking: Field Notes, Essays, Books & Tools",
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/topics/better-thinking.html"
+        }
+      ]
+    }
+  },
+  "topics/books-reading.html": {
+    "title": "Books &amp; Reading: Recommendations, Philosophy &amp; Notes | Jevan Goldsmith",
+    "description": "A topic hub for books and reading: recommendations, reading philosophy, book notes, useful ideas, and Field Notes from Jevan Goldsmith.",
+    "robots": "index, follow, max-image-preview:large",
+    "canonical": "https://jevangoldsmith.com/topics/books-reading.html",
+    "og": {
+      "og:type": "website",
+      "og:title": "Books &amp; Reading: Recommendations, Philosophy &amp; Notes",
+      "og:description": "A topic hub for books and reading: recommendations, reading philosophy, book notes, useful ideas, and Field Notes from Jevan Goldsmith.",
+      "og:url": "https://jevangoldsmith.com/topics/books-reading.html",
+      "og:site_name": "Jevan Goldsmith",
+      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Books &amp; Reading: Recommendations, Philosophy &amp; Notes",
+      "twitter:description": "A topic hub for books and reading: recommendations, reading philosophy, book notes, useful ideas, and Field Notes from Jevan Goldsmith.",
+      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "alternate": [
+      {
+        "href": "api/v1/index.json",
+        "type": "application/json",
+        "title": "Agent API index",
+        "hreflang": null
+      },
+      {
+        "href": "llms.txt",
+        "type": "text/plain",
+        "title": "Agent instructions",
+        "hreflang": null
+      }
+    ],
+    "jsonLd": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@id": "https://jevangoldsmith.com/#person",
+          "@type": "Person",
+          "description": "Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.",
+          "email": "hello@jevangoldsmith.com",
+          "image": "https://jevangoldsmith.com/images/generated/profile/profile-720.jpg",
+          "jobTitle": "Writer and builder",
+          "knowsAbout": [
+            "better thinking",
+            "books and reading",
+            "AI-assisted work",
+            "personal systems",
+            "real estate development",
+            "business building"
+          ],
+          "name": "Jevan Goldsmith",
+          "sameAs": [
+            "https://x.com/JevanGoldsmith",
+            "https://youtube.com/@JevanGoldsmith",
+            "https://instagram.com/jevangoldsmith",
+            "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+            "https://letterboxd.com/contentwatch"
+          ],
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/#website",
+          "@type": "WebSite",
+          "inLanguage": "en",
+          "name": "Jevan Goldsmith",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "query-input": "required name=search_term_string",
+            "target": "https://jevangoldsmith.com/search.html?q={search_term_string}"
+          },
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/books-reading.html#breadcrumbs",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/",
+              "name": "Home",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/better-thinking.html",
+              "name": "Topics",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/books-reading.html",
+              "name": "Books & Reading: Recommendations, Philosophy & Notes",
+              "position": 3
+            }
+          ]
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/books-reading.html#page",
+          "@type": "CollectionPage",
+          "about": [
+            "Books & Reading",
+            "Books & Reading"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Readers exploring a focused topic trail"
+          },
+          "author": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "breadcrumb": {
+            "@id": "https://jevangoldsmith.com/topics/books-reading.html#breadcrumbs"
+          },
+          "dateModified": "2026-04-22",
+          "description": "A topic hub for books and reading: recommendations, reading philosophy, book notes, useful ideas, and Field Notes from Jevan Goldsmith.",
+          "headline": "Books & Reading: Recommendations, Philosophy & Notes",
+          "image": {
+            "@type": "ImageObject",
+            "caption": "Books & Reading: Recommendations, Philosophy & Notes",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "height": 630,
+            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "width": 1200
+          },
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://jevangoldsmith.com/#website"
+          },
+          "keywords": [
+            "books & reading",
+            "Books & Reading",
+            "Books",
+            "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+            "How I Read: A Practical Reading Philosophy",
+            "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+          ],
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Books",
+                "position": 1,
+                "url": "https://jevangoldsmith.com/books.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+                "position": 2,
+                "url": "https://jevangoldsmith.com/field-notes.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "How I Read: A Practical Reading Philosophy",
+                "position": 3,
+                "url": "https://jevangoldsmith.com/reading-philosophy.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+                "position": 4,
+                "url": "https://jevangoldsmith.com/index.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Useful Resources for Thinking, Building & Learning",
+                "position": 5,
+                "url": "https://jevangoldsmith.com/free-resources.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Podcasts",
+                "position": 6,
+                "url": "https://jevangoldsmith.com/podcasts.html"
+              }
+            ]
+          },
+          "name": "Books & Reading: Recommendations, Philosophy & Notes",
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/topics/books-reading.html"
+        }
+      ]
+    }
+  },
+  "topics/business-building.html": {
+    "title": "Business &amp; Building: Projects, Strategy &amp; Useful Experiments | Jevan Goldsmith",
+    "description": "A topic hub for business and building: projects, strategy, finance, experiments, essays, skills, and field notes from Jevan Goldsmith.",
+    "robots": "index, follow, max-image-preview:large",
+    "canonical": "https://jevangoldsmith.com/topics/business-building.html",
+    "og": {
+      "og:type": "website",
+      "og:title": "Business &amp; Building: Projects, Strategy &amp; Useful Experiments",
+      "og:description": "A topic hub for business and building: projects, strategy, finance, experiments, essays, skills, and field notes from Jevan Goldsmith.",
+      "og:url": "https://jevangoldsmith.com/topics/business-building.html",
+      "og:site_name": "Jevan Goldsmith",
+      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Business &amp; Building: Projects, Strategy &amp; Useful Experiments",
+      "twitter:description": "A topic hub for business and building: projects, strategy, finance, experiments, essays, skills, and field notes from Jevan Goldsmith.",
+      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "alternate": [
+      {
+        "href": "api/v1/index.json",
+        "type": "application/json",
+        "title": "Agent API index",
+        "hreflang": null
+      },
+      {
+        "href": "llms.txt",
+        "type": "text/plain",
+        "title": "Agent instructions",
+        "hreflang": null
+      }
+    ],
+    "jsonLd": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@id": "https://jevangoldsmith.com/#person",
+          "@type": "Person",
+          "description": "Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.",
+          "email": "hello@jevangoldsmith.com",
+          "image": "https://jevangoldsmith.com/images/generated/profile/profile-720.jpg",
+          "jobTitle": "Writer and builder",
+          "knowsAbout": [
+            "better thinking",
+            "books and reading",
+            "AI-assisted work",
+            "personal systems",
+            "real estate development",
+            "business building"
+          ],
+          "name": "Jevan Goldsmith",
+          "sameAs": [
+            "https://x.com/JevanGoldsmith",
+            "https://youtube.com/@JevanGoldsmith",
+            "https://instagram.com/jevangoldsmith",
+            "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+            "https://letterboxd.com/contentwatch"
+          ],
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/#website",
+          "@type": "WebSite",
+          "inLanguage": "en",
+          "name": "Jevan Goldsmith",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "query-input": "required name=search_term_string",
+            "target": "https://jevangoldsmith.com/search.html?q={search_term_string}"
+          },
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/business-building.html#breadcrumbs",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/",
+              "name": "Home",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/better-thinking.html",
+              "name": "Topics",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/business-building.html",
+              "name": "Business & Building: Projects, Strategy & Useful Experiments",
+              "position": 3
+            }
+          ]
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/business-building.html#page",
+          "@type": "CollectionPage",
+          "about": [
+            "Business & Building",
+            "Business & Building"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Readers exploring a focused topic trail"
+          },
+          "author": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "breadcrumb": {
+            "@id": "https://jevangoldsmith.com/topics/business-building.html#breadcrumbs"
+          },
+          "dateModified": "2026-04-22",
+          "description": "A topic hub for business and building: projects, strategy, finance, experiments, essays, skills, and field notes from Jevan Goldsmith.",
+          "headline": "Business & Building: Projects, Strategy & Useful Experiments",
+          "image": {
+            "@type": "ImageObject",
+            "caption": "Business & Building: Projects, Strategy & Useful Experiments",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "height": 630,
+            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "width": 1200
+          },
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://jevangoldsmith.com/#website"
+          },
+          "keywords": [
+            "business & building",
+            "Business & Building",
+            "Essays",
+            "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+            "Projects Jevan Goldsmith Is Building & Exploring",
+            "Useful Resources for Thinking, Building & Learning"
+          ],
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Essays",
+                "position": 1,
+                "url": "https://jevangoldsmith.com/essays.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+                "position": 2,
+                "url": "https://jevangoldsmith.com/index.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Projects Jevan Goldsmith Is Building & Exploring",
+                "position": 3,
+                "url": "https://jevangoldsmith.com/projects.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Useful Resources for Thinking, Building & Learning",
+                "position": 4,
+                "url": "https://jevangoldsmith.com/free-resources.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Contact",
+                "position": 5,
+                "url": "https://jevangoldsmith.com/contact.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Meet",
+                "position": 6,
+                "url": "https://jevangoldsmith.com/meet.html"
+              }
+            ]
+          },
+          "name": "Business & Building: Projects, Strategy & Useful Experiments",
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/topics/business-building.html"
+        }
+      ]
+    }
+  },
+  "topics/health-performance.html": {
+    "title": "Health &amp; Performance: Systems for Energy and Better Work | Jevan Goldsmith",
+    "description": "A topic hub for health and performance notes, systems, habits, energy, recovery, and tools that support better work.",
+    "robots": "index, follow, max-image-preview:large",
+    "canonical": "https://jevangoldsmith.com/topics/health-performance.html",
+    "og": {
+      "og:type": "website",
+      "og:title": "Health &amp; Performance: Systems for Energy and Better Work",
+      "og:description": "A topic hub for health and performance notes, systems, habits, energy, recovery, and tools that support better work.",
+      "og:url": "https://jevangoldsmith.com/topics/health-performance.html",
+      "og:site_name": "Jevan Goldsmith",
+      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Health &amp; Performance: Systems for Energy and Better Work",
+      "twitter:description": "A topic hub for health and performance notes, systems, habits, energy, recovery, and tools that support better work.",
+      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "alternate": [
+      {
+        "href": "api/v1/index.json",
+        "type": "application/json",
+        "title": "Agent API index",
+        "hreflang": null
+      },
+      {
+        "href": "llms.txt",
+        "type": "text/plain",
+        "title": "Agent instructions",
+        "hreflang": null
+      }
+    ],
+    "jsonLd": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@id": "https://jevangoldsmith.com/#person",
+          "@type": "Person",
+          "description": "Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.",
+          "email": "hello@jevangoldsmith.com",
+          "image": "https://jevangoldsmith.com/images/generated/profile/profile-720.jpg",
+          "jobTitle": "Writer and builder",
+          "knowsAbout": [
+            "better thinking",
+            "books and reading",
+            "AI-assisted work",
+            "personal systems",
+            "real estate development",
+            "business building"
+          ],
+          "name": "Jevan Goldsmith",
+          "sameAs": [
+            "https://x.com/JevanGoldsmith",
+            "https://youtube.com/@JevanGoldsmith",
+            "https://instagram.com/jevangoldsmith",
+            "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+            "https://letterboxd.com/contentwatch"
+          ],
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/#website",
+          "@type": "WebSite",
+          "inLanguage": "en",
+          "name": "Jevan Goldsmith",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "query-input": "required name=search_term_string",
+            "target": "https://jevangoldsmith.com/search.html?q={search_term_string}"
+          },
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/health-performance.html#breadcrumbs",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/",
+              "name": "Home",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/better-thinking.html",
+              "name": "Topics",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/health-performance.html",
+              "name": "Health & Performance: Systems for Energy and Better Work",
+              "position": 3
+            }
+          ]
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/health-performance.html#page",
+          "@type": "CollectionPage",
+          "about": [
+            "Health & Performance",
+            "Health & Performance"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Readers exploring a focused topic trail"
+          },
+          "author": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "breadcrumb": {
+            "@id": "https://jevangoldsmith.com/topics/health-performance.html#breadcrumbs"
+          },
+          "dateModified": "2026-04-22",
+          "description": "A topic hub for health and performance notes, systems, habits, energy, recovery, and tools that support better work.",
+          "headline": "Health & Performance: Systems for Energy and Better Work",
+          "image": {
+            "@type": "ImageObject",
+            "caption": "Health & Performance: Systems for Energy and Better Work",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "height": 630,
+            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "width": 1200
+          },
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://jevangoldsmith.com/#website"
+          },
+          "keywords": [
+            "health & performance",
+            "Health & Performance",
+            "Health",
+            "Books",
+            "Essays",
+            "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+          ],
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Health",
+                "position": 1,
+                "url": "https://jevangoldsmith.com/health.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Books",
+                "position": 2,
+                "url": "https://jevangoldsmith.com/books.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Essays",
+                "position": 3,
+                "url": "https://jevangoldsmith.com/essays.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+                "position": 4,
+                "url": "https://jevangoldsmith.com/field-notes.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "How I Read: A Practical Reading Philosophy",
+                "position": 5,
+                "url": "https://jevangoldsmith.com/reading-philosophy.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+                "position": 6,
+                "url": "https://jevangoldsmith.com/index.html"
+              }
+            ]
+          },
+          "name": "Health & Performance: Systems for Energy and Better Work",
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/topics/health-performance.html"
+        }
+      ]
+    }
+  },
+  "topics/personal-systems.html": {
+    "title": "Personal Systems: Weekly Reviews, Notes &amp; Operating Loops | Jevan Goldsmith",
+    "description": "A topic hub for personal systems: weekly reviews, planning, reflection, notes, energy, decisions, and practical operating loops.",
+    "robots": "index, follow, max-image-preview:large",
+    "canonical": "https://jevangoldsmith.com/topics/personal-systems.html",
+    "og": {
+      "og:type": "website",
+      "og:title": "Personal Systems: Weekly Reviews, Notes &amp; Operating Loops",
+      "og:description": "A topic hub for personal systems: weekly reviews, planning, reflection, notes, energy, decisions, and practical operating loops.",
+      "og:url": "https://jevangoldsmith.com/topics/personal-systems.html",
+      "og:site_name": "Jevan Goldsmith",
+      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Personal Systems: Weekly Reviews, Notes &amp; Operating Loops",
+      "twitter:description": "A topic hub for personal systems: weekly reviews, planning, reflection, notes, energy, decisions, and practical operating loops.",
+      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "alternate": [
+      {
+        "href": "api/v1/index.json",
+        "type": "application/json",
+        "title": "Agent API index",
+        "hreflang": null
+      },
+      {
+        "href": "llms.txt",
+        "type": "text/plain",
+        "title": "Agent instructions",
+        "hreflang": null
+      }
+    ],
+    "jsonLd": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@id": "https://jevangoldsmith.com/#person",
+          "@type": "Person",
+          "description": "Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.",
+          "email": "hello@jevangoldsmith.com",
+          "image": "https://jevangoldsmith.com/images/generated/profile/profile-720.jpg",
+          "jobTitle": "Writer and builder",
+          "knowsAbout": [
+            "better thinking",
+            "books and reading",
+            "AI-assisted work",
+            "personal systems",
+            "real estate development",
+            "business building"
+          ],
+          "name": "Jevan Goldsmith",
+          "sameAs": [
+            "https://x.com/JevanGoldsmith",
+            "https://youtube.com/@JevanGoldsmith",
+            "https://instagram.com/jevangoldsmith",
+            "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+            "https://letterboxd.com/contentwatch"
+          ],
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/#website",
+          "@type": "WebSite",
+          "inLanguage": "en",
+          "name": "Jevan Goldsmith",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "query-input": "required name=search_term_string",
+            "target": "https://jevangoldsmith.com/search.html?q={search_term_string}"
+          },
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/personal-systems.html#breadcrumbs",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/",
+              "name": "Home",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/better-thinking.html",
+              "name": "Topics",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/personal-systems.html",
+              "name": "Personal Systems: Weekly Reviews, Notes & Operating Loops",
+              "position": 3
+            }
+          ]
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/personal-systems.html#page",
+          "@type": "CollectionPage",
+          "about": [
+            "Personal Systems",
+            "Personal Systems"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Readers exploring a focused topic trail"
+          },
+          "author": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "breadcrumb": {
+            "@id": "https://jevangoldsmith.com/topics/personal-systems.html#breadcrumbs"
+          },
+          "dateModified": "2026-04-22",
+          "description": "A topic hub for personal systems: weekly reviews, planning, reflection, notes, energy, decisions, and practical operating loops.",
+          "headline": "Personal Systems: Weekly Reviews, Notes & Operating Loops",
+          "image": {
+            "@type": "ImageObject",
+            "caption": "Personal Systems: Weekly Reviews, Notes & Operating Loops",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "height": 630,
+            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "width": 1200
+          },
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://jevangoldsmith.com/#website"
+          },
+          "keywords": [
+            "personal systems",
+            "Personal Systems",
+            "Essays",
+            "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+            "How I Read: A Practical Reading Philosophy",
+            "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+          ],
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Essays",
+                "position": 1,
+                "url": "https://jevangoldsmith.com/essays.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+                "position": 2,
+                "url": "https://jevangoldsmith.com/field-notes.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "How I Read: A Practical Reading Philosophy",
+                "position": 3,
+                "url": "https://jevangoldsmith.com/reading-philosophy.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+                "position": 4,
+                "url": "https://jevangoldsmith.com/index.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "The Shelf: Tools, Objects & Gear That Earned Their Place",
+                "position": 5,
+                "url": "https://jevangoldsmith.com/products.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Useful Resources for Thinking, Building & Learning",
+                "position": 6,
+                "url": "https://jevangoldsmith.com/free-resources.html"
+              }
+            ]
+          },
+          "name": "Personal Systems: Weekly Reviews, Notes & Operating Loops",
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/topics/personal-systems.html"
+        }
+      ]
+    }
+  },
+  "topics/real-estate-development.html": {
+    "title": "Real Estate Development Notes: Finance, Sites &amp; Learning | Jevan Goldsmith",
+    "description": "A topic hub for real estate development notes, feasibility, finance, site selection, project learning, and related resources.",
+    "robots": "index, follow, max-image-preview:large",
+    "canonical": "https://jevangoldsmith.com/topics/real-estate-development.html",
+    "og": {
+      "og:type": "website",
+      "og:title": "Real Estate Development Notes: Finance, Sites &amp; Learning",
+      "og:description": "A topic hub for real estate development notes, feasibility, finance, site selection, project learning, and related resources.",
+      "og:url": "https://jevangoldsmith.com/topics/real-estate-development.html",
+      "og:site_name": "Jevan Goldsmith",
+      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Real Estate Development Notes: Finance, Sites &amp; Learning",
+      "twitter:description": "A topic hub for real estate development notes, feasibility, finance, site selection, project learning, and related resources.",
+      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "alternate": [
+      {
+        "href": "api/v1/index.json",
+        "type": "application/json",
+        "title": "Agent API index",
+        "hreflang": null
+      },
+      {
+        "href": "llms.txt",
+        "type": "text/plain",
+        "title": "Agent instructions",
+        "hreflang": null
+      }
+    ],
+    "jsonLd": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@id": "https://jevangoldsmith.com/#person",
+          "@type": "Person",
+          "description": "Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.",
+          "email": "hello@jevangoldsmith.com",
+          "image": "https://jevangoldsmith.com/images/generated/profile/profile-720.jpg",
+          "jobTitle": "Writer and builder",
+          "knowsAbout": [
+            "better thinking",
+            "books and reading",
+            "AI-assisted work",
+            "personal systems",
+            "real estate development",
+            "business building"
+          ],
+          "name": "Jevan Goldsmith",
+          "sameAs": [
+            "https://x.com/JevanGoldsmith",
+            "https://youtube.com/@JevanGoldsmith",
+            "https://instagram.com/jevangoldsmith",
+            "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+            "https://letterboxd.com/contentwatch"
+          ],
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/#website",
+          "@type": "WebSite",
+          "inLanguage": "en",
+          "name": "Jevan Goldsmith",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "query-input": "required name=search_term_string",
+            "target": "https://jevangoldsmith.com/search.html?q={search_term_string}"
+          },
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/real-estate-development.html#breadcrumbs",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/",
+              "name": "Home",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/better-thinking.html",
+              "name": "Topics",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/real-estate-development.html",
+              "name": "Real Estate Development Notes: Finance, Sites & Learning",
+              "position": 3
+            }
+          ]
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/real-estate-development.html#page",
+          "@type": "CollectionPage",
+          "about": [
+            "Real Estate Development",
+            "Real Estate Development"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Readers exploring a focused topic trail"
+          },
+          "author": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "breadcrumb": {
+            "@id": "https://jevangoldsmith.com/topics/real-estate-development.html#breadcrumbs"
+          },
+          "dateModified": "2026-04-22",
+          "description": "A topic hub for real estate development notes, feasibility, finance, site selection, project learning, and related resources.",
+          "headline": "Real Estate Development Notes: Finance, Sites & Learning",
+          "image": {
+            "@type": "ImageObject",
+            "caption": "Real Estate Development Notes: Finance, Sites & Learning",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "height": 630,
+            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "width": 1200
+          },
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://jevangoldsmith.com/#website"
+          },
+          "keywords": [
+            "real estate development",
+            "Real Estate Development",
+            "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+            "Books",
+            "Essays",
+            "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+          ],
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+                "position": 1,
+                "url": "https://jevangoldsmith.com/index.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Books",
+                "position": 2,
+                "url": "https://jevangoldsmith.com/books.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Essays",
+                "position": 3,
+                "url": "https://jevangoldsmith.com/essays.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+                "position": 4,
+                "url": "https://jevangoldsmith.com/field-notes.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "How I Read: A Practical Reading Philosophy",
+                "position": 5,
+                "url": "https://jevangoldsmith.com/reading-philosophy.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Projects Jevan Goldsmith Is Building & Exploring",
+                "position": 6,
+                "url": "https://jevangoldsmith.com/projects.html"
+              }
+            ]
+          },
+          "name": "Real Estate Development Notes: Finance, Sites & Learning",
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/topics/real-estate-development.html"
+        }
+      ]
+    }
+  },
+  "topics/tools-objects.html": {
+    "title": "Tools &amp; Objects That Earned Their Place | Jevan Goldsmith",
+    "description": "A topic hub for tools, objects, gear, and digital systems Jevan Goldsmith actually uses, including The Shelf and related Field Notes.",
+    "robots": "index, follow, max-image-preview:large",
+    "canonical": "https://jevangoldsmith.com/topics/tools-objects.html",
+    "og": {
+      "og:type": "website",
+      "og:title": "Tools &amp; Objects That Earned Their Place",
+      "og:description": "A topic hub for tools, objects, gear, and digital systems Jevan Goldsmith actually uses, including The Shelf and related Field Notes.",
+      "og:url": "https://jevangoldsmith.com/topics/tools-objects.html",
+      "og:site_name": "Jevan Goldsmith",
+      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Tools &amp; Objects That Earned Their Place",
+      "twitter:description": "A topic hub for tools, objects, gear, and digital systems Jevan Goldsmith actually uses, including The Shelf and related Field Notes.",
+      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+    },
+    "alternate": [
+      {
+        "href": "api/v1/index.json",
+        "type": "application/json",
+        "title": "Agent API index",
+        "hreflang": null
+      },
+      {
+        "href": "llms.txt",
+        "type": "text/plain",
+        "title": "Agent instructions",
+        "hreflang": null
+      }
+    ],
+    "jsonLd": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@id": "https://jevangoldsmith.com/#person",
+          "@type": "Person",
+          "description": "Jevan Goldsmith writes about better thinking, books, AI-assisted work, personal systems, real estate development, business building, travel, and useful tools.",
+          "email": "hello@jevangoldsmith.com",
+          "image": "https://jevangoldsmith.com/images/generated/profile/profile-720.jpg",
+          "jobTitle": "Writer and builder",
+          "knowsAbout": [
+            "better thinking",
+            "books and reading",
+            "AI-assisted work",
+            "personal systems",
+            "real estate development",
+            "business building"
+          ],
+          "name": "Jevan Goldsmith",
+          "sameAs": [
+            "https://x.com/JevanGoldsmith",
+            "https://youtube.com/@JevanGoldsmith",
+            "https://instagram.com/jevangoldsmith",
+            "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+            "https://letterboxd.com/contentwatch"
+          ],
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/#website",
+          "@type": "WebSite",
+          "inLanguage": "en",
+          "name": "Jevan Goldsmith",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "query-input": "required name=search_term_string",
+            "target": "https://jevangoldsmith.com/search.html?q={search_term_string}"
+          },
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/tools-objects.html#breadcrumbs",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/",
+              "name": "Home",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/better-thinking.html",
+              "name": "Topics",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/topics/tools-objects.html",
+              "name": "Tools & Objects That Earned Their Place",
+              "position": 3
+            }
+          ]
+        },
+        {
+          "@id": "https://jevangoldsmith.com/topics/tools-objects.html#page",
+          "@type": "CollectionPage",
+          "about": [
+            "Tools & Objects",
+            "Tools & Objects"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Readers exploring a focused topic trail"
+          },
+          "author": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "breadcrumb": {
+            "@id": "https://jevangoldsmith.com/topics/tools-objects.html#breadcrumbs"
+          },
+          "dateModified": "2026-04-22",
+          "description": "A topic hub for tools, objects, gear, and digital systems Jevan Goldsmith actually uses, including The Shelf and related Field Notes.",
+          "headline": "Tools & Objects That Earned Their Place",
+          "image": {
+            "@type": "ImageObject",
+            "caption": "Tools & Objects That Earned Their Place",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "height": 630,
+            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "width": 1200
+          },
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://jevangoldsmith.com/#website"
+          },
+          "keywords": [
+            "tools & objects",
+            "Tools & Objects",
+            "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+            "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+            "Projects Jevan Goldsmith Is Building & Exploring",
+            "The Shelf: Tools, Objects & Gear That Earned Their Place"
+          ],
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+                "position": 1,
+                "url": "https://jevangoldsmith.com/field-notes.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+                "position": 2,
+                "url": "https://jevangoldsmith.com/index.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Projects Jevan Goldsmith Is Building & Exploring",
+                "position": 3,
+                "url": "https://jevangoldsmith.com/projects.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "The Shelf: Tools, Objects & Gear That Earned Their Place",
+                "position": 4,
+                "url": "https://jevangoldsmith.com/products.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Cool Shit",
+                "position": 5,
+                "url": "https://jevangoldsmith.com/cool-shit.html"
+              },
+              {
+                "@type": "ListItem",
+                "name": "Movies",
+                "position": 6,
+                "url": "https://jevangoldsmith.com/movies.html"
+              }
+            ]
+          },
+          "name": "Tools & Objects That Earned Their Place",
+          "publisher": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "url": "https://jevangoldsmith.com/topics/tools-objects.html"
+        }
+      ]
+    }
+  },
   "videos.html": {
     "title": "Videos, Channels &amp; Useful Visual Learning | Jevan Goldsmith",
     "description": "A video archive of talks, channels, clips, and visual lessons Jevan Goldsmith found useful.",

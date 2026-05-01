@@ -1,0 +1,1424 @@
+{
+  "about": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 163,
+      "load": 183
+    },
+    "bytes": {
+      "html": 25996,
+      "css": 190155,
+      "js": 13752,
+      "image": 44877,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 328622,
+    "requestCount": 13
+  },
+  "adventure-austin-adventure": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 122,
+      "load": 487
+    },
+    "bytes": {
+      "html": 30566,
+      "css": 204961,
+      "js": 164555,
+      "image": 271433,
+      "font": 45656,
+      "json": 8186,
+      "other": 165987
+    },
+    "totalBytes": 891344,
+    "requestCount": 26
+  },
+  "adventure-ayr-adventure": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 41,
+      "load": 96
+    },
+    "bytes": {
+      "html": 30609,
+      "css": 204961,
+      "js": 164555,
+      "image": 296035,
+      "font": 45656,
+      "json": 8186,
+      "other": 103813
+    },
+    "totalBytes": 853815,
+    "requestCount": 27
+  },
+  "adventure-japan-adventure": {
+    "timing": {
+      "ttfb": 3,
+      "domReady": 60,
+      "load": 139
+    },
+    "bytes": {
+      "html": 30557,
+      "css": 204961,
+      "js": 164555,
+      "image": 322204,
+      "font": 45656,
+      "json": 8186,
+      "other": 207183
+    },
+    "totalBytes": 983302,
+    "requestCount": 31
+  },
+  "adventure-sample-adventure": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 41,
+      "load": 137
+    },
+    "bytes": {
+      "html": 28380,
+      "css": 204961,
+      "js": 164555,
+      "image": 286771,
+      "font": 45656,
+      "json": 8186,
+      "other": 269824
+    },
+    "totalBytes": 1008333,
+    "requestCount": 31
+  },
+  "adventure-sydney-adventure": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 44,
+      "load": 137
+    },
+    "bytes": {
+      "html": 30620,
+      "css": 204961,
+      "js": 164555,
+      "image": 277653,
+      "font": 45656,
+      "json": 8186,
+      "other": 124352
+    },
+    "totalBytes": 855983,
+    "requestCount": 27
+  },
+  "adventure-uluru-adventure": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 33,
+      "load": 152
+    },
+    "bytes": {
+      "html": 30485,
+      "css": 204961,
+      "js": 164555,
+      "image": 233542,
+      "font": 45656,
+      "json": 8186,
+      "other": 192478
+    },
+    "totalBytes": 879863,
+    "requestCount": 34
+  },
+  "adventure-vietnam-adventure": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 33,
+      "load": 103
+    },
+    "bytes": {
+      "html": 30785,
+      "css": 204961,
+      "js": 164555,
+      "image": 300974,
+      "font": 45656,
+      "json": 8186,
+      "other": 130361
+    },
+    "totalBytes": 885478,
+    "requestCount": 27
+  },
+  "adventures": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 38,
+      "load": 48
+    },
+    "bytes": {
+      "html": 29539,
+      "css": 204961,
+      "js": 235814,
+      "image": 1039241,
+      "font": 45656,
+      "json": 2268515,
+      "other": 146175
+    },
+    "totalBytes": 3969901,
+    "requestCount": 45
+  },
+  "books": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 37,
+      "load": 172
+    },
+    "bytes": {
+      "html": 44713,
+      "css": 190155,
+      "js": 74484,
+      "image": 1163458,
+      "font": 61132,
+      "json": 11420,
+      "other": 53207
+    },
+    "totalBytes": 1598569,
+    "requestCount": 70
+  },
+  "challenges": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 37,
+      "load": 41
+    },
+    "bytes": {
+      "html": 35037,
+      "css": 190155,
+      "js": 39417,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 347346,
+    "requestCount": 11
+  },
+  "changed-my-mind": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 34,
+      "load": 35
+    },
+    "bytes": {
+      "html": 26098,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 297266,
+    "requestCount": 10
+  },
+  "contact": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 18,
+      "load": 28
+    },
+    "bytes": {
+      "html": 21774,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 308418,
+    "requestCount": 11
+  },
+  "cool-shit": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 29,
+      "load": 49
+    },
+    "bytes": {
+      "html": 24818,
+      "css": 190155,
+      "js": 24873,
+      "image": 289728,
+      "font": 45656,
+      "json": 15652,
+      "other": 0
+    },
+    "totalBytes": 590882,
+    "requestCount": 17
+  },
+  "dateme": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 21,
+      "load": 32
+    },
+    "bytes": {
+      "html": 19682,
+      "css": 190155,
+      "js": 54654,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 331752,
+    "requestCount": 10
+  },
+  "essays": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 43,
+      "load": 438
+    },
+    "bytes": {
+      "html": 31773,
+      "css": 190155,
+      "js": 73681,
+      "image": 13419,
+      "font": 61132,
+      "json": 11420,
+      "other": 5471
+    },
+    "totalBytes": 387051,
+    "requestCount": 13
+  },
+  "field-notes": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 18,
+      "load": 28
+    },
+    "bytes": {
+      "html": 25674,
+      "css": 190155,
+      "js": 15644,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 298734,
+    "requestCount": 10
+  },
+  "free-resources": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 46,
+      "load": 47
+    },
+    "bytes": {
+      "html": 31188,
+      "css": 190155,
+      "js": 20991,
+      "image": 13419,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 301409,
+    "requestCount": 9
+  },
+  "health": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 24,
+      "load": 32
+    },
+    "bytes": {
+      "html": 32484,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 303652,
+    "requestCount": 10
+  },
+  "important-or-not": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 23,
+      "load": 35
+    },
+    "bytes": {
+      "html": 31387,
+      "css": 190155,
+      "js": 14448,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 303251,
+    "requestCount": 10
+  },
+  "index": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 73,
+      "load": 88
+    },
+    "bytes": {
+      "html": 49637,
+      "css": 190155,
+      "js": 23666,
+      "image": 354169,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 686945,
+    "requestCount": 18
+  },
+  "lesson-logger": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 19,
+      "load": 34
+    },
+    "bytes": {
+      "html": 28934,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 300102,
+    "requestCount": 10
+  },
+  "living-manifesto": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 53,
+      "load": 55
+    },
+    "bytes": {
+      "html": 37386,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 323984,
+    "requestCount": 12
+  },
+  "meet": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 10,
+      "load": 25
+    },
+    "bytes": {
+      "html": 8644,
+      "css": 190155,
+      "js": 13752,
+      "image": 3569,
+      "font": 46028,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 262148,
+    "requestCount": 7
+  },
+  "movie-philosophy": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 19,
+      "load": 30
+    },
+    "bytes": {
+      "html": 23127,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 309771,
+    "requestCount": 11
+  },
+  "movies": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 51,
+      "load": 53
+    },
+    "bytes": {
+      "html": 35153,
+      "css": 190155,
+      "js": 86011,
+      "image": 338969,
+      "font": 61132,
+      "json": 11420,
+      "other": 5189
+    },
+    "totalBytes": 728029,
+    "requestCount": 19
+  },
+  "north-star": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 22,
+      "load": 30
+    },
+    "bytes": {
+      "html": 31581,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 302749,
+    "requestCount": 10
+  },
+  "notes": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 36,
+      "load": 47
+    },
+    "bytes": {
+      "html": 25938,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 297106,
+    "requestCount": 10
+  },
+  "people": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 34,
+      "load": 36
+    },
+    "bytes": {
+      "html": 29038,
+      "css": 190155,
+      "js": 81703,
+      "image": 1137371,
+      "font": 61132,
+      "json": 11420,
+      "other": 87122
+    },
+    "totalBytes": 1597941,
+    "requestCount": 60
+  },
+  "people-philosophy": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 30,
+      "load": 31
+    },
+    "bytes": {
+      "html": 23355,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 309999,
+    "requestCount": 11
+  },
+  "people/andrew-huberman": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 22,
+      "load": 33
+    },
+    "bytes": {
+      "html": 25026,
+      "css": 190155,
+      "js": 13706,
+      "image": 14966,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 297695,
+    "requestCount": 12
+  },
+  "people/andrew-wilkinson": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 32,
+      "load": 33
+    },
+    "bytes": {
+      "html": 25454,
+      "css": 190155,
+      "js": 13706,
+      "image": 37680,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 320837,
+    "requestCount": 13
+  },
+  "people/anne-lamott": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 49,
+      "load": 62
+    },
+    "bytes": {
+      "html": 25188,
+      "css": 190155,
+      "js": 13706,
+      "image": 52914,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 335805,
+    "requestCount": 13
+  },
+  "people/atul-gawande": {
+    "timing": {
+      "ttfb": 3,
+      "domReady": 43,
+      "load": 46
+    },
+    "bytes": {
+      "html": 25320,
+      "css": 190155,
+      "js": 13706,
+      "image": 47991,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 331014,
+    "requestCount": 13
+  },
+  "people/baltasar-gracian": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 33,
+      "load": 35
+    },
+    "bytes": {
+      "html": 25505,
+      "css": 190155,
+      "js": 13706,
+      "image": 120879,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 404087,
+    "requestCount": 13
+  },
+  "people/cal-newport": {
+    "timing": {
+      "ttfb": 4,
+      "domReady": 31,
+      "load": 48
+    },
+    "bytes": {
+      "html": 25243,
+      "css": 190155,
+      "js": 13706,
+      "image": 31753,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 314699,
+    "requestCount": 13
+  },
+  "people/charlie-munger": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 34,
+      "load": 42
+    },
+    "bytes": {
+      "html": 27986,
+      "css": 190155,
+      "js": 13706,
+      "image": 78981,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 364670,
+    "requestCount": 16
+  },
+  "people/christopher-nolan": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 17,
+      "load": 23
+    },
+    "bytes": {
+      "html": 25016,
+      "css": 190155,
+      "js": 13706,
+      "image": 42061,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 324780,
+    "requestCount": 12
+  },
+  "people/david-goggins": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 45,
+      "load": 53
+    },
+    "bytes": {
+      "html": 25308,
+      "css": 190155,
+      "js": 13706,
+      "image": 44694,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 327705,
+    "requestCount": 13
+  },
+  "people/david-ogilvy": {
+    "timing": {
+      "ttfb": 3,
+      "domReady": 48,
+      "load": 97
+    },
+    "bytes": {
+      "html": 26107,
+      "css": 190155,
+      "js": 13706,
+      "image": 48106,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 331916,
+    "requestCount": 14
+  },
+  "people/eckhart-tolle": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 19,
+      "load": 31
+    },
+    "bytes": {
+      "html": 25306,
+      "css": 190155,
+      "js": 13706,
+      "image": 76857,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 359866,
+    "requestCount": 13
+  },
+  "people/elon-musk": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 31,
+      "load": 32
+    },
+    "bytes": {
+      "html": 24727,
+      "css": 190155,
+      "js": 13706,
+      "image": 31428,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 313858,
+    "requestCount": 12
+  },
+  "people/eric-ries": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 20,
+      "load": 33
+    },
+    "bytes": {
+      "html": 25140,
+      "css": 190155,
+      "js": 13706,
+      "image": 44473,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 319130,
+    "requestCount": 12
+  },
+  "people/james-clear": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 28,
+      "load": 53
+    },
+    "bytes": {
+      "html": 25168,
+      "css": 190155,
+      "js": 13706,
+      "image": 34891,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 317762,
+    "requestCount": 13
+  },
+  "people/john-d-rockefeller": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 95,
+      "load": 97
+    },
+    "bytes": {
+      "html": 28058,
+      "css": 190155,
+      "js": 13706,
+      "image": 60748,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 346509,
+    "requestCount": 15
+  },
+  "people/keith-j-cunningham": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 18,
+      "load": 27
+    },
+    "bytes": {
+      "html": 26145,
+      "css": 190155,
+      "js": 13706,
+      "image": 57091,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 340939,
+    "requestCount": 14
+  },
+  "people/lex-fridman": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 17,
+      "load": 26
+    },
+    "bytes": {
+      "html": 24791,
+      "css": 190155,
+      "js": 13706,
+      "image": 28606,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 311100,
+    "requestCount": 12
+  },
+  "people/morgan-housel": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 18,
+      "load": 28
+    },
+    "bytes": {
+      "html": 24845,
+      "css": 190155,
+      "js": 13706,
+      "image": 15014,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 297562,
+    "requestCount": 12
+  },
+  "people/naval-ravikant": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 34,
+      "load": 35
+    },
+    "bytes": {
+      "html": 25736,
+      "css": 190155,
+      "js": 13706,
+      "image": 74350,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 357789,
+    "requestCount": 13
+  },
+  "people/peter-thiel": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 24,
+      "load": 31
+    },
+    "bytes": {
+      "html": 25510,
+      "css": 190155,
+      "js": 13706,
+      "image": 41394,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 324607,
+    "requestCount": 13
+  },
+  "people/ray-dalio": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 32,
+      "load": 33
+    },
+    "bytes": {
+      "html": 25431,
+      "css": 190155,
+      "js": 13706,
+      "image": 30023,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 313157,
+    "requestCount": 13
+  },
+  "people/richard-feynman": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 46,
+      "load": 53
+    },
+    "bytes": {
+      "html": 25787,
+      "css": 190155,
+      "js": 13706,
+      "image": 51384,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 334874,
+    "requestCount": 13
+  },
+  "people/rick-rubin": {
+    "timing": {
+      "ttfb": 3,
+      "domReady": 32,
+      "load": 35
+    },
+    "bytes": {
+      "html": 24705,
+      "css": 190155,
+      "js": 13706,
+      "image": 15265,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 297673,
+    "requestCount": 12
+  },
+  "people/rob-fitzpatrick": {
+    "timing": {
+      "ttfb": 4,
+      "domReady": 37,
+      "load": 69
+    },
+    "bytes": {
+      "html": 25063,
+      "css": 190155,
+      "js": 13706,
+      "image": 51540,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 334306,
+    "requestCount": 13
+  },
+  "people/robert-cialdini": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 28,
+      "load": 29
+    },
+    "bytes": {
+      "html": 25387,
+      "css": 190155,
+      "js": 13706,
+      "image": 46352,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 321256,
+    "requestCount": 12
+  },
+  "people/ryan-holiday": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 17,
+      "load": 24
+    },
+    "bytes": {
+      "html": 24865,
+      "css": 190155,
+      "js": 13706,
+      "image": 14888,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 297456,
+    "requestCount": 12
+  },
+  "people/shane-parrish": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 23,
+      "load": 35
+    },
+    "bytes": {
+      "html": 25982,
+      "css": 190155,
+      "js": 13706,
+      "image": 35292,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 310791,
+    "requestCount": 13
+  },
+  "people/sherlock-holmes": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 35,
+      "load": 36
+    },
+    "bytes": {
+      "html": 25461,
+      "css": 190155,
+      "js": 13706,
+      "image": 35572,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 318736,
+    "requestCount": 13
+  },
+  "people/victor-o-schwab": {
+    "timing": {
+      "ttfb": 23,
+      "domReady": 142,
+      "load": 196
+    },
+    "bytes": {
+      "html": 25467,
+      "css": 190155,
+      "js": 13706,
+      "image": 43464,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 326634,
+    "requestCount": 13
+  },
+  "people/warren-buffett": {
+    "timing": {
+      "ttfb": 4,
+      "domReady": 78,
+      "load": 81
+    },
+    "bytes": {
+      "html": 26888,
+      "css": 190155,
+      "js": 13706,
+      "image": 58628,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 343219,
+    "requestCount": 14
+  },
+  "podcasts": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 53,
+      "load": 63
+    },
+    "bytes": {
+      "html": 29324,
+      "css": 190155,
+      "js": 54071,
+      "image": 536159,
+      "font": 61132,
+      "json": 11420,
+      "other": 4390
+    },
+    "totalBytes": 886651,
+    "requestCount": 22
+  },
+  "problems": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 30,
+      "load": 32
+    },
+    "bytes": {
+      "html": 22538,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 293706,
+    "requestCount": 10
+  },
+  "products": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 40,
+      "load": 50
+    },
+    "bytes": {
+      "html": 33098,
+      "css": 190155,
+      "js": 20991,
+      "image": 69282,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 367368,
+    "requestCount": 13
+  },
+  "projects": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 69,
+      "load": 77
+    },
+    "bytes": {
+      "html": 34966,
+      "css": 190155,
+      "js": 39387,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 347245,
+    "requestCount": 11
+  },
+  "quotes": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 25,
+      "load": 48
+    },
+    "bytes": {
+      "html": 34152,
+      "css": 190155,
+      "js": 14785,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 321829,
+    "requestCount": 11
+  },
+  "reading-philosophy": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 36,
+      "load": 53
+    },
+    "bytes": {
+      "html": 23879,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 310477,
+    "requestCount": 12
+  },
+  "search": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 75,
+      "load": 94
+    },
+    "bytes": {
+      "html": 20887,
+      "css": 190155,
+      "js": 27412,
+      "image": 13419,
+      "font": 45656,
+      "json": 11420,
+      "other": 130257
+    },
+    "totalBytes": 439206,
+    "requestCount": 12
+  },
+  "speeches": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 36,
+      "load": 58
+    },
+    "bytes": {
+      "html": 22218,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 308816,
+    "requestCount": 12
+  },
+  "takes": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 22,
+      "load": 32
+    },
+    "bytes": {
+      "html": 22690,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 293858,
+    "requestCount": 10
+  },
+  "topics/ai-assisted-work": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 38,
+      "load": 40
+    },
+    "bytes": {
+      "html": 25455,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 296577,
+    "requestCount": 11
+  },
+  "topics/better-thinking": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 34,
+      "load": 41
+    },
+    "bytes": {
+      "html": 28924,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 300046,
+    "requestCount": 11
+  },
+  "topics/books-reading": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 19,
+      "load": 29
+    },
+    "bytes": {
+      "html": 27795,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 298917,
+    "requestCount": 11
+  },
+  "topics/business-building": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 16,
+      "load": 26
+    },
+    "bytes": {
+      "html": 0,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 271122,
+    "requestCount": 10
+  },
+  "topics/health-performance": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 29,
+      "load": 37
+    },
+    "bytes": {
+      "html": 23810,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 45656,
+      "json": 0,
+      "other": 0
+    },
+    "totalBytes": 286746,
+    "requestCount": 10
+  },
+  "topics/personal-systems": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 30,
+      "load": 36
+    },
+    "bytes": {
+      "html": 29346,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 300468,
+    "requestCount": 11
+  },
+  "topics/real-estate-development": {
+    "timing": {
+      "ttfb": 10,
+      "domReady": 78,
+      "load": 102
+    },
+    "bytes": {
+      "html": 24237,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 295359,
+    "requestCount": 11
+  },
+  "topics/tools-objects": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 46,
+      "load": 60
+    },
+    "bytes": {
+      "html": 27003,
+      "css": 190155,
+      "js": 13706,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 298125,
+    "requestCount": 11
+  },
+  "videos": {
+    "timing": {
+      "ttfb": 2,
+      "domReady": 61,
+      "load": 70
+    },
+    "bytes": {
+      "html": 23725,
+      "css": 190155,
+      "js": 20396,
+      "image": 13419,
+      "font": 61132,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 317013,
+    "requestCount": 11
+  },
+  "weekly-review-template": {
+    "timing": {
+      "ttfb": 1,
+      "domReady": 38,
+      "load": 40
+    },
+    "bytes": {
+      "html": 23762,
+      "css": 190155,
+      "js": 13752,
+      "image": 13419,
+      "font": 45656,
+      "json": 8186,
+      "other": 0
+    },
+    "totalBytes": 294930,
+    "requestCount": 10
+  }
+}

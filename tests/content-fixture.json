@@ -1,0 +1,4033 @@
+{
+  "about.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "How I Got Here"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 31,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 8,
+      "withAlt": 2
+    },
+    "wordCount": 328,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "adventure-austin-adventure.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Live Music & BBQ Capital"
+      },
+      {
+        "level": 3,
+        "text": "Trip Highlights"
+      },
+      {
+        "level": 3,
+        "text": "Photo Locations"
+      },
+      {
+        "level": 3,
+        "text": "Photo Gallery"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 7,
+      "withAlt": 6
+    },
+    "wordCount": 369,
+    "dataActions": [
+      "lightbox-close",
+      "lightbox-next",
+      "lightbox-prev",
+      "open-lightbox"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "adventure-ayr-adventure.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Sugar Cane & Sunsets"
+      },
+      {
+        "level": 3,
+        "text": "Trip Highlights"
+      },
+      {
+        "level": 3,
+        "text": "Photo Locations"
+      },
+      {
+        "level": 3,
+        "text": "Photo Gallery"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 7,
+      "withAlt": 6
+    },
+    "wordCount": 370,
+    "dataActions": [
+      "lightbox-close",
+      "lightbox-next",
+      "lightbox-prev",
+      "open-lightbox"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "adventure-japan-adventure.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Temples & Cherry Blossoms"
+      },
+      {
+        "level": 3,
+        "text": "Trip Highlights"
+      },
+      {
+        "level": 3,
+        "text": "Photo Locations"
+      },
+      {
+        "level": 3,
+        "text": "Photo Gallery"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 7,
+      "withAlt": 6
+    },
+    "wordCount": 359,
+    "dataActions": [
+      "lightbox-close",
+      "lightbox-next",
+      "lightbox-prev",
+      "open-lightbox"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "adventure-sample-adventure.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Sample Adventure"
+      },
+      {
+        "level": 3,
+        "text": "Trip Highlights"
+      },
+      {
+        "level": 3,
+        "text": "Photo Locations"
+      },
+      {
+        "level": 3,
+        "text": "Photo Gallery"
+      }
+    ],
+    "links": {
+      "internal": 28,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 7,
+      "withAlt": 6
+    },
+    "wordCount": 199,
+    "dataActions": [
+      "lightbox-close",
+      "lightbox-next",
+      "lightbox-prev",
+      "open-lightbox"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "adventure-sydney-adventure.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Harbour City Dreams"
+      },
+      {
+        "level": 3,
+        "text": "Trip Highlights"
+      },
+      {
+        "level": 3,
+        "text": "Photo Locations"
+      },
+      {
+        "level": 3,
+        "text": "Photo Gallery"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 7,
+      "withAlt": 6
+    },
+    "wordCount": 357,
+    "dataActions": [
+      "lightbox-close",
+      "lightbox-next",
+      "lightbox-prev",
+      "open-lightbox"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "adventure-uluru-adventure.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Red Centre Journey"
+      },
+      {
+        "level": 3,
+        "text": "Trip Highlights"
+      },
+      {
+        "level": 3,
+        "text": "Photo Locations"
+      },
+      {
+        "level": 3,
+        "text": "Photo Gallery"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 7,
+      "withAlt": 6
+    },
+    "wordCount": 361,
+    "dataActions": [
+      "lightbox-close",
+      "lightbox-next",
+      "lightbox-prev",
+      "open-lightbox"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "adventure-vietnam-adventure.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Motorbikes & Mountains"
+      },
+      {
+        "level": 3,
+        "text": "Trip Highlights"
+      },
+      {
+        "level": 3,
+        "text": "Photo Locations"
+      },
+      {
+        "level": 3,
+        "text": "Photo Gallery"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 7,
+      "withAlt": 6
+    },
+    "wordCount": 382,
+    "dataActions": [
+      "lightbox-close",
+      "lightbox-next",
+      "lightbox-prev",
+      "open-lightbox"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "adventures.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Adventures"
+      },
+      {
+        "level": 3,
+        "text": "Sugar Cane & Sunsets"
+      },
+      {
+        "level": 3,
+        "text": "Live Music & BBQ Capital"
+      },
+      {
+        "level": 3,
+        "text": "Motorbikes & Mountains"
+      },
+      {
+        "level": 3,
+        "text": "Red Centre Journey"
+      },
+      {
+        "level": 3,
+        "text": "Harbour City Dreams"
+      },
+      {
+        "level": 3,
+        "text": "Sample Adventure"
+      },
+      {
+        "level": 3,
+        "text": "Temples & Cherry Blossoms"
+      }
+    ],
+    "links": {
+      "internal": 27,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 10,
+      "withAlt": 9
+    },
+    "wordCount": 202,
+    "dataActions": [
+      "closeAdventureDetail",
+      "closeLightbox",
+      "nextImage",
+      "prevImage",
+      "resetFilters",
+      "switchMobileView",
+      "toggleFilter",
+      "togglePlacesOfInterest"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "books.html": {
+    "headings": [
+      {
+        "level": 2,
+        "text": "Bookshelf"
+      },
+      {
+        "level": 1,
+        "text": "Bookshelf"
+      },
+      {
+        "level": 3,
+        "text": "My Review"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 38,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 5
+    },
+    "images": {
+      "total": 3,
+      "withAlt": 2
+    },
+    "wordCount": 381,
+    "dataActions": [
+      "clear-search",
+      "clear-star-filter",
+      "close-book-modal",
+      "set-view-mode",
+      "toggle-list-dropdown",
+      "toggle-sidebar"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "challenges.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Challenges"
+      },
+      {
+        "level": 3,
+        "text": "52 Books in 2026"
+      },
+      {
+        "level": 3,
+        "text": "Morning Routine"
+      },
+      {
+        "level": 3,
+        "text": "100 Days of Writing"
+      },
+      {
+        "level": 3,
+        "text": "No-Spend Month"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 35,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 426,
+    "dataActions": [
+      "clearChallengeSearch",
+      "filterChallenges",
+      "searchChallenges",
+      "toggleChallengeListDropdown",
+      "toggleChallengeSidebar"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "changed-my-mind.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Changed My Mind"
+      },
+      {
+        "level": 2,
+        "text": "The Rule"
+      },
+      {
+        "level": 2,
+        "text": "From portfolio to public operating system"
+      },
+      {
+        "level": 2,
+        "text": "From finished objects to build documentaries"
+      },
+      {
+        "level": 2,
+        "text": "From finishing books to extracting judgment"
+      },
+      {
+        "level": 2,
+        "text": "From automation to better feedback loops"
+      },
+      {
+        "level": 2,
+        "text": "Still updating"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 572,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "contact.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Get in Touch"
+      },
+      {
+        "level": 3,
+        "text": "Or reach out directly:"
+      }
+    ],
+    "links": {
+      "internal": 27,
+      "external": 7,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 137,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "cool-shit.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Cool Shit"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 35,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 327,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "dateme.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Date Me"
+      }
+    ],
+    "links": {
+      "internal": 31,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 132,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "essays.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Essays"
+      },
+      {
+        "level": 2,
+        "text": "Want more notes like this?"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 36,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 329,
+    "dataActions": [
+      "clearEssaySearch",
+      "searchEssays",
+      "toggleCategory",
+      "toggleEssaysSidebar",
+      "toggleListDropdown"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "field-notes.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "One useful idea, object, book, question, or experiment each week."
+      },
+      {
+        "level": 2,
+        "text": "Small artifacts worth keeping."
+      },
+      {
+        "level": 3,
+        "text": "An object that earned its place"
+      },
+      {
+        "level": 3,
+        "text": "A book idea I cannot shake"
+      },
+      {
+        "level": 3,
+        "text": "A system I am testing"
+      },
+      {
+        "level": 2,
+        "text": "The recurring obsessions."
+      },
+      {
+        "level": 2,
+        "text": "Want the next dispatch?"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 39,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 410,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "free-resources.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Practical artifacts from the archive."
+      },
+      {
+        "level": 3,
+        "text": "Book Notes Collection"
+      },
+      {
+        "level": 3,
+        "text": "Weekly Review Template"
+      },
+      {
+        "level": 3,
+        "text": "Personal Finance Tracker"
+      },
+      {
+        "level": 3,
+        "text": "Decision Making Framework"
+      },
+      {
+        "level": 3,
+        "text": "Reading Operating System"
+      },
+      {
+        "level": 3,
+        "text": "First Principles Decision Template"
+      },
+      {
+        "level": 2,
+        "text": "Why Free?"
+      },
+      {
+        "level": 2,
+        "text": "Request a Resource"
+      },
+      {
+        "level": 4,
+        "text": "Have an idea?"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 41,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 497,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "health.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Health is the asset that touches every other one."
+      },
+      {
+        "level": 2,
+        "text": "Train for the version of you at 70."
+      },
+      {
+        "level": 3,
+        "text": "Strength is the base layer"
+      },
+      {
+        "level": 3,
+        "text": "Walking is underrated"
+      },
+      {
+        "level": 3,
+        "text": "Sleep is the multiplier"
+      },
+      {
+        "level": 2,
+        "text": "Mental health when life is mostly good."
+      },
+      {
+        "level": 3,
+        "text": "Stress as signal, not noise"
+      },
+      {
+        "level": 3,
+        "text": "Journaling, lightly"
+      },
+      {
+        "level": 3,
+        "text": "The people you eat with"
+      },
+      {
+        "level": 2,
+        "text": "Thoughts on food."
+      },
+      {
+        "level": 3,
+        "text": "Eat real food. Mostly plants and animals."
+      },
+      {
+        "level": 3,
+        "text": "Protein is the anchor"
+      },
+      {
+        "level": 3,
+        "text": "Fasting, when it fits"
+      },
+      {
+        "level": 3,
+        "text": "Cooking is a forcing function"
+      },
+      {
+        "level": 3,
+        "text": "Alcohol"
+      },
+      {
+        "level": 3,
+        "text": "What I actually eat"
+      },
+      {
+        "level": 2,
+        "text": "What I changed my mind about."
+      },
+      {
+        "level": 2,
+        "text": "What I actually use."
+      },
+      {
+        "level": 4,
+        "text": "Daily"
+      },
+      {
+        "level": 4,
+        "text": "Gear"
+      },
+      {
+        "level": 4,
+        "text": "Books that shaped this"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 1409,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "important-or-not.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Important or Not"
+      },
+      {
+        "level": 3,
+        "text": "Reading books"
+      },
+      {
+        "level": 3,
+        "text": "Having a morning routine"
+      },
+      {
+        "level": 3,
+        "text": "Who you spend time with"
+      },
+      {
+        "level": 3,
+        "text": "Going to university"
+      },
+      {
+        "level": 3,
+        "text": "Inbox zero"
+      },
+      {
+        "level": 3,
+        "text": "Sleep quality"
+      },
+      {
+        "level": 3,
+        "text": "Following the news daily"
+      },
+      {
+        "level": 3,
+        "text": "Saying no"
+      },
+      {
+        "level": 3,
+        "text": "Social media presence"
+      },
+      {
+        "level": 3,
+        "text": "Physical exercise"
+      },
+      {
+        "level": 3,
+        "text": "Optimizing every meal"
+      },
+      {
+        "level": 3,
+        "text": "Having difficult conversations"
+      },
+      {
+        "level": 3,
+        "text": "Networking events"
+      },
+      {
+        "level": 3,
+        "text": "Writing things down"
+      },
+      {
+        "level": 3,
+        "text": "Having the latest tech"
+      },
+      {
+        "level": 3,
+        "text": "Financial literacy"
+      },
+      {
+        "level": 3,
+        "text": "Traveling extensively"
+      },
+      {
+        "level": 3,
+        "text": "Having a 5-year plan"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 31,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 963,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "index.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Hi I'm Jevan."
+      },
+      {
+        "level": 2,
+        "text": "What took me months to figure out, in 5 minutes"
+      },
+      {
+        "level": 2,
+        "text": "Things I have been up to"
+      },
+      {
+        "level": 3,
+        "text": "Temples & Cherry Blossoms"
+      },
+      {
+        "level": 3,
+        "text": "Feed My Addiction"
+      },
+      {
+        "level": 3,
+        "text": "Development AI"
+      },
+      {
+        "level": 3,
+        "text": "AI agents that actually work"
+      },
+      {
+        "level": 3,
+        "text": "Mountain Exploration"
+      },
+      {
+        "level": 2,
+        "text": "I think too much about things most people ignore"
+      },
+      {
+        "level": 2,
+        "text": "Things I've Written"
+      },
+      {
+        "level": 3,
+        "text": "Feed My Addiction: The Way of Modern Life"
+      },
+      {
+        "level": 3,
+        "text": "The Beginning is the End"
+      },
+      {
+        "level": 3,
+        "text": "Hot Spas Never Go Out of Style"
+      },
+      {
+        "level": 2,
+        "text": "Where My Attention Lives"
+      },
+      {
+        "level": 3,
+        "text": "Real Estate Development"
+      },
+      {
+        "level": 3,
+        "text": "Writing"
+      },
+      {
+        "level": 3,
+        "text": "How Organizations Work"
+      },
+      {
+        "level": 3,
+        "text": "Software & Tools"
+      },
+      {
+        "level": 2,
+        "text": "Let's Talk"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 48,
+      "external": 9,
+      "mailto": 2,
+      "anchor": 10
+    },
+    "images": {
+      "total": 10,
+      "withAlt": 10
+    },
+    "wordCount": 753,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": false,
+      "footer": true,
+      "header": true
+    }
+  },
+  "lesson-logger.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Lesson Logger"
+      },
+      {
+        "level": 3,
+        "text": "The best time to start was yesterday. The second best time is now."
+      },
+      {
+        "level": 3,
+        "text": "Your lifestyle should lag your income by at least two years"
+      },
+      {
+        "level": 3,
+        "text": "Focus on inputs, not outputs"
+      },
+      {
+        "level": 3,
+        "text": "Be the friend who reaches out first"
+      },
+      {
+        "level": 3,
+        "text": "Travel while you're young and healthy"
+      },
+      {
+        "level": 3,
+        "text": "You don't rise to the level of your goals, you fall to the level of your systems"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 38,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 551,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "living-manifesto.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Living Manifesto"
+      },
+      {
+        "level": 2,
+        "text": "Why a Living Manifesto"
+      },
+      {
+        "level": 2,
+        "text": "What I Optimize For"
+      },
+      {
+        "level": 2,
+        "text": "How I Spend Time"
+      },
+      {
+        "level": 2,
+        "text": "How I Choose Work"
+      },
+      {
+        "level": 2,
+        "text": "How I Treat My Body"
+      },
+      {
+        "level": 2,
+        "text": "How I Treat People"
+      },
+      {
+        "level": 2,
+        "text": "How I Think"
+      },
+      {
+        "level": 2,
+        "text": "How I Handle Money"
+      },
+      {
+        "level": 2,
+        "text": "How I Handle Failure"
+      },
+      {
+        "level": 2,
+        "text": "How I Learn"
+      },
+      {
+        "level": 2,
+        "text": "How I Build Identity"
+      },
+      {
+        "level": 2,
+        "text": "What I Refuse"
+      },
+      {
+        "level": 2,
+        "text": "Defaults I Try to Live"
+      },
+      {
+        "level": 2,
+        "text": "How This Page Stays Honest"
+      },
+      {
+        "level": 2,
+        "text": "North Star"
+      },
+      {
+        "level": 2,
+        "text": "What I Stand For"
+      },
+      {
+        "level": 3,
+        "text": "I Believe"
+      },
+      {
+        "level": 3,
+        "text": "I Reject"
+      },
+      {
+        "level": 2,
+        "text": "Core Values"
+      },
+      {
+        "level": 2,
+        "text": "Life Areas"
+      },
+      {
+        "level": 2,
+        "text": "Mental Models I Return To"
+      },
+      {
+        "level": 2,
+        "text": "Words to Live By"
+      },
+      {
+        "level": 2,
+        "text": "Where to Go Next"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 34,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 2283,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "meet.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Let's Chat"
+      }
+    ],
+    "links": {
+      "internal": 2,
+      "external": 2,
+      "mailto": 1,
+      "anchor": 0
+    },
+    "images": {
+      "total": 1,
+      "withAlt": 1
+    },
+    "wordCount": 69,
+    "dataActions": [],
+    "landmarks": {
+      "nav": false,
+      "main": true,
+      "footer": false,
+      "header": true
+    }
+  },
+  "movie-philosophy.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "My Movie Philosophy"
+      },
+      {
+        "level": 2,
+        "text": "Why I Watch"
+      },
+      {
+        "level": 2,
+        "text": "How I Choose What to Watch"
+      },
+      {
+        "level": 2,
+        "text": "What I Look For"
+      },
+      {
+        "level": 2,
+        "text": "How I Watch"
+      },
+      {
+        "level": 2,
+        "text": "Where to Go Next"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 462,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "movies.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "My Movie Reviews"
+      },
+      {
+        "level": 2,
+        "text": "Watch stats"
+      },
+      {
+        "level": 3,
+        "text": "My Review"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 37,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 6
+    },
+    "images": {
+      "total": 3,
+      "withAlt": 2
+    },
+    "wordCount": 370,
+    "dataActions": [
+      "clearAllFilters",
+      "clearMovieSearch",
+      "closeMovieModal",
+      "searchMovies",
+      "toggleListDropdown",
+      "toggleMovieGenre",
+      "toggleSidebar"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "north-star.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "North Star"
+      },
+      {
+        "level": 2,
+        "text": "What I Stand For"
+      },
+      {
+        "level": 2,
+        "text": "Core Values"
+      },
+      {
+        "level": 4,
+        "text": "Intellectual Honesty"
+      },
+      {
+        "level": 4,
+        "text": "Long-Term Thinking"
+      },
+      {
+        "level": 4,
+        "text": "Continuous Learning"
+      },
+      {
+        "level": 4,
+        "text": "Bias for Action"
+      },
+      {
+        "level": 2,
+        "text": "Life Areas"
+      },
+      {
+        "level": 3,
+        "text": "Work & Career"
+      },
+      {
+        "level": 3,
+        "text": "Relationships"
+      },
+      {
+        "level": 3,
+        "text": "Learning & Growth"
+      },
+      {
+        "level": 3,
+        "text": "Health & Vitality"
+      },
+      {
+        "level": 2,
+        "text": "Mental Models"
+      },
+      {
+        "level": 2,
+        "text": "Words to Live By"
+      },
+      {
+        "level": 2,
+        "text": "What I Avoid"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 31,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 967,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "notes.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Notes"
+      },
+      {
+        "level": 3,
+        "text": "Why I Started Writing Notes in Public"
+      },
+      {
+        "level": 2,
+        "text": "What I've Been Thinking About"
+      },
+      {
+        "level": 3,
+        "text": "Notes on \"The Almanack of Naval Ravikant\""
+      },
+      {
+        "level": 3,
+        "text": "The Problem with \"Best Practices\""
+      },
+      {
+        "level": 3,
+        "text": "On Saying No More Often"
+      },
+      {
+        "level": 3,
+        "text": "Building in Public vs Building in Private"
+      },
+      {
+        "level": 2,
+        "text": "All Notes"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 31,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 13
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 501,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "people-philosophy.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "My People Philosophy"
+      },
+      {
+        "level": 2,
+        "text": "Why People Matter"
+      },
+      {
+        "level": 2,
+        "text": "How I Choose Who to Learn From"
+      },
+      {
+        "level": 2,
+        "text": "What I Look For"
+      },
+      {
+        "level": 2,
+        "text": "How I Engage"
+      },
+      {
+        "level": 2,
+        "text": "Where to Go Next"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 468,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "people.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "People of History"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 297,
+    "dataActions": [
+      "clearPeopleSearch",
+      "filterByCategory",
+      "filterPeople",
+      "filterPeopleSource",
+      "togglePeopleSidebar"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "people/andrew-huberman.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Andrew Huberman"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Palo Alto, California"
+      },
+      {
+        "level": 3,
+        "text": "Huberman Lab launched"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 3,
+      "withAlt": 3
+    },
+    "wordCount": 411,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/andrew-wilkinson.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Andrew Wilkinson"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Founded MetaLab"
+      },
+      {
+        "level": 3,
+        "text": "Never Enough published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 409,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/anne-lamott.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Anne Lamott"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in San Francisco"
+      },
+      {
+        "level": 3,
+        "text": "Bird by Bird published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 408,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/atul-gawande.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Atul Gawande"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Brooklyn"
+      },
+      {
+        "level": 3,
+        "text": "The Checklist Manifesto published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 411,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/baltasar-gracian.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Baltasar Gracián"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Belmonte, Spain"
+      },
+      {
+        "level": 3,
+        "text": "The Art of Worldly Wisdom published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 410,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/cal-newport.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Cal Newport"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Houston"
+      },
+      {
+        "level": 3,
+        "text": "Deep Work published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 409,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/charlie-munger.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Charlie Munger"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Omaha"
+      },
+      {
+        "level": 3,
+        "text": "Joined Berkshire Hathaway as vice chairman"
+      },
+      {
+        "level": 3,
+        "text": "Poor Charlie's Almanack published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 37,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 7,
+      "withAlt": 7
+    },
+    "wordCount": 481,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/christopher-nolan.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Christopher Nolan"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in London"
+      },
+      {
+        "level": 3,
+        "text": "Memento released"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 3,
+      "withAlt": 3
+    },
+    "wordCount": 399,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/david-goggins.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "David Goggins"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Buffalo"
+      },
+      {
+        "level": 3,
+        "text": "Can't Hurt Me published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 409,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/david-ogilvy.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "David Ogilvy"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in West Horsley, England"
+      },
+      {
+        "level": 3,
+        "text": "Founded his advertising agency"
+      },
+      {
+        "level": 3,
+        "text": "Ogilvy on Advertising published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 34,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 5,
+      "withAlt": 5
+    },
+    "wordCount": 426,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/eckhart-tolle.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Eckhart Tolle"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Germany"
+      },
+      {
+        "level": 3,
+        "text": "The Power of Now published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 409,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/elon-musk.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Elon Musk"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Pretoria"
+      },
+      {
+        "level": 3,
+        "text": "Founded SpaceX"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 3,
+      "withAlt": 3
+    },
+    "wordCount": 406,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/eric-ries.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Eric Ries"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born"
+      },
+      {
+        "level": 3,
+        "text": "The Lean Startup published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 401,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/james-clear.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "James Clear"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Ohio"
+      },
+      {
+        "level": 3,
+        "text": "Atomic Habits published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 399,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/john-d-rockefeller.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "John D. Rockefeller"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Richford, New York"
+      },
+      {
+        "level": 3,
+        "text": "Entered oil refining"
+      },
+      {
+        "level": 3,
+        "text": "Standard Oil founded"
+      },
+      {
+        "level": 3,
+        "text": "Standard Oil Trust formed"
+      },
+      {
+        "level": 3,
+        "text": "Standard Oil broken up"
+      },
+      {
+        "level": 3,
+        "text": "Rockefeller Foundation chartered"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 35,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 6,
+      "withAlt": 6
+    },
+    "wordCount": 510,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/keith-j-cunningham.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Keith J. Cunningham"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "The Ultimate Blueprint published"
+      },
+      {
+        "level": 3,
+        "text": "The Road Less Stupid published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 34,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 5,
+      "withAlt": 5
+    },
+    "wordCount": 422,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/lex-fridman.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Lex Fridman"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Chkalovsk"
+      },
+      {
+        "level": 3,
+        "text": "Podcast work expanded"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 3,
+      "withAlt": 3
+    },
+    "wordCount": 402,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/morgan-housel.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Morgan Housel"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born"
+      },
+      {
+        "level": 3,
+        "text": "The Psychology of Money published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 3,
+      "withAlt": 3
+    },
+    "wordCount": 398,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/naval-ravikant.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Naval Ravikant"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in India"
+      },
+      {
+        "level": 3,
+        "text": "AngelList founded"
+      },
+      {
+        "level": 3,
+        "text": "The Almanack of Naval Ravikant published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 421,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/peter-thiel.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Peter Thiel"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Frankfurt"
+      },
+      {
+        "level": 3,
+        "text": "Co-founded PayPal"
+      },
+      {
+        "level": 3,
+        "text": "Zero to One published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 417,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/ray-dalio.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Ray Dalio"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Queens"
+      },
+      {
+        "level": 3,
+        "text": "Founded Bridgewater Associates"
+      },
+      {
+        "level": 3,
+        "text": "Principles published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 411,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/richard-feynman.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Richard Feynman"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Queens"
+      },
+      {
+        "level": 3,
+        "text": "Awarded the Nobel Prize in Physics"
+      },
+      {
+        "level": 3,
+        "text": "Surely You're Joking, Mr. Feynman! published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 418,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/rick-rubin.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Rick Rubin"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Long Island"
+      },
+      {
+        "level": 3,
+        "text": "Def Jam founded"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 3,
+      "withAlt": 3
+    },
+    "wordCount": 405,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/rob-fitzpatrick.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Rob Fitzpatrick"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "The Mom Test published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 392,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/robert-cialdini.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Robert Cialdini"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Milwaukee"
+      },
+      {
+        "level": 3,
+        "text": "Influence published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 399,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/ryan-holiday.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Ryan Holiday"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in California"
+      },
+      {
+        "level": 3,
+        "text": "The Obstacle Is the Way published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 3,
+      "withAlt": 3
+    },
+    "wordCount": 410,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/shane-parrish.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Shane Parrish"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Farnam Street started"
+      },
+      {
+        "level": 3,
+        "text": "The Great Mental Models series began"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 34,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 5,
+      "withAlt": 5
+    },
+    "wordCount": 427,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/sherlock-holmes.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Sherlock Holmes"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "First appeared in A Study in Scarlet"
+      },
+      {
+        "level": 3,
+        "text": "Short stories began in The Strand Magazine"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 412,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/victor-o-schwab.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Victor O. Schwab"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born"
+      },
+      {
+        "level": 3,
+        "text": "How to Write a Good Advertisement published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 4,
+      "withAlt": 4
+    },
+    "wordCount": 409,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "people/warren-buffett.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Warren Buffett"
+      },
+      {
+        "level": 2,
+        "text": "Life Events"
+      },
+      {
+        "level": 3,
+        "text": "Born in Omaha"
+      },
+      {
+        "level": 3,
+        "text": "Took control of Berkshire Hathaway"
+      },
+      {
+        "level": 3,
+        "text": "The Snowball published"
+      },
+      {
+        "level": 2,
+        "text": "Books And Notes"
+      },
+      {
+        "level": 2,
+        "text": "Videos, Essays, And Primary Sources"
+      },
+      {
+        "level": 2,
+        "text": "What I Am Taking From This Person"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 35,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 5,
+      "withAlt": 5
+    },
+    "wordCount": 455,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "podcasts.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Podcasts I Listen To"
+      },
+      {
+        "level": 2,
+        "text": "Recently Listened on Spotify"
+      },
+      {
+        "level": 2,
+        "text": "Shows I Follow on Spotify"
+      },
+      {
+        "level": 2,
+        "text": "Curated Picks"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 36,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 333,
+    "dataActions": [
+      "clearPodcastSearch",
+      "filterPodcasts",
+      "searchPodcasts",
+      "togglePodcastListDropdown",
+      "togglePodcastSidebar"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "problems.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Problems worth thinking about."
+      },
+      {
+        "level": 2,
+        "text": "Active"
+      },
+      {
+        "level": 2,
+        "text": "Open Questions"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 31,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 314,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "products.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "The Shelf: Tools, Objects & Gear That Earned Their Place"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 31,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 5,
+      "withAlt": 5
+    },
+    "wordCount": 544,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "projects.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Projects"
+      },
+      {
+        "level": 3,
+        "text": "Personal Website"
+      },
+      {
+        "level": 3,
+        "text": "People of History"
+      },
+      {
+        "level": 3,
+        "text": "Openclaw Agents"
+      },
+      {
+        "level": 3,
+        "text": "Development AI"
+      },
+      {
+        "level": 3,
+        "text": "Field Notes"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 35,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 402,
+    "dataActions": [
+      "clearProjectSearch",
+      "filterProjects",
+      "searchProjects",
+      "toggleProjectListDropdown",
+      "toggleProjectSidebar"
+    ],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "quotes.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Words That Shaped My Thinking"
+      },
+      {
+        "level": 2,
+        "text": "Share a Quote"
+      }
+    ],
+    "links": {
+      "internal": 28,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 503,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "reading-philosophy.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "How I Read"
+      },
+      {
+        "level": 2,
+        "text": "Why I Read"
+      },
+      {
+        "level": 2,
+        "text": "How I Choose Books"
+      },
+      {
+        "level": 2,
+        "text": "How I Read"
+      },
+      {
+        "level": 2,
+        "text": "What I Look For"
+      },
+      {
+        "level": 2,
+        "text": "Where to Go Next"
+      },
+      {
+        "level": 2,
+        "text": "Want more notes like this?"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 34,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 488,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "search.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Search Jevan Goldsmith"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 136,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "speeches.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Speeches"
+      },
+      {
+        "level": 2,
+        "text": "Why a Speeches Page"
+      },
+      {
+        "level": 2,
+        "text": "The Collection"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 32,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 370,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "takes.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Where my takes live."
+      },
+      {
+        "level": 2,
+        "text": "Important or Not"
+      },
+      {
+        "level": 2,
+        "text": "Changed My Mind"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 332,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/ai-assisted-work.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "AI-Assisted Work"
+      },
+      {
+        "level": 2,
+        "text": "Follow this thread"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 39,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 427,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/better-thinking.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Better Thinking"
+      },
+      {
+        "level": 2,
+        "text": "Follow this thread"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 49,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 629,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/books-reading.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Books & Reading"
+      },
+      {
+        "level": 2,
+        "text": "Follow this thread"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 45,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 565,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/business-building.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Business & Building"
+      },
+      {
+        "level": 2,
+        "text": "Follow this thread"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 41,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 458,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/health-performance.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Health & Performance"
+      },
+      {
+        "level": 2,
+        "text": "Follow this thread"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 35,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 319,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/personal-systems.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Personal Systems"
+      },
+      {
+        "level": 2,
+        "text": "Follow this thread"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 49,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 638,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/real-estate-development.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Real Estate Development"
+      },
+      {
+        "level": 2,
+        "text": "Follow this thread"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 35,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 336,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "topics/tools-objects.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Tools & Objects"
+      },
+      {
+        "level": 2,
+        "text": "Follow this thread"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 43,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 517,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  },
+  "videos.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Videos"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 35,
+      "external": 5,
+      "mailto": 2,
+      "anchor": 4
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 308,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": true
+    }
+  },
+  "weekly-review-template.html": {
+    "headings": [
+      {
+        "level": 1,
+        "text": "Weekly Review Template"
+      },
+      {
+        "level": 2,
+        "text": "The Review"
+      },
+      {
+        "level": 3,
+        "text": "1. What happened?"
+      },
+      {
+        "level": 3,
+        "text": "2. What did I learn?"
+      },
+      {
+        "level": 3,
+        "text": "3. What matters next?"
+      },
+      {
+        "level": 3,
+        "text": "4. What gets committed?"
+      },
+      {
+        "level": 2,
+        "text": "Why this exists"
+      },
+      {
+        "level": 2,
+        "text": "Keep exploring this idea"
+      }
+    ],
+    "links": {
+      "internal": 33,
+      "external": 4,
+      "mailto": 2,
+      "anchor": 5
+    },
+    "images": {
+      "total": 2,
+      "withAlt": 2
+    },
+    "wordCount": 381,
+    "dataActions": [],
+    "landmarks": {
+      "nav": true,
+      "main": true,
+      "footer": true,
+      "header": false
+    }
+  }
+}
