@@ -177,7 +177,36 @@ const projects = defineCollection({
 
 const topics = defineCollection({
   loader: jsonArrayLoader('topics.json', { key: 'topics' }),
-  schema: z.object({ id: z.string() }).passthrough()
+  schema: z.object({
+    id: z.string(),
+    label: nstr(),
+    description: nstr()
+  }).passthrough()
 });
 
-export const collections = { books, movies, people, essays, podcasts, adventures, challenges, projects, topics };
+const peopleProfiles = defineCollection({
+  loader: jsonArrayLoader('people.profiles.json', { key: 'profiles' }),
+  schema: z.object({
+    id: z.string(),
+    name: z.string(),
+    title: nstr(),
+    thesis: nstr(),
+    bio: nstr(),
+    image: nstr(),
+    srcset: nstr(),
+    timeline: z.array(z.object({
+      year: nstr(),
+      title: nstr(),
+      note: nstr()
+    })).nullable().optional(),
+    bookTitles: z.array(z.string()).nullable().optional(),
+    resources: z.array(z.object({
+      type: nstr(),
+      title: nstr(),
+      url: nstr(),
+      note: nstr()
+    })).nullable().optional()
+  }).passthrough()
+});
+
+export const collections = { books, movies, people, essays, podcasts, adventures, challenges, projects, topics, peopleProfiles };

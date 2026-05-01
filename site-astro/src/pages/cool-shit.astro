@@ -1,0 +1,96 @@
+---
+// Ported from _src/pages/cool-shit.html via scripts/port-page.mjs.
+// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Cool Shit: Objects, Ideas &amp; Useful Finds | Jevan Goldsmith"
+  description="A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith's attention."
+  canonical="https://jevangoldsmith.com/cool-shit.html"
+>
+---
+title: "Cool Shit: Objects, Ideas &amp; Useful Finds"
+description: "A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith's attention."
+layout: "base"
+bodyClass: "nav-compact"
+scripts: ""
+---
+<main class="cool-page" data-active="feed">
+        <aside class="cool-sidebar" aria-label="Timeline">
+            <div class="timeline-head">
+                <span class="timeline-title">Timeline</span>
+                <button type="button" class="timeline-toggle-all" id="timeline-toggle-all" aria-label="Collapse or expand all months">Collapse all</button>
+            </div>
+            <nav class="timeline" id="timeline"></nav>
+        </aside>
+
+        <div class="cool-content">
+            <div class="container">
+                <header class="cool-page-header">
+                    <p class="feed-eyebrow">Field Archive · Cool Shit</p>
+                    <h1>Cool Shit</h1>
+                    <p>Interesting objects, tools, ideas, links, and finds that earned a permanent place in my attention.</p>
+                </header>
+                <div class="cool-tabs" role="tablist">
+                    <button class="cool-tab" data-tab="timeline" role="tab">Timeline</button>
+                    <button class="cool-tab active" data-tab="feed" role="tab">Feed</button>
+                </div>
+
+                <div class="cool-layout">
+                    <section class="cool-col-feed" aria-label="Feed">
+                        <div class="feed-head">
+                            <span class="feed-eyebrow">Field Archive · Cool Shit</span>
+                            <span class="feed-count" id="feed-count"></span>
+                        </div>
+                        <div class="feed" id="feed"></div>
+                        <div class="cool-empty" id="feed-empty" hidden>Nothing in this category yet.</div>
+                    </section>
+                    <aside class="cool-col-rail" aria-label="Filter by category">
+                        <div class="cool-rail-head"><span>Filter</span></div>
+                        <nav class="cool-tag-rail" id="tag-rail"></nav>
+                        <div class="cool-rail-stats">
+                            <span id="hero-count">—</span> finds · <span id="hero-cats">—</span> cats · last <span id="hero-updated">—</span>
+                        </div>
+                    </aside>
+                </div>
+
+            </div>
+        </div>
+    <section class="seo-related-section" data-seo-related>
+        <p class="seo-related-eyebrow">Related thread</p>
+        <h2>Keep exploring this idea</h2>
+        <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
+        <div class="seo-related-grid">
+            <a class="seo-related-card" href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="cool-shit">
+                <span>The Shelf: Tools, Objects &amp; Gear That Earned Their Place</span>
+                <p>A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced.</p>
+            </a>
+            <a class="seo-related-card" href="movies.html">
+                <span>Movie Reviews, Watchlist &amp; Taste Notes</span>
+                <p>A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste.</p>
+            </a>
+            <a class="seo-related-card" href="books.html">
+                <span>Books I Recommend &amp; Notes From My Reading System</span>
+                <p>A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems.</p>
+            </a>
+        </div>
+    </section>
+</main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+                    <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="cool-shit">Field Notes</a></li>
+                    <li><a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="cool-shit">The Shelf</a></li>
+                    <li><a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="cool-shit">Resources</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</Base>

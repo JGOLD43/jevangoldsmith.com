@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const adventures = await getCollection('adventures');
+  return adventures.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const a = entry.data;
+
+function fmtRange(start?: string | null, end?: string | null): string {
+  if (!start && !end) return '';
+  if (start && end) return `${start} – ${end}`;
+  return start ?? end ?? '';
+}
+---
+<Base
+  title={`${a.title} - Jevan Goldsmith`}
+  description={a.shortDescription ?? `${a.title} adventure log.`}
+  canonical={`https://jevangoldsmith.com/adventure-${entry.id}.html`}
+  bodyClass="nav-compact"
+>
+  <main class="adventure-detail-page">
+    <div class="adventure-hero">
+      {a.heroImage && (
+        <img src={a.heroImage} alt={a.title} width="1200" height="800" decoding="async" fetchpriority="high" />
+      )}
+      <div class="adventure-hero-overlay">
+        {a.location && <div class="adventure-hero-location">{a.location}</div>}
+        <h1 class="adventure-hero-title">{a.title}</h1>
+        {a.subtitle && <p class="adventure-hero-subtitle">{a.subtitle}</p>}
+      </div>
+    </div>
+
+    <div class="adventure-content">
+      <a href="/adventures.html" class="adventure-back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to Adventures
+      </a>
+
+      <div class="adventure-meta-bar">
+        <div class="adventure-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>{fmtRange(a.startDate, a.endDate)}</span>
+        </div>
+        {a.duration && (
+          <div class="adventure-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>{a.duration}</span>
+          </div>
+        )}
+        {a.location && (
+          <div class="adventure-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>{a.location}</span>
+          </div>
+        )}
+      </div>
+
+      {a.content && <div class="adventure-story" set:html={a.content} />}
+
+      {a.highlights && a.highlights.length > 0 && (
+        <div class="adventure-highlights-section">
+          <h3>Trip Highlights</h3>
+          <div class="adventure-highlights-list">
+            {a.highlights.map((h) => <span class="adventure-highlight-tag">{h}</span>)}
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+</Base>

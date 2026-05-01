@@ -1,0 +1,142 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const profiles = await getCollection('peopleProfiles');
+  return profiles.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const p = entry.data;
+const books = await getCollection('books');
+const titles = new Set(p.bookTitles || []);
+const relatedBooks = books.filter((b) => titles.has(b.data.title));
+const heroImage = p.image || `/images/generated/people/${entry.id}-400.jpg`;
+const heroSrcset = p.srcset || [
+  `/images/generated/people/${entry.id}-200.jpg 200w`,
+  `/images/generated/people/${entry.id}-400.jpg 400w`,
+  `/images/generated/people/${entry.id}-800.jpg 800w`
+].join(', ');
+const fmtCover = (b: typeof books[number]) => {
+  const isbn = String(b.data.isbn || '').replace(/[^0-9X]/gi, '');
+  return isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg` : '';
+};
+---
+<Base
+  title={`${p.name} - People - Jevan Goldsmith`}
+  description={p.bio ?? `${p.name} profile, timeline, books, notes, and resources.`}
+  canonical={`https://jevangoldsmith.com/people/${entry.id}.html`}
+  bodyClass="nav-compact"
+>
+  <main class="person-profile-page">
+    <section class="person-profile-hero">
+      <a href="/people.html" class="person-profile-back">Back to People</a>
+      <div class="person-profile-hero-grid">
+        <div class="person-profile-image-wrap">
+          <img
+            src={heroImage.startsWith('/') || heroImage.startsWith('http') ? heroImage : `/${heroImage}`}
+            srcset={heroSrcset}
+            sizes="(max-width: 768px) 90vw, 360px"
+            alt={p.name}
+            width="400"
+            height="400"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="person-profile-intro">
+          <p class="person-profile-kicker">{p.title || 'Person'}</p>
+          <h1>{p.name}</h1>
+          {p.bio && <p class="person-profile-bio">{p.bio}</p>}
+          {p.thesis && <p class="person-profile-thesis">{p.thesis}</p>}
+        </div>
+      </div>
+    </section>
+
+    <section class="person-profile-section">
+      <div class="person-profile-section-header">
+        <p class="person-profile-kicker">Timeline</p>
+        <h2>Life Events</h2>
+      </div>
+      {p.timeline && p.timeline.length > 0 ? (
+        <ol class="person-timeline">
+          {p.timeline.map((event) => (
+            <li class="person-timeline-item">
+              <time>{event.year ?? ''}</time>
+              <div>
+                <h3>{event.title ?? ''}</h3>
+                {event.note && <p>{event.note}</p>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="person-profile-empty">Timeline notes will live here as I turn reading notes into dated life events.</p>
+      )}
+    </section>
+
+    <section class="person-profile-section">
+      <div class="person-profile-section-header">
+        <p class="person-profile-kicker">Reading</p>
+        <h2>Books And Notes</h2>
+      </div>
+      <p class="person-profile-note-policy">These notes are designed as commentary: short personal takeaways, applications, questions, and links back to the reading list, not copied chapters or long excerpts.</p>
+      {relatedBooks.length > 0 ? (
+        <div class="person-profile-books">
+          {relatedBooks.map((b) => {
+            const cover = fmtCover(b);
+            const href = `/books.html?book=${encodeURIComponent(b.data.title)}`;
+            return (
+              <a class="person-profile-book-card" href={href}>
+                {cover ? (
+                  <img src={cover} alt={`${b.data.title} cover`} loading="lazy" decoding="async" />
+                ) : (
+                  <span class="person-profile-book-cover-fallback" aria-hidden="true"></span>
+                )}
+                <span>
+                  <strong>{b.data.title}</strong>
+                  <small>{b.data.author}{b.data.year ? ` · ${b.data.year}` : ''}</small>
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <p class="person-profile-empty">No linked books yet.</p>
+      )}
+    </section>
+
+    <section class="person-profile-section">
+      <div class="person-profile-section-header">
+        <p class="person-profile-kicker">Media</p>
+        <h2>Videos, Essays, And Primary Sources</h2>
+      </div>
+      {p.resources && p.resources.length > 0 ? (
+        <div class="person-resource-list">
+          {p.resources.map((r) => (
+            <a class="person-resource-card" href={r.url ?? '#'} target="_blank" rel="noopener noreferrer">
+              <span>{r.type ?? 'Resource'}</span>
+              <strong>{r.title ?? ''}</strong>
+              {r.note && <p>{r.note}</p>}
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="person-profile-empty">This is where I will add the best videos, talks, letters, interviews, essays, and primary sources for {p.name}.</p>
+      )}
+    </section>
+
+    <section class="person-profile-section person-profile-notes">
+      <div class="person-profile-section-header">
+        <p class="person-profile-kicker">My Notes</p>
+        <h2>What I Am Taking From This Person</h2>
+      </div>
+      <div class="person-note-prompts">
+        <p><strong>Useful ideas:</strong> Add takeaways in my own words.</p>
+        <p><strong>Open questions:</strong> Add what I still need to understand.</p>
+        <p><strong>Applications:</strong> Add decisions, habits, or business systems this person changes.</p>
+      </div>
+    </section>
+  </main>
+</Base>
