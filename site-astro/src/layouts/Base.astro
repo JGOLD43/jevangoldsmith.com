@@ -6,6 +6,8 @@
 // that produces byte-identical <head> output to satisfy the SEO fixture.
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep } from '../lib/seo';
 import '../styles/global.css';
 
 interface Props {
@@ -17,6 +19,12 @@ interface Props {
   bodyClass?: string;
   /** Pages like /meet replace the global navbar with their own header. */
   noChrome?: boolean;
+  /** schema.org page type for JSON-LD. Defaults to "WebPage". */
+  pageType?: 'WebPage' | 'AboutPage' | 'CollectionPage' | 'ContactPage' | 'ProfilePage' | 'Article';
+  /** Breadcrumb trail. Defaults to Home → current page. */
+  breadcrumbs?: BreadcrumbStep[];
+  /** Skip JSON-LD (e.g. for /data-smoke or other non-public pages). */
+  noJsonLd?: boolean;
 }
 
 const {
@@ -24,12 +32,15 @@ const {
   description = '',
   canonical = '',
   ogType = 'website',
-  ogImage = 'https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png',
+  ogImage = DEFAULT_OG_IMAGE,
   bodyClass = '',
-  noChrome = false
+  noChrome = false,
+  pageType = 'WebPage',
+  breadcrumbs,
+  noJsonLd = false
 } = Astro.props;
 
-const siteName = 'Jevan Goldsmith';
+const siteName = SITE_NAME;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -53,6 +64,16 @@ const siteName = 'Jevan Goldsmith';
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    {!noJsonLd && canonical && (
+      <JsonLd
+        canonical={canonical}
+        title={title}
+        description={description}
+        pageType={pageType}
+        image={ogImage}
+        breadcrumbs={breadcrumbs}
+      />
+    )}
     <slot name="head" />
   </head>
   <body class={bodyClass}>

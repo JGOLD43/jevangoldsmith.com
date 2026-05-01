@@ -1,0 +1,42 @@
+---
+// Renders a single <script type="application/ld+json"> with the site-wide
+// Person + WebSite graph plus a per-page BreadcrumbList + page node. Mirrors
+// the structure of the legacy tests/seo-fixture.json @graph so rich-result
+// tools see no regression after the migration.
+import {
+  PERSON_SCHEMA,
+  WEBSITE_SCHEMA,
+  breadcrumbList,
+  pageNode,
+  type BreadcrumbStep
+} from '../lib/seo';
+
+interface Props {
+  canonical: string;
+  title: string;
+  description: string;
+  pageType?: 'WebPage' | 'AboutPage' | 'CollectionPage' | 'ContactPage' | 'ProfilePage' | 'Article';
+  image?: string;
+  breadcrumbs?: BreadcrumbStep[];
+}
+
+const {
+  canonical,
+  title,
+  description,
+  pageType = 'WebPage',
+  image,
+  breadcrumbs = [{ name: 'Home', url: 'https://jevangoldsmith.com/' }, { name: title, url: canonical }]
+} = Astro.props;
+
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    PERSON_SCHEMA,
+    WEBSITE_SCHEMA,
+    breadcrumbList(canonical, breadcrumbs),
+    pageNode({ type: pageType, canonical, title, description, image })
+  ]
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(graph)} />

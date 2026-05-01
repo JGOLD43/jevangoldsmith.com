@@ -13,7 +13,20 @@ export default defineConfig({
   build: {
     format: 'file'
   },
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      // Match legacy URL form so external backlinks + Search Console don't
+      // see a URL change.
+      serialize(item) {
+        if (!item.url.endsWith('/') && !/\.[a-z]+$/.test(item.url)) {
+          item.url = `${item.url}.html`;
+        }
+        return item;
+      },
+      filter: (page) => !page.endsWith('/data-smoke') && !page.endsWith('/data-smoke.html')
+    })
+  ],
   vite: {
     plugins: [tailwindcss()]
   }

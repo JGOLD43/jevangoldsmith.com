@@ -28,6 +28,12 @@ const fmtCover = (b: typeof books[number]) => {
   description={p.bio ?? `${p.name} profile, timeline, books, notes, and resources.`}
   canonical={`https://jevangoldsmith.com/people/${entry.id}.html`}
   bodyClass="nav-compact"
+  pageType="ProfilePage"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://jevangoldsmith.com/' },
+    { name: 'People', url: 'https://jevangoldsmith.com/people.html' },
+    { name: p.name, url: `https://jevangoldsmith.com/people/${entry.id}.html` }
+  ]}
 >
   <main class="person-profile-page">
     <section class="person-profile-hero">
