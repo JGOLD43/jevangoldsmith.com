@@ -1,0 +1,183 @@
+import { defineCollection } from 'astro:content';
+import { z } from 'astro:schema';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+// Read the project-root data/*.json directly so legacy build and Astro stay
+// on a single source of truth. No copy, no sync, no drift.
+const DATA_DIR = resolve(import.meta.dirname, '../../data');
+
+// Many JSON fields use null for empty values. Standardize on
+// optional-or-nullable so schemas survive pre-existing data quirks.
+const nstr = () => z.string().nullable().optional();
+const nnum = () => z.number().nullable().optional();
+const nbool = () => z.boolean().nullable().optional();
+
+function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+// Loader factory. Reads a JSON file, optionally unwraps a key (people.json
+// has shape { people: [...] }), assigns each item a stable id, and returns it.
+//
+// id resolution order:
+//   1. opts.idFrom (if set)
+//   2. item.id
+//   3. slugify(item.title || item.name) — disambiguated with idDisambiguator
+//      (e.g. author for books) when present
+//   4. file name + index fallback
+function jsonArrayLoader(file: string, opts: {
+  key?: string;
+  idFrom?: string;
+  idDisambiguator?: string;
+} = {}) {
+  return () => {
+    const raw = JSON.parse(readFileSync(resolve(DATA_DIR, file), 'utf8'));
+    const arr: Record<string, unknown>[] = opts.key ? raw[opts.key] : raw;
+    if (!Array.isArray(arr)) {
+      throw new Error(`Expected array from ${file}${opts.key ? `["${opts.key}"]` : ''}, got ${typeof arr}`);
+    }
+    const used = new Set<string>();
+    return arr.map((item, i) => {
+      let id: string | undefined;
+      const fromField = opts.idFrom ? item[opts.idFrom] : item.id;
+      if (fromField !== undefined && fromField !== null && fromField !== '') {
+        id = String(fromField);
+      } else {
+        const title = (item.title || item.name) as string | undefined;
+        if (title) {
+          let candidate = slugify(title);
+          if (opts.idDisambiguator && item[opts.idDisambiguator]) {
+            candidate = `${candidate}-${slugify(String(item[opts.idDisambiguator]))}`;
+          }
+          if (used.has(candidate)) candidate = `${candidate}-${i}`;
+          id = candidate;
+        } else {
+          id = `${file.replace(/\.json$/, '')}-${i}`;
+        }
+      }
+      used.add(id);
+      return { ...item, id };
+    });
+  };
+}
+
+const books = defineCollection({
+  loader: jsonArrayLoader('books.json', { idFrom: 'isbn', idDisambiguator: 'author' }),
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    author: z.string(),
+    isbn: nstr(),
+    year: z.union([z.string(), z.number()]).nullable().optional(),
+    rating: z.number(),
+    reReads: nnum(),
+    category: nstr(),
+    shortDescription: nstr(),
+    review: nstr(),
+    read: nbool()
+  })
+});
+
+const movies = defineCollection({
+  loader: jsonArrayLoader('movies.json', { idFrom: 'tmdbId' }),
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    date: nstr(),
+    link: nstr(),
+    rating: nstr(),
+    starCount: nnum(),
+    year: z.union([z.string(), z.number()]).nullable().optional(),
+    poster: nstr(),
+    genre: nstr(),
+    timesWatched: nnum(),
+    tmdbId: nnum(),
+    runtime: nnum(),
+    tmdbGenres: z.array(z.string()).nullable().optional(),
+    overview: nstr(),
+    backdrop: nstr()
+  }).passthrough()
+});
+
+const people = defineCollection({
+  loader: jsonArrayLoader('people.json', { key: 'people' }),
+  schema: z.object({
+    id: z.string(),
+    name: z.string(),
+    title: nstr(),
+    lesson: nstr(),
+    category: nstr(),
+    image: nstr(),
+    srcset: nstr(),
+    searchText: nstr()
+  }).passthrough()
+});
+
+const essays = defineCollection({
+  loader: jsonArrayLoader('essays.json', { key: 'essays' }),
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    subtitle: nstr(),
+    author: nstr(),
+    date: nstr(),
+    category: nstr(),
+    status: nstr(),
+    content: z.string()
+  }).passthrough()
+});
+
+const podcasts = defineCollection({
+  loader: jsonArrayLoader('podcasts.json', { key: 'podcasts' }),
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    host: nstr(),
+    description: nstr(),
+    category: nstr(),
+    badge: nstr(),
+    image: nstr(),
+    searchText: nstr()
+  }).passthrough()
+});
+
+const adventures = defineCollection({
+  loader: jsonArrayLoader('adventures.json', { key: 'adventures' }),
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    subtitle: nstr(),
+    location: nstr(),
+    region: nstr(),
+    startDate: nstr(),
+    endDate: nstr(),
+    duration: nstr(),
+    heroImage: nstr(),
+    shortDescription: nstr(),
+    content: nstr(),
+    highlights: z.array(z.string()).nullable().optional()
+  }).passthrough()
+});
+
+const challenges = defineCollection({
+  loader: jsonArrayLoader('challenges.json', { key: 'challenges' }),
+  schema: z.object({ id: z.string() }).passthrough()
+});
+
+const projects = defineCollection({
+  loader: jsonArrayLoader('projects.json', { key: 'projects' }),
+  schema: z.object({ id: z.string() }).passthrough()
+});
+
+const topics = defineCollection({
+  loader: jsonArrayLoader('topics.json', { key: 'topics' }),
+  schema: z.object({ id: z.string() }).passthrough()
+});
+
+export const collections = { books, movies, people, essays, podcasts, adventures, challenges, projects, topics };

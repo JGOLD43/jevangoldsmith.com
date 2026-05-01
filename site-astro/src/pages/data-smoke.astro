@@ -1,0 +1,53 @@
+---
+// Phase 3 smoke test page — proves every content collection loads, validates,
+// and exposes typed entries. Hidden by leading underscore (Astro convention
+// for private pages); accessible at /_data-smoke.html during dev.
+//
+// Drop this file in Phase 4 once real pages reference each collection.
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const [books, movies, people, essays, podcasts, adventures, challenges, projects, topics] = await Promise.all([
+  getCollection('books'),
+  getCollection('movies'),
+  getCollection('people'),
+  getCollection('essays'),
+  getCollection('podcasts'),
+  getCollection('adventures'),
+  getCollection('challenges'),
+  getCollection('projects'),
+  getCollection('topics')
+]);
+
+const summary = [
+  { name: 'books', count: books.length, sample: books[0]?.data.title },
+  { name: 'movies', count: movies.length, sample: movies[0]?.data.title },
+  { name: 'people', count: people.length, sample: people[0]?.data.name },
+  { name: 'essays', count: essays.length, sample: essays[0]?.data.title },
+  { name: 'podcasts', count: podcasts.length, sample: podcasts[0]?.data.title },
+  { name: 'adventures', count: adventures.length, sample: adventures[0]?.data.title },
+  { name: 'challenges', count: challenges.length, sample: (challenges[0]?.data as { title?: string })?.title },
+  { name: 'projects', count: projects.length, sample: (projects[0]?.data as { title?: string })?.title },
+  { name: 'topics', count: topics.length, sample: (topics[0]?.data as { title?: string })?.title }
+];
+---
+<Base title="Data smoke test" canonical="https://jevangoldsmith.com/_data-smoke">
+  <main class="container" style="padding: 4rem 2rem;">
+    <h1>Content collections smoke test</h1>
+    <p>Every collection loads + validates against its Zod schema.</p>
+    <table style="margin-top: 2rem; width: 100%; max-width: 700px; border-collapse: collapse;">
+      <thead>
+        <tr><th align="left">collection</th><th align="left">count</th><th align="left">sample</th></tr>
+      </thead>
+      <tbody>
+        {summary.map((row) => (
+          <tr style="border-top: 1px solid var(--border-color);">
+            <td><code>{row.name}</code></td>
+            <td>{row.count}</td>
+            <td>{row.sample ?? '—'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </main>
+</Base>
