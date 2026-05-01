@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PodcastCard from '../components/PodcastCard.astro';
+
+const podcasts = await getCollection('podcasts');
+const count = podcasts.length;
+---
+<Base
+  title="Podcasts I Listen To | Jevan Goldsmith"
+  description="A curated list of podcasts and episodes Jevan Goldsmith returns to on business, technology, and life."
+  canonical="https://jevangoldsmith.com/podcasts.html"
+>
+  <main class="movies-layout podcasts-layout collection-layout sidebar-collapsed" id="podcasts-layout">
+    <section class="movies-main collection-main">
+      <header class="movies-hero podcasts-hero">
+        <div class="movies-hero-text">
+          <h1 class="hero-headline">Podcasts I Listen To</h1>
+          <p class="hero-tagline">Conversations, shows, and episodes that shaped how I think about business, technology, and life.</p>
+        </div>
+        <div class="movies-hero-stats">
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">{count}</div>
+            <div class="hero-stat-label">Audio Notes</div>
+          </div>
+        </div>
+      </header>
+
+      <section id="curated-podcasts-section">
+        <div class="spotify-section-header">
+          <h2>Curated Picks</h2>
+          <p class="spotify-section-meta">Hand-picked shows and episodes I return to.</p>
+        </div>
+        <div id="podcasts-container" class="movies-grid">
+          {podcasts.map((entry) => <PodcastCard entry={entry} />)}
+        </div>
+      </section>
+    </section>
+  </main>
+</Base>

@@ -1,0 +1,27 @@
+---
+// Single podcast card. Mirrors the markup produced by js/podcasts.js + the
+// legacy pages-legacy.css selectors (.movie-card.podcast-card, etc).
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { entry: CollectionEntry<'podcasts'> }
+const { entry } = Astro.props;
+const p = entry.data;
+const search = (p.searchText ?? `${p.title ?? ''} ${p.host ?? ''}`).trim();
+---
+<div
+  class={`movie-card podcast-card js-zoom-item${p.description ? ' has-review' : ''}`}
+  data-category={p.category ?? ''}
+  data-search={search}
+>
+  {p.badge && <div class="times-read-badge movie-watch-badge">{p.badge}</div>}
+  <div class="movie-poster-wrapper">
+    {p.image && <img src={`/${p.image}`} alt={p.host ?? p.title ?? ''} class="podcast-cover" width="150" height="150" loading="lazy" decoding="async" />}
+  </div>
+  <div class="movie-info">
+    <div class="movie-title-row">
+      <h3 class="movie-title">{p.title}</h3>
+    </div>
+    {p.host && <div class="podcast-category-badge">{p.host}</div>}
+    {p.description && <p class="movie-description">{p.description}</p>}
+  </div>
+</div>

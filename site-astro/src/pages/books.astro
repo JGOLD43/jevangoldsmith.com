@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import BookCard from '../components/BookCard.astro';
+
+const books = (await getCollection('books')).sort((a, b) =>
+  (a.data.title ?? '').localeCompare(b.data.title ?? '')
+);
+const count = books.length;
+---
+<Base
+  title="Books I've Read | Jevan Goldsmith"
+  description="Books that shaped how Jevan Goldsmith thinks about business, learning, and life — with ratings and reviews."
+  canonical="https://jevangoldsmith.com/books.html"
+>
+  <main class="books-layout collection-layout sidebar-collapsed" id="books-layout">
+    <section class="books-main collection-main">
+      <header class="books-hero">
+        <div class="books-hero-text">
+          <h1 class="hero-headline">Books I've Read</h1>
+          <p class="hero-tagline">Books that shaped how I think about business, learning, and life.</p>
+        </div>
+        <div class="books-hero-stats">
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">{count}</div>
+            <div class="hero-stat-label">Books</div>
+          </div>
+        </div>
+      </header>
+      <div id="books-container" class="books-grid">
+        {books.map((entry) => <BookCard entry={entry} />)}
+      </div>
+    </section>
+  </main>
+</Base>

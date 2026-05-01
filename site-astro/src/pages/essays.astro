@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import EssayCard from '../components/EssayCard.astro';
+
+const essays = (await getCollection('essays', ({ data }) => data.status !== 'draft')).sort((a, b) =>
+  (b.data.date ?? '').localeCompare(a.data.date ?? '')
+);
+const count = essays.length;
+---
+<Base
+  title="Essays | Jevan Goldsmith"
+  description="Essays on philosophy, management, technology, and modern life by Jevan Goldsmith."
+  canonical="https://jevangoldsmith.com/essays.html"
+>
+  <main class="essays-layout collection-layout sidebar-collapsed" id="essays-layout">
+    <section class="essays-main collection-main">
+      <header class="essays-hero">
+        <div class="essays-hero-text">
+          <h1 class="hero-headline">Essays</h1>
+          <p class="hero-tagline">Thoughts on philosophy, management, and modern life.</p>
+        </div>
+        <div class="essays-hero-stats">
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">{count}</div>
+            <div class="hero-stat-label">Essays Published</div>
+          </div>
+        </div>
+      </header>
+      <div id="essays-container" class="content-section essays-stack">
+        {essays.map((entry) => <EssayCard entry={entry} />)}
+      </div>
+    </section>
+  </main>
+</Base>

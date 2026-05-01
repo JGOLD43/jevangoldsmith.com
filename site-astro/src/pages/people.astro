@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PersonCard from '../components/PersonCard.astro';
+
+const people = (await getCollection('people')).sort((a, b) =>
+  (a.data.name ?? '').localeCompare(b.data.name ?? '')
+);
+const count = people.length;
+---
+<Base
+  title="People of History | Jevan Goldsmith"
+  description="A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment."
+  canonical="https://jevangoldsmith.com/people.html"
+>
+  <main class="people-layout collection-layout sidebar-collapsed" id="people-layout">
+    <section class="people-main collection-main">
+      <header class="people-hero">
+        <div class="people-hero-text">
+          <h1 class="hero-headline">People of History</h1>
+          <p class="hero-tagline">Thinkers, builders, writers, and creators who shaped how I think.</p>
+        </div>
+        <div class="people-hero-stats">
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">{count}</div>
+            <div class="hero-stat-label">People</div>
+          </div>
+        </div>
+      </header>
+      <div id="people-container" class="people-grid">
+        {people.map((entry) => <PersonCard entry={entry} />)}
+      </div>
+    </section>
+  </main>
+</Base>

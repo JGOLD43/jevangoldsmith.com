@@ -1,0 +1,38 @@
+---
+// Single person card. Mirrors js/people.js generated markup.
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { entry: CollectionEntry<'people'> }
+const { entry } = Astro.props;
+const p = entry.data;
+const search = (p.searchText ?? `${p.name ?? ''} ${p.title ?? ''} ${p.lesson ?? ''}`).trim();
+---
+<article
+  class="person-card"
+  data-category={p.category ?? ''}
+  data-person-id={entry.id}
+  data-search={search}
+  role="button"
+  tabindex="0"
+>
+  <div class="person-image-container">
+    {p.image && (
+      <img
+        src={`/${p.image}`}
+        alt={p.name ?? ''}
+        class="person-image"
+        srcset={p.srcset ?? undefined}
+        sizes="(max-width: 768px) 42vw, 220px"
+        width="400"
+        height="400"
+        loading="lazy"
+        decoding="async"
+      />
+    )}
+  </div>
+  <div class="person-info">
+    <h3 class="person-name">{p.name}</h3>
+    {p.title && <p class="person-title">{p.title}</p>}
+    {p.lesson && <p class="person-lesson">{p.lesson}</p>}
+  </div>
+</article>

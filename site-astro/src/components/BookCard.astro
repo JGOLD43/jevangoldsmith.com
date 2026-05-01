@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { entry: CollectionEntry<'books'> }
+const { entry } = Astro.props;
+const b = entry.data;
+const stars = '★'.repeat(b.rating) + '☆'.repeat(Math.max(0, 5 - b.rating));
+const reReads = (b.reReads ?? 0) > 0;
+const reviewText = (b.review ?? '').trim();
+---
+<div
+  class={`book-card js-zoom-item${reviewText ? ' has-review' : ''}`}
+  data-isbn={b.isbn ?? ''}
+  data-id={entry.id}
+  data-title={b.title}
+  role="button"
+  tabindex="0"
+>
+  {reReads && <div class="times-read-badge">📖 {(b.reReads ?? 0) + 1}x Read</div>}
+  <div class="book-cover-wrapper" data-title={b.title}>
+    {b.isbn && (
+      <img
+        src={`https://covers.openlibrary.org/b/isbn/${b.isbn}-L.jpg`}
+        alt={b.title}
+        class="book-cover"
+        loading="lazy"
+        decoding="async"
+        data-book-cover-fallback="true"
+      />
+    )}
+    <div class="js-zoom-detail" aria-hidden="true">
+      <p class="zoom-detail-kicker">{b.author}{b.year ? ` · ${b.year}` : ''}</p>
+      <p class="zoom-detail-title">{b.title}</p>
+      <p class="zoom-detail-lead">{stars}</p>
+      {reviewText && <p class="zoom-detail-line"><span>Review —</span> {reviewText}</p>}
+    </div>
+  </div>
+  <div class="book-info">
+    <div class="book-title-row">
+      <h3 class="book-title">{b.title}</h3>
+    </div>
+    <p class="book-author">{b.author}</p>
+    <div class="book-rating">{stars}</div>
+    {b.shortDescription && <p class="book-description">{b.shortDescription}</p>}
+  </div>
+</div>

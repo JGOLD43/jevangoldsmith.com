@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import MovieCard from '../components/MovieCard.astro';
+
+const movies = await getCollection('movies');
+const count = movies.length;
+const totalHours = movies.reduce((acc, m) => acc + ((m.data.runtime ?? 0) * (m.data.timesWatched ?? 1)), 0) / 60;
+---
+<Base
+  title="Movies I've Watched | Jevan Goldsmith"
+  description="A Letterboxd-synced log of movies Jevan Goldsmith has watched, with ratings, runtimes, and rewatch counts."
+  canonical="https://jevangoldsmith.com/movies.html"
+>
+  <main class="movies-layout collection-layout sidebar-collapsed" id="movies-layout">
+    <section class="movies-main collection-main">
+      <header class="movies-hero">
+        <div class="movies-hero-text">
+          <h1 class="hero-headline">Movies I've Watched</h1>
+          <p class="hero-tagline">A Letterboxd-synced log with ratings, runtimes, and rewatch counts.</p>
+        </div>
+        <div class="movies-hero-stats">
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">{count}</div>
+            <div class="hero-stat-label">Movies</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">{Math.round(totalHours)}</div>
+            <div class="hero-stat-label">Hours</div>
+          </div>
+        </div>
+      </header>
+      <div id="movies-container" class="movies-grid">
+        {movies.map((entry) => <MovieCard entry={entry} />)}
+      </div>
+    </section>
+  </main>
+</Base>
