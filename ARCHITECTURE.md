@@ -70,6 +70,24 @@ The check suite validates:
 - performance budgets
 - canonical docs presence and key source-of-truth rules
 
+## Parity Harness
+
+`tests/` contains a four-layer parity harness used to detect regressions during
+the in-progress Astro migration (see `docs/MIGRATION-ASTRO.md`):
+
+| Fixture | Locks | Capture | Check |
+|---|---|---|---|
+| `seo-fixture.json` | `<head>` per page (title, meta, og, twitter, canonical, JSON-LD) | `npm run check:seo:capture` | `npm run check:seo` |
+| `content-fixture.json` | heading outline, link/image counts, word count, data-action surface, landmarks | `npm run check:content:capture` | `npm run check:content` |
+| `visual-baselines/` | PNG SHA-256 at desktop / tablet / mobile | `npm run check:visual:capture` | `npm run check:visual` |
+| `perf-baseline.json` | load timing + bytes by asset class per page | `npm run check:perf:capture` | `npm run check:perf` |
+
+Capture every layer in one shot:
+
+```bash
+npm run check:parity:capture
+```
+
 ## Site-Wide Config
 
 After editing `data/site.json`, run:

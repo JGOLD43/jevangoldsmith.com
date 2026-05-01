@@ -54,6 +54,15 @@ Run all local checks:
 npm run check
 ```
 
+Capture every parity baseline (SEO, content, visual, perf) — used to lock
+current behavior during the in-progress Astro migration:
+
+```bash
+npm run check:parity:capture
+```
+
+See [docs/MIGRATION-ASTRO.md](docs/MIGRATION-ASTRO.md) for the migration plan.
+
 Verify live Firebase output (without requiring custom domain cutover):
 
 ```bash

@@ -41,14 +41,28 @@ function findGstack() {
 }
 
 function listRoutes() {
-  return fs.readdirSync(DIST)
-    .filter((f) => f.endsWith('.html'))
-    .map((f) => f.replace(/\.html$/, ''))
-    .sort();
+  const skip = new Set(['api', 'assets', 'images', 'vendor', 'data', 'fonts']);
+  function walk(dir, base) {
+    const out = [];
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isDirectory()) {
+        if (skip.has(entry.name)) continue;
+        out.push(...walk(path.join(dir, entry.name), path.posix.join(base, entry.name)));
+      } else if (entry.isFile() && entry.name.endsWith('.html')) {
+        out.push(path.posix.join(base, entry.name).replace(/\.html$/, ''));
+      }
+    }
+    return out;
+  }
+  return walk(DIST, '').sort();
+}
+
+function safeBaselineName(route) {
+  return route.replace(/\//g, '__');
 }
 
 function urlFor(route) {
-  return route === 'index' ? `http://localhost:${SERVER_PORT}/` : `http://localhost:${SERVER_PORT}/${route}`;
+  return route === 'index' ? `http://localhost:${SERVER_PORT}/` : `http://localhost:${SERVER_PORT}/${route}.html`;
 }
 
 function ensureServerUp() {
@@ -79,7 +93,7 @@ function captureRoute(B, route, viewport, outDir) {
   sh(B, ['viewport', viewport.size]);
   sh(B, ['goto', urlFor(route)]);
   sh(B, ['wait', '--networkidle']);
-  const out = path.join(outDir, `${route}-${viewport.label}.png`);
+  const out = path.join(outDir, `${safeBaselineName(route)}-${viewport.label}.png`);
   sh(B, ['screenshot', out]);
   return out;
 }
@@ -114,7 +128,7 @@ function check() {
   let count = 0;
   for (const route of routes) {
     for (const vp of VIEWPORTS) {
-      const baseline = path.join(BASELINE_DIR, `${route}-${vp.label}.png`);
+      const baseline = path.join(BASELINE_DIR, `${safeBaselineName(route)}-${vp.label}.png`);
       if (!fs.existsSync(baseline)) {
         failures.push({ route, viewport: vp.label, reason: 'no baseline' });
         continue;

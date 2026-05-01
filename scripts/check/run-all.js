@@ -1,6 +1,6 @@
 const { spawn } = require('child_process');
 
-const CHECKS = ['check:lint', 'check:build', 'check:seo', 'check:links', 'check:page-baselines', 'check:smoke'];
+const CHECKS = ['check:lint', 'check:build', 'check:seo', 'check:content', 'check:links', 'check:page-baselines', 'check:smoke'];
 
 function run(name) {
   return new Promise((resolve) => {

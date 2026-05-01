@@ -26,7 +26,7 @@ function walkHtml(dir, base = '') {
     const full = path.join(dir, entry.name);
     const rel = path.posix.join(base, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name === 'api' || entry.name === 'assets' || entry.name === 'images' || entry.name === 'vendor' || entry.name === 'data' || entry.name === 'fonts' || entry.name === 'topics') continue;
+      if (entry.name === 'api' || entry.name === 'assets' || entry.name === 'images' || entry.name === 'vendor' || entry.name === 'data' || entry.name === 'fonts') continue;
       out.push(...walkHtml(full, rel));
     } else if (entry.isFile() && entry.name.endsWith('.html')) {
       out.push(rel);
