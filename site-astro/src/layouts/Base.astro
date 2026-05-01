@@ -1,0 +1,61 @@
+---
+// Shared layout. Ported from _src/layouts/base.html.
+//
+// Phase 1 mirrors the legacy structure (title, description, canonical, og,
+// twitter, JSON-LD slot). Later phases will introduce a typed <Seo> component
+// that produces byte-identical <head> output to satisfy the SEO fixture.
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogType?: string;
+  ogImage?: string;
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description = '',
+  canonical = '',
+  ogType = 'website',
+  ogImage = 'https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png',
+  bodyClass = ''
+} = Astro.props;
+
+const siteName = 'Jevan Goldsmith';
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="alternate" type="application/json" href="/api/v1/index.json" title="Agent API index" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="Agent instructions" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <Nav />
+    <slot />
+    <Footer />
+    <slot name="scripts" />
+  </body>
+</html>

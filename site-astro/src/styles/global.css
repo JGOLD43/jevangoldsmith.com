@@ -1,0 +1,4 @@
+/* Tailwind v4 entry. Phase 1: import tailwind so the build pipeline links up.
+   Phase 2 will add @theme tokens ported from css/src/01-tokens.css and replace
+   the legacy chrome stylesheet wholesale. */
+@import "tailwindcss";

@@ -38,7 +38,13 @@ playwright-report/
 
 # Generated build output
 dist/
+dist-astro/
 .firebase/
+
+# Astro migration (in-progress)
+site-astro/node_modules/
+site-astro/.astro/
+site-astro/dist/
 
 # Generated root artifacts from npm run build
 css/style.css
