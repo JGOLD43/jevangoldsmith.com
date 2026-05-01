@@ -1,0 +1,40 @@
+---
+// Ported from _src/pages/problems.html via scripts/port-page.mjs.
+// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Problems: A Running Log of What I&#39;m Working On | Jevan Goldsmith"
+  description="A running log of problems Jevan Goldsmith is thinking about, working on, or watching from a distance."
+  canonical="https://jevangoldsmith.com/problems.html"
+>
+---
+title: "Problems - Jevan Goldsmith"
+description: "A running log of problems Jevan Goldsmith is thinking about, working on, or watching from a distance."
+layout: "base"
+bodyClass: "problems-page"
+fontWeights: "300;400;600;700"
+scripts: ''
+---
+<main class="takes-main">
+    <section class="takes-hero">
+        <p class="takes-eyebrow">Problems</p>
+        <h1>Problems worth thinking about.</h1>
+        <p>A running list of problems I am chewing on. Some are mine to solve. Some belong to other people, but I want to understand them. Some I am only watching from a distance.</p>
+    </section>
+
+    <section class="takes-grid" aria-label="Problems collections">
+        <article class="takes-card">
+            <p class="takes-card-eyebrow">Working On</p>
+            <h2>Active</h2>
+            <p>Problems I am currently spending real time on.</p>
+        </article>
+
+        <article class="takes-card">
+            <p class="takes-card-eyebrow">Watching</p>
+            <h2>Open Questions</h2>
+            <p>Problems I want to understand better before forming a view.</p>
+        </article>
+    </section>
+</main>
+</Base>

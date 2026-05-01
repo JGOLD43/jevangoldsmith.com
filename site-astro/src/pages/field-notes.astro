@@ -1,0 +1,87 @@
+---
+// Ported from _src/pages/field-notes.html via scripts/port-page.mjs.
+// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments | Jevan Goldsmith"
+  description="One useful idea, object, book, question, or experiment each week from Jevan Goldsmith's living archive."
+  canonical="https://jevangoldsmith.com/field-notes.html"
+>
+---
+title: "Field Notes - Jevan Goldsmith"
+description: "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith's living archive."
+layout: "base"
+bodyClass: "field-notes-page"
+fontWeights: "300;400;600;700"
+scripts: ''
+---
+<main class="field-notes-main">
+    <section class="field-notes-hero">
+        <p class="archive-kicker">Field Notes</p>
+        <h1>One useful idea, object, book, question, or experiment each week.</h1>
+        <p>Field Notes is where I send the useful things before they become polished essays: books worth reading, tools that stayed, questions I am stuck on, systems I am testing, and ideas I keep returning to.</p>
+        <form class="field-notes-form field-notes-form-large" action="https://formsubmit.co/hello@jevangoldsmith.com" method="POST" data-newsletter-form data-endpoint="https://formsubmit.co/ajax/hello@jevangoldsmith.com">
+            <input type="hidden" name="_subject" value="Field Notes signup">
+            <input type="hidden" name="_template" value="table">
+            <label class="sr-only" for="field-notes-hero-email">Email for Field Notes</label>
+            <input id="field-notes-hero-email" type="email" name="email" placeholder="Your email" autocomplete="email" required>
+            <button type="submit">Join Field Notes</button>
+        </form>
+        <p class="field-note-microcopy">Weekly-ish. Short. Useful. No spam.</p>
+    </section>
+
+    <section class="field-notes-section">
+        <div class="archive-section-heading">
+            <p class="archive-kicker">What Shows Up</p>
+            <h2>Small artifacts worth keeping.</h2>
+        </div>
+        <div class="field-notes-example-grid">
+            <article>
+                <span>01</span>
+                <h3>An object that earned its place</h3>
+                <p>A short note on a tool, why it stayed, and what it replaced.</p>
+            </article>
+            <article>
+                <span>02</span>
+                <h3>A book idea I cannot shake</h3>
+                <p>One useful idea from the reading pile and where it applies.</p>
+            </article>
+            <article>
+                <span>03</span>
+                <h3>A system I am testing</h3>
+                <p>A practical experiment in thinking, work, health, money, or attention.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="field-notes-section">
+        <div class="archive-section-heading">
+            <p class="archive-kicker">Common Threads</p>
+            <h2>The recurring obsessions.</h2>
+        </div>
+        <div class="obsession-cloud">
+            <a href="topics/books-reading.html">books</a>
+            <a href="topics/better-thinking.html">better thinking</a>
+            <a href="topics/business-building.html">business</a>
+            <a href="topics/real-estate-development.html">real estate</a>
+            <a href="topics/ai-assisted-work.html">AI-assisted work</a>
+            <a href="topics/tools-objects.html">tools</a>
+            <a href="topics/personal-systems.html">personal systems</a>
+            <a href="cool-shit.html">taste</a>
+        </div>
+    </section>
+
+    <section class="field-notes-final">
+        <h2>Want the next dispatch?</h2>
+        <p>Subscribe once. If the notes stop being useful, leave. Simple.</p>
+        <form class="field-notes-form" action="https://formsubmit.co/hello@jevangoldsmith.com" method="POST" data-newsletter-form data-endpoint="https://formsubmit.co/ajax/hello@jevangoldsmith.com">
+            <input type="hidden" name="_subject" value="Field Notes signup">
+            <input type="hidden" name="_template" value="table">
+            <label class="sr-only" for="field-notes-final-email">Email for Field Notes</label>
+            <input id="field-notes-final-email" type="email" name="email" placeholder="Your email" autocomplete="email" required>
+            <button type="submit">Get Field Notes</button>
+        </form>
+    </section>
+</main>
+</Base>

@@ -1,0 +1,127 @@
+---
+// Ported from _src/pages/changed-my-mind.html via scripts/port-page.mjs.
+// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Changed My Mind: Belief Updates &amp; Public Learning Log | Jevan Goldsmith"
+  description="A public record of ideas Jevan Goldsmith has updated, softened, reversed, or stopped believing."
+  canonical="https://jevangoldsmith.com/changed-my-mind.html"
+>
+---
+title: "Changed My Mind - Jevan Goldsmith"
+description: "A public record of ideas Jevan Goldsmith has updated, softened, reversed, or stopped believing."
+layout: "base"
+bodyClass: "changed-mind-page"
+fontWeights: "300;400;600;700"
+scripts: ''
+---
+<main class="changed-mind">
+    <section class="changed-mind-hero">
+        <p class="changed-mind-eyebrow">Belief Change Log</p>
+        <h1>Changed My Mind</h1>
+        <p>A public record of ideas I have updated, softened, reversed, or stopped believing. The point is not to perform certainty. The point is to keep score against reality.</p>
+    </section>
+
+    <section class="changed-mind-rule">
+        <h2>The Rule</h2>
+        <p>If I cannot name a belief that changed, I am probably collecting opinions instead of learning. This page is where I keep the useful reversals.</p>
+    </section>
+
+    <section class="changed-mind-list" aria-label="Changed beliefs">
+        <article class="changed-mind-entry">
+            <div class="changed-mind-date">2026</div>
+            <div class="changed-mind-copy">
+                <p class="changed-mind-topic">Personal websites</p>
+                <h2>From portfolio to public operating system</h2>
+                <dl>
+                    <div>
+                        <dt>I used to think</dt>
+                        <dd>A personal site should mainly prove competence: projects, bio, contact, maybe some writing.</dd>
+                    </div>
+                    <div>
+                        <dt>Now I think</dt>
+                        <dd>The best personal sites document how someone thinks, changes, chooses, builds, and pays attention over time.</dd>
+                    </div>
+                    <div>
+                        <dt>What changed it</dt>
+                        <dd>Building this archive made it obvious that the interesting part is not the static profile. It is the trail of judgment.</dd>
+                    </div>
+                </dl>
+            </div>
+        </article>
+
+        <article class="changed-mind-entry">
+            <div class="changed-mind-date">2026</div>
+            <div class="changed-mind-copy">
+                <p class="changed-mind-topic">Projects</p>
+                <h2>From finished objects to build documentaries</h2>
+                <dl>
+                    <div>
+                        <dt>I used to think</dt>
+                        <dd>Projects should be shown when they look polished enough to be impressive.</dd>
+                    </div>
+                    <div>
+                        <dt>Now I think</dt>
+                        <dd>Projects are more interesting when they show the current question, messy decisions, proof, and next move.</dd>
+                    </div>
+                    <div>
+                        <dt>What changed it</dt>
+                        <dd>Static project cards felt less honest than the actual learning underneath them.</dd>
+                    </div>
+                </dl>
+            </div>
+        </article>
+
+        <article class="changed-mind-entry">
+            <div class="changed-mind-date">2025</div>
+            <div class="changed-mind-copy">
+                <p class="changed-mind-topic">Reading</p>
+                <h2>From finishing books to extracting judgment</h2>
+                <dl>
+                    <div>
+                        <dt>I used to think</dt>
+                        <dd>Reading more books was the main sign that I was learning.</dd>
+                    </div>
+                    <div>
+                        <dt>Now I think</dt>
+                        <dd>A book only counts if it changes how I decide, notice, explain, or act.</dd>
+                    </div>
+                    <div>
+                        <dt>What changed it</dt>
+                        <dd>Too many finished books became trivia unless I turned them into notes, questions, systems, or conversations.</dd>
+                    </div>
+                </dl>
+            </div>
+        </article>
+
+        <article class="changed-mind-entry">
+            <div class="changed-mind-date">2025</div>
+            <div class="changed-mind-copy">
+                <p class="changed-mind-topic">AI-assisted work</p>
+                <h2>From automation to better feedback loops</h2>
+                <dl>
+                    <div>
+                        <dt>I used to think</dt>
+                        <dd>The main value of AI was doing work faster.</dd>
+                    </div>
+                    <div>
+                        <dt>Now I think</dt>
+                        <dd>The better value is making the feedback loop tighter: draft, inspect, test, compare, revise.</dd>
+                    </div>
+                    <div>
+                        <dt>What changed it</dt>
+                        <dd>Speed without taste just produces more output to clean up.</dd>
+                    </div>
+                </dl>
+            </div>
+        </article>
+    </section>
+
+    <section class="changed-mind-final">
+        <h2>Still updating</h2>
+        <p>This page should get more embarrassing over time. That means it is working.</p>
+        <a href="projects.html" class="btn-primary">See the build log</a>
+    </section>
+</main>
+</Base>
