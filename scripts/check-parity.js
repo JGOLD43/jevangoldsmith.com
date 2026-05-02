@@ -35,7 +35,9 @@ const SINGLE_PAGE = args.page || null;
 const JSON_OUT = !!args.json;
 
 if (args.build) {
-  console.error('[parity] rebuilding Astro -> dist-astro/ ...');
+  console.error('[parity] running asset preconditions + Astro build -> dist-astro/ ...');
+  execFileSync('npm', ['run', 'snap:routes'], { cwd: ROOT, stdio: 'inherit' });
+  execFileSync('npm', ['run', 'assets:optimize'], { cwd: ROOT, stdio: 'inherit' });
   execFileSync(
     'npx',
     ['astro', 'build', '--outDir', path.relative(path.join(ROOT, 'site-astro'), ASTRO_DIR)],
