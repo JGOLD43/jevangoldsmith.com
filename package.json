@@ -24,6 +24,7 @@
     "check:parity": "node scripts/check-parity.js",
     "check:parity:build": "node scripts/check-parity.js --build",
     "check:parity:visual": "node scripts/check-visual-parity.mjs",
+    "check:parity:runtime": "node scripts/check-runtime.mjs",
     "check:parity:capture": "npm run build && npm run check:seo:capture && npm run check:content:capture && npm run check:visual:capture && npm run check:perf:capture",
     "check:links": "node scripts/check-links.js",
     "check:page-baselines": "node scripts/check-page-baselines.js",
