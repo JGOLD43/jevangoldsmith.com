@@ -43,6 +43,7 @@ if (args.build) {
     ['astro', 'build', '--outDir', path.relative(path.join(ROOT, 'site-astro'), ASTRO_DIR)],
     { cwd: path.join(ROOT, 'site-astro'), stdio: 'inherit' }
   );
+  execFileSync('node', ['scripts/normalize-astro-html.js', `--dist=${ASTRO_DIR}`], { cwd: ROOT, stdio: 'inherit' });
 }
 
 if (!fs.existsSync(LEGACY_DIR) || !fs.existsSync(ASTRO_DIR)) {
@@ -103,6 +104,12 @@ function checkPage(filename) {
   const delta = aBytes - lBytes;
   const pct = lBytes > 0 ? delta / lBytes : 0;
 
+  // Gate on whitespace-normalized delta — Astro emits compact HTML and legacy
+  // emits indented HTML, so raw byte delta penalizes cosmetic-only difference.
+  // Normalized delta is the meaningful "did we actually lose content" metric.
+  const normDelta = aNorm.length - lNorm.length;
+  const normPct = lNorm.length > 0 ? normDelta / lNorm.length : 0;
+
   const lTok = extractTokens(lRaw);
   const aTok = extractTokens(aRaw);
 
@@ -118,7 +125,7 @@ function checkPage(filename) {
     if (d < 0) structuralLoss += -d;
   }
 
-  const withinByte = Math.abs(pct) <= BYTE_TOL;
+  const withinByte = Math.abs(normPct) <= BYTE_TOL;
   const noStructLoss = structuralLoss === 0;
   const noIdLoss = missingIds.length === 0;
   const fewClassLoss = missingClasses.length <= 5;
@@ -129,7 +136,7 @@ function checkPage(filename) {
     status: pass ? 'PASS' : 'FAIL',
     astroExists: true,
     bytes: { legacy: lBytes, astro: aBytes, delta, pct },
-    normalizedBytes: { legacy: lNorm.length, astro: aNorm.length },
+    normalizedBytes: { legacy: lNorm.length, astro: aNorm.length, delta: normDelta, pct: normPct },
     missingClasses,
     missingIds,
     missingDataAttrs,
@@ -179,19 +186,20 @@ let pass = 0;
 let fail = 0;
 let missing = 0;
 console.log(`\nparity check: ${ASTRO_DIR.replace(ROOT + '/', '')} vs ${LEGACY_DIR.replace(ROOT + '/', '')}\n`);
-console.log('STATUS  PAGE                                       BYTES_DELTA   MISSING_IDS  MISSING_CLASSES  STRUCT_LOSS');
-console.log('------  ----                                       -----------   -----------  ---------------  -----------');
+console.log('STATUS  PAGE                                       NORM_DELTA   RAW_DELTA   MISSING_IDS  MISSING_CLASSES  STRUCT_LOSS');
+console.log('------  ----                                       ----------   ---------   -----------  ---------------  -----------');
 for (const r of results) {
   if (r.status === 'MISSING') {
     missing++;
-    console.log(`MISS    ${r.filename.padEnd(43)}                  -            -                -          -`);
+    console.log(`MISS    ${r.filename.padEnd(43)}                                  -                -          -`);
     continue;
   }
   if (r.status === 'PASS') pass++;
   else fail++;
-  const pctStr = `${r.bytes.pct >= 0 ? '+' : ''}${(r.bytes.pct * 100).toFixed(1)}%`;
+  const normPctStr = `${r.normalizedBytes.pct >= 0 ? '+' : ''}${(r.normalizedBytes.pct * 100).toFixed(1)}%`;
+  const rawPctStr = `${r.bytes.pct >= 0 ? '+' : ''}${(r.bytes.pct * 100).toFixed(1)}%`;
   console.log(
-    `${r.status.padEnd(6)}  ${r.filename.padEnd(43)}  ${String(r.bytes.delta).padStart(7)} ${pctStr.padStart(7)}   ${String(r.missingIds.length).padStart(11)}  ${String(r.missingClasses.length).padStart(15)}  ${String(r.structuralLoss).padStart(11)}`
+    `${r.status.padEnd(6)}  ${r.filename.padEnd(43)}  ${normPctStr.padStart(8)}  ${rawPctStr.padStart(8)}   ${String(r.missingIds.length).padStart(11)}  ${String(r.missingClasses.length).padStart(15)}  ${String(r.structuralLoss).padStart(11)}`
   );
 }
 
