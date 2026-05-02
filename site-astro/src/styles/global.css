@@ -1,17 +1,12 @@
 /* Site-wide stylesheet, imported once from src/layouts/Base.astro.
  *
- * Order matters:
- *   1. tailwindcss   — utility engine + reset.
- *   2. tokens        — :root vars + Tailwind @theme + base typography.
- *   3. fonts         — @font-face declarations.
- *   4. chrome-legacy — verbatim port of css/src/{02-chrome,05-overrides}.css
- *                      (~2.4k lines). Owns navbar, footer, theme toggle, etc.
- *                      Phase 11 will rewrite this in Tailwind utilities.
+ * Tailwind 4's content-aware purge was stripping un-detected legacy class
+ * rules from chrome-legacy/collection-legacy/pages-legacy.css when imported
+ * here. The full legacy bundle is served as /css/legacy-style.css from
+ * public/ (linked in Base.astro <head>) and carries every selector intact.
  *
- * New page styles should use Tailwind utilities, not append to chrome-legacy.
+ * This file keeps tokens + fonts + tailwindcss for utility classes only.
  */
 @import "tailwindcss";
 @import "./tokens.css";
 @import "./fonts.css";
-@import "./chrome-legacy.css";
-@import "./pages-legacy.css";

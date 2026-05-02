@@ -1,18 +1,160 @@
 ---
-// Ported from _src/pages/products.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+import raw from '../../../data/products.json';
 import Base from '../layouts/Base.astro';
+
+interface Product {
+  id: string;
+  slug?: string;
+  title: string;
+  brand?: string;
+  type?: string;
+  category?: string;
+  status?: string;
+  price?: string | number;
+  shortDescription?: string;
+  description?: string;
+  rating?: number;
+  badge?: string;
+  image?: string;
+  ctaLabel?: string;
+  checkoutUrl?: string;
+  verdict?: string;
+  whyItStayed?: string;
+  howIUseIt?: string;
+  replaced?: string;
+  usage?: string;
+  icon?: string;
+}
+
+interface Category {
+  id: string;
+  title: string;
+  icon?: string;
+}
+
+const products: Product[] = (raw as any).products ?? [];
+const categories: Category[] = (raw as any).productCategories ?? [];
 ---
 <Base
   title="The Shelf: Tools, Objects &amp; Gear That Earned Their Place | Jevan Goldsmith"
   description="A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced."
   canonical="https://jevangoldsmith.com/products.html"
+  pageType="CollectionPage"
+  bodyClass="shelf-experience"
 >
----
-title: "The Shelf"
-description: "Objects, tools, and products that earned a place in Jevan Goldsmith's life."
-layout: "base"
-engine: "collection"
-bodyClass: "shelf-experience nav-compact"
----
+  <main class="shelf-page">
+    <h1 class="sr-only">The Shelf: Tools, Objects &amp; Gear That Earned Their Place</h1>
+
+    <div class="shelf-filter" data-shelf-filter aria-label="Shelf filters">
+      <button type="button" class="active" data-shelf-category="all">All</button>
+      {categories.map((c) => (
+        <button type="button" data-shelf-category={c.id}>{c.title}</button>
+      ))}
+    </div>
+
+    <section class="shelf-grid" aria-label="Objects on the shelf">
+      {products.map((p, i) => (
+        <article
+          class="shelf-item"
+          id={p.id}
+          data-shelf-card
+          data-category={(p.category ?? '').toLowerCase()}
+          style={`--shelf-index: ${i}`}
+        >
+          <button
+            class="shelf-object"
+            type="button"
+            data-shelf-item
+            data-id={p.id}
+            data-title={p.title}
+            data-brand={p.brand ?? ''}
+            data-category={p.category ?? ''}
+            data-verdict={p.verdict ?? p.shortDescription ?? ''}
+            data-why={p.whyItStayed ?? ''}
+            data-how={p.howIUseIt ?? ''}
+            data-replaced={p.replaced ?? ''}
+            data-usage={p.usage ?? ''}
+            data-icon={p.icon ?? ''}
+            data-image={p.image ?? ''}
+            data-link={p.checkoutUrl ?? ''}
+          >
+            <span class="shelf-object-stage has-photo" aria-hidden="true">
+              <span class="shelf-object-mark">
+                {p.image && (
+                  <img
+                    class="shelf-object-photo"
+                    src={p.image}
+                    alt={p.title}
+                    loading="lazy"
+                    decoding="async"
+                    width="800"
+                    height="800"
+                  />
+                )}
+                {!p.image && p.icon && <span class="shelf-object-icon">{p.icon}</span>}
+              </span>
+            </span>
+            {p.badge && <span class="shelf-badge">{p.badge}</span>}
+            <span class="shelf-object-name">{p.title}</span>
+            {(p.verdict || p.shortDescription) && (
+              <span class="shelf-object-verdict">{p.verdict ?? p.shortDescription}</span>
+            )}
+          </button>
+
+          <div class="shelf-object-detail" aria-hidden="true">
+            {p.brand && <p class="shelf-object-detail-brand">{p.brand}</p>}
+            {(p.verdict || p.shortDescription) && (
+              <p class="shelf-object-detail-verdict">{p.verdict ?? p.shortDescription}</p>
+            )}
+            {p.whyItStayed && (
+              <p class="shelf-object-detail-line"><strong>Why it stayed:</strong> {p.whyItStayed}</p>
+            )}
+            {p.howIUseIt && (
+              <p class="shelf-object-detail-line"><strong>How I use it:</strong> {p.howIUseIt}</p>
+            )}
+            {p.replaced && (
+              <p class="shelf-object-detail-line"><strong>Replaced:</strong> {p.replaced}</p>
+            )}
+            {p.usage && (
+              <p class="shelf-object-detail-line">{p.usage}</p>
+            )}
+            {p.checkoutUrl && (
+              <a
+                href={p.checkoutUrl}
+                class="shelf-object-detail-link"
+                target="_blank"
+                rel="noopener"
+                data-cta-id={`shelf-${p.id}`}
+                data-cta-location="products"
+              >
+                {p.ctaLabel ?? 'View'}
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <p class="shelf-disclosure">
+      Some links may earn a small commission at no cost to you. Only items I actually use end up on the shelf.
+    </p>
+  </main>
 </Base>
+
+<script>
+  // Simple filter wiring: click a .shelf-filter button → toggle .active and
+  // hide .shelf-item articles whose data-category doesn't match.
+  const filterRow = document.querySelector('[data-shelf-filter]');
+  const items = document.querySelectorAll<HTMLElement>('.shelf-item');
+  filterRow?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement)?.closest('button[data-shelf-category]') as HTMLElement | null;
+    if (!btn) return;
+    const cat = (btn.dataset.shelfCategory ?? 'all').toLowerCase();
+    filterRow.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    items.forEach((it) => {
+      const ic = (it.dataset.category ?? '').toLowerCase();
+      it.style.display = cat === 'all' || ic === cat ? '' : 'none';
+    });
+  });
+</script>

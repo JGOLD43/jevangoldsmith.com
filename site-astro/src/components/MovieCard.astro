@@ -18,6 +18,8 @@ const runtime = fmtRuntime(m.runtime);
   data-movie-title={m.title}
   data-title={m.title}
   data-id={m.title}
+  data-search={`${m.title ?? ''} ${m.genre ?? ''} ${(m.tmdbGenres ?? []).join(' ')}`.toLowerCase()}
+  data-category={m.genre ?? ''}
 >
   <div class="movie-poster-wrapper">
     {m.poster && <img src={m.poster} alt={m.title} class="movie-poster" loading="lazy" decoding="async" />}

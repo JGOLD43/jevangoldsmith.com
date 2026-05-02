@@ -1,0 +1,18 @@
+{
+  "siteName": "Jevan Goldsmith",
+  "domain": "jevangoldsmith.com",
+  "email": "hello@jevangoldsmith.com",
+  "social": {
+    "x": "https://x.com/JevanGoldsmith",
+    "youtube": "https://youtube.com/@JevanGoldsmith",
+    "instagram": "https://instagram.com/jevangoldsmith",
+    "linkedin": "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+    "letterboxd": "https://letterboxd.com/contentwatch"
+  },
+  "assets": {
+    "favicon": "images/favicon.svg",
+    "logo": "images/generated/logo/logo-nav-352.png",
+    "animatedLogo": "images/generated/video/logo-animated-352.mp4",
+    "profile": "images/generated/profile/profile-720.jpg"
+  }
+}

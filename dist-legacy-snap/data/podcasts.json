@@ -1,0 +1,97 @@
+{
+  "podcasts": [
+    {
+      "id": "naval-how-to-get-rich",
+      "title": "Naval Ravikant - How to Get Rich",
+      "host": "The Tim Ferriss Show",
+      "description": "A compact philosophy of leverage, judgment, ownership, and compounding.",
+      "category": "episodes",
+      "badge": "Must Listen",
+      "image": "images/podcasts/tim-ferriss.jpg",
+      "searchText": "Naval Ravikant How to Get Rich The Tim Ferriss Show must listen episode"
+    },
+    {
+      "id": "psychology-of-money",
+      "title": "The Psychology of Money",
+      "host": "Invest Like the Best - Morgan Housel",
+      "description": "A useful frame for behavior, incentives, luck, risk, and long-term wealth.",
+      "category": "episodes",
+      "badge": "Must Listen",
+      "image": "images/podcasts/invest-like-the-best.jpg",
+      "searchText": "The Psychology of Money Invest Like the Best Morgan Housel must listen episode"
+    },
+    {
+      "id": "changing-world-order",
+      "title": "Principles for Dealing with the Changing World Order",
+      "host": "Lex Fridman Podcast - Ray Dalio",
+      "description": "A long-view conversation about cycles, power, debt, and systems.",
+      "category": "episodes",
+      "badge": "Must Listen",
+      "image": "images/podcasts/lex-fridman.jpg",
+      "searchText": "Principles for Dealing with the Changing World Order Lex Fridman Podcast Ray Dalio must listen episode"
+    },
+    {
+      "id": "invest-like-the-best",
+      "title": "Invest Like the Best",
+      "host": "Patrick O'Shaughnessy",
+      "description": "Deep dives into investing strategies and business models with world-class operators and investors.",
+      "category": "business",
+      "image": "images/podcasts/invest-like-the-best.jpg",
+      "searchText": "Invest Like the Best Patrick O'Shaughnessy investing business strategy"
+    },
+    {
+      "id": "all-in-podcast",
+      "title": "All-In Podcast",
+      "host": "Chamath, Jason, Sacks & Friedberg",
+      "description": "Industry veterans break down the biggest stories in technology, economics, and politics.",
+      "category": "business",
+      "image": "images/podcasts/all-in.jpg",
+      "searchText": "All-In Podcast Chamath Jason Sacks Friedberg technology economics politics venture capital"
+    },
+    {
+      "id": "acquired",
+      "title": "Acquired",
+      "host": "Ben Gilbert & David Rosenthal",
+      "description": "The playbook of great companies: how they were built, acquired, and scaled.",
+      "category": "business",
+      "image": "images/podcasts/acquired.jpg",
+      "searchText": "Acquired Ben Gilbert David Rosenthal business history strategy companies"
+    },
+    {
+      "id": "lex-fridman",
+      "title": "Lex Fridman Podcast",
+      "host": "Lex Fridman",
+      "description": "Long-form conversations about AI, science, technology, history, philosophy, and intelligence.",
+      "category": "ideas",
+      "image": "images/podcasts/lex-fridman.jpg",
+      "searchText": "Lex Fridman Podcast AI science technology history philosophy intelligence"
+    },
+    {
+      "id": "huberman-lab",
+      "title": "Huberman Lab",
+      "host": "Andrew Huberman",
+      "description": "Science-based tools for everyday life: sleep, focus, motivation, and peak performance.",
+      "category": "ideas",
+      "image": "images/podcasts/huberman-lab.jpg",
+      "searchText": "Huberman Lab Andrew Huberman neuroscience health sleep focus motivation performance"
+    },
+    {
+      "id": "tim-ferriss-show",
+      "title": "The Tim Ferriss Show",
+      "host": "Tim Ferriss",
+      "description": "Deconstructing world-class performers to extract the tactics and tools you can use.",
+      "category": "development",
+      "image": "images/podcasts/tim-ferriss.jpg",
+      "searchText": "The Tim Ferriss Show Tim Ferriss productivity success world class performers tactics tools"
+    },
+    {
+      "id": "knowledge-project",
+      "title": "The Knowledge Project",
+      "host": "Shane Parrish",
+      "description": "Mental models and conversations for mastering the best of what others have figured out.",
+      "category": "development",
+      "image": "images/podcasts/knowledge-project.jpg",
+      "searchText": "The Knowledge Project Shane Parrish mental models decision making thinking"
+    }
+  ]
+}

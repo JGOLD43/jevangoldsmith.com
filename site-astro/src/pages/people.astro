@@ -2,19 +2,41 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PersonCard from '../components/PersonCard.astro';
+import CollectionSidebar from '../components/CollectionSidebar.astro';
+import { collectionPageItemList } from '../lib/seo';
 
 const people = (await getCollection('people')).sort((a, b) =>
   (a.data.name ?? '').localeCompare(b.data.name ?? '')
 );
 const count = people.length;
+const canonical = 'https://jevangoldsmith.com/people.html';
+const itemList = collectionPageItemList({
+  canonical,
+  items: people.map((p) => ({ name: p.data.name, url: `https://jevangoldsmith.com/people/${p.id}.html` }))
+});
+
+const categories = Array.from(
+  people.reduce((acc, p) => {
+    const c = p.data.category ?? '';
+    if (c) acc.set(c, (acc.get(c) ?? 0) + 1);
+    return acc;
+  }, new Map<string, number>())
+).map(([key, n]) => ({ key, label: key, count: n }));
 ---
 <Base
   title="People of History | Jevan Goldsmith"
   description="A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment."
-  canonical="https://jevangoldsmith.com/people.html"
+  canonical={canonical}
   pageType="CollectionPage"
+  extraSchema={[itemList]}
 >
-  <main class="people-layout collection-layout sidebar-collapsed" id="people-layout">
+  <main class="people-layout collection-layout" id="people-layout">
+    <CollectionSidebar
+      pageKey="people"
+      searchPlaceholder="Search people..."
+      categories={categories}
+      totalCount={count}
+    />
     <section class="people-main collection-main">
       <header class="people-hero">
         <div class="people-hero-text">

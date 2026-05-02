@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { personSchema } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const profiles = await getCollection('peopleProfiles');
@@ -9,6 +10,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const p = entry.data;
+const canonical = `https://jevangoldsmith.com/people/${entry.id}.html`;
 const books = await getCollection('books');
 const titles = new Set(p.bookTitles || []);
 const relatedBooks = books.filter((b) => titles.has(b.data.title));
@@ -22,18 +24,32 @@ const fmtCover = (b: typeof books[number]) => {
   const isbn = String(b.data.isbn || '').replace(/[^0-9X]/gi, '');
   return isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg` : '';
 };
+
+const heroImageAbs = heroImage.startsWith('http')
+  ? heroImage
+  : `https://jevangoldsmith.com${heroImage.startsWith('/') ? heroImage : `/${heroImage}`}`;
+
+const subject = personSchema({
+  canonical,
+  name: p.name,
+  jobTitle: p.title ?? null,
+  description: p.thesis ?? p.bio ?? null,
+  image: heroImageAbs
+});
 ---
 <Base
   title={`${p.name} - People - Jevan Goldsmith`}
   description={p.bio ?? `${p.name} profile, timeline, books, notes, and resources.`}
-  canonical={`https://jevangoldsmith.com/people/${entry.id}.html`}
+  canonical={canonical}
   bodyClass="nav-compact"
   pageType="ProfilePage"
+  ogImage={heroImageAbs}
   breadcrumbs={[
     { name: 'Home', url: 'https://jevangoldsmith.com/' },
     { name: 'People', url: 'https://jevangoldsmith.com/people.html' },
-    { name: p.name, url: `https://jevangoldsmith.com/people/${entry.id}.html` }
+    { name: p.name, url: canonical }
   ]}
+  extraSchema={[subject]}
 >
   <main class="person-profile-page">
     <section class="person-profile-hero">

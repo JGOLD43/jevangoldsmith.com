@@ -1,6 +1,6 @@
 ---
 // Ported from _src/pages/dateme.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+// SEO mirrors tests/seo-fixture.json.
 import Base from '../layouts/Base.astro';
 ---
 <Base
@@ -8,34 +8,11 @@ import Base from '../layouts/Base.astro';
   description="A private, noindex personal page for date-me context, compatibility, and contact flow."
   canonical="https://jevangoldsmith.com/dateme.html"
 >
----
-title: "Date Me"
-description: "A private, noindex personal page for date-me context, compatibility, and contact flow."
-layout: "base"
-bodyClass: "dateme-page"
-scripts: ""
----
 <main class="dateme-main">
         <h1 class="sr-only">Date Me</h1>
         <div id="funnel-container" class="funnel-container">
             <!-- Funnel content rendered by JavaScript -->
         </div>
     </main>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div>
-                    <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
-                    <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
-                </div>
-                <ul class="footer-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="dateme">Field Notes</a></li>
-                    <li><a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="dateme">The Shelf</a></li>
-                    <li><a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="dateme">Resources</a></li>
-                </ul>
-            </div>
-        </div>
-    </footer>
+<script is:inline src="/js/dateme.js" defer></script>
 </Base>

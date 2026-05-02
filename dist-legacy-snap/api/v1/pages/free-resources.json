@@ -1,0 +1,271 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "page": {
+    "id": "free-resources",
+    "title": "Useful Resources for Thinking, Building & Learning",
+    "description": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work.",
+    "index": true,
+    "section": "taste",
+    "primaryKeyword": "useful resources",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Better Thinking",
+      "Books & Reading",
+      "Business & Building",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "How I Read: A Practical Reading Philosophy",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "index.html",
+      "reading-philosophy.html",
+      "essays.html",
+      "field-notes.html",
+      "books.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "url": "https://jevangoldsmith.com/free-resources.html",
+    "htmlPath": "free-resources.html",
+    "source": "_src/pages"
+  },
+  "source": "data/products.json",
+  "categories": [
+    {
+      "id": "reading",
+      "title": "Reading",
+      "icon": "book"
+    },
+    {
+      "id": "productivity",
+      "title": "Productivity",
+      "icon": "calendar"
+    },
+    {
+      "id": "finance",
+      "title": "Finance",
+      "icon": "dollar"
+    },
+    {
+      "id": "mental-models",
+      "title": "Mental Models",
+      "icon": "question"
+    }
+  ],
+  "items": [
+    {
+      "id": "book-notes-collection",
+      "slug": "book-notes-collection",
+      "title": "Book Notes Collection",
+      "type": "lead-magnet",
+      "resourceType": "notes",
+      "category": "reading",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "My personal notes and key takeaways from impactful books across business, psychology, and philosophy.",
+      "description": "A future free resource that packages durable book notes for faster review and application.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "readers",
+        "builders"
+      ],
+      "topics": [
+        "books-reading",
+        "better-thinking"
+      ],
+      "tags": [
+        "reading",
+        "books",
+        "notes"
+      ],
+      "relatedContent": [
+        "books.html",
+        "reading-philosophy.html"
+      ],
+      "collection": "resources",
+      "canonicalUrl": "https://jevangoldsmith.com/free-resources.html#book-notes-collection",
+      "shareable": true,
+      "summary": "My personal notes and key takeaways from impactful books across business, psychology, and philosophy."
+    },
+    {
+      "id": "weekly-review-template",
+      "slug": "weekly-review-template",
+      "title": "Weekly Review Template",
+      "type": "template",
+      "resourceType": "worksheet",
+      "category": "productivity",
+      "status": "available",
+      "price": "Free",
+      "shortDescription": "The template I use every Sunday to reflect on the week and plan ahead with intention.",
+      "description": "A free weekly review template for reflection, planning, and intentional next actions.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Open Template",
+      "downloadUrl": "weekly-review-template.html",
+      "checkoutUrl": "",
+      "audience": [
+        "operators",
+        "students"
+      ],
+      "topics": [
+        "personal-systems",
+        "better-thinking"
+      ],
+      "tags": [
+        "planning",
+        "reflection",
+        "weekly-review"
+      ],
+      "relatedContent": [
+        "notes.html"
+      ],
+      "collection": "resources",
+      "canonicalUrl": "https://jevangoldsmith.com/free-resources.html#weekly-review-template",
+      "shareable": true,
+      "summary": "The template I use every Sunday to reflect on the week and plan ahead with intention."
+    },
+    {
+      "id": "personal-finance-tracker",
+      "slug": "personal-finance-tracker",
+      "title": "Personal Finance Tracker",
+      "type": "template",
+      "resourceType": "spreadsheet",
+      "category": "finance",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "A simple spreadsheet for tracking income, expenses, savings rate, and net worth over time.",
+      "description": "A free personal finance spreadsheet for income, expenses, savings rate, and net worth tracking.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "personal finance learners"
+      ],
+      "topics": [
+        "personal-systems"
+      ],
+      "tags": [
+        "finance",
+        "spreadsheet",
+        "tracking"
+      ],
+      "relatedContent": [],
+      "collection": "resources",
+      "canonicalUrl": "https://jevangoldsmith.com/free-resources.html#personal-finance-tracker",
+      "shareable": true,
+      "summary": "A simple spreadsheet for tracking income, expenses, savings rate, and net worth over time."
+    },
+    {
+      "id": "decision-making-framework",
+      "slug": "decision-making-framework",
+      "title": "Decision Making Framework",
+      "type": "template",
+      "resourceType": "checklist",
+      "category": "mental-models",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "A checklist of questions and frameworks I use when facing important decisions.",
+      "description": "A free decision-making checklist for assumptions, constraints, options, and next actions.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "builders",
+        "decision makers"
+      ],
+      "topics": [
+        "better-thinking",
+        "personal-systems"
+      ],
+      "tags": [
+        "decision-making",
+        "mental-models",
+        "strategy"
+      ],
+      "relatedContent": [],
+      "collection": "resources",
+      "canonicalUrl": "https://jevangoldsmith.com/free-resources.html#decision-making-framework",
+      "shareable": true,
+      "summary": "A checklist of questions and frameworks I use when facing important decisions."
+    },
+    {
+      "id": "reading-operating-system",
+      "slug": "reading-operating-system",
+      "title": "Reading Operating System",
+      "type": "template",
+      "resourceType": "template",
+      "category": "reading",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "A future downloadable template for turning books into durable notes, decisions, and action.",
+      "description": "A lightweight resource placeholder for the future commerce/resource layer. It keeps the catalog shape ready without changing the current public product experience.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "readers",
+        "lifelong learners"
+      ],
+      "topics": [
+        "books-reading",
+        "personal-systems"
+      ],
+      "tags": [
+        "reading",
+        "learning",
+        "templates"
+      ],
+      "relatedContent": [
+        "books.html",
+        "reading-philosophy.html"
+      ],
+      "collection": "resources",
+      "canonicalUrl": "https://jevangoldsmith.com/free-resources.html#reading-operating-system",
+      "shareable": true,
+      "summary": "A future downloadable template for turning books into durable notes, decisions, and action."
+    },
+    {
+      "id": "first-principles-decision-template",
+      "slug": "first-principles-decision-template",
+      "title": "First Principles Decision Template",
+      "type": "template",
+      "resourceType": "worksheet",
+      "category": "mental-models",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "A future worksheet for breaking decisions down to assumptions, truths, options, and next actions.",
+      "description": "A commerce-ready placeholder connected to the skills library. The generated API exposes it to agents before a checkout provider is chosen.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "builders",
+        "strategists"
+      ],
+      "topics": [
+        "better-thinking"
+      ],
+      "tags": [
+        "decision-making",
+        "strategy",
+        "templates"
+      ],
+      "relatedContent": [],
+      "collection": "resources",
+      "canonicalUrl": "https://jevangoldsmith.com/free-resources.html#first-principles-decision-template",
+      "shareable": true,
+      "summary": "A future worksheet for breaking decisions down to assumptions, truths, options, and next actions."
+    }
+  ]
+}

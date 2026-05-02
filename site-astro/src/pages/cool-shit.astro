@@ -1,20 +1,14 @@
 ---
 // Ported from _src/pages/cool-shit.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+// SEO mirrors tests/seo-fixture.json.
 import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Cool Shit: Objects, Ideas &amp; Useful Finds | Jevan Goldsmith"
   description="A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith's attention."
   canonical="https://jevangoldsmith.com/cool-shit.html"
+  pageType="CollectionPage"
 >
----
-title: "Cool Shit: Objects, Ideas &amp; Useful Finds"
-description: "A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith's attention."
-layout: "base"
-bodyClass: "nav-compact"
-scripts: ""
----
 <main class="cool-page" data-active="feed">
         <aside class="cool-sidebar" aria-label="Timeline">
             <div class="timeline-head">
@@ -56,41 +50,6 @@ scripts: ""
 
             </div>
         </div>
-    <section class="seo-related-section" data-seo-related>
-        <p class="seo-related-eyebrow">Related thread</p>
-        <h2>Keep exploring this idea</h2>
-        <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
-        <div class="seo-related-grid">
-            <a class="seo-related-card" href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="cool-shit">
-                <span>The Shelf: Tools, Objects &amp; Gear That Earned Their Place</span>
-                <p>A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced.</p>
-            </a>
-            <a class="seo-related-card" href="movies.html">
-                <span>Movie Reviews, Watchlist &amp; Taste Notes</span>
-                <p>A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste.</p>
-            </a>
-            <a class="seo-related-card" href="books.html">
-                <span>Books I Recommend &amp; Notes From My Reading System</span>
-                <p>A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems.</p>
-            </a>
-        </div>
-    </section>
 </main>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div>
-                    <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
-                    <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
-                </div>
-                <ul class="footer-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="cool-shit">Field Notes</a></li>
-                    <li><a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="cool-shit">The Shelf</a></li>
-                    <li><a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="cool-shit">Resources</a></li>
-                </ul>
-            </div>
-        </div>
-    </footer>
+<script is:inline src="/js/cool-shit.js" defer></script>
 </Base>

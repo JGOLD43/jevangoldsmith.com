@@ -1,0 +1,192 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "page": {
+    "id": "products",
+    "title": "The Shelf: Tools, Objects & Gear That Earned Their Place",
+    "description": "A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced.",
+    "index": true,
+    "section": "taste",
+    "primaryKeyword": "tools objects",
+    "secondaryKeywords": [
+      "Tools & Objects",
+      "AI-Assisted Work",
+      "Personal Systems",
+      "Taste",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Projects Jevan Goldsmith Is Building & Exploring",
+      "Cool Shit"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "index.html",
+      "field-notes.html",
+      "projects.html",
+      "cool-shit.html",
+      "movies.html",
+      "movie-philosophy.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "url": "https://jevangoldsmith.com/products.html",
+    "htmlPath": "products.html",
+    "source": "_src/pages"
+  },
+  "source": "data/products.json",
+  "categories": [
+    {
+      "id": "tech",
+      "title": "Tech & Gadgets",
+      "icon": "monitor"
+    },
+    {
+      "id": "productivity",
+      "title": "Productivity",
+      "icon": "file"
+    },
+    {
+      "id": "travel",
+      "title": "Travel",
+      "icon": "globe"
+    },
+    {
+      "id": "health",
+      "title": "Health & Fitness",
+      "icon": "heart"
+    }
+  ],
+  "items": [
+    {
+      "id": "macbook-pro-14",
+      "slug": "macbook-pro-14",
+      "title": "MacBook Air M1 2020 16GB",
+      "brand": "Apple",
+      "type": "recommendation",
+      "category": "tech",
+      "status": "available",
+      "price": "",
+      "shortDescription": "The M1 chip with 16GB RAM handles everything I throw at it. Perfect for coding, writing, and running multiple apps simultaneously.",
+      "description": "A daily-driver laptop recommendation for coding, video editing, and heavy multitasking.",
+      "rating": 5,
+      "badge": "Daily Driver",
+      "usage": "Used daily for 2+ years",
+      "icon": "laptop",
+      "image": "images/generated/products/macbook-pro-14-640.png",
+      "ctaLabel": "View Recommendation",
+      "checkoutUrl": "",
+      "verdict": "The machine I stop thinking about because it just keeps up.",
+      "whyItStayed": "Fast enough for coding, writing, media, and too many browser tabs without becoming the constraint.",
+      "howIUseIt": "Daily work, writing, builds, research, editing, and the general command center for everything digital.",
+      "replaced": "A slower laptop that made context switching feel expensive.",
+      "audience": [
+        "builders",
+        "creators"
+      ],
+      "topics": [
+        "tools-objects",
+        "ai-assisted-work"
+      ],
+      "tags": [
+        "tech",
+        "workstation",
+        "coding"
+      ],
+      "relatedContent": [
+        "projects.html"
+      ],
+      "collection": "products",
+      "canonicalUrl": "https://jevangoldsmith.com/products.html#macbook-pro-14",
+      "shareable": true,
+      "summary": "The M1 chip with 16GB RAM handles everything I throw at it. Perfect for coding, writing, and running multiple apps simultaneously."
+    },
+    {
+      "id": "samsung-galaxy-s23-ultra",
+      "slug": "samsung-galaxy-s23-ultra",
+      "title": "Galaxy S23 Ultra",
+      "brand": "Samsung",
+      "type": "recommendation",
+      "category": "tech",
+      "status": "available",
+      "price": "",
+      "shortDescription": "A big-screen Android phone with an excellent camera system, built-in S Pen, and enough battery to feel dependable all day.",
+      "description": "A flagship Android phone recommendation for capture, notes, and everyday mobile work.",
+      "rating": 4.7,
+      "badge": "Power Phone",
+      "usage": "Primary Android pick",
+      "icon": "phone",
+      "image": "images/generated/products/samsung-galaxy-s23-ultra-640.png",
+      "ctaLabel": "View Recommendation",
+      "checkoutUrl": "",
+      "verdict": "A phone that behaves more like a pocket workstation.",
+      "whyItStayed": "The big screen, strong cameras, and S Pen make it useful for capturing, annotating, and doing real work away from the desk.",
+      "howIUseIt": "Photos, quick notes, reading, navigation, travel planning, and mobile admin when opening a laptop would be overkill.",
+      "replaced": "A smaller phone that made mobile work feel cramped.",
+      "audience": [
+        "builders",
+        "creators"
+      ],
+      "topics": [
+        "tools-objects",
+        "ai-assisted-work"
+      ],
+      "tags": [
+        "phone",
+        "camera",
+        "android"
+      ],
+      "relatedContent": [
+        "videos.html"
+      ],
+      "collection": "products",
+      "canonicalUrl": "https://jevangoldsmith.com/products.html#samsung-galaxy-s23-ultra",
+      "shareable": true,
+      "summary": "A big-screen Android phone with an excellent camera system, built-in S Pen, and enough battery to feel dependable all day."
+    },
+    {
+      "id": "dji-osmo-action-4",
+      "slug": "dji-osmo-action-4",
+      "title": "Osmo Action 4",
+      "brand": "DJI",
+      "type": "recommendation",
+      "category": "tech",
+      "status": "available",
+      "price": "",
+      "shortDescription": "Rugged, waterproof action camera with excellent stabilization. Captures adventures without turning the moment into a production.",
+      "description": "An action camera recommendation for travel, adventures, and POV capture.",
+      "rating": 4.7,
+      "badge": "Capture Kit",
+      "usage": "Travel and adventure kit",
+      "icon": "camera",
+      "image": "images/generated/products/dji-osmo-action-4-640.png",
+      "ctaLabel": "View Recommendation",
+      "checkoutUrl": "",
+      "verdict": "The pocket camera that makes the best shots actually happen.",
+      "whyItStayed": "Rugged, waterproof, and stabilized enough that the footage looks intentional instead of accidental.",
+      "howIUseIt": "Adventures, travel, POV clips, and the handheld moments where a phone is not the right tool.",
+      "replaced": "Shaky phone footage and shots I kept meaning to get but never did.",
+      "audience": [
+        "creators",
+        "travellers"
+      ],
+      "topics": [
+        "tools-objects",
+        "adventure"
+      ],
+      "tags": [
+        "camera",
+        "video",
+        "travel"
+      ],
+      "relatedContent": [
+        "adventures.html",
+        "videos.html"
+      ],
+      "collection": "products",
+      "canonicalUrl": "https://jevangoldsmith.com/products.html#dji-osmo-action-4",
+      "shareable": true,
+      "summary": "Rugged, waterproof action camera with excellent stabilization. Captures adventures without turning the moment into a production."
+    }
+  ]
+}

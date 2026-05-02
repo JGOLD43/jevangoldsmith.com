@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "collection": "resources",
+  "canonicalUrl": "https://jevangoldsmith.com/api/v1/resources/decision-making-framework.json",
+  "item": {
+    "id": "decision-making-framework",
+    "slug": "decision-making-framework",
+    "title": "Decision Making Framework",
+    "type": "template",
+    "resourceType": "checklist",
+    "category": "mental-models",
+    "status": "preview",
+    "price": "Free",
+    "shortDescription": "A checklist of questions and frameworks I use when facing important decisions.",
+    "description": "A free decision-making checklist for assumptions, constraints, options, and next actions.",
+    "image": "images/generated/logo/logo-nav-352.png",
+    "ctaLabel": "Coming Soon",
+    "downloadUrl": "",
+    "checkoutUrl": "",
+    "audience": [
+      "builders",
+      "decision makers"
+    ],
+    "topics": [
+      "better-thinking",
+      "personal-systems"
+    ],
+    "tags": [
+      "decision-making",
+      "mental-models",
+      "strategy"
+    ],
+    "relatedContent": [],
+    "collection": "resources",
+    "canonicalUrl": "https://jevangoldsmith.com/free-resources.html#decision-making-framework",
+    "shareable": true,
+    "summary": "A checklist of questions and frameworks I use when facing important decisions."
+  }
+}

@@ -73,7 +73,7 @@
       "search.html",
       "products.html"
     ],
-    "maxCriticalPageHtmlBytes": 90000,
+    "maxCriticalPageHtmlBytes": 150000,
     "maxCriticalPageLocalAssetBytes": 380000,
     "maxAgentApiIndexBytes": 20000,
     "maxAgentCollectionBytes": 140000

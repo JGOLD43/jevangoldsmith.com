@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import { tripSchema } from '../lib/seo';
 
 export async function getStaticPaths() {
   const adventures = await getCollection('adventures');
@@ -9,18 +10,39 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const a = entry.data;
+const canonical = `https://jevangoldsmith.com/adventure-${entry.id}.html`;
 
 function fmtRange(start?: string | null, end?: string | null): string {
   if (!start && !end) return '';
   if (start && end) return `${start} – ${end}`;
   return start ?? end ?? '';
 }
+
+const trip = tripSchema({
+  canonical,
+  name: a.title,
+  description: a.shortDescription ?? undefined,
+  startDate: a.startDate ?? null,
+  endDate: a.endDate ?? null,
+  itinerary: a.highlights?.map((h) => ({ name: h })) ?? null,
+  image: a.heroImage ?? undefined
+});
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://jevangoldsmith.com/' },
+  { name: 'Adventures', url: 'https://jevangoldsmith.com/adventures.html' },
+  { name: a.title, url: canonical }
+];
 ---
 <Base
   title={`${a.title} - Jevan Goldsmith`}
   description={a.shortDescription ?? `${a.title} adventure log.`}
-  canonical={`https://jevangoldsmith.com/adventure-${entry.id}.html`}
+  canonical={canonical}
   bodyClass="nav-compact"
+  pageType="Article"
+  breadcrumbs={breadcrumbs}
+  ogImage={a.heroImage ?? undefined}
+  extraSchema={[trip]}
 >
   <main class="adventure-detail-page">
     <div class="adventure-hero">

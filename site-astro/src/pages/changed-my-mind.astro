@@ -1,21 +1,14 @@
 ---
 // Ported from _src/pages/changed-my-mind.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+// SEO mirrors tests/seo-fixture.json.
 import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Changed My Mind: Belief Updates &amp; Public Learning Log | Jevan Goldsmith"
   description="A public record of ideas Jevan Goldsmith has updated, softened, reversed, or stopped believing."
   canonical="https://jevangoldsmith.com/changed-my-mind.html"
+  pageType="CollectionPage"
 >
----
-title: "Changed My Mind - Jevan Goldsmith"
-description: "A public record of ideas Jevan Goldsmith has updated, softened, reversed, or stopped believing."
-layout: "base"
-bodyClass: "changed-mind-page"
-fontWeights: "300;400;600;700"
-scripts: ''
----
 <main class="changed-mind">
     <section class="changed-mind-hero">
         <p class="changed-mind-eyebrow">Belief Change Log</p>
@@ -121,7 +114,7 @@ scripts: ''
     <section class="changed-mind-final">
         <h2>Still updating</h2>
         <p>This page should get more embarrassing over time. That means it is working.</p>
-        <a href="projects.html" class="btn-primary">See the build log</a>
+        <a href="/projects.html" class="btn-primary">See the build log</a>
     </section>
 </main>
 </Base>

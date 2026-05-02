@@ -40,11 +40,27 @@ function pageProps(slug) {
   };
 }
 
-function stripScripts(html) {
-  // Astro's bundler tries to resolve src="js/..." imports at build time. Legacy
-  // pages reference /js/*.js modules that still live outside Astro. Strip them
-  // for Phase 4 (static structure only). Re-introduced as Astro islands later.
-  return html.replace(/<script\b[\s\S]*?<\/script>/gi, '');
+function stripFrontmatter(html) {
+  // Legacy body files often start with their own YAML frontmatter (legacy
+  // build engine consumed it). Astro must not see it — it's neither HTML nor
+  // an Astro frontmatter block. Returns { body, frontmatter } where
+  // frontmatter is the raw YAML text (or '' if none).
+  const m = html.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n+/);
+  if (!m) return { body: html, frontmatter: '' };
+  return { body: html.slice(m[0].length), frontmatter: m[1] };
+}
+
+function extractScriptDeps(html) {
+  // Find legacy <script src="js/..."> references so Phase 5 (JS islands)
+  // knows what to wire. Drop all <script> tags from the emitted body.
+  const deps = [];
+  const re = /<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>\s*<\/script>/gi;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    deps.push(m[1]);
+  }
+  const body = html.replace(/<script\b[\s\S]*?<\/script>/gi, '');
+  return { body, deps };
 }
 
 function portPage(slug, opts = {}) {
@@ -53,18 +69,34 @@ function portPage(slug, opts = {}) {
     console.error(`  ✗ ${slug}: no body source found`);
     return false;
   }
-  let body = readFileSync(bodyPath, 'utf8');
-  const before = body.length;
-  body = stripScripts(body);
-  const stripped = before - body.length;
+  const raw = readFileSync(bodyPath, 'utf8');
+  const before = raw.length;
+  const { body: noFm, frontmatter } = stripFrontmatter(raw);
+  const { body: stripped, deps } = extractScriptDeps(noFm);
+  const trimmed = stripped.trim();
+  const droppedBytes = before - trimmed.length;
   const { title, description, canonical } = pageProps(slug);
   const noChrome = opts.noChrome ? ', noChrome' : '';
+
+  const isCollectionEngine = /^\s*engine:\s*"?collection"?\s*$/m.test(frontmatter);
+  const isEmpty = trimmed.length === 0;
+
+  let bodyOut;
+  if (isEmpty && isCollectionEngine) {
+    bodyOut = `  {/* TODO: collection render — legacy page used engine:"collection".\n      Wire getCollection() and a render loop here matching legacy ${slug}.html. */}\n  <main class="placeholder-page"><h1>${title}</h1></main>`;
+  } else if (isEmpty) {
+    bodyOut = `  {/* TODO: legacy body was empty after frontmatter strip. Hand-fill ${slug}. */}\n  <main class="placeholder-page"><h1>${title}</h1></main>`;
+  } else {
+    bodyOut = trimmed;
+  }
+
+  const depsComment = deps.length > 0 ? `\n// js-deps: ${deps.join(', ')}` : '';
 
   // Escape backticks/dollars only inside ${} so they survive the template literal.
   // Body is emitted verbatim — Astro accepts HTML in templates.
   const out = `---
 // Ported from ${bodyPath.replace(ROOT + '/', '')} via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+// SEO mirrors tests/seo-fixture.json.${depsComment}
 import Base from '../layouts/Base.astro';
 ---
 <Base
@@ -72,14 +104,16 @@ import Base from '../layouts/Base.astro';
   description=${JSON.stringify(description)}
   canonical=${JSON.stringify(canonical)}${noChrome}
 >
-${body.trim()}
+${bodyOut}
 </Base>
 `;
 
   const dest = resolve(SITE_ASTRO, `src/pages/${slug}.astro`);
   writeFileSync(dest, out);
-  const tail = stripped > 0 ? `, stripped ${stripped} bytes of <script>` : '';
-  console.log(`  ✓ ${slug}.astro  (${body.length} body bytes from ${bodyPath.replace(ROOT + '/', '')}${tail})`);
+  const tail = droppedBytes > 0 ? `, dropped ${droppedBytes}b (frontmatter+scripts)` : '';
+  const depTail = deps.length > 0 ? ` deps=[${deps.join(',')}]` : '';
+  const stubTail = isEmpty ? ' [STUB]' : '';
+  console.log(`  ✓ ${slug}.astro  (${trimmed.length} body bytes${tail})${depTail}${stubTail}`);
   return true;
 }
 

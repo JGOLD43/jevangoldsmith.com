@@ -2,18 +2,27 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import MovieCard from '../components/MovieCard.astro';
+import CollectionSidebar from '../components/CollectionSidebar.astro';
+import { collectionPageItemList } from '../lib/seo';
 
 const movies = await getCollection('movies');
 const count = movies.length;
 const totalHours = movies.reduce((acc, m) => acc + ((m.data.runtime ?? 0) * (m.data.timesWatched ?? 1)), 0) / 60;
+const canonical = 'https://jevangoldsmith.com/movies.html';
+const itemList = collectionPageItemList({
+  canonical,
+  items: movies.map((m) => ({ name: m.data.title }))
+});
 ---
 <Base
   title="Movies I've Watched | Jevan Goldsmith"
   description="A Letterboxd-synced log of movies Jevan Goldsmith has watched, with ratings, runtimes, and rewatch counts."
-  canonical="https://jevangoldsmith.com/movies.html"
+  canonical={canonical}
   pageType="CollectionPage"
+  extraSchema={[itemList]}
 >
-  <main class="movies-layout collection-layout sidebar-collapsed" id="movies-layout">
+  <main class="movies-layout collection-layout" id="movies-layout">
+    <CollectionSidebar pageKey="movies" searchPlaceholder="Search movies..." totalCount={count} />
     <section class="movies-main collection-main">
       <header class="movies-hero">
         <div class="movies-hero-text">

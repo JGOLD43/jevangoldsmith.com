@@ -2,17 +2,26 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PodcastCard from '../components/PodcastCard.astro';
+import CollectionSidebar from '../components/CollectionSidebar.astro';
+import { collectionPageItemList } from '../lib/seo';
 
 const podcasts = await getCollection('podcasts');
 const count = podcasts.length;
+const canonical = 'https://jevangoldsmith.com/podcasts.html';
+const itemList = collectionPageItemList({
+  canonical,
+  items: podcasts.map((p) => ({ name: p.data.title }))
+});
 ---
 <Base
   title="Podcasts I Listen To | Jevan Goldsmith"
   description="A curated list of podcasts and episodes Jevan Goldsmith returns to on business, technology, and life."
-  canonical="https://jevangoldsmith.com/podcasts.html"
+  canonical={canonical}
   pageType="CollectionPage"
+  extraSchema={[itemList]}
 >
-  <main class="movies-layout podcasts-layout collection-layout sidebar-collapsed" id="podcasts-layout">
+  <main class="movies-layout podcasts-layout collection-layout" id="podcasts-layout">
+    <CollectionSidebar pageKey="podcasts" searchPlaceholder="Search podcasts..." totalCount={count} />
     <section class="movies-main collection-main">
       <header class="movies-hero podcasts-hero">
         <div class="movies-hero-text">

@@ -1,21 +1,14 @@
 ---
 // Ported from _src/pages/problems.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+// SEO mirrors tests/seo-fixture.json.
 import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Problems: A Running Log of What I&#39;m Working On | Jevan Goldsmith"
   description="A running log of problems Jevan Goldsmith is thinking about, working on, or watching from a distance."
   canonical="https://jevangoldsmith.com/problems.html"
+  pageType="CollectionPage"
 >
----
-title: "Problems - Jevan Goldsmith"
-description: "A running log of problems Jevan Goldsmith is thinking about, working on, or watching from a distance."
-layout: "base"
-bodyClass: "problems-page"
-fontWeights: "300;400;600;700"
-scripts: ''
----
 <main class="takes-main">
     <section class="takes-hero">
         <p class="takes-eyebrow">Problems</p>

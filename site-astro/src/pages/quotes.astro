@@ -1,17 +1,64 @@
 ---
-// Ported from _src/pages/quotes.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+import data from '../../../data/quotes.json';
 import Base from '../layouts/Base.astro';
+import CollectionSidebar from '../components/CollectionSidebar.astro';
+
+const featured = data.featuredQuote ?? null;
+const quotes: Array<{
+  id: string;
+  text: string;
+  author?: string;
+  category?: string;
+  topics?: string[];
+  tags?: string[];
+}> = data.fullQuotes ?? [];
+const count = quotes.length;
 ---
 <Base
   title="Quotes That Shaped My Thinking | Jevan Goldsmith"
   description="A collection of quotes and durable ideas that shaped how Jevan Goldsmith thinks about life, business, growth, and decisions."
   canonical="https://jevangoldsmith.com/quotes.html"
+  pageType="CollectionPage"
 >
----
-title: "Quotes"
-description: "Quotes and ideas that have shaped how Jevan Goldsmith thinks about life, business, growth, and decision-making."
-layout: "base"
-engine: "collection"
----
+  <main class="quotes-layout collection-layout" id="quotes-layout">
+    <CollectionSidebar pageKey="quotes" searchPlaceholder="Search quotes..." totalCount={count} />
+    <section class="quotes-main collection-main">
+      <header class="quotes-hero">
+        <div class="quotes-hero-text">
+          <h1 class="hero-headline">Words That Shaped My Thinking</h1>
+          <p class="hero-tagline">Lines I keep returning to — by mentors, masters, and quiet observers.</p>
+        </div>
+        <div class="quotes-hero-stats">
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">{count}</div>
+            <div class="hero-stat-label">Quotes</div>
+          </div>
+        </div>
+      </header>
+
+      {featured && (
+        <figure class="quote-featured">
+          <blockquote class="quote-featured-text">"{featured.text}"</blockquote>
+          {featured.author && <figcaption class="quote-featured-author">— {featured.author}</figcaption>}
+        </figure>
+      )}
+
+      <div class="quotes-container">
+        <div class="quotes-grid">
+          {quotes.map((q) => (
+            <article class="quote-card" data-id={q.id} data-category={q.category ?? ''}>
+              <blockquote class="quote-text">"{q.text}"</blockquote>
+              {q.author && <p class="quote-author">— {q.author}</p>}
+              {q.category && <span class="quote-category">{q.category}</span>}
+              {q.tags && q.tags.length > 0 && (
+                <ul class="quote-tags">
+                  {q.tags.map((t) => <li class="quote-tag">{t}</li>)}
+                </ul>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
 </Base>

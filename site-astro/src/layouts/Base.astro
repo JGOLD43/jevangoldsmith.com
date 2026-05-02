@@ -7,7 +7,8 @@
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import JsonLd from '../components/JsonLd.astro';
-import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep } from '../lib/seo';
+import SeoRelated from '../components/SeoRelated.astro';
+import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type PageType } from '../lib/seo';
 import '../styles/global.css';
 
 interface Props {
@@ -20,11 +21,15 @@ interface Props {
   /** Pages like /meet replace the global navbar with their own header. */
   noChrome?: boolean;
   /** schema.org page type for JSON-LD. Defaults to "WebPage". */
-  pageType?: 'WebPage' | 'AboutPage' | 'CollectionPage' | 'ContactPage' | 'ProfilePage' | 'Article';
+  pageType?: PageType;
   /** Breadcrumb trail. Defaults to Home → current page. */
   breadcrumbs?: BreadcrumbStep[];
   /** Skip JSON-LD (e.g. for /data-smoke or other non-public pages). */
   noJsonLd?: boolean;
+  /** Per-page schema.org @graph nodes (Article, Book, Movie, ItemList, ...). */
+  extraSchema?: Array<Record<string, unknown>>;
+  /** Skip the auto SeoRelated section (e.g. for pages where the body owns it). */
+  noSeoRelated?: boolean;
 }
 
 const {
@@ -37,10 +42,17 @@ const {
   noChrome = false,
   pageType = 'WebPage',
   breadcrumbs,
-  noJsonLd = false
+  noJsonLd = false,
+  extraSchema,
+  noSeoRelated = false
 } = Astro.props;
 
 const siteName = SITE_NAME;
+
+// Derive the page slug from the current URL so SeoRelated.astro can look up
+// the matching legacy related-cards entry without each page passing a prop.
+const rawPath = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
+const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split('/').pop()!;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -64,6 +76,7 @@ const siteName = SITE_NAME;
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="stylesheet" href="/css/legacy-style.css" />
     {!noJsonLd && canonical && (
       <JsonLd
         canonical={canonical}
@@ -72,6 +85,7 @@ const siteName = SITE_NAME;
         pageType={pageType}
         image={ogImage}
         breadcrumbs={breadcrumbs}
+        extraSchema={extraSchema}
       />
     )}
     <slot name="head" />
@@ -79,7 +93,12 @@ const siteName = SITE_NAME;
   <body class={bodyClass}>
     {!noChrome && <Nav />}
     <slot />
+    {!noChrome && !noSeoRelated && <SeoRelated slug={seoSlug} />}
     {!noChrome && <Footer />}
+    <script is:inline src="/js/theme.js" defer></script>
+    <script is:inline src="/js/grid-zoom.js" defer></script>
+    <script is:inline src="/js/analytics.js" defer></script>
+    <script is:inline src="/js/newsletter.js" defer></script>
     <slot name="scripts" />
   </body>
 </html>

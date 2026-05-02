@@ -1,21 +1,14 @@
 ---
 // Ported from _src/pages/field-notes.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+// SEO mirrors tests/seo-fixture.json.
 import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments | Jevan Goldsmith"
   description="One useful idea, object, book, question, or experiment each week from Jevan Goldsmith's living archive."
   canonical="https://jevangoldsmith.com/field-notes.html"
+  pageType="CollectionPage"
 >
----
-title: "Field Notes - Jevan Goldsmith"
-description: "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith's living archive."
-layout: "base"
-bodyClass: "field-notes-page"
-fontWeights: "300;400;600;700"
-scripts: ''
----
 <main class="field-notes-main">
     <section class="field-notes-hero">
         <p class="archive-kicker">Field Notes</p>
@@ -68,7 +61,7 @@ scripts: ''
             <a href="topics/ai-assisted-work.html">AI-assisted work</a>
             <a href="topics/tools-objects.html">tools</a>
             <a href="topics/personal-systems.html">personal systems</a>
-            <a href="cool-shit.html">taste</a>
+            <a href="/cool-shit.html">taste</a>
         </div>
     </section>
 

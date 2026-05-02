@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "collection": "resources",
+  "canonicalUrl": "https://jevangoldsmith.com/api/v1/resources/first-principles-decision-template.json",
+  "item": {
+    "id": "first-principles-decision-template",
+    "slug": "first-principles-decision-template",
+    "title": "First Principles Decision Template",
+    "type": "template",
+    "resourceType": "worksheet",
+    "category": "mental-models",
+    "status": "preview",
+    "price": "Free",
+    "shortDescription": "A future worksheet for breaking decisions down to assumptions, truths, options, and next actions.",
+    "description": "A commerce-ready placeholder connected to the skills library. The generated API exposes it to agents before a checkout provider is chosen.",
+    "image": "images/generated/logo/logo-nav-352.png",
+    "ctaLabel": "Coming Soon",
+    "downloadUrl": "",
+    "checkoutUrl": "",
+    "audience": [
+      "builders",
+      "strategists"
+    ],
+    "topics": [
+      "better-thinking"
+    ],
+    "tags": [
+      "decision-making",
+      "strategy",
+      "templates"
+    ],
+    "relatedContent": [],
+    "collection": "resources",
+    "canonicalUrl": "https://jevangoldsmith.com/free-resources.html#first-principles-decision-template",
+    "shareable": true,
+    "summary": "A future worksheet for breaking decisions down to assumptions, truths, options, and next actions."
+  }
+}

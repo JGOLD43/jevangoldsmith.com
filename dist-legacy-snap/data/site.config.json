@@ -1,0 +1,81 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignoredSource": [
+      "admin/**",
+      "functions/**",
+      "_src/**",
+      "scripts/**",
+      "css/src/**"
+    ]
+  },
+  "csp": {
+    "default-src": ["'self'"],
+    "script-src": ["'self'", "'unsafe-inline'"],
+    "style-src": ["'self'", "'unsafe-inline'"],
+    "font-src": ["'self'"],
+    "img-src": ["'self'", "https://images.unsplash.com", "https://*.ltrbxd.com", "https://covers.openlibrary.org", "https://server.arcgisonline.com", "data:"],
+    "connect-src": ["'self'", "https://api.allorigins.win", "https://formsubmit.co", "https://server.arcgisonline.com"],
+    "frame-src": ["'none'"],
+    "object-src": ["'none'"],
+    "base-uri": ["'self'"],
+    "form-action": ["'self'", "mailto:", "https://formsubmit.co"]
+  },
+  "externalAllowlist": {
+    "script": [],
+    "style": [],
+    "image": [
+      "https://images.unsplash.com",
+      "https://covers.openlibrary.org",
+      "https://*.ltrbxd.com",
+      "https://server.arcgisonline.com",
+      "data:"
+    ],
+    "connect": ["https://api.allorigins.win", "https://formsubmit.co", "https://server.arcgisonline.com"]
+  },
+  "analytics": {
+    "provider": "privacy-endpoint",
+    "endpoint": "",
+    "debugLocalStorage": true,
+    "trackedEvents": [
+      "page_view",
+      "cta_click",
+      "contact_click",
+      "product_click",
+      "resource_click",
+      "outbound_click",
+      "search_query",
+      "search_result_click",
+      "newsletter_submit"
+    ],
+    "notTracked": [
+      "cross-site identity",
+      "ad retargeting",
+      "keystrokes",
+      "full form contents",
+      "precise location"
+    ]
+  },
+  "budgets": {
+    "maxHtmlBytes": 90000,
+    "maxCssBytes": 105000,
+    "maxJsBytes": 95000,
+    "maxExternalScriptsPerPage": 2,
+    "maxAdventureDetailScripts": 4,
+    "maxInlineScripts": 16,
+    "maxInlineHandlers": 116,
+    "maxAdminInlineHandlers": 0,
+    "maxInlineStyles": 33,
+    "criticalPages": [
+      "index.html",
+      "books.html",
+      "adventures.html",
+      "search.html",
+      "products.html"
+    ],
+    "maxCriticalPageHtmlBytes": 90000,
+    "maxCriticalPageLocalAssetBytes": 380000,
+    "maxAgentApiIndexBytes": 20000,
+    "maxAgentCollectionBytes": 140000
+  }
+}

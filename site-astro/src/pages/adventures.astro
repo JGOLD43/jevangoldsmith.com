@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import AdventureMap from '../components/AdventureMap.astro';
+import { collectionPageItemList } from '../lib/seo';
 
 const adventures = (await getCollection('adventures')).sort((a, b) =>
   String(b.data.startDate ?? '').localeCompare(String(a.data.startDate ?? ''))
@@ -13,12 +14,23 @@ function shortDate(start?: string | null, _end?: string | null): string {
   if (Number.isNaN(d.getTime())) return start;
   return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
+
+const canonical = 'https://jevangoldsmith.com/adventures.html';
+const itemList = collectionPageItemList({
+  canonical,
+  items: adventures.map((a) => ({
+    name: a.data.title,
+    url: `https://jevangoldsmith.com/adventure-${a.id}.html`
+  }))
+});
 ---
 <Base
   title="Adventures, Travel Notes & Places Worth Remembering | Jevan Goldsmith"
   description="Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored."
-  canonical="https://jevangoldsmith.com/adventures.html"
+  canonical={canonical}
   bodyClass="nav-compact"
+  pageType="CollectionPage"
+  extraSchema={[itemList]}
 >
   <main>
     <div class="adventures-page-split">

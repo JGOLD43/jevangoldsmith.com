@@ -1,18 +1,79 @@
 ---
-// Ported from _src/pages/projects.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+import raw from '../../../data/projects.json';
 import Base from '../layouts/Base.astro';
+import CollectionSidebar from '../components/CollectionSidebar.astro';
+
+interface Project {
+  id: string;
+  slug?: string;
+  title: string;
+  status?: string;
+  category?: string;
+  shortDescription?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  technologies?: string[];
+  topics?: string[];
+  tags?: string[];
+  links?: Array<{ label?: string; url?: string }>;
+}
+
+const projects: Project[] = (raw as any).projects ?? [];
+const count = projects.length;
 ---
 <Base
   title="Projects Jevan Goldsmith Is Building &amp; Exploring"
   description="A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems."
   canonical="https://jevangoldsmith.com/projects.html"
+  pageType="CollectionPage"
 >
----
-title: "Projects"
-description: "Projects Jevan Goldsmith is building, exploring, and planning."
-layout: "base"
-engine: "collection"
-bodyClass: "nav-compact"
----
+  <main class="projects-layout collection-layout" id="projects-layout">
+    <CollectionSidebar pageKey="projects" searchPlaceholder="Search projects..." totalCount={count} />
+    <section class="projects-main collection-main">
+      <header class="projects-hero">
+        <div class="projects-hero-text">
+          <h1 class="hero-headline">Projects</h1>
+          <p class="hero-tagline">Builds, experiments, and systems Jevan Goldsmith is shipping in public.</p>
+        </div>
+        <div class="projects-hero-stats">
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">{count}</div>
+            <div class="hero-stat-label">Projects</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="projects-grid movies-grid">
+        {projects.map((p) => (
+          <article class="movie-card project-card js-zoom-item" data-id={p.id} data-category={p.category ?? ''} data-status={p.status ?? ''}>
+            {p.image && (
+              <div class="project-card-media">
+                <img src={p.image} alt={p.imageAlt ?? p.title} loading="lazy" decoding="async" />
+              </div>
+            )}
+            <div class="project-card-body">
+              {p.status && <span class="project-status">{p.status}</span>}
+              <h2 class="project-title">{p.title}</h2>
+              {p.shortDescription && <p class="project-description">{p.shortDescription}</p>}
+              {p.technologies && p.technologies.length > 0 && (
+                <ul class="project-tech">
+                  {p.technologies.map((t) => <li class="project-tech-item">{t}</li>)}
+                </ul>
+              )}
+              {p.links && p.links.length > 0 && (
+                <ul class="project-links">
+                  {p.links.map((l) => (
+                    l.url && (
+                      <li><a href={l.url} target="_blank" rel="noopener">{l.label ?? l.url}</a></li>
+                    )
+                  ))}
+                </ul>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
 </Base>

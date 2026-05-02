@@ -13,6 +13,9 @@ const reviewText = (b.review ?? '').trim();
   data-isbn={b.isbn ?? ''}
   data-id={entry.id}
   data-title={b.title}
+  data-rating={String(b.rating ?? 0)}
+  data-rereads={String(b.reReads ?? 0)}
+  data-category={b.category ?? ''}
   role="button"
   tabindex="0"
 >

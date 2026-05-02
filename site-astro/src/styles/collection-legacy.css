@@ -1,0 +1,1064 @@
+/* When a collection page omits the sidebar (Astro pages render only
+   .collection-main), let the main span both grid columns instead of being
+   crushed into the 48px sidebar slot. */
+.collection-layout > .collection-main:only-child {
+    grid-column: 1 / -1;
+    width: 100%;
+}
+
+/* Shared collection page layout shell */
+.collection-layout {
+    display: grid;
+    grid-template-columns: var(--collection-sidebar-width, 280px) minmax(0, 1fr);
+    gap: 0;
+    min-height: calc(100vh - var(--nav-height, 70px));
+    width: 100%;
+    background: var(--background);
+}
+
+.collection-layout.sidebar-collapsed {
+    grid-template-columns: var(--collection-sidebar-collapsed-width, 48px) minmax(0, 1fr);
+}
+
+.collection-sidebar {
+    align-self: start;
+    background: var(--collection-sidebar-bg, var(--background));
+    border-right: 1px solid var(--collection-sidebar-border, var(--border-color));
+    height: calc(100vh - var(--nav-height, 70px));
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: var(--collection-sidebar-padding, 0.75rem 0);
+    position: sticky;
+    scrollbar-color: var(--collection-sidebar-scrollbar, #ccc) transparent;
+    scrollbar-width: thin;
+    top: var(--nav-height, 70px);
+}
+
+.collection-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.collection-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.collection-sidebar::-webkit-scrollbar-thumb {
+    background: var(--collection-sidebar-scrollbar, #ccc);
+    border-radius: 4px;
+}
+
+.collection-sidebar.collapsed {
+    min-width: var(--collection-sidebar-collapsed-width, 48px);
+    padding: var(--collection-sidebar-collapsed-padding, 0.75rem 0);
+    width: var(--collection-sidebar-collapsed-width, 48px);
+}
+
+.collection-main {
+    background: var(--background);
+    min-width: 0;
+    padding: 2rem 3rem;
+}
+
+@media (max-width: 1024px) {
+    .collection-layout,
+    .collection-layout.sidebar-collapsed {
+        display: block;
+        min-height: auto;
+    }
+
+    .collection-sidebar,
+    .collection-sidebar.collapsed {
+        border-bottom: 1px solid var(--collection-sidebar-border, var(--border-color));
+        border-right: 0;
+        height: auto;
+        max-height: none;
+        min-width: 0;
+        padding: 1rem 0;
+        position: relative;
+        top: 0;
+        width: auto;
+    }
+
+    .collection-main {
+        padding: 2rem 1rem;
+    }
+}
+/* Shared collection page sidebar primitives */
+.collection-sidebar .sidebar-header {
+    align-items: center;
+    border-bottom: 1px solid var(--collection-sidebar-divider, var(--border-color));
+    display: flex;
+    gap: 0.75rem;
+    margin: 0;
+    padding: var(--collection-sidebar-header-padding, 0.5rem 1.5rem 0.5rem 10px);
+}
+
+.collection-sidebar .sidebar-browse-label {
+    color: var(--collection-sidebar-browse-color, var(--text-color));
+    flex: 1;
+    font-size: var(--collection-sidebar-browse-size, 1.1rem);
+    font-weight: 600;
+}
+
+.sidebar-collapse-btn {
+    align-items: center;
+    background: none;
+    border: 1px solid var(--collection-collapse-border, transparent);
+    border-radius: var(--collection-collapse-radius, 4px);
+    color: var(--collection-collapse-color, var(--text-light));
+    cursor: pointer;
+    display: inline-flex;
+    flex: 0 0 28px;
+    height: 28px;
+    justify-content: center;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    width: 28px;
+}
+
+.sidebar-collapse-btn:hover {
+    color: var(--collection-collapse-hover-color, var(--text-color));
+}
+
+.collection-sidebar .sidebar-list-selector,
+.collection-sidebar .sidebar-search {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.collection-sidebar .sidebar-list-selector {
+    margin-top: 0.65rem;
+}
+
+.collection-sidebar .sidebar-search {
+    margin: 0.75rem 0;
+}
+
+.collection-sidebar .list-dropdown {
+    position: relative;
+}
+
+.collection-sidebar .list-dropdown-btn {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    font-size: 1.05rem;
+    font-weight: 600;
+    gap: 0.5rem;
+    padding: 0;
+}
+
+.collection-sidebar .list-dropdown-btn:hover {
+    color: var(--secondary-color);
+}
+
+.collection-sidebar .list-dropdown-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.collection-sidebar .list-dropdown.open .list-dropdown-btn svg {
+    transform: rotate(180deg);
+}
+
+.collection-sidebar .list-dropdown-menu {
+    background: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    left: 0;
+    min-width: 150px;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    visibility: hidden;
+    z-index: 100;
+}
+
+.collection-sidebar .list-dropdown.open .list-dropdown-menu {
+    opacity: 1;
+    transform: translateY(4px);
+    visibility: visible;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option {
+    color: var(--text-color);
+    display: block;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.collection-sidebar .list-dropdown-menu .list-option:hover {
+    background: var(--border-color);
+}
+
+.collection-sidebar .list-dropdown-menu .list-option.active {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.collection-sidebar .search-input-wrapper {
+    align-items: center;
+    display: flex;
+    position: relative;
+}
+
+.collection-sidebar .search-input-wrapper.search-bubble {
+    background: var(--collection-search-bubble-bg, var(--border-color));
+    border: var(--collection-search-bubble-border, none);
+    border-radius: 20px;
+    padding: 0 12px;
+}
+
+.collection-sidebar .search-bubble .search-icon {
+    color: var(--text-light);
+    flex-shrink: 0;
+    margin-right: 8px;
+    opacity: 0.6;
+    position: static;
+}
+
+.collection-search-input {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: var(--text-color);
+    font-family: 'Chivo', sans-serif;
+    font-size: 0.85rem;
+    height: 36px;
+    min-width: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.collection-search-input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.collection-search-input::placeholder {
+    color: var(--text-light);
+}
+
+.search-clear-btn {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--text-light);
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    padding: 0.25rem;
+    position: static;
+    transform: none;
+}
+
+.search-clear-btn:hover {
+    color: var(--text-color);
+}
+
+.collection-sidebar .sidebar-section {
+    margin: 0;
+}
+
+.collection-sidebar .sidebar-category {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--collection-category-color, #222);
+    cursor: pointer;
+    display: flex;
+    font-family: 'Chivo', sans-serif;
+    font-size: 0.9rem;
+    gap: 0.75rem;
+    line-height: 1.15;
+    min-height: 36px;
+    padding: var(--collection-category-padding, 0.58rem 1.5rem);
+    position: relative;
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+    width: 100%;
+}
+
+.collection-sidebar .category-icon {
+    align-items: center;
+    display: flex;
+    flex: 0 0 24px;
+    height: 24px;
+    justify-content: center;
+    width: 24px;
+}
+
+.collection-sidebar .category-icon svg {
+    height: 18px;
+    stroke: currentColor;
+    width: 18px;
+}
+
+.collection-sidebar .category-name {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
+.collection-sidebar .category-count {
+    align-items: center;
+    border-radius: 10px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-size: 0.7rem;
+    font-weight: 700;
+    justify-content: center;
+    min-width: 18px;
+    padding: 0.12rem 0.42rem;
+}
+
+.collection-sidebar .expand-icon {
+    color: inherit;
+    flex: 0 0 auto;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+.collection-sidebar.collapsed .sidebar-header {
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    padding: var(--collection-sidebar-collapsed-header-padding, 0.5rem 0);
+}
+
+.collection-sidebar.collapsed .sidebar-list-selector,
+.collection-sidebar.collapsed .sidebar-search,
+.collection-sidebar.collapsed .sidebar-browse-label,
+.collection-sidebar.collapsed .category-name,
+.collection-sidebar.collapsed .category-count,
+.collection-sidebar.collapsed .expand-icon,
+.collection-sidebar.collapsed .category-books,
+.collection-sidebar.collapsed .category-movies,
+.collection-sidebar.collapsed .category-essays,
+.collection-sidebar.collapsed .genre-movies {
+    display: none !important;
+}
+
+.collection-sidebar.collapsed .sidebar-collapse-btn {
+    margin: 0 auto;
+}
+
+.collection-sidebar.collapsed .sidebar-category {
+    gap: 0;
+    justify-content: center;
+    min-height: 38px;
+    padding: var(--collection-sidebar-collapsed-category-padding, 0.5rem 0);
+}
+
+.collection-sidebar.collapsed .category-icon {
+    height: 20px;
+    width: 20px;
+}
+
+.collection-sidebar.collapsed .category-icon svg {
+    height: 18px;
+    width: 18px;
+}
+/* Shared collection page header */
+.collection-header {
+    align-items: flex-start;
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.collection-header .header-content h1,
+.collection-header .header-content .bookshelf-view-title {
+    color: #000;
+    font-family: 'Chivo', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 3rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+}
+
+.collection-header .header-content p,
+.collection-header .header-subtitle-link {
+    color: var(--text-color);
+    font-family: 'Chivo', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+.header-subtitle-link {
+    border-bottom: 1px solid var(--text-light);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.header-subtitle-link:hover {
+    border-bottom-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.philosophy-link-wrapper {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.read-first-note {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    font-style: italic;
+    font-weight: 400;
+}
+
+.collection-header-counter {
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+.collection-counter-number {
+    color: #000;
+    display: block;
+    font-family: 'Chivo', sans-serif;
+    font-size: 3rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.collection-counter-label {
+    color: var(--text-light);
+    display: block;
+    font-family: 'Chivo', sans-serif;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 900px) {
+    .collection-header {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .collection-header-counter {
+        padding: 0;
+        text-align: left;
+    }
+}
+/* Shared grid/card shell for books, movies, and podcasts */
+.books-grid,
+.movies-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    margin-bottom: 3rem;
+}
+
+.collection-layout.sidebar-collapsed .books-grid,
+.collection-layout.sidebar-collapsed .movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.book-card,
+.movie-card {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.book-card:hover,
+.movie-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.book-info,
+.movie-info {
+    padding: 0 0.5rem;
+}
+
+.book-title-row,
+.movie-title-row {
+    align-items: baseline;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+}
+
+.book-title,
+.movie-title {
+    color: #0F1111;
+    font-family: 'Chivo', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.book-description,
+.movie-description {
+    color: var(--text-color);
+    display: -webkit-box;
+    font-size: 0.9rem;
+    -webkit-box-orient: vertical;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.book-description {
+    -webkit-line-clamp: 2;
+}
+
+.movie-description {
+    -webkit-line-clamp: 3;
+}
+/* SEO-related-content section used at the foot of collection and narrative pages. */
+.seo-related-section {
+    max-width: 1040px;
+    margin: 3rem auto;
+    padding: 2.5rem 2rem 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.books-layout .seo-related-section,
+.movies-layout .seo-related-section,
+.music-layout .seo-related-section,
+.podcasts-layout .seo-related-section,
+.people-layout .seo-related-section,
+.essays-layout .seo-related-section {
+    grid-column: 1 / -1;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.seo-related-eyebrow {
+    color: var(--secondary-color);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.seo-related-section h2 {
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+}
+
+.seo-related-intro {
+    max-width: 640px;
+    color: var(--text-light);
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+}
+
+.seo-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.seo-related-card {
+    display: block;
+    min-height: 130px;
+    padding: 1.1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    text-decoration: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.seo-related-card:hover {
+    border-color: var(--secondary-color);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.seo-related-card span {
+    display: block;
+    color: var(--primary-color);
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 0.6rem;
+}
+
+.seo-related-card p {
+    color: var(--text-light);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .seo-related-section {
+        padding: 2rem 1.25rem 0;
+    }
+}
+/* Rating modal used by books and movies collection pages. */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.modal-content {
+    background-color: var(--background);
+    border-radius: 12px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--text-light);
+    cursor: pointer;
+    z-index: 1001;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: var(--accent-color);
+}
+
+.modal-body {
+    padding: 2.5rem;
+}
+
+.modal-header {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-cover {
+    width: 180px;
+    height: 270px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+}
+
+.modal-info {
+    flex: 1;
+}
+
+.modal-info h2 {
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+}
+
+.modal-author {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.modal-rating {
+    color: #FFD700;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.modal-review h3 {
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.review-text {
+    color: var(--text-color);
+    line-height: 1.8;
+    font-size: 1.05rem;
+    white-space: pre-line;
+}
+/* Public static search page backed by api/v1/search-index.json. */
+.search-page {
+    min-height: 70vh;
+}
+
+.search-hero {
+    padding: 5rem 0 3rem;
+    background: var(--background);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    letter-spacing: 0;
+    margin-bottom: 2rem;
+}
+
+.site-search-shell {
+    position: relative;
+    max-width: 860px;
+}
+
+.site-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 1.25rem;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    pointer-events: none;
+}
+
+.site-search-input {
+    width: 100%;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem 1.1rem 3.25rem;
+    font: inherit;
+    font-size: 1.05rem;
+    box-shadow: var(--shadow);
+}
+
+.site-search-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+.site-search-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+}
+
+.site-search-filter {
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    border-radius: 999px;
+    padding: 0.45rem 0.85rem;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.site-search-filter:hover,
+.site-search-filter.active {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.search-results-section {
+    padding: 2rem 0 4rem;
+}
+
+.search-results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.search-api-link {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.search-results {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.search-result-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-color);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.search-result-card:hover {
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+.search-result-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--primary-color);
+}
+
+.search-result-summary {
+    color: var(--text-light);
+    line-height: 1.5;
+}
+
+.search-result-type {
+    align-self: start;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-light);
+}
+
+.search-empty {
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-light);
+    background: var(--card-bg);
+}
+
+@media (max-width: 640px) {
+    .search-hero {
+        padding: 3rem 0 2rem;
+    }
+
+    .search-result-card {
+        grid-template-columns: 1fr;
+    }
+}
+/* Skill detail pages are generated from data/skills.json. */
+.skill-detail-hero {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+.skill-detail-hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.skill-detail-tagline {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+.skill-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.skill-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.skill-meta-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.proficiency-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.proficiency-segments {
+    display: flex;
+    gap: 4px;
+}
+
+.proficiency-segment {
+    width: 28px;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--border-color);
+}
+
+.proficiency-segment.filled {
+    background: var(--secondary-color);
+}
+
+.proficiency-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.activity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.activity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.skill-detail-content {
+    max-width: 800px;
+}
+
+.skill-section {
+    margin-bottom: 2.5rem;
+}
+
+.skill-section h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.skill-section p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.skill-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.skill-section li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.skill-section li::before {
+    content: "\2192";
+    position: absolute;
+    left: 0;
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.related-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.related-skill-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.related-skill-link:hover {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: var(--secondary-color);
+}
+
+.back-link svg {
+    width: 18px;
+    height: 18px;
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

@@ -1,23 +1,25 @@
 ---
 // Renders a single <script type="application/ld+json"> with the site-wide
-// Person + WebSite graph plus a per-page BreadcrumbList + page node. Mirrors
-// the structure of the legacy tests/seo-fixture.json @graph so rich-result
-// tools see no regression after the migration.
+// Person + WebSite graph plus a per-page BreadcrumbList + page node + any
+// per-page entity schemas (Article, Book, Movie, ItemList, etc).
 import {
   PERSON_SCHEMA,
   WEBSITE_SCHEMA,
   breadcrumbList,
   pageNode,
-  type BreadcrumbStep
+  type BreadcrumbStep,
+  type PageType
 } from '../lib/seo';
 
 interface Props {
   canonical: string;
   title: string;
   description: string;
-  pageType?: 'WebPage' | 'AboutPage' | 'CollectionPage' | 'ContactPage' | 'ProfilePage' | 'Article';
+  pageType?: PageType;
   image?: string;
   breadcrumbs?: BreadcrumbStep[];
+  /** Additional schema.org @graph nodes (Article, Book, Movie, ItemList, ...). */
+  extraSchema?: Array<Record<string, unknown>>;
 }
 
 const {
@@ -26,7 +28,8 @@ const {
   description,
   pageType = 'WebPage',
   image,
-  breadcrumbs = [{ name: 'Home', url: 'https://jevangoldsmith.com/' }, { name: title, url: canonical }]
+  breadcrumbs = [{ name: 'Home', url: 'https://jevangoldsmith.com/' }, { name: title, url: canonical }],
+  extraSchema = []
 } = Astro.props;
 
 const graph = {
@@ -35,7 +38,8 @@ const graph = {
     PERSON_SCHEMA,
     WEBSITE_SCHEMA,
     breadcrumbList(canonical, breadcrumbs),
-    pageNode({ type: pageType, canonical, title, description, image })
+    pageNode({ type: pageType, canonical, title, description, image }),
+    ...extraSchema
   ]
 };
 ---

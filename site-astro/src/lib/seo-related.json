@@ -1,0 +1,750 @@
+{
+  "about": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "adventure-austin-adventure": [
+    {
+      "href": "/adventures.html",
+      "title": "Adventures",
+      "desc": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored."
+    },
+    {
+      "href": "/adventure-ayr-adventure.html",
+      "title": "Ayr Adventure: Sugar Cane, Sunsets &amp; North Queensland",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Ayr trip through North Queensland landscapes, coast, and slower rhythms."
+    },
+    {
+      "href": "/adventure-japan-adventure.html",
+      "title": "Japan Adventure: Temples, Food &amp; Cherry Blossoms",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Japan trip through temples, cities, food, and seasonal detail."
+    },
+    {
+      "href": "/adventure-sydney-adventure.html",
+      "title": "Sydney Adventure: Harbour Walks, Food &amp; City Notes",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Sydney trip through harbour views, neighborhoods, seafood, and coastal walks."
+    }
+  ],
+  "adventure-ayr-adventure": [
+    {
+      "href": "/adventures.html",
+      "title": "Adventures",
+      "desc": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored."
+    },
+    {
+      "href": "/adventure-austin-adventure.html",
+      "title": "Austin Adventure: Live Music, BBQ &amp; City Notes",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Austin trip through music, food, neighborhoods, and local energy."
+    },
+    {
+      "href": "/adventure-japan-adventure.html",
+      "title": "Japan Adventure: Temples, Food &amp; Cherry Blossoms",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Japan trip through temples, cities, food, and seasonal detail."
+    },
+    {
+      "href": "/adventure-sydney-adventure.html",
+      "title": "Sydney Adventure: Harbour Walks, Food &amp; City Notes",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Sydney trip through harbour views, neighborhoods, seafood, and coastal walks."
+    }
+  ],
+  "adventure-japan-adventure": [
+    {
+      "href": "/adventures.html",
+      "title": "Adventures",
+      "desc": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored."
+    },
+    {
+      "href": "/adventure-austin-adventure.html",
+      "title": "Austin Adventure: Live Music, BBQ &amp; City Notes",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Austin trip through music, food, neighborhoods, and local energy."
+    },
+    {
+      "href": "/adventure-ayr-adventure.html",
+      "title": "Ayr Adventure: Sugar Cane, Sunsets &amp; North Queensland",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Ayr trip through North Queensland landscapes, coast, and slower rhythms."
+    },
+    {
+      "href": "/adventure-sydney-adventure.html",
+      "title": "Sydney Adventure: Harbour Walks, Food &amp; City Notes",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Sydney trip through harbour views, neighborhoods, seafood, and coastal walks."
+    }
+  ],
+  "adventure-sydney-adventure": [
+    {
+      "href": "/adventures.html",
+      "title": "Adventures",
+      "desc": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored."
+    },
+    {
+      "href": "/adventure-austin-adventure.html",
+      "title": "Austin Adventure: Live Music, BBQ &amp; City Notes",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Austin trip through music, food, neighborhoods, and local energy."
+    },
+    {
+      "href": "/adventure-ayr-adventure.html",
+      "title": "Ayr Adventure: Sugar Cane, Sunsets &amp; North Queensland",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Ayr trip through North Queensland landscapes, coast, and slower rhythms."
+    },
+    {
+      "href": "/adventure-japan-adventure.html",
+      "title": "Japan Adventure: Temples, Food &amp; Cherry Blossoms",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Japan trip through temples, cities, food, and seasonal detail."
+    }
+  ],
+  "adventure-uluru-adventure": [
+    {
+      "href": "/adventures.html",
+      "title": "Adventures",
+      "desc": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored."
+    },
+    {
+      "href": "/adventure-austin-adventure.html",
+      "title": "Austin Adventure: Live Music, BBQ &amp; City Notes",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Austin trip through music, food, neighborhoods, and local energy."
+    },
+    {
+      "href": "/adventure-ayr-adventure.html",
+      "title": "Ayr Adventure: Sugar Cane, Sunsets &amp; North Queensland",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Ayr trip through North Queensland landscapes, coast, and slower rhythms."
+    },
+    {
+      "href": "/adventure-japan-adventure.html",
+      "title": "Japan Adventure: Temples, Food &amp; Cherry Blossoms",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Japan trip through temples, cities, food, and seasonal detail."
+    }
+  ],
+  "adventure-vietnam-adventure": [
+    {
+      "href": "/adventures.html",
+      "title": "Adventures",
+      "desc": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored."
+    },
+    {
+      "href": "/adventure-austin-adventure.html",
+      "title": "Austin Adventure: Live Music, BBQ &amp; City Notes",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Austin trip through music, food, neighborhoods, and local energy."
+    },
+    {
+      "href": "/adventure-ayr-adventure.html",
+      "title": "Ayr Adventure: Sugar Cane, Sunsets &amp; North Queensland",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Ayr trip through North Queensland landscapes, coast, and slower rhythms."
+    },
+    {
+      "href": "/adventure-japan-adventure.html",
+      "title": "Japan Adventure: Temples, Food &amp; Cherry Blossoms",
+      "desc": "Notes and photos from Jevan Goldsmith&#39;s Japan trip through temples, cities, food, and seasonal detail."
+    }
+  ],
+  "books": [
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/free-resources.html",
+      "title": "Useful Resources for Thinking, Building &amp; Learning",
+      "desc": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "challenges": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "changed-my-mind": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "cool-shit": [
+    {
+      "href": "/products.html",
+      "title": "The Shelf: Tools, Objects &amp; Gear That Earned Their Place",
+      "desc": "A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced."
+    },
+    {
+      "href": "/movies.html",
+      "title": "Movies",
+      "desc": "A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste."
+    },
+    {
+      "href": "/books.html",
+      "title": "Books",
+      "desc": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    }
+  ],
+  "essays": [
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    },
+    {
+      "href": "/free-resources.html",
+      "title": "Useful Resources for Thinking, Building &amp; Learning",
+      "desc": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    }
+  ],
+  "field-notes": [
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/free-resources.html",
+      "title": "Useful Resources for Thinking, Building &amp; Learning",
+      "desc": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work."
+    },
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    }
+  ],
+  "free-resources": [
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    }
+  ],
+  "health": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "important-or-not": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "index": [
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/free-resources.html",
+      "title": "Useful Resources for Thinking, Building &amp; Learning",
+      "desc": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work."
+    },
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    }
+  ],
+  "lesson-logger": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "living-manifesto": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "movie-philosophy": [
+    {
+      "href": "/products.html",
+      "title": "The Shelf: Tools, Objects &amp; Gear That Earned Their Place",
+      "desc": "A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced."
+    },
+    {
+      "href": "/weekly-review-template.html",
+      "title": "Weekly Review Template for Reflection, Planning &amp; Better Decisions",
+      "desc": "A simple weekly review template for reviewing lessons, decisions, energy, priorities, and next actions."
+    },
+    {
+      "href": "/books.html",
+      "title": "Books",
+      "desc": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
+    },
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    }
+  ],
+  "movies": [
+    {
+      "href": "/products.html",
+      "title": "The Shelf: Tools, Objects &amp; Gear That Earned Their Place",
+      "desc": "A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced."
+    },
+    {
+      "href": "/cool-shit.html",
+      "title": "Cool Shit",
+      "desc": "A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith&#39;s attention."
+    },
+    {
+      "href": "/books.html",
+      "title": "Books",
+      "desc": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    }
+  ],
+  "north-star": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "notes": [
+    {
+      "href": "/weekly-review-template.html",
+      "title": "Weekly Review Template for Reflection, Planning &amp; Better Decisions",
+      "desc": "A simple weekly review template for reviewing lessons, decisions, energy, priorities, and next actions."
+    },
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    }
+  ],
+  "people-philosophy": [
+    {
+      "href": "/weekly-review-template.html",
+      "title": "Weekly Review Template for Reflection, Planning &amp; Better Decisions",
+      "desc": "A simple weekly review template for reviewing lessons, decisions, energy, priorities, and next actions."
+    },
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    }
+  ],
+  "people": [
+    {
+      "href": "/books.html",
+      "title": "Books",
+      "desc": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/products.html",
+      "title": "The Shelf: Tools, Objects &amp; Gear That Earned Their Place",
+      "desc": "A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced."
+    },
+    {
+      "href": "/free-resources.html",
+      "title": "Useful Resources for Thinking, Building &amp; Learning",
+      "desc": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work."
+    }
+  ],
+  "podcasts": [
+    {
+      "href": "/books.html",
+      "title": "Books",
+      "desc": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/products.html",
+      "title": "The Shelf: Tools, Objects &amp; Gear That Earned Their Place",
+      "desc": "A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced."
+    },
+    {
+      "href": "/free-resources.html",
+      "title": "Useful Resources for Thinking, Building &amp; Learning",
+      "desc": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work."
+    }
+  ],
+  "problems": [
+    {
+      "href": "/weekly-review-template.html",
+      "title": "Weekly Review Template for Reflection, Planning &amp; Better Decisions",
+      "desc": "A simple weekly review template for reviewing lessons, decisions, energy, priorities, and next actions."
+    },
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    }
+  ],
+  "products": [
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/projects.html",
+      "title": "Projects Jevan Goldsmith Is Building &amp; Exploring",
+      "desc": "A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems."
+    },
+    {
+      "href": "/cool-shit.html",
+      "title": "Cool Shit",
+      "desc": "A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith&#39;s attention."
+    }
+  ],
+  "projects": [
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    },
+    {
+      "href": "/products.html",
+      "title": "The Shelf: Tools, Objects &amp; Gear That Earned Their Place",
+      "desc": "A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced."
+    },
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    }
+  ],
+  "reading-philosophy": [
+    {
+      "href": "/free-resources.html",
+      "title": "Useful Resources for Thinking, Building &amp; Learning",
+      "desc": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    },
+    {
+      "href": "/books.html",
+      "title": "Books",
+      "desc": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
+    }
+  ],
+  "speeches": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ],
+  "takes": [
+    {
+      "href": "/weekly-review-template.html",
+      "title": "Weekly Review Template for Reflection, Planning &amp; Better Decisions",
+      "desc": "A simple weekly review template for reviewing lessons, decisions, energy, priorities, and next actions."
+    },
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    }
+  ],
+  "videos": [
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    },
+    {
+      "href": "/books.html",
+      "title": "Books",
+      "desc": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    }
+  ],
+  "weekly-review-template": [
+    {
+      "href": "/essays.html",
+      "title": "Essays",
+      "desc": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+    },
+    {
+      "href": "/field-notes.html",
+      "title": "Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments",
+      "desc": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive."
+    },
+    {
+      "href": "/reading-philosophy.html",
+      "title": "How I Read: A Practical Reading Philosophy",
+      "desc": "Notes on reading for judgment, taste, decision-making, and a better personal operating system."
+    },
+    {
+      "href": "/index.html",
+      "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech",
+      "desc": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+    }
+  ]
+}

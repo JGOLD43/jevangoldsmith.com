@@ -1,17 +1,90 @@
 ---
-// Ported from _src/pages/free-resources.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+import raw from '../../../data/products.json';
 import Base from '../layouts/Base.astro';
+
+interface Resource {
+  id: string;
+  slug?: string;
+  title: string;
+  type?: string;
+  resourceType?: string;
+  category?: string;
+  status?: string;
+  price?: string | number;
+  shortDescription?: string;
+  description?: string;
+  image?: string;
+  ctaLabel?: string;
+  downloadUrl?: string;
+  checkoutUrl?: string;
+}
+
+interface Category {
+  id: string;
+  title: string;
+  icon?: string;
+}
+
+const resources: Resource[] = (raw as any).resources ?? [];
+const categories: Category[] = (raw as any).resourceCategories ?? [];
+const count = resources.length;
 ---
 <Base
   title="Useful Resources for Thinking, Building &amp; Learning | Jevan Goldsmith"
   description="Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work."
   canonical="https://jevangoldsmith.com/free-resources.html"
+  pageType="CollectionPage"
 >
----
-title: "Useful Resources"
-description: "Guides, templates, and tools from Jevan Goldsmith for thinking better, working smarter, and living well."
-layout: "base"
-engine: "collection"
----
+  <main class="resources-content">
+    <header class="resources-hero">
+      <p class="resources-eyebrow">Useful Resources</p>
+      <h1 class="resources-title">Practical artifacts from the archive.</h1>
+      <p class="resources-tagline">Templates, guides, and tools for reflection, thinking, reading, and useful work. {count} resources.</p>
+    </header>
+
+    {categories.length > 0 && (
+      <nav class="resources-categories" aria-label="Resource categories">
+        <ul class="resources-category-list">
+          {categories.map((c) => (
+            <li><a href={`#cat-${c.id}`} class="resources-category-link">{c.title}</a></li>
+          ))}
+        </ul>
+      </nav>
+    )}
+
+    <section class="resources-grid">
+      {resources.map((r) => (
+        <article class="resource-card" data-id={r.id} data-category={r.category ?? ''} data-type={r.resourceType ?? r.type ?? ''}>
+          {r.image && (
+            <div class="resource-card-media">
+              <img src={r.image} alt={r.title} loading="lazy" decoding="async" />
+            </div>
+          )}
+          <div class="resource-card-body">
+            {r.resourceType && <span class="resource-card-type">{r.resourceType}</span>}
+            <h2 class="resource-card-title">{r.title}</h2>
+            {r.shortDescription && <p class="resource-card-description">{r.shortDescription}</p>}
+            <div class="resource-card-actions">
+              {r.downloadUrl && (
+                <a href={r.downloadUrl} class="resource-card-cta" data-cta-id={`resource-${r.id}`} data-cta-location="free-resources">
+                  {r.ctaLabel ?? 'Download'}
+                </a>
+              )}
+              {!r.downloadUrl && r.checkoutUrl && (
+                <a href={r.checkoutUrl} class="resource-card-cta" target="_blank" rel="noopener" data-cta-id={`resource-${r.id}`} data-cta-location="free-resources">
+                  {r.ctaLabel ?? 'View'}
+                </a>
+              )}
+              {r.price && <span class="resource-card-price">{typeof r.price === 'number' ? `$${r.price}` : r.price}</span>}
+            </div>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <aside class="request-card">
+      <h2>Don't see what you need?</h2>
+      <p>Email <a href="mailto:hello@jevangoldsmith.com?subject=Resource%20request">hello@jevangoldsmith.com</a> and tell me what would help.</p>
+    </aside>
+  </main>
 </Base>

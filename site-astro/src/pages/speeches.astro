@@ -1,13 +1,19 @@
 ---
 // Ported from _src/content/speeches/body.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+// SEO mirrors tests/seo-fixture.json.
 import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Speeches, Talks &amp; Remarks by Jevan Goldsmith"
   description="A running archive of speeches, talks, and remarks by Jevan Goldsmith, written for delivery and kept as a record of what was said and why."
   canonical="https://jevangoldsmith.com/speeches.html"
+  pageType="CollectionPage"
 >
+<main class="container">
+<header class="page-header">
+  <h1>Speeches</h1>
+  <p>Talks, remarks, and things written for delivery.</p>
+</header>
 <section class="philosophy-section">
     <h2>Why a Speeches Page</h2>
     <p>A talk is a different shape of writing. It is meant to be heard once, in a room, by people who cannot scroll back. That forces a discipline the page does not — clearer arcs, fewer hedges, a single thing worth saying.</p>
@@ -18,6 +24,7 @@ import Base from '../layouts/Base.astro';
     <p>Speeches will appear here as they are added. For now, this page is a placeholder marking the spot.</p>
 </section>
 <div class="back-to-books">
-    <a href="index.html" class="back-link">&larr; Back to Home</a>
+    <a href="/index.html" class="back-link">&larr; Back to Home</a>
 </div>
+</main>
 </Base>

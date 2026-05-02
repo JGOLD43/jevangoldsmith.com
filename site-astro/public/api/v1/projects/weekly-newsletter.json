@@ -1,0 +1,74 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "collection": "projects",
+  "canonicalUrl": "https://jevangoldsmith.com/api/v1/projects/weekly-newsletter.json",
+  "item": {
+    "id": "weekly-newsletter",
+    "slug": "weekly-newsletter",
+    "title": "Field Notes",
+    "status": "planned",
+    "category": "writing",
+    "shortDescription": "A weekly-ish note sharing useful ideas, books, tools, questions, and experiments from the archive.",
+    "description": "Field Notes is the lightweight dispatch for useful things before they become polished essays.",
+    "whatItIs": "A short email for ideas, objects, books, questions, and experiments worth keeping.",
+    "whyIMadeIt": "Some useful things are too small for essays but too valuable to disappear into private notes.",
+    "whatILearned": "A newsletter needs a clear promise before it needs volume.",
+    "nextStep": "Publish a sample issue and turn the archive page into the canonical signup surface.",
+    "documentaryLead": "This is the lightweight publishing channel for things before they become polished essays. It should feel like a useful note from the archive, not a content machine.",
+    "currentQuestion": "What is the smallest note format that is consistently worth opening?",
+    "proofArtifacts": [
+      {
+        "label": "Promise",
+        "value": "One useful idea, object, book, question, or experiment from the archive."
+      },
+      {
+        "label": "Constraint",
+        "value": "It has to be short enough to send and useful enough to keep."
+      }
+    ],
+    "buildLog": [
+      {
+        "date": "2026-04-23",
+        "title": "Kept the scope small",
+        "note": "The next version needs a sample issue before it needs a cadence."
+      }
+    ],
+    "image": "images/generated/remote/4983bd7192e7b3-800.jpg",
+    "imageAlt": "Newspaper pages",
+    "technologies": [
+      "Writing",
+      "Email"
+    ],
+    "topics": [
+      "writing",
+      "learning",
+      "business",
+      "field-notes"
+    ],
+    "tags": [
+      "newsletter",
+      "writing",
+      "email"
+    ],
+    "audience": [
+      "readers"
+    ],
+    "links": [
+      {
+        "label": "Subscribe",
+        "url": "field-notes.html",
+        "icon": "external"
+      }
+    ],
+    "relatedContent": [
+      "field-notes.html",
+      "essays.html",
+      "books.html"
+    ],
+    "collection": "projects",
+    "canonicalUrl": "https://jevangoldsmith.com/projects.html#weekly-newsletter",
+    "shareable": true,
+    "summary": "A weekly-ish note sharing useful ideas, books, tools, questions, and experiments from the archive."
+  }
+}

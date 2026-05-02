@@ -1,19 +1,21 @@
 ---
-// Single person card. Mirrors js/people.js generated markup.
+// Single person card — wrapped in <a> so the whole card opens the detail page.
 import type { CollectionEntry } from 'astro:content';
 
 interface Props { entry: CollectionEntry<'people'> }
 const { entry } = Astro.props;
 const p = entry.data;
 const search = (p.searchText ?? `${p.name ?? ''} ${p.title ?? ''} ${p.lesson ?? ''}`).trim();
+const href = `/people/${entry.id}.html`;
 ---
-<article
-  class="person-card"
+<a
+  href={href}
+  class="person-card person-card-link"
   data-category={p.category ?? ''}
   data-person-id={entry.id}
   data-search={search}
-  role="button"
-  tabindex="0"
+  data-cta-id={`person-${entry.id}`}
+  data-cta-location="people"
 >
   <div class="person-image-container">
     {p.image && (
@@ -35,4 +37,4 @@ const search = (p.searchText ?? `${p.name ?? ''} ${p.title ?? ''} ${p.lesson ?? 
     {p.title && <p class="person-title">{p.title}</p>}
     {p.lesson && <p class="person-lesson">{p.lesson}</p>}
   </div>
-</article>
+</a>

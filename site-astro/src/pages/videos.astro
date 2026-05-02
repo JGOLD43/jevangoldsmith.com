@@ -1,19 +1,14 @@
 ---
 // Ported from _src/pages/videos.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json. JSON-LD lands in Phase 8.
+// SEO mirrors tests/seo-fixture.json.
 import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Videos, Channels &amp; Useful Visual Learning | Jevan Goldsmith"
   description="A video archive of talks, channels, clips, and visual lessons Jevan Goldsmith found useful."
   canonical="https://jevangoldsmith.com/videos.html"
+  pageType="CollectionPage"
 >
----
-title: "Videos, Channels &amp; Useful Visual Learning"
-description: "A video archive of talks, channels, clips, and visual lessons Jevan Goldsmith found useful."
-layout: "base"
-scripts: ""
----
 <header class="page-header">
         <div class="container">
             <h1>Videos</h1>
@@ -39,45 +34,5 @@ scripts: ""
                 Visit My YouTube Channel
             </a>
         </div>
-    <section class="seo-related-section" data-seo-related>
-        <p class="seo-related-eyebrow">Related thread</p>
-        <h2>Keep exploring this idea</h2>
-        <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
-        <div class="seo-related-grid">
-            <a class="seo-related-card" href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="videos">
-                <span>Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments</span>
-                <p>One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive.</p>
-            </a>
-            <a class="seo-related-card" href="index.html">
-                <span>Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech</span>
-                <p>Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas.</p>
-            </a>
-            <a class="seo-related-card" href="books.html">
-                <span>Books I Recommend &amp; Notes From My Reading System</span>
-                <p>A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems.</p>
-            </a>
-            <a class="seo-related-card" href="reading-philosophy.html">
-                <span>How I Read: A Practical Reading Philosophy</span>
-                <p>Notes on reading for judgment, taste, decision-making, and a better personal operating system.</p>
-            </a>
-        </div>
-    </section>
 </main>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div>
-                    <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
-                    <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
-                </div>
-                <ul class="footer-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="videos">Field Notes</a></li>
-                    <li><a href="products.html" data-analytics="cta" data-cta-id="product-recommendations" data-cta-location="videos">The Shelf</a></li>
-                    <li><a href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="videos">Resources</a></li>
-                </ul>
-            </div>
-        </div>
-    </footer>
 </Base>

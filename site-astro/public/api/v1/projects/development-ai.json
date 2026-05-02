@@ -1,0 +1,67 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "collection": "projects",
+  "canonicalUrl": "https://jevangoldsmith.com/api/v1/projects/development-ai.json",
+  "item": {
+    "id": "development-ai",
+    "slug": "development-ai",
+    "title": "Development AI",
+    "status": "active",
+    "category": "ai",
+    "shortDescription": "AI-powered development tools and workflows for accelerating software development and automating coding tasks.",
+    "description": "A set of experiments around how artificial intelligence can improve software development workflows.",
+    "whatItIs": "A working set of AI-assisted development workflows for research, coding, review, and QA.",
+    "whyIMadeIt": "I want to build faster without outsourcing taste, judgment, or responsibility.",
+    "whatILearned": "The best AI workflow is still a human workflow with better feedback loops.",
+    "nextStep": "Write up the strongest patterns and connect them to the technical skills archive.",
+    "documentaryLead": "This project tracks how I actually use AI while building: where it speeds me up, where it makes me lazy, and where the human taste layer still matters most.",
+    "currentQuestion": "What parts of building should be delegated, and what parts should stay stubbornly human?",
+    "proofArtifacts": [
+      {
+        "label": "Working loop",
+        "value": "Research, plan, implement, review, QA, then tighten the product judgment."
+      },
+      {
+        "label": "Standard",
+        "value": "Speed only counts if the final thing is clearer, more useful, and easier to maintain."
+      }
+    ],
+    "buildLog": [
+      {
+        "date": "2026-04-23",
+        "title": "Separated speed from taste",
+        "note": "The tool can draft, inspect, and verify. It still needs a person deciding what is worth making."
+      }
+    ],
+    "image": "images/generated/remote/b1130034d11397-800.jpg",
+    "imageAlt": "Code on a laptop",
+    "technologies": [
+      "AI",
+      "Development",
+      "Automation"
+    ],
+    "topics": [
+      "ai",
+      "software",
+      "building"
+    ],
+    "tags": [
+      "development",
+      "automation",
+      "coding"
+    ],
+    "audience": [
+      "developers",
+      "builders"
+    ],
+    "links": [],
+    "relatedContent": [
+      "projects.html"
+    ],
+    "collection": "projects",
+    "canonicalUrl": "https://jevangoldsmith.com/projects.html#development-ai",
+    "shareable": true,
+    "summary": "AI-powered development tools and workflows for accelerating software development and automating coding tasks."
+  }
+}

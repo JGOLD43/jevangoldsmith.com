@@ -29,9 +29,11 @@ const requiredApi = [
   'api/v1/quotes.json',
   'api/v1/products.json'
 ];
+// After Astro migration legacy hashed bundles + data-action filter hooks no
+// longer exist. Smoke just verifies the page rendered the right card class.
 const pageSpecificPatterns = {
-  'projects.html': [/page-projects\.[a-f0-9]+\.js/, /data-action="filterProjects"/, /class="[^"]*project-card/],
-  'challenges.html': [/page-challenges\.[a-f0-9]+\.js/, /data-action="filterChallenges"/, /class="[^"]*challenge-card/]
+  'projects.html': [/class="[^"]*project-card/],
+  'challenges.html': [/class="[^"]*challenge-card/]
 };
 
 let failed = false;

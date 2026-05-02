@@ -6,9 +6,9 @@
   "scripts": {
     "assets:optimize": "node scripts/optimize-assets.js",
     "snap:routes": "node scripts/snap-popular-routes.js",
-    "build": "npm run --prefix site-astro build",
+    "build": "npm run snap:routes && npm run assets:optimize && node scripts/legacy-build/build-site.js",
     "dev": "npm run --prefix site-astro dev",
-    "build:legacy": "npm run snap:routes && npm run assets:optimize && node scripts/legacy-build/build-site.js",
+    "build:astro": "npm run --prefix site-astro build",
     "check": "node scripts/check/run-all.js",
     "check:build": "npm run build",
     "check:lint": "npx biome check js scripts",

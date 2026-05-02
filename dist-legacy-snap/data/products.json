@@ -1,0 +1,360 @@
+{
+  "schemaVersion": "1.0",
+  "statuses": {
+    "draft": "Private or not ready to publish.",
+    "preview": "Visible as a coming-soon or early surface.",
+    "available": "Publicly available.",
+    "retired": "No longer actively recommended or offered."
+  },
+  "productCategories": [
+    {
+      "id": "tech",
+      "title": "Tech & Gadgets",
+      "icon": "monitor"
+    },
+    {
+      "id": "productivity",
+      "title": "Productivity",
+      "icon": "file"
+    },
+    {
+      "id": "travel",
+      "title": "Travel",
+      "icon": "globe"
+    },
+    {
+      "id": "health",
+      "title": "Health & Fitness",
+      "icon": "heart"
+    }
+  ],
+  "resourceCategories": [
+    {
+      "id": "reading",
+      "title": "Reading",
+      "icon": "book"
+    },
+    {
+      "id": "productivity",
+      "title": "Productivity",
+      "icon": "calendar"
+    },
+    {
+      "id": "finance",
+      "title": "Finance",
+      "icon": "dollar"
+    },
+    {
+      "id": "mental-models",
+      "title": "Mental Models",
+      "icon": "question"
+    }
+  ],
+  "products": [
+    {
+      "id": "macbook-pro-14",
+      "slug": "macbook-pro-14",
+      "title": "MacBook Air M1 2020 16GB",
+      "brand": "Apple",
+      "type": "recommendation",
+      "category": "tech",
+      "status": "available",
+      "price": "",
+      "shortDescription": "The M1 chip with 16GB RAM handles everything I throw at it. Perfect for coding, writing, and running multiple apps simultaneously.",
+      "description": "A daily-driver laptop recommendation for coding, video editing, and heavy multitasking.",
+      "rating": 5,
+      "badge": "Daily Driver",
+      "usage": "Used daily for 2+ years",
+      "icon": "laptop",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "View Recommendation",
+      "checkoutUrl": "",
+      "verdict": "The machine I stop thinking about because it just keeps up.",
+      "whyItStayed": "Fast enough for coding, writing, media, and too many browser tabs without becoming the constraint.",
+      "howIUseIt": "Daily work, writing, builds, research, editing, and the general command center for everything digital.",
+      "replaced": "A slower laptop that made context switching feel expensive.",
+      "audience": [
+        "builders",
+        "creators"
+      ],
+      "topics": [
+        "tools-objects",
+        "ai-assisted-work"
+      ],
+      "tags": [
+        "tech",
+        "workstation",
+        "coding"
+      ],
+      "relatedContent": [
+        "projects.html"
+      ]
+    },
+    {
+      "id": "samsung-galaxy-s23-ultra",
+      "slug": "samsung-galaxy-s23-ultra",
+      "title": "Galaxy S23 Ultra",
+      "brand": "Samsung",
+      "type": "recommendation",
+      "category": "tech",
+      "status": "available",
+      "price": "",
+      "shortDescription": "A big-screen Android phone with an excellent camera system, built-in S Pen, and enough battery to feel dependable all day.",
+      "description": "A flagship Android phone recommendation for capture, notes, and everyday mobile work.",
+      "rating": 4.7,
+      "badge": "Power Phone",
+      "usage": "Primary Android pick",
+      "icon": "phone",
+      "image": "images/products/samsung-galaxy-s23-ultra.png",
+      "ctaLabel": "View Recommendation",
+      "checkoutUrl": "",
+      "verdict": "A phone that behaves more like a pocket workstation.",
+      "whyItStayed": "The big screen, strong cameras, and S Pen make it useful for capturing, annotating, and doing real work away from the desk.",
+      "howIUseIt": "Photos, quick notes, reading, navigation, travel planning, and mobile admin when opening a laptop would be overkill.",
+      "replaced": "A smaller phone that made mobile work feel cramped.",
+      "audience": [
+        "builders",
+        "creators"
+      ],
+      "topics": [
+        "tools-objects",
+        "ai-assisted-work"
+      ],
+      "tags": [
+        "phone",
+        "camera",
+        "android"
+      ],
+      "relatedContent": [
+        "videos.html"
+      ]
+    },
+    {
+      "id": "dji-osmo-action-4",
+      "slug": "dji-osmo-action-4",
+      "title": "Osmo Action 4",
+      "brand": "DJI",
+      "type": "recommendation",
+      "category": "tech",
+      "status": "available",
+      "price": "",
+      "shortDescription": "Rugged, waterproof action camera with excellent stabilization. Captures adventures without turning the moment into a production.",
+      "description": "An action camera recommendation for travel, adventures, and POV capture.",
+      "rating": 4.7,
+      "badge": "Capture Kit",
+      "usage": "Travel and adventure kit",
+      "icon": "camera",
+      "image": "images/products/dji-osmo-action-4.png",
+      "ctaLabel": "View Recommendation",
+      "checkoutUrl": "",
+      "verdict": "The pocket camera that makes the best shots actually happen.",
+      "whyItStayed": "Rugged, waterproof, and stabilized enough that the footage looks intentional instead of accidental.",
+      "howIUseIt": "Adventures, travel, POV clips, and the handheld moments where a phone is not the right tool.",
+      "replaced": "Shaky phone footage and shots I kept meaning to get but never did.",
+      "audience": [
+        "creators",
+        "travellers"
+      ],
+      "topics": [
+        "tools-objects",
+        "adventure"
+      ],
+      "tags": [
+        "camera",
+        "video",
+        "travel"
+      ],
+      "relatedContent": [
+        "adventures.html",
+        "videos.html"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "book-notes-collection",
+      "slug": "book-notes-collection",
+      "title": "Book Notes Collection",
+      "type": "lead-magnet",
+      "resourceType": "notes",
+      "category": "reading",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "My personal notes and key takeaways from impactful books across business, psychology, and philosophy.",
+      "description": "A future free resource that packages durable book notes for faster review and application.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "readers",
+        "builders"
+      ],
+      "topics": [
+        "books-reading",
+        "better-thinking"
+      ],
+      "tags": [
+        "reading",
+        "books",
+        "notes"
+      ],
+      "relatedContent": [
+        "books.html",
+        "reading-philosophy.html"
+      ]
+    },
+    {
+      "id": "weekly-review-template",
+      "slug": "weekly-review-template",
+      "title": "Weekly Review Template",
+      "type": "template",
+      "resourceType": "worksheet",
+      "category": "productivity",
+      "status": "available",
+      "price": "Free",
+      "shortDescription": "The template I use every Sunday to reflect on the week and plan ahead with intention.",
+      "description": "A free weekly review template for reflection, planning, and intentional next actions.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Open Template",
+      "downloadUrl": "weekly-review-template.html",
+      "checkoutUrl": "",
+      "audience": [
+        "operators",
+        "students"
+      ],
+      "topics": [
+        "personal-systems",
+        "better-thinking"
+      ],
+      "tags": [
+        "planning",
+        "reflection",
+        "weekly-review"
+      ],
+      "relatedContent": [
+        "notes.html"
+      ]
+    },
+    {
+      "id": "personal-finance-tracker",
+      "slug": "personal-finance-tracker",
+      "title": "Personal Finance Tracker",
+      "type": "template",
+      "resourceType": "spreadsheet",
+      "category": "finance",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "A simple spreadsheet for tracking income, expenses, savings rate, and net worth over time.",
+      "description": "A free personal finance spreadsheet for income, expenses, savings rate, and net worth tracking.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "personal finance learners"
+      ],
+      "topics": [
+        "personal-systems"
+      ],
+      "tags": [
+        "finance",
+        "spreadsheet",
+        "tracking"
+      ],
+      "relatedContent": []
+    },
+    {
+      "id": "decision-making-framework",
+      "slug": "decision-making-framework",
+      "title": "Decision Making Framework",
+      "type": "template",
+      "resourceType": "checklist",
+      "category": "mental-models",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "A checklist of questions and frameworks I use when facing important decisions.",
+      "description": "A free decision-making checklist for assumptions, constraints, options, and next actions.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "builders",
+        "decision makers"
+      ],
+      "topics": [
+        "better-thinking",
+        "personal-systems"
+      ],
+      "tags": [
+        "decision-making",
+        "mental-models",
+        "strategy"
+      ],
+      "relatedContent": []
+    },
+    {
+      "id": "reading-operating-system",
+      "slug": "reading-operating-system",
+      "title": "Reading Operating System",
+      "type": "template",
+      "resourceType": "template",
+      "category": "reading",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "A future downloadable template for turning books into durable notes, decisions, and action.",
+      "description": "A lightweight resource placeholder for the future commerce/resource layer. It keeps the catalog shape ready without changing the current public product experience.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "readers",
+        "lifelong learners"
+      ],
+      "topics": [
+        "books-reading",
+        "personal-systems"
+      ],
+      "tags": [
+        "reading",
+        "learning",
+        "templates"
+      ],
+      "relatedContent": [
+        "books.html",
+        "reading-philosophy.html"
+      ]
+    },
+    {
+      "id": "first-principles-decision-template",
+      "slug": "first-principles-decision-template",
+      "title": "First Principles Decision Template",
+      "type": "template",
+      "resourceType": "worksheet",
+      "category": "mental-models",
+      "status": "preview",
+      "price": "Free",
+      "shortDescription": "A future worksheet for breaking decisions down to assumptions, truths, options, and next actions.",
+      "description": "A commerce-ready placeholder connected to the skills library. The generated API exposes it to agents before a checkout provider is chosen.",
+      "image": "images/generated/logo/logo-nav-352.png",
+      "ctaLabel": "Coming Soon",
+      "downloadUrl": "",
+      "checkoutUrl": "",
+      "audience": [
+        "builders",
+        "strategists"
+      ],
+      "topics": [
+        "better-thinking"
+      ],
+      "tags": [
+        "decision-making",
+        "strategy",
+        "templates"
+      ],
+      "relatedContent": []
+    }
+  ]
+}

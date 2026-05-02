@@ -136,13 +136,13 @@
       "og:description": "A week in Austin experiencing world-famous BBQ, incredible live music, and the unique culture that makes Texas's capital so special.",
       "og:url": "https://jevangoldsmith.com/adventure-austin-adventure.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Live Music &#38; BBQ Capital - Jevan Goldsmith",
       "twitter:description": "A week in Austin experiencing world-famous BBQ, incredible live music, and the unique culture that makes Texas's capital so special.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200"
     },
     "alternate": [
       {
@@ -213,15 +213,21 @@
             },
             {
               "@type": "ListItem",
-              "item": "https://jevangoldsmith.com/adventure-austin-adventure.html",
-              "name": "Live Music & BBQ Capital - Jevan Goldsmith",
+              "item": "https://jevangoldsmith.com/adventures.html",
+              "name": "Adventures",
               "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/adventure-austin-adventure.html",
+              "name": "Live Music & BBQ Capital",
+              "position": 3
             }
           ]
         },
         {
           "@id": "https://jevangoldsmith.com/adventure-austin-adventure.html#page",
-          "@type": "WebPage",
+          "@type": "Article",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -233,9 +239,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Live Music & BBQ Capital - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200",
             "width": 1200
           },
           "inLanguage": "en",
@@ -247,6 +253,43 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-austin-adventure.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/adventure-austin-adventure.html#trip",
+          "@type": "TouristTrip",
+          "description": "A week in Austin experiencing world-famous BBQ, incredible live music, and the unique culture that makes Texas's capital so special.",
+          "endDate": "2025-03-08",
+          "image": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200",
+          "itinerary": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Live music on 6th Street",
+                "position": 1
+              },
+              {
+                "@type": "ListItem",
+                "name": "World-famous BBQ",
+                "position": 2
+              },
+              {
+                "@type": "ListItem",
+                "name": "Lady Bird Lake",
+                "position": 3
+              },
+              {
+                "@type": "ListItem",
+                "name": "South Congress shopping",
+                "position": 4
+              }
+            ]
+          },
+          "name": "Live Music & BBQ Capital",
+          "provider": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "startDate": "2025-03-01"
         }
       ]
     }
@@ -262,13 +305,13 @@
       "og:description": "Exploring the quiet beauty of North Queensland's sugar country, from the Burdekin River to nearby Great Barrier Reef day trips.",
       "og:url": "https://jevangoldsmith.com/adventure-ayr-adventure.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Sugar Cane &#38; Sunsets - Jevan Goldsmith",
       "twitter:description": "Exploring the quiet beauty of North Queensland's sugar country, from the Burdekin River to nearby Great Barrier Reef day trips.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200"
     },
     "alternate": [
       {
@@ -339,15 +382,21 @@
             },
             {
               "@type": "ListItem",
-              "item": "https://jevangoldsmith.com/adventure-ayr-adventure.html",
-              "name": "Sugar Cane & Sunsets - Jevan Goldsmith",
+              "item": "https://jevangoldsmith.com/adventures.html",
+              "name": "Adventures",
               "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/adventure-ayr-adventure.html",
+              "name": "Sugar Cane & Sunsets",
+              "position": 3
             }
           ]
         },
         {
           "@id": "https://jevangoldsmith.com/adventure-ayr-adventure.html#page",
-          "@type": "WebPage",
+          "@type": "Article",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -359,9 +408,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Sugar Cane & Sunsets - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200",
             "width": 1200
           },
           "inLanguage": "en",
@@ -373,6 +422,43 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-ayr-adventure.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/adventure-ayr-adventure.html#trip",
+          "@type": "TouristTrip",
+          "description": "Exploring the quiet beauty of North Queensland's sugar country, from the Burdekin River to nearby Great Barrier Reef day trips.",
+          "endDate": "2025-05-22",
+          "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200",
+          "itinerary": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Burdekin River sunsets",
+                "position": 1
+              },
+              {
+                "@type": "ListItem",
+                "name": "Sugar cane country",
+                "position": 2
+              },
+              {
+                "@type": "ListItem",
+                "name": "Great Barrier Reef day trip",
+                "position": 3
+              },
+              {
+                "@type": "ListItem",
+                "name": "Friendly locals",
+                "position": 4
+              }
+            ]
+          },
+          "name": "Sugar Cane & Sunsets",
+          "provider": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "startDate": "2025-05-15"
         }
       ]
     }
@@ -388,13 +474,13 @@
       "og:description": "A journey through Japan's ancient capital during the magical cherry blossom season, visiting temples, shrines, and hidden gardens.",
       "og:url": "https://jevangoldsmith.com/adventure-japan-adventure.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Temples &#38; Cherry Blossoms - Jevan Goldsmith",
       "twitter:description": "A journey through Japan's ancient capital during the magical cherry blossom season, visiting temples, shrines, and hidden gardens.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200"
     },
     "alternate": [
       {
@@ -465,15 +551,21 @@
             },
             {
               "@type": "ListItem",
-              "item": "https://jevangoldsmith.com/adventure-japan-adventure.html",
-              "name": "Temples & Cherry Blossoms - Jevan Goldsmith",
+              "item": "https://jevangoldsmith.com/adventures.html",
+              "name": "Adventures",
               "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/adventure-japan-adventure.html",
+              "name": "Temples & Cherry Blossoms",
+              "position": 3
             }
           ]
         },
         {
           "@id": "https://jevangoldsmith.com/adventure-japan-adventure.html#page",
-          "@type": "WebPage",
+          "@type": "Article",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -485,9 +577,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Temples & Cherry Blossoms - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200",
             "width": 1200
           },
           "inLanguage": "en",
@@ -499,6 +591,43 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-japan-adventure.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/adventure-japan-adventure.html#trip",
+          "@type": "TouristTrip",
+          "description": "A journey through Japan's ancient capital during the magical cherry blossom season, visiting temples, shrines, and hidden gardens.",
+          "endDate": "2024-04-05",
+          "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200",
+          "itinerary": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Cherry blossoms",
+                "position": 1
+              },
+              {
+                "@type": "ListItem",
+                "name": "Ancient temples",
+                "position": 2
+              },
+              {
+                "@type": "ListItem",
+                "name": "Traditional cuisine",
+                "position": 3
+              },
+              {
+                "@type": "ListItem",
+                "name": "Zen gardens",
+                "position": 4
+              }
+            ]
+          },
+          "name": "Temples & Cherry Blossoms",
+          "provider": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "startDate": "2024-03-25"
         }
       ]
     }
@@ -514,13 +643,13 @@
       "og:description": "This is a sample adventure to demonstrate the layout. Replace this with your own adventures!",
       "og:url": "https://jevangoldsmith.com/adventure-sample-adventure.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Sample Adventure - Jevan Goldsmith",
       "twitter:description": "This is a sample adventure to demonstrate the layout. Replace this with your own adventures!",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200"
     },
     "alternate": [
       {
@@ -591,15 +720,21 @@
             },
             {
               "@type": "ListItem",
-              "item": "https://jevangoldsmith.com/adventure-sample-adventure.html",
-              "name": "Sample Adventure - Jevan Goldsmith",
+              "item": "https://jevangoldsmith.com/adventures.html",
+              "name": "Adventures",
               "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/adventure-sample-adventure.html",
+              "name": "Sample Adventure",
+              "position": 3
             }
           ]
         },
         {
           "@id": "https://jevangoldsmith.com/adventure-sample-adventure.html#page",
-          "@type": "WebPage",
+          "@type": "Article",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -611,9 +746,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Sample Adventure - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200",
             "width": 1200
           },
           "inLanguage": "en",
@@ -625,6 +760,38 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-sample-adventure.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/adventure-sample-adventure.html#trip",
+          "@type": "TouristTrip",
+          "description": "This is a sample adventure to demonstrate the layout. Replace this with your own adventures!",
+          "endDate": "2024-06-20",
+          "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200",
+          "itinerary": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Beautiful scenery",
+                "position": 1
+              },
+              {
+                "@type": "ListItem",
+                "name": "Great food",
+                "position": 2
+              },
+              {
+                "@type": "ListItem",
+                "name": "Amazing people",
+                "position": 3
+              }
+            ]
+          },
+          "name": "Sample Adventure",
+          "provider": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "startDate": "2024-06-15"
         }
       ]
     }
@@ -640,13 +807,13 @@
       "og:description": "From the iconic Opera House to hidden beaches, discovering why Sydney is one of the world's most beautiful cities.",
       "og:url": "https://jevangoldsmith.com/adventure-sydney-adventure.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Harbour City Dreams - Jevan Goldsmith",
       "twitter:description": "From the iconic Opera House to hidden beaches, discovering why Sydney is one of the world's most beautiful cities.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200"
     },
     "alternate": [
       {
@@ -717,15 +884,21 @@
             },
             {
               "@type": "ListItem",
-              "item": "https://jevangoldsmith.com/adventure-sydney-adventure.html",
-              "name": "Harbour City Dreams - Jevan Goldsmith",
+              "item": "https://jevangoldsmith.com/adventures.html",
+              "name": "Adventures",
               "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/adventure-sydney-adventure.html",
+              "name": "Harbour City Dreams",
+              "position": 3
             }
           ]
         },
         {
           "@id": "https://jevangoldsmith.com/adventure-sydney-adventure.html#page",
-          "@type": "WebPage",
+          "@type": "Article",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -737,9 +910,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Harbour City Dreams - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200",
             "width": 1200
           },
           "inLanguage": "en",
@@ -751,6 +924,43 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-sydney-adventure.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/adventure-sydney-adventure.html#trip",
+          "@type": "TouristTrip",
+          "description": "From the iconic Opera House to hidden beaches, discovering why Sydney is one of the world's most beautiful cities.",
+          "endDate": "2024-08-20",
+          "image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200",
+          "itinerary": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Sydney Opera House",
+                "position": 1
+              },
+              {
+                "@type": "ListItem",
+                "name": "Bondi to Coogee walk",
+                "position": 2
+              },
+              {
+                "@type": "ListItem",
+                "name": "Harbour Bridge climb",
+                "position": 3
+              },
+              {
+                "@type": "ListItem",
+                "name": "Fresh seafood",
+                "position": 4
+              }
+            ]
+          },
+          "name": "Harbour City Dreams",
+          "provider": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "startDate": "2024-08-10"
         }
       ]
     }
@@ -766,13 +976,13 @@
       "og:description": "A spiritual journey to Australia's Red Centre, witnessing Uluru's magic at sunrise and sunset while learning about Aboriginal culture.",
       "og:url": "https://jevangoldsmith.com/adventure-uluru-adventure.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=1200"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Red Centre Journey - Jevan Goldsmith",
       "twitter:description": "A spiritual journey to Australia's Red Centre, witnessing Uluru's magic at sunrise and sunset while learning about Aboriginal culture.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=1200"
     },
     "alternate": [
       {
@@ -843,15 +1053,21 @@
             },
             {
               "@type": "ListItem",
-              "item": "https://jevangoldsmith.com/adventure-uluru-adventure.html",
-              "name": "Red Centre Journey - Jevan Goldsmith",
+              "item": "https://jevangoldsmith.com/adventures.html",
+              "name": "Adventures",
               "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/adventure-uluru-adventure.html",
+              "name": "Red Centre Journey",
+              "position": 3
             }
           ]
         },
         {
           "@id": "https://jevangoldsmith.com/adventure-uluru-adventure.html#page",
-          "@type": "WebPage",
+          "@type": "Article",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -863,9 +1079,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Red Centre Journey - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=1200",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=1200",
             "width": 1200
           },
           "inLanguage": "en",
@@ -877,6 +1093,43 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-uluru-adventure.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/adventure-uluru-adventure.html#trip",
+          "@type": "TouristTrip",
+          "description": "A spiritual journey to Australia's Red Centre, witnessing Uluru's magic at sunrise and sunset while learning about Aboriginal culture.",
+          "endDate": "2024-09-12",
+          "image": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=1200",
+          "itinerary": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Uluru sunrise",
+                "position": 1
+              },
+              {
+                "@type": "ListItem",
+                "name": "Kata Tjuta hike",
+                "position": 2
+              },
+              {
+                "@type": "ListItem",
+                "name": "Aboriginal culture",
+                "position": 3
+              },
+              {
+                "@type": "ListItem",
+                "name": "Field of Light",
+                "position": 4
+              }
+            ]
+          },
+          "name": "Red Centre Journey",
+          "provider": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "startDate": "2024-09-05"
         }
       ]
     }
@@ -892,13 +1145,13 @@
       "og:description": "An unforgettable journey through Vietnam's stunning landscapes, from the limestone karsts of Ha Long Bay to the bustling streets of Ho Chi Minh City.",
       "og:url": "https://jevangoldsmith.com/adventure-vietnam-adventure.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Motorbikes &#38; Mountains - Jevan Goldsmith",
       "twitter:description": "An unforgettable journey through Vietnam's stunning landscapes, from the limestone karsts of Ha Long Bay to the bustling streets of Ho Chi Minh City.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200"
     },
     "alternate": [
       {
@@ -969,15 +1222,21 @@
             },
             {
               "@type": "ListItem",
-              "item": "https://jevangoldsmith.com/adventure-vietnam-adventure.html",
-              "name": "Motorbikes & Mountains - Jevan Goldsmith",
+              "item": "https://jevangoldsmith.com/adventures.html",
+              "name": "Adventures",
               "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "item": "https://jevangoldsmith.com/adventure-vietnam-adventure.html",
+              "name": "Motorbikes & Mountains",
+              "position": 3
             }
           ]
         },
         {
           "@id": "https://jevangoldsmith.com/adventure-vietnam-adventure.html#page",
-          "@type": "WebPage",
+          "@type": "Article",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -989,9 +1248,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Motorbikes & Mountains - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200",
             "width": 1200
           },
           "inLanguage": "en",
@@ -1003,6 +1262,43 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventure-vietnam-adventure.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/adventure-vietnam-adventure.html#trip",
+          "@type": "TouristTrip",
+          "description": "An unforgettable journey through Vietnam's stunning landscapes, from the limestone karsts of Ha Long Bay to the bustling streets of Ho Chi Minh City.",
+          "endDate": "2024-11-24",
+          "image": "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200",
+          "itinerary": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "name": "Ha Long Bay cruise",
+                "position": 1
+              },
+              {
+                "@type": "ListItem",
+                "name": "Street food tours",
+                "position": 2
+              },
+              {
+                "@type": "ListItem",
+                "name": "Ancient temples",
+                "position": 3
+              },
+              {
+                "@type": "ListItem",
+                "name": "Motorbike adventures",
+                "position": 4
+              }
+            ]
+          },
+          "name": "Motorbikes & Mountains",
+          "provider": {
+            "@id": "https://jevangoldsmith.com/#person"
+          },
+          "startDate": "2024-11-10"
         }
       ]
     }
@@ -1103,7 +1399,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/adventures.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -1129,6 +1425,55 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/adventures.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/adventures.html#itemlist",
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "name": "Sugar Cane & Sunsets",
+              "position": 1,
+              "url": "https://jevangoldsmith.com/adventure-ayr-adventure.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Live Music & BBQ Capital",
+              "position": 2,
+              "url": "https://jevangoldsmith.com/adventure-austin-adventure.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Motorbikes & Mountains",
+              "position": 3,
+              "url": "https://jevangoldsmith.com/adventure-vietnam-adventure.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Red Centre Journey",
+              "position": 4,
+              "url": "https://jevangoldsmith.com/adventure-uluru-adventure.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Harbour City Dreams",
+              "position": 5,
+              "url": "https://jevangoldsmith.com/adventure-sydney-adventure.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Sample Adventure",
+              "position": 6,
+              "url": "https://jevangoldsmith.com/adventure-sample-adventure.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Temples & Cherry Blossoms",
+              "position": 7,
+              "url": "https://jevangoldsmith.com/adventure-japan-adventure.html"
+            }
+          ],
+          "numberOfItems": 7
         }
       ]
     }
@@ -1255,6 +1600,138 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/books.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/books.html#itemlist",
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "name": "7 Powers: The Foundations of Business Strategy — Hamilton Helmer",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "name": "A Few Lessons for Investors and Managers from Warren Buffett — Peter Bevelin",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "name": "A Few Lessons from Sherlock Holmes — Peter Bevelin",
+              "position": 3
+            },
+            {
+              "@type": "ListItem",
+              "name": "A Man for All Markets — Edward O. Thorp",
+              "position": 4
+            },
+            {
+              "@type": "ListItem",
+              "name": "Against the Odds — James Dyson",
+              "position": 5
+            },
+            {
+              "@type": "ListItem",
+              "name": "All I Want to Know is Where I'm Going to Die So I'll Never Go There — Peter Bevelin",
+              "position": 6
+            },
+            {
+              "@type": "ListItem",
+              "name": "Am I Being Too Subtle? — Sam Zell",
+              "position": 7
+            },
+            {
+              "@type": "ListItem",
+              "name": "Atomic Habits — James Clear",
+              "position": 8
+            },
+            {
+              "@type": "ListItem",
+              "name": "Autobiography of a Restless Mind — Dee Hock",
+              "position": 9
+            },
+            {
+              "@type": "ListItem",
+              "name": "Bartlett's Familiar Quotations — John Bartlett, Geoffrey O'Brien",
+              "position": 10
+            },
+            {
+              "@type": "ListItem",
+              "name": "Becoming Steve Jobs — Brent Schlender, Rick Tetzeli",
+              "position": 11
+            },
+            {
+              "@type": "ListItem",
+              "name": "Benjamin Franklin — Carl Van Doren",
+              "position": 12
+            },
+            {
+              "@type": "ListItem",
+              "name": "Benjamin Franklin — Edmund S. Morgan",
+              "position": 13
+            },
+            {
+              "@type": "ListItem",
+              "name": "Benjamin Franklin: An American Life — Walter Isaacson",
+              "position": 14
+            },
+            {
+              "@type": "ListItem",
+              "name": "Berkshire Hathaway Letters to Shareholders 1965-2023 — Warren Buffett",
+              "position": 15
+            },
+            {
+              "@type": "ListItem",
+              "name": "Bird by Bird — Anne Lamott",
+              "position": 16
+            },
+            {
+              "@type": "ListItem",
+              "name": "Bloomberg by Bloomberg — Michael Bloomberg",
+              "position": 17
+            },
+            {
+              "@type": "ListItem",
+              "name": "Bruce Lee: Wisdom for the Way — Bruce Lee",
+              "position": 18
+            },
+            {
+              "@type": "ListItem",
+              "name": "Can't Hurt Me — David Goggins",
+              "position": 19
+            },
+            {
+              "@type": "ListItem",
+              "name": "Choices, Values, and Frames — Daniel Kahneman, Amos Tversky",
+              "position": 20
+            },
+            {
+              "@type": "ListItem",
+              "name": "Churchill — Paul Johnson",
+              "position": 21
+            },
+            {
+              "@type": "ListItem",
+              "name": "Churchill: Walking with Destiny — Andrew Roberts",
+              "position": 22
+            },
+            {
+              "@type": "ListItem",
+              "name": "Confessions of an Advertising Man — David Ogilvy",
+              "position": 23
+            },
+            {
+              "@type": "ListItem",
+              "name": "Copywriting Secrets — Jim Edwards",
+              "position": 24
+            },
+            {
+              "@type": "ListItem",
+              "name": "Creativity, Inc. — Ed Catmull, Amy Wallace",
+              "position": 25
+            }
+          ],
+          "numberOfItems": 122
         }
       ]
     }
@@ -1355,7 +1832,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/challenges.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -1481,7 +1958,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/changed-my-mind.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -1733,7 +2210,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/cool-shit.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -2135,6 +2612,28 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/essays.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/essays.html#itemlist",
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "name": "Feed My Addiction",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "name": "The Beginning is the End and the End is the Beginning",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "name": "Hot Spas Never go out of Style - A lesson on Culture",
+              "position": 3
+            }
+          ],
+          "numberOfItems": 3
         }
       ]
     }
@@ -2235,7 +2734,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/field-notes.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -2361,7 +2860,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/free-resources.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -2739,7 +3238,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/#page",
-          "@type": "WebPage",
+          "@type": "WebSite",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -3117,7 +3616,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/meet.html#page",
-          "@type": "WebPage",
+          "@type": "ContactPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -3395,6 +3894,43 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/movies.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/movies.html#itemlist",
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "name": "What Dreams May Come",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "name": "Breakfast at Tiffany's",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "name": "Before Sunrise",
+              "position": 3
+            },
+            {
+              "@type": "ListItem",
+              "name": "Before Sunset",
+              "position": 4
+            },
+            {
+              "@type": "ListItem",
+              "name": "Lawrence of Arabia",
+              "position": 5
+            },
+            {
+              "@type": "ListItem",
+              "name": "The Place Beyond the Pines",
+              "position": 6
+            }
+          ],
+          "numberOfItems": 6
         }
       ]
     }
@@ -3621,7 +4157,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/notes.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -3899,6 +4435,85 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people.html#itemlist",
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "name": "Andrew Huberman",
+              "position": 1,
+              "url": "https://jevangoldsmith.com/people/andrew-huberman.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Christopher Nolan",
+              "position": 2,
+              "url": "https://jevangoldsmith.com/people/christopher-nolan.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Elon Musk",
+              "position": 3,
+              "url": "https://jevangoldsmith.com/people/elon-musk.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "James Clear",
+              "position": 4,
+              "url": "https://jevangoldsmith.com/people/james-clear.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Lex Fridman",
+              "position": 5,
+              "url": "https://jevangoldsmith.com/people/lex-fridman.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Morgan Housel",
+              "position": 6,
+              "url": "https://jevangoldsmith.com/people/morgan-housel.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Naval Ravikant",
+              "position": 7,
+              "url": "https://jevangoldsmith.com/people/naval-ravikant.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Ray Dalio",
+              "position": 8,
+              "url": "https://jevangoldsmith.com/people/ray-dalio.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Richard Feynman",
+              "position": 9,
+              "url": "https://jevangoldsmith.com/people/richard-feynman.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Rick Rubin",
+              "position": 10,
+              "url": "https://jevangoldsmith.com/people/rick-rubin.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Ryan Holiday",
+              "position": 11,
+              "url": "https://jevangoldsmith.com/people/ryan-holiday.html"
+            },
+            {
+              "@type": "ListItem",
+              "name": "Warren Buffett",
+              "position": 12,
+              "url": "https://jevangoldsmith.com/people/warren-buffett.html"
+            }
+          ],
+          "numberOfItems": 12
         }
       ]
     }
@@ -3914,13 +4529,13 @@
       "og:description": "Andrew Huberman is a neuroscientist and educator known for making neuroscience, physiology, and behavioral tools useful to a broad audience.",
       "og:url": "https://jevangoldsmith.com/people/andrew-huberman.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/andrew-huberman-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Andrew Huberman - People - Jevan Goldsmith",
       "twitter:description": "Andrew Huberman is a neuroscientist and educator known for making neuroscience, physiology, and behavioral tools useful to a broad audience.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/andrew-huberman-400.jpg"
     },
     "alternate": [
       {
@@ -4017,9 +4632,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Andrew Huberman - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/andrew-huberman-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/andrew-huberman-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -4031,6 +4646,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/andrew-huberman.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/andrew-huberman.html#subject",
+          "@type": "Person",
+          "description": "Useful biology for changing behavior.",
+          "image": "https://jevangoldsmith.com/images/generated/people/andrew-huberman-400.jpg",
+          "jobTitle": "Neuroscientist, Stanford",
+          "name": "Andrew Huberman"
         }
       ]
     }
@@ -4046,13 +4669,13 @@
       "og:description": "Andrew Wilkinson is the co-founder of Tiny, a holding company built around buying, operating, and compounding simple internet businesses.",
       "og:url": "https://jevangoldsmith.com/people/andrew-wilkinson.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/andrew-wilkinson-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Andrew Wilkinson - People - Jevan Goldsmith",
       "twitter:description": "Andrew Wilkinson is the co-founder of Tiny, a holding company built around buying, operating, and compounding simple internet businesses.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/andrew-wilkinson-400.jpg"
     },
     "alternate": [
       {
@@ -4149,9 +4772,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Andrew Wilkinson - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/andrew-wilkinson-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/andrew-wilkinson-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -4163,6 +4786,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/andrew-wilkinson.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/andrew-wilkinson.html#subject",
+          "@type": "Person",
+          "description": "Build patiently, own what lasts.",
+          "image": "https://jevangoldsmith.com/images/generated/people/andrew-wilkinson-400.jpg",
+          "jobTitle": "Entrepreneur, Investor",
+          "name": "Andrew Wilkinson"
         }
       ]
     }
@@ -4178,13 +4809,13 @@
       "og:description": "Anne Lamott is an American novelist and writing teacher whose work is known for its honesty, humor, faith, and practical creative guidance.",
       "og:url": "https://jevangoldsmith.com/people/anne-lamott.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/anne-lamott-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Anne Lamott - People - Jevan Goldsmith",
       "twitter:description": "Anne Lamott is an American novelist and writing teacher whose work is known for its honesty, humor, faith, and practical creative guidance.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/anne-lamott-400.jpg"
     },
     "alternate": [
       {
@@ -4281,9 +4912,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Anne Lamott - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/anne-lamott-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/anne-lamott-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -4295,6 +4926,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/anne-lamott.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/anne-lamott.html#subject",
+          "@type": "Person",
+          "description": "Write one honest sentence at a time.",
+          "image": "https://jevangoldsmith.com/images/generated/people/anne-lamott-400.jpg",
+          "jobTitle": "Writer",
+          "name": "Anne Lamott"
         }
       ]
     }
@@ -4310,13 +4949,13 @@
       "og:description": "Atul Gawande is a surgeon, writer, and public health thinker who studies how professionals make complex systems safer and more reliable.",
       "og:url": "https://jevangoldsmith.com/people/atul-gawande.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/atul-gawande-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Atul Gawande - People - Jevan Goldsmith",
       "twitter:description": "Atul Gawande is a surgeon, writer, and public health thinker who studies how professionals make complex systems safer and more reliable.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/atul-gawande-400.jpg"
     },
     "alternate": [
       {
@@ -4413,9 +5052,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Atul Gawande - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/atul-gawande-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/atul-gawande-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -4427,6 +5066,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/atul-gawande.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/atul-gawande.html#subject",
+          "@type": "Person",
+          "description": "Complex work needs simple checks.",
+          "image": "https://jevangoldsmith.com/images/generated/people/atul-gawande-400.jpg",
+          "jobTitle": "Surgeon, Writer",
+          "name": "Atul Gawande"
         }
       ]
     }
@@ -4442,13 +5089,13 @@
       "og:description": "Baltasar Gracián was a Spanish Jesuit philosopher and writer whose aphorisms compress practical wisdom about judgment, reputation, and power.",
       "og:url": "https://jevangoldsmith.com/people/baltasar-gracian.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/baltasar-gracian-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Baltasar Gracián - People - Jevan Goldsmith",
       "twitter:description": "Baltasar Gracián was a Spanish Jesuit philosopher and writer whose aphorisms compress practical wisdom about judgment, reputation, and power.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/baltasar-gracian-400.jpg"
     },
     "alternate": [
       {
@@ -4545,9 +5192,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Baltasar Gracián - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/baltasar-gracian-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/baltasar-gracian-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -4559,6 +5206,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/baltasar-gracian.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/baltasar-gracian.html#subject",
+          "@type": "Person",
+          "description": "Wisdom is precision under pressure.",
+          "image": "https://jevangoldsmith.com/images/generated/people/baltasar-gracian-400.jpg",
+          "jobTitle": "Philosopher, Writer",
+          "name": "Baltasar Gracián"
         }
       ]
     }
@@ -4574,13 +5229,13 @@
       "og:description": "Cal Newport is a computer science professor and author focused on deep work, attention, skill-building, and the discipline required for meaningful output.",
       "og:url": "https://jevangoldsmith.com/people/cal-newport.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/cal-newport-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Cal Newport - People - Jevan Goldsmith",
       "twitter:description": "Cal Newport is a computer science professor and author focused on deep work, attention, skill-building, and the discipline required for meaningful output.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/cal-newport-400.jpg"
     },
     "alternate": [
       {
@@ -4677,9 +5332,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Cal Newport - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/cal-newport-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/cal-newport-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -4691,6 +5346,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/cal-newport.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/cal-newport.html#subject",
+          "@type": "Person",
+          "description": "Protect the depth that compounds.",
+          "image": "https://jevangoldsmith.com/images/generated/people/cal-newport-400.jpg",
+          "jobTitle": "Writer, Computer Scientist",
+          "name": "Cal Newport"
         }
       ]
     }
@@ -4706,13 +5369,13 @@
       "og:description": "Charlie Munger was Warren Buffett's longtime partner at Berkshire Hathaway and a relentless advocate for multidisciplinary thinking, incentives, and avoiding obvious stupidity.",
       "og:url": "https://jevangoldsmith.com/people/charlie-munger.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/charlie-munger-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Charlie Munger - People - Jevan Goldsmith",
       "twitter:description": "Charlie Munger was Warren Buffett's longtime partner at Berkshire Hathaway and a relentless advocate for multidisciplinary thinking, incentives, and avoiding obvious stupidity.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/charlie-munger-400.jpg"
     },
     "alternate": [
       {
@@ -4809,9 +5472,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Charlie Munger - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/charlie-munger-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/charlie-munger-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -4823,6 +5486,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/charlie-munger.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/charlie-munger.html#subject",
+          "@type": "Person",
+          "description": "Collect models, avoid stupidity.",
+          "image": "https://jevangoldsmith.com/images/generated/people/charlie-munger-400.jpg",
+          "jobTitle": "Investor, Berkshire Hathaway",
+          "name": "Charlie Munger"
         }
       ]
     }
@@ -4838,13 +5509,13 @@
       "og:description": "Christopher Nolan is a filmmaker known for large-scale, structurally ambitious movies built around time, memory, obsession, and moral pressure.",
       "og:url": "https://jevangoldsmith.com/people/christopher-nolan.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/christopher-nolan-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Christopher Nolan - People - Jevan Goldsmith",
       "twitter:description": "Christopher Nolan is a filmmaker known for large-scale, structurally ambitious movies built around time, memory, obsession, and moral pressure.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/christopher-nolan-400.jpg"
     },
     "alternate": [
       {
@@ -4941,9 +5612,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Christopher Nolan - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/christopher-nolan-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/christopher-nolan-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -4955,6 +5626,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/christopher-nolan.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/christopher-nolan.html#subject",
+          "@type": "Person",
+          "description": "Ambition can still be precise.",
+          "image": "https://jevangoldsmith.com/images/generated/people/christopher-nolan-400.jpg",
+          "jobTitle": "Film Director",
+          "name": "Christopher Nolan"
         }
       ]
     }
@@ -4970,13 +5649,13 @@
       "og:description": "David Goggins is an endurance athlete and former Navy SEAL known for his extreme mental toughness and self-discipline philosophy.",
       "og:url": "https://jevangoldsmith.com/people/david-goggins.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/david-goggins-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "David Goggins - People - Jevan Goldsmith",
       "twitter:description": "David Goggins is an endurance athlete and former Navy SEAL known for his extreme mental toughness and self-discipline philosophy.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/david-goggins-400.jpg"
     },
     "alternate": [
       {
@@ -5073,9 +5752,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "David Goggins - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/david-goggins-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/david-goggins-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -5087,6 +5766,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/david-goggins.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/david-goggins.html#subject",
+          "@type": "Person",
+          "description": "Expand the standard you answer to.",
+          "image": "https://jevangoldsmith.com/images/generated/people/david-goggins-400.jpg",
+          "jobTitle": "Endurance Athlete, Author",
+          "name": "David Goggins"
         }
       ]
     }
@@ -5102,13 +5789,13 @@
       "og:description": "David Ogilvy was a legendary advertising executive who helped define modern direct-response and brand advertising through research, clarity, and craft.",
       "og:url": "https://jevangoldsmith.com/people/david-ogilvy.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/david-ogilvy-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "David Ogilvy - People - Jevan Goldsmith",
       "twitter:description": "David Ogilvy was a legendary advertising executive who helped define modern direct-response and brand advertising through research, clarity, and craft.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/david-ogilvy-400.jpg"
     },
     "alternate": [
       {
@@ -5205,9 +5892,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "David Ogilvy - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/david-ogilvy-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/david-ogilvy-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -5219,6 +5906,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/david-ogilvy.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/david-ogilvy.html#subject",
+          "@type": "Person",
+          "description": "Sell with research and clarity.",
+          "image": "https://jevangoldsmith.com/images/generated/people/david-ogilvy-400.jpg",
+          "jobTitle": "Advertising Executive",
+          "name": "David Ogilvy"
         }
       ]
     }
@@ -5234,13 +5929,13 @@
       "og:description": "Eckhart Tolle is a spiritual teacher and author whose work centers on presence, attention, and loosening identification with thought.",
       "og:url": "https://jevangoldsmith.com/people/eckhart-tolle.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/eckhart-tolle-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Eckhart Tolle - People - Jevan Goldsmith",
       "twitter:description": "Eckhart Tolle is a spiritual teacher and author whose work centers on presence, attention, and loosening identification with thought.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/eckhart-tolle-400.jpg"
     },
     "alternate": [
       {
@@ -5337,9 +6032,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Eckhart Tolle - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/eckhart-tolle-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/eckhart-tolle-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -5351,6 +6046,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/eckhart-tolle.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/eckhart-tolle.html#subject",
+          "@type": "Person",
+          "description": "Return attention to the present.",
+          "image": "https://jevangoldsmith.com/images/generated/people/eckhart-tolle-400.jpg",
+          "jobTitle": "Spiritual Teacher",
+          "name": "Eckhart Tolle"
         }
       ]
     }
@@ -5366,13 +6069,13 @@
       "og:description": "Elon Musk is an entrepreneur and engineer associated with Tesla, SpaceX, and other companies pushing aggressive technology and manufacturing frontiers.",
       "og:url": "https://jevangoldsmith.com/people/elon-musk.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/elon-musk-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Elon Musk - People - Jevan Goldsmith",
       "twitter:description": "Elon Musk is an entrepreneur and engineer associated with Tesla, SpaceX, and other companies pushing aggressive technology and manufacturing frontiers.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/elon-musk-400.jpg"
     },
     "alternate": [
       {
@@ -5469,9 +6172,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Elon Musk - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/elon-musk-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/elon-musk-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -5483,6 +6186,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/elon-musk.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/elon-musk.html#subject",
+          "@type": "Person",
+          "description": "First principles pushed into hardware.",
+          "image": "https://jevangoldsmith.com/images/generated/people/elon-musk-400.jpg",
+          "jobTitle": "CEO, Tesla & SpaceX",
+          "name": "Elon Musk"
         }
       ]
     }
@@ -5498,13 +6209,13 @@
       "og:description": "Eric Ries is an entrepreneur and author best known for the Lean Startup method: rapid experimentation, validated learning, and disciplined product iteration.",
       "og:url": "https://jevangoldsmith.com/people/eric-ries.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/eric-ries-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Eric Ries - People - Jevan Goldsmith",
       "twitter:description": "Eric Ries is an entrepreneur and author best known for the Lean Startup method: rapid experimentation, validated learning, and disciplined product iteration.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/eric-ries-400.jpg"
     },
     "alternate": [
       {
@@ -5601,9 +6312,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Eric Ries - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/eric-ries-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/eric-ries-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -5615,6 +6326,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/eric-ries.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/eric-ries.html#subject",
+          "@type": "Person",
+          "description": "Validate before you scale.",
+          "image": "https://jevangoldsmith.com/images/generated/people/eric-ries-400.jpg",
+          "jobTitle": "Entrepreneur, Author",
+          "name": "Eric Ries"
         }
       ]
     }
@@ -5630,13 +6349,13 @@
       "og:description": "James Clear is an author and habits thinker whose work turns behavior change into simple, repeatable systems.",
       "og:url": "https://jevangoldsmith.com/people/james-clear.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/james-clear-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "James Clear - People - Jevan Goldsmith",
       "twitter:description": "James Clear is an author and habits thinker whose work turns behavior change into simple, repeatable systems.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/james-clear-400.jpg"
     },
     "alternate": [
       {
@@ -5733,9 +6452,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "James Clear - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/james-clear-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/james-clear-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -5747,6 +6466,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/james-clear.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/james-clear.html#subject",
+          "@type": "Person",
+          "description": "Small systems compound.",
+          "image": "https://jevangoldsmith.com/images/generated/people/james-clear-400.jpg",
+          "jobTitle": "Author, Atomic Habits",
+          "name": "James Clear"
         }
       ]
     }
@@ -5762,13 +6489,13 @@
       "og:description": "John D. Rockefeller built Standard Oil into one of history's most powerful companies and became a defining figure in American business, monopoly, and philanthropy.",
       "og:url": "https://jevangoldsmith.com/people/john-d-rockefeller.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/john-d-rockefeller-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "John D. Rockefeller - People - Jevan Goldsmith",
       "twitter:description": "John D. Rockefeller built Standard Oil into one of history's most powerful companies and became a defining figure in American business, monopoly, and philanthropy.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/john-d-rockefeller-400.jpg"
     },
     "alternate": [
       {
@@ -5865,9 +6592,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "John D. Rockefeller - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/john-d-rockefeller-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/john-d-rockefeller-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -5879,6 +6606,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/john-d-rockefeller.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/john-d-rockefeller.html#subject",
+          "@type": "Person",
+          "description": "Systemize the machine, then improve it.",
+          "image": "https://jevangoldsmith.com/images/generated/people/john-d-rockefeller-400.jpg",
+          "jobTitle": "Founder, Standard Oil",
+          "name": "John D. Rockefeller"
         }
       ]
     }
@@ -5894,13 +6629,13 @@
       "og:description": "Keith J. Cunningham is an entrepreneur and business teacher focused on judgment, financial discipline, and asking better questions before acting.",
       "og:url": "https://jevangoldsmith.com/people/keith-j-cunningham.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/keith-j-cunningham-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Keith J. Cunningham - People - Jevan Goldsmith",
       "twitter:description": "Keith J. Cunningham is an entrepreneur and business teacher focused on judgment, financial discipline, and asking better questions before acting.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/keith-j-cunningham-400.jpg"
     },
     "alternate": [
       {
@@ -5997,9 +6732,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Keith J. Cunningham - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/keith-j-cunningham-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/keith-j-cunningham-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -6011,6 +6746,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/keith-j-cunningham.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/keith-j-cunningham.html#subject",
+          "@type": "Person",
+          "description": "Think clearly before acting quickly.",
+          "image": "https://jevangoldsmith.com/images/generated/people/keith-j-cunningham-400.jpg",
+          "jobTitle": "Entrepreneur, Business Teacher",
+          "name": "Keith J. Cunningham"
         }
       ]
     }
@@ -6026,13 +6769,13 @@
       "og:description": "Lex Fridman is an AI researcher and long-form interviewer known for conversations about technology, science, philosophy, and human nature.",
       "og:url": "https://jevangoldsmith.com/people/lex-fridman.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/lex-fridman-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Lex Fridman - People - Jevan Goldsmith",
       "twitter:description": "Lex Fridman is an AI researcher and long-form interviewer known for conversations about technology, science, philosophy, and human nature.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/lex-fridman-400.jpg"
     },
     "alternate": [
       {
@@ -6129,9 +6872,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Lex Fridman - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/lex-fridman-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/lex-fridman-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -6143,6 +6886,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/lex-fridman.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/lex-fridman.html#subject",
+          "@type": "Person",
+          "description": "Long conversations as a learning engine.",
+          "image": "https://jevangoldsmith.com/images/generated/people/lex-fridman-400.jpg",
+          "jobTitle": "AI Researcher, MIT",
+          "name": "Lex Fridman"
         }
       ]
     }
@@ -6158,13 +6909,13 @@
       "og:description": "Morgan Housel is a writer and investor known for explaining money, risk, behavior, and long-term decision-making through clear stories.",
       "og:url": "https://jevangoldsmith.com/people/morgan-housel.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/morgan-housel-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Morgan Housel - People - Jevan Goldsmith",
       "twitter:description": "Morgan Housel is a writer and investor known for explaining money, risk, behavior, and long-term decision-making through clear stories.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/morgan-housel-400.jpg"
     },
     "alternate": [
       {
@@ -6261,9 +7012,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Morgan Housel - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/morgan-housel-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/morgan-housel-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -6275,6 +7026,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/morgan-housel.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/morgan-housel.html#subject",
+          "@type": "Person",
+          "description": "Behavior beats spreadsheets.",
+          "image": "https://jevangoldsmith.com/images/generated/people/morgan-housel-400.jpg",
+          "jobTitle": "Author, Psychology of Money",
+          "name": "Morgan Housel"
         }
       ]
     }
@@ -6290,13 +7049,13 @@
       "og:description": "Naval Ravikant is an entrepreneur, investor, and thinker known for compact ideas about leverage, judgment, wealth, happiness, and independence.",
       "og:url": "https://jevangoldsmith.com/people/naval-ravikant.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/naval-ravikant-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Naval Ravikant - People - Jevan Goldsmith",
       "twitter:description": "Naval Ravikant is an entrepreneur, investor, and thinker known for compact ideas about leverage, judgment, wealth, happiness, and independence.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/naval-ravikant-400.jpg"
     },
     "alternate": [
       {
@@ -6393,9 +7152,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Naval Ravikant - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/naval-ravikant-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/naval-ravikant-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -6407,6 +7166,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/naval-ravikant.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/naval-ravikant.html#subject",
+          "@type": "Person",
+          "description": "Leverage, judgment, and freedom.",
+          "image": "https://jevangoldsmith.com/images/generated/people/naval-ravikant-400.jpg",
+          "jobTitle": "Entrepreneur, Investor",
+          "name": "Naval Ravikant"
         }
       ]
     }
@@ -6422,13 +7189,13 @@
       "og:description": "Peter Thiel is an entrepreneur and investor known for PayPal, Palantir, Founders Fund, and contrarian ideas about monopoly and startups.",
       "og:url": "https://jevangoldsmith.com/people/peter-thiel.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/peter-thiel-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Peter Thiel - People - Jevan Goldsmith",
       "twitter:description": "Peter Thiel is an entrepreneur and investor known for PayPal, Palantir, Founders Fund, and contrarian ideas about monopoly and startups.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/peter-thiel-400.jpg"
     },
     "alternate": [
       {
@@ -6525,9 +7292,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Peter Thiel - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/peter-thiel-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/peter-thiel-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -6539,6 +7306,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/peter-thiel.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/peter-thiel.html#subject",
+          "@type": "Person",
+          "description": "Compete by escaping competition.",
+          "image": "https://jevangoldsmith.com/images/generated/people/peter-thiel-400.jpg",
+          "jobTitle": "Entrepreneur, Investor",
+          "name": "Peter Thiel"
         }
       ]
     }
@@ -6554,13 +7329,13 @@
       "og:description": "Ray Dalio founded Bridgewater Associates and is known for principles-based management, macro investing, and systematic decision-making.",
       "og:url": "https://jevangoldsmith.com/people/ray-dalio.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/ray-dalio-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Ray Dalio - People - Jevan Goldsmith",
       "twitter:description": "Ray Dalio founded Bridgewater Associates and is known for principles-based management, macro investing, and systematic decision-making.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/ray-dalio-400.jpg"
     },
     "alternate": [
       {
@@ -6657,9 +7432,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Ray Dalio - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/ray-dalio-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/ray-dalio-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -6671,6 +7446,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/ray-dalio.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/ray-dalio.html#subject",
+          "@type": "Person",
+          "description": "Make principles explicit.",
+          "image": "https://jevangoldsmith.com/images/generated/people/ray-dalio-400.jpg",
+          "jobTitle": "Founder, Bridgewater",
+          "name": "Ray Dalio"
         }
       ]
     }
@@ -6686,13 +7469,13 @@
       "og:description": "Richard Feynman was a Nobel Prize-winning physicist celebrated for curiosity, clear explanation, playful problem-solving, and scientific honesty.",
       "og:url": "https://jevangoldsmith.com/people/richard-feynman.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/richard-feynman-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Richard Feynman - People - Jevan Goldsmith",
       "twitter:description": "Richard Feynman was a Nobel Prize-winning physicist celebrated for curiosity, clear explanation, playful problem-solving, and scientific honesty.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/richard-feynman-400.jpg"
     },
     "alternate": [
       {
@@ -6789,9 +7572,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Richard Feynman - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/richard-feynman-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/richard-feynman-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -6803,6 +7586,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/richard-feynman.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/richard-feynman.html#subject",
+          "@type": "Person",
+          "description": "Curiosity plus honesty.",
+          "image": "https://jevangoldsmith.com/images/generated/people/richard-feynman-400.jpg",
+          "jobTitle": "Physicist, Nobel Laureate",
+          "name": "Richard Feynman"
         }
       ]
     }
@@ -6818,13 +7609,13 @@
       "og:description": "Rick Rubin is a music producer known for stripping work down to its essence and helping artists find what feels true.",
       "og:url": "https://jevangoldsmith.com/people/rick-rubin.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/rick-rubin-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Rick Rubin - People - Jevan Goldsmith",
       "twitter:description": "Rick Rubin is a music producer known for stripping work down to its essence and helping artists find what feels true.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/rick-rubin-400.jpg"
     },
     "alternate": [
       {
@@ -6921,9 +7712,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Rick Rubin - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/rick-rubin-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/rick-rubin-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -6935,6 +7726,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/rick-rubin.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/rick-rubin.html#subject",
+          "@type": "Person",
+          "description": "Reduce until the real thing appears.",
+          "image": "https://jevangoldsmith.com/images/generated/people/rick-rubin-400.jpg",
+          "jobTitle": "Music Producer",
+          "name": "Rick Rubin"
         }
       ]
     }
@@ -6950,13 +7749,13 @@
       "og:description": "Rob Fitzpatrick is an entrepreneur and author who teaches practical customer discovery and how to ask questions that reveal reality.",
       "og:url": "https://jevangoldsmith.com/people/rob-fitzpatrick.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/rob-fitzpatrick-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Rob Fitzpatrick - People - Jevan Goldsmith",
       "twitter:description": "Rob Fitzpatrick is an entrepreneur and author who teaches practical customer discovery and how to ask questions that reveal reality.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/rob-fitzpatrick-400.jpg"
     },
     "alternate": [
       {
@@ -7053,9 +7852,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Rob Fitzpatrick - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/rob-fitzpatrick-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/rob-fitzpatrick-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -7067,6 +7866,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/rob-fitzpatrick.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/rob-fitzpatrick.html#subject",
+          "@type": "Person",
+          "description": "Ask questions reality can answer.",
+          "image": "https://jevangoldsmith.com/images/generated/people/rob-fitzpatrick-400.jpg",
+          "jobTitle": "Entrepreneur, Author",
+          "name": "Rob Fitzpatrick"
         }
       ]
     }
@@ -7082,13 +7889,13 @@
       "og:description": "Robert Cialdini is a psychologist whose research on persuasion and social influence shaped how people understand compliance, trust, and decision triggers.",
       "og:url": "https://jevangoldsmith.com/people/robert-cialdini.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/robert-cialdini-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Robert Cialdini - People - Jevan Goldsmith",
       "twitter:description": "Robert Cialdini is a psychologist whose research on persuasion and social influence shaped how people understand compliance, trust, and decision triggers.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/robert-cialdini-400.jpg"
     },
     "alternate": [
       {
@@ -7185,9 +7992,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Robert Cialdini - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/robert-cialdini-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/robert-cialdini-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -7199,6 +8006,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/robert-cialdini.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/robert-cialdini.html#subject",
+          "@type": "Person",
+          "description": "Influence follows predictable triggers.",
+          "image": "https://jevangoldsmith.com/images/generated/people/robert-cialdini-400.jpg",
+          "jobTitle": "Psychologist, Author",
+          "name": "Robert Cialdini"
         }
       ]
     }
@@ -7214,13 +8029,13 @@
       "og:description": "Ryan Holiday is a writer and media strategist who popularized modern Stoicism through books about discipline, resilience, ego, and action.",
       "og:url": "https://jevangoldsmith.com/people/ryan-holiday.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/ryan-holiday-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Ryan Holiday - People - Jevan Goldsmith",
       "twitter:description": "Ryan Holiday is a writer and media strategist who popularized modern Stoicism through books about discipline, resilience, ego, and action.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/ryan-holiday-400.jpg"
     },
     "alternate": [
       {
@@ -7317,9 +8132,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Ryan Holiday - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/ryan-holiday-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/ryan-holiday-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -7331,6 +8146,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/ryan-holiday.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/ryan-holiday.html#subject",
+          "@type": "Person",
+          "description": "Ancient discipline for modern pressure.",
+          "image": "https://jevangoldsmith.com/images/generated/people/ryan-holiday-400.jpg",
+          "jobTitle": "Author, The Daily Stoic",
+          "name": "Ryan Holiday"
         }
       ]
     }
@@ -7346,13 +8169,13 @@
       "og:description": "Shane Parrish is the founder of Farnam Street and a writer focused on mental models, decision-making, and practical wisdom.",
       "og:url": "https://jevangoldsmith.com/people/shane-parrish.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/shane-parrish-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Shane Parrish - People - Jevan Goldsmith",
       "twitter:description": "Shane Parrish is the founder of Farnam Street and a writer focused on mental models, decision-making, and practical wisdom.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/shane-parrish-400.jpg"
     },
     "alternate": [
       {
@@ -7449,9 +8272,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Shane Parrish - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/shane-parrish-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/shane-parrish-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -7463,6 +8286,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/shane-parrish.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/shane-parrish.html#subject",
+          "@type": "Person",
+          "description": "Make better decisions with better models.",
+          "image": "https://jevangoldsmith.com/images/generated/people/shane-parrish-400.jpg",
+          "jobTitle": "Writer, Mental Models Teacher",
+          "name": "Shane Parrish"
         }
       ]
     }
@@ -7478,13 +8309,13 @@
       "og:description": "Sherlock Holmes is Arthur Conan Doyle's fictional detective and a durable symbol of observation, inference, and disciplined attention.",
       "og:url": "https://jevangoldsmith.com/people/sherlock-holmes.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/sherlock-holmes-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Sherlock Holmes - People - Jevan Goldsmith",
       "twitter:description": "Sherlock Holmes is Arthur Conan Doyle's fictional detective and a durable symbol of observation, inference, and disciplined attention.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/sherlock-holmes-400.jpg"
     },
     "alternate": [
       {
@@ -7581,9 +8412,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Sherlock Holmes - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/sherlock-holmes-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/sherlock-holmes-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -7595,6 +8426,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/sherlock-holmes.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/sherlock-holmes.html#subject",
+          "@type": "Person",
+          "description": "Observe before you infer.",
+          "image": "https://jevangoldsmith.com/images/generated/people/sherlock-holmes-400.jpg",
+          "jobTitle": "Fictional Detective",
+          "name": "Sherlock Holmes"
         }
       ]
     }
@@ -7610,13 +8449,13 @@
       "og:description": "Victor O. Schwab was a direct-response copywriter whose advertising work emphasized reader desire, specific promises, and clear selling.",
       "og:url": "https://jevangoldsmith.com/people/victor-o-schwab.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/victor-o-schwab-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Victor O. Schwab - People - Jevan Goldsmith",
       "twitter:description": "Victor O. Schwab was a direct-response copywriter whose advertising work emphasized reader desire, specific promises, and clear selling.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/victor-o-schwab-400.jpg"
     },
     "alternate": [
       {
@@ -7713,9 +8552,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Victor O. Schwab - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/victor-o-schwab-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/victor-o-schwab-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -7727,6 +8566,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/victor-o-schwab.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/victor-o-schwab.html#subject",
+          "@type": "Person",
+          "description": "Lead with the reader's desire.",
+          "image": "https://jevangoldsmith.com/images/generated/people/victor-o-schwab-400.jpg",
+          "jobTitle": "Copywriter",
+          "name": "Victor O. Schwab"
         }
       ]
     }
@@ -7742,13 +8589,13 @@
       "og:description": "Warren Buffett is the chairman of Berkshire Hathaway and one of the most influential investors in history, known for patience, temperament, and business quality.",
       "og:url": "https://jevangoldsmith.com/people/warren-buffett.html",
       "og:site_name": "Jevan Goldsmith",
-      "og:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "og:image": "https://jevangoldsmith.com/images/generated/people/warren-buffett-400.jpg"
     },
     "twitter": {
       "twitter:card": "summary_large_image",
       "twitter:title": "Warren Buffett - People - Jevan Goldsmith",
       "twitter:description": "Warren Buffett is the chairman of Berkshire Hathaway and one of the most influential investors in history, known for patience, temperament, and business quality.",
-      "twitter:image": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png"
+      "twitter:image": "https://jevangoldsmith.com/images/generated/people/warren-buffett-400.jpg"
     },
     "alternate": [
       {
@@ -7845,9 +8692,9 @@
           "image": {
             "@type": "ImageObject",
             "caption": "Warren Buffett - People - Jevan Goldsmith",
-            "contentUrl": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "contentUrl": "https://jevangoldsmith.com/images/generated/people/warren-buffett-400.jpg",
             "height": 630,
-            "url": "https://jevangoldsmith.com/images/generated/logo/logo-nav-176.png",
+            "url": "https://jevangoldsmith.com/images/generated/people/warren-buffett-400.jpg",
             "width": 1200
           },
           "inLanguage": "en",
@@ -7859,6 +8706,14 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/people/warren-buffett.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/people/warren-buffett.html#subject",
+          "@type": "Person",
+          "description": "Temperament is an investing edge.",
+          "image": "https://jevangoldsmith.com/images/generated/people/warren-buffett-400.jpg",
+          "jobTitle": "CEO, Berkshire Hathaway",
+          "name": "Warren Buffett"
         }
       ]
     }
@@ -7985,6 +8840,63 @@
             "@id": "https://jevangoldsmith.com/#person"
           },
           "url": "https://jevangoldsmith.com/podcasts.html"
+        },
+        {
+          "@id": "https://jevangoldsmith.com/podcasts.html#itemlist",
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "name": "Acquired",
+              "position": 1
+            },
+            {
+              "@type": "ListItem",
+              "name": "All-In Podcast",
+              "position": 2
+            },
+            {
+              "@type": "ListItem",
+              "name": "Principles for Dealing with the Changing World Order",
+              "position": 3
+            },
+            {
+              "@type": "ListItem",
+              "name": "Huberman Lab",
+              "position": 4
+            },
+            {
+              "@type": "ListItem",
+              "name": "Invest Like the Best",
+              "position": 5
+            },
+            {
+              "@type": "ListItem",
+              "name": "The Knowledge Project",
+              "position": 6
+            },
+            {
+              "@type": "ListItem",
+              "name": "Lex Fridman Podcast",
+              "position": 7
+            },
+            {
+              "@type": "ListItem",
+              "name": "Naval Ravikant - How to Get Rich",
+              "position": 8
+            },
+            {
+              "@type": "ListItem",
+              "name": "The Psychology of Money",
+              "position": 9
+            },
+            {
+              "@type": "ListItem",
+              "name": "The Tim Ferriss Show",
+              "position": 10
+            }
+          ],
+          "numberOfItems": 10
         }
       ]
     }
@@ -8085,7 +8997,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/problems.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -8211,7 +9123,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/products.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -8337,7 +9249,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/projects.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -8463,7 +9375,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/quotes.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -8841,7 +9753,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/speeches.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -8967,7 +9879,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/takes.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },
@@ -10353,7 +11265,7 @@
         },
         {
           "@id": "https://jevangoldsmith.com/videos.html#page",
-          "@type": "WebPage",
+          "@type": "CollectionPage",
           "author": {
             "@id": "https://jevangoldsmith.com/#person"
           },

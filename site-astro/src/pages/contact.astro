@@ -9,6 +9,12 @@ import Base from '../layouts/Base.astro';
   canonical="https://jevangoldsmith.com/contact.html"
   pageType="ContactPage"
 >
+<main class="container">
+<header class="page-header">
+  <h1>Contact</h1>
+  <p>Send a note, ask a question, or just say hi.</p>
+</header>
+<div class="content-section">
 <form class="contact-form" action="mailto:hello@jevangoldsmith.com" method="get" enctype="text/plain">
     <div class="form-group">
         <label for="name">Name</label>
@@ -45,4 +51,6 @@ import Base from '../layouts/Base.astro';
         <em>The form opens your email client so you can send the message directly.</em>
     </p>
 </div>
+</div>
+</main>
 </Base>
