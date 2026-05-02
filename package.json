@@ -22,6 +22,7 @@
     "check:visual:capture": "node scripts/check/visual-baselines.js capture",
     "check:parity": "node scripts/check-parity.js",
     "check:parity:build": "node scripts/check-parity.js --build",
+    "check:parity:visual": "node scripts/check-visual-parity.mjs",
     "check:parity:capture": "npm run build && npm run check:seo:capture && npm run check:content:capture && npm run check:visual:capture && npm run check:perf:capture",
     "check:links": "node scripts/check-links.js",
     "check:page-baselines": "node scripts/check-page-baselines.js",
@@ -40,6 +41,8 @@
     "@playwright/test": "^1.59.1",
     "http-server": "^14.1.1",
     "lightningcss": "^1.32.0",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
     "sharp": "^0.34.5"
   },
   "dependencies": {
