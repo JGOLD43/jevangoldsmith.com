@@ -9,6 +9,7 @@ import Footer from '../components/Footer.astro';
 import JsonLd from '../components/JsonLd.astro';
 import SeoRelated from '../components/SeoRelated.astro';
 import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type PageType } from '../lib/seo';
+import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
 import '../styles/global.css';
 
 interface Props {
@@ -32,13 +33,14 @@ interface Props {
   noSeoRelated?: boolean;
 }
 
+const _currentPage = currentPageFromUrl(Astro.url.pathname);
 const {
   title,
   description = '',
   canonical = '',
   ogType = 'website',
   ogImage = DEFAULT_OG_IMAGE,
-  bodyClass = '',
+  bodyClass = bodyClassFor(_currentPage),
   noChrome = false,
   pageType = 'WebPage',
   breadcrumbs,
