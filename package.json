@@ -20,6 +20,8 @@
     "check:perf:capture": "node scripts/check/perf-baseline.js capture",
     "check:visual": "node scripts/check/visual-baselines.js check",
     "check:visual:capture": "node scripts/check/visual-baselines.js capture",
+    "check:parity": "node scripts/check-parity.js",
+    "check:parity:build": "node scripts/check-parity.js --build",
     "check:parity:capture": "npm run build && npm run check:seo:capture && npm run check:content:capture && npm run check:visual:capture && npm run check:perf:capture",
     "check:links": "node scripts/check-links.js",
     "check:page-baselines": "node scripts/check-page-baselines.js",
