@@ -1,12 +1,13 @@
 /* Site-wide stylesheet, imported once from src/layouts/Base.astro.
  *
- * Tailwind 4's content-aware purge was stripping un-detected legacy class
- * rules from chrome-legacy/collection-legacy/pages-legacy.css when imported
- * here. The full legacy bundle is served as /css/legacy-style.css from
- * public/ (linked in Base.astro <head>) and carries every selector intact.
+ * The full legacy CSS bundle is served as /css/legacy-style.css from public/
+ * (linked in Base.astro <head>) and carries every selector + reset intact.
  *
- * This file keeps tokens + fonts + tailwindcss for utility classes only.
+ * Tailwind v4 was previously imported here for utilities, but its `@layer
+ * base` reset (* { margin: 0; padding: 0; border: 0 }) overrode the legacy
+ * defaults that the rest of the legacy bundle expects, shifting collection-
+ * page layouts by ~28px. Removed — no Astro page uses utility classes yet,
+ * and we can scope Tailwind to specific components later if needed.
  */
-@import "tailwindcss";
 @import "./tokens.css";
 @import "./fonts.css";

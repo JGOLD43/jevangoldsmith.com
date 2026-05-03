@@ -41,6 +41,30 @@ function ctaLocationFor(file) {
   return file.replace(/\.html$/, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
 }
 
+// Legacy injectRelatedInternalLinks puts <section class="seo-related-section">
+// INSIDE </main>. Astro's Base.astro emits it AFTER </main> via the SeoRelated
+// component. To match legacy layout, move the section so it's the last element
+// inside <main>...</main>.
+function moveSeoRelatedInsideMain(html) {
+  const sectionRegex = /<section class="seo-related-section"[\s\S]*?<\/section>/g;
+  const matches = [...html.matchAll(sectionRegex)];
+  if (matches.length === 0) return html;
+  // Use the LAST occurrence (in case there are multiples) to move inside main.
+  const last = matches[matches.length - 1];
+  const sectionHtml = last[0];
+  const mainCloseIdx = html.indexOf('</main>');
+  if (mainCloseIdx < 0) return html;
+  // Skip if the section is already inside <main>: section position < </main> position.
+  if (last.index < mainCloseIdx) return html;
+
+  // Strip the section from where it currently sits.
+  const stripped = html.slice(0, last.index) + html.slice(last.index + sectionHtml.length);
+  // Re-find </main> in the stripped string and insert before it.
+  const newMainCloseIdx = stripped.indexOf('</main>');
+  if (newMainCloseIdx < 0) return html;
+  return stripped.slice(0, newMainCloseIdx) + sectionHtml + '\n' + stripped.slice(newMainCloseIdx);
+}
+
 function injectFieldNotesCta(file, html) {
   const base = path.basename(file);
   const eligible = base === 'essays.html' || base === 'reading-philosophy.html';
@@ -127,6 +151,7 @@ for (const file of files) {
   after = optimizeLocalImageReferences(after);
   after = localizeRemainingRemoteAssetReferences(after);
   after = injectFieldNotesCta(rel, after);
+  after = moveSeoRelatedInsideMain(after);
   after = decorateTrackedLinks(rel, after);
 
   if (after !== before) {

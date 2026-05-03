@@ -11,7 +11,10 @@ import SeoRelated from '../components/SeoRelated.astro';
 import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type PageType } from '../lib/seo';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
 import { pageScriptsFor } from '../lib/page-scripts';
-import '../styles/global.css';
+// global.css is intentionally NOT imported. Astro inlines small imported
+// CSS files into <style> tags in every page (3KB × 41 pages = wasted bytes
+// + visual parity drift). The full legacy bundle served at /css/legacy-
+// style.css already includes the design tokens, font-faces, and reset.
 
 interface Props {
   title: string;
