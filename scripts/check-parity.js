@@ -51,6 +51,26 @@ if (!fs.existsSync(LEGACY_DIR) || !fs.existsSync(ASTRO_DIR)) {
   process.exit(2);
 }
 
+// Pages where the legacy build emits a duplicate <footer class="footer"> by
+// mistake. Astro emits exactly one (correct). To compare apples-to-apples we
+// strip the second copy from the legacy side before diffing.
+const LEGACY_DUPED_FOOTER = new Set([
+  'cool-shit.html',
+  'dateme.html',
+  'lesson-logger.html',
+  'search.html',
+  'videos.html'
+]);
+
+function stripDuplicateFooter(html) {
+  const matches = [...html.matchAll(/<footer class="footer"[\s\S]*?<\/footer>/g)];
+  if (matches.length < 2) return html;
+  // Drop everything from the start of the 2nd footer to the end of the last footer.
+  const second = matches[1];
+  const last = matches[matches.length - 1];
+  return html.slice(0, second.index) + html.slice(last.index + last[0].length);
+}
+
 function normalize(html) {
   return html
     // bundle hashes: assets/js/foo.abc1234567.js, assets/css/Base.abc1234567.css
@@ -94,8 +114,9 @@ function checkPage(filename) {
   const ap = path.join(ASTRO_DIR, filename);
   if (!fs.existsSync(ap)) return { filename, status: 'MISSING', astroExists: false };
 
-  const lRaw = fs.readFileSync(lp, 'utf8');
+  let lRaw = fs.readFileSync(lp, 'utf8');
   const aRaw = fs.readFileSync(ap, 'utf8');
+  if (LEGACY_DUPED_FOOTER.has(filename)) lRaw = stripDuplicateFooter(lRaw);
   const lNorm = normalize(lRaw);
   const aNorm = normalize(aRaw);
 

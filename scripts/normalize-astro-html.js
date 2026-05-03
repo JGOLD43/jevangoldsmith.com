@@ -32,7 +32,43 @@ const remoteAssets = fs.existsSync(remoteAssetsPath)
   ? JSON.parse(fs.readFileSync(remoteAssetsPath, 'utf8'))
   : {};
 
+const ctas = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/ctas.json'), 'utf8'));
+const ctaByHref = new Map((ctas.ctas || []).map((c) => [c.href, c]));
+
 const SITE_ORIGIN = 'https://jevangoldsmith.com';
+
+function ctaLocationFor(file) {
+  return file.replace(/\.html$/, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+}
+
+function injectFieldNotesCta(file, html) {
+  const base = path.basename(file);
+  const eligible = base === 'essays.html' || base === 'reading-philosophy.html';
+  if (!eligible || html.includes('data-field-notes-inline')) return html;
+  const location = escapeHtmlAttr(base.replace(/\.html$/, ''));
+  const block = `<section class="field-notes-inline-cta" data-field-notes-inline>
+        <p class="archive-kicker">Field Notes</p>
+        <h2>Want more notes like this?</h2>
+        <p>Field Notes is where I send useful ideas before they become polished essays: books, objects, questions, and experiments worth keeping.</p>
+        <a href="field-notes.html" class="btn-primary" data-analytics="cta" data-cta-id="newsletter" data-cta-location="${location}-inline">Get Field Notes</a>
+    </section>`;
+  return html.replace('</main>', `    ${block}\n</main>`);
+}
+
+function decorateTrackedLinks(file, html) {
+  const location = ctaLocationFor(file);
+  return html.replace(/<a\b([^>]*?)href=(["'])([^"']+)\2([^>]*)>/gi, (match, before, quote, href, after) => {
+    if (/data-analytics=/.test(match)) return match;
+    const cta = ctaByHref.get(href);
+    if (cta) {
+      return `<a${before}href=${quote}${href}${quote}${after} data-analytics="cta" data-cta-id="${escapeHtmlAttr(cta.id)}" data-cta-location="${escapeHtmlAttr(location)}">`;
+    }
+    if (/^mailto:/i.test(href) || href.includes('contact.html') || href.includes('meet.html')) {
+      return `<a${before}href=${quote}${href}${quote}${after} data-analytics="contact" data-cta-location="${escapeHtmlAttr(location)}">`;
+    }
+    return match;
+  });
+}
 
 function escapeHtmlAttr(value) {
   return String(value)
@@ -90,6 +126,8 @@ for (const file of files) {
   after = removeExternalFontLinks(after);
   after = optimizeLocalImageReferences(after);
   after = localizeRemainingRemoteAssetReferences(after);
+  after = injectFieldNotesCta(rel, after);
+  after = decorateTrackedLinks(rel, after);
 
   if (after !== before) {
     changed++;
