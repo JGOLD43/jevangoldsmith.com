@@ -5,6 +5,9 @@
 
 import pagesData from '../../../data/pages.json';
 import topicsData from '../../../data/topics.json';
+import quotesData from '../../../data/quotes.json';
+import productsData from '../../../data/products.json';
+import projectsData from '../../../data/projects.json';
 
 const SITE_URL = 'https://jevangoldsmith.com';
 
@@ -135,19 +138,70 @@ export function pageEnrichment(currentPage: string): PageEnrichment {
     out.about = meta.topics.map((id) => TOPIC_LABEL_BY_ID.get(id) ?? id);
   }
 
-  // CollectionPage gets a mainEntity ItemList sourced from relatedPages,
-  // mirroring the default branch of legacy collectionItemsForSchema().
-  if (meta.schemaType === 'CollectionPage' && meta.relatedPages && meta.relatedPages.length > 0) {
-    const items = meta.relatedPages.slice(0, 12).map((href, i) => ({
-      '@type': 'ListItem' as const,
-      position: i + 1,
-      url: `${SITE_URL}/${href.replace(/^\//, '')}`,
-      name: PAGE_TITLE_BY_FILE.get(href) ?? href
-    }));
-    out.mainEntity = { '@type': 'ItemList', itemListElement: items };
+  // CollectionPage gets a mainEntity ItemList sourced from per-page logic
+  // mirroring the legacy collectionItemsForSchema() branches.
+  if (meta.schemaType === 'CollectionPage') {
+    const items = collectionItemsFor(currentPage, meta);
+    if (items.length > 0) {
+      out.mainEntity = {
+        '@type': 'ItemList',
+        itemListElement: items.map((item, i) => ({
+          '@type': 'ListItem' as const,
+          position: i + 1,
+          url: item.url,
+          name: item.name
+        }))
+      };
+    }
   }
 
   return out;
+}
+
+interface CollectionItem {
+  url: string;
+  name: string;
+}
+
+function collectionItemsFor(currentPage: string, meta: PageMeta): CollectionItem[] {
+  // Specific collection branches from legacy collectionItemsForSchema().
+  if (currentPage === 'quotes.html') {
+    const quotes = ((quotesData as { fullQuotes?: Array<{ id: string; slug?: string; text: string }> }).fullQuotes ?? []).slice(0, 20);
+    return quotes.map((q) => ({
+      url: `${SITE_URL}/quotes.html#${q.slug ?? q.id}`,
+      name: q.text.slice(0, 80)
+    }));
+  }
+  if (currentPage === 'products.html') {
+    const products = ((productsData as { products?: Array<{ id: string; slug?: string; title: string }> }).products ?? []);
+    return products.map((p) => ({
+      url: `${SITE_URL}/products.html#${p.slug ?? p.id}`,
+      name: p.title
+    }));
+  }
+  if (currentPage === 'free-resources.html') {
+    const resources = ((productsData as { resources?: Array<{ id: string; slug?: string; title: string }> }).resources ?? []);
+    return resources.map((r) => ({
+      url: `${SITE_URL}/free-resources.html#${r.slug ?? r.id}`,
+      name: r.title
+    }));
+  }
+  if (currentPage === 'projects.html') {
+    const projects = ((projectsData as { projects?: Array<{ id: string; slug?: string; title: string; status?: string; visibility?: string }> }).projects ?? [])
+      .filter((p) => p.status !== 'draft' && p.visibility !== 'private');
+    return projects.map((p) => ({
+      url: `${SITE_URL}/projects.html#${p.slug ?? p.id}`,
+      name: p.title
+    }));
+  }
+  // Default: relatedPages from data/pages.json (matches legacy default branch).
+  if (meta.relatedPages && meta.relatedPages.length > 0) {
+    return meta.relatedPages.slice(0, 12).map((href) => ({
+      url: `${SITE_URL}/${href.replace(/^\//, '')}`,
+      name: PAGE_TITLE_BY_FILE.get(href) ?? href
+    }));
+  }
+  return [];
 }
 
 export function pageNode({

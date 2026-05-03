@@ -1,18 +1,25 @@
 ---
 import data from '../../../data/quotes.json';
 import Base from '../layouts/Base.astro';
-import CollectionSidebar from '../components/CollectionSidebar.astro';
 
-const featured = data.featuredQuote ?? null;
-const quotes: Array<{
+interface Quote {
   id: string;
+  slug?: string;
   text: string;
   author?: string;
   category?: string;
-  topics?: string[];
-  tags?: string[];
-}> = data.fullQuotes ?? [];
-const count = quotes.length;
+}
+
+const featured = data.featuredQuote ?? null;
+const quotes: Quote[] = data.fullQuotes ?? [];
+
+// Distinct categories, alphabetical (mirrors legacy filter button order).
+const categories: string[] = Array.from(
+  new Set(quotes.map((q) => q.category).filter((c): c is string => Boolean(c)))
+).sort();
+function titleCase(s: string) {
+  return s.replace(/\b\w/g, (c) => c.toUpperCase());
+}
 ---
 <Base
   title="Quotes That Shaped My Thinking | Jevan Goldsmith"
@@ -20,45 +27,47 @@ const count = quotes.length;
   canonical="https://jevangoldsmith.com/quotes.html"
   pageType="CollectionPage"
 >
-  <main class="quotes-layout collection-layout" id="quotes-layout">
-    <CollectionSidebar pageKey="quotes" searchPlaceholder="Search quotes..." totalCount={count} />
-    <section class="quotes-main collection-main">
-      <header class="quotes-hero">
-        <div class="quotes-hero-text">
-          <h1 class="hero-headline">Words That Shaped My Thinking</h1>
-          <p class="hero-tagline">Lines I keep returning to — by mentors, masters, and quiet observers.</p>
-        </div>
-        <div class="quotes-hero-stats">
-          <div class="hero-stat-card">
-            <div class="hero-stat-number">{count}</div>
-            <div class="hero-stat-label">Quotes</div>
-          </div>
-        </div>
-      </header>
-
-      {featured && (
-        <figure class="quote-featured">
-          <blockquote class="quote-featured-text">"{featured.text}"</blockquote>
-          {featured.author && <figcaption class="quote-featured-author">— {featured.author}</figcaption>}
-        </figure>
-      )}
-
-      <div class="quotes-container">
-        <div class="quotes-grid">
-          {quotes.map((q) => (
-            <article class="quote-card" data-id={q.id} data-category={q.category ?? ''}>
-              <blockquote class="quote-text">"{q.text}"</blockquote>
-              {q.author && <p class="quote-author">— {q.author}</p>}
-              {q.category && <span class="quote-category">{q.category}</span>}
-              {q.tags && q.tags.length > 0 && (
-                <ul class="quote-tags">
-                  {q.tags.map((t) => <li class="quote-tag">{t}</li>)}
-                </ul>
-              )}
-            </article>
-          ))}
-        </div>
-      </div>
+  <main>
+    <section class="quotes-hero">
+      <h1>Words That Shaped My Thinking</h1>
+      <p>A collection of quotes that have influenced how I see the world, make decisions, and approach life. These are ideas I return to regularly.</p>
     </section>
+
+    {featured && (
+      <section class="featured-quote">
+        <blockquote>&ldquo;{featured.text}&rdquo;</blockquote>
+        {featured.author && <cite>- {featured.author}</cite>}
+      </section>
+    )}
+
+    <div class="quote-filters" data-filter-group="quotes" data-filter-field="category">
+      <button class="filter-btn active" type="button" data-filter-value="all">All Quotes</button>
+      {categories.map((c) => (
+        <button class="filter-btn " type="button" data-filter-value={c}>{titleCase(c)}</button>
+      ))}
+    </div>
+
+    <div class="quotes-container">
+      <div class="quotes-grid" id="quotes-grid">
+        {quotes.map((q) => (
+          <article class="quote-card" id={q.slug || q.id} data-category={q.category ?? ''}>
+            <p class="quote-text">{q.text}</p>
+            <div class="quote-footer">
+              {q.author && <span class="quote-author">{q.author}</span>}
+              {q.category && <span class="quote-category">{titleCase(q.category)}</span>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="submit-quote-section">
+      <h2>Share a Quote</h2>
+      <p>Have a quote that changed how you think? I'd love to hear it.</p>
+      <a href="contact.html" class="btn-primary" data-analytics="cta" data-cta-id="contact" data-cta-location="quotes">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send me a quote
+      </a>
+    </div>
   </main>
 </Base>
