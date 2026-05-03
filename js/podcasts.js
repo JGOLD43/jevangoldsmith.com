@@ -37,6 +37,9 @@ async function renderCuratedPodcasts() {
     const podcasts = Array.isArray(data.podcasts) ? data.podcasts : [];
     const container = document.getElementById('podcasts-container');
     if (!container) return;
+    // Phase B: Astro now SSRs the curated cards. If the DOM already matches
+    // the data, leave it alone — page paints with content from the start.
+    if (container.children.length === podcasts.length) return;
     container.innerHTML = '';
     const fragment = document.createDocumentFragment();
     podcasts.forEach((podcast) => fragment.appendChild(buildCuratedPodcastCard(podcast)));
