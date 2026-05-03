@@ -101,6 +101,18 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
       <script is:inline src={src} defer></script>
     )}
     <slot name="scripts" />
+    {/* Phase E: register the repeat-visit service worker. The SW caches
+        hashed assets cache-first and HTMLs network-first with a short
+        timeout, so cold visits behave normally and warm visits hit local
+        cache for nav + page CSS + JS bundles. Adds ~300 bytes of inline
+        JS; no harm if the browser disables SW. */}
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+        });
+      }
+    </script>
     {/* JSON-LD at end of <body>: ~4KB structured-data block was previously
         in <head> where it stalled the parser before reaching <body>.
         Crawlers (Google, Bing, ClaudeBot, etc.) read JSON-LD anywhere in
