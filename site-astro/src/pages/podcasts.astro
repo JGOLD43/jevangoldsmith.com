@@ -1,50 +1,73 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import PodcastCard from '../components/PodcastCard.astro';
-import CollectionSidebar from '../components/CollectionSidebar.astro';
-import { collectionPageItemList } from '../lib/seo';
+import {
+  renderCollectionMain,
+  tasteListOptions,
+  PODCAST_SECTIONS
+} from '../lib/collection-chrome';
 
-const podcasts = await getCollection('podcasts');
-const count = podcasts.length;
 const canonical = 'https://jevangoldsmith.com/podcasts.html';
-const itemList = collectionPageItemList({
-  canonical,
-  items: podcasts.map((p) => ({ name: p.data.title }))
+
+const main = renderCollectionMain({
+  layout: { id: 'podcasts-layout', className: 'movies-layout podcasts-layout collection-layout sidebar-collapsed' },
+  sidebar: {
+    id: 'podcasts-sidebar',
+    className: 'movies-sidebar collection-sidebar collection-sidebar--taste collapsed',
+    collapseAction: 'togglePodcastSidebar',
+    listAction: 'togglePodcastListDropdown',
+    currentListName: 'Podcasts',
+    listOptions: tasteListOptions('podcasts', 'podcasts'),
+    search: {
+      inputId: 'podcast-search',
+      inputClass: 'movie-search-input collection-search-input',
+      placeholder: 'Search podcasts...',
+      clearButtonId: 'podcast-search-clear-btn',
+      clearAction: 'clearPodcastSearch',
+      searchAction: 'searchPodcasts',
+      searchUsesValue: true,
+      searchEvent: 'input',
+      wrapperClass: 'search-input-wrapper search-bubble'
+    },
+    footerText: 'Shows and episodes I return to',
+    sections: PODCAST_SECTIONS
+  },
+  main: {
+    className: 'movies-main collection-main',
+    title: 'Podcasts I Listen To',
+    subtitleText: 'Conversations, shows, and episodes that shaped how I think about business, technology, and life.',
+    counterId: 'podcast-count',
+    counterLabel: 'Audio Notes',
+    bodyHtml: `<section id="spotify-recent-section" class="spotify-section" hidden>
+    <div class="spotify-section-header">
+        <h2>Recently Listened on Spotify</h2>
+        <p class="spotify-section-meta" id="spotify-recent-meta"></p>
+    </div>
+    <div id="spotify-recent-container" class="movies-grid"></div>
+</section>
+
+<section id="spotify-shows-section" class="spotify-section" hidden>
+    <div class="spotify-section-header">
+        <h2>Shows I Follow on Spotify</h2>
+        <p class="spotify-section-meta" id="spotify-shows-meta"></p>
+    </div>
+    <div id="spotify-shows-container" class="movies-grid"></div>
+</section>
+
+<section id="curated-podcasts-section">
+    <div class="spotify-section-header">
+        <h2>Curated Picks</h2>
+        <p class="spotify-section-meta">Hand-picked shows and episodes I return to.</p>
+    </div>
+    <div id="podcasts-container" class="movies-grid"></div>
+</section>`
+  }
 });
 ---
 <Base
-  title="Podcasts I Listen To | Jevan Goldsmith"
-  description="A curated list of podcasts and episodes Jevan Goldsmith returns to on business, technology, and life."
+  title="Podcasts, Conversations &amp; Audio Notes"
+  description="A podcast archive of conversations, shows, and audio ideas Jevan Goldsmith returns to."
   canonical={canonical}
   pageType="CollectionPage"
-  extraSchema={[itemList]}
 >
-  <main class="movies-layout podcasts-layout collection-layout" id="podcasts-layout">
-    <CollectionSidebar pageKey="podcasts" searchPlaceholder="Search podcasts..." totalCount={count} />
-    <section class="movies-main collection-main">
-      <header class="movies-hero podcasts-hero">
-        <div class="movies-hero-text">
-          <h1 class="hero-headline">Podcasts I Listen To</h1>
-          <p class="hero-tagline">Conversations, shows, and episodes that shaped how I think about business, technology, and life.</p>
-        </div>
-        <div class="movies-hero-stats">
-          <div class="hero-stat-card">
-            <div class="hero-stat-number">{count}</div>
-            <div class="hero-stat-label">Audio Notes</div>
-          </div>
-        </div>
-      </header>
-
-      <section id="curated-podcasts-section">
-        <div class="spotify-section-header">
-          <h2>Curated Picks</h2>
-          <p class="spotify-section-meta">Hand-picked shows and episodes I return to.</p>
-        </div>
-        <div id="podcasts-container" class="movies-grid">
-          {podcasts.map((entry) => <PodcastCard entry={entry} />)}
-        </div>
-      </section>
-    </section>
-  </main>
+  <Fragment set:html={main} />
 </Base>

@@ -1,58 +1,49 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import PersonCard from '../components/PersonCard.astro';
-import CollectionSidebar from '../components/CollectionSidebar.astro';
-import { collectionPageItemList } from '../lib/seo';
+import {
+  renderCollectionMain,
+  PEOPLE_SECTIONS
+} from '../lib/collection-chrome';
+import sidebarFiltersRaw from '../../../_src/collections/people/sidebar-filters.html?raw';
+import mainBodyRaw from '../../../_src/collections/people/main-body.html?raw';
 
-const people = (await getCollection('people')).sort((a, b) =>
-  (a.data.name ?? '').localeCompare(b.data.name ?? '')
-);
-const count = people.length;
 const canonical = 'https://jevangoldsmith.com/people.html';
-const itemList = collectionPageItemList({
-  canonical,
-  items: people.map((p) => ({ name: p.data.name, url: `https://jevangoldsmith.com/people/${p.id}.html` }))
-});
 
-const categories = Array.from(
-  people.reduce((acc, p) => {
-    const c = p.data.category ?? '';
-    if (c) acc.set(c, (acc.get(c) ?? 0) + 1);
-    return acc;
-  }, new Map<string, number>())
-).map(([key, n]) => ({ key, label: key, count: n }));
+const main = renderCollectionMain({
+  layout: { id: 'people-layout', className: 'people-layout collection-layout sidebar-collapsed' },
+  sidebar: {
+    id: 'people-sidebar',
+    className: 'people-sidebar collection-sidebar collapsed',
+    collapseAction: 'togglePeopleSidebar',
+    search: {
+      inputId: 'people-search',
+      inputClass: 'collection-search-input',
+      placeholder: 'Search people...',
+      clearButtonId: 'people-search-clear-btn',
+      clearAction: 'clearPeopleSearch',
+      searchAction: 'filterPeople',
+      searchUsesValue: true,
+      searchEvent: 'input',
+      wrapperClass: 'search-bubble'
+    },
+    extraHtml: sidebarFiltersRaw.trim(),
+    sections: PEOPLE_SECTIONS
+  },
+  main: {
+    className: 'people-main collection-main',
+    title: 'People of History',
+    subtitleHtml: '<div class="philosophy-link-wrapper"><a href="people-philosophy.html" class="header-subtitle-link">My People Philosophy</a><span class="read-first-note">← read this first</span></div>',
+    counterId: 'people-count',
+    counterLabel: 'People Listed',
+    bodyHtml: mainBodyRaw.trim()
+  }
+});
 ---
 <Base
-  title="People of History | Jevan Goldsmith"
+  title="People of History"
   description="A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment."
   canonical={canonical}
   pageType="CollectionPage"
-  extraSchema={[itemList]}
 >
-  <main class="people-layout collection-layout" id="people-layout">
-    <CollectionSidebar
-      pageKey="people"
-      searchPlaceholder="Search people..."
-      categories={categories}
-      totalCount={count}
-    />
-    <section class="people-main collection-main">
-      <header class="people-hero">
-        <div class="people-hero-text">
-          <h1 class="hero-headline">People of History</h1>
-          <p class="hero-tagline">Thinkers, builders, writers, and creators who shaped how I think.</p>
-        </div>
-        <div class="people-hero-stats">
-          <div class="hero-stat-card">
-            <div class="hero-stat-number">{count}</div>
-            <div class="hero-stat-label">People</div>
-          </div>
-        </div>
-      </header>
-      <div id="people-container" class="people-grid">
-        {people.map((entry) => <PersonCard entry={entry} />)}
-      </div>
-    </section>
-  </main>
+  <Fragment set:html={main} />
 </Base>

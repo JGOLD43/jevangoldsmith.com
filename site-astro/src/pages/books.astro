@@ -1,125 +1,60 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import BookCard from '../components/BookCard.astro';
-import CollectionSidebar from '../components/CollectionSidebar.astro';
-import { collectionPageItemList } from '../lib/seo';
+import {
+  renderCollectionMain,
+  tasteListOptions,
+  BOOK_SECTIONS
+} from '../lib/collection-chrome';
+import sidebarFiltersRaw from '../../../_src/collections/books/sidebar-filters.html?raw';
+import mainBodyRaw from '../../../_src/collections/books/main-body.html?raw';
+import headerCarouselRaw from '../../../_src/collections/books/header-carousel.html?raw';
+import headerViewToggleRaw from '../../../_src/collections/books/header-view-toggle.html?raw';
+import afterMainRaw from '../../../_src/collections/books/after-main.html?raw';
 
-const books = (await getCollection('books')).sort((a, b) =>
-  (a.data.title ?? '').localeCompare(b.data.title ?? '')
-);
-const count = books.length;
 const canonical = 'https://jevangoldsmith.com/books.html';
-const itemList = collectionPageItemList({
-  canonical,
-  items: books.map((b) => ({ name: `${b.data.title} — ${b.data.author}` }))
+
+const main = renderCollectionMain({
+  layout: { id: 'books-layout', className: 'books-layout collection-layout sidebar-collapsed' },
+  sidebar: {
+    id: 'books-sidebar',
+    className: 'books-sidebar collection-sidebar collection-sidebar--taste collapsed',
+    collapseAction: 'toggle-sidebar',
+    listAction: 'toggle-list-dropdown',
+    currentListName: 'Books',
+    listOptions: tasteListOptions('books', 'books'),
+    search: {
+      inputId: 'book-search',
+      inputClass: 'book-search-input collection-search-input',
+      placeholder: 'Search books...',
+      clearButtonId: 'search-clear-btn',
+      clearAction: 'clear-search',
+      wrapperClass: 'search-input-wrapper search-bubble'
+    },
+    extraHtml: sidebarFiltersRaw.trim(),
+    footerText: 'Books with a badge have my full review',
+    sections: BOOK_SECTIONS
+  },
+  main: {
+    className: 'books-main collection-main',
+    titleTag: 'h2',
+    title: 'Bookshelf',
+    subtitleHtml: '<div class="philosophy-link-wrapper"><a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a><span class="read-first-note">← read this first</span></div>',
+    headerExtraHtml: headerCarouselRaw.trim(),
+    counterExtraHtml: headerViewToggleRaw.trim(),
+    counterGroupClass: 'header-right',
+    counterId: 'book-count',
+    counterLabelId: 'counter-label',
+    counterLabel: 'Total Books Read',
+    bodyHtml: mainBodyRaw.trim()
+  },
+  afterMainHtml: afterMainRaw.trim()
 });
 ---
 <Base
-  title="Books I've Read | Jevan Goldsmith"
-  description="Books that shaped how Jevan Goldsmith thinks about business, learning, and life — with ratings and reviews."
+  title="Books I Recommend &amp; Notes From My Reading System"
+  description="A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
   canonical={canonical}
   pageType="CollectionPage"
-  extraSchema={[itemList]}
 >
-  <main class="books-layout collection-layout" id="books-layout">
-    <CollectionSidebar pageKey="books" searchPlaceholder="Search books..." totalCount={count} />
-    <section class="books-main collection-main">
-      <header class="books-hero">
-        <div class="books-hero-text">
-          <h1 class="hero-headline">Books I've Read</h1>
-          <p class="hero-tagline">Books that shaped how I think about business, learning, and life.</p>
-        </div>
-        <div class="books-hero-stats">
-          <div class="hero-stat-card">
-            <div class="hero-stat-number">{count}</div>
-            <div class="hero-stat-label">Books</div>
-          </div>
-        </div>
-      </header>
-      <div class="books-filters" id="books-filters" role="region" aria-label="Filter books">
-        <div class="books-filter-row">
-          <input
-            type="search"
-            id="books-search"
-            class="books-search-input"
-            placeholder="Search title, author, or category..."
-            autocomplete="off"
-            aria-label="Search books"
-          />
-          <select id="books-stars" class="books-filter-select" aria-label="Minimum rating">
-            <option value="all">All ratings</option>
-            <option value="5">★ 5 only</option>
-            <option value="4">★ 4+</option>
-            <option value="3">★ 3+</option>
-          </select>
-          <select id="books-rereads" class="books-filter-select" aria-label="Re-reads">
-            <option value="all">All reads</option>
-            <option value="1">Re-read 1+</option>
-            <option value="2">Re-read 2+</option>
-          </select>
-          <button type="button" id="books-clear" class="books-filter-clear">Clear</button>
-        </div>
-        <p class="books-filter-count" id="books-count" aria-live="polite">{count} books</p>
-      </div>
-      <div id="books-container" class="books-grid">
-        {books.map((entry) => <BookCard entry={entry} />)}
-      </div>
-    </section>
-  </main>
+  <Fragment set:html={main} />
 </Base>
-
-<script>
-  const grid = document.getElementById('books-container');
-  const search = document.getElementById('books-search') as HTMLInputElement | null;
-  const starsSel = document.getElementById('books-stars') as HTMLSelectElement | null;
-  const rereadsSel = document.getElementById('books-rereads') as HTMLSelectElement | null;
-  const clearBtn = document.getElementById('books-clear') as HTMLButtonElement | null;
-  const countEl = document.getElementById('books-count');
-
-  if (grid && search && starsSel && rereadsSel && countEl) {
-    const cards = Array.from(grid.children) as HTMLElement[];
-    const total = cards.length;
-
-    const cardData = cards.map((card) => {
-      const title = (card.querySelector('.book-title')?.textContent ?? '').toLowerCase();
-      const author = (card.querySelector('.book-author')?.textContent ?? '').toLowerCase();
-      const category = (card.dataset.category ?? '').toLowerCase();
-      const ratingAttr = card.dataset.rating;
-      const rereadsAttr = card.dataset.rereads;
-      const rating = ratingAttr ? Number(ratingAttr) : 0;
-      const rereads = rereadsAttr ? Number(rereadsAttr) : 0;
-      return { card, haystack: `${title} ${author} ${category}`, rating, rereads };
-    });
-
-    function applyFilters() {
-      const q = (search!.value ?? '').toLowerCase().trim();
-      const minStars = starsSel!.value === 'all' ? 0 : Number(starsSel!.value);
-      const minRereads = rereadsSel!.value === 'all' ? 0 : Number(rereadsSel!.value);
-      let visible = 0;
-      for (const { card, haystack, rating, rereads } of cardData) {
-        const matchQ = !q || haystack.includes(q);
-        const matchStars = minStars === 0 || rating >= minStars;
-        const matchRereads = minRereads === 0 || rereads >= minRereads;
-        const show = matchQ && matchStars && matchRereads;
-        card.hidden = !show;
-        if (show) visible++;
-      }
-      countEl!.textContent = `${visible} of ${total} books`;
-    }
-
-    let t: ReturnType<typeof setTimeout> | null = null;
-    search.addEventListener('input', () => {
-      if (t) clearTimeout(t);
-      t = setTimeout(applyFilters, 100);
-    });
-    starsSel.addEventListener('change', applyFilters);
-    rereadsSel.addEventListener('change', applyFilters);
-    clearBtn?.addEventListener('click', () => {
-      search.value = '';
-      starsSel.value = 'all';
-      rereadsSel.value = 'all';
-      applyFilters();
-    });
-  }
-</script>
