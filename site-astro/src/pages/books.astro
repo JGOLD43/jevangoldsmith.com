@@ -1,10 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
 import {
   renderCollectionMain,
   tasteListOptions,
   BOOK_SECTIONS
 } from '../lib/collection-chrome';
+import { renderBookCardHtml } from '../lib/book-card';
 import sidebarFiltersRaw from '../../../_src/collections/books/sidebar-filters.html?raw';
 import mainBodyRaw from '../../../_src/collections/books/main-body.html?raw';
 import headerCarouselRaw from '../../../_src/collections/books/header-carousel.html?raw';
@@ -12,6 +14,17 @@ import headerViewToggleRaw from '../../../_src/collections/books/header-view-tog
 import afterMainRaw from '../../../_src/collections/books/after-main.html?raw';
 
 const canonical = 'https://jevangoldsmith.com/books.html';
+
+// Phase B: server-render every book card at build time. books.js detects
+// an already-populated container and skips the initial wipe-and-render.
+const books = await getCollection('books');
+const bookCardsHtml = books.map((b) => renderBookCardHtml(b.data)).join('');
+const populatedMainBody = mainBodyRaw
+  .trim()
+  .replace(
+    '<div id="books-container" class="books-grid"></div>',
+    `<div id="books-container" class="books-grid">${bookCardsHtml}</div>`
+  );
 
 const main = renderCollectionMain({
   layout: { id: 'books-layout', className: 'books-layout collection-layout sidebar-collapsed' },
@@ -45,7 +58,7 @@ const main = renderCollectionMain({
     counterId: 'book-count',
     counterLabelId: 'counter-label',
     counterLabel: 'Total Books Read',
-    bodyHtml: mainBodyRaw.trim()
+    bodyHtml: populatedMainBody
   },
   afterMainHtml: afterMainRaw.trim()
 });

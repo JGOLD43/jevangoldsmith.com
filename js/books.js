@@ -153,67 +153,20 @@ const categoryDisplayNames = {
 function createBooksView(controller) {
     let currentViewMode = 'list';
 
-    function createBookCard(book) {
-        const card = document.createElement('div');
-        const isUnread = book.read === false;
-        const ratingValue = Number(book.rating || 0);
-        const hasRating = !isUnread && ratingValue > 0;
-        card.className = 'book-card js-zoom-item';
-        card.setAttribute('data-isbn', book.isbn);
-        card.setAttribute('data-id', book.isbn || book.title);
-        card.setAttribute('data-title', book.title);
-        card.setAttribute('role', 'button');
-        card.setAttribute('tabindex', '0');
-        card.style.cursor = 'pointer';
-        if (isUnread) card.classList.add('is-unread');
-        if (book.review) card.classList.add('has-review');
-
-        const stars = hasRating ? '★'.repeat(ratingValue) + '☆'.repeat(5 - ratingValue) : '';
-        const coverUrl = controller.getCoverUrl(book);
-        const timesRead = Number(book.reReads || 0) + 1;
-        let topBadge = '';
-        if (isUnread) topBadge = '<div class="to-read-badge">📚 To Read</div>';
-        else if (timesRead > 1) topBadge = `<div class="times-read-badge">📖 ${timesRead}x Read</div>`;
-        const detailBody = book.review || book.shortDescription || `${book.title} by ${book.author}`;
-        const detailLabel = book.review ? 'Review' : 'Notes';
-        let zoomLead = `<p class="zoom-detail-lead">${stars}</p>`;
-        if (isUnread) zoomLead = '<p class="zoom-detail-lead zoom-detail-unread">To Read</p>';
-        else if (!hasRating) zoomLead = '<p class="zoom-detail-lead zoom-detail-unread">Read</p>';
-
-        let ratingBlock;
-        if (isUnread) ratingBlock = '<div class="book-rating book-rating-unread">Not yet read</div>';
-        else if (!hasRating) ratingBlock = '<div class="book-rating book-rating-unrated">Read</div>';
-        else ratingBlock = `<div class="book-rating"><span class="rating-number">${ratingValue}</span> ${stars}</div>`;
-
-        card.innerHTML = `
-            ${topBadge}
-            <div class="book-cover-wrapper" data-title="${escapeAttr(book.title)}">
-                <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" class="book-cover" loading="lazy" decoding="async" data-book-cover-fallback="true">
-                <div class="js-zoom-detail" aria-hidden="true">
-                    <p class="zoom-detail-kicker">${escapeHTML(book.author)}${book.year ? ' · ' + escapeHTML(book.year) : ''}</p>
-                    <p class="zoom-detail-title">${escapeHTML(book.title)}</p>
-                    ${zoomLead}
-                    <p class="zoom-detail-line"><span>${detailLabel} —</span> ${escapeHTML(detailBody)}</p>
-                </div>
-            </div>
-            <div class="book-info">
-                <div class="book-title-row">
-                    <h3 class="book-title">${escapeHTML(book.title)}</h3>
-                    ${book.year ? `<span class="book-year">${escapeHTML(book.year)}</span>` : ''}
-                </div>
-                <p class="book-author">by ${escapeHTML(book.author)}</p>
-                ${ratingBlock}
-                ${book.review ? `<p class="book-description">${escapeHTML(book.shortDescription)}</p>` : ''}
-            </div>
-        `;
-        return card;
-    }
-
+    // Phase B follow-up: Astro SSRs every card at build time, so the page
+    // ships with all 122 cards already in the DOM. Filter / search no longer
+    // re-renders; it toggles each card's visibility based on the matched
+    // set. createBookCard() is deleted entirely (~50 lines), shrinking the
+    // page-books bundle by ~3KB minified.
     function renderBooks(books) {
         const container = document.getElementById('books-container');
         if (!container) return;
-        container.innerHTML = '';
-        books.forEach((book) => container.appendChild(createBookCard(book)));
+        const visible = new Set();
+        for (const b of books) visible.add(b.isbn || b.title);
+        for (const card of container.children) {
+            const id = card.dataset.isbn || card.dataset.title;
+            card.style.display = visible.has(id) ? '' : 'none';
+        }
     }
 
     function renderSidebar(categories) {

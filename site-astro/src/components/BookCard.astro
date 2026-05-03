@@ -1,30 +1,59 @@
 ---
+// Server-rendered book card. Output matches the createBookCard() string in
+// js/books.js so books.js can re-render on top of an SSR'd card without a
+// visible flash, and so the existing zoom + modal handlers still bind to
+// the same DOM shape.
 import type { CollectionEntry } from 'astro:content';
 
 interface Props { entry: CollectionEntry<'books'> }
 const { entry } = Astro.props;
-const b = entry.data;
-const stars = '★'.repeat(b.rating) + '☆'.repeat(Math.max(0, 5 - b.rating));
-const reReads = (b.reReads ?? 0) > 0;
-const reviewText = (b.review ?? '').trim();
+const b = entry.data as Record<string, unknown>;
+
+const title = String(b.title ?? '');
+const author = String(b.author ?? '');
+const year = b.year != null ? String(b.year) : '';
+const isbn = String(b.isbn ?? '');
+const review = String(b.review ?? '').trim();
+const shortDescription = String(b.shortDescription ?? '');
+const category = String(b.category ?? '');
+const ratingValue = Number(b.rating ?? 0);
+const reReads = Number(b.reReads ?? 0);
+const isUnread = b.read === false;
+const hasRating = !isUnread && ratingValue > 0;
+const timesRead = reReads + 1;
+
+const stars = hasRating ? '★'.repeat(ratingValue) + '☆'.repeat(5 - ratingValue) : '';
+
+const detailBody = review || shortDescription || `${title} by ${author}`;
+const detailLabel = review ? 'Review' : 'Notes';
+
+// Cover URL: prefer the locally-generated image, fall back to OpenLibrary.
+const coverImage = (b as { coverImage?: string }).coverImage;
+const cleanIsbn = isbn.replace(/[^0-9X]/g, '');
+const coverUrl = coverImage || (cleanIsbn ? `https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg` : '');
+
+const dataId = isbn || title;
+const cardClass = `book-card js-zoom-item${isUnread ? ' is-unread' : ''}${review ? ' has-review' : ''}`;
 ---
 <div
-  class={`book-card js-zoom-item${reviewText ? ' has-review' : ''}`}
-  data-isbn={b.isbn ?? ''}
-  data-id={entry.id}
-  data-title={b.title}
-  data-rating={String(b.rating ?? 0)}
-  data-rereads={String(b.reReads ?? 0)}
-  data-category={b.category ?? ''}
+  class={cardClass}
+  data-isbn={isbn}
+  data-id={dataId}
+  data-title={title}
+  data-rating={String(ratingValue)}
+  data-rereads={String(reReads)}
+  data-category={category}
   role="button"
   tabindex="0"
+  style="cursor: pointer"
 >
-  {reReads && <div class="times-read-badge">📖 {(b.reReads ?? 0) + 1}x Read</div>}
-  <div class="book-cover-wrapper" data-title={b.title}>
-    {b.isbn && (
+  {isUnread && <div class="to-read-badge">📚 To Read</div>}
+  {!isUnread && timesRead > 1 && <div class="times-read-badge">📖 {timesRead}x Read</div>}
+  <div class="book-cover-wrapper" data-title={title}>
+    {coverUrl && (
       <img
-        src={`https://covers.openlibrary.org/b/isbn/${b.isbn}-L.jpg`}
-        alt={b.title}
+        src={coverUrl}
+        alt={title}
         class="book-cover"
         loading="lazy"
         decoding="async"
@@ -32,18 +61,25 @@ const reviewText = (b.review ?? '').trim();
       />
     )}
     <div class="js-zoom-detail" aria-hidden="true">
-      <p class="zoom-detail-kicker">{b.author}{b.year ? ` · ${b.year}` : ''}</p>
-      <p class="zoom-detail-title">{b.title}</p>
-      <p class="zoom-detail-lead">{stars}</p>
-      {reviewText && <p class="zoom-detail-line"><span>Review —</span> {reviewText}</p>}
+      <p class="zoom-detail-kicker">{author}{year ? ` · ${year}` : ''}</p>
+      <p class="zoom-detail-title">{title}</p>
+      {isUnread && <p class="zoom-detail-lead zoom-detail-unread">To Read</p>}
+      {!isUnread && !hasRating && <p class="zoom-detail-lead zoom-detail-unread">Read</p>}
+      {hasRating && <p class="zoom-detail-lead">{stars}</p>}
+      <p class="zoom-detail-line"><span>{detailLabel} —</span> {detailBody}</p>
     </div>
   </div>
   <div class="book-info">
     <div class="book-title-row">
-      <h3 class="book-title">{b.title}</h3>
+      <h3 class="book-title">{title}</h3>
+      {year && <span class="book-year">{year}</span>}
     </div>
-    <p class="book-author">{b.author}</p>
-    <div class="book-rating">{stars}</div>
-    {b.shortDescription && <p class="book-description">{b.shortDescription}</p>}
+    <p class="book-author">by {author}</p>
+    {isUnread && <div class="book-rating book-rating-unread">Not yet read</div>}
+    {!isUnread && !hasRating && <div class="book-rating book-rating-unrated">Read</div>}
+    {hasRating && (
+      <div class="book-rating"><span class="rating-number">{ratingValue}</span> {stars}</div>
+    )}
+    {review && <p class="book-description">{shortDescription}</p>}
   </div>
 </div>
