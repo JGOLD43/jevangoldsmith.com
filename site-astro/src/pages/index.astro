@@ -1,218 +1,48 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import EssayCard from '../components/EssayCard.astro';
+import indexBodyRaw from '../../../_src/pages/index.html?raw';
 
-const essays = (await getCollection('essays'))
-  .sort((a, b) => (b.data.date ?? '').localeCompare(a.data.date ?? ''))
-  .slice(0, 3);
+// Strip the legacy YAML-style frontmatter (lines between leading --- markers).
+function stripFrontmatter(raw: string): string {
+  const lines = raw.split('\n');
+  if (lines[0]?.trim() !== '---') return raw;
+  let end = -1;
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim() === '---') {
+      end = i;
+      break;
+    }
+  }
+  if (end < 0) return raw;
+  return lines.slice(end + 1).join('\n').trimStart();
+}
 
+const essays = await getCollection('essays', ({ data }) => data.status !== 'draft');
 const books = await getCollection('books');
-const topBooks = books
-  .filter((b) => (b.data.rating ?? 0) >= 4)
-  .sort((a, b) => (b.data.rating ?? 0) - (a.data.rating ?? 0))
-  .slice(0, 4);
+const projects = await getCollection('projects', ({ data }) => data.status !== 'draft').catch(() => []);
+const resources = await getCollection('resources', ({ data }) => data.status !== 'draft').catch(() => []);
 
-const adventures = await getCollection('adventures');
-const recentAdventures = adventures
-  .sort((a, b) => (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''))
-  .slice(0, 3);
+const counts: Record<string, number> = {
+  essays: essays.length,
+  books: books.length,
+  projects: projects.length,
+  resources: resources.length
+};
 
-const people = await getCollection('people');
-const featuredPeople = people.slice(0, 6);
+let body = stripFrontmatter(indexBodyRaw);
+body = body.replace(
+  /<span class="stat-number" data-home-stat="([a-z]+)">[^<]*<\/span>/g,
+  (match, key) => Object.prototype.hasOwnProperty.call(counts, key)
+    ? `<span class="stat-number" data-home-stat="${key}">${counts[key]}</span>`
+    : match
+);
 ---
 <Base
-  title="Jevan Goldsmith"
-  description="Personal archive of essays, books, movies, podcasts, adventures, and the people who shaped my taste."
+  title="Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+  description="Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
   canonical="https://jevangoldsmith.com/"
   pageType="WebSite"
 >
-  <header class="hero" id="hero">
-    <div class="hero-container">
-      <div class="hero-left">
-        <h1 class="hero-headline">Hi I'm Jevan.</h1>
-        <p class="hero-welcome">Writer and builder. I think a lot about better thinking, books, AI-assisted work, personal systems, real estate, and useful tools. This site is the archive of what I've read, watched, learned, and made.</p>
-        <a href="/field-notes.html" class="hero-cta-left" data-analytics="cta" data-cta-id="hero-field-notes" data-cta-location="index">
-          <span class="cta-title">Read the field notes</span>
-          <p class="cta-text">A weekly note on books, decisions, and tools. Short. Useful.</p>
-        </a>
-      </div>
-      <div class="hero-right">
-        <div class="profile-container">
-          <picture class="hero-picture">
-            <source
-              type="image/avif"
-              srcset="/images/generated/profile/profile-360.avif 360w, /images/generated/profile/profile-520.avif 520w, /images/generated/profile/profile-720.avif 720w, /images/generated/profile/profile-960.avif 960w"
-              sizes="(max-width: 768px) 82vw, 42vw"
-            />
-            <source
-              type="image/webp"
-              srcset="/images/generated/profile/profile-360.webp 360w, /images/generated/profile/profile-520.webp 520w, /images/generated/profile/profile-720.webp 720w, /images/generated/profile/profile-960.webp 960w"
-              sizes="(max-width: 768px) 82vw, 42vw"
-            />
-            <img
-              src="/images/generated/profile/profile-720.jpg"
-              srcset="/images/generated/profile/profile-360.jpg 360w, /images/generated/profile/profile-520.jpg 520w, /images/generated/profile/profile-720.jpg 720w, /images/generated/profile/profile-960.jpg 960w"
-              sizes="(max-width: 768px) 82vw, 42vw"
-              alt="Jevan Goldsmith"
-              class="hero-image"
-              width="713"
-              height="778"
-              decoding="async"
-              fetchpriority="high"
-            />
-          </picture>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="home-page">
-    <section class="credibility-section">
-      <div class="credibility-bar">
-        <div class="credibility-stat">
-          <span class="stat-number" data-home-stat="essays">{essays.length}</span>
-          <span class="stat-label">Essays Written</span>
-        </div>
-        <div class="credibility-divider"></div>
-        <div class="credibility-stat">
-          <span class="stat-number" data-home-stat="books">{books.length}</span>
-          <span class="stat-label">Books Logged</span>
-        </div>
-        <div class="credibility-divider"></div>
-        <div class="credibility-stat">
-          <span class="stat-number" data-home-stat="adventures">{adventures.length}</span>
-          <span class="stat-label">Adventures</span>
-        </div>
-        <div class="credibility-divider"></div>
-        <div class="credibility-stat">
-          <span class="stat-number" data-home-stat="people">{people.length}</span>
-          <span class="stat-label">Mentors Profiled</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="newsletter-cta-section">
-      <div class="container">
-        <div class="newsletter-cta-inner">
-          <h2 class="newsletter-cta-title">What took me months to figure out, in 5 minutes</h2>
-          <p class="newsletter-cta-subtitle">A weekly note on books, decisions, and the tools that earned their place.</p>
-          <form class="newsletter-cta-form" action="https://jevangoldsmith.com/api/newsletter" method="post" data-cta-id="newsletter-home" data-cta-location="home-newsletter">
-            <input type="email" name="email" placeholder="you@email.com" required class="newsletter-cta-input" aria-label="Email address" />
-            <button type="submit" class="newsletter-cta-button">Subscribe</button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    {essays.length > 0 && (
-      <section class="featured-essays-section">
-        <div class="container">
-          <header class="section-header">
-            <h2>Things I've Written</h2>
-            <a href="/essays.html" class="section-link">All essays →</a>
-          </header>
-          <div class="featured-essays-grid">
-            {essays.map((entry) => <EssayCard entry={entry} />)}
-          </div>
-        </div>
-      </section>
-    )}
-
-    {topBooks.length > 0 && (
-      <section class="featured-books-section">
-        <div class="container">
-          <header class="section-header">
-            <h2>Books on the Shelf</h2>
-            <a href="/books.html" class="section-link">All {books.length} books →</a>
-          </header>
-          <div class="featured-books-grid">
-            {topBooks.map((b) => (
-              <article class="featured-book-card" data-id={b.id}>
-                <h3 class="featured-book-title">{b.data.title}</h3>
-                <p class="featured-book-author">{b.data.author}</p>
-                {b.data.rating && <p class="featured-book-rating" aria-label={`Rated ${b.data.rating} of 5`}>★ {b.data.rating}</p>}
-                {b.data.shortDescription && <p class="featured-book-description">{b.data.shortDescription}</p>}
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-    )}
-
-    {recentAdventures.length > 0 && (
-      <section class="featured-adventures-section">
-        <div class="container">
-          <header class="section-header">
-            <h2>Recent Adventures</h2>
-            <a href="/adventures.html" class="section-link">All adventures →</a>
-          </header>
-          <div class="featured-adventures-grid">
-            {recentAdventures.map((a) => (
-              <a href={`/adventure-${a.id}.html`} class="featured-adventure-card" data-id={a.id}>
-                {a.data.heroImage && (
-                  <img src={a.data.heroImage} alt={a.data.title} loading="lazy" decoding="async" class="featured-adventure-image" />
-                )}
-                <div class="featured-adventure-body">
-                  {a.data.location && <p class="featured-adventure-location">{a.data.location}</p>}
-                  <h3 class="featured-adventure-title">{a.data.title}</h3>
-                  {a.data.subtitle && <p class="featured-adventure-subtitle">{a.data.subtitle}</p>}
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )}
-
-    <section class="value-prop-section">
-      <div class="container">
-        <h2 class="value-prop-headline">I think too much about things most people ignore</h2>
-        <div class="value-prop-grid">
-          <a href="/reading-philosophy.html" class="value-prop-card">
-            <h3>How I read</h3>
-            <p>Why I take notes, when I quit a book, what I look for.</p>
-          </a>
-          <a href="/people-philosophy.html" class="value-prop-card">
-            <h3>How I pick mentors</h3>
-            <p>The dead and living people I learn from, and why.</p>
-          </a>
-          <a href="/movie-philosophy.html" class="value-prop-card">
-            <h3>How I watch</h3>
-            <p>What movies are for and why most are wasted on us.</p>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    {featuredPeople.length > 0 && (
-      <section class="current-focus-section">
-        <div class="container">
-          <header class="section-header">
-            <h2>Where My Attention Lives</h2>
-            <a href="/people.html" class="section-link">All {people.length} people →</a>
-          </header>
-          <ul class="featured-people-list">
-            {featuredPeople.map((p) => (
-              <li class="featured-person-item">
-                <a href={`/people/${p.id}.html`}>{p.data.name}</a>
-                {p.data.title && <span class="featured-person-title"> — {p.data.title}</span>}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    )}
-
-    <section class="final-cta-section">
-      <div class="container">
-        <h2>Let's Talk</h2>
-        <p>If something here sparked an idea, push back, ask, or send me a thing you're working on.</p>
-        <div class="final-cta-row">
-          <a href="/meet.html" class="final-cta primary" data-cta-id="final-meet" data-cta-location="home-final">Book a call</a>
-          <a href="/contact.html" class="final-cta secondary" data-cta-id="final-contact" data-cta-location="home-final">Send a note</a>
-        </div>
-      </div>
-    </section>
-  </main>
+  <Fragment set:html={body} />
 </Base>

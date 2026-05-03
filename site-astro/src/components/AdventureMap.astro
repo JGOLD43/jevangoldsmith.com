@@ -11,6 +11,7 @@ import type { CollectionEntry } from 'astro:content';
 interface Props { adventures: CollectionEntry<'adventures'>[] }
 const { adventures } = Astro.props;
 
+// Compact marker payload — only the fields adventures-map-init.js reads.
 const markers = adventures
   .filter((a) => {
     const c = a.data.mapCenter as { lat?: number; lng?: number } | undefined;
@@ -19,12 +20,11 @@ const markers = adventures
   .map((a) => {
     const c = a.data.mapCenter as { lat: number; lng: number };
     return {
-      id: a.id,
       title: a.data.title,
       location: a.data.location ?? '',
       lat: c.lat,
       lng: c.lng,
-      href: `/adventure-${a.id}.html`
+      href: `adventure-${a.id}.html`
     };
   });
 ---
