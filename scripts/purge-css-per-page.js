@@ -368,12 +368,15 @@ for (const { file, html, kept } of perPage) {
   const outFile = `${slug}.${h}.css`;
   fs.writeFileSync(path.join(outDir, outFile), purged);
 
-  // Rewrite the legacy <link> to chrome.css + per-page CSS, preserving
-  // fetchpriority on the chrome bundle (it's the bigger one and ships on
-  // every page).
+  // Phase G: inline the per-page CSS in <head> instead of fetching it.
+  // chrome.css stays external (long-cached, shared across all pages), but
+  // the per-page slice is small (avg ~5.7KB) so a separate request just
+  // costs one RTT on FCP. Inlining drops that RTT entirely. The per-page
+  // file is still written to disk for inspection / debugging.
+  const inlineStyle = purged ? `\n  <style>${purged}</style>` : '';
   const next = html.replace(
     /<link rel="stylesheet" href="\/css\/legacy-style\.css"([^>]*)>/g,
-    `<link rel="stylesheet" href="/css/${chromeFile}"$1>\n  <link rel="stylesheet" href="/css/per-page/${outFile}">`
+    `<link rel="stylesheet" href="/css/${chromeFile}"$1>${inlineStyle}`
   );
   if (next !== html) {
     fs.writeFileSync(file, next);

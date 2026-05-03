@@ -1,27 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
 import {
   renderCollectionMain,
   tasteListOptions,
   MOVIE_SECTIONS
 } from '../lib/collection-chrome';
-import { renderMovieCardHtml } from '../lib/movie-card';
 import sidebarFiltersRaw from '../../../_src/collections/movies/sidebar-filters.html?raw';
 import mainBodyRaw from '../../../_src/collections/movies/main-body.html?raw';
 
 const canonical = 'https://jevangoldsmith.com/movies.html';
 
-// Phase B: server-render every movie card at build time. letterboxd.js
-// detects an already-populated container and skips the initial wipe + render.
-const movies = await getCollection('movies');
-const movieCardsHtml = movies.map((m) => renderMovieCardHtml(m.data as Record<string, unknown>)).join('');
-const populatedMainBody = mainBodyRaw
-  .trim()
-  .replace(
-    '<div id="movies-container" class="movies-grid" style="display: none;"></div>',
-    `<div id="movies-container" class="movies-grid">${movieCardsHtml}</div>`
-  );
+// Phase G: revert the Phase B.2 SSR. data/movies.json holds only 6 movies;
+// the rest of the grid is filled by letterboxd.js fetching RSS at runtime.
+// The SSR'd 6 cards were getting wiped + replaced as soon as the RSS came
+// back, spiking CLS from 0.060 → 0.372. Restoring the legacy "empty
+// container, hidden until ready" behavior brings CLS back to baseline at
+// the cost of losing the 6-card head start (negligible for FCP/LCP).
 
 const movieModal = `<div id="movie-modal" class="modal">
     <div class="modal-content">
@@ -79,7 +73,7 @@ const main = renderCollectionMain({
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="movie-philosophy.html" class="header-subtitle-link">My Movie Philosophy</a><span class="read-first-note">← read this first</span></div>',
     counterId: 'movie-count',
     counterLabel: 'Movies Watched',
-    bodyHtml: populatedMainBody
+    bodyHtml: mainBodyRaw.trim()
   },
   afterMainHtml: movieModal
 });
