@@ -11,10 +11,12 @@ import SeoRelated from '../components/SeoRelated.astro';
 import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type PageType } from '../lib/seo';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
 import { pageScriptsFor } from '../lib/page-scripts';
-// global.css is intentionally NOT imported. Astro inlines small imported
-// CSS files into <style> tags in every page (3KB × 41 pages = wasted bytes
-// + visual parity drift). The full legacy bundle served at /css/legacy-
-// style.css already includes the design tokens, font-faces, and reset.
+// Critical-CSS-inline + async-load was tried and reverted: it cut FCP
+// modestly but caused a major CLS regression (0.084 → 0.726) when full
+// styles arrived. Below-fold layout would jump every render. The 187KB
+// legacy-style.css is the FCP bottleneck; the real fix is purging unused
+// selectors or migrating to per-page Tailwind utilities — both larger
+// projects than the parity refactor.
 
 interface Props {
   title: string;
@@ -71,11 +73,6 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    {/* Mirror legacy: stylesheet RIGHT after title. fetchpriority="high"
-        on the link tag tells the browser to process this CSS before
-        lower-priority resources without adding a separate preload (which
-        empirically pushed font fetches onto the critical path and slowed
-        FCP — fonts already use font-display:swap so they don't block). */}
     <link rel="stylesheet" href="/css/legacy-style.css" fetchpriority="high" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
     {description && <meta name="description" content={description} />}
