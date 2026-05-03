@@ -300,23 +300,80 @@ const outDir = path.join(DIST, 'css/per-page');
 fs.mkdirSync(outDir, { recursive: true });
 
 const htmlFiles = walk(DIST);
-const stats = [];
-let mutated = 0;
 
-for (const file of htmlFiles) {
+// Phase A — chrome extraction.
+//
+// Step 1: per-page purge into memory (don't write yet). We need every
+// page's kept-rule list to compute the cross-page intersection.
+const perPage = htmlFiles.map((file) => {
   const html = fs.readFileSync(file, 'utf8');
   const tokens = extractTokensFromHtml(html);
   const kept = purge(allRules, tokens);
-  const purged = kept.join('');
+  return { file, html, kept };
+});
+
+// Step 2: identify "chrome" rules — present on >= CHROME_THRESHOLD fraction
+// of pages. Compare by exact source-text equality (selector + body).
+//
+// Keeps shared chrome (nav, footer, body, typography, theme tokens) in a
+// single long-cached chrome.HASH.css linked from every page; per-page
+// stylesheets shrink to just page-specific selectors.
+const CHROME_THRESHOLD = Number(process.env.CHROME_THRESHOLD || 0.7);
+const ruleCount = new Map();
+for (const { kept } of perPage) {
+  const seenThisPage = new Set();
+  for (const rule of kept) {
+    if (seenThisPage.has(rule)) continue;
+    seenThisPage.add(rule);
+    ruleCount.set(rule, (ruleCount.get(rule) || 0) + 1);
+  }
+}
+const minPages = Math.ceil(perPage.length * CHROME_THRESHOLD);
+const chromeRuleSet = new Set();
+const chromeRulesOrdered = [];
+// Walk the original rule order so chrome.css preserves cascade.
+for (const rule of perPage[0]?.kept || []) {
+  if ((ruleCount.get(rule) || 0) >= minPages && !chromeRuleSet.has(rule)) {
+    chromeRuleSet.add(rule);
+    chromeRulesOrdered.push(rule);
+  }
+}
+// Some chrome rules may only appear on later pages (e.g. lesson-logger
+// adds a rule the index doesn't). Append them in insertion order.
+for (const { kept } of perPage.slice(1)) {
+  for (const rule of kept) {
+    if ((ruleCount.get(rule) || 0) >= minPages && !chromeRuleSet.has(rule)) {
+      chromeRuleSet.add(rule);
+      chromeRulesOrdered.push(rule);
+    }
+  }
+}
+
+const chromeCss = chromeRulesOrdered.join('');
+const chromeHash = crypto.createHash('sha256').update(chromeCss).digest('hex').slice(0, 10);
+const chromeFile = `chrome.${chromeHash}.css`;
+fs.writeFileSync(path.join(DIST, 'css', chromeFile), chromeCss);
+
+// Step 3: write per-page CSS minus the chrome rules; rewrite each page's
+// <link> so it pulls chrome.HASH.css first (long-cacheable, shared across
+// the whole site) and the per-page slice second.
+const stats = [];
+let mutated = 0;
+
+for (const { file, html, kept } of perPage) {
+  const pageRules = kept.filter((r) => !chromeRuleSet.has(r));
+  const purged = pageRules.join('');
   const h = crypto.createHash('sha256').update(purged).digest('hex').slice(0, 10);
   const slug = path.relative(DIST, file).replace(/\.html$/, '').replace(/[\/]/g, '__');
   const outFile = `${slug}.${h}.css`;
   fs.writeFileSync(path.join(outDir, outFile), purged);
 
-  // Rewrite the link tag in the HTML.
+  // Rewrite the legacy <link> to chrome.css + per-page CSS, preserving
+  // fetchpriority on the chrome bundle (it's the bigger one and ships on
+  // every page).
   const next = html.replace(
     /<link rel="stylesheet" href="\/css\/legacy-style\.css"([^>]*)>/g,
-    `<link rel="stylesheet" href="/css/per-page/${outFile}"$1>`
+    `<link rel="stylesheet" href="/css/${chromeFile}"$1>\n  <link rel="stylesheet" href="/css/per-page/${outFile}">`
   );
   if (next !== html) {
     fs.writeFileSync(file, next);
@@ -331,6 +388,8 @@ const total = stats.reduce((s, x) => s + x.bytes, 0);
 const avg = total / stats.length;
 const original = css.length;
 console.log(`[purge-css] ${stats.length} pages, original=${(original/1024).toFixed(1)}KB`);
-console.log(`[purge-css] avg=${(avg/1024).toFixed(1)}KB  min=${(stats[0].bytes/1024).toFixed(1)}KB (${stats[0].file})  max=${(stats[stats.length-1].bytes/1024).toFixed(1)}KB (${stats[stats.length-1].file})`);
-console.log(`[purge-css] avg saving per page: ${((original-avg)/1024).toFixed(1)}KB (${((1-avg/original)*100).toFixed(0)}%)`);
+console.log(`[purge-css] chrome=${(chromeCss.length/1024).toFixed(1)}KB (shared, cached) → ${chromeFile}`);
+console.log(`[purge-css] per-page avg=${(avg/1024).toFixed(1)}KB  min=${(stats[0].bytes/1024).toFixed(1)}KB (${stats[0].file})  max=${(stats[stats.length-1].bytes/1024).toFixed(1)}KB (${stats[stats.length-1].file})`);
+console.log(`[purge-css] saving on first visit: chrome+page avg ${((chromeCss.length+avg)/1024).toFixed(1)}KB vs original ${(original/1024).toFixed(1)}KB (${((1-(chromeCss.length+avg)/original)*100).toFixed(0)}%)`);
+console.log(`[purge-css] saving on repeat visit: per-page avg ${(avg/1024).toFixed(1)}KB vs original ${(original/1024).toFixed(1)}KB (${((1-avg/original)*100).toFixed(0)}%)`);
 console.log(`[purge-css] rewrote link tag in ${mutated}/${stats.length} pages`);
