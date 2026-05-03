@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import AdventureMap from '../components/AdventureMap.astro';
 import remoteAssets from '../../../data/remote-assets.generated.json';
 
 interface RemoteAssetEntry {
@@ -145,5 +144,6 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
     <div class="lightbox-counter" id="lightbox-counter"></div>
   </div>
 
-  <AdventureMap adventures={adventures} slot="scripts" />
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" slot="head" />
+  <script slot="scripts" is:inline src="/vendor/leaflet/leaflet.js"></script>
 </Base>
