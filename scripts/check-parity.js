@@ -44,6 +44,7 @@ if (args.build) {
     { cwd: path.join(ROOT, 'site-astro'), stdio: 'inherit' }
   );
   execFileSync('node', ['scripts/normalize-astro-html.js', `--dist=${ASTRO_DIR}`], { cwd: ROOT, stdio: 'inherit' });
+  execFileSync('node', ['scripts/bundle-page-scripts.js', `--dist=${ASTRO_DIR}`], { cwd: ROOT, stdio: 'inherit' });
 }
 
 if (!fs.existsSync(LEGACY_DIR) || !fs.existsSync(ASTRO_DIR)) {
