@@ -1,6 +1,31 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import raw from '../../../data/products.json';
 import Base from '../layouts/Base.astro';
+
+// Resolve product image to its optimized generated raster (mirrors
+// scripts/legacy-build/build/cards.js generatedProductImageAsset).
+// Astro runs the build from site-astro/, so the repo root is one level up.
+const ROOT = path.resolve(process.cwd(), '..');
+function productImageAsset(slug?: string, fallbackImage?: string) {
+  if (!slug) return null;
+  const widths = [240, 400, 640, 800];
+  for (const ext of ['jpg', 'png'] as const) {
+    const candidate = `images/generated/products/${slug}-640.${ext}`;
+    if (!fs.existsSync(path.join(ROOT, candidate))) continue;
+    const srcset = widths
+      .filter((w) => fs.existsSync(path.join(ROOT, `images/generated/products/${slug}-${w}.${ext}`)))
+      .map((w) => `images/generated/products/${slug}-${w}.${ext} ${w}w`)
+      .join(', ');
+    return { src: candidate, srcset, sizes: '(max-width: 768px) 78vw, 320px', width: 800, height: 800 };
+  }
+  if (fallbackImage && fs.existsSync(path.join(ROOT, fallbackImage))) {
+    return { src: fallbackImage, srcset: '', sizes: '', width: 800, height: 800 };
+  }
+  return null;
+}
 
 interface Product {
   id: string;
@@ -24,6 +49,7 @@ interface Product {
   replaced?: string;
   usage?: string;
   icon?: string;
+  relatedContent?: string[];
 }
 
 interface Category {
@@ -40,7 +66,6 @@ const categories: Category[] = (raw as any).productCategories ?? [];
   description="A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced."
   canonical="https://jevangoldsmith.com/products.html"
   pageType="CollectionPage"
-  bodyClass="shelf-experience"
 >
   <main class="shelf-page">
     <h1 class="sr-only">The Shelf: Tools, Objects &amp; Gear That Earned Their Place</h1>
@@ -53,7 +78,9 @@ const categories: Category[] = (raw as any).productCategories ?? [];
     </div>
 
     <section class="shelf-grid" aria-label="Objects on the shelf">
-      {products.map((p, i) => (
+      {products.map((p, i) => {
+        const asset = productImageAsset(p.slug ?? p.id, p.image);
+        return (
         <article
           class="shelf-item"
           id={p.id}
@@ -75,20 +102,23 @@ const categories: Category[] = (raw as any).productCategories ?? [];
             data-replaced={p.replaced ?? ''}
             data-usage={p.usage ?? ''}
             data-icon={p.icon ?? ''}
-            data-image={p.image ?? ''}
+            data-image={asset?.src ?? p.image ?? ''}
+            data-related={(p.relatedContent ?? []).join('|')}
             data-link={p.checkoutUrl ?? ''}
           >
             <span class="shelf-object-stage has-photo" aria-hidden="true">
               <span class="shelf-object-mark">
-                {p.image && (
+                {asset && (
                   <img
                     class="shelf-object-photo"
-                    src={p.image}
+                    src={asset.src}
+                    srcset={asset.srcset}
+                    sizes={asset.sizes}
                     alt={p.title}
+                    width={asset.width}
+                    height={asset.height}
                     loading="lazy"
                     decoding="async"
-                    width="800"
-                    height="800"
                   />
                 )}
                 {!p.image && p.icon && <span class="shelf-object-icon">{p.icon}</span>}
@@ -132,7 +162,8 @@ const categories: Category[] = (raw as any).productCategories ?? [];
             )}
           </div>
         </article>
-      ))}
+        );
+      })}
     </section>
 
     <p class="shelf-disclosure">

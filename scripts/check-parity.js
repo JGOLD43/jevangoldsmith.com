@@ -92,7 +92,9 @@ function extractTokens(html) {
     for (const c of m[1].split(/\s+/)) if (c) classes.add(c);
   }
   for (const m of html.matchAll(/id="([^"]+)"/g)) ids.add(m[1]);
-  for (const m of html.matchAll(/(data-[a-z0-9-]+)=/gi)) dataAttrs.add(m[1].toLowerCase());
+  // Match `data-foo=`, `data-foo "`, and bare `data-foo>` / `data-foo/` (Astro
+  // emits no value for empty strings; legacy emits data-foo="").
+  for (const m of html.matchAll(/(data-[a-z0-9-]+)(?==|[\s>/])/gi)) dataAttrs.add(m[1].toLowerCase());
 
   for (const tag of ['form', 'nav', 'main', 'section', 'article', 'button', 'img', 'picture', 'h1', 'h2', 'h3']) {
     const re = new RegExp(`<${tag}[\\s>/]`, 'g');
