@@ -1,12 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
 import {
   renderCollectionMain,
   tasteListOptions,
   PODCAST_SECTIONS
 } from '../lib/collection-chrome';
+import { renderPodcastCardHtml } from '../lib/podcast-card';
 
 const canonical = 'https://jevangoldsmith.com/podcasts.html';
+
+// Phase B: pre-render curated podcast cards.
+const podcasts = await getCollection('podcasts');
+const podcastCardsHtml = podcasts.map((p) => renderPodcastCardHtml(p.data as Record<string, unknown>)).join('');
 
 const main = renderCollectionMain({
   layout: { id: 'podcasts-layout', className: 'movies-layout podcasts-layout collection-layout sidebar-collapsed' },
@@ -58,7 +64,7 @@ const main = renderCollectionMain({
         <h2>Curated Picks</h2>
         <p class="spotify-section-meta">Hand-picked shows and episodes I return to.</p>
     </div>
-    <div id="podcasts-container" class="movies-grid"></div>
+    <div id="podcasts-container" class="movies-grid">${podcastCardsHtml}</div>
 </section>`
   }
 });

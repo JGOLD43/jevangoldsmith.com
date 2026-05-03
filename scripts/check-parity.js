@@ -30,10 +30,14 @@ const args = process.argv.slice(2).reduce((acc, a) => {
 
 const LEGACY_DIR = path.join(ROOT, args.legacy || 'dist-legacy-snap');
 const ASTRO_DIR = path.join(ROOT, args.astro || 'dist-astro');
-// Phase C drops the webp <source> from <picture> wraps and shrinks index/
-// about by ~6%, just over the original 5% gate. Bump to 15% — the
-// structural-element + id checks remain the meaningful gates.
-const BYTE_TOL = Number(args.tol || 15) / 100;
+// Phase A relaxed the byte tolerance to 15% and downgraded the class-diff
+// to informational; Phase B then bumped tolerance to 1000% because SSR'd
+// collection cards inflate HTML by 100–700% — books.html alone goes from
+// a 100-byte empty container to 230KB of card markup. Phase C drops the
+// webp <source> from <picture> wraps which trims a further ~6% off
+// index/about. Structural element + id checks remain the meaningful
+// gates. Strict mode still available via `--tol=5` and `--strict-classes`.
+const BYTE_TOL = Number(args.tol || 1000) / 100;
 const STRICT_CLASSES = !!args['strict-classes'];
 const SINGLE_PAGE = args.page || null;
 const JSON_OUT = !!args.json;
