@@ -199,4 +199,9 @@ const detailData = JSON.stringify({
   </div>
 
   <script type="application/json" id="adventure-detail-data" set:html={detailData}></script>
+
+  {/* Leaflet drives the small Photo Locations map via #adventure-map.
+      adventure-detail.js (loaded by the page bundle) initializes it. */}
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" slot="head" />
+  <script slot="scripts" is:inline src="/vendor/leaflet/leaflet.js"></script>
 </Base>
