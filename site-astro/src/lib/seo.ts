@@ -3,6 +3,9 @@
 // legacy tests/seo-fixture.json so external scrapers and rich-result tools
 // see no behavioral diff.
 
+import pagesData from '../../../data/pages.json';
+import topicsData from '../../../data/topics.json';
+
 const SITE_URL = 'https://jevangoldsmith.com';
 
 export const SITE_NAME = 'Jevan Goldsmith';
@@ -69,31 +72,106 @@ export function breadcrumbList(canonical: string, steps: BreadcrumbStep[]) {
 
 export type PageType = 'WebPage' | 'AboutPage' | 'CollectionPage' | 'ContactPage' | 'ProfilePage' | 'Article' | 'WebSite';
 
+interface PageMeta {
+  path?: string;
+  audience?: string;
+  topics?: string[];
+  primaryKeyword?: string;
+  secondaryKeywords?: string[];
+  lastReviewed?: string;
+  schemaType?: string;
+  relatedPages?: string[];
+}
+
+interface TopicMeta {
+  id: string;
+  label?: string;
+}
+
+const PAGE_META_BY_FILE = new Map<string, PageMeta>(
+  (pagesData as PageMeta[]).filter((p) => p.path).map((p) => [p.path!, p])
+);
+
+const TOPIC_LABEL_BY_ID = new Map<string, string>(
+  ((topicsData as { topics?: TopicMeta[] }).topics ?? []).map((t) => [t.id, t.label ?? t.id])
+);
+
+const PAGE_TITLE_BY_FILE = new Map<string, string>(
+  (pagesData as Array<PageMeta & { title?: string }>).filter((p) => p.path && p.title).map((p) => [p.path!, p.title!])
+);
+
+interface PageEnrichment {
+  dateModified?: string;
+  keywords?: string[];
+  audience?: { '@type': 'Audience'; audienceType: string };
+  about?: string[];
+  mainEntity?: {
+    '@type': 'ItemList';
+    itemListElement: Array<{ '@type': 'ListItem'; position: number; url: string; name: string }>;
+  };
+}
+
+/**
+ * Mirrors scripts/legacy-build/build/page-metadata.js: reads data/pages.json
+ * + data/topics.json and returns the extra @graph fields the legacy build
+ * adds to each pageNode (about / audience / dateModified / keywords /
+ * mainEntity). currentPage is e.g. "problems.html".
+ */
+export function pageEnrichment(currentPage: string): PageEnrichment {
+  const meta = PAGE_META_BY_FILE.get(currentPage);
+  if (!meta) return {};
+  const out: PageEnrichment = {};
+
+  if (meta.lastReviewed) out.dateModified = meta.lastReviewed;
+
+  const keywords = [meta.primaryKeyword, ...(meta.secondaryKeywords ?? [])].filter(Boolean) as string[];
+  if (keywords.length > 0) out.keywords = keywords;
+
+  if (meta.audience) {
+    out.audience = { '@type': 'Audience', audienceType: meta.audience };
+  }
+
+  if (meta.topics && meta.topics.length > 0) {
+    out.about = meta.topics.map((id) => TOPIC_LABEL_BY_ID.get(id) ?? id);
+  }
+
+  // CollectionPage gets a mainEntity ItemList sourced from relatedPages,
+  // mirroring the default branch of legacy collectionItemsForSchema().
+  if (meta.schemaType === 'CollectionPage' && meta.relatedPages && meta.relatedPages.length > 0) {
+    const items = meta.relatedPages.slice(0, 12).map((href, i) => ({
+      '@type': 'ListItem' as const,
+      position: i + 1,
+      url: `${SITE_URL}/${href.replace(/^\//, '')}`,
+      name: PAGE_TITLE_BY_FILE.get(href) ?? href
+    }));
+    out.mainEntity = { '@type': 'ItemList', itemListElement: items };
+  }
+
+  return out;
+}
+
 export function pageNode({
   type,
   canonical,
   title,
   description,
-  image
+  image,
+  enrichment
 }: {
   type: PageType;
   canonical: string;
   title: string;
   description: string;
   image?: string;
+  enrichment?: PageEnrichment;
 }) {
-  return {
+  const base: Record<string, unknown> = {
     '@id': `${canonical}#page`,
     '@type': type,
     url: canonical,
     name: title,
     headline: title,
     description,
-    inLanguage: 'en',
-    isPartOf: { '@id': `${SITE_URL}/#website` },
-    author: { '@id': `${SITE_URL}/#person` },
-    publisher: { '@id': `${SITE_URL}/#person` },
-    breadcrumb: { '@id': `${canonical}#breadcrumbs` },
     image: {
       '@type': 'ImageObject',
       url: image ?? DEFAULT_OG_IMAGE,
@@ -101,8 +179,19 @@ export function pageNode({
       caption: title,
       width: 1200,
       height: 630
-    }
+    },
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    author: { '@id': `${SITE_URL}/#person` },
+    publisher: { '@id': `${SITE_URL}/#person` },
+    inLanguage: 'en'
   };
+  if (enrichment?.dateModified) base.dateModified = enrichment.dateModified;
+  if (enrichment?.keywords) base.keywords = enrichment.keywords;
+  if (enrichment?.audience) base.audience = enrichment.audience;
+  if (enrichment?.about) base.about = enrichment.about;
+  base.breadcrumb = { '@id': `${canonical}#breadcrumbs` };
+  if (enrichment?.mainEntity) base.mainEntity = enrichment.mainEntity;
+  return base;
 }
 
 // Entity-specific schema builders. Returned objects are added to the @graph

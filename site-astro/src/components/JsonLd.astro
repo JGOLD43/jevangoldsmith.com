@@ -6,10 +6,12 @@ import {
   PERSON_SCHEMA,
   WEBSITE_SCHEMA,
   breadcrumbList,
+  pageEnrichment,
   pageNode,
   type BreadcrumbStep,
   type PageType
 } from '../lib/seo';
+import { currentPageFromUrl } from '../lib/chrome';
 
 interface Props {
   canonical: string;
@@ -32,13 +34,14 @@ const {
   extraSchema = []
 } = Astro.props;
 
+const enrichment = pageEnrichment(currentPageFromUrl(Astro.url.pathname));
 const graph = {
   '@context': 'https://schema.org',
   '@graph': [
     PERSON_SCHEMA,
     WEBSITE_SCHEMA,
     breadcrumbList(canonical, breadcrumbs),
-    pageNode({ type: pageType, canonical, title, description, image }),
+    pageNode({ type: pageType, canonical, title, description, image, enrichment }),
     ...extraSchema
   ]
 };
