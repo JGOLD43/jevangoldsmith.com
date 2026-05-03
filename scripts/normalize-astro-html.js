@@ -150,6 +150,12 @@ for (const file of files) {
   after = removeExternalFontLinks(after);
   after = optimizeLocalImageReferences(after);
   after = localizeRemainingRemoteAssetReferences(after);
+  // Phase C: strip hard-coded webp <source> tags inside <picture>. The avif
+  // <source> next to it covers ~95% of browsers; the rest fall through to
+  // the <img> jpg/png. Hardcoded ones live in _src/pages/index.html and
+  // _src/partials/nav.html (dynamically-generated <picture> blocks already
+  // skip webp via wrapInPicture).
+  after = after.replace(/\s*<source\s+type="image\/webp"[^>]*>/gi, '');
   after = injectFieldNotesCta(rel, after);
   after = moveSeoRelatedInsideMain(after);
   after = decorateTrackedLinks(rel, after);

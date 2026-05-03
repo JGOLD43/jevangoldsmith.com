@@ -13,17 +13,21 @@ function createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset }
     return setHtmlAttribute(tag, name, value);
   }
 
-  // Wrap an optimized <img> in <picture> with AVIF + WebP sources.
-  // Variants on disk are sibling files at the same width set; we generate the
-  // alternate srcsets by swapping the extension on each entry.
-  function wrapInPicture(imgTag, jpgSrcset, sizes, hasAvif = true, hasWebp = true) {
+  // Wrap an optimized <img> in <picture> with an AVIF source.
+  //
+  // Phase C: drop the webp <source>. AVIF has ~95% browser support and is
+  // smaller than webp; browsers that can't decode AVIF fall through to the
+  // <img> jpg/png src. Cuts ~150 bytes × N images per page on collection
+  // pages — roughly 25–60KB off books.html / movies.html / people.html
+  // with no visible behavior change for >99% of users (modern Safari,
+  // Chrome, Firefox, Edge all decode AVIF; legacy IE / very old Safari
+  // still get the jpg fallback).
+  function wrapInPicture(imgTag, jpgSrcset, sizes, hasAvif = true, _hasWebp = true) {
     if (!jpgSrcset) return imgTag;
     const avifSrcset = jpgSrcset.replace(/\.(jpg|jpeg|png)\b/gi, '.avif');
-    const webpSrcset = jpgSrcset.replace(/\.(jpg|jpeg|png)\b/gi, '.webp');
     const sizesAttr = sizes ? ` sizes="${escapeHtmlAttr(sizes)}"` : '';
     const avifSource = hasAvif ? `<source type="image/avif" srcset="${escapeHtmlAttr(avifSrcset)}"${sizesAttr}>` : '';
-    const webpSource = hasWebp ? `<source type="image/webp" srcset="${escapeHtmlAttr(webpSrcset)}"${sizesAttr}>` : '';
-    return `<picture>${avifSource}${webpSource}${imgTag}</picture>`;
+    return `<picture>${avifSource}${imgTag}</picture>`;
   }
 
   function optimizeGeneratedRaster(tag, original, replacement, srcset, sizes) {
