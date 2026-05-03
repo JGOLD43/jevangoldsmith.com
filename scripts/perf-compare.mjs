@@ -38,7 +38,7 @@ const PAGES = [
   'search.html'
 ];
 
-const SAMPLES = 3;
+const SAMPLES = 15;
 const ASTRO = 'http://127.0.0.1:4200';
 const LEGACY = 'http://127.0.0.1:4201';
 

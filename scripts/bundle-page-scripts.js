@@ -112,14 +112,16 @@ function applyBundle(file, html, bundles) {
     : BUNDLES[bundleName];
   const sourceSet = new Set(sources.map((p) => `/${p}`));
 
-  // Strip every <script src="/js/..."> or "/vendor/..." that's part of the bundle.
+  // Strip per-source <script src="/js/..."> tags that are part of this bundle,
+  // PLUS any previously-inserted bundle tag (idempotent across repeated runs
+  // even if the bundle hash changed between runs).
   let next = html.replace(/\n?\s*<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*><\/script>/gi, (tag, src) => {
-    return sourceSet.has(src) ? '' : tag;
+    if (sourceSet.has(src)) return '';
+    if (/^assets\/js\/bundles\/page-[\w-]+\.[a-f0-9]+\.js$/.test(src)) return '';
+    return tag;
   });
 
-  // Insert single bundle tag before </body>.
   const bundleTag = `<script src="${bundlePath}" defer></script>`;
-  if (next.includes(bundleTag)) return next;
   return next.replace(/<\/body>/i, `    ${bundleTag}\n</body>`);
 }
 

@@ -71,6 +71,13 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    {/* Mirror legacy: stylesheet RIGHT after title. fetchpriority="high"
+        on the link tag tells the browser to process this CSS before
+        lower-priority resources without adding a separate preload (which
+        empirically pushed font fetches onto the critical path and slowed
+        FCP — fonts already use font-display:swap so they don't block). */}
+    <link rel="stylesheet" href="/css/legacy-style.css" fetchpriority="high" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
     {description && <meta name="description" content={description} />}
     <meta name="robots" content="index, follow, max-image-preview:large" />
     {canonical && <link rel="canonical" href={canonical} />}
@@ -86,8 +93,6 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
     <meta name="twitter:title" content={title} />
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="stylesheet" href="/css/legacy-style.css" />
     {!noJsonLd && canonical && (
       <JsonLd
         canonical={canonical}
