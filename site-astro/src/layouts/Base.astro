@@ -10,6 +10,7 @@ import JsonLd from '../components/JsonLd.astro';
 import SeoRelated from '../components/SeoRelated.astro';
 import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type PageType } from '../lib/seo';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
+import { pageScriptsFor } from '../lib/page-scripts';
 import '../styles/global.css';
 
 interface Props {
@@ -31,6 +32,10 @@ interface Props {
   extraSchema?: Array<Record<string, unknown>>;
   /** Skip the auto SeoRelated section (e.g. for pages where the body owns it). */
   noSeoRelated?: boolean;
+  /** Extra <script src="/js/X.js"> tags to load before the closing body tag.
+   * Mirrors the per-page script bundles the legacy build emits via
+   * scripts/legacy-build/build/collection-config.js. Order is preserved. */
+  scripts?: string[];
 }
 
 const _currentPage = currentPageFromUrl(Astro.url.pathname);
@@ -46,7 +51,8 @@ const {
   breadcrumbs,
   noJsonLd = false,
   extraSchema,
-  noSeoRelated = false
+  noSeoRelated = false,
+  scripts = []
 } = Astro.props;
 
 const siteName = SITE_NAME;
@@ -97,10 +103,9 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
     <slot />
     {!noChrome && !noSeoRelated && <SeoRelated slug={seoSlug} />}
     {!noChrome && <Footer />}
-    <script is:inline src="/js/theme.js" defer></script>
-    <script is:inline src="/js/grid-zoom.js" defer></script>
-    <script is:inline src="/js/analytics.js" defer></script>
-    <script is:inline src="/js/newsletter.js" defer></script>
+    {(scripts.length > 0 ? scripts : pageScriptsFor(_currentPage)).map((src) =>
+      <script is:inline src={src} defer></script>
+    )}
     <slot name="scripts" />
   </body>
 </html>
