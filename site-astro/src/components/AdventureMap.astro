@@ -1,25 +1,16 @@
 ---
-// Leaflet world map showing every adventure as a clickable marker.
+// Loads Leaflet + initializes the world map for /adventures.html.
+// The <div id="world-map"> lives in the page itself; this component only
+// emits the stylesheet + script + initializer.
 //
-// Replaces ~755 lines of js/adventures-map.js + js/adventures-runtime.js +
-// js/adventures-ui.js + js/adventures.js + js/action-dispatcher.js.
-//
-// Loaded as a client island via <AdventureMap client:visible /> in the parent
-// page so the JS only ships when the map scrolls into view. Everything else
-// on the page is static HTML.
-//
-// Out of scope (deferred from legacy):
-//   - GPX route polylines (read from data/routes.generated.json)
-//   - Places-of-interest layer (data/placeofinterest.json)
-//   - Region filter pills (Europe / Asia / Australia / Americas / Other)
-//   - Mobile list/map view toggle
+// Marker payload is dumped as a separate JSON script tag (not a
+// data-markers attribute on the div) to keep adventures.html byte-close
+// to legacy where the markers ship via a separate JS bundle.
 import type { CollectionEntry } from 'astro:content';
 
 interface Props { adventures: CollectionEntry<'adventures'>[] }
 const { adventures } = Astro.props;
 
-// Pre-compute the marker payload at build time so the client script is
-// data-driven and tiny. Filters out adventures without coordinates.
 const markers = adventures
   .filter((a) => {
     const c = a.data.mapCenter as { lat?: number; lng?: number } | undefined;
@@ -39,43 +30,5 @@ const markers = adventures
 ---
 <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" />
 <script is:inline src="/vendor/leaflet/leaflet.js"></script>
-<div
-  id="world-map"
-  class="adventures-main-map"
-  data-markers={JSON.stringify(markers)}
-  style="width: 100%; height: 100%; min-height: 600px;"
-></div>
-
-<script is:inline>
-  // Self-hosted Leaflet attaches to window.L. is:inline keeps Astro's bundler
-  // from trying to resolve the import — Leaflet ships pre-built from /vendor/.
-  (function initWorldMap() {
-    var el = document.getElementById('world-map');
-    if (!el || !window.L) return;
-    var L = window.L;
-    var markers = JSON.parse(el.getAttribute('data-markers') || '[]');
-    var map = L.map(el, {
-      center: [20, 0],
-      zoom: 2,
-      worldCopyJump: true,
-      scrollWheelZoom: true
-    });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      subdomains: 'abcd',
-      maxZoom: 19
-    }).addTo(map);
-    for (var i = 0; i < markers.length; i++) {
-      var m = markers[i];
-      var marker = L.marker([m.lat, m.lng]).addTo(map);
-      marker.bindPopup(
-        '<strong>' + m.title + '</strong><br>' + m.location +
-        '<br><a href="' + m.href + '">View adventure &rarr;</a>'
-      );
-    }
-    if (markers.length > 0) {
-      var bounds = L.latLngBounds(markers.map(function (m) { return [m.lat, m.lng]; }));
-      map.fitBounds(bounds.pad(0.3));
-    }
-  })();
-</script>
+<script type="application/json" id="adventures-map-data" set:html={JSON.stringify(markers)} />
+<script is:inline src="/js/adventures-map-init.js" defer></script>

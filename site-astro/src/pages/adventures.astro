@@ -2,51 +2,105 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import AdventureMap from '../components/AdventureMap.astro';
-import { collectionPageItemList } from '../lib/seo';
+import remoteAssets from '../../../data/remote-assets.generated.json';
+
+interface RemoteAssetEntry {
+  widths?: number[];
+  formats?: Record<string, Record<string, string>>;
+}
+
+// Mirrors scripts/legacy-build/build/html-normalize.js remoteAssetFor:
+// resolve a remote URL to its localized generated raster at the requested
+// width (or the next-larger available width).
+function remoteAssetFor(url: string | undefined, preferredWidth = 800, format = 'jpg'): string {
+  if (!url || !/^https?:\/\//i.test(url)) return url ?? '';
+  const map = remoteAssets as Record<string, RemoteAssetEntry>;
+  let entry = map[url.replace(/&amp;/g, '&')];
+  if (!entry) return url;
+  const widths = (entry.widths ?? Object.keys(entry.formats ?? {}).map(Number)).sort((a, b) => a - b);
+  const width = widths.find((w) => w >= preferredWidth) ?? widths[widths.length - 1];
+  return entry.formats?.[String(width)]?.[format] ?? entry.formats?.[String(width)]?.jpg ?? url;
+}
 
 const adventures = (await getCollection('adventures')).sort((a, b) =>
   String(b.data.startDate ?? '').localeCompare(String(a.data.startDate ?? ''))
 );
 
-function shortDate(start?: string | null, _end?: string | null): string {
+function shortDateRange(start?: string | null, end?: string | null): string {
   if (!start) return '';
-  const d = new Date(start);
-  if (Number.isNaN(d.getTime())) return start;
-  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  const s = new Date(start);
+  if (Number.isNaN(s.getTime())) return start;
+  const sLabel = s.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  if (!end) return sLabel;
+  const e = new Date(end);
+  if (Number.isNaN(e.getTime())) return sLabel;
+  const eLabel = e.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  return sLabel === eLabel ? sLabel : `${s.toLocaleDateString('en-US', { month: 'short' })} - ${eLabel}`;
 }
 
 const canonical = 'https://jevangoldsmith.com/adventures.html';
-const itemList = collectionPageItemList({
-  canonical,
-  items: adventures.map((a) => ({
-    name: a.data.title,
-    url: `https://jevangoldsmith.com/adventure-${a.id}.html`
-  }))
-});
 ---
 <Base
-  title="Adventures, Travel Notes & Places Worth Remembering | Jevan Goldsmith"
+  title="Adventures, Travel Notes &amp; Places Worth Remembering"
   description="Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored."
   canonical={canonical}
-  bodyClass="nav-compact"
   pageType="CollectionPage"
-  extraSchema={[itemList]}
 >
   <main>
     <div class="adventures-page-split">
+      <div class="adventures-mobile-toggle">
+        <button class="mobile-view-btn active" data-view="list" data-action="switchMobileView" data-action-args="list">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          List
+        </button>
+        <button class="mobile-view-btn" data-view="map" data-action="switchMobileView" data-action-args="map">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+            <line x1="8" y1="2" x2="8" y2="18"></line>
+            <line x1="16" y1="6" x2="16" y2="22"></line>
+          </svg>
+          Map
+        </button>
+      </div>
+
       <aside class="adventures-sidebar">
         <div class="adventures-sidebar-header">
           <h1>Adventures</h1>
-          <span class="adventures-count">{adventures.length} trips</span>
+          <span class="adventures-count"><span id="adventure-count">{adventures.length}</span> trips</span>
+          <button type="button" class="adventures-sidebar-toggle" id="adventures-sidebar-toggle" aria-label="Collapse sidebar" aria-expanded="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
         </div>
+
+        <div class="adventures-filters">
+          <button class="filter-pill active" data-region="all" data-action="resetFilters" data-action-this="true">All</button>
+          <button class="filter-pill" data-region="europe" data-action="toggleFilter" data-action-args="" data-action-this="true">Europe <span id="count-europe"></span></button>
+          <button class="filter-pill" data-region="asia" data-action="toggleFilter" data-action-args="" data-action-this="true">Asia <span id="count-asia"></span></button>
+          <button class="filter-pill" data-region="australia" data-action="toggleFilter" data-action-args="" data-action-this="true">Australia <span id="count-australia"></span></button>
+          <button class="filter-pill" data-region="americas" data-action="toggleFilter" data-action-args="" data-action-this="true">Americas <span id="count-americas"></span></button>
+          <button class="filter-pill" data-region="other" data-action="toggleFilter" data-action-args="" data-action-this="true">Other <span id="count-other"></span></button>
+          <button class="filter-pill filter-pill-poi active" data-action="togglePlacesOfInterest" data-action-this="true" title="Places I want to visit">
+            <span class="poi-dot" aria-hidden="true"></span> Want to Visit
+          </button>
+        </div>
+
         <div class="adventures-compact-list" id="adventures-container">
           {adventures.map((a) => (
-            <a class="adventure-compact-card" href={`/adventure-${a.id}.html`} data-adventure-id={a.id}>
+            <div class="adventure-compact-card" id={`card-${a.id}`} data-adventure-id={a.id}>
               {a.data.heroImage && (
                 <img
-                  src={a.data.heroImage}
+                  src={remoteAssetFor(a.data.heroImage, 800)}
                   alt={a.data.title}
                   class="adventure-compact-image"
+                  width="800"
+                  height="533"
                   loading="lazy"
                   decoding="async"
                 />
@@ -57,17 +111,39 @@ const itemList = collectionPageItemList({
                 )}
                 <h3 class="adventure-compact-title">{a.data.title}</h3>
                 <div class="adventure-compact-meta">
-                  {shortDate(a.data.startDate, a.data.endDate)}
+                  {shortDateRange(a.data.startDate, a.data.endDate)}
                   {a.data.duration && ` · ${a.data.duration}`}
                 </div>
               </div>
-            </a>
+            </div>
           ))}
         </div>
       </aside>
+
       <div class="adventures-map-panel">
-        <AdventureMap adventures={adventures} />
+        <div class="adventures-main-map" id="world-map"></div>
+
+        <div class="adventure-detail-overlay" id="adventure-detail-overlay">
+          <button class="detail-close-btn" data-action="closeAdventureDetail">&times;</button>
+          <div class="adventure-detail-content" id="adventure-detail-content">
+          </div>
+        </div>
       </div>
     </div>
+
+    <section class="adventure-story-inline" id="adventure-story-inline" hidden>
+      <div class="adventure-story-inner" id="adventure-story-inner"></div>
+    </section>
   </main>
+
+  <div id="lightbox" class="lightbox">
+    <span class="lightbox-close" data-action="closeLightbox">&times;</span>
+    <span class="lightbox-prev" data-action="prevImage">&#10094;</span>
+    <img id="lightbox-image" src="" alt="" decoding="async">
+    <span class="lightbox-next" data-action="nextImage">&#10095;</span>
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+
+  <AdventureMap adventures={adventures} slot="scripts" />
 </Base>
