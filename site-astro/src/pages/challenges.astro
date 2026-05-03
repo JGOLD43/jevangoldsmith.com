@@ -1,7 +1,11 @@
 ---
 import raw from '../../../data/challenges.json';
 import Base from '../layouts/Base.astro';
-import CollectionSidebar from '../components/CollectionSidebar.astro';
+import {
+  renderTaskListMain,
+  renderChallengeCard,
+  CHALLENGES_TASK_CONFIG
+} from '../lib/collection-chrome';
 
 interface Challenge {
   id: string;
@@ -12,53 +16,23 @@ interface Challenge {
   timeframe?: string;
   shortDescription?: string;
   description?: string;
-  progress?: number | string;
-  searchTerms?: string;
+  visibility?: string;
+  tags?: string[];
+  searchTerms?: string[];
+  icon?: string;
+  progress?: { label?: string; value?: string; percent?: number | string };
 }
 
-const challenges: Challenge[] = (raw as any).challenges ?? [];
-const count = challenges.length;
+const allChallenges: Challenge[] = (raw as { challenges?: Challenge[] }).challenges ?? [];
+const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibility !== 'private');
+
+const main = renderTaskListMain(challenges, CHALLENGES_TASK_CONFIG, renderChallengeCard);
 ---
 <Base
-  title="Challenges, Constraints &amp; Personal Experiments | Jevan Goldsmith"
+  title="Challenges, Constraints &amp; Personal Experiments"
   description="A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life."
   canonical="https://jevangoldsmith.com/challenges.html"
   pageType="CollectionPage"
 >
-  <main class="challenges-layout collection-layout" id="challenges-layout">
-    <CollectionSidebar pageKey="challenges" searchPlaceholder="Search challenges..." totalCount={count} />
-    <section class="challenges-main collection-main">
-      <header class="challenges-hero">
-        <div class="challenges-hero-text">
-          <h1 class="hero-headline">Challenges</h1>
-          <p class="hero-tagline">Constraints and experiments that test ideas against real life.</p>
-        </div>
-        <div class="challenges-hero-stats">
-          <div class="hero-stat-card">
-            <div class="hero-stat-number">{count}</div>
-            <div class="hero-stat-label">Challenges</div>
-          </div>
-        </div>
-      </header>
-
-      <div class="challenges-grid movies-grid">
-        {challenges.map((c) => (
-          <article class="movie-card challenge-card js-zoom-item" data-id={c.id} data-status={c.status ?? ''} data-category={c.category ?? ''}>
-            <div class="challenge-card-body">
-              {c.status && <span class="challenge-status">{c.status}</span>}
-              {c.timeframe && <span class="challenge-timeframe">{c.timeframe}</span>}
-              <h2 class="challenge-title">{c.title}</h2>
-              {c.shortDescription && <p class="challenge-description">{c.shortDescription}</p>}
-              {typeof c.progress === 'number' && (
-                <div class="challenge-progress" aria-label={`Progress: ${c.progress}%`}>
-                  <div class="challenge-progress-bar" style={`width: ${c.progress}%`} />
-                  <span class="challenge-progress-label">{c.progress}%</span>
-                </div>
-              )}
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  </main>
+  <Fragment set:html={main} />
 </Base>
