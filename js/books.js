@@ -209,9 +209,18 @@ function createBooksView(controller) {
         return card;
     }
 
+    let hasAdoptedSsrCards = false;
     function renderBooks(books) {
         const container = document.getElementById('books-container');
         if (!container) return;
+        // Phase B: Astro now SSRs every card. On the first render call (which
+        // always paints the full unfiltered list), if the DOM already matches
+        // the data, skip the wipe + re-append so the page doesn't flash.
+        // Subsequent calls (filter / search) re-render as usual.
+        if (!hasAdoptedSsrCards) {
+            hasAdoptedSsrCards = true;
+            if (container.children.length === books.length) return;
+        }
         container.innerHTML = '';
         books.forEach((book) => container.appendChild(createBookCard(book)));
     }
