@@ -200,9 +200,17 @@ function createMovieCardFromData(movieData) {
     return card;
 }
 
+let hasAdoptedSsrMovies = false;
 function displayMovies(movies) {
     const container = document.getElementById('movies-container');
     if (!container) return;
+    // Phase B: Astro now SSRs every movie card. On the first display call,
+    // if the DOM already matches the data, skip the wipe + re-append so the
+    // page doesn't flash. Subsequent calls (filter / search) re-render.
+    if (!hasAdoptedSsrMovies) {
+        hasAdoptedSsrMovies = true;
+        if (container.children.length === movies.length) return;
+    }
     container.innerHTML = '';
     movies.forEach((movieData) => container.appendChild(createMovieCardFromData(movieData)));
 }
