@@ -24,19 +24,7 @@ interface BookData {
   coverImage?: string | null;
 }
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
-function escapeAttr(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;');
-}
+import { escapeHtml, escapeAttr } from './html-escape';
 
 export function bookCoverUrl(book: BookData): string {
   if (book.coverImage) return book.coverImage;

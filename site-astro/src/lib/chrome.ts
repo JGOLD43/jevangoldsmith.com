@@ -11,49 +11,32 @@ import navTemplateRaw from '../../../_src/partials/nav.html?raw';
 import footerTemplateRaw from '../../../_src/partials/footer.html?raw';
 import pages from '../../../data/pages.json';
 import ctas from '../../../data/ctas.json';
+import { escapeAttr as escapeHtmlAttr } from './html-escape';
 
 const NAV_TEMPLATE = navTemplateRaw.trim();
 const FOOTER_TEMPLATE = footerTemplateRaw.trim();
 
-interface PageMeta {
-  path?: string;
-  section?: string;
-}
-
-interface Cta {
-  id: string;
-  href: string;
-}
-
 const SECTION_BY_FILE = new Map<string, string>(
-  (pages as PageMeta[]).filter((p) => p.path).map((p) => [p.path!, p.section ?? ''])
+  ((pages as Array<{ path?: string; section?: string }>) ?? [])
+    .filter((p) => p.path)
+    .map((p) => [p.path!, p.section ?? ''])
 );
 
-const CTA_BY_HREF = new Map<string, Cta>(
-  ((ctas as { ctas?: Cta[] }).ctas ?? []).map((c) => [c.href, c])
+const CTA_BY_HREF = new Map<string, { id: string; href: string }>(
+  ((ctas as { ctas?: Array<{ id: string; href: string }> }).ctas ?? []).map((c) => [c.href, c])
 );
 
+// Maps a section ID from data/pages.json to the dropdown-trigger label in
+// nav.html. Only sections whose label matches a literal nav trigger are
+// listed; "experience" was removed because the nav uses "Ventures" and
+// the matcher never fired.
 const TRIGGER_BY_SECTION: Record<string, string> = {
   explore: 'Explore',
-  taste: 'Taste',
-  experience: 'Experience' // legacy quirk: nav uses "Ventures" so this won't match
+  taste: 'Taste'
 };
-
-function escapeHtmlAttr(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
 
 function ctaLocationFor(file: string): string {
   return file.replace(/\.html$/, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
-}
-
-function escapeRegExp(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function decorateTrackedLinks(file: string, html: string): string {
@@ -71,30 +54,28 @@ function decorateTrackedLinks(file: string, html: string): string {
   });
 }
 
-function sectionFor(file: string): string {
-  return SECTION_BY_FILE.get(file) ?? '';
-}
-
 export function renderNav(file: string): string {
   // Step 1: clear any leftover active markers.
   const cleared = NAV_TEMPLATE
     .replace(/\sclass="active"/g, '')
     .replace(/\sclass="dropdown-trigger active"/g, ' class="dropdown-trigger"');
 
-  // Step 2: mark the leaf nav-link active for this page (adventure-* roll up to adventures.html).
+  // Step 2: mark the leaf nav-link active for this page (adventure-* roll up
+  // to adventures.html). Searches the <ul class="nav-links"> block so the
+  // active marker doesn't leak into a footer link with the same href.
   const activeHref = file.startsWith('adventure-') ? 'adventures.html' : file;
   const navLinksStart = cleared.indexOf('<ul class="nav-links">');
+  const literalActiveTag = `<a href="${activeHref}">`;
   let next = cleared;
   if (navLinksStart >= 0) {
-    const before = cleared.slice(0, navLinksStart);
-    const navBlock = cleared
-      .slice(navLinksStart)
-      .replace(new RegExp(`<a href="${escapeRegExp(activeHref)}">`), `<a href="${activeHref}" class="active">`);
-    next = before + navBlock;
+    const idx = cleared.indexOf(literalActiveTag, navLinksStart);
+    if (idx >= 0) {
+      next = cleared.slice(0, idx) + `<a href="${activeHref}" class="active">` + cleared.slice(idx + literalActiveTag.length);
+    }
   }
 
-  // Step 3: mark the section's dropdown-trigger active (Explore / Taste only — see TRIGGER_BY_SECTION note).
-  const section = sectionFor(file);
+  // Step 3: mark the section's dropdown-trigger active.
+  const section = SECTION_BY_FILE.get(file) ?? '';
   const triggerLabel = TRIGGER_BY_SECTION[section];
   if (triggerLabel) {
     next = next.replace(
@@ -104,9 +85,7 @@ export function renderNav(file: string): string {
   }
 
   // Step 4: decorate tracked links (data-analytics + data-cta-location).
-  next = decorateTrackedLinks(file, next);
-
-  return next;
+  return decorateTrackedLinks(file, next);
 }
 
 export function renderFooter(file: string): string {
@@ -147,6 +126,5 @@ export function currentPageFromUrl(pathname: string): string {
   // Astro pathname examples: '/', '/about.html', '/people/foo.html', '/adventure-japan-adventure.html'
   const stripped = pathname.replace(/^\/+/, '');
   if (stripped === '' || stripped === 'index.html') return 'index.html';
-  // Don't append .html if it's already there.
   return stripped.endsWith('.html') ? stripped : `${stripped}.html`;
 }
