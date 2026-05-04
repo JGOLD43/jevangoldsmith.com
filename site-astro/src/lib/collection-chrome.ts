@@ -260,10 +260,11 @@ export function renderCollectionMain(config: CollectionConfig): string {
 
 // === Section presets (mirror collection-sections.js) ===
 
-function categorySection({ label, key, iconKey, tooltip = label, countId = `count-${key}`, attrs = {}, panelPrefix = '', panelClass = '' }: {
+function categorySection({ label, key, iconKey = '', icon, tooltip = label, countId = `count-${key}`, attrs = {}, panelPrefix = '', panelClass = '' }: {
   label: string;
   key: string;
-  iconKey: string;
+  iconKey?: string;
+  icon?: string;
   tooltip?: string;
   countId?: string;
   attrs?: Record<string, string>;
@@ -275,6 +276,7 @@ function categorySection({ label, key, iconKey, tooltip = label, countId = `coun
     tooltip,
     countId,
     iconKey,
+    icon,
     attrs,
     panelId: panelPrefix ? `${panelPrefix}-${key}` : '',
     panelClass
@@ -357,7 +359,7 @@ export const MOVIE_SECTIONS: SectionItem[] = [
   ...movieSectionConfigs.map(([label, key, icon]) => categorySection({
     label,
     key: key.toLowerCase().replace(/[^a-z0-9]+/g, ''),
-    iconKey: '',
+    icon,
     attrs: {
       'data-action': 'toggleMovieGenre',
       'data-action-args': key,
@@ -366,10 +368,7 @@ export const MOVIE_SECTIONS: SectionItem[] = [
     },
     panelPrefix: 'genre',
     panelClass: 'genre-movies'
-  })).map((sec, i) => {
-    // categorySection sets iconKey, but movies use a literal emoji icon.
-    return { ...sec, iconKey: '', icon: movieSectionConfigs[i][2] } as SectionItem;
-  })
+  }))
 ];
 
 const bookSectionConfigs: Array<[string, string, string, string]> = [
