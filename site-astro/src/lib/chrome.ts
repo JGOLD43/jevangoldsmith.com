@@ -71,7 +71,7 @@ function decorateTrackedLinks(file: string, html: string): string {
   });
 }
 
-export function sectionFor(file: string): string {
+function sectionFor(file: string): string {
   return SECTION_BY_FILE.get(file) ?? '';
 }
 
