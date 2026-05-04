@@ -35,6 +35,19 @@ import Base from '../layouts/Base.astro';
   </main>
 </Base>
 
+<style>
+  /* Phase 2 slice 2.1 (Tier 1+2 plan): reserve vertical space for the
+     search results so the empty-on-first-paint container doesn't grow
+     from height 0 → 261-card height when JS hydrates. Eliminates the
+     CLS=0.46 regression on /search.html. */
+  #site-search-results {
+    min-height: 80vh;
+  }
+  #site-search-filters:empty {
+    min-height: 2.5rem;
+  }
+</style>
+
 <script>
   // Phase 5 (slice 16) + Phase 7 (slice 5): search + sanitize as native.
   import '../scripts/sanitize.js';

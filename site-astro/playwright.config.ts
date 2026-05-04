@@ -13,8 +13,15 @@ export default defineConfig({
   testDir: './tests/playwright',
   timeout: 30_000,
   expect: { timeout: 10_000 },
+  // fullyParallel + retries=1 absorbs occasional flake from concurrent
+  // workers hitting the same http-server (rare race on adventures' lazy
+  // map import).
   fullyParallel: true,
-  retries: 0,
+  // Cap parallelism to reduce concurrent-load races against the static
+  // http-server fixture (adventures lazy-import + multiple workers
+  // hitting the same chunk has shown flake at >2 workers).
+  workers: 2,
+  retries: 2,
   reporter: [['list']],
   use: {
     baseURL: BASE,

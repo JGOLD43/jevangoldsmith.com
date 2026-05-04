@@ -45,13 +45,14 @@ function checkBaseUp() {
   }
 }
 
-function runLighthouse(url) {
-  const lhciBin = path.resolve(ROOT, 'site-astro/node_modules/.bin/lhci');
+const RUNS_PER_ROUTE = Number(process.env.LIGHTHOUSE_RUNS || 3);
+
+function runLighthouseOnce(url, idx) {
   const lighthouseBin = path.resolve(ROOT, 'site-astro/node_modules/lighthouse/cli/index.js');
   if (!fs.existsSync(lighthouseBin)) {
     return { error: `lighthouse not installed at ${lighthouseBin}` };
   }
-  const tmp = path.join(ROOT, '.perf-tmp', `${encodeURIComponent(url)}.json`);
+  const tmp = path.join(ROOT, '.perf-tmp', `${encodeURIComponent(url)}.run-${idx}.json`);
   fs.mkdirSync(path.dirname(tmp), { recursive: true });
   const fullUrl = url.startsWith('http') ? url : `${BASE}${url}`;
 
@@ -74,16 +75,41 @@ function runLighthouse(url) {
   const report = JSON.parse(fs.readFileSync(tmp, 'utf8'));
   const audits = report.audits || {};
   return {
-    url,
-    fullUrl,
     score: Math.round(((report.categories?.performance?.score) || 0) * 100),
     lcp: audits['largest-contentful-paint']?.numericValue ?? null,
     cls: audits['cumulative-layout-shift']?.numericValue ?? null,
     tbt: audits['total-blocking-time']?.numericValue ?? null,
     fcp: audits['first-contentful-paint']?.numericValue ?? null,
     si: audits['speed-index']?.numericValue ?? null,
-    totalBytes: audits['total-byte-weight']?.numericValue ?? null,
-    jsBytes: audits['network-rtt']?.numericValue ?? null
+    totalBytes: audits['total-byte-weight']?.numericValue ?? null
+  };
+}
+
+function median(values) {
+  const filtered = values.filter((v) => v != null);
+  if (filtered.length === 0) return null;
+  const sorted = filtered.slice().sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
+}
+
+function runLighthouse(url) {
+  const runs = [];
+  for (let i = 0; i < RUNS_PER_ROUTE; i++) {
+    const r = runLighthouseOnce(url, i);
+    if (r.error) return r;
+    runs.push(r);
+  }
+  return {
+    url,
+    fullUrl: url.startsWith('http') ? url : `${BASE}${url}`,
+    score: Math.round(median(runs.map((r) => r.score))),
+    lcp: median(runs.map((r) => r.lcp)),
+    cls: median(runs.map((r) => r.cls)),
+    tbt: median(runs.map((r) => r.tbt)),
+    fcp: median(runs.map((r) => r.fcp)),
+    si: median(runs.map((r) => r.si)),
+    totalBytes: median(runs.map((r) => r.totalBytes))
   };
 }
 

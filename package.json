@@ -12,6 +12,7 @@
     "content:validate:strict": "node scripts/validate-content.js --strict",
     "smoke": "node scripts/smoke-check.js",
     "perf:lighthouse": "node scripts/perf-lighthouse.js",
+    "perf:check": "node scripts/check-lighthouse-budget.js",
     "movies:sync": "node scripts/sync-letterboxd.js",
     "test:browser": "cd site-astro && npx playwright test",
     "search:audit": "node scripts/audit-search-index.js",
@@ -36,11 +37,6 @@
     "sharp": "^0.34.5"
   },
   "dependencies": {
-    "@tmcw/togeojson": "^7.1.2",
-    "@turf/boolean-point-in-polygon": "^7.3.5",
-    "@turf/length": "^7.3.5",
-    "@turf/simplify": "^7.3.5",
-    "@xmldom/xmldom": "^0.9.10",
     "dotenv": "^17.4.2"
   },
   "optionalDependencies": {

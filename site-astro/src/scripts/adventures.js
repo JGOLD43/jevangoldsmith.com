@@ -50,6 +50,25 @@ const DEFAULT_FILTERS = {
     routeSet: 'all'
 };
 
+// Phase 3 slice 3.1 (Tier 1+2 plan): expose constants on globalThis so the
+// dynamically-imported adventures-map.js module can resolve them via free-
+// identifier lookup. Without this the map throws "WEB_MERCATOR_MAX_LAT is
+// not defined" on bootstrap.
+globalThis.WEB_MERCATOR_MAX_LAT = WEB_MERCATOR_MAX_LAT;
+globalThis.HORIZONTAL_WRAP_BOUND = HORIZONTAL_WRAP_BOUND;
+globalThis.ROUTE_TYPE_COLORS = ROUTE_TYPE_COLORS;
+globalThis.BASEMAPS = BASEMAPS;
+globalThis.FILTERS_STORAGE_KEY = FILTERS_STORAGE_KEY;
+globalThis.DEFAULT_FILTERS = DEFAULT_FILTERS;
+globalThis.ADVENTURES_DATA_URL = ADVENTURES_DATA_URL;
+globalThis.PLACES_DATA_URL = PLACES_DATA_URL;
+globalThis.ROUTES_DATA_URL = ROUTES_DATA_URL;
+globalThis.POPULAR_ROUTES_URL = POPULAR_ROUTES_URL;
+globalThis.POPULAR_ROUTES_INDEX_URL = POPULAR_ROUTES_INDEX_URL;
+globalThis.PHOTOS_DATA_URL = PHOTOS_DATA_URL;
+globalThis.COUNTRIES_GEO_URL = COUNTRIES_GEO_URL;
+globalThis.COUNTRIES_VISITED_URL = COUNTRIES_VISITED_URL;
+
 // Phase 5 (slice 12): cross-script-shared state lives on globalThis so the
 // dynamically-imported adventures-map.js module sees the same backing
 // values via free-identifier resolution.
@@ -121,7 +140,8 @@ if (typeof window !== 'undefined') {
     };
 }
 
-const FAST_BASEMAP_LAND = [
+// FAST_BASEMAP_LAND consumed by adventures-map.js via globalThis.
+globalThis.FAST_BASEMAP_LAND = [
     [[72, -168], [68, -52], [56, -58], [48, -70], [32, -81], [19, -105], [24, -125], [39, -124], [51, -134], [59, -151]],
     [[34, -116], [29, -95], [17, -88], [8, -80], [-4, -81], [-18, -75], [-35, -70], [-55, -66], [-52, -45], [-30, -39], [-7, -35], [8, -50], [18, -63], [24, -82]],
     [[72, -10], [70, 42], [62, 98], [55, 145], [42, 158], [28, 124], [8, 104], [6, 78], [21, 59], [31, 35], [40, 23], [45, 5], [54, -7]],
@@ -431,6 +451,10 @@ function updateLightboxImage() {
     document.getElementById('lightbox-counter').textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
 }
 
+// Phase 3 slice 3.2 (Tier 1+2 plan): adventures-map.js calls updateLightboxImage
+// when the map's photo lightbox is opened.
+globalThis.updateLightboxImage = updateLightboxImage;
+
 document.addEventListener('keydown', (event) => {
     const lightbox = document.getElementById('lightbox');
     if (!lightbox || !lightbox.classList.contains('active')) return;
@@ -596,6 +620,16 @@ function bindAdventureActions() {
 // Adventures Page Bootstrap
 // ============================================
 
+// Phase 3 slice 3.2 (Tier 1+2 plan): copy of nearestWrappedLongitude so
+// adventures.js's highlightAdventureOnMap path doesn't depend on the
+// map-module having loaded. Same impl as adventures-map.js.
+function nearestWrappedLongitude(lng, referenceLng) {
+    let wrappedLng = lng;
+    while (wrappedLng - referenceLng > 180) wrappedLng -= 360;
+    while (wrappedLng - referenceLng < -180) wrappedLng += 360;
+    return wrappedLng;
+}
+
 async function fetchJson(url, fallback = null) {
     try {
         const response = await fetch(url);
@@ -605,6 +639,10 @@ async function fetchJson(url, fallback = null) {
         return fallback;
     }
 }
+
+// Phase 3 slice 3.1 (Tier 1+2 plan): adventures-map.js calls fetchJson as a
+// bare reference. Expose on globalThis for cross-module resolution.
+globalThis.fetchJson = fetchJson;
 
 async function loadAdventures() {
     const data = await fetchJson(ADVENTURES_DATA_URL);

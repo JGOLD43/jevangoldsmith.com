@@ -132,17 +132,6 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         return `${h.toFixed(1)} hr`;
     }
 
-    function bar(label, value, max, suffix) {
-        const pct = max > 0 ? Math.max(2, Math.round((value / max) * 100)) : 0;
-        return `
-            <div class="stats-bar-row">
-                <span class="stats-bar-label">${escapeHTML(label)}</span>
-                <span class="stats-bar-track"><span class="stats-bar-fill" style="width: ${pct}%"></span></span>
-                <span class="stats-bar-value">${escapeHTML(suffix ? `${value} ${suffix}` : String(value))}</span>
-            </div>
-        `;
-    }
-
     function renderHeadline(stats) {
         return `
             <div class="stats-headline-grid">
@@ -187,18 +176,6 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
                 ${card('Longest film', stats.longest)}
                 ${card('Shortest film', stats.shortest)}
             </div>
-        `;
-    }
-
-    function renderHoursByGenre(stats) {
-        const entries = Object.entries(stats.hoursByGenre).sort((a, b) => b[1] - a[1]);
-        if (entries.length === 0) return '';
-        const max = entries[0][1];
-        return `
-            <section class="stats-section">
-                <h3 class="stats-section-title">Hours by genre</h3>
-                ${entries.map(([genre, mins]) => bar(genre, fmtHours(mins), max ? mins : 0)).join('')}
-            </section>
         `;
     }
 

@@ -14,9 +14,6 @@
     tabs: document.querySelectorAll('.cool-tab'),
   };
 
-  let activeFilter = 'all';
-  let allItems = [];
-
   if (!els.feed) return;
 
   function escapeHtml(s) {
@@ -209,7 +206,6 @@
   }
 
   function setFilter(cat) {
-    activeFilter = cat;
     if (els.tagRail) {
       els.tagRail.querySelectorAll('.cool-tag-pill').forEach((p) => {
         p.classList.toggle('active', p.dataset.cat === cat);
@@ -268,7 +264,6 @@
       return;
     }
     const items = [...data.items].sort((a, b) => b.date.localeCompare(a.date));
-    allItems = items;
     renderFeed(items, data.categories);
     renderTimeline(items);
     renderTagRail(items, data.categories);
