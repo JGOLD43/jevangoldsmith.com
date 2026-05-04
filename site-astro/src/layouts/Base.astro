@@ -72,12 +72,15 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#F5F3ED" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     <link rel="stylesheet" href="/css/legacy-style.css" fetchpriority="high" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
     {description && <meta name="description" content={description} />}
     <meta name="robots" content="index, follow, max-image-preview:large" />
     {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="alternate" type="application/rss+xml" href="/rss.xml" title={`${SITE_NAME} — RSS Feed`} />
     <link rel="alternate" type="application/json" href="/api/v1/index.json" title="Agent API index" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="Agent instructions" />
     <meta property="og:type" content={ogType} />
