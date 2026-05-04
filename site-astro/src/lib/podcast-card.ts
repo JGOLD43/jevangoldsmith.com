@@ -1,6 +1,7 @@
 // Phase B: build-time-rendered curated-podcast card.
 // Mirrors buildCuratedPodcastCard() in js/podcasts.js so renderCuratedPodcasts
 // adopts the SSR'd cards on first call instead of wiping them.
+import { escapeAttr as escape } from './html-escape';
 
 interface PodcastData {
   title?: string;
@@ -10,15 +11,6 @@ interface PodcastData {
   badge?: string | null;
   image?: string | null;
   searchText?: string | null;
-}
-
-function escape(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
 }
 
 export function renderPodcastCardHtml(podcast: PodcastData): string {
