@@ -46,7 +46,12 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
   pageType="CollectionPage"
 >
   <main>
-    <div class="adventures-page-split">
+    {/* Phase H: SSR with `sidebar-collapsed` matching the JS default
+        (localStorage 'adventures-sidebar-collapsed' is unset on first
+        visit → JS would add this class anyway). Without it, the filters
+        bar renders visible for ~50ms before JS hides it, causing a
+        ~120px layout shift that drove CLS to 0.20+. */}
+    <div class="adventures-page-split sidebar-collapsed">
       <div class="adventures-mobile-toggle">
         <button class="mobile-view-btn active" data-view="list" data-action="switchMobileView" data-action-args="list">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -98,9 +103,9 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
                   src={remoteAssetFor(a.data.heroImage, 800)}
                   alt={a.data.title}
                   class="adventure-compact-image"
-                  width="800"
-                  height="533"
-                  loading="lazy"
+                  width="80"
+                  height="80"
+                  loading="eager"
                   decoding="async"
                 />
               )}

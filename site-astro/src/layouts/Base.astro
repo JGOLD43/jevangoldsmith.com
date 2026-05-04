@@ -113,6 +113,58 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
         });
       }
     </script>
+    {/* Phase H: Chrome-style Speculation Rules — prerender same-origin
+        nav links on hover/touchstart. The browser eagerly fetches +
+        renders the next page in a hidden tab; clicking the link swaps
+        in the prerendered document instantly (sub-100ms FCP for the
+        second navigation). Excludes API endpoints, large assets, and
+        auth-shaped URLs to keep cost predictable. Browsers without
+        speculation-rules support ignore the block. */}
+    <script type="speculationrules" is:inline set:html={JSON.stringify({
+      prerender: [{
+        where: {
+          and: [
+            { href_matches: '/*.html' },
+            { not: { href_matches: '/data-smoke.html' } },
+            { not: { href_matches: '/dateme.html' } },
+            { not: { href_matches: '/meet.html' } }
+          ]
+        },
+        eagerness: 'moderate'
+      }],
+      prefetch: [{
+        where: { href_matches: '/*.html' },
+        eagerness: 'moderate'
+      }]
+    })} />
+    {/* Inline script: hover-prefetch fallback for browsers without
+        Speculation Rules support (older Firefox / Safari). Adds a
+        <link rel="prefetch"> on first hover/touchstart on a same-origin
+        anchor. ~250 bytes inline, idempotent (each href prefetched
+        once), bails out if the page is offline. */}
+    <script is:inline>
+      (() => {
+        const seen = new Set();
+        const prefetch = (href) => {
+          if (seen.has(href)) return;
+          seen.add(href);
+          const l = document.createElement('link');
+          l.rel = 'prefetch';
+          l.href = href;
+          document.head.appendChild(l);
+        };
+        const onHover = (e) => {
+          const a = e.target.closest('a[href]');
+          if (!a) return;
+          if (a.origin !== location.origin) return;
+          if (a.href === location.href) return;
+          if (!navigator.onLine) return;
+          prefetch(a.href);
+        };
+        addEventListener('mouseover', onHover, { passive: true });
+        addEventListener('touchstart', onHover, { passive: true });
+      })();
+    </script>
     {/* JSON-LD at end of <body>: ~4KB structured-data block was previously
         in <head> where it stalled the parser before reaching <body>.
         Crawlers (Google, Bing, ClaudeBot, etc.) read JSON-LD anywhere in

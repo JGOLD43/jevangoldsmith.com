@@ -2,11 +2,10 @@
 // Adventures Page UI
 // ============================================
 
+let hasAdoptedSsrAdventures = false;
 function renderAdventures(adventures) {
     const container = document.getElementById('adventures-container');
     if (!container) return;
-
-    container.innerHTML = '';
 
     if (adventures.length === 0) {
         container.innerHTML = `
@@ -17,6 +16,29 @@ function renderAdventures(adventures) {
         return;
     }
 
+    // Phase H: Astro SSRs every card with explicit width/height. On the
+    // first render call, if the DOM already matches the data, just attach
+    // click handlers to the existing cards instead of wiping + re-rendering.
+    // Skipping the rebuild kills the CLS spike caused by re-renders that
+    // dropped the width/height image attrs.
+    if (!hasAdoptedSsrAdventures && container.children.length === adventures.length) {
+        hasAdoptedSsrAdventures = true;
+        const ids = adventures.map((a) => a.id);
+        let allMatch = true;
+        for (let i = 0; i < container.children.length; i++) {
+            if (container.children[i].dataset.adventureId !== ids[i]) { allMatch = false; break; }
+        }
+        if (allMatch) {
+            adventures.forEach((adventure) => {
+                const card = document.getElementById(`card-${adventure.id}`);
+                if (card) card.addEventListener('click', () => selectAdventure(adventure.id));
+            });
+            return;
+        }
+    }
+
+    hasAdoptedSsrAdventures = true;
+    container.innerHTML = '';
     adventures.forEach((adventure) => {
         container.appendChild(createCompactCard(adventure));
     });
@@ -30,8 +52,12 @@ function createCompactCard(adventure) {
 
     const formattedDate = formatDateRange(adventure.startDate, adventure.endDate);
 
+    // width/height attrs matching the displayed CSS size (80×80 desktop)
+    // so the browser reserves a square box before the image loads —
+    // matches the legacy-style.css `.adventure-compact-image` rule and
+    // eliminates the CLS spike from late-arriving image dimensions.
     card.innerHTML = `
-        <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-compact-image" loading="lazy" decoding="async">
+        <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-compact-image" width="80" height="80" loading="eager" decoding="async">
         <div class="adventure-compact-info">
             <div class="adventure-compact-location">${escapeHTML(adventure.location)}</div>
             <h3 class="adventure-compact-title">${escapeHTML(adventure.title)}</h3>
