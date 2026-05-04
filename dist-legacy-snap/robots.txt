@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://jevangoldsmith.com/sitemap.xml
-
-AI-Agent-Index: https://jevangoldsmith.com/llms.txt
-Content-API: https://jevangoldsmith.com/api/v1/index.json

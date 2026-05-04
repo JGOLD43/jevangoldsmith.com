@@ -7,8 +7,8 @@
 
 // Vite ?raw imports inline the file contents at build time, so we don't
 // need filesystem access from the bundled module.
-import navTemplateRaw from '../../../_src/partials/nav.html?raw';
-import footerTemplateRaw from '../../../_src/partials/footer.html?raw';
+import navTemplateRaw from '../legacy/partials/nav.html?raw';
+import footerTemplateRaw from '../legacy/partials/footer.html?raw';
 import pages from '../../../data/pages.json';
 import ctas from '../../../data/ctas.json';
 import { escapeAttr as escapeHtmlAttr } from './html-escape';
