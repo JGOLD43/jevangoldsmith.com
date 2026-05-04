@@ -103,7 +103,7 @@ function collectRemoteMediaUrls() {
     if (fs.existsSync(fullPath)) collectUrls(JSON.parse(fs.readFileSync(fullPath, 'utf8')), urls);
   }
 
-  for (const dir of [root, path.join(root, '_src', 'pages')]) {
+  for (const dir of [root, path.join(root, '_src', 'pages'), path.join(root, 'site-astro', 'src', 'legacy', 'pages')]) {
     if (!fs.existsSync(dir)) continue;
     for (const file of fs.readdirSync(dir).filter((entry) => entry.endsWith('.html'))) {
       const html = fs.readFileSync(path.join(dir, file), 'utf8');

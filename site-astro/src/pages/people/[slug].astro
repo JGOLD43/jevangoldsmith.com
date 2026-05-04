@@ -5,15 +5,15 @@ import { personSchema } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const profiles = await getCollection('peopleProfiles');
-  return profiles.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  return profiles.map((entry: any) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 
-const { entry } = Astro.props;
+const { entry } = Astro.props as { entry: any };
 const p = entry.data;
 const canonical = `https://jevangoldsmith.com/people/${entry.id}.html`;
 const books = await getCollection('books');
 const titles = new Set(p.bookTitles || []);
-const relatedBooks = books.filter((b) => titles.has(b.data.title));
+const relatedBooks = books.filter((b: any) => titles.has(b.data.title));
 const heroImage = p.image || `/images/generated/people/${entry.id}-400.jpg`;
 const heroSrcset = p.srcset || [
   `/images/generated/people/${entry.id}-200.jpg 200w`,
@@ -83,7 +83,7 @@ const subject = personSchema({
       </div>
       {p.timeline && p.timeline.length > 0 ? (
         <ol class="person-timeline">
-          {p.timeline.map((event) => (
+          {p.timeline.map((event: any) => (
             <li class="person-timeline-item">
               <time>{event.year ?? ''}</time>
               <div>
@@ -106,7 +106,7 @@ const subject = personSchema({
       <p class="person-profile-note-policy">These notes are designed as commentary: short personal takeaways, applications, questions, and links back to the reading list, not copied chapters or long excerpts.</p>
       {relatedBooks.length > 0 ? (
         <div class="person-profile-books">
-          {relatedBooks.map((b) => {
+          {relatedBooks.map((b: any) => {
             const cover = fmtCover(b);
             const href = `/books.html?book=${encodeURIComponent(b.data.title)}`;
             return (
@@ -136,7 +136,7 @@ const subject = personSchema({
       </div>
       {p.resources && p.resources.length > 0 ? (
         <div class="person-resource-list">
-          {p.resources.map((r) => (
+          {p.resources.map((r: any) => (
             <a class="person-resource-card" href={r.url ?? '#'} target="_blank" rel="noopener noreferrer">
               <span>{r.type ?? 'Resource'}</span>
               <strong>{r.title ?? ''}</strong>

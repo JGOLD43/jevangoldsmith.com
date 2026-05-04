@@ -1,8 +1,7 @@
 ---
 import raw from '../../../data/challenges.json';
-import Base from '../layouts/Base.astro';
+import TaskCollectionPage from '../components/TaskCollectionPage.astro';
 import {
-  renderTaskListMain,
   renderChallengeCard,
   CHALLENGES_TASK_CONFIG
 } from '../lib/collection-chrome';
@@ -25,14 +24,40 @@ interface Challenge {
 
 const allChallenges: Challenge[] = (raw as { challenges?: Challenge[] }).challenges ?? [];
 const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibility !== 'private');
-
-const main = renderTaskListMain(challenges, CHALLENGES_TASK_CONFIG, renderChallengeCard);
 ---
-<Base
+<TaskCollectionPage
+  items={challenges}
+  config={CHALLENGES_TASK_CONFIG}
+  renderCard={renderChallengeCard}
   title="Challenges, Constraints &amp; Personal Experiments"
   description="A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life."
   canonical="https://jevangoldsmith.com/challenges.html"
-  pageType="CollectionPage"
->
-  <Fragment set:html={main} />
-</Base>
+/>
+
+<script>
+  // Phase 3 slice 3.1: native named imports replace `window.JGTaskList`.
+  import '../scripts/grid-zoom.js';
+  import '../scripts/collection-ui.js';
+  import '../scripts/collection-runtime.js';
+  import '../scripts/action-dispatcher.js';
+  import { createTaskList } from '../scripts/task-list.js';
+
+  createTaskList({
+    actions: {
+      clearSearch: 'clearChallengeSearch',
+      filter: 'filterChallenges',
+      search: 'searchChallenges',
+      toggleDropdown: 'toggleChallengeListDropdown',
+      toggleSidebar: 'toggleChallengeSidebar'
+    },
+    cardSelector: '.challenge-card',
+    counterId: 'challenge-count',
+    gridId: 'challenges-container',
+    layoutId: 'challenges-layout',
+    searchClearButtonId: 'challenge-search-clear-btn',
+    searchInputId: 'challenge-search',
+    sidebarId: 'challenges-sidebar',
+    storageKey: 'challenges-sidebar-collapsed',
+    zoomEvent: 'challenge_open'
+  });
+</script>

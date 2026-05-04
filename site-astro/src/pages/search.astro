@@ -34,4 +34,9 @@ import Base from '../layouts/Base.astro';
     </section>
   </main>
 </Base>
-<script src="/js/search-astro.js" defer is:inline></script>
+
+<script>
+  // Phase 5 (slice 16) + Phase 7 (slice 5): search + sanitize as native.
+  import '../scripts/sanitize.js';
+  import '../scripts/search-astro.js';
+</script>

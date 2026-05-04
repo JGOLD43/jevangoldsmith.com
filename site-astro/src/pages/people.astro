@@ -1,15 +1,27 @@
 ---
-import Base from '../layouts/Base.astro';
+import CollectionPage from '../components/CollectionPage.astro';
+import { getCollection } from 'astro:content';
 import {
-  renderCollectionMain,
   PEOPLE_SECTIONS
 } from '../lib/collection-chrome';
+import { renderPersonCardHtml } from '../lib/person-card';
 import sidebarFiltersRaw from '../legacy/collections/people/sidebar-filters.html?raw';
 import mainBodyRaw from '../legacy/collections/people/main-body.html?raw';
 
 const canonical = 'https://jevangoldsmith.com/people.html';
 
-const main = renderCollectionMain({
+// Phase 6 (slice 2): server-render the people grid. people.js detects an
+// already-populated grid and skips the initial wipe + DOM construction.
+const peopleEntries = await getCollection('people');
+const peopleCardsHtml = peopleEntries.map((p: any) => renderPersonCardHtml(p.data)).join('');
+const populatedMainBody = mainBodyRaw
+  .trim()
+  .replace(
+    '<div class="people-grid" id="people-grid"></div>',
+    `<div class="people-grid" id="people-grid">${peopleCardsHtml}</div>`
+  );
+
+const config = ({
   layout: { id: 'people-layout', className: 'people-layout collection-layout sidebar-collapsed' },
   sidebar: {
     id: 'people-sidebar',
@@ -35,15 +47,25 @@ const main = renderCollectionMain({
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="people-philosophy.html" class="header-subtitle-link">My People Philosophy</a><span class="read-first-note">← read this first</span></div>',
     counterId: 'people-count',
     counterLabel: 'People Listed',
-    bodyHtml: mainBodyRaw.trim()
+    bodyHtml: populatedMainBody
   }
 });
 ---
-<Base
+<CollectionPage
+  config={config}
   title="People of History"
   description="A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment."
   canonical={canonical}
-  pageType="CollectionPage"
->
-  <Fragment set:html={main} />
-</Base>
+/>
+
+<script>
+  // Phase 5 (slice 9) + Phase 7 (slice 4): people + infra deps as native modules.
+  import '../scripts/grid-zoom.js';
+  import '../scripts/collection-ui.js';
+  import '../scripts/collection-runtime.js';
+  import '../scripts/collection-helpers.js';
+  import '../scripts/data-fetch.js';
+  import '../scripts/action-dispatcher.js';
+  import '../scripts/sanitize.js';
+  import '../scripts/people.js';
+</script>

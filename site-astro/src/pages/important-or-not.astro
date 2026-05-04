@@ -46,5 +46,28 @@ import Base from '../layouts/Base.astro';
             <div class="ion-card not-important" data-verdict="not-important"><div class="ion-card-header"><h3 class="ion-card-topic">Having a 5-year plan</h3><span class="ion-verdict not-important">Not Important</span></div><p class="ion-card-category">Planning</p><p class="ion-card-reasoning">The world changes too fast for rigid long-term plans. Direction matters more than destination. Have principles, not plans. Know what you're optimizing for, but stay flexible on the path.</p></div>
         </div>
 </main>
-<script is:inline src="/js/important-or-not.js" defer></script>
 </Base>
+
+<script>
+  // Phase 5 (slice 2): native Astro module replaces /js/important-or-not.js.
+  function setup() {
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.ion-filter-btn'));
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.ion-card'));
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const filter = button.getAttribute('data-filter');
+        buttons.forEach((b) => b.classList.remove('active'));
+        button.classList.add('active');
+        cards.forEach((card) => {
+          const verdict = card.getAttribute('data-verdict');
+          card.style.display = filter === 'all' || verdict === filter ? 'block' : 'none';
+        });
+      });
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup, { once: true });
+  } else {
+    setup();
+  }
+</script>

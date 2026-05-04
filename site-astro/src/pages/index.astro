@@ -18,16 +18,15 @@ function stripFrontmatter(raw: string): string {
   return lines.slice(end + 1).join('\n').trimStart();
 }
 
-const essays = await getCollection('essays', ({ data }) => data.status !== 'draft');
+const essays = await getCollection('essays', ({ data }: any) => data.status !== 'draft');
 const books = await getCollection('books');
-const projects = await getCollection('projects', ({ data }) => data.status !== 'draft').catch(() => []);
-const resources = await getCollection('resources', ({ data }) => data.status !== 'draft').catch(() => []);
+const projects = await getCollection('projects', ({ data }: any) => data.status !== 'draft').catch(() => []);
 
 const counts: Record<string, number> = {
   essays: essays.length,
   books: books.length,
   projects: projects.length,
-  resources: resources.length
+  resources: 0
 };
 
 let body = stripFrontmatter(indexBodyRaw);
@@ -46,3 +45,10 @@ body = body.replace(
 >
   <Fragment set:html={body} />
 </Base>
+
+<script>
+  // Phase 5 (slice 14) + Phase 7 (slice 5): home + newsletter + sanitize as native.
+  import '../scripts/sanitize.js';
+  import '../scripts/home.js';
+  import '../scripts/newsletter.js';
+</script>

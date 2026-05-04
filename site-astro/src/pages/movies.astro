@@ -1,21 +1,29 @@
 ---
-import Base from '../layouts/Base.astro';
+import CollectionPage from '../components/CollectionPage.astro';
+import { getCollection } from 'astro:content';
 import {
-  renderCollectionMain,
   tasteListOptions,
   MOVIE_SECTIONS
 } from '../lib/collection-chrome';
+import { renderMovieCardHtml } from '../lib/movie-card';
 import sidebarFiltersRaw from '../legacy/collections/movies/sidebar-filters.html?raw';
 import mainBodyRaw from '../legacy/collections/movies/main-body.html?raw';
 
 const canonical = 'https://jevangoldsmith.com/movies.html';
 
-// Phase G: revert the Phase B.2 SSR. data/movies.json holds only 6 movies;
-// the rest of the grid is filled by letterboxd.js fetching RSS at runtime.
-// The SSR'd 6 cards were getting wiped + replaced as soon as the RSS came
-// back, spiking CLS from 0.060 → 0.372. Restoring the legacy "empty
-// container, hidden until ready" behavior brings CLS back to baseline at
-// the cost of losing the 6-card head start (negligible for FCP/LCP).
+// Phase 1 slice 1.2: server-render every movie card. data/movies.json is
+// kept fresh by `npm run movies:sync` (Letterboxd RSS sync). letterboxd.js
+// detects the populated grid and skips the initial wipe, so SSR'd cards
+// stay on screen until the runtime fetch completes (if it runs at all).
+
+const movies = (await getCollection('movies')).map((m: any) => m.data);
+const movieCardsHtml = movies.map((m: any) => renderMovieCardHtml(m)).join('');
+const populatedMainBody = mainBodyRaw
+  .trim()
+  .replace(
+    '<div id="movies-container" class="movies-grid" style="display: none;"></div>',
+    `<div id="movies-container" class="movies-grid">${movieCardsHtml}</div>`
+  );
 
 const movieModal = `<div id="movie-modal" class="modal">
     <div class="modal-content">
@@ -39,7 +47,7 @@ const movieModal = `<div id="movie-modal" class="modal">
     </div>
 </div>`;
 
-const main = renderCollectionMain({
+const config = ({
   layout: { id: 'movies-layout', className: 'movies-layout collection-layout sidebar-collapsed' },
   sidebar: {
     id: 'movies-sidebar',
@@ -73,16 +81,28 @@ const main = renderCollectionMain({
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="movie-philosophy.html" class="header-subtitle-link">My Movie Philosophy</a><span class="read-first-note">← read this first</span></div>',
     counterId: 'movie-count',
     counterLabel: 'Movies Watched',
-    bodyHtml: mainBodyRaw.trim()
+    bodyHtml: populatedMainBody
   },
   afterMainHtml: movieModal
 });
 ---
-<Base
+<CollectionPage
+  config={config}
   title="Movie Reviews, Watchlist &amp; Taste Notes"
   description="A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste."
   canonical={canonical}
-  pageType="CollectionPage"
->
-  <Fragment set:html={main} />
-</Base>
+/>
+
+<script>
+  // Phase 5 (slice 10) + Phase 7 (slice 4): movies + infra deps as native modules.
+  import '../scripts/grid-zoom.js';
+  import '../scripts/collection-ui.js';
+  import '../scripts/collection-runtime.js';
+  import '../scripts/collection-helpers.js';
+  import '../scripts/data-fetch.js';
+  import '../scripts/action-dispatcher.js';
+  import '../scripts/sanitize.js';
+  // movie-stats must run before letterboxd so window.MovieStats is registered.
+  import '../scripts/movie-stats.js';
+  import '../scripts/letterboxd.js';
+</script>

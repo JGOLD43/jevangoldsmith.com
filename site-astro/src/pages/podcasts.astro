@@ -1,8 +1,7 @@
 ---
-import Base from '../layouts/Base.astro';
+import CollectionPage from '../components/CollectionPage.astro';
 import { getCollection } from 'astro:content';
 import {
-  renderCollectionMain,
   tasteListOptions,
   PODCAST_SECTIONS
 } from '../lib/collection-chrome';
@@ -12,9 +11,9 @@ const canonical = 'https://jevangoldsmith.com/podcasts.html';
 
 // Phase B: pre-render curated podcast cards.
 const podcasts = await getCollection('podcasts');
-const podcastCardsHtml = podcasts.map((p) => renderPodcastCardHtml(p.data as Record<string, unknown>)).join('');
+const podcastCardsHtml = podcasts.map((p: any) => renderPodcastCardHtml(p.data as Record<string, unknown>)).join('');
 
-const main = renderCollectionMain({
+const config = ({
   layout: { id: 'podcasts-layout', className: 'movies-layout podcasts-layout collection-layout sidebar-collapsed' },
   sidebar: {
     id: 'podcasts-sidebar',
@@ -69,11 +68,21 @@ const main = renderCollectionMain({
   }
 });
 ---
-<Base
+<CollectionPage
+  config={config}
   title="Podcasts, Conversations &amp; Audio Notes"
   description="A podcast archive of conversations, shows, and audio ideas Jevan Goldsmith returns to."
   canonical={canonical}
-  pageType="CollectionPage"
->
-  <Fragment set:html={main} />
-</Base>
+/>
+
+<script>
+  // Phase 5 (slice 7) + Phase 7 (slice 4): podcasts + infra deps as native modules.
+  import '../scripts/grid-zoom.js';
+  import '../scripts/collection-ui.js';
+  import '../scripts/collection-runtime.js';
+  import '../scripts/collection-helpers.js';
+  import '../scripts/data-fetch.js';
+  import '../scripts/action-dispatcher.js';
+  import '../scripts/sanitize.js';
+  import '../scripts/podcasts.js';
+</script>

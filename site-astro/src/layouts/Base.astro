@@ -104,6 +104,11 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
       <script is:inline src={src} defer></script>
     )}
     <slot name="scripts" />
+    {/* Phase 7 (slice 6): site-wide theme + analytics as native Astro modules. */}
+    <script>
+      import '../scripts/theme.js';
+      import '../scripts/analytics.js';
+    </script>
     {/* Phase E: register the repeat-visit service worker. The SW caches
         hashed assets cache-first and HTMLs network-first with a short
         timeout, so cold visits behave normally and warm visits hit local

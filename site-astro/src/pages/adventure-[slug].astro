@@ -33,10 +33,10 @@ function remoteAssetSrcset(url: string | undefined, format = 'jpg'): string {
 
 export async function getStaticPaths() {
   const adventures = await getCollection('adventures');
-  return adventures.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  return adventures.map((entry: any) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 
-const { entry } = Astro.props;
+const { entry } = Astro.props as { entry: any };
 const a = entry.data;
 const canonical = `https://jevangoldsmith.com/adventure-${entry.id}.html`;
 
@@ -62,7 +62,7 @@ const trip = tripSchema({
   description: a.shortDescription ?? undefined,
   startDate: a.startDate ?? null,
   endDate: a.endDate ?? null,
-  itinerary: a.highlights?.map((h) => ({ name: h })) ?? null,
+  itinerary: a.highlights?.map((h: string) => ({ name: h })) ?? null,
   image: a.heroImage ?? undefined
 });
 
@@ -148,7 +148,7 @@ const detailData = JSON.stringify({
         <div class="adventure-highlights-section">
           <h3>Trip Highlights</h3>
           <div class="adventure-highlights-list">
-            {a.highlights.map((h) => <span class="adventure-highlight-tag">{h}</span>)}
+            {a.highlights.map((h: string) => <span class="adventure-highlight-tag">{h}</span>)}
           </div>
         </div>
       )}
@@ -198,10 +198,18 @@ const detailData = JSON.stringify({
     <div class="lightbox-counter" id="lightbox-counter"></div>
   </div>
 
-  <script type="application/json" id="adventure-detail-data" set:html={detailData}></script>
+  <script is:inline type="application/json" id="adventure-detail-data" set:html={detailData}></script>
 
-  {/* Leaflet drives the small Photo Locations map via #adventure-map.
-      adventure-detail.js (loaded by the page bundle) initializes it. */}
+  {/* Leaflet drives the small Photo Locations map via #adventure-map. */}
   <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" slot="head" />
   <script slot="scripts" is:inline src="/vendor/leaflet/leaflet.js"></script>
 </Base>
+
+<script>
+  // Phase 5 (slice 17) + Phase 7 (slice 5): adventure-detail + sanitize +
+  // action-dispatcher as native modules. Loaded after Leaflet (above) so
+  // window.L is available.
+  import '../scripts/sanitize.js';
+  import '../scripts/action-dispatcher.js';
+  import '../scripts/adventure-detail.js';
+</script>

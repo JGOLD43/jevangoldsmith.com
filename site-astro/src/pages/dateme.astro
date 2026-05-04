@@ -14,5 +14,10 @@ import Base from '../layouts/Base.astro';
             <!-- Funnel content rendered by JavaScript -->
         </div>
     </main>
-<script is:inline src="/js/dateme.js" defer></script>
 </Base>
+
+<script>
+  // Phase 5 (slice 17) + Phase 7 (slice 5): dateme + action-dispatcher as native.
+  import '../scripts/action-dispatcher.js';
+  import '../scripts/dateme.js';
+</script>

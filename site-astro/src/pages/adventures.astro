@@ -21,7 +21,7 @@ function remoteAssetFor(url: string | undefined, preferredWidth = 800, format = 
   return entry.formats?.[String(width)]?.[format] ?? entry.formats?.[String(width)]?.jpg ?? url;
 }
 
-const adventures = (await getCollection('adventures')).sort((a, b) =>
+const adventures = (await getCollection('adventures')).sort((a: any, b: any) =>
   String(b.data.startDate ?? '').localeCompare(String(a.data.startDate ?? ''))
 );
 
@@ -96,7 +96,7 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
         </div>
 
         <div class="adventures-compact-list" id="adventures-container">
-          {adventures.map((a) => (
+          {adventures.map((a: any) => (
             <div class="adventure-compact-card" id={`card-${a.id}`} data-adventure-id={a.id}>
               {a.data.heroImage && (
                 <img
@@ -148,7 +148,14 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
     <div class="lightbox-caption" id="lightbox-caption"></div>
     <div class="lightbox-counter" id="lightbox-counter"></div>
   </div>
-
-  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" slot="head" />
-  <script slot="scripts" is:inline src="/vendor/leaflet/leaflet.js"></script>
 </Base>
+
+<script>
+  // Phase 5 (slice 12): adventures fully on native modules. The 4 main files
+  // are concatenated into adventures.js (state shared via globalThis.X);
+  // adventures-map.js is dynamically imported on first map view.
+  import '../scripts/action-dispatcher.js';
+  import '../scripts/sanitize.js';
+  import '../scripts/adventures.js';
+</script>
+

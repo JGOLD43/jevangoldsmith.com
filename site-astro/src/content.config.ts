@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { z } from 'astro:schema';
+import { z } from 'astro/zod';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -69,7 +69,7 @@ function jsonArrayLoader(file: string, opts: {
 
 const books = defineCollection({
   loader: jsonArrayLoader('books.json', { idFrom: 'isbn', idDisambiguator: 'author' }),
-  schema: z.object({
+  schema: z.looseObject({
     id: z.string(),
     title: z.string(),
     author: z.string(),
@@ -86,7 +86,7 @@ const books = defineCollection({
 
 const movies = defineCollection({
   loader: jsonArrayLoader('movies.json', { idFrom: 'tmdbId' }),
-  schema: z.object({
+  schema: z.looseObject({
     id: z.string(),
     title: z.string(),
     date: nstr(),
@@ -102,12 +102,12 @@ const movies = defineCollection({
     tmdbGenres: z.array(z.string()).nullable().optional(),
     overview: nstr(),
     backdrop: nstr()
-  }).passthrough()
+  })
 });
 
 const people = defineCollection({
   loader: jsonArrayLoader('people.json', { key: 'people' }),
-  schema: z.object({
+  schema: z.looseObject({
     id: z.string(),
     name: z.string(),
     title: nstr(),
@@ -116,12 +116,12 @@ const people = defineCollection({
     image: nstr(),
     srcset: nstr(),
     searchText: nstr()
-  }).passthrough()
+  })
 });
 
 const essays = defineCollection({
   loader: jsonArrayLoader('essays.json', { key: 'essays' }),
-  schema: z.object({
+  schema: z.looseObject({
     id: z.string(),
     title: z.string(),
     subtitle: nstr(),
@@ -130,12 +130,12 @@ const essays = defineCollection({
     category: nstr(),
     status: nstr(),
     content: z.string()
-  }).passthrough()
+  })
 });
 
 const podcasts = defineCollection({
   loader: jsonArrayLoader('podcasts.json', { key: 'podcasts' }),
-  schema: z.object({
+  schema: z.looseObject({
     id: z.string(),
     title: z.string(),
     host: nstr(),
@@ -144,12 +144,12 @@ const podcasts = defineCollection({
     badge: nstr(),
     image: nstr(),
     searchText: nstr()
-  }).passthrough()
+  })
 });
 
 const adventures = defineCollection({
   loader: jsonArrayLoader('adventures.json', { key: 'adventures' }),
-  schema: z.object({
+  schema: z.looseObject({
     id: z.string(),
     title: z.string(),
     subtitle: nstr(),
@@ -162,31 +162,31 @@ const adventures = defineCollection({
     shortDescription: nstr(),
     content: nstr(),
     highlights: z.array(z.string()).nullable().optional()
-  }).passthrough()
+  })
 });
 
 const challenges = defineCollection({
   loader: jsonArrayLoader('challenges.json', { key: 'challenges' }),
-  schema: z.object({ id: z.string() }).passthrough()
+  schema: z.looseObject({ id: z.string() })
 });
 
 const projects = defineCollection({
   loader: jsonArrayLoader('projects.json', { key: 'projects' }),
-  schema: z.object({ id: z.string() }).passthrough()
+  schema: z.looseObject({ id: z.string() })
 });
 
 const topics = defineCollection({
   loader: jsonArrayLoader('topics.json', { key: 'topics' }),
-  schema: z.object({
+  schema: z.looseObject({
     id: z.string(),
     label: nstr(),
     description: nstr()
-  }).passthrough()
+  })
 });
 
 const peopleProfiles = defineCollection({
   loader: jsonArrayLoader('people.profiles.json', { key: 'profiles' }),
-  schema: z.object({
+  schema: z.looseObject({
     id: z.string(),
     name: z.string(),
     title: nstr(),
@@ -206,7 +206,7 @@ const peopleProfiles = defineCollection({
       url: nstr(),
       note: nstr()
     })).nullable().optional()
-  }).passthrough()
+  })
 });
 
 export const collections = { books, movies, people, essays, podcasts, adventures, challenges, projects, topics, peopleProfiles };

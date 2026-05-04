@@ -29,15 +29,26 @@ The site is an Astro project rooted at `site-astro/`:
   - dynamic routes: `people/[slug].astro`, `adventure-[slug].astro`, `topics/[slug].astro`
   - `rss.xml.ts` for the essays RSS feed
 - `site-astro/src/layouts/Base.astro` — shared HTML layout (head, nav, footer, JSON-LD)
-- `site-astro/src/components/` — Nav, Footer, JsonLd, AdventureMap, BookCard, MovieCard, PersonCard, PodcastCard, EssayCard
+- `site-astro/src/components/` — Nav, Footer, JsonLd, SeoRelated, plus the
+  Phase 3 collection wrappers `CollectionPage.astro` and
+  `TaskCollectionPage.astro` that thin out the per-page boilerplate
 - `site-astro/src/content.config.ts` — Zod schemas + custom loaders that read `../data/*.json` directly (no copy)
 - `site-astro/src/lib/seo.ts` — schema.org Person / WebSite descriptors
+- `site-astro/src/lib/content-types.ts` — Phase 2 normalized collection types
+  (`NormalizedItem`, `COLLECTION_CONTRACTS`)
+- `site-astro/src/lib/collection-normalizers.ts` — pure normalizers per
+  collection plus `isPublished` / `collectionUrl` / `collectionImage` /
+  `collectionDescription` / `collectionSearchText` helpers
+- `site-astro/src/lib/collection-chrome.ts` — string-template chrome renderer
+  used by `CollectionPage.astro` and `TaskCollectionPage.astro`
 - `site-astro/src/styles/` — Tailwind v4 entry, design tokens, fonts, transitional chrome-legacy.css and pages-legacy.css
 - `data/*.json` — source of truth for books, movies, people, essays, podcasts, adventures, etc. Read by both Astro and the (archived) legacy build
 - `images/` — source + generated image variants (symlinked into `site-astro/public/images/`)
 - `fonts/chivo/` — self-hosted Chivo font (symlinked into `site-astro/public/fonts/`)
 - `vendor/leaflet/` — self-hosted Leaflet (copied into `site-astro/public/vendor/`)
-- `scripts/` — enrichment + sync scripts (Letterboxd, Spotify, TMDB), plus parity check harness in `scripts/check/`
+- `scripts/` — enrichment + sync scripts (Letterboxd, Spotify, TMDB), parity
+  check harness in `scripts/check/`, the Phase 2 content guard
+  (`validate-content.js`), and the Phase 10 smoke harness (`smoke-check.js`)
 - `scripts/legacy-build/` — archived hand-rolled SSG (build-site.js + 38 helper modules). Available via `npm run build:legacy` for emergency rollback. Removed in Phase 11 cleanup.
 - `admin/` — browser-based admin interface, excluded from Hosting
 
@@ -53,6 +64,22 @@ data/*.json + site-astro/src/* + images/ + fonts/ + vendor/
 Build time: ~4s for 82 routes. Legacy was ~30s.
 
 `dist/` is generated and should not be hand-edited.
+
+## Build Pipeline (post-Astro)
+
+`npm run build:fast` chains:
+
+1. `content:validate` — fails on duplicate ids/slugs and missing published
+   titles in source JSON; warns on missing description/image until cleanup
+   (`content:validate:strict` flips warnings to errors).
+2. `routes:split` — explodes `popular-routes.json` into per-route chunks.
+3. `astro build` — page HTML + asset graph.
+4. `normalize:html`, `bundle:js`, `purge:css`, `prune:dist` — compatibility
+   layer that lives until Phase 7 retires each piece.
+5. `perf:budget` — fails the build if any production budget regresses.
+
+Browser smoke harness (`npm run smoke`) hits a running dev server (or any
+`BASE_URL`) and asserts stable structural anchors per page.
 
 ## Checks
 

@@ -1,8 +1,7 @@
 ---
-import Base from '../layouts/Base.astro';
+import CollectionPage from '../components/CollectionPage.astro';
 import { getCollection } from 'astro:content';
 import {
-  renderCollectionMain,
   tasteListOptions,
   BOOK_SECTIONS
 } from '../lib/collection-chrome';
@@ -18,7 +17,7 @@ const canonical = 'https://jevangoldsmith.com/books.html';
 // Phase B: server-render every book card at build time. books.js detects
 // an already-populated container and skips the initial wipe-and-render.
 const books = await getCollection('books');
-const bookCardsHtml = books.map((b) => renderBookCardHtml(b.data)).join('');
+const bookCardsHtml = books.map((b: any) => renderBookCardHtml(b.data)).join('');
 const populatedMainBody = mainBodyRaw
   .trim()
   .replace(
@@ -26,7 +25,7 @@ const populatedMainBody = mainBodyRaw
     `<div id="books-container" class="books-grid">${bookCardsHtml}</div>`
   );
 
-const main = renderCollectionMain({
+const config = ({
   layout: { id: 'books-layout', className: 'books-layout collection-layout sidebar-collapsed' },
   sidebar: {
     id: 'books-sidebar',
@@ -63,11 +62,20 @@ const main = renderCollectionMain({
   afterMainHtml: afterMainRaw.trim()
 });
 ---
-<Base
+<CollectionPage
+  config={config}
   title="Books I Recommend &amp; Notes From My Reading System"
   description="A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
   canonical={canonical}
-  pageType="CollectionPage"
->
-  <Fragment set:html={main} />
-</Base>
+/>
+
+<script>
+  // Phase 5 (slice 11) + Phase 7 (slice 4): books + infra deps as native modules.
+  import '../scripts/grid-zoom.js';
+  import '../scripts/collection-ui.js';
+  import '../scripts/collection-runtime.js';
+  import '../scripts/collection-helpers.js';
+  import '../scripts/data-fetch.js';
+  import '../scripts/sanitize.js';
+  import '../scripts/books.js';
+</script>

@@ -1,0 +1,34 @@
+---
+// Phase 3: Shared collection-page wrapper.
+//
+// Collapses the repeated Base + renderCollectionMain + <Fragment set:html>
+// pattern across books/movies/people/podcasts/essays into one component.
+// Output is byte-equivalent to the previous per-page composition.
+//
+// This is intentionally a thin wrapper. Renaming class hooks, replacing
+// string-template chrome with native Astro markup, and moving filter logic
+// into Astro components are deliberately deferred — the existing CSS/JS
+// dependencies in /js still target the legacy class names and ids.
+
+import Base from '../layouts/Base.astro';
+import { renderCollectionMain, type CollectionConfig } from '../lib/collection-chrome';
+
+interface Props {
+  config: CollectionConfig;
+  title: string;
+  description: string;
+  canonical: string;
+  pageType?: 'CollectionPage' | 'WebPage' | 'AboutPage' | 'ContactPage';
+}
+
+const { config, title, description, canonical, pageType = 'CollectionPage' } = Astro.props;
+const main = renderCollectionMain(config);
+---
+<Base
+  title={title}
+  description={description}
+  canonical={canonical}
+  pageType={pageType}
+>
+  <Fragment set:html={main} />
+</Base>

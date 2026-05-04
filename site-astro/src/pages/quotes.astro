@@ -71,3 +71,45 @@ function titleCase(s: string) {
     </div>
   </main>
 </Base>
+
+<script>
+  // Phase 5 (slice 1): native ES-module replacement for /js/collection-filters.js
+  // on the quotes page. Astro/Vite fingerprints this, the post-build bundler
+  // leaves /_astro/* tags untouched, and the page no longer needs the
+  // /js/collection-filters.js global script.
+  type CardEl = HTMLElement & { hidden: boolean };
+
+  function setup() {
+    const groups = document.querySelectorAll<HTMLElement>('[data-filter-group]');
+    groups.forEach((group) => {
+      const groupName = group.dataset.filterGroup;
+      const field = group.dataset.filterField;
+      if (!field) return;
+      const buttons = Array.from(group.querySelectorAll<HTMLButtonElement>('[data-filter-value]'));
+      const cards = Array.from(document.querySelectorAll<CardEl>(`[data-${field}]`));
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const value = button.dataset.filterValue;
+          buttons.forEach((b) => b.classList.remove('active'));
+          button.classList.add('active');
+
+          cards.forEach((card) => {
+            const matchesGroup = groupName === 'quotes'
+              ? card.classList.contains('quote-card')
+              : card.classList.contains('project-card');
+            if (!matchesGroup) return;
+            const visible = value === 'all' || card.dataset[field] === value;
+            card.hidden = !visible;
+          });
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup, { once: true });
+  } else {
+    setup();
+  }
+</script>

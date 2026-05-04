@@ -1,7 +1,6 @@
 ---
-import Base from '../layouts/Base.astro';
+import CollectionPage from '../components/CollectionPage.astro';
 import {
-  renderCollectionMain,
   ESSAY_LIST_OPTIONS,
   ESSAY_SECTIONS
 } from '../lib/collection-chrome';
@@ -10,7 +9,7 @@ const canonical = 'https://jevangoldsmith.com/essays.html';
 
 // after-main.html (field-notes inline CTA + seo-related) is added by the
 // post-build normalizer + Base layout, so we leave it out here.
-const main = renderCollectionMain({
+const config = ({
   layout: { id: 'essays-layout', className: 'essays-layout collection-layout' },
   sidebar: {
     id: 'essays-sidebar',
@@ -42,11 +41,21 @@ const main = renderCollectionMain({
   }
 });
 ---
-<Base
+<CollectionPage
+  config={config}
   title="Essays on Thinking, Business, Culture &amp; Personal Systems"
   description="Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
   canonical={canonical}
-  pageType="CollectionPage"
->
-  <Fragment set:html={main} />
-</Base>
+/>
+
+<script>
+  // Phase 5 (slice 8) + Phase 7 (slice 4): essays + infra deps as native modules.
+  import '../scripts/collection-ui.js';
+  import '../scripts/collection-runtime.js';
+  import '../scripts/data-fetch.js';
+  import '../scripts/action-dispatcher.js';
+  import '../scripts/sanitize.js';
+  // Phase 1 slice 1.1: DOMPurify lives in a separate chunk loaded only here.
+  import '../scripts/sanitize-html.js';
+  import '../scripts/essays.js';
+</script>
