@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import indexBodyRaw from '../../../_src/pages/index.html?raw';
+import indexBodyRaw from '../legacy/pages/index.html?raw';
 
 // Strip the legacy YAML-style frontmatter (lines between leading --- markers).
 function stripFrontmatter(raw: string): string {

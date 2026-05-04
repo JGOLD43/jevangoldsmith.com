@@ -110,7 +110,7 @@ function absolutizeAsset(asset) {
 }
 
 const { createHtmlNormalizers } = require(
-  path.join(ROOT, 'scripts/legacy-build/build/html-normalize.js')
+  path.join(ROOT, 'scripts/html-normalize.js')
 );
 
 const normalizers = createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolutizeAsset });
