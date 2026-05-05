@@ -100,6 +100,55 @@ export async function fetchJson(url: string, fallback: unknown = null): Promise<
   }
 }
 
+export function loadFilters(): void {
+  try {
+    const raw = localStorage.getItem(FILTERS_STORAGE_KEY);
+    if (!raw) return;
+    const stored = JSON.parse(raw);
+    if (!stored || typeof stored !== 'object') return;
+    state.mapFilters = {
+      year: stored.year || 'all',
+      region: stored.region || 'all',
+      layers: { ...DEFAULT_FILTERS.layers, ...(stored.layers || {}) },
+      poiCategories: { ...(stored.poiCategories || {}) },
+      basemap: stored.basemap || 'satellite',
+      routeSet: stored.routeSet || 'all'
+    };
+    state.placesVisible = state.mapFilters.layers.pois;
+  } catch (_error) {
+    // localStorage access can throw in privacy mode; ignore.
+  }
+}
+
+export function saveFilters(): void {
+  try {
+    localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(state.mapFilters));
+  } catch (_error) {
+    // localStorage access can throw in privacy mode; ignore.
+  }
+}
+
+export function adventureYear(adventure: { startDate?: string }): number | null {
+  if (!adventure || !adventure.startDate) return null;
+  const date = new Date(adventure.startDate);
+  return Number.isNaN(date.getTime()) ? null : date.getUTCFullYear();
+}
+
+export function matchesYearFilter(year: number | null | string): boolean {
+  if (state.mapFilters.year === 'all' || state.mapFilters.year === null) return true;
+  return String(year) === String(state.mapFilters.year);
+}
+
+export function matchesRegionFilter(region?: string | null): boolean {
+  if (state.mapFilters.region === 'all' || !state.mapFilters.region) return true;
+  if (!region) return false;
+  return String(region).toLowerCase() === String(state.mapFilters.region).toLowerCase();
+}
+
+export function matchesAdventureFilters(adventure: { startDate?: string; region?: string }): boolean {
+  return matchesYearFilter(adventureYear(adventure)) && matchesRegionFilter(adventure.region);
+}
+
 export function updateLightboxImage(): void {
   const photo = state.lightboxImages[state.lightboxIndex];
   if (!photo) return;

@@ -5,12 +5,16 @@
 
 import {
     state, fetchJson, updateLightboxImage,
-    ADVENTURES_DATA_URL, PLACES_DATA_URL, ROUTES_DATA_URL,
-    POPULAR_ROUTES_URL, POPULAR_ROUTES_INDEX_URL, PHOTOS_DATA_URL,
-    COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL, FILTERS_STORAGE_KEY,
-    WEB_MERCATOR_MAX_LAT, HORIZONTAL_WRAP_BOUND, ROUTE_TYPE_COLORS,
-    BASEMAPS, DEFAULT_FILTERS, FAST_BASEMAP_LAND
+    saveFilters, loadFilters, matchesAdventureFilters,
+    matchesRegionFilter, adventureYear,
+    ROUTE_TYPE_COLORS, BASEMAPS, FAST_BASEMAP_LAND,
+    WEB_MERCATOR_MAX_LAT, HORIZONTAL_WRAP_BOUND
 } from './adventures-state';
+import { loadLeaflet, loadMarkerCluster } from './adventures-map-vendor';
+import {
+    loadCountriesData, loadMapDatasets,
+    schedulePopularRoutes, setRouteRerender
+} from './adventures-map-data';
 
 function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, popupAnchor, popupHtml, onClick, riseOnHover = false, layer }) {
     const iconOpts = { className: iconClass, html: iconHtml, iconSize };
@@ -23,153 +27,6 @@ function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, 
     return marker;
 }
 
-function injectVendorBundle({ cssHrefs = [], scriptSrc, marker }) {
-    return new Promise((resolve, reject) => {
-        if (marker && !document.querySelector(`link[${marker}]`)) {
-            cssHrefs.forEach((href, index) => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = href;
-                if (index === 0) link.setAttribute(marker, 'true');
-                document.head.appendChild(link);
-            });
-        } else if (!marker) {
-            cssHrefs.forEach((href) => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = href;
-                document.head.appendChild(link);
-            });
-        }
-        const script = document.createElement('script');
-        script.src = scriptSrc;
-        script.defer = true;
-        script.onload = () => resolve();
-        script.onerror = reject;
-        document.head.appendChild(script);
-    });
-}
-
-async function loadPlacesOfInterest() {
-    const data = await fetchJson(PLACES_DATA_URL);
-    if (!data) return;
-    state.allPlaces = Array.isArray(data.places) ? data.places : [];
-    state.placeCategories = Array.isArray(data.categories) ? data.categories : [];
-    for (const category of state.placeCategories) {
-        if (state.mapFilters.poiCategories[category.id] === undefined) {
-            state.mapFilters.poiCategories[category.id] = true;
-        }
-    }
-    saveFilters();
-}
-
-// countries data is gated on the layer toggle. DEFAULT_FILTERS
-// has `countries: false`, so by default this file (~248KB) never ships.
-// First time the user enables the layer, ensureCountriesData() fetches
-// once + caches via state.countriesPromise, then renderCountryLayer
-// re-runs to draw the geometry.
-async function loadCountriesData() {
-    if (state.countriesPromise) return state.countriesPromise;
-    state.countriesPromise = (async () => {
-        const [geo, visited] = await Promise.all([
-            fetchJson(COUNTRIES_GEO_URL),
-            fetchJson(COUNTRIES_VISITED_URL)
-        ]);
-        if (geo) state.countryGeo = geo;
-        if (visited) state.visitedIso = new Set(Array.isArray(visited.iso) ? visited.iso : []);
-    })();
-    return state.countriesPromise;
-}
-
-// split routes into primary (small, eager) + popular bucket-list
-// routes (~2MB across chunks, deferred). Popular routes load lazily on
-// first map interaction or after a short idle delay so they don't dominate
-// initial Total Bytes. routeSet === 'mine' skips them entirely.
-async function loadRoutes() {
-    const primary = await fetchJson(ROUTES_DATA_URL, { routes: [] });
-    state.allRoutes = Array.isArray(primary?.routes) ? primary.routes : [];
-}
-
-async function loadPopularRoutes() {
-    if (state.popularRoutesPromise) return state.popularRoutesPromise;
-    state.popularRoutesPromise = (async () => {
-        const index = await fetchJson(POPULAR_ROUTES_INDEX_URL);
-        const chunks = Array.isArray(index?.chunks) ? index.chunks : [];
-        let payload;
-        if (chunks.length === 0) {
-            payload = await fetchJson(POPULAR_ROUTES_URL, { routes: [] });
-        } else {
-            const payloads = await Promise.all(chunks.map((chunk) => fetchJson(chunk.href, { routes: [] })));
-            payload = {
-                routes: payloads.flatMap((p) => Array.isArray(p?.routes) ? p.routes : [])
-            };
-        }
-        const additions = Array.isArray(payload?.routes) ? payload.routes : [];
-        // Avoid duplicating if loadPopularRoutes runs twice via race.
-        const have = new Set(state.allRoutes.map((r) => r.id || `${r.adventureId}:${r.name}`));
-        for (const route of additions) {
-            const key = route.id || `${route.adventureId}:${route.name}`;
-            if (!have.has(key)) state.allRoutes.push(route);
-        }
-        return payload;
-    })();
-    return state.popularRoutesPromise;
-}
-
-function shouldLoadPopularRoutes() {
-    return state.mapFilters.layers.routes && state.mapFilters.routeSet !== 'mine';
-}
-
-// kick off the (~2MB) popular-routes fetch only on actual user
-// engagement with the map — pointerdown / pan / zoom / wheel — or via
-// any explicit filter change that needs them. Default page load doesn't
-// pay the bytes; first interaction does.
-function schedulePopularRoutes(force = false) {
-    if (!shouldLoadPopularRoutes()) return;
-    if (state.popularRoutesPromise) return;
-    const run = () => {
-        loadPopularRoutes()
-            .then(() => { renderRouteLayer(); })
-            .catch((error) => console.error('Error loading popular routes', error));
-    };
-    if (force) { run(); return; }
-    if (!state.worldMap) {
-        // Map not mounted yet — caller will retry once it is.
-        return;
-    }
-    const onFirstInteraction = () => {
-        state.worldMap.off('movestart', onFirstInteraction);
-        state.worldMap.off('zoomstart', onFirstInteraction);
-        state.worldMap.off('mousedown', onFirstInteraction);
-        state.worldMap.off('touchstart', onFirstInteraction);
-        run();
-    };
-    state.worldMap.on('movestart', onFirstInteraction);
-    state.worldMap.on('zoomstart', onFirstInteraction);
-    state.worldMap.on('mousedown', onFirstInteraction);
-    state.worldMap.on('touchstart', onFirstInteraction);
-}
-
-async function loadPhotos() {
-    const data = await fetchJson(PHOTOS_DATA_URL, { photos: [] });
-    state.allPhotos = Array.isArray(data?.photos) ? data.photos : [];
-}
-
-async function loadMapDatasets() {
-    if (state.mapDataPromise) return state.mapDataPromise;
-    // drop loadCountriesData() + loadPopularRoutes() from the
-    // eager Promise.all. Countries data is gated on the layer toggle
-    // (default off) — see renderCountryLayer. Popular routes (~2MB)
-    // wait for an idle window via schedulePopularRoutes after the map
-    // mounts.
-    state.mapDataPromise = Promise.all([
-        loadPlacesOfInterest(),
-        loadRoutes(),
-        loadPhotos()
-    ]);
-    return state.mapDataPromise;
-}
-
 function refreshMapDatasets() {
     if (!state.worldMap || !window.L) return;
     renderPlaceMarkers();
@@ -180,35 +37,11 @@ function refreshMapDatasets() {
     buildMapControlStack();
 }
 
-function loadMarkerCluster() {
-    if (window.L && window.L.markerClusterGroup) return Promise.resolve();
-    if (state.markerClusterPromise) return state.markerClusterPromise;
-    state.markerClusterPromise = injectVendorBundle({
-        cssHrefs: [
-            'vendor/leaflet.markercluster/MarkerCluster.css',
-            'vendor/leaflet.markercluster/MarkerCluster.Default.css'
-        ],
-        scriptSrc: 'vendor/leaflet.markercluster/leaflet.markercluster.js'
-    });
-    return state.markerClusterPromise;
-}
-
 function nearestWrappedLongitude(lng, referenceLng) {
     let wrappedLng = lng;
     while (wrappedLng - referenceLng > 180) wrappedLng -= 360;
     while (wrappedLng - referenceLng < -180) wrappedLng += 360;
     return wrappedLng;
-}
-
-function loadLeaflet() {
-    if (window.L) return Promise.resolve(window.L);
-    if (state.leafletPromise) return state.leafletPromise;
-    state.leafletPromise = injectVendorBundle({
-        cssHrefs: ['vendor/leaflet/leaflet.css'],
-        scriptSrc: 'vendor/leaflet/leaflet.js',
-        marker: 'data-leaflet-css'
-    }).then(() => window.L);
-    return state.leafletPromise;
 }
 
 function addFastBaseMap(map) {
@@ -488,54 +321,6 @@ function togglePlacesOfInterest(buttonEl) {
     if (buttonEl) buttonEl.classList.toggle('active', state.mapFilters.layers.pois);
     saveFilters();
     renderPlaceMarkers();
-}
-
-function loadFilters() {
-    try {
-        const raw = localStorage.getItem(FILTERS_STORAGE_KEY);
-        if (!raw) return;
-        const stored = JSON.parse(raw);
-        if (!stored || typeof stored !== 'object') return;
-
-        state.mapFilters = {
-            year: stored.year || 'all',
-            region: stored.region || 'all',
-            layers: { ...DEFAULT_FILTERS.layers, ...(stored.layers || {}) },
-            poiCategories: { ...(stored.poiCategories || {}) },
-            basemap: stored.basemap || 'satellite',
-            routeSet: stored.routeSet || 'all'
-        };
-        state.placesVisible = state.mapFilters.layers.pois;
-    } catch (_error) {
-    }
-}
-
-function saveFilters() {
-    try {
-        localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(state.mapFilters));
-    } catch (_error) {
-    }
-}
-
-function adventureYear(adventure) {
-    if (!adventure || !adventure.startDate) return null;
-    const date = new Date(adventure.startDate);
-    return Number.isNaN(date.getTime()) ? null : date.getUTCFullYear();
-}
-
-function matchesYearFilter(year) {
-    if (state.mapFilters.year === 'all' || state.mapFilters.year === null) return true;
-    return String(year) === String(state.mapFilters.year);
-}
-
-function matchesRegionFilter(region) {
-    if (state.mapFilters.region === 'all' || !state.mapFilters.region) return true;
-    if (!region) return false;
-    return String(region).toLowerCase() === String(state.mapFilters.region).toLowerCase();
-}
-
-function matchesAdventureFilters(adventure) {
-    return matchesYearFilter(adventureYear(adventure)) && matchesRegionFilter(adventure.region);
 }
 
 function applyAllFilters() {
@@ -856,6 +641,8 @@ function renderPoiToggles() {
         </label>
     `).join('');
 }
+
+setRouteRerender(() => renderRouteLayer());
 
 window.AdventuresMap = {
     ensureWorldMap
