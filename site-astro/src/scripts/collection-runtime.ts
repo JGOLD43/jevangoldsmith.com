@@ -1,57 +1,62 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
+// Collection runtime is a config-driven dynamic adapter consumed by every
+// collection page (books, podcasts, people, ...). The Config shape varies
+// per page (renderers, action names, group helpers), so the public surface
+// is intentionally typed as `any` — internal DOM access is narrowed.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Cfg = any;
 (function () {
-    function toArray(value) {
+    function toArray<T>(value: ArrayLike<T> | Iterable<T> | null | undefined): T[] {
         return Array.from(value || []);
     }
 
-    function datasetValue(element, key) {
+    function datasetValue(element: HTMLElement | null | undefined, key: string): string {
         return element?.dataset?.[key] || '';
     }
 
-    function selectorValue(value) {
+    function selectorValue(value: unknown): string {
         if (window.CSS?.escape) return window.CSS.escape(String(value));
         return String(value).replace(/["\\]/g, '\\$&');
     }
 
-    function resolveActionButton(buttonOrEvent, selector) {
-        if (buttonOrEvent?.target) return buttonOrEvent.target.closest(selector);
-        if (buttonOrEvent?.matches?.(selector)) return buttonOrEvent;
+    function resolveActionButton(buttonOrEvent: Cfg, selector: string): HTMLElement | null {
+        if (buttonOrEvent?.target) return (buttonOrEvent.target as Element).closest(selector) as HTMLElement | null;
+        if (buttonOrEvent?.matches?.(selector)) return buttonOrEvent as HTMLElement;
         return null;
     }
 
-    function create(config) {
+    function create(config: Cfg) {
         const state = {
             category: config.defaultCategory || 'all',
             search: ''
         };
         let initialized = false;
 
-        function cards() {
-            return toArray(document.querySelectorAll(config.cardSelector));
+        function cards(): HTMLElement[] {
+            return toArray(document.querySelectorAll<HTMLElement>(config.cardSelector));
         }
 
-        function categoryTokens(card) {
+        function categoryTokens(card: HTMLElement): string[] {
             const raw = datasetValue(card, config.categoryDataset || 'category').toLowerCase();
             if (config.categoryMode === 'exact') return [raw];
             return raw.split(/\s+/).filter(Boolean);
         }
 
-        function matchesCategory(card) {
+        function matchesCategory(card: HTMLElement): boolean {
             if (state.category === 'all') return true;
             return categoryTokens(card).includes(String(state.category).toLowerCase());
         }
 
-        function matchesSearch(card) {
+        function matchesSearch(card: HTMLElement): boolean {
             const query = state.search.toLowerCase();
             if (!query) return true;
             return datasetValue(card, config.searchDataset || 'search').toLowerCase().includes(query);
         }
 
-        function visibleCards(allCards = cards()) {
+        function visibleCards(allCards: HTMLElement[] = cards()): HTMLElement[] {
             return allCards.filter((card) => matchesCategory(card) && matchesSearch(card));
         }
 
-        function setActiveButton(button) {
+        function setActiveButton(button: Element | null | undefined) {
             const buttons = toArray(document.querySelectorAll(config.buttonSelector || '.sidebar-category'));
             if (window.JGCollectionUI?.activateOnly) {
                 window.JGCollectionUI.activateOnly(buttons, button);
@@ -77,10 +82,10 @@
             if (button) button.style.display = state.search ? displayValue : 'none';
         }
 
-        function updateCount(count) {
+        function updateCount(count: number) {
             if (!config.counterId) return;
             const counter = document.getElementById(config.counterId);
-            if (counter) counter.textContent = count;
+            if (counter) counter.textContent = String(count);
         }
 
         function groupButtons() {
@@ -106,7 +111,7 @@
             setActiveButton(activeButton);
         }
 
-        function activateGrouping(button, panel = null) {
+        function activateGrouping(button: Element | null | undefined, panel: Element | null = null) {
             if (config.group?.panelSelector) {
                 window.JGCollectionUI?.collapseGroups({
                     activeButton: button,
@@ -163,7 +168,7 @@
             return renderCards();
         }
 
-        function filter(category, buttonOrEvent) {
+        function filter(category: string, buttonOrEvent?: Cfg) {
             state.category = category || 'all';
             const button = resolveActionButton(buttonOrEvent, config.buttonSelector || '.sidebar-category')
                 || document.querySelector(`${config.buttonSelector || '.sidebar-category'}[data-action-args="${selectorValue(state.category)}"]`)
@@ -172,7 +177,7 @@
             return render();
         }
 
-        function search(query) {
+        function search(query: string) {
             state.search = String(query || '').trim();
             if (config.resetCategoryOnSearch !== false) {
                 state.category = 'all';
@@ -182,7 +187,7 @@
         }
 
         function clearSearchInput() {
-            const input = document.getElementById(config.searchInputId);
+            const input = document.getElementById(config.searchInputId) as HTMLInputElement | null;
             if (input) input.value = '';
         }
 
@@ -226,16 +231,16 @@
             document.getElementById(config.dropdownId || 'list-dropdown')?.classList.toggle('open');
         }
 
-        function closeDropdownOnOutsideClick(event) {
+        function closeDropdownOnOutsideClick(event: Event) {
             if (window.JGCollectionUI?.closeDropdownOnOutsideClick) {
                 window.JGCollectionUI.closeDropdownOnOutsideClick(config.dropdownId || 'list-dropdown', event);
                 return;
             }
             const dropdown = document.getElementById(config.dropdownId || 'list-dropdown');
-            if (dropdown && !dropdown.contains(event.target)) dropdown.classList.remove('open');
+            if (dropdown && !dropdown.contains(event.target as Node)) dropdown.classList.remove('open');
         }
 
-        function toggleGroup({ button = null, onCollapse = null, onExpand = null, panel = null, value = 'all' }) {
+        function toggleGroup({ button = null, onCollapse = null, onExpand = null, panel = null, value = 'all' }: { button?: Element | null; onCollapse?: (() => void) | null; onExpand?: (() => void) | null; panel?: Element | null; value?: string }) {
             if (!config.group) return render();
             if (config.group.panelSelector) {
                 const resolvedPanel = panel || config.group.panelForValue?.(value) || null;
@@ -274,7 +279,7 @@
 
         function registerActions() {
             if (!config.actions || !window.JGActions) return;
-            const actions = {};
+            const actions: Record<string, unknown> = {};
             if (config.actions.clearSearch) actions[config.actions.clearSearch] = clearSearch;
             if (config.actions.filter) actions[config.actions.filter] = filter;
             if (config.actions.search) actions[config.actions.search] = search;

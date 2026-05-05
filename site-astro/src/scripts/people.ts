@@ -1,16 +1,20 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
-const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyObj = any;
+const escapeHTML = window.escapeHTML as (s: unknown) => string;
+const escapeAttr = window.escapeAttr as (s: unknown) => string;
 
-const dataFetch = window.JGDataFetch;
+const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
 
-let peopleCards = [];
-let peopleRuntime = null;
-let peopleById = new Map();
-let lastFocusedPerson = null;
+type CardRecord = { category: string; card: HTMLElement; searchText: string; sourceType: string };
+let peopleCards: CardRecord[] = [];
+let peopleRuntime: AnyObj = null;
+let peopleById = new Map<string, AnyObj>();
+let lastFocusedPerson: HTMLElement | null = null;
 
 let peopleSourceFilter = 'all';
+void peopleCards;
 
-function normalizePersonName(name) {
+function normalizePersonName(name: unknown): string {
     return String(name || '')
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
@@ -20,11 +24,11 @@ function normalizePersonName(name) {
         .replace(/^-+|-+$/g, '');
 }
 
-function sourceTypeFor(person) {
+function sourceTypeFor(person: AnyObj) {
     return person.sourceType || (person.title?.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
 }
 
-function createPersonCard(person) {
+function createPersonCard(person: AnyObj) {
     const article = document.createElement('article');
     article.className = 'person-card';
     article.dataset.category = person.category || '';
@@ -47,31 +51,31 @@ function createPersonCard(person) {
     return article;
 }
 
-function sourceMatches(card) {
+function sourceMatches(card: HTMLElement) {
     return peopleSourceFilter === 'all' || card.dataset.sourceType === peopleSourceFilter;
 }
 
 function updatePeopleSourceButtons() {
-    document.querySelectorAll('.people-source-filter-btn').forEach((button) => {
+    document.querySelectorAll<HTMLElement>('.people-source-filter-btn').forEach((button) => {
         button.classList.toggle('active', button.dataset.actionArgs === peopleSourceFilter);
     });
 }
 
-function setText(id, value) {
+function setText(id: string, value: unknown) {
     const element = document.getElementById(id);
     if (element) element.textContent = String(value);
 }
 
-function updatePeopleFilterCounts(allCards) {
+function updatePeopleFilterCounts(allCards: HTMLElement[]) {
     const sourceCards = peopleSourceFilter === 'all'
         ? allCards
         : allCards.filter((card) => card.dataset.sourceType === peopleSourceFilter);
-    const sourceCounts = allCards.reduce((counts, card) => {
+    const sourceCounts = allCards.reduce<Record<string, number>>((counts, card) => {
         const source = card.dataset.sourceType || 'nonfiction';
         counts[source] = (counts[source] || 0) + 1;
         return counts;
     }, { fiction: 0, nonfiction: 0 });
-    const categoryCounts = sourceCards.reduce((counts, card) => {
+    const categoryCounts = sourceCards.reduce<Record<string, number>>((counts, card) => {
         const category = card.dataset.category || '';
         counts[category] = (counts[category] || 0) + 1;
         return counts;
@@ -86,9 +90,9 @@ function updatePeopleFilterCounts(allCards) {
     });
 }
 
-function applyPeopleSourceFilter({ allCards, visibleCards }) {
+function applyPeopleSourceFilter({ allCards, visibleCards }: { allCards: HTMLElement[]; visibleCards: HTMLElement[] }) {
     const categorySearchVisible = new Set(visibleCards);
-    const finalVisible = [];
+    const finalVisible: HTMLElement[] = [];
     allCards.forEach((card) => {
         const visible = categorySearchVisible.has(card) && sourceMatches(card);
         card.style.display = visible ? 'block' : 'none';
@@ -99,9 +103,9 @@ function applyPeopleSourceFilter({ allCards, visibleCards }) {
     updatePeopleSourceButtons();
 }
 
-function filterPeopleSource(source, event) {
+function filterPeopleSource(source: string, event?: Event) {
     peopleSourceFilter = source || 'all';
-    const button = event?.target?.closest('.people-source-filter-btn');
+    const button = (event?.target as Element | undefined)?.closest('.people-source-filter-btn');
     if (button) {
         document.querySelectorAll('.people-source-filter-btn').forEach((item) => item.classList.remove('active'));
         button.classList.add('active');
@@ -116,7 +120,7 @@ async function loadPeopleCards() {
     // All 98 cards are SSR'd from data/people.merged.generated.json.
     // The merged data is inlined as JSON in #people-merged-data for the
     // detail modal. No runtime fetch / merge required.
-    let mergedPeople = [];
+    let mergedPeople: AnyObj[] = [];
     const dataNode = document.getElementById('people-merged-data');
     if (dataNode?.textContent) {
         try {
@@ -143,14 +147,14 @@ async function loadPeopleCards() {
     // SSR'd cards already cover every merged person. Walk the existing
     // .person-card nodes and bind records from the inline data — no DOM
     // mutation, no CLS, no fetch.
-    const existingByPersonId = new Map();
-    for (const card of grid.querySelectorAll('.person-card')) {
+    const existingByPersonId = new Map<string, HTMLElement>();
+    for (const card of grid.querySelectorAll<HTMLElement>('.person-card')) {
         const id = card.getAttribute('data-person-id');
         if (id) existingByPersonId.set(id, card);
     }
 
     const fragment = document.createDocumentFragment();
-    const records = [];
+    const records: CardRecord[] = [];
     let appendCount = 0;
     for (const person of mergedPeople) {
         const personId = normalizePersonName(person.name);
@@ -171,14 +175,14 @@ async function loadPeopleCards() {
     if (appendCount > 0) grid.appendChild(fragment);
 }
 
-function createMediaMarkup(person, key, label) {
+function createMediaMarkup(person: AnyObj, key: string, label: string) {
     const entries = person[key] || [];
     if (!entries.length) return '';
     return `
         <div class="person-detail-books">
             <p class="person-detail-section-label">${escapeHTML(label)}</p>
             <div class="person-detail-book-list">
-                ${entries.map((item) => `
+                ${entries.map((item: AnyObj) => `
                     <a class="person-detail-book-link" href="${escapeAttr(item.href)}">
                         ${item.coverImage ? `<img class="person-detail-book-cover" src="${escapeAttr(item.coverImage)}" alt="${escapeAttr(item.title)} cover" loading="lazy" decoding="async">` : '<span class="person-detail-book-cover person-detail-book-cover-fallback" aria-hidden="true"></span>'}
                         <span class="person-detail-book-meta">
@@ -192,7 +196,7 @@ function createMediaMarkup(person, key, label) {
     `;
 }
 
-function createBooksMarkup(person) {
+function createBooksMarkup(person: AnyObj) {
     return `${createMediaMarkup(person, 'books', 'Books')}${createMediaMarkup(person, 'movies', 'Movies')}`;
 }
 
@@ -213,13 +217,13 @@ function closePeopleDetail() {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('person-detail-open');
-    lastFocusedPerson?.focus();
+    (lastFocusedPerson as HTMLElement | null)?.focus?.();
     lastFocusedPerson = null;
 }
 
-function openPeopleDetail(person, trigger) {
+function openPeopleDetail(person: AnyObj, trigger: HTMLElement | null) {
     const modal = ensurePeopleDetailModal();
-    lastFocusedPerson = trigger || document.activeElement;
+    lastFocusedPerson = (trigger || document.activeElement) as HTMLElement | null;
     modal.innerHTML = `
         <div class="person-detail-backdrop" data-action="close-person-detail"></div>
         <article class="person-detail-panel" role="dialog" aria-modal="true" aria-labelledby="person-detail-title">
@@ -242,7 +246,7 @@ function openPeopleDetail(person, trigger) {
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('person-detail-open');
-    modal.querySelector('.person-detail-close')?.focus();
+    (modal.querySelector('.person-detail-close') as HTMLElement | null)?.focus?.();
 }
 
 function initPeopleDetail() {
@@ -250,7 +254,7 @@ function initPeopleDetail() {
     if (!grid) return;
 
     grid.addEventListener('click', (event) => {
-        const card = event.target.closest('.person-card');
+        const card = (event.target as Element | null)?.closest?.('.person-card') as HTMLElement | null;
         if (!card) return;
         const person = peopleById.get(card.dataset.personId || '');
         if (!person) return;
@@ -258,8 +262,9 @@ function initPeopleDetail() {
     });
 
     grid.addEventListener('keydown', (event) => {
-        if (event.key !== 'Enter' && event.key !== ' ') return;
-        const card = event.target.closest('.person-card');
+        const ke = event as KeyboardEvent;
+        if (ke.key !== 'Enter' && ke.key !== ' ') return;
+        const card = (event.target as Element | null)?.closest?.('.person-card') as HTMLElement | null;
         if (!card) return;
         event.preventDefault();
         const person = peopleById.get(card.dataset.personId || '');
@@ -267,7 +272,7 @@ function initPeopleDetail() {
     });
 
     document.addEventListener('click', (event) => {
-        if (event.target.closest('[data-action="close-person-detail"]')) closePeopleDetail();
+        if ((event.target as Element | null)?.closest?.('[data-action="close-person-detail"]')) closePeopleDetail();
     });
 
     document.addEventListener('keydown', (event) => {

@@ -1,4 +1,3 @@
-// @ts-nocheck — Phase 3.1 split: leaflet + cluster vendor injection. The
 // scripts come from /vendor/, not npm — load via injected <script> tags so
 // they don't bloat the initial bundle. Both promises are cached on
 // state.{leafletPromise,markerClusterPromise} so concurrent callers share
@@ -37,18 +36,18 @@ export function injectVendorBundle({ cssHrefs = [], scriptSrc, marker }: {
 }
 
 export function loadLeaflet() {
-  if (window.L) return Promise.resolve(window.L);
+  if ((window as any).L) return Promise.resolve((window as any).L);
   if (state.leafletPromise) return state.leafletPromise;
   state.leafletPromise = injectVendorBundle({
     cssHrefs: ['vendor/leaflet/leaflet.css'],
     scriptSrc: 'vendor/leaflet/leaflet.js',
     marker: 'data-leaflet-css'
-  }).then(() => window.L);
+  }).then(() => (window as any).L);
   return state.leafletPromise;
 }
 
 export function loadMarkerCluster() {
-  if (window.L && window.L.markerClusterGroup) return Promise.resolve();
+  if ((window as any).L && (window as any).L.markerClusterGroup) return Promise.resolve();
   if (state.markerClusterPromise) return state.markerClusterPromise;
   state.markerClusterPromise = injectVendorBundle({
     cssHrefs: [

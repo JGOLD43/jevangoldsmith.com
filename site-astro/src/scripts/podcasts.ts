@@ -1,10 +1,11 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
-const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyObj = any;
+const escapeHTML = window.escapeHTML;
+const escapeAttr = window.escapeAttr;
+const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
+let podcastRuntime: AnyObj = null;
 
-const dataFetch = window.JGDataFetch;
-let podcastRuntime = null;
-
-function escapeValue(value) {
+function escapeValue(value: unknown) {
     return String(value || '').replace(/[&<>"']/g, (char) => ({
         '&': '&amp;',
         '<': '&lt;',
@@ -14,7 +15,7 @@ function escapeValue(value) {
     }[char]));
 }
 
-function buildCuratedPodcastCard(podcast) {
+function buildCuratedPodcastCard(podcast: AnyObj) {
     const card = document.createElement('div');
     card.className = `movie-card podcast-card js-zoom-item${podcast.badge ? ' has-review' : ''}`;
     card.dataset.category = podcast.category || 'all';
@@ -45,7 +46,7 @@ async function renderCuratedPodcasts() {
     if (container.children.length === podcasts.length) return;
     container.innerHTML = '';
     const fragment = document.createDocumentFragment();
-    podcasts.forEach((podcast) => fragment.appendChild(buildCuratedPodcastCard(podcast)));
+    podcasts.forEach((podcast: AnyObj) => fragment.appendChild(buildCuratedPodcastCard(podcast)));
     container.appendChild(fragment);
 }
 
@@ -71,7 +72,7 @@ function buildCollectionController() {
     });
 }
 
-function formatEpisodeDuration(ms) {
+function formatEpisodeDuration(ms: number) {
     if (!ms || typeof ms !== 'number' || ms <= 0) return '';
     const totalMin = Math.round(ms / 60000);
     if (totalMin < 60) return `${totalMin} min`;
@@ -80,7 +81,7 @@ function formatEpisodeDuration(ms) {
     return m === 0 ? `${h}h` : `${h}h ${m}m`;
 }
 
-function formatRelativeDate(iso) {
+function formatRelativeDate(iso: string) {
     if (!iso) return '';
     const date = new Date(iso);
     if (Number.isNaN(date.getTime())) return '';
@@ -93,7 +94,7 @@ function formatRelativeDate(iso) {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-function buildSpotifyEpisodeCard(ep) {
+function buildSpotifyEpisodeCard(ep: AnyObj) {
     const card = document.createElement('div');
     card.className = 'movie-card podcast-card js-zoom-item';
     card.dataset.spotify = 'episode';
@@ -123,7 +124,7 @@ function buildSpotifyEpisodeCard(ep) {
     return card;
 }
 
-function buildSpotifyShowCard(show) {
+function buildSpotifyShowCard(show: AnyObj) {
     const card = document.createElement('div');
     card.className = 'movie-card podcast-card js-zoom-item';
     card.dataset.spotify = 'show';
@@ -150,7 +151,7 @@ function buildSpotifyShowCard(show) {
     return card;
 }
 
-async function loadJSON(url) {
+async function loadJSON(url: string) {
     try {
         return await dataFetch.fetchJson(url);
     } catch {
@@ -158,7 +159,7 @@ async function loadJSON(url) {
     }
 }
 
-function renderSpotifyMeta(elId, generatedAt, count, label) {
+function renderSpotifyMeta(elId: string, generatedAt: string, count: number, label: string) {
     const el = document.getElementById(elId);
     if (!el) return;
     if (!count) {
@@ -179,7 +180,7 @@ async function renderSpotifyRecentEpisodes() {
 
     const recent = data.episodes.slice(0, 24);
     const frag = document.createDocumentFragment();
-    recent.forEach((ep) => frag.appendChild(buildSpotifyEpisodeCard(ep)));
+    recent.forEach((ep: AnyObj) => frag.appendChild(buildSpotifyEpisodeCard(ep)));
     container.appendChild(frag);
     section.hidden = false;
     renderSpotifyMeta('spotify-recent-meta', data.generatedAt, recent.length, recent.length === 1 ? 'recent episode' : 'recent episodes');
@@ -194,7 +195,7 @@ async function renderSpotifyFollowedShows() {
     if (!container || !section) return;
 
     const frag = document.createDocumentFragment();
-    data.shows.forEach((show) => frag.appendChild(buildSpotifyShowCard(show)));
+    data.shows.forEach((show: AnyObj) => frag.appendChild(buildSpotifyShowCard(show)));
     container.appendChild(frag);
     section.hidden = false;
     renderSpotifyMeta('spotify-shows-meta', data.generatedAt, data.shows.length, data.shows.length === 1 ? 'show' : 'shows');

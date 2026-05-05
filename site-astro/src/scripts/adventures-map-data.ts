@@ -1,4 +1,3 @@
-// @ts-nocheck — Phase 3.1 split: data loaders + lazy gates for the
 // adventures map. Pure data layer — populates state.{allPlaces, allRoutes,
 // allPhotos, countryGeo, ...} from network. The render module reads state;
 // no circular dependency.
@@ -62,14 +61,14 @@ export async function loadPopularRoutes() {
     if (chunks.length === 0) {
       payload = await fetchJson(POPULAR_ROUTES_URL, { routes: [] });
     } else {
-      const payloads: any[] = await Promise.all(chunks.map((chunk) => fetchJson(chunk.href, { routes: [] })));
+      const payloads: any[] = await Promise.all(chunks.map((chunk: any) => fetchJson(chunk.href, { routes: [] })));
       payload = {
         routes: payloads.flatMap((p) => Array.isArray(p?.routes) ? p.routes : [])
       };
     }
     const additions = Array.isArray(payload?.routes) ? payload.routes : [];
     // Avoid duplicating if loadPopularRoutes runs twice via race.
-    const have = new Set(state.allRoutes.map((r) => r.id || `${r.adventureId}:${r.name}`));
+    const have = new Set(state.allRoutes.map((r: any) => r.id || `${r.adventureId}:${r.name}`));
     for (const route of additions) {
       const key = route.id || `${route.adventureId}:${route.name}`;
       if (!have.has(key)) state.allRoutes.push(route);

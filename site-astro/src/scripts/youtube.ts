@@ -1,18 +1,20 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 // YouTube Channel Integration. Self-contained module: includes minimal
 // escape helpers so it doesn't depend on the global sanitize.js bundle.
 const YOUTUBE_CHANNEL_HANDLE = 'JevanGoldsmith';
 
-const HTML_ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-function escapeHTML(s) {
+const HTML_ESCAPES: { [k: string]: string } = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+function escapeHTML(s: unknown): string {
     return String(s ?? '').replace(/[&<>"']/g, (c) => HTML_ESCAPES[c]);
 }
-function escapeAttr(s) { return escapeHTML(s); }
+function escapeAttr(s: unknown): string { return escapeHTML(s); }
+
+type Video = { id: string; title: string; description: string; thumbnail: string; url: string; date: string };
 
 async function fetchYouTubeVideos() {
-    const loadingEl = document.getElementById('loading');
-    const errorEl = document.getElementById('error');
-    const containerEl = document.getElementById('videos-container');
+    const loadingEl = document.getElementById('loading') as HTMLElement | null;
+    const errorEl = document.getElementById('error') as HTMLElement | null;
+    const containerEl = document.getElementById('videos-container') as HTMLElement | null;
+    if (!loadingEl || !errorEl || !containerEl) return;
 
     try {
         // YouTube RSS feed for channel
@@ -44,11 +46,11 @@ async function fetchYouTubeVideos() {
 
         // Convert XML entries to video data
         const videos = entries.map(entry => {
-            const getElementText = (tagName, namespace = null) => {
+            const getElementText = (tagName: string, namespace: string | null = null): string => {
                 const el = namespace
                     ? entry.getElementsByTagNameNS(namespace, tagName)[0]
                     : entry.querySelector(tagName);
-                return el ? el.textContent : '';
+                return el ? (el.textContent || '') : '';
             };
 
             const videoId = getElementText('videoId', 'http://www.youtube.com/xml/schemas/2015');
@@ -84,8 +86,9 @@ async function fetchYouTubeVideos() {
     }
 }
 
-function displayVideos(videos) {
+function displayVideos(videos: Video[]) {
     const container = document.getElementById('videos-container');
+    if (!container) return;
     container.innerHTML = '';
 
     videos.forEach(video => {
@@ -94,7 +97,7 @@ function displayVideos(videos) {
     });
 }
 
-function createVideoCard(video) {
+function createVideoCard(video: Video) {
     const card = document.createElement('div');
     card.className = 'video-card';
     card.onclick = () => window.open(video.url, '_blank');

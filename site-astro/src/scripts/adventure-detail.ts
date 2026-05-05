@@ -1,15 +1,14 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 (() => {
     const dataEl = document.getElementById('adventure-detail-data');
     if (!dataEl) return;
-    let config;
+    let config: any;
     try {
         config = JSON.parse(dataEl.textContent || '{}');
     } catch (_error) {
         return;
     }
 
-    const { mapCenter, mapZoom, photoMarkers = [], galleryImages = [] } = config;
+    const { mapCenter, mapZoom, photoMarkers = [], galleryImages = [] } = config as { mapCenter?: { lat: number; lng: number }; mapZoom?: number; photoMarkers?: any[]; galleryImages?: any[] };
 
     if (typeof L !== 'undefined' && document.getElementById('adventure-map')) {
         const map = L.map('adventure-map').setView(
@@ -18,7 +17,7 @@
         );
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
 
-        photoMarkers.forEach((photo) => {
+        photoMarkers.forEach((photo: any) => {
             L.circleMarker([photo.lat, photo.lng], {
                 radius: 8, fillColor: '#C9A86C', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.9
             }).addTo(map).bindPopup(photo.caption);
@@ -28,7 +27,7 @@
     let currentIndex = 0;
 
     function updateLightbox() {
-        const image = document.getElementById('lightbox-image');
+        const image = document.getElementById('lightbox-image') as HTMLImageElement | null;
         const caption = document.getElementById('lightbox-caption');
         const counter = document.getElementById('lightbox-counter');
         if (!image || !galleryImages[currentIndex]) return;
@@ -37,7 +36,7 @@
         if (counter) counter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
     }
 
-    function openLightbox(index) {
+    function openLightbox(index: number) {
         currentIndex = index;
         updateLightbox();
         const lightbox = document.getElementById('lightbox');
@@ -74,7 +73,7 @@
     });
 
     document.addEventListener('click', (e) => {
-        const trigger = e.target.closest('[data-action]');
+        const trigger = (e.target as Element | null)?.closest?.('[data-action]') as HTMLElement | null;
         if (!trigger) return;
         const action = trigger.dataset.action;
         if (action === 'open-lightbox') {

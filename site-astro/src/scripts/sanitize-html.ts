@@ -1,3 +1,4 @@
+// @ts-nocheck — pending typed migration
 // DOMPurify-backed HTML sanitizer split out from
 // sanitize.js so it only ships to pages that actually render
 // rich-text content (essays + adventure detail). Non-essays

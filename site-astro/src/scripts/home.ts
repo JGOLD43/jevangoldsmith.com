@@ -1,4 +1,3 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 (function() {
     'use strict';
 
@@ -16,8 +15,8 @@
 
     function initCarousel() {
         const track = document.getElementById('carousel-track');
-        const dots = Array.from(document.querySelectorAll('[data-carousel-slide]'));
-        const cards = Array.from(document.querySelectorAll('.feature-card'));
+        const dots = Array.from(document.querySelectorAll<HTMLElement>('[data-carousel-slide]'));
+        const cards = Array.from(document.querySelectorAll<HTMLElement>('.feature-card'));
         if (!track || cards.length === 0) return;
 
         let currentSlide = 0;
@@ -39,14 +38,14 @@
             });
         }
 
-        function moveTo(index) {
+        function moveTo(index: number) {
             const cardWidth = cards[0].offsetWidth;
             currentSlide = Math.max(0, Math.min(index, maxSlide()));
-            track.style.transform = `translateX(-${currentSlide * (cardWidth + gap)}px)`;
+            (track as HTMLElement).style.transform = `translateX(-${currentSlide * (cardWidth + gap)}px)`;
             updateDots();
         }
 
-        document.querySelectorAll('[data-carousel-direction]').forEach((button) => {
+        document.querySelectorAll<HTMLElement>('[data-carousel-direction]').forEach((button) => {
             button.addEventListener('click', () => {
                 moveTo(currentSlide + Number(button.dataset.carouselDirection || 0));
             });
@@ -62,9 +61,9 @@
         setInterval(() => moveTo(currentSlide >= maxSlide() ? 0 : currentSlide + 1), 5000);
     }
 
-    function animateValue(element, start, end, duration, suffix) {
-        let startTimestamp = null;
-        const step = (timestamp) => {
+    function animateValue(element: Element, start: number, end: number, duration: number, suffix: string) {
+        let startTimestamp: number | null = null;
+        const step = (timestamp: number) => {
             if (!startTimestamp) startTimestamp = timestamp;
             const progress = Math.min((timestamp - startTimestamp) / duration, 1);
             const value = Math.floor(progress * (end - start) + start);
@@ -82,7 +81,7 @@
             entries.forEach((entry) => {
                 if (!entry.isIntersecting || entry.target.classList.contains('animated')) return;
                 entry.target.classList.add('animated');
-                const text = entry.target.textContent;
+                const text = entry.target.textContent || '';
                 const match = text.match(/(\d+)/);
                 if (!match) return;
                 animateValue(entry.target, 0, parseInt(match[1], 10), 2000, text.replace(match[1], ''));

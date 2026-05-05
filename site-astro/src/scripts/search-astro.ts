@@ -1,44 +1,44 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
-const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
-
 // Standalone search script for the Astro build. Self-contained — does not
 // depend on the legacy js/search.js (which expects JGDataFetch + JGCollectionUI
 // globals) so it can be loaded with a single <script> tag instead of three.
 (() => {
+  type SearchRecord = { title: string; summary?: string; section?: string; type?: string; tags?: string[]; searchText?: string; url?: string };
+
   const SEARCH_INDEX_URL = '/api/v1/search-index.json';
 
-  const state = {
+  const state: { records: SearchRecord[]; query: string; type: string } = {
     records: [],
     query: '',
     type: 'all'
   };
 
-  function debounce(fn, wait = 120) {
-    let t = null;
-    return (...args) => {
+  function debounce<T extends (...a: unknown[]) => unknown>(fn: T, wait = 120) {
+    let t: number | null = null;
+    return (...args: Parameters<T>) => {
       if (t) clearTimeout(t);
-      t = setTimeout(() => fn(...args), wait);
+      t = window.setTimeout(() => fn(...args), wait);
     };
   }
 
-  function escapeHTML(s) {
-    return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const ESC_MAP: { [k: string]: string } = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  function escapeHTML(s: unknown): string {
+    return String(s ?? '').replace(/[&<>"']/g, (c) => ESC_MAP[c]);
   }
-  function escapeAttr(s) { return escapeHTML(s); }
-  function sanitizeUrl(u) {
+  function escapeAttr(s: unknown): string { return escapeHTML(s); }
+  function sanitizeUrl(u: string | undefined): string {
     if (!u) return '#';
     if (/^javascript:/i.test(u)) return '#';
     return u;
   }
 
-  function normalize(v) { return String(v ?? '').toLowerCase().trim(); }
-  function recordText(r) {
+  function normalize(v: unknown): string { return String(v ?? '').toLowerCase().trim(); }
+  function recordText(r: SearchRecord): string {
     if (r.searchText) return normalize(r.searchText);
     return normalize([r.title, r.summary, r.section, r.type, ...(r.tags || [])].join(' '));
   }
-  function displayType(t) { return String(t || 'page').replace(/-/g, ' '); }
+  function displayType(t: string | undefined): string { return String(t || 'page').replace(/-/g, ' '); }
 
-  const input = document.getElementById('site-search-input');
+  const input = document.getElementById('site-search-input') as HTMLInputElement | null;
   const filters = document.getElementById('site-search-filters');
   const results = document.getElementById('site-search-results');
   const count = document.getElementById('site-search-count');
@@ -98,7 +98,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
     }
     if (filters) {
       filters.addEventListener('click', (e) => {
-        const btn = e.target?.closest('[data-search-type]');
+        const btn = (e.target as Element | null)?.closest?.('[data-search-type]') as HTMLElement | null;
         if (!btn) return;
         state.type = btn.dataset.searchType || 'all';
         renderFilters();

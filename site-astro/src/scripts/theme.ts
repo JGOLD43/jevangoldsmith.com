@@ -1,4 +1,3 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 // Theme Toggle and Wisdom Ticker Functionality
 
 (function() {
@@ -13,13 +12,13 @@
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
 
-    function setTheme(theme) {
+    function setTheme(theme: string) {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem(THEME_KEY, theme);
         updateToggleButton(theme);
     }
 
-    function updateToggleButton(theme) {
+    function updateToggleButton(theme: string) {
         const btn = document.querySelector('.theme-toggle');
         if (!btn) return;
         const label = btn.querySelector('span');
@@ -62,7 +61,7 @@
         "Comfort is the enemy of progress"
     ];
 
-    function renderWisdomTicker(quotes) {
+    function renderWisdomTicker(quotes: string[]) {
         const track = document.querySelector('.wisdom-ticker-track');
         if (!track) return;
 
@@ -106,13 +105,13 @@
     // Logo video hover effect (lazy-load video source on first interaction)
     function initLogoVideo() {
         const logo = document.querySelector('.logo');
-        const video = document.querySelector('.logo-video');
+        const video = document.querySelector('.logo-video') as HTMLVideoElement | null;
         if (!logo || !video) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
         let sourceLoaded = false;
 
-        function supportsVideoType(type) {
+        function supportsVideoType(type: string) {
             return Boolean(video.canPlayType && video.canPlayType(type).replace('no', ''));
         }
 
@@ -181,7 +180,7 @@
         dropdowns.forEach(dropdown => {
             const trigger = dropdown.querySelector('.dropdown-trigger');
             if (trigger) {
-                const handleDropdownClick = (e) => {
+                const handleDropdownClick = (e: Event) => {
                     if (window.innerWidth <= 968) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -245,9 +244,10 @@
         }
     }
 
-    function runWhenIdle(callback) {
-        if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(callback, { timeout: 2500 });
+    function runWhenIdle(callback: () => void) {
+        const w = window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => void };
+        if (typeof w.requestIdleCallback === 'function') {
+            w.requestIdleCallback(callback, { timeout: 2500 });
             return;
         }
         window.addEventListener('load', () => setTimeout(callback, 250), { once: true });
