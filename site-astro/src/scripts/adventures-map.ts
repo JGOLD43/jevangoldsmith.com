@@ -17,8 +17,16 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyObj = any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const L = (window as any).L as AnyObj;
+// Leaflet is injected by adventures-map-vendor's loadLeaflet() at runtime
+// AFTER this module is imported, so capture L lazily via a getter — never
+// at module scope.
+function getL(): AnyObj {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (window as any).L;
+}
+// Re-bind L locally inside each function via `const L = getL();` so the
+// existing call sites (L.map, L.marker, L.tileLayer, L.polyline, …) stay
+// readable. The pattern is cheap (one property read per function call).
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,6 +34,7 @@ declare global {
 }
 
 function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, popupAnchor, popupHtml, onClick, riseOnHover = false, layer }: AnyObj) {
+    const L = getL();
     const iconOpts: AnyObj = { className: iconClass, html: iconHtml, iconSize };
     if (iconAnchor) iconOpts.iconAnchor = iconAnchor;
     if (popupAnchor) iconOpts.popupAnchor = popupAnchor;
@@ -54,7 +63,8 @@ function nearestWrappedLongitude(lng: number, referenceLng: number) {
 }
 
 function addFastBaseMap(map: AnyObj) {
-    if (!(window as any).L || !map || map._fastBaseMapAdded) return;
+    const L = getL();
+    if (!L || !map || map._fastBaseMapAdded) return;
 
     map.createPane('fastBasemap');
     map.getPane('fastBasemap').style.zIndex = 180;
@@ -88,7 +98,8 @@ function addSatelliteTiles(map: AnyObj) {
 }
 
 function setBasemap(map: AnyObj, name: string) {
-    if (!(window as any).L || !map) return;
+    const L = getL();
+    if (!L || !map) return;
     const def = BASEMAPS[name] || BASEMAPS.satellite;
 
     if (state.basemapTileLayer && map === state.worldMap) {
@@ -156,8 +167,9 @@ async function ensureWorldMap(adventures = state.allAdventures) {
 }
 
 function initWorldMap(adventures: AnyObj[]) {
+    const L = getL();
     const mapContainer = document.getElementById('world-map');
-    if (!mapContainer || state.worldMap || !(window as any).L) return;
+    if (!mapContainer || state.worldMap || !L) return;
     mapContainer.classList.add('map-loaded');
     mapContainer.classList.remove('map-loading');
     mapContainer.querySelector('[data-map-load-shell]')?.remove();
@@ -271,7 +283,7 @@ function initWorldMap(adventures: AnyObj[]) {
 }
 
 function renderPlaceMarkers() {
-    if (!state.worldMap || !(window as any).L) return;
+    if (!state.worldMap || !getL()) return;
 
     state.placeMarkers.forEach((marker: AnyObj) => state.worldMap.removeLayer(marker));
     state.placeMarkers = [];
@@ -359,7 +371,8 @@ function applyAdventureMarkerFilter() {
 }
 
 function renderCountryLayer() {
-    if (!state.worldMap || !(window as any).L) return;
+    const L = getL();
+    if (!state.worldMap || !L) return;
     if (state.countryLayer) {
         state.worldMap.removeLayer(state.countryLayer);
         state.countryLayer = null;
@@ -393,7 +406,8 @@ function renderCountryLayer() {
 }
 
 function renderRouteLayer() {
-    if (!state.worldMap || !(window as any).L) return;
+    const L = getL();
+    if (!state.worldMap || !L) return;
     if (state.routeLayer) {
         state.worldMap.removeLayer(state.routeLayer);
         state.routeLayer = null;
@@ -448,7 +462,8 @@ function renderRouteLayer() {
 }
 
 function renderPhotoLayer() {
-    if (!state.worldMap || !(window as any).L) return;
+    const L = getL();
+    if (!state.worldMap || !L) return;
     if (state.photoLayer) {
         state.worldMap.removeLayer(state.photoLayer);
         state.photoLayer = null;
@@ -456,7 +471,7 @@ function renderPhotoLayer() {
     if (!state.mapFilters.layers.photos || state.allPhotos.length === 0) return;
 
     const createLayer = () => {
-        const cluster = (window as any).L.markerClusterGroup
+        const cluster = L.markerClusterGroup
             ? L.markerClusterGroup({
                 chunkedLoading: true,
                 spiderfyOnMaxZoom: true,
@@ -493,7 +508,7 @@ function renderPhotoLayer() {
         state.photoLayer = cluster.addTo(state.worldMap);
     };
 
-    if ((window as any).L.markerClusterGroup) createLayer();
+    if (L.markerClusterGroup) createLayer();
     else loadMarkerCluster().then(createLayer).catch(() => createLayer());
 }
 
