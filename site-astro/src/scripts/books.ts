@@ -1,5 +1,10 @@
-// @ts-nocheck — pending typed migration
-const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyObj = any;
+const escapeHTML = window.escapeHTML as (s: unknown) => string;
+const escapeAttr = window.escapeAttr as (s: unknown) => string;
+const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
+const sanitizeHTML = window.sanitizeHTML as ((s: string) => string) | undefined;
+void sanitizeUrl; void sanitizeHTML;
 
 // Books page orchestrator. Inlines what used to live in
 // js/books-state.js, js/books-filters.js, js/books-modal.js,
@@ -9,7 +14,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
 
 // --- state ---
 const booksState = (function createState() {
-    const state = {
+    const state: { activeCategory: string; books: AnyObj[]; reReadsFilter: string; searchQuery: string; sidebarCollapsed: boolean; starFilter: string; viewMode: string } = {
         activeCategory: 'all',
         books: [],
         reReadsFilter: 'all',
@@ -24,18 +29,18 @@ const booksState = (function createState() {
         clearStarFilter() { state.starFilter = 'all'; },
         get() { return { ...state }; },
         getBooks() { return state.books; },
-        setActiveCategory(c) { state.activeCategory = c || 'all'; },
-        setBooks(b) { state.books = Array.isArray(b) ? b : []; },
-        setReReadsFilter(c) { state.reReadsFilter = c; },
-        setSearchQuery(q) { state.searchQuery = String(q || '').trim(); },
-        setSidebarCollapsed(v) { state.sidebarCollapsed = Boolean(v); },
-        setStarFilter(r) { state.starFilter = r; },
-        setViewMode(m) { state.viewMode = m || 'list'; }
+        setActiveCategory(c: string) { state.activeCategory = c || 'all'; },
+        setBooks(b: AnyObj[]) { state.books = Array.isArray(b) ? b : []; },
+        setReReadsFilter(c: string) { state.reReadsFilter = c; },
+        setSearchQuery(q: string) { state.searchQuery = String(q || '').trim(); },
+        setSidebarCollapsed(v: boolean) { state.sidebarCollapsed = Boolean(v); },
+        setStarFilter(r: string) { state.starFilter = r; },
+        setViewMode(m: string) { state.viewMode = m || 'list'; }
     };
 }());
 
 // --- filters ---
-const CATEGORY_MAP = {
+const CATEGORY_MAP: Record<string, string> = {
     'Advertising and Copywriting': 'advertising',
     'Autobiographies': 'autobiographies',
     'Big Ideas': 'bigideas',
@@ -51,12 +56,12 @@ const CATEGORY_MAP = {
     'The Great Books': 'greatbooks',
     'Who Am I?': 'whoami'
 };
-const CATEGORY_NAME_BY_KEY = Object.entries(CATEGORY_MAP).reduce((lookup, [name, key]) => {
+const CATEGORY_NAME_BY_KEY: Record<string, string> = Object.entries(CATEGORY_MAP).reduce((lookup: Record<string, string>, [name, key]) => {
     lookup[key] = name;
     return lookup;
-}, {});
+}, {} as Record<string, string>);
 
-function filterBooks(books, state) {
+function filterBooks(books: AnyObj[], state: AnyObj): AnyObj[] {
     const query = String(state.searchQuery || '').toLowerCase();
     return books.filter((book) => {
         const isUnread = book.read === false;
@@ -78,18 +83,18 @@ function filterBooks(books, state) {
     });
 }
 
-function getBooksForCategory(books, categoryKey) {
+function getBooksForCategory(books: AnyObj[], categoryKey: string) {
     if (categoryKey === 'all') return books;
     const categoryName = CATEGORY_NAME_BY_KEY[categoryKey];
     if (!categoryName) return [];
     return books.filter((book) => book.category === categoryName);
 }
 
-function groupBooksByCategory(books) {
-    const groups = Object.values(CATEGORY_MAP).reduce((memo, key) => {
+function groupBooksByCategory(books: AnyObj[]): Record<string, AnyObj[]> {
+    const groups = Object.values(CATEGORY_MAP).reduce((memo: Record<string, AnyObj[]>, key) => {
         memo[key] = [];
         return memo;
-    }, {});
+    }, {} as Record<string, AnyObj[]>);
     books.forEach((book) => {
         const categoryKey = CATEGORY_MAP[book.category];
         if (categoryKey && groups[categoryKey]) groups[categoryKey].push(book);
@@ -98,19 +103,19 @@ function groupBooksByCategory(books) {
 }
 
 // --- modal ---
-function createBooksModal({ getCoverUrl }) {
+function createBooksModal({ getCoverUrl }: { getCoverUrl: (b: AnyObj, size?: string) => string }) {
     function close() {
         const modal = document.getElementById('book-modal');
         if (!modal) return;
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
-    function open(book) {
+    function open(book: AnyObj) {
         if (!book?.review) return false;
         const modal = document.getElementById('book-modal');
         const modalTitle = document.getElementById('modal-book-title');
         const modalAuthor = document.getElementById('modal-book-author');
-        const modalCover = document.getElementById('modal-book-cover');
+        const modalCover = document.getElementById('modal-book-cover') as HTMLImageElement | null;
         const modalRating = document.getElementById('modal-book-rating');
         const modalReview = document.getElementById('modal-book-review');
         if (!modal || !modalTitle || !modalAuthor || !modalCover || !modalRating || !modalReview) return false;
@@ -133,7 +138,7 @@ function createBooksModal({ getCoverUrl }) {
 }
 
 // --- view ---
-const categoryDisplayNames = {
+const categoryDisplayNames: Record<string, string> = {
     'Advertising and Copywriting': 'Advertising',
     'Astral Projection': 'Astral projection',
     'Autobiographies': 'Autobiographies',
@@ -153,7 +158,7 @@ const categoryDisplayNames = {
     'Who Am I?': 'Who Am I?'
 };
 
-function createBooksView(controller) {
+function createBooksView(controller: AnyObj) {
     let currentViewMode = 'list';
 
     // follow-up: Astro SSRs every card at build time, so the page
@@ -161,18 +166,18 @@ function createBooksView(controller) {
     // re-renders; it toggles each card's visibility based on the matched
     // set. createBookCard() is deleted entirely (~50 lines), shrinking the
     // page-books bundle by ~3KB minified.
-    function renderBooks(books) {
+    function renderBooks(books: AnyObj[]) {
         const container = document.getElementById('books-container');
         if (!container) return;
-        const visible = new Set();
+        const visible = new Set<string>();
         for (const b of books) visible.add(b.isbn || b.title);
-        for (const card of container.children) {
-            const id = card.dataset.isbn || card.dataset.title;
+        for (const card of Array.from(container.children) as HTMLElement[]) {
+            const id = card.dataset.isbn || card.dataset.title || '';
             card.style.display = visible.has(id) ? '' : 'none';
         }
     }
 
-    function renderSidebar(categories) {
+    function renderSidebar(categories: Record<string, AnyObj[]>) {
         // /books pre-renders the per-category lists at build time. If the
         // first category container already has children, the SSR's covered
         // sidebar + counts — leave them alone (no flicker).
@@ -185,18 +190,18 @@ function createBooksView(controller) {
 
         const countAll = document.getElementById('count-all');
         if (countAll) {
-            const total = Object.values(categories).reduce((sum, books) => sum + books.length, 0);
-            countAll.textContent = total;
+            const total = (Object.values(categories) as AnyObj[][]).reduce((sum: number, books) => sum + books.length, 0);
+            countAll.textContent = String(total);
         }
         Object.keys(categories).forEach((categoryKey) => {
-            const books = categories[categoryKey];
+            const books = (categories as AnyObj)[categoryKey] as AnyObj[];
             const countElement = document.getElementById(`count-${categoryKey}`);
-            const section = countElement?.closest('.sidebar-section');
+            const section = countElement?.closest('.sidebar-section') as HTMLElement | null;
             const container = document.getElementById(`category-${categoryKey}`);
-            if (countElement) countElement.textContent = books.length;
+            if (countElement) countElement.textContent = String(books.length);
             if (section) section.style.display = books.length === 0 ? 'none' : 'block';
             if (container) {
-                container.innerHTML = books.map((book) => `
+                container.innerHTML = books.map((book: AnyObj) => `
                     <a href="#" class="book-link" data-action="book-link" data-book-title="${escapeAttr(book.title)}">
                         <div>${escapeHTML(book.title)}</div>
                         <div class="book-link-author">${escapeHTML(book.author)}</div>
@@ -206,7 +211,7 @@ function createBooksView(controller) {
         });
     }
 
-    function renderCarousel(books) {
+    function renderCarousel(books: AnyObj[]) {
         const track = document.getElementById('carousel-track');
         if (!track) return;
         // /books pre-renders the carousel at build time. If the track
@@ -216,38 +221,38 @@ function createBooksView(controller) {
         const recentBooks = books.slice(-20).reverse();
         const carouselBooks = [...recentBooks, ...recentBooks];
         track.style.animationDuration = `${recentBooks.length * 3}s`;
-        track.innerHTML = carouselBooks.map((book) => {
+        track.innerHTML = carouselBooks.map((book: AnyObj) => {
             const coverUrl = controller.getCoverUrl(book, 'medium');
             return `<img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
         }).join('');
     }
 
-    function scrollToBookByIsbn(isbn) {
+    function scrollToBookByIsbn(isbn: string) {
         const bookCard = document.querySelector(`[data-isbn="${isbn}"]`);
         if (!bookCard) return;
-        window.JGCollectionUI.highlightAndScroll(bookCard, {
+        window.JGCollectionUI?.highlightAndScroll?.(bookCard, {
             duration: 1000,
             shadow: '0 8px 24px rgba(0,0,0,0.2)'
         });
     }
 
-    function scrollToBookByTitle(bookTitle, event) {
+    function scrollToBookByTitle(bookTitle: string, event?: Event) {
         const bookCards = Array.from(document.querySelectorAll('.book-card'));
         const targetCard = bookCards.find((card) => {
             const titleElement = card.querySelector('.book-title');
             return titleElement?.textContent === bookTitle;
         });
         if (!targetCard) return;
-        window.JGCollectionUI.highlightAndScroll(targetCard, {
-            activeElement: event?.target?.closest('.book-link'),
+        window.JGCollectionUI?.highlightAndScroll?.(targetCard, {
+            activeElement: (event?.target as Element | undefined)?.closest('.book-link'),
             activeSelector: '.book-link'
         });
     }
 
-    function updateBookCount(count, categoryName) {
+    function updateBookCount(count: number, categoryName?: string) {
         const countElement = document.getElementById('book-count');
         const labelElement = document.getElementById('counter-label');
-        if (countElement) countElement.textContent = count;
+        if (countElement) countElement.textContent = String(count);
         if (labelElement) {
             labelElement.textContent = categoryName && categoryName !== 'all'
                 ? 'Books'
@@ -255,11 +260,11 @@ function createBooksView(controller) {
         }
     }
 
-    function updateReReadsFilterDisplay(value) {
-        const slider = document.getElementById('timesread-slider');
+    function updateReReadsFilterDisplay(value: string | number) {
+        const slider = document.getElementById('timesread-slider') as HTMLInputElement | null;
         const text = document.getElementById('filter-timesread-text');
         const normalizedValue = value === 'all' ? 0 : Number(value);
-        if (slider) slider.value = normalizedValue;
+        if (slider) slider.value = String(normalizedValue);
         if (text) {
             text.textContent = normalizedValue > 0
                 ? (normalizedValue >= 10 ? '10' : String(normalizedValue))
@@ -267,22 +272,23 @@ function createBooksView(controller) {
         }
     }
 
-    function updateStarFilterDisplay(value) {
+    function updateStarFilterDisplay(value: string | number) {
         const stars = document.querySelectorAll('.filter-star');
         const text = document.getElementById('filter-rating-text');
+        const valNum = value === 'all' ? Number.NaN : Number(value);
         stars.forEach((star) => {
-            const starNumber = Number.parseInt(star.getAttribute('data-star'), 10);
+            const starNumber = Number.parseInt(star.getAttribute('data-star') || '0', 10);
             star.classList.remove('full', 'half');
             if (value === 'all') return;
-            if (starNumber <= Math.floor(value)) star.classList.add('full');
-            else if (starNumber === Math.ceil(value) && value % 1 === 0.5) star.classList.add('half');
+            if (starNumber <= Math.floor(valNum)) star.classList.add('full');
+            else if (starNumber === Math.ceil(valNum) && valNum % 1 === 0.5) star.classList.add('half');
         });
         if (text) text.textContent = value === 'all' ? '' : `${value}+`;
     }
 
-    function getBooksByCategory() {
-        const categories = {};
-        controller.getBooks().forEach((book) => {
+    function getBooksByCategory(): Record<string, AnyObj[]> {
+        const categories: Record<string, AnyObj[]> = {};
+        controller.getBooks().forEach((book: AnyObj) => {
             const category = book.category || 'Uncategorized';
             if (!categories[category]) categories[category] = [];
             categories[category].push(book);
@@ -294,11 +300,11 @@ function createBooksView(controller) {
         const container = document.getElementById('category-grid');
         if (!container) return;
         const booksByCategory = getBooksByCategory();
-        const sortedCategories = Object.entries(booksByCategory).sort((a, b) => b[1].length - a[1].length);
-        container.innerHTML = sortedCategories.map(([category, books]) => {
+        const sortedCategories = (Object.entries(booksByCategory) as [string, AnyObj[]][]).sort((a, b) => b[1].length - a[1].length);
+        container.innerHTML = sortedCategories.map(([category, books]: [string, AnyObj[]]) => {
             const previewBooks = books.slice(0, 8);
             const displayName = categoryDisplayNames[category] || category;
-            const bookCovers = previewBooks.map((book) => {
+            const bookCovers = previewBooks.map((book: AnyObj) => {
                 const coverUrl = controller.getCoverUrl(book, 'medium');
                 return `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" loading="lazy" decoding="async" data-remove-on-error="true">`;
             }).join('');
@@ -319,7 +325,7 @@ function createBooksView(controller) {
         }).join('');
     }
 
-    function setViewMode(mode) {
+    function setViewMode(mode: string) {
         currentViewMode = mode;
         const listBtn = document.getElementById('list-view-btn');
         const gridBtn = document.getElementById('grid-view-btn');
@@ -340,7 +346,7 @@ function createBooksView(controller) {
         if (gridBtnMain) gridBtnMain.classList.toggle('active', mode === 'grid');
 
         if (mode === 'grid') {
-            if (booksMain) booksMain.style.display = 'none';
+            if (booksMain) (booksMain as HTMLElement).style.display = 'none';
             if (categoryGridView) categoryGridView.style.display = 'block';
             if (sidebar) sidebar.style.display = 'none';
             if (booksLayout) {
@@ -350,14 +356,14 @@ function createBooksView(controller) {
             renderCategoryGrid();
             return;
         }
-        if (booksMain) booksMain.style.display = 'block';
+        if (booksMain) (booksMain as HTMLElement).style.display = 'block';
         if (categoryGridView) categoryGridView.style.display = 'none';
         if (sidebar) sidebar.style.display = 'block';
         if (booksLayout) booksLayout.classList.remove('grid-view-active');
         if (sidebar?.classList.contains('collapsed')) booksLayout?.classList.add('sidebar-collapsed');
     }
 
-    function openCategoryModal(category) {
+    function openCategoryModal(category: string) {
         const books = getBooksByCategory()[category] || [];
         const displayName = categoryDisplayNames[category] || category;
         let modal = document.getElementById('category-expanded-modal');
@@ -375,7 +381,7 @@ function createBooksView(controller) {
                     <button class="category-expanded-close" data-action="close-category-modal">&times;</button>
                 </div>
                 <div class="category-expanded-books">
-                    ${books.map((book) => {
+                    ${books.map((book: AnyObj) => {
                         const coverUrl = controller.getCoverUrl(book);
                         return `
                             <div class="category-expanded-book" data-action="open-book-from-grid" data-isbn="${escapeAttr(book.isbn)}">
@@ -397,8 +403,8 @@ function createBooksView(controller) {
         document.body.style.overflow = '';
     }
 
-    function openBookFromGrid(isbn) {
-        const book = controller.getBooks().find((entry) => entry.isbn === isbn);
+    function openBookFromGrid(isbn: string) {
+        const book = controller.getBooks().find((entry: AnyObj) => entry.isbn === isbn);
         if (!book) return;
         closeCategoryModal();
         controller.openBookModal(book);
@@ -423,7 +429,7 @@ function createBooksView(controller) {
 }
 
 // --- events ---
-function bindBooksEvents(handlers) {
+function bindBooksEvents(handlers: AnyObj) {
     const {
         clearSearch, clearStarFilter, closeBookModal, closeCategoryModal,
         handleCategoryToggle, openBookFromGrid, openCategoryModal,
@@ -437,50 +443,52 @@ function bindBooksEvents(handlers) {
     helpers.installEscapeCloser(closeBookModal);
     helpers.installEscapeCloser(closeCategoryModal);
 
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', (event: Event) => {
+        const target = event.target as Element | null;
+        if (!target) return;
         const modal = document.getElementById('book-modal');
         if (event.target === modal) { closeBookModal(); return; }
-        if (event.target.closest('[data-action="close-book-modal"]')) { closeBookModal(); return; }
-        if (event.target.closest('[data-action="toggle-sidebar"]')) { toggleSidebar(); return; }
-        if (event.target.closest('[data-action="toggle-list-dropdown"]')) { toggleListDropdown(); return; }
-        if (event.target.closest('[data-action="clear-search"]')) { clearSearch(); return; }
-        if (event.target.closest('[data-action="clear-star-filter"]')) {
+        if (target.closest?.('[data-action="close-book-modal"]')) { closeBookModal(); return; }
+        if (target.closest?.('[data-action="toggle-sidebar"]')) { toggleSidebar(); return; }
+        if (target.closest?.('[data-action="toggle-list-dropdown"]')) { toggleListDropdown(); return; }
+        if (target.closest?.('[data-action="clear-search"]')) { clearSearch(); return; }
+        if (target.closest?.('[data-action="clear-star-filter"]')) {
             event.preventDefault();
             clearStarFilter();
             return;
         }
-        const categoryButton = event.target.closest('.sidebar-category[data-category]');
+        const categoryButton = target.closest?.('.sidebar-category[data-category]') as HTMLElement | null;
         if (categoryButton) {
             handleCategoryToggle(categoryButton.dataset.category || 'all', categoryButton);
             return;
         }
-        const viewToggle = event.target.closest('[data-action="set-view-mode"]');
+        const viewToggle = target.closest?.('[data-action="set-view-mode"]') as HTMLElement | null;
         if (viewToggle) { setViewMode(viewToggle.dataset.mode || 'list'); return; }
-        const bookLink = event.target.closest('[data-action="book-link"]');
+        const bookLink = target.closest?.('[data-action="book-link"]') as HTMLElement | null;
         if (bookLink) { scrollToBookByTitle(bookLink.dataset.bookTitle || '', event); return; }
-        const carouselBook = event.target.closest('[data-action="carousel-book"]');
+        const carouselBook = target.closest?.('[data-action="carousel-book"]') as HTMLElement | null;
         if (carouselBook) { scrollToBookByIsbn(carouselBook.dataset.isbn || ''); return; }
-        const categoryModal = event.target.closest('[data-action="open-category-modal"]');
+        const categoryModal = target.closest?.('[data-action="open-category-modal"]') as HTMLElement | null;
         if (categoryModal) { openCategoryModal(categoryModal.dataset.category || ''); return; }
-        if (event.target.closest('[data-action="close-category-modal"]')) { closeCategoryModal(); return; }
-        const openFromGrid = event.target.closest('[data-action="open-book-from-grid"]');
+        if (target.closest?.('[data-action="close-category-modal"]')) { closeCategoryModal(); return; }
+        const openFromGrid = target.closest?.('[data-action="open-book-from-grid"]') as HTMLElement | null;
         if (openFromGrid) openBookFromGrid(openFromGrid.dataset.isbn || '');
     });
 
     document.addEventListener('click', (event) => {
-        window.JGCollectionUI.closeDropdownOnOutsideClick('list-dropdown', event);
+        window.JGCollectionUI?.closeDropdownOnOutsideClick?.('list-dropdown', event);
     });
 
-    const searchInput = document.getElementById('book-search');
+    const searchInput = document.getElementById('book-search') as HTMLInputElement | null;
     if (searchInput) {
-        const debouncedSearch = window.JGCollectionUI.debounce((value) => searchBooks(value), 120);
-        searchInput.addEventListener('input', () => debouncedSearch(searchInput.value));
+        const debouncedSearch = window.JGCollectionUI?.debounce?.((value: string) => searchBooks(value), 120);
+        if (debouncedSearch) searchInput.addEventListener('input', () => debouncedSearch(searchInput.value));
     }
 
     const slider = document.getElementById('timesread-slider');
     if (slider) {
-        slider.addEventListener('input', (event) => {
-            const count = Number.parseInt(event.target.value, 10);
+        slider.addEventListener('input', (event: Event) => {
+            const count = Number.parseInt((event.target as HTMLInputElement).value, 10);
             setReReadsFilter(count);
         });
     }
@@ -493,11 +501,12 @@ function bindBooksEvents(handlers) {
 }
 
 // --- orchestrator ---
-const collectionUi = window.JGCollectionUI;
-const dataFetch = window.JGDataFetch;
+const collectionUi = window.JGCollectionUI as AnyObj;
+const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj>; fetchJsonWithFallback: (urls: string[], opts?: AnyObj) => Promise<AnyObj> };
 const booksModal = createBooksModal({ getCoverUrl });
-let booksView = null;
-let booksRuntime = null;
+let booksView: AnyObj = null;
+let booksRuntime: AnyObj = null;
+void booksModal;
 
 async function loadBooksData() {
     if (booksState.getBooks().length > 0) return booksState.getBooks();
@@ -506,7 +515,7 @@ async function loadBooksData() {
     return books;
 }
 
-function getCoverUrl(bookOrIsbn, size = 'large') {
+function getCoverUrl(bookOrIsbn: AnyObj, size: string = "large") {
     if (!bookOrIsbn) return null;
     if (typeof bookOrIsbn === 'object') {
         if (size === 'medium' && bookOrIsbn.coverImageMedium) return bookOrIsbn.coverImageMedium;
@@ -525,7 +534,7 @@ function getFilteredBooks() {
     return filterBooks(booksState.getBooks(), booksState.get());
 }
 
-function flashCategoryArrow(button, isExpanding) {
+function flashCategoryArrow(button: HTMLElement | null, isExpanding: boolean) {
     const existingArrow = button.querySelector('.arrow-flash');
     if (existingArrow) existingArrow.remove();
     const arrow = document.createElement('span');
@@ -543,12 +552,12 @@ function buildCollectionController() {
     booksRuntime = window.JGCollectionRuntime.create({
         getState: () => booksState.get(),
         getFilteredItems: () => getFilteredBooks(),
-        getVisibleItems: (filteredBooks, state) => getBooksForCategory(filteredBooks, state.activeCategory),
-        groupItems: (filteredBooks) => groupBooksByCategory(filteredBooks),
-        renderSidebar: (groups) => booksView?.renderSidebar(groups),
-        renderVisibleItems: (visibleBooks) => booksView?.renderBooks(visibleBooks),
-        updateCount: (visibleBooks, state) => booksView?.updateBookCount(visibleBooks.length, state.activeCategory),
-        updateControls: (state) => {
+        getVisibleItems: (filteredBooks: AnyObj[], state: AnyObj) => getBooksForCategory(filteredBooks, state.activeCategory),
+        groupItems: (filteredBooks: AnyObj[]) => groupBooksByCategory(filteredBooks),
+        renderSidebar: (groups: AnyObj) => booksView?.renderSidebar(groups),
+        renderVisibleItems: (visibleBooks: AnyObj[]) => booksView?.renderBooks(visibleBooks),
+        updateCount: (visibleBooks: AnyObj[], state: AnyObj) => booksView?.updateBookCount(visibleBooks.length, state.activeCategory),
+        updateControls: (state: AnyObj) => {
             booksView?.updateStarFilterDisplay(state.starFilter);
             booksView?.updateReReadsFilterDisplay(state.reReadsFilter);
             collectionUi.toggleClearButton('search-clear-btn', Boolean(state.searchQuery));
@@ -556,7 +565,7 @@ function buildCollectionController() {
         group: {
             allButtonSelector: '.sidebar-category[data-category="all"]',
             buttonSelector: '.sidebar-category',
-            panelForValue: (category) => category === 'all' ? null : document.getElementById(`category-${category}`),
+            panelForValue: (category: string) => category === 'all' ? null : document.getElementById(`category-${category}`),
             panelSelector: '.category-books'
         },
         searchClearButtonId: 'search-clear-btn',
@@ -568,7 +577,7 @@ function buildCollectionController() {
     });
 }
 
-function searchBooks(query) {
+function searchBooks(query: string) {
     booksState.setSearchQuery(query);
     booksState.setActiveCategory('all');
     booksRuntime?.resetGrouping();
@@ -583,7 +592,7 @@ function clearSearch() {
     renderFromState();
 }
 
-function setStarFilter(rating) {
+function setStarFilter(rating: string) {
     booksState.setStarFilter(rating);
     booksState.setActiveCategory('all');
     booksRuntime?.resetGrouping();
@@ -597,15 +606,15 @@ function clearStarFilter() {
     renderFromState();
 }
 
-function setReReadsFilter(count) {
-    if (count === 0) booksState.clearReReadsFilter();
-    else booksState.setReReadsFilter(count);
+function setReReadsFilter(count: string | number) {
+    if (count === 0 || count === '0') booksState.clearReReadsFilter();
+    else booksState.setReReadsFilter(String(count));
     booksState.setActiveCategory('all');
     booksRuntime?.resetGrouping();
     renderFromState();
 }
 
-function toggleBookCategory(category, button) {
+function toggleBookCategory(category: string, button: HTMLElement) {
     booksRuntime?.toggleGroup({
         value: category,
         button,
@@ -629,12 +638,12 @@ function restoreSidebarState() {
 
 function toggleListDropdown() { booksRuntime?.toggleListDropdown(); }
 
-function setViewMode(mode) {
+function setViewMode(mode: string) {
     booksState.setViewMode(mode);
     booksView?.setViewMode(mode);
 }
 
-function scrollToBookByTitle(bookTitle, event) {
+function scrollToBookByTitle(bookTitle: string, event?: Event) {
     event?.preventDefault();
     booksView?.scrollToBookByTitle(bookTitle, event);
 }
@@ -645,10 +654,10 @@ function scrollToLinkedBook() {
     scrollToBookByTitle(linkedBookTitle);
 }
 
-function scrollToBookByIsbn(isbn) { booksView?.scrollToBookByIsbn(isbn); }
-function openCategoryModal(category) { booksView?.openCategoryModal(category); }
+function scrollToBookByIsbn(isbn: string) { booksView?.scrollToBookByIsbn(isbn); }
+function openCategoryModal(category: string) { booksView?.openCategoryModal(category); }
 function closeCategoryModal() { booksView?.closeCategoryModal(); }
-function openBookFromGrid(isbn) { booksView?.openBookFromGrid(isbn); }
+function openBookFromGrid(isbn: string) { booksView?.openBookFromGrid(isbn); }
 
 function initBooksZoom() {
     const booksGrid = document.getElementById('books-container');
@@ -712,6 +721,10 @@ async function initBooksPage() {
         showBooksUnavailable();
     }
 }
+
+// Mark as intentionally referenced — currently unused at module scope but
+// retained to ease future re-introduction.
+void getAllCategoryButton;
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initBooksPage, { once: true });
