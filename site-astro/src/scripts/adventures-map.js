@@ -53,38 +53,91 @@ async function loadPlacesOfInterest() {
     saveFilters();
 }
 
+// Phase 1.2: countries data is gated on the layer toggle. DEFAULT_FILTERS
+// has `countries: false`, so by default this file (~248KB) never ships.
+// First time the user enables the layer, ensureCountriesData() fetches
+// once + caches via globalThis.countriesPromise, then renderCountryLayer
+// re-runs to draw the geometry.
 async function loadCountriesData() {
-    const [geo, visited] = await Promise.all([
-        fetchJson(COUNTRIES_GEO_URL),
-        fetchJson(COUNTRIES_VISITED_URL)
-    ]);
-    if (geo) countryGeo = geo;
-    if (visited) visitedIso = new Set(Array.isArray(visited.iso) ? visited.iso : []);
+    if (globalThis.countriesPromise) return globalThis.countriesPromise;
+    globalThis.countriesPromise = (async () => {
+        const [geo, visited] = await Promise.all([
+            fetchJson(COUNTRIES_GEO_URL),
+            fetchJson(COUNTRIES_VISITED_URL)
+        ]);
+        if (geo) globalThis.countryGeo = geo;
+        if (visited) globalThis.visitedIso = new Set(Array.isArray(visited.iso) ? visited.iso : []);
+    })();
+    return globalThis.countriesPromise;
 }
 
+// Phase 1.2: split routes into primary (small, eager) + popular bucket-list
+// routes (~2MB across chunks, deferred). Popular routes load lazily on
+// first map interaction or after a short idle delay so they don't dominate
+// initial Total Bytes. routeSet === 'mine' skips them entirely.
 async function loadRoutes() {
-    const [primary, popular] = await Promise.all([
-        fetchJson(ROUTES_DATA_URL, { routes: [] }),
-        loadPopularRoutes()
-    ]);
-    globalThis.allRoutes = [
-        ...(Array.isArray(primary?.routes) ? primary.routes : []),
-        ...(Array.isArray(popular?.routes) ? popular.routes : [])
-    ];
+    const primary = await fetchJson(ROUTES_DATA_URL, { routes: [] });
+    globalThis.allRoutes = Array.isArray(primary?.routes) ? primary.routes : [];
 }
 
 async function loadPopularRoutes() {
-    const index = await fetchJson(POPULAR_ROUTES_INDEX_URL);
-    const chunks = Array.isArray(index?.chunks) ? index.chunks : [];
+    if (globalThis.popularRoutesPromise) return globalThis.popularRoutesPromise;
+    globalThis.popularRoutesPromise = (async () => {
+        const index = await fetchJson(POPULAR_ROUTES_INDEX_URL);
+        const chunks = Array.isArray(index?.chunks) ? index.chunks : [];
+        let payload;
+        if (chunks.length === 0) {
+            payload = await fetchJson(POPULAR_ROUTES_URL, { routes: [] });
+        } else {
+            const payloads = await Promise.all(chunks.map((chunk) => fetchJson(chunk.href, { routes: [] })));
+            payload = {
+                routes: payloads.flatMap((p) => Array.isArray(p?.routes) ? p.routes : [])
+            };
+        }
+        const additions = Array.isArray(payload?.routes) ? payload.routes : [];
+        // Avoid duplicating if loadPopularRoutes runs twice via race.
+        const have = new Set(globalThis.allRoutes.map((r) => r.id || `${r.adventureId}:${r.name}`));
+        for (const route of additions) {
+            const key = route.id || `${route.adventureId}:${route.name}`;
+            if (!have.has(key)) globalThis.allRoutes.push(route);
+        }
+        return payload;
+    })();
+    return globalThis.popularRoutesPromise;
+}
 
-    if (chunks.length === 0) {
-        return fetchJson(POPULAR_ROUTES_URL, { routes: [] });
-    }
+function shouldLoadPopularRoutes() {
+    return mapFilters.layers.routes && mapFilters.routeSet !== 'mine';
+}
 
-    const payloads = await Promise.all(chunks.map((chunk) => fetchJson(chunk.href, { routes: [] })));
-    return {
-        routes: payloads.flatMap((payload) => Array.isArray(payload?.routes) ? payload.routes : [])
+// Phase 1.2: kick off the (~2MB) popular-routes fetch only on actual user
+// engagement with the map — pointerdown / pan / zoom / wheel — or via
+// any explicit filter change that needs them. Default page load doesn't
+// pay the bytes; first interaction does.
+function schedulePopularRoutes(force = false) {
+    if (!shouldLoadPopularRoutes()) return;
+    if (globalThis.popularRoutesPromise) return;
+    const run = () => {
+        loadPopularRoutes()
+            .then(() => { renderRouteLayer(); })
+            .catch((error) => console.error('Error loading popular routes', error));
     };
+    if (force) { run(); return; }
+    if (!worldMap) {
+        // Map not mounted yet — caller will retry once it is.
+        return;
+    }
+    const onFirstInteraction = () => {
+        worldMap.off('movestart', onFirstInteraction);
+        worldMap.off('zoomstart', onFirstInteraction);
+        worldMap.off('mousedown', onFirstInteraction);
+        worldMap.off('touchstart', onFirstInteraction);
+        run();
+    };
+    worldMap.on('movestart', onFirstInteraction);
+    worldMap.on('zoomstart', onFirstInteraction);
+    worldMap.on('mousedown', onFirstInteraction);
+    worldMap.on('touchstart', onFirstInteraction);
 }
 
 async function loadPhotos() {
@@ -94,9 +147,13 @@ async function loadPhotos() {
 
 async function loadMapDatasets() {
     if (mapDataPromise) return mapDataPromise;
+    // Phase 1.2: drop loadCountriesData() + loadPopularRoutes() from the
+    // eager Promise.all. Countries data is gated on the layer toggle
+    // (default off) — see renderCountryLayer. Popular routes (~2MB)
+    // wait for an idle window via schedulePopularRoutes after the map
+    // mounts.
     globalThis.mapDataPromise = Promise.all([
         loadPlacesOfInterest(),
-        loadCountriesData(),
         loadRoutes(),
         loadPhotos()
     ]);
@@ -236,7 +293,13 @@ async function ensureWorldMap(adventures = allAdventures) {
     initWorldMap(adventures);
     setTimeout(() => {
         loadMapDatasets()
-            .then(refreshMapDatasets)
+            .then(() => {
+                refreshMapDatasets();
+                // Phase 1.2: defer popular-routes (~2MB) until idle so the
+                // initial Total Bytes drops. The route layer renders again
+                // once these resolve.
+                schedulePopularRoutes();
+            })
             .catch((error) => console.error('Error loading map overlays', error));
     }, 900);
 }
@@ -465,6 +528,10 @@ function matchesAdventureFilters(adventure) {
 
 function applyAllFilters() {
     saveFilters();
+    // Phase 1.2: enabling the routes layer kicks off popular-routes
+    // fetch if it hasn't run yet. No-op if already loading or routeSet
+    // is "mine".
+    schedulePopularRoutes();
     applyAdventureMarkerFilter();
     renderPlaceMarkers();
     renderRouteLayer();
@@ -491,7 +558,15 @@ function renderCountryLayer() {
         worldMap.removeLayer(countryLayer);
         globalThis.countryLayer = null;
     }
-    if (!mapFilters.layers.countries || !countryGeo) return;
+    if (!mapFilters.layers.countries) return;
+    // Phase 1.2: lazy-fetch countries data on first toggle. Re-renders
+    // once the geometry resolves.
+    if (!countryGeo) {
+        loadCountriesData()
+            .then(() => renderCountryLayer())
+            .catch((error) => console.error('Error loading countries data', error));
+        return;
+    }
 
     globalThis.countryLayer = L.geoJSON(countryGeo, {
         renderer: L.svg(),
@@ -734,6 +809,10 @@ function buildMapControlStack() {
         if (target.id === 'map-filter-routeset') {
             mapFilters.routeSet = target.value;
             saveFilters();
+            // Phase 1.2: switching the route filter is explicit user
+            // intent — fire the fetch immediately rather than waiting
+            // for a map gesture.
+            schedulePopularRoutes(true);
             renderRouteLayer();
         }
     });
