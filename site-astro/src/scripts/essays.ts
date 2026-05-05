@@ -8,13 +8,6 @@ const collectionUi = window.JGCollectionUI;
 const dataFetch = window.JGDataFetch;
 let essaysRuntime = null;
 
-// Phase 4 (additive): expose essays runtime state for future feature-module migration.
-if (typeof window !== 'undefined') {
-    window.EssaysState = {
-        get runtime() { return essaysRuntime; }
-    };
-}
-
 // Essays page orchestrator. State, filters, and view rendering live here because
 // this page is their only consumer.
 const ESSAY_CATEGORY_KEYS = ['philosophy', 'management', 'technology', 'personal', 'finance', 'writing'];

@@ -9,7 +9,6 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
 // js/letterboxd-render.js, js/letterboxd-view.js — those shards only ever
 // exposed window.JGLetterboxd* globals consumed here.
 
-const LETTERBOXD_USERNAME = 'contentwatch';
 let linkedMovieHandled = false;
 const movieMetadata = {
     'What Dreams May Come': { genre: 'Drama', timesWatched: 1 },
@@ -44,11 +43,6 @@ const movieState = (function createState() {
         setTimesWatchedFilter(c) { state.timesWatchedFilter = c; }
     };
 }());
-
-// Phase 4 (additive): expose movies-page state for future feature-module migration.
-if (typeof window !== 'undefined') {
-    window.MoviesState = movieState;
-}
 
 // --- filters ---
 function normalizeGenreKey(genre) {

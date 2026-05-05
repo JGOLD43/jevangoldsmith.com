@@ -37,11 +37,6 @@ const booksState = (function createState() {
     };
 }());
 
-// Phase 4 (additive): expose books-page state for future feature-module migration.
-if (typeof window !== 'undefined') {
-    window.BooksState = booksState;
-}
-
 // --- filters ---
 const CATEGORY_MAP = {
     'Advertising and Copywriting': 'advertising',

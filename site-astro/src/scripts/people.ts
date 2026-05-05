@@ -11,20 +11,6 @@ let peopleRuntime = null;
 let peopleById = new Map();
 let lastFocusedPerson = null;
 
-// Phase 4 (additive): expose the people-page runtime state via a single
-// namespaced surface so future feature-module migration has a stable
-// import target. Bare-global access in this file keeps working unchanged.
-if (typeof window !== 'undefined') {
-    window.PeopleState = {
-        get cards() { return peopleCards; },
-        set cards(value) { peopleCards = value; },
-        get runtime() { return peopleRuntime; },
-        get byId() { return peopleById; },
-        get lastFocused() { return lastFocusedPerson; },
-        set lastFocused(value) { lastFocusedPerson = value; }
-    };
-}
-
 let peopleSourceFilter = 'all';
 
 function normalizePersonName(name) {

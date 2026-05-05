@@ -7,13 +7,6 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
 const dataFetch = window.JGDataFetch;
 let podcastRuntime = null;
 
-// Phase 4 (additive): expose podcasts runtime state for future migration.
-if (typeof window !== 'undefined') {
-    window.PodcastsState = {
-        get runtime() { return podcastRuntime; }
-    };
-}
-
 function escapeValue(value) {
     return String(value || '').replace(/[&<>"']/g, (char) => ({
         '&': '&amp;',

@@ -120,13 +120,6 @@ declare global {
     sanitizeUrl?: (s: unknown, fallback?: string) => string;
     sanitizeHTML?: (s: string) => string;
 
-    // Per-page state surfaces (additive Phase 4 of the prior plan).
-    AdventuresState?: Record<string, unknown>;
-    BooksState?: Record<string, unknown>;
-    MoviesState?: Record<string, unknown>;
-    PeopleState?: Record<string, unknown>;
-    PodcastsState?: Record<string, unknown>;
-    EssaysState?: Record<string, unknown>;
     MovieStats?: { render: (movies: unknown) => void; compute: (movies: unknown) => unknown };
 
     // Legacy JG namespaces (still referenced by some consumers).
