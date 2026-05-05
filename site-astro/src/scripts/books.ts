@@ -173,6 +173,16 @@ function createBooksView(controller) {
     }
 
     function renderSidebar(categories) {
+        // /books pre-renders the per-category lists at build time. If the
+        // first category container already has children, the SSR's covered
+        // sidebar + counts — leave them alone (no flicker).
+        const ssrCategoryKeys = Object.keys(categories);
+        const ssrAlreadyRendered = ssrCategoryKeys.some((key) => {
+            const c = document.getElementById(`category-${key}`);
+            return c && c.children.length > 0;
+        });
+        if (ssrAlreadyRendered) return;
+
         const countAll = document.getElementById('count-all');
         if (countAll) {
             const total = Object.values(categories).reduce((sum, books) => sum + books.length, 0);
@@ -199,6 +209,10 @@ function createBooksView(controller) {
     function renderCarousel(books) {
         const track = document.getElementById('carousel-track');
         if (!track) return;
+        // /books pre-renders the carousel at build time. If the track
+        // already has children, SSR's done the work — don't re-render and
+        // cause the visible flash of swap-out / swap-in.
+        if (track.children.length > 0) return;
         const recentBooks = books.slice(-20).reverse();
         const carouselBooks = [...recentBooks, ...recentBooks];
         track.style.animationDuration = `${recentBooks.length * 3}s`;

@@ -17,6 +17,7 @@ Purpose: `small active index for docs that guide current website work`
 - [Post-Tier-1+2 Improvements Plan](POST_TIER12_PLAN.md)
 - [Post-Audit Cleanup + LH-99 Plan](POST_AUDIT_PLAN.md)
 - [Instant Load Execution Plan](INSTANT_LOAD_PLAN.md)
+- [Code Optimization Execution Plan](CODE_OPTIMIZATION_EXECUTION_PLAN.md)
 - [Release Runbook](RELEASE_RUNBOOK.md)
 - [Decision Log](DECISION_LOG.md)
 - [Agent Guide](AGENT_GUIDE.md)

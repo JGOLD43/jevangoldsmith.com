@@ -3,6 +3,7 @@ import CollectionPage from '../components/CollectionPage.astro';
 import { getCollection } from 'astro:content';
 import { tasteListOptions, BOOK_SECTIONS } from '../lib/collection-sections';
 import { renderBookCardHtml } from '../lib/book-card';
+import { escapeAttr } from '../lib/html-escape';
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
@@ -10,6 +11,64 @@ const canonical = 'https://jevangoldsmith.com/books.html';
 // an already-populated container and skips the initial wipe-and-render.
 const books = await getCollection('books');
 const bookCardsHtml = books.map((b: any) => renderBookCardHtml(b.data)).join('');
+
+// Pre-render the carousel + per-category sidebar lists so the page
+// paints with everything in place — no flicker as JS populates them.
+const CATEGORY_MAP: Record<string, string> = {
+  'Advertising and Copywriting': 'advertising',
+  'Autobiographies': 'autobiographies',
+  'Big Ideas': 'bigideas',
+  'Learning': 'learning',
+  'Mental Endurance': 'mentalendurance',
+  'Out of the Box Thinking': 'outofthebox',
+  'Patience and Clear Thinking': 'patience',
+  'Persuasion': 'persuasion',
+  'Psychology Books': 'psychology',
+  'Science': 'science',
+  'Storytelling': 'storytelling',
+  'Strategy and War': 'strategy',
+  'The Great Books': 'greatbooks',
+  'Who Am I?': 'whoami'
+};
+
+function coverUrl(book: any, size: 'medium' | 'large' = 'large'): string {
+  if (size === 'medium' && book.coverImageMedium) return book.coverImageMedium;
+  if (book.coverImage) return book.coverImage;
+  const isbn = String(book.isbn || '').replace(/[^0-9X]/gi, '');
+  return isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-${size === 'medium' ? 'M' : 'L'}.jpg` : '';
+}
+
+const booksByCategoryKey: Record<string, any[]> = {};
+for (const entry of books) {
+  const data = entry.data as any;
+  const key = CATEGORY_MAP[data.category];
+  if (!key) continue;
+  (booksByCategoryKey[key] ||= []).push(data);
+}
+
+// Inject per-category list HTML + counts into the cloned section configs.
+const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section: any) => {
+  // The "All Books" section has no panelId — just stamp the total count
+  // so the badge ships with 122 instead of the placeholder 0.
+  if (!section.panelId) return { ...section, count: String(books.length) };
+  const key = section.panelId.replace(/^category-/, '');
+  const list = booksByCategoryKey[key] || [];
+  const innerHtml = list.map((book) => `
+                <a href="#" class="book-link" data-action="book-link" data-book-title="${escapeAttr(book.title)}">
+                    <div>${escapeAttr(book.title)}</div>
+                    <div class="book-link-author">${escapeAttr(book.author)}</div>
+                </a>
+              `).join('');
+  return { ...section, count: String(list.length), panelInnerHtml: innerHtml };
+});
+
+// Carousel: most recent 20 books, doubled for the seamless scroll loop.
+const recentBooks = books.slice(-20).reverse().map((b: any) => b.data);
+const carouselBooks = [...recentBooks, ...recentBooks];
+const carouselTrackInner = carouselBooks.map((book: any) => {
+  const url = coverUrl(book, 'medium');
+  return `<img class="carousel-book" src="${escapeAttr(url)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
+}).join('');
 
 // legacy fragments inlined directly into the page.
 const sidebarFiltersHtml = `<div class="sidebar-filter-section">
@@ -49,7 +108,7 @@ const sidebarFiltersHtml = `<div class="sidebar-filter-section">
 
 const headerCarouselHtml = `<div class="recent-books-carousel">
     <span class="carousel-label">Recently Added</span>
-    <div class="carousel-track" id="carousel-track"></div>
+    <div class="carousel-track" id="carousel-track" style="animation-duration:${recentBooks.length * 3}s">${carouselTrackInner}</div>
 </div>`;
 
 const headerViewToggleHtml = `<div class="view-toggle main-view-toggle">
@@ -150,7 +209,7 @@ const config = ({
     },
     extraHtml: sidebarFiltersHtml,
     footerText: 'Books with a badge have my full review',
-    sections: BOOK_SECTIONS
+    sections: SIDEBAR_SECTIONS
   },
   main: {
     className: 'books-main collection-main',

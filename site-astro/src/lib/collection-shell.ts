@@ -55,6 +55,9 @@ export interface SectionItem {
   attrs?: Record<string, string>;
   panelId?: string;
   panelClass?: string;
+  /** Optional inner HTML inlined inside the panel div at SSR. Lets pages
+   * pre-render per-category lists so JS doesn't paint them in. */
+  panelInnerHtml?: string;
 }
 
 export interface ListOption {
@@ -200,7 +203,7 @@ function renderSection(item: SectionItem): string {
   const icon = iconSource.trim().startsWith('<') ? iconSource : escapeHTML(iconSource);
   const countIdAttr = item.countId ? ` id="${escapeHtmlAttr(item.countId)}"` : '';
   const panel = item.panelId
-    ? `\n                <div class="${escapeHtmlAttr(item.panelClass ?? '')}" id="${escapeHtmlAttr(item.panelId)}"></div>`
+    ? `\n                <div class="${escapeHtmlAttr(item.panelClass ?? '')}" id="${escapeHtmlAttr(item.panelId)}">${item.panelInnerHtml ?? ''}</div>`
     : '';
 
   return `<div class="sidebar-section">
