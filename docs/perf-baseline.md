@@ -14,34 +14,38 @@ Update this file deliberately when shipping a perf-affecting change that
 moves the baseline. Re-capture with
 `npm run perf:lighthouse -- --out=docs/perf-baseline.md`.
 
-**Build**: post Tier 1+2 plan (search CLS fix + adventures map test +
-adventures map cross-module fixes).
+**Build**: post Phase 1 + 2 of POST_TIER12_PLAN (people merge to build,
+adventures countries + popular routes gated, movies CLS deterministic
+fix via cron sync, podcasts LCP eager, preconnect hints, /_astro
+immutable cache).
 **Base URL**: `http://localhost:8765`
 **Preset**: desktop, simulated throttling, median-of-3 runs
 
 Notes:
 
-- `/adventures.html` LCP went from 684ms → 1578ms because the previous
-  baseline measured a silently-broken map (`WEB_MERCATOR_MAX_LAT is not
-  defined` halted bootstrap). The Tier 1+2 fix exposes cross-module
-  constants on globalThis so the map actually mounts + renders 540+
-  markers + tiles. The new number is the cost of working software.
-- `/movies.html` CLS varies between runs because the Letterboxd RSS
-  fetch sometimes resolves during the LH run and sometimes doesn't.
-  `npm run movies:sync` populating `data/movies.json` with the full
-  history fixes this; the proxy was 520-ing during baseline capture.
-- `/search.html` Lighthouse 80 → 100 after Phase 2.1 (min-height fix
-  on the results container kills the empty-to-261-card CLS).
+- `/movies.html` CLS dropped from 0.380 to 0.000 after slice 1.3 cut
+  the runtime allorigins.win RSS proxy fetch. `data/movies.json` is
+  now refreshed daily by .github/workflows/letterboxd-sync.yml so the
+  page is pure SSR.
+- `/adventures.html` Total Bytes dropped from 3278.7KB to 1083.5KB
+  after slice 1.2 gated the popular-routes chunks behind first user
+  interaction (movestart / zoomstart / mousedown / touchstart) and
+  the countries data behind the layer toggle.
+- `/people.html` Total Bytes dropped from 2007.3KB to 1958.6KB after
+  slice 1.1 moved the books/movies/profiles merge to build time.
+  Native loading="lazy" still pre-fetches ~68/98 thumbnails inside
+  Lighthouse's network-idle window — see slice 1.1 commit for the
+  deviation note on why `< 700KB` is unreached.
 
 | Route | Score | LCP | CLS | TBT | FCP | SI | Total Bytes |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| / | 100 | 627ms | 0.000 | 0ms | 486ms | 486ms | 545.7KB |
-| /books.html | 97 | 1052ms | 0.064 | 0ms | 667ms | 667ms | 1392.3KB |
-| /movies.html | 82 | 566ms | 0.380 | 0ms | 485ms | 485ms | 567.7KB |
-| /people.html | 99 | 959ms | 0.000 | 0ms | 510ms | 510ms | 2007.3KB |
-| /adventures.html | 95 | 1578ms | 0.000 | 14ms | 446ms | 700ms | 3278.7KB |
-| /podcasts.html | 98 | 1087ms | 0.000 | 0ms | 487ms | 487ms | 729.4KB |
-| /essays.html | 100 | 605ms | 0.000 | 0ms | 504ms | 504ms | 231.6KB |
-| /search.html | 100 | 643ms | 0.007 | 0ms | 423ms | 423ms | 313.8KB |
+| / | 100 | 630ms | 0.000 | 0ms | 486ms | 486ms | 545.7KB |
+| /books.html | 99 | 860ms | 0.054 | 0ms | 648ms | 648ms | 1392.3KB |
+| /movies.html | 100 | 568ms | 0.000 | 0ms | 506ms | 506ms | 566.4KB |
+| /people.html | 99 | 920ms | 0.001 | 0ms | 652ms | 652ms | 1958.6KB |
+| /adventures.html | 94 | 1678ms | 0.000 | 1ms | 408ms | 691ms | 1083.5KB |
+| /podcasts.html | 99 | 952ms | 0.000 | 0ms | 490ms | 490ms | 729.5KB |
+| /essays.html | 100 | 604ms | 0.000 | 0ms | 506ms | 506ms | 231.6KB |
+| /search.html | 100 | 605ms | 0.007 | 0ms | 425ms | 425ms | 313.8KB |
 
 Captured by `scripts/perf-lighthouse.js`. Re-run with `npm run perf:lighthouse`.
