@@ -25,11 +25,30 @@ interface BookData {
 }
 
 import { escapeHtml, escapeAttr } from './html-escape';
+import remoteAssets from '../../../data/remote-assets.generated.json';
+
+type RemoteEntry = { source: string; widths: number[]; formats: Record<string, { avif?: string; jpg?: string }> };
+const REMOTE = remoteAssets as Record<string, RemoteEntry>;
+
+// Localize an OpenLibrary cover URL to the locally-generated jpg
+// (build-time download from optimize-assets.js → images/generated/remote/).
+// Fall back to the remote URL when the manifest doesn't have it (first
+// build before optimize-assets has run, or a non-OpenLibrary cover).
+function localize(url: string): string {
+  if (!url) return '';
+  const lookupKey = url.replace(/-M\.jpg(\?.*)?$/, '-L.jpg');
+  const entry = REMOTE[lookupKey] || REMOTE[url];
+  if (!entry) return url;
+  // 360 is the visible width for a card cover (~150px display, 2x DPR).
+  const jpg = entry.formats['360']?.jpg || entry.formats['480']?.jpg;
+  return jpg ? `/${jpg}` : url;
+}
 
 export function bookCoverUrl(book: BookData): string {
-  if (book.coverImage) return book.coverImage;
+  if (book.coverImage) return localize(book.coverImage);
   const cleanIsbn = String(book.isbn ?? '').replace(/[^0-9X]/g, '');
-  return cleanIsbn ? `https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg` : '';
+  if (!cleanIsbn) return '';
+  return localize(`https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg`);
 }
 
 export function renderBookCardHtml(book: BookData): string {

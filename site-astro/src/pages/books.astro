@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import { tasteListOptions, BOOK_SECTIONS } from '../lib/collection-sections';
 import { renderBookCardHtml } from '../lib/book-card';
 import { escapeAttr } from '../lib/html-escape';
+import remoteAssets from '../../../data/remote-assets.generated.json';
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
@@ -31,11 +32,33 @@ const CATEGORY_MAP: Record<string, string> = {
   'Who Am I?': 'whoami'
 };
 
+// Resolve a remote OpenLibrary cover URL to a local pre-generated jpg.
+// remote-assets.generated.json holds the mapping built by
+// scripts/optimize-assets.js (cover widths: 160, 240, 360, 480). Local
+// paths paint instantly from /images/generated/remote/. Without this the
+// browser still hits openlibrary on first visit and covers visibly load
+// in below the fold even on a fast connection.
+type RemoteEntry = { source: string; widths: number[]; formats: Record<string, { avif?: string; jpg?: string }> };
+const REMOTE = remoteAssets as Record<string, RemoteEntry>;
+function localizeCover(url: string, size: 'medium' | 'large'): string {
+  // optimize-assets indexes ISBN covers under the -L URL only (it
+  // generates 160/240/360/480 widths from that single source). Normalize
+  // an -M lookup back to its -L key so the manifest hit lands.
+  const lookupKey = url.replace(/-M\.jpg(\?.*)?$/, '-L.jpg');
+  const entry = REMOTE[lookupKey] || REMOTE[url];
+  if (!entry) return url;
+  const targetWidth = size === 'medium' ? 240 : 480;
+  const jpg = entry.formats[String(targetWidth)]?.jpg;
+  return jpg ? `/${jpg}` : url;
+}
+
 function coverUrl(book: any, size: 'medium' | 'large' = 'large'): string {
-  if (size === 'medium' && book.coverImageMedium) return book.coverImageMedium;
-  if (book.coverImage) return book.coverImage;
+  if (size === 'medium' && book.coverImageMedium) return localizeCover(book.coverImageMedium, size);
+  if (book.coverImage) return localizeCover(book.coverImage, size);
   const isbn = String(book.isbn || '').replace(/[^0-9X]/gi, '');
-  return isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-${size === 'medium' ? 'M' : 'L'}.jpg` : '';
+  if (!isbn) return '';
+  const remote = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+  return localizeCover(remote, size);
 }
 
 const booksByCategoryKey: Record<string, any[]> = {};
@@ -216,7 +239,7 @@ const config = ({
     titleTag: 'h2',
     title: 'Bookshelf',
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a><span class="read-first-note">← read this first</span></div>',
-    headerExtraHtml: '',
+    headerExtraHtml: headerCarouselHtml,
     counterExtraHtml: headerViewToggleHtml,
     counterGroupClass: 'header-right',
     counterId: 'book-count',
