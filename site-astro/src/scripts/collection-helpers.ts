@@ -1,4 +1,3 @@
-// @ts-nocheck — strict typing deferred; runtime is covered by Playwright + smoke. See POST_AUDIT_PLAN slice 3.3.
 // Cross-collection helpers: image error fallback, star drag handler,
 // escape-key closer. Replaces duplicated logic across books/letterboxd/podcasts.
 (function () {
@@ -20,13 +19,13 @@
 
     // Drag-to-rate over .filter-star elements inside `container`.
     // halfStars=true enables 0.5 increments based on click x-position.
-    function bindStarRatingDrag(container, onChange, options = {}) {
+    function bindStarRatingDrag(container: Element | null, onChange: (value: number) => void, options: { halfStars?: boolean } = {}) {
         if (!container) return;
         const halfStars = Boolean(options.halfStars);
-        const stars = Array.from(container.querySelectorAll('.filter-star'));
+        const stars = Array.from(container.querySelectorAll<HTMLElement>('.filter-star'));
         let dragging = false;
-        function valueFor(star, event) {
-            const n = Number.parseInt(star.getAttribute('data-star'), 10);
+        function valueFor(star: HTMLElement, event: MouseEvent): number {
+            const n = Number.parseInt(star.getAttribute('data-star') || '0', 10);
             if (!halfStars) return n;
             const rect = star.getBoundingClientRect();
             const isLeftHalf = (event.clientX - rect.left) < rect.width / 2;
@@ -45,9 +44,9 @@
         document.addEventListener('mouseup', () => { dragging = false; });
     }
 
-    const escapeClosers = [];
+    const escapeClosers: Array<() => void> = [];
     let escapeInstalled = false;
-    function installEscapeCloser(closer) {
+    function installEscapeCloser(closer: () => void) {
         if (typeof closer === 'function') escapeClosers.push(closer);
         if (escapeInstalled) return;
         escapeInstalled = true;
