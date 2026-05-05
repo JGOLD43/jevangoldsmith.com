@@ -11,7 +11,8 @@
 // dependencies in /js still target the legacy class names and ids.
 
 import Base from '../layouts/Base.astro';
-import { renderCollectionMain, type CollectionConfig } from '../lib/collection-chrome';
+import { renderCollectionMain } from '../lib/collection-shell';
+import type { CollectionConfig } from '../lib/collection-shell';
 
 interface Props {
   config: CollectionConfig;

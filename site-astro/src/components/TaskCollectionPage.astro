@@ -5,10 +5,8 @@
 // output is byte-identical to the previous per-page composition.
 
 import Base from '../layouts/Base.astro';
-import {
-  renderTaskListMain,
-  type TaskListConfig
-} from '../lib/collection-chrome';
+import { renderTaskListMain } from '../lib/collection-sections';
+import type { TaskListConfig } from '../lib/collection-sections';
 
 interface Props {
   items: any[];

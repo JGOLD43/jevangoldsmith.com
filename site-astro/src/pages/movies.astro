@@ -1,10 +1,7 @@
 ---
 import CollectionPage from '../components/CollectionPage.astro';
 import { getCollection } from 'astro:content';
-import {
-  tasteListOptions,
-  MOVIE_SECTIONS
-} from '../lib/collection-chrome';
+import { tasteListOptions, MOVIE_SECTIONS } from '../lib/collection-sections';
 import { renderMovieCardHtml } from '../lib/movie-card';
 
 const canonical = 'https://jevangoldsmith.com/movies.html';

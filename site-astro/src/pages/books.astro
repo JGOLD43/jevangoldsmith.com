@@ -1,10 +1,7 @@
 ---
 import CollectionPage from '../components/CollectionPage.astro';
 import { getCollection } from 'astro:content';
-import {
-  tasteListOptions,
-  BOOK_SECTIONS
-} from '../lib/collection-chrome';
+import { tasteListOptions, BOOK_SECTIONS } from '../lib/collection-sections';
 import { renderBookCardHtml } from '../lib/book-card';
 
 const canonical = 'https://jevangoldsmith.com/books.html';
