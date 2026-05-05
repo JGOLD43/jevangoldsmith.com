@@ -108,17 +108,20 @@ const categories: Category[] = (raw as any).productCategories ?? [];
             <span class="shelf-object-stage has-photo" aria-hidden="true">
               <span class="shelf-object-mark">
                 {asset && (
-                  <img
-                    class="shelf-object-photo"
-                    src={asset.src}
-                    srcset={asset.srcset}
-                    sizes={asset.sizes}
-                    alt={p.title}
-                    width={asset.width}
-                    height={asset.height}
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <picture>
+                    <source type="image/avif" srcset={asset.srcset.replace(/\.png\b/g, '.avif')} sizes={asset.sizes} />
+                    <img
+                      class="shelf-object-photo"
+                      src={asset.src}
+                      srcset={asset.srcset}
+                      sizes={asset.sizes}
+                      alt={p.title}
+                      width={asset.width}
+                      height={asset.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
                 )}
                 {!p.image && p.icon && <span class="shelf-object-icon">{p.icon}</span>}
               </span>

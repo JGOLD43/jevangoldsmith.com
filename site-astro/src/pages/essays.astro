@@ -34,7 +34,13 @@ const config = ({
     subtitleText: 'Thoughts on philosophy, management, and modern life',
     counterId: 'essay-count',
     counterLabel: 'Essays Published',
-    bodyHtml: '<div id="essays-container" class="content-section"></div>'
+    bodyHtml: `<div id="essays-container" class="content-section"></div>
+    <section class="field-notes-inline-cta" data-field-notes-inline>
+        <p class="archive-kicker">Field Notes</p>
+        <h2>Want more notes like this?</h2>
+        <p>Field Notes is where I send useful ideas before they become polished essays: books, objects, questions, and experiments worth keeping.</p>
+        <a href="field-notes.html" class="btn-primary" data-cta-id="newsletter" data-cta-location="essays-inline">Get Field Notes</a>
+    </section>`
   }
 });
 ---

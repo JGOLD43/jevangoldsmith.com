@@ -63,7 +63,7 @@ const trip = tripSchema({
   startDate: a.startDate ?? null,
   endDate: a.endDate ?? null,
   itinerary: a.highlights?.map((h: string) => ({ name: h })) ?? null,
-  image: a.heroImage ?? undefined
+  image: a.heroImage ? `https://jevangoldsmith.com/${remoteAssetFor(a.heroImage, 1200)}` : undefined
 });
 
 const breadcrumbs = [
@@ -92,23 +92,26 @@ const detailData = JSON.stringify({
   canonical={canonical}
   pageType="Article"
   breadcrumbs={breadcrumbs}
-  ogImage={a.heroImage ?? undefined}
+  ogImage={a.heroImage ? `https://jevangoldsmith.com/${remoteAssetFor(a.heroImage, 1200)}` : undefined}
   extraSchema={[trip]}
 >
   <main class="adventure-detail-page">
     <div class="adventure-hero">
       {heroLocal && (
-        <img
-          src={heroLocal}
-          alt={a.title}
-          width="1200"
-          height="800"
-          decoding="async"
-          fetchpriority="high"
-          srcset={remoteAssetSrcset(a.heroImage ?? undefined)}
-          sizes="(max-width: 768px) 92vw, 640px"
-          loading="lazy"
-        />
+        <picture>
+          <source type="image/avif" srcset={remoteAssetSrcset(a.heroImage ?? undefined, 'avif')} sizes="(max-width: 768px) 92vw, 640px" />
+          <img
+            src={heroLocal}
+            alt={a.title}
+            width="1200"
+            height="800"
+            decoding="async"
+            fetchpriority="high"
+            srcset={remoteAssetSrcset(a.heroImage ?? undefined)}
+            sizes="(max-width: 768px) 92vw, 640px"
+            loading="lazy"
+          />
+        </picture>
       )}
       <div class="adventure-hero-overlay">
         {a.location && <div class="adventure-hero-location">{a.location}</div>}
@@ -167,18 +170,22 @@ const detailData = JSON.stringify({
             {gallery.map((g, i) => {
               const local = remoteAssetFor(g.src ?? '', 800);
               const srcset = remoteAssetSrcset(g.src);
+              const avifSrcset = remoteAssetSrcset(g.src, 'avif');
               return (
                 <div class="adventure-gallery-item" data-action="open-lightbox" data-index={i}>
-                  <img
-                    src={local}
-                    alt={g.caption ?? ''}
-                    width="800"
-                    height="533"
-                    loading="lazy"
-                    decoding="async"
-                    srcset={srcset}
-                    sizes="(max-width: 768px) 92vw, 640px"
-                  />
+                  <picture>
+                    <source type="image/avif" srcset={avifSrcset} sizes="(max-width: 768px) 92vw, 640px" />
+                    <img
+                      src={local}
+                      alt={g.caption ?? ''}
+                      width="800"
+                      height="533"
+                      loading="lazy"
+                      decoding="async"
+                      srcset={srcset}
+                      sizes="(max-width: 768px) 92vw, 640px"
+                    />
+                  </picture>
                   {g.caption && <div class="adventure-gallery-caption">{g.caption}</div>}
                 </div>
               );

@@ -54,9 +54,16 @@ export function renderPersonCardHtml(person: Person, index = Number.MAX_SAFE_INT
   const loadingAttr = eager ? 'eager' : 'lazy';
   const priorityAttr = eager ? ' fetchpriority="high"' : '';
 
+  // Source-native <picture> with avif source — eliminates the post-build
+  // wrap that scripts/normalize-astro-html.js used to perform on every card.
+  const avifSrcset = srcset ? srcset.replace(/\.jpg\b/g, '.avif') : '';
+  const avifSource = avifSrcset
+    ? `<source type="image/avif" srcset="${escapeHtml(avifSrcset)}" sizes="(max-width: 768px) 42vw, 220px">`
+    : '';
+
   return `<article class="person-card" data-category="${escapeHtml(category)}" data-person-id="${escapeHtml(personId)}" data-search="${escapeHtml(searchText)}" data-source-type="${escapeHtml(sourceType)}" role="button" tabindex="0">
         <div class="person-image-container">
-            <img src="${escapeHtml(image)}" alt="${escapeHtml(name)}" class="person-image" srcset="${escapeHtml(srcset)}" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="${loadingAttr}" decoding="async"${priorityAttr}>
+            <picture>${avifSource}<img src="${escapeHtml(image)}" alt="${escapeHtml(name)}" class="person-image" srcset="${escapeHtml(srcset)}" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="${loadingAttr}" decoding="async"${priorityAttr}></picture>
         </div>
         <div class="person-info">
             <h3 class="person-name">${escapeHtml(name)}</h3>

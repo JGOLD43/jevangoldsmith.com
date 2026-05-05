@@ -33,67 +33,7 @@ const remoteAssets = fs.existsSync(remoteAssetsPath)
   ? JSON.parse(fs.readFileSync(remoteAssetsPath, 'utf8'))
   : {};
 
-const ctas = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/ctas.json'), 'utf8'));
-const ctaByHref = new Map((ctas.ctas || []).map((c) => [c.href, c]));
-
 const SITE_ORIGIN = 'https://jevangoldsmith.com';
-
-function ctaLocationFor(file) {
-  return file.replace(/\.html$/, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
-}
-
-// Legacy injectRelatedInternalLinks puts <section class="seo-related-section">
-// INSIDE </main>. Astro's Base.astro emits it AFTER </main> via the SeoRelated
-// component. To match legacy layout, move the section so it's the last element
-// inside <main>...</main>.
-function moveSeoRelatedInsideMain(html) {
-  const sectionRegex = /<section class="seo-related-section"[\s\S]*?<\/section>/g;
-  const matches = [...html.matchAll(sectionRegex)];
-  if (matches.length === 0) return html;
-  // Use the LAST occurrence (in case there are multiples) to move inside main.
-  const last = matches[matches.length - 1];
-  const sectionHtml = last[0];
-  const mainCloseIdx = html.indexOf('</main>');
-  if (mainCloseIdx < 0) return html;
-  // Skip if the section is already inside <main>: section position < </main> position.
-  if (last.index < mainCloseIdx) return html;
-
-  // Strip the section from where it currently sits.
-  const stripped = html.slice(0, last.index) + html.slice(last.index + sectionHtml.length);
-  // Re-find </main> in the stripped string and insert before it.
-  const newMainCloseIdx = stripped.indexOf('</main>');
-  if (newMainCloseIdx < 0) return html;
-  return stripped.slice(0, newMainCloseIdx) + sectionHtml + '\n' + stripped.slice(newMainCloseIdx);
-}
-
-function injectFieldNotesCta(file, html) {
-  const base = path.basename(file);
-  const eligible = base === 'essays.html' || base === 'reading-philosophy.html';
-  if (!eligible || html.includes('data-field-notes-inline')) return html;
-  const location = escapeHtmlAttr(base.replace(/\.html$/, ''));
-  const block = `<section class="field-notes-inline-cta" data-field-notes-inline>
-        <p class="archive-kicker">Field Notes</p>
-        <h2>Want more notes like this?</h2>
-        <p>Field Notes is where I send useful ideas before they become polished essays: books, objects, questions, and experiments worth keeping.</p>
-        <a href="field-notes.html" class="btn-primary" data-analytics="cta" data-cta-id="newsletter" data-cta-location="${location}-inline">Get Field Notes</a>
-    </section>`;
-  return html.replace('</main>', `    ${block}\n</main>`);
-}
-
-function decorateTrackedLinks(file, html) {
-  const location = ctaLocationFor(file);
-  return html.replace(/<a\b([^>]*?)href=(["'])([^"']+)\2([^>]*)>/gi, (match, before, quote, href, after) => {
-    if (/data-analytics=/.test(match)) return match;
-    const cta = ctaByHref.get(href);
-    if (cta) {
-      return `<a${before}href=${quote}${href}${quote}${after} data-analytics="cta" data-cta-id="${escapeHtmlAttr(cta.id)}" data-cta-location="${escapeHtmlAttr(location)}">`;
-    }
-    if (/^mailto:/i.test(href) || href.includes('contact.html') || href.includes('meet.html')) {
-      return `<a${before}href=${quote}${href}${quote}${after} data-analytics="contact" data-cta-location="${escapeHtmlAttr(location)}">`;
-    }
-    return match;
-  });
-}
 
 function escapeHtmlAttr(value) {
   return String(value)
@@ -118,8 +58,7 @@ const normalizers = createHtmlNormalizers({ remoteAssets, escapeHtmlAttr, absolu
 const {
   optimizeLocalImageReferences,
   localizeRemainingRemoteAssetReferences,
-  removeStaticLeafletTags,
-  removeExternalFontLinks
+  removeStaticLeafletTags
 } = normalizers;
 
 function walkHtml(dir) {
@@ -148,18 +87,8 @@ for (const file of files) {
   const isAdventure = rel === 'adventures.html' || /^adventure-/.test(rel);
   if (isAdventure) after = removeStaticLeafletTags(after);
 
-  after = removeExternalFontLinks(after);
   after = optimizeLocalImageReferences(after);
   after = localizeRemainingRemoteAssetReferences(after);
-  // Phase C: strip hard-coded webp <source> tags inside <picture>. The avif
-  // <source> next to it covers ~95% of browsers; the rest fall through to
-  // the <img> jpg/png. Hardcoded ones live in _src/pages/index.html and
-  // _src/partials/nav.html (dynamically-generated <picture> blocks already
-  // skip webp via wrapInPicture).
-  after = after.replace(/\s*<source\s+type="image\/webp"[^>]*>/gi, '');
-  after = injectFieldNotesCta(rel, after);
-  after = moveSeoRelatedInsideMain(after);
-  after = decorateTrackedLinks(rel, after);
 
   if (after !== before) {
     changed++;

@@ -1,7 +1,25 @@
 // home page body extracted from src/legacy/pages/index.html
 // so the legacy folder can be deleted. index.astro consumes this string
 // and replaces the data-home-stat counters at build time.
-export const HOME_BODY = `    <!-- Side Navigation Dots -->
+import remoteAssets from '../../../data/remote-assets.generated.json';
+
+type RemoteEntry = { source: string; widths: number[]; formats: Record<string, { avif?: string; jpg?: string }> };
+const REMOTE = remoteAssets as Record<string, RemoteEntry>;
+
+// Swap any inlined https://images.unsplash.com/... <img src="..."> for the
+// pre-generated 800w jpg under /images/generated/remote/. The normalizer
+// used to do this post-build; doing it at SSR time means no mutation step.
+function localizeUnsplash(html: string): string {
+  return html.replace(/https:\/\/images\.unsplash\.com\/[^"'\s)]+/g, (url) => {
+    const entry = REMOTE[url] || REMOTE[url.replace(/&amp;/g, '&')];
+    if (!entry) return url;
+    const widths = (entry.widths || Object.keys(entry.formats || {}).map(Number)).sort((a, b) => a - b);
+    const w = widths.find((c) => c >= 800) || widths[widths.length - 1];
+    return `/${entry.formats?.[w]?.jpg || url}`;
+  });
+}
+
+const RAW_HOME_BODY = `    <!-- Side Navigation Dots -->
     <nav class="side-nav" id="side-nav">
         <a href="#hero" class="side-nav-dot active" data-section="hero" title="Intro" aria-label="Intro"></a>
         <a href="#newsletter-cta" class="side-nav-dot" data-section="newsletter-cta" title="Field Notes" aria-label="Field Notes"></a>
@@ -28,7 +46,6 @@ export const HOME_BODY = `    <!-- Side Navigation Dots -->
                 <div class="profile-container">
                     <picture class="hero-picture">
                         <source type="image/avif" srcset="images/generated/profile/profile-360.avif 360w, images/generated/profile/profile-520.avif 520w, images/generated/profile/profile-720.avif 720w, images/generated/profile/profile-960.avif 960w" sizes="(max-width: 768px) 82vw, 42vw">
-                        <source type="image/webp" srcset="images/generated/profile/profile-360.webp 360w, images/generated/profile/profile-520.webp 520w, images/generated/profile/profile-720.webp 720w, images/generated/profile/profile-960.webp 960w" sizes="(max-width: 768px) 82vw, 42vw">
                         <img src="images/generated/profile/profile-720.jpg" srcset="images/generated/profile/profile-360.jpg 360w, images/generated/profile/profile-520.jpg 520w, images/generated/profile/profile-720.jpg 720w, images/generated/profile/profile-960.jpg 960w" sizes="(max-width: 768px) 82vw, 42vw" alt="Jevan Goldsmith" class="hero-image" width="713" height="778" decoding="async" fetchpriority="high">
                     </picture>
 
@@ -344,3 +361,5 @@ export const HOME_BODY = `    <!-- Side Navigation Dots -->
             </div>
         </div>
     </section>`;
+
+export const HOME_BODY = localizeUnsplash(RAW_HOME_BODY);

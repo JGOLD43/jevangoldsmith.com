@@ -56,16 +56,19 @@ const subject = personSchema({
       <a href="/people.html" class="person-profile-back">Back to People</a>
       <div class="person-profile-hero-grid">
         <div class="person-profile-image-wrap">
-          <img
-            src={heroImage.startsWith('/') || heroImage.startsWith('http') ? heroImage : `/${heroImage}`}
-            srcset={heroSrcset}
-            sizes="(max-width: 768px) 90vw, 360px"
-            alt={p.name}
-            width="400"
-            height="400"
-            decoding="async"
-            fetchpriority="high"
-          />
+          <picture>
+            <source type="image/avif" srcset={heroSrcset.replace(/\.jpg\b/g, '.avif')} sizes="(max-width: 768px) 90vw, 360px" />
+            <img
+              src={heroImage.startsWith('/') || heroImage.startsWith('http') ? heroImage : `/${heroImage}`}
+              srcset={heroSrcset}
+              sizes="(max-width: 768px) 90vw, 360px"
+              alt={p.name}
+              width="400"
+              height="400"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </picture>
         </div>
         <div class="person-profile-intro">
           <p class="person-profile-kicker">{p.title || 'Person'}</p>

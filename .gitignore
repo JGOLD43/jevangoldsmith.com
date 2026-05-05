@@ -59,3 +59,4 @@ llms.txt
 .gstack/
 .perf-tmp/*.run-*.json
 .claude/scheduled_tasks.lock
+.codex_tmp/
