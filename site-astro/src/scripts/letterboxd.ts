@@ -1,5 +1,9 @@
-// @ts-nocheck — pending typed migration
-const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyObj = any;
+const escapeHTML = window.escapeHTML as (s: unknown) => string;
+const escapeAttr = window.escapeAttr as (s: unknown) => string;
+const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
+void sanitizeUrl;
 
 // Movies/letterboxd page orchestrator. Inlines js/letterboxd-state.js,
 // js/letterboxd-filters.js, js/letterboxd-modal.js, js/letterboxd-events.js,
@@ -7,7 +11,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
 // exposed window.JGLetterboxd* globals consumed here.
 
 let linkedMovieHandled = false;
-const movieMetadata = {
+const movieMetadata: Record<string, AnyObj> = {
     'What Dreams May Come': { genre: 'Drama', timesWatched: 1 },
     'Before Sunset': { genre: 'Romance', timesWatched: 1 },
     'Before Sunrise': { genre: 'Romance', timesWatched: 1 },
@@ -18,7 +22,7 @@ const movieMetadata = {
 
 // --- state ---
 const movieState = (function createState() {
-    const state = {
+    const state: { activeGenre: string; movies: AnyObj[]; searchQuery: string; sidebarCollapsed: boolean; starFilter: string; timesWatchedFilter: string } = {
         activeGenre: 'all',
         movies: [],
         searchQuery: '',
@@ -32,21 +36,21 @@ const movieState = (function createState() {
         clearTimesWatchedFilter() { state.timesWatchedFilter = 'all'; },
         get() { return { ...state }; },
         getMovies() { return state.movies; },
-        setActiveGenre(g) { state.activeGenre = g || 'all'; },
-        setMovies(m) { state.movies = Array.isArray(m) ? m : []; },
-        setSearchQuery(q) { state.searchQuery = String(q || '').trim(); },
-        setSidebarCollapsed(v) { state.sidebarCollapsed = Boolean(v); },
-        setStarFilter(r) { state.starFilter = r; },
-        setTimesWatchedFilter(c) { state.timesWatchedFilter = c; }
+        setActiveGenre(g: string) { state.activeGenre = g || 'all'; },
+        setMovies(m: AnyObj[]) { state.movies = Array.isArray(m) ? m : []; },
+        setSearchQuery(q: string) { state.searchQuery = String(q || '').trim(); },
+        setSidebarCollapsed(v: boolean) { state.sidebarCollapsed = Boolean(v); },
+        setStarFilter(r: string) { state.starFilter = r; },
+        setTimesWatchedFilter(c: string) { state.timesWatchedFilter = c; }
     };
 }());
 
 // --- filters ---
-function normalizeGenreKey(genre) {
+function normalizeGenreKey(genre: unknown): string {
     return String(genre || 'Uncategorized').toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-function filterMoviesData(movies, state) {
+function filterMoviesData(movies: AnyObj[], state: AnyObj): AnyObj[] {
     const query = String(state.searchQuery || '').toLowerCase();
     return movies.filter((movie) => {
         if (query) {
@@ -60,12 +64,12 @@ function filterMoviesData(movies, state) {
     });
 }
 
-function getMoviesForGenre(movies, genre) {
+function getMoviesForGenre(movies: AnyObj[], genre: string) {
     if (genre === 'all') return movies;
     return movies.filter((movie) => movie.genre === genre);
 }
 
-function groupMoviesByGenre(movies) {
+function groupMoviesByGenre(movies: AnyObj[]) {
     return movies.reduce((groups, movie) => {
         const genre = movie.genre || 'Uncategorized';
         if (!groups[genre]) groups[genre] = [];
@@ -89,21 +93,21 @@ function createMovieModal() {
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
-    function open(movieData) {
+    function open(movieData: AnyObj) {
         const modal = document.getElementById('movie-modal');
         if (!modal) return false;
-        document.getElementById('modal-movie-title').textContent = movieData.title;
-        document.getElementById('modal-movie-year').textContent = movieData.year || '';
-        document.getElementById('modal-movie-rating').textContent = movieData.rating || '';
-        document.getElementById('modal-movie-date').textContent = `Watched: ${movieData.date}`;
-        document.getElementById('modal-movie-review').textContent = movieData.review || 'No review available.';
-        document.getElementById('modal-letterboxd-link').href = movieData.link;
-        const posterImg = document.getElementById('modal-movie-poster');
-        if (movieData.poster) {
+        (document.getElementById('modal-movie-title') as HTMLElement).textContent = movieData.title;
+        (document.getElementById('modal-movie-year') as HTMLElement).textContent = movieData.year || '';
+        (document.getElementById('modal-movie-rating') as HTMLElement).textContent = movieData.rating || '';
+        (document.getElementById('modal-movie-date') as HTMLElement).textContent = `Watched: ${movieData.date}`;
+        (document.getElementById('modal-movie-review') as HTMLElement).textContent = movieData.review || 'No review available.';
+        (document.getElementById('modal-letterboxd-link') as HTMLAnchorElement).href = movieData.link;
+        const posterImg = document.getElementById('modal-movie-poster') as HTMLImageElement | null;
+        if (movieData.poster && posterImg) {
             posterImg.src = movieData.poster;
             posterImg.alt = movieData.title;
             posterImg.style.display = 'block';
-        } else {
+        } else if (posterImg) {
             posterImg.style.display = 'none';
         }
         modal.style.display = 'block';
@@ -114,14 +118,14 @@ function createMovieModal() {
 }
 
 // --- render ---
-const genreIcons = {
+const genreIcons: Record<string, string> = {
     'Action': '💥', 'Adventure': '🗺️', 'Animation': '🎨', 'Comedy': '😂',
     'Crime': '🔫', 'Documentary': '📹', 'Drama': '🎭', 'Fantasy': '🧙',
     'Horror': '👻', 'Mystery': '🔍', 'Romance': '💕', 'Sci-Fi': '🚀',
     'Thriller': '😱', 'Western': '🤠', 'Uncategorized': '🎬'
 };
 
-function formatRuntime(minutes) {
+function formatRuntime(minutes: number) {
     const totalMinutes = Number(minutes) || 0;
     if (totalMinutes <= 0) return '';
     const hours = Math.floor(totalMinutes / 60);
@@ -131,7 +135,7 @@ function formatRuntime(minutes) {
     return `${hours}h ${remainder}m`;
 }
 
-function normalizeMovieData(movie) {
+function normalizeMovieData(movie: AnyObj) {
     const metadata = movieMetadata[movie.title] || {};
     const starCount = Number(movie.starCount || metadata.starCount || 0);
     return {
@@ -154,7 +158,7 @@ function normalizeMovieData(movie) {
     };
 }
 
-function createMovieCardFromData(movieData) {
+function createMovieCardFromData(movieData: AnyObj) {
     const card = document.createElement('div');
     card.className = 'movie-card js-zoom-item';
     card.setAttribute('data-movie-title', movieData.title);
@@ -203,7 +207,7 @@ function createMovieCardFromData(movieData) {
 }
 
 let hasAdoptedSsrMovies = false;
-function displayMovies(movies) {
+function displayMovies(movies: AnyObj[]) {
     const container = document.getElementById('movies-container');
     if (!container) return;
     // Astro SSRs every movie card from data/movies.json.
@@ -218,11 +222,11 @@ function displayMovies(movies) {
         if (container.children.length === movies.length) return;
     }
     container.innerHTML = '';
-    movies.forEach((movieData) => container.appendChild(createMovieCardFromData(movieData)));
+    movies.forEach((movieData: AnyObj) => container.appendChild(createMovieCardFromData(movieData)));
 }
 
-function parseMovieData(item) {
-    const data = {
+function parseMovieData(item: AnyObj) {
+    const data: AnyObj = {
         title: item.title,
         date: new Date(item.pubDate).toLocaleDateString('en-US', {
             year: 'numeric', month: 'long', day: 'numeric'
@@ -292,15 +296,15 @@ function setError() {
     if (errorEl) errorEl.style.display = 'block';
 }
 
-function renderSidebar(genreGroups) {
+function renderSidebar(genreGroups: AnyObj) {
     setSidebarLoaded();
     const countAllEl = document.getElementById('count-all-movies');
     if (countAllEl) {
-        const total = Object.values(genreGroups).reduce((sum, movies) => sum + movies.length, 0);
-        countAllEl.textContent = total;
+        const total = (Object.values(genreGroups) as AnyObj[][]).reduce((sum: number, movies) => sum + movies.length, 0);
+        countAllEl.textContent = String(total);
     }
     document.querySelectorAll('#sidebar-content .sidebar-section').forEach((section) => {
-        const button = section.querySelector('.sidebar-category[data-genre]');
+        const button = section.querySelector('.sidebar-category[data-genre]') as HTMLElement | null;
         const genre = button?.dataset.genre;
         if (!genre || genre === 'all') return;
         const key = normalizeGenreKey(genre);
@@ -308,18 +312,18 @@ function renderSidebar(genreGroups) {
         const container = document.getElementById(`genre-${key}`);
         if (countEl) countEl.textContent = '0';
         if (container) container.innerHTML = '';
-        section.style.display = 'none';
+        (section as HTMLElement).style.display = 'none';
     });
     Object.keys(genreGroups).forEach((genre) => {
         const key = normalizeGenreKey(genre);
-        const movies = genreGroups[genre];
+        const movies = genreGroups[genre] as AnyObj[];
         const countEl = document.getElementById(`count-${key}`);
-        const section = countEl?.closest('.sidebar-section');
+        const section = countEl?.closest('.sidebar-section') as HTMLElement | null;
         const container = document.getElementById(`genre-${key}`);
-        if (countEl) countEl.textContent = movies.length;
+        if (countEl) countEl.textContent = String(movies.length);
         if (section) section.style.display = movies.length === 0 ? 'none' : 'block';
         if (container) {
-            container.innerHTML = movies.map((movie) => `
+            container.innerHTML = movies.map((movie: AnyObj) => `
                 <a href="#" class="movie-link" data-action="scrollToMovie" data-action-args="${encodeURIComponent(movie.title)}" data-action-eventobj="true">
                     <div>${escapeHTML(movie.title)}</div>
                     <div class="movie-link-year">${escapeHTML(movie.year || '')}</div>
@@ -329,38 +333,39 @@ function renderSidebar(genreGroups) {
     });
 }
 
-function updateMovieCount(count) {
+function updateMovieCount(count: number) {
     const countElement = document.getElementById('movie-count');
-    if (countElement) countElement.textContent = count;
+    if (countElement) countElement.textContent = String(count);
 }
 
-function updateStarFilterDisplay(value) {
+function updateStarFilterDisplay(value: string | number) {
     const stars = document.querySelectorAll('.filter-star');
     const text = document.getElementById('filter-rating-text');
+    const valNum = value === 'all' ? Number.NaN : Number(value);
     stars.forEach((star) => {
-        const starNumber = Number.parseInt(star.getAttribute('data-star'), 10);
+        const starNumber = Number.parseInt(star.getAttribute('data-star') || '0', 10);
         star.classList.remove('full', 'half');
         if (value === 'all') return;
-        if (starNumber <= value) star.classList.add('full');
-        else if (starNumber === value + 0.5) star.classList.add('half');
+        if (starNumber <= valNum) star.classList.add('full');
+        else if (starNumber === valNum + 0.5) star.classList.add('half');
     });
-    if (text) text.textContent = value === 'all' ? '' : (value >= 5 ? '★' : `${value}★+`);
+    if (text) text.textContent = value === 'all' ? '' : (valNum >= 5 ? '★' : `${value}★+`);
 }
 
-function updateTimesWatchedFilterDisplay(value) {
-    const slider = document.getElementById('timeswatched-slider');
+function updateTimesWatchedFilterDisplay(value: string | number) {
+    const slider = document.getElementById('timeswatched-slider') as HTMLInputElement | null;
     const text = document.getElementById('filter-timeswatched-text');
     const normalized = value === 'all' ? 0 : Number(value);
-    if (slider) slider.value = normalized;
+    if (slider) slider.value = String(normalized);
     if (text) text.textContent = normalized > 0 ? (normalized >= 10 ? '10' : String(normalized)) : '';
 }
 
-function scrollToMovieByTitle(movieTitle, event) {
+function scrollToMovieByTitle(movieTitle: string, event?: Event) {
     const movieCards = Array.from(document.querySelectorAll('.movie-card'));
     const targetCard = movieCards.find((card) => card.getAttribute('data-movie-title') === movieTitle);
     if (!targetCard) return;
-    window.JGCollectionUI.highlightAndScroll(targetCard, {
-        activeElement: event?.target?.closest('.movie-link'),
+    window.JGCollectionUI?.highlightAndScroll?.(targetCard, {
+        activeElement: (event?.target as Element | undefined)?.closest('.movie-link'),
         activeSelector: '.movie-link'
     });
 }
@@ -401,8 +406,8 @@ function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilt
 
     const slider = document.getElementById('timeswatched-slider');
     if (slider) {
-        slider.addEventListener('input', (event) => {
-            const count = Number.parseInt(event.target.value, 10);
+        slider.addEventListener('input', (event: Event) => {
+            const count = Number.parseInt((event.target as HTMLInputElement).value, 10);
             if (count === 0) {
                 clearTimesWatchedFilter();
                 return;
@@ -413,10 +418,11 @@ function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilt
 }
 
 // --- orchestrator ---
-const dataFetch = window.JGDataFetch;
-const collectionUi = window.JGCollectionUI;
+const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
+const collectionUi = window.JGCollectionUI as AnyObj;
 const movieModal = createMovieModal();
-let moviesRuntime = null;
+let moviesRuntime: AnyObj = null;
+void movieModal;
 
 function getFilteredMovies() {
     return movieFilters.filterMovies(movieState.getMovies(), movieState.get());
@@ -430,15 +436,15 @@ function buildCollectionController() {
     moviesRuntime = window.JGCollectionRuntime.create({
         getState: () => movieState.get(),
         getFilteredItems: () => getFilteredMovies(),
-        getVisibleItems: (filteredMovies, state) => movieFilters.getMoviesForGenre(filteredMovies, state.activeGenre),
-        groupItems: (filteredMovies) => movieFilters.groupMoviesByGenre(filteredMovies),
-        renderSidebar: (groups) => movieView.renderSidebar(groups),
-        renderVisibleItems: (visibleMovies) => {
+        getVisibleItems: (filteredMovies: AnyObj[], state: AnyObj) => movieFilters.getMoviesForGenre(filteredMovies, state.activeGenre),
+        groupItems: (filteredMovies: AnyObj[]) => movieFilters.groupMoviesByGenre(filteredMovies),
+        renderSidebar: (groups: AnyObj) => movieView.renderSidebar(groups),
+        renderVisibleItems: (visibleMovies: AnyObj[]) => {
             movieView.setMainLoaded();
             movieRender.displayMovies(visibleMovies);
         },
-        updateCount: (visibleMovies) => movieView.updateMovieCount(visibleMovies.length),
-        updateControls: (state, filteredMovies) => {
+        updateCount: (visibleMovies: AnyObj[]) => movieView.updateMovieCount(visibleMovies.length),
+        updateControls: (state: AnyObj, filteredMovies: AnyObj[]) => {
             movieView.updateStarFilterDisplay(state.starFilter);
             movieView.updateTimesWatchedFilterDisplay(state.timesWatchedFilter);
             collectionUi.toggleClearButton('movie-search-clear-btn', Boolean(state.searchQuery));
@@ -449,7 +455,7 @@ function buildCollectionController() {
         group: {
             allButtonSelector: '[data-genre="all"]',
             buttonSelector: '.sidebar-category',
-            panelForValue: (genre) => genre === 'all' ? null : document.getElementById(`genre-${normalizeGenreKey(genre)}`),
+            panelForValue: (genre: string) => genre === 'all' ? null : document.getElementById(`genre-${normalizeGenreKey(genre)}`),
             panelSelector: '.genre-movies'
         },
         searchClearButtonId: 'movie-search-clear-btn',
@@ -469,7 +475,7 @@ async function loadCachedMovies() {
     return movies.map(normalizeMovieData);
 }
 
-function setMovies(movies) {
+function setMovies(movies: AnyObj[]) {
     movieState.setMovies(movies.map(normalizeMovieData));
     renderFromState();
     handleLinkedMovie();
@@ -490,7 +496,7 @@ async function fetchLetterboxdMovies() {
     }
 }
 
-function searchMovies(query) {
+function searchMovies(query: string) {
     movieState.setSearchQuery(query);
     movieState.setActiveGenre('all');
     moviesRuntime?.resetGrouping();
@@ -505,7 +511,7 @@ function clearMovieSearch() {
     renderFromState();
 }
 
-function setStarFilter(rating) {
+function setStarFilter(rating: string) {
     movieState.setStarFilter(rating);
     movieState.setActiveGenre('all');
     moviesRuntime?.resetGrouping();
@@ -519,7 +525,7 @@ function clearStarFilter() {
     renderFromState();
 }
 
-function setTimesWatchedFilter(count) {
+function setTimesWatchedFilter(count: string) {
     movieState.setTimesWatchedFilter(count);
     movieState.setActiveGenre('all');
     moviesRuntime?.resetGrouping();
@@ -533,8 +539,8 @@ function clearTimesWatchedFilter() {
     renderFromState();
 }
 
-function toggleMovieGenre(genre, event) {
-    const button = event?.target?.closest('.sidebar-category');
+function toggleMovieGenre(genre: string, event?: Event) {
+    const button = (event?.target as Element | undefined)?.closest('.sidebar-category');
     moviesRuntime?.toggleGroup({
         value: genre,
         button,
@@ -543,7 +549,7 @@ function toggleMovieGenre(genre, event) {
     });
 }
 
-function scrollToMovie(movieTitle, event) {
+function scrollToMovie(movieTitle: string, event?: Event) {
     event?.preventDefault();
     movieView.scrollToMovie(movieTitle, event);
 }
@@ -554,7 +560,7 @@ function handleLinkedMovie() {
     if (!linkedMovieTitle) return;
     linkedMovieHandled = true;
     window.requestAnimationFrame(() => {
-        scrollToMovie(linkedMovieTitle);
+        scrollToMovie(linkedMovieTitle, undefined);
     });
 }
 
@@ -582,7 +588,7 @@ function toggleListDropdown() {
     moviesRuntime?.toggleListDropdown();
 }
 
-function openMovieModal(movieData) {
+function openMovieModal(movieData: AnyObj) {
     movieModal.open(movieData);
 }
 
@@ -590,11 +596,13 @@ function closeMovieModal() {
     movieModal.close();
 }
 
-function openMovieByTitle(movieTitle) {
-    const movie = movieState.getMovies().find((entry) => entry.title === movieTitle && entry.review);
+function openMovieByTitle(movieTitle: string) {
+    const movie = movieState.getMovies().find((entry: AnyObj) => entry.title === movieTitle && entry.review);
     if (!movie) return;
     openMovieModal(movie);
 }
+void openMovieByTitle;
+void clearStarFilter;
 
 function initMoviesZoom() {
     const moviesGrid = document.getElementById('movies-container');
