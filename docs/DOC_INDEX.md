@@ -14,6 +14,7 @@ Purpose: `small active index for docs that guide current website work`
 - [Native Astro Modernization Execution Plan](NATIVE_ASTRO_EXECUTION_PLAN.md)
 - [Simplify + Performance Execution Plan](SIMPLIFY_AND_PERF_PLAN.md)
 - [Tier 1 + 2 Improvements Execution Plan](TIER_1_2_PLAN.md)
+- [Post-Tier-1+2 Improvements Plan](POST_TIER12_PLAN.md)
 - [Release Runbook](RELEASE_RUNBOOK.md)
 - [Decision Log](DECISION_LOG.md)
 - [Agent Guide](AGENT_GUIDE.md)

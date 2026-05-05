@@ -17,19 +17,29 @@ interface Person {
   sourceType?: string | null;
 }
 
+// Phase 1.1: Slug-form normalization. Must match people.js
+// normalizePersonName + scripts/build/merge-people.js so SSR'd
+// data-person-id values line up with the runtime peopleById map.
 function normalizePersonName(name: string): string {
   return String(name || '')
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
-    .trim();
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 function sourceTypeFor(person: Person): string {
   return person.sourceType || (person.title?.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
 }
 
-export function renderPersonCardHtml(person: Person): string {
+// Phase 1.1: index-aware loading. The first 12 cards (above the fold at
+// 1280×800) get loading="eager"; index 0 also gets fetchpriority="high"
+// as the LCP candidate. All other cards remain native lazy + async.
+const EAGER_ABOVE_FOLD = 12;
+
+export function renderPersonCardHtml(person: Person, index = Number.MAX_SAFE_INTEGER): string {
   const name = person.name ?? '';
   const title = person.title ?? '';
   const lesson = person.lesson ?? '';
@@ -40,10 +50,13 @@ export function renderPersonCardHtml(person: Person): string {
   const sourceType = sourceTypeFor(person);
   const personId = normalizePersonName(name);
   const sourceLabel = sourceType === 'fiction' ? 'Fiction' : 'Non-fiction';
+  const eager = index < EAGER_ABOVE_FOLD;
+  const loadingAttr = eager ? 'eager' : 'lazy';
+  const priorityAttr = index === 0 ? ' fetchpriority="high"' : '';
 
   return `<article class="person-card" data-category="${escapeHtml(category)}" data-person-id="${escapeHtml(personId)}" data-search="${escapeHtml(searchText)}" data-source-type="${escapeHtml(sourceType)}" role="button" tabindex="0">
         <div class="person-image-container">
-            <img src="${escapeHtml(image)}" alt="${escapeHtml(name)}" class="person-image" srcset="${escapeHtml(srcset)}" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(name)}" class="person-image" srcset="${escapeHtml(srcset)}" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="${loadingAttr}" decoding="async"${priorityAttr}>
         </div>
         <div class="person-info">
             <h3 class="person-name">${escapeHtml(name)}</h3>
