@@ -14,10 +14,9 @@ Update this file deliberately when shipping a perf-affecting change that
 moves the baseline. Re-capture with
 `npm run perf:lighthouse -- --out=docs/perf-baseline.md`.
 
-**Build**: post Phase 1 + 2 of POST_TIER12_PLAN (people merge to build,
-adventures countries + popular routes gated, movies CLS deterministic
-fix via cron sync, podcasts LCP eager, preconnect hints, /_astro
-immutable cache).
+**Build**: post POST_AUDIT_PLAN (dead code drop, Phase-N comment sweep,
+unused WebP drop, leaflet defer, adventures-map split, dateme split,
+@ts-nocheck shed on small scripts).
 **Base URL**: `http://localhost:8765`
 **Preset**: desktop, simulated throttling, median-of-3 runs
 
@@ -39,13 +38,13 @@ Notes:
 
 | Route | Score | LCP | CLS | TBT | FCP | SI | Total Bytes |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| / | 100 | 627ms | 0.000 | 0ms | 490ms | 490ms | 545.7KB |
-| /books.html | 98 | 981ms | 0.060 | 0ms | 670ms | 670ms | 1392.3KB |
-| /movies.html | 100 | 567ms | 0.000 | 0ms | 506ms | 506ms | 566.4KB |
-| /people.html | 99 | 928ms | 0.001 | 0ms | 653ms | 653ms | 1958.6KB |
-| /adventures.html | 94 | 1631ms | 0.000 | 0ms | 407ms | 686ms | 1082.7KB |
-| /podcasts.html | 99 | 995ms | 0.000 | 0ms | 487ms | 487ms | 729.5KB |
-| /essays.html | 100 | 605ms | 0.000 | 0ms | 504ms | 504ms | 231.6KB |
-| /search.html | 100 | 645ms | 0.007 | 0ms | 426ms | 426ms | 313.8KB |
+| / | 100 | 607ms | 0.000 | 0ms | 487ms | 487ms | 548.5KB |
+| /books.html | 99 | 750ms | 0.064 | 0ms | 670ms | 670ms | 1394.4KB |
+| /movies.html | 100 | 547ms | 0.000 | 0ms | 506ms | 506ms | 568.6KB |
+| /people.html | 99 | 816ms | 0.001 | 0ms | 653ms | 653ms | 1960.6KB |
+| /adventures.html | 100 | 586ms | 0.000 | 0ms | 407ms | 686ms | 694.2KB |
+| /podcasts.html | 99 | 934ms | 0.000 | 0ms | 487ms | 487ms | 731.6KB |
+| /essays.html | 100 | 588ms | 0.000 | 0ms | 506ms | 506ms | 234.3KB |
+| /search.html | 100 | 645ms | 0.007 | 0ms | 426ms | 426ms | 315.9KB |
 
 Captured by `scripts/perf-lighthouse.js`. Re-run with `npm run perf:lighthouse`.
