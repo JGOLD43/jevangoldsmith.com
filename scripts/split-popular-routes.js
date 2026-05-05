@@ -10,7 +10,7 @@ const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT, 'data');
-const SOURCE = path.join(DATA_DIR, 'popular-routes.json');
+const SOURCE = path.join(DATA_DIR, 'sources', 'popular-routes.json');
 const OUT_DIR = path.join(DATA_DIR, 'popular-routes');
 const INDEX = path.join(DATA_DIR, 'popular-routes.index.json');
 

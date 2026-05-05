@@ -65,7 +65,7 @@ for (const rel of [
   'images/logo-animated.mp4',
   'images/profile.jpg',
   'images/zen-nature.jpg',
-  'data/popular-routes.json'
+  'data/sources'
 ]) {
   if (exists(rel)) fail(`Production-only dist should not include ${rel}`);
 }
@@ -95,7 +95,6 @@ if (routeChunks.length === 0) fail('Missing popular route chunks');
 // from current measured sizes + ~25% headroom so adding new content does
 // not silently regress payload size.
 const RUNTIME_JSON_BUDGETS = {
-  'data/countries.geo.json': 1024 * KB,
   'data/countries.slim.generated.json': 320 * KB,
   'data/remote-assets.generated.json': 240 * KB,
   'data/pages.json': 130 * KB,

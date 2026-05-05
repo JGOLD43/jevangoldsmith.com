@@ -24,7 +24,7 @@ const targets = [
     'images/profile.jpg',
     'images/zen-nature.jpg',
     'images/.DS_Store',
-    'data/popular-routes.json'
+    'data/sources'
 ];
 
 let removed = 0;
