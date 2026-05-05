@@ -2,124 +2,46 @@
 // Phase 7 (slice 8): bind sanitize helpers from window so strict-mode
 // ES modules resolve bare `escapeHTML`/`escapeAttr`/`sanitizeUrl`/`sanitizeHTML`
 // references that the legacy classic-script code depended on.
+import {
+    state, fetchJson, updateLightboxImage,
+    ADVENTURES_DATA_URL, PLACES_DATA_URL, ROUTES_DATA_URL,
+    POPULAR_ROUTES_URL, POPULAR_ROUTES_INDEX_URL, PHOTOS_DATA_URL,
+    COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL, FILTERS_STORAGE_KEY,
+    WEB_MERCATOR_MAX_LAT, HORIZONTAL_WRAP_BOUND, ROUTE_TYPE_COLORS,
+    BASEMAPS, DEFAULT_FILTERS
+} from './adventures-state';
+
 const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
 
 // ============================================
 // Adventures Page Runtime State
 // ============================================
 
-const ADVENTURES_DATA_URL = 'data/adventures.json';
-const PLACES_DATA_URL = 'data/placeofinterest.json';
-const ROUTES_DATA_URL = 'data/routes.generated.json';
-const POPULAR_ROUTES_URL = 'data/popular-routes.json';
-const POPULAR_ROUTES_INDEX_URL = 'data/popular-routes.index.json';
-const PHOTOS_DATA_URL = 'data/photos.generated.json';
-const COUNTRIES_GEO_URL = 'data/countries.slim.generated.json';
-const COUNTRIES_VISITED_URL = 'data/countries-visited.generated.json';
-const FILTERS_STORAGE_KEY = 'adventures-map-filters-v1';
-const WEB_MERCATOR_MAX_LAT = 85.05112878;
-const HORIZONTAL_WRAP_BOUND = 1000000;
 
-const ROUTE_TYPE_COLORS = {
-    hike: '#38a169',
-    drive: '#dd6b20',
-    bike: '#d69e2e',
-    flight: '#9f7aea',
-    sail: '#3182ce',
-    paddle: '#0987a0',
-    run: '#e53e3e',
-    walk: '#4a5568',
-    ski: '#63b3ed',
-    track: '#C9A86C'
-};
 
-const BASEMAPS = {
-    streets: { label: 'Streets', tile: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19, subdomains: 'abc' },
-    satellite: { label: 'Satellite', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
-    hybrid: { label: 'Satellite + Labels', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19, overlay: 'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}' },
-    terrain: { label: 'Terrain', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
-    dark: { label: 'Dark', tile: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', maxZoom: 19, subdomains: 'abcd' },
-    light: { label: 'Light', tile: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', maxZoom: 19, subdomains: 'abcd' }
-};
-
-const DEFAULT_FILTERS = {
-    year: 'all',
-    region: 'all',
-    layers: { adventures: true, routes: true, photos: true, pois: true, countries: false },
-    poiCategories: {},
-    basemap: 'satellite',
-    routeSet: 'all'
-};
-
-// Phase 3 slice 3.1 (Tier 1+2 plan): expose constants on globalThis so the
-// dynamically-imported adventures-map.js module can resolve them via free-
-// identifier lookup. Without this the map throws "WEB_MERCATOR_MAX_LAT is
-// not defined" on bootstrap.
-globalThis.WEB_MERCATOR_MAX_LAT = WEB_MERCATOR_MAX_LAT;
-globalThis.HORIZONTAL_WRAP_BOUND = HORIZONTAL_WRAP_BOUND;
-globalThis.ROUTE_TYPE_COLORS = ROUTE_TYPE_COLORS;
-globalThis.BASEMAPS = BASEMAPS;
-globalThis.FILTERS_STORAGE_KEY = FILTERS_STORAGE_KEY;
-globalThis.DEFAULT_FILTERS = DEFAULT_FILTERS;
-globalThis.ADVENTURES_DATA_URL = ADVENTURES_DATA_URL;
-globalThis.PLACES_DATA_URL = PLACES_DATA_URL;
-globalThis.ROUTES_DATA_URL = ROUTES_DATA_URL;
-globalThis.POPULAR_ROUTES_URL = POPULAR_ROUTES_URL;
-globalThis.POPULAR_ROUTES_INDEX_URL = POPULAR_ROUTES_INDEX_URL;
-globalThis.PHOTOS_DATA_URL = PHOTOS_DATA_URL;
-globalThis.COUNTRIES_GEO_URL = COUNTRIES_GEO_URL;
-globalThis.COUNTRIES_VISITED_URL = COUNTRIES_VISITED_URL;
-
-// Phase 5 (slice 12): cross-script-shared state lives on globalThis so the
-// dynamically-imported adventures-map.js module sees the same backing
-// values via free-identifier resolution.
-globalThis.allAdventures = [];
-globalThis.allPlaces = [];
-globalThis.placeCategories = [];
-globalThis.allRoutes = [];
-globalThis.allPhotos = [];
-globalThis.countryGeo = null;
-globalThis.visitedIso = new Set();
-globalThis.placesVisible = true;
-globalThis.placeMarkers = [];
-globalThis.routeLayer = null;
-globalThis.photoLayer = null;
-globalThis.countryLayer = null;
-globalThis.basemapTileLayer = null;
-globalThis.activeFilters = new Set();
-globalThis.mapFilters = { ...DEFAULT_FILTERS, layers: { ...DEFAULT_FILTERS.layers }, poiCategories: {} };
-globalThis.lightboxImages = [];
-globalThis.lightboxIndex = 0;
-globalThis.worldMap = null;
-globalThis.adventureMaps = {};
-globalThis.adventureMarkers = {};
-globalThis.leafletPromise = null;
-globalThis.markerClusterPromise = null;
-globalThis.mapDataPromise = null;
-globalThis.worldMapRequested = false;
-globalThis.selectedAdventureId = null;
-globalThis.currentAdventureView = 'list';
-globalThis.adventuresMapBundlePromise = null;
+// Phase 3.3: state defaults live in adventures-state.ts. constants
+// (BASEMAPS, DEFAULT_FILTERS, *_DATA_URL, ...) imported from the same
+// module — no more globalThis.X = X exposure for cross-module reads.
 
 // Phase 4 (additive): namespaced surface for AdventuresState/Urls/Constants.
 if (typeof window !== 'undefined') {
     window.AdventuresState = {
-        get adventures() { return globalThis.allAdventures; },
-        set adventures(v) { globalThis.allAdventures = v; },
-        get places() { return globalThis.allPlaces; },
-        get placeCategories() { return globalThis.placeCategories; },
-        get routes() { return globalThis.allRoutes; },
-        get photos() { return globalThis.allPhotos; },
-        get countries() { return globalThis.countryGeo; },
-        get visited() { return globalThis.visitedIso; },
-        get filters() { return globalThis.mapFilters; },
-        get worldMap() { return globalThis.worldMap; },
-        get adventureMaps() { return globalThis.adventureMaps; },
-        get adventureMarkers() { return globalThis.adventureMarkers; },
-        get selectedId() { return globalThis.selectedAdventureId; },
-        set selectedId(v) { globalThis.selectedAdventureId = v; },
-        get currentView() { return globalThis.currentAdventureView; },
-        set currentView(v) { globalThis.currentAdventureView = v; }
+        get adventures() { return state.allAdventures; },
+        set adventures(v) { state.allAdventures = v; },
+        get places() { return state.allPlaces; },
+        get placeCategories() { return state.placeCategories; },
+        get routes() { return state.allRoutes; },
+        get photos() { return state.allPhotos; },
+        get countries() { return state.countryGeo; },
+        get visited() { return state.visitedIso; },
+        get filters() { return state.mapFilters; },
+        get worldMap() { return state.worldMap; },
+        get adventureMaps() { return state.adventureMaps; },
+        get adventureMarkers() { return state.adventureMarkers; },
+        get selectedId() { return state.selectedAdventureId; },
+        set selectedId(v) { state.selectedAdventureId = v; },
+        get currentView() { return state.currentAdventureView; },
+        set currentView(v) { state.currentAdventureView = v; }
     };
     window.AdventuresUrls = {
         adventures: ADVENTURES_DATA_URL,
@@ -142,16 +64,6 @@ if (typeof window !== 'undefined') {
 }
 
 // FAST_BASEMAP_LAND consumed by adventures-map.js via globalThis.
-globalThis.FAST_BASEMAP_LAND = [
-    [[72, -168], [68, -52], [56, -58], [48, -70], [32, -81], [19, -105], [24, -125], [39, -124], [51, -134], [59, -151]],
-    [[34, -116], [29, -95], [17, -88], [8, -80], [-4, -81], [-18, -75], [-35, -70], [-55, -66], [-52, -45], [-30, -39], [-7, -35], [8, -50], [18, -63], [24, -82]],
-    [[72, -10], [70, 42], [62, 98], [55, 145], [42, 158], [28, 124], [8, 104], [6, 78], [21, 59], [31, 35], [40, 23], [45, 5], [54, -7]],
-    [[35, -18], [30, 32], [14, 45], [-3, 40], [-20, 30], [-35, 19], [-34, 1], [-20, -12], [5, -17], [22, -16]],
-    [[-11, 112], [-11, 154], [-28, 154], [-39, 145], [-35, 116]],
-    [[-34, 166], [-36, 178], [-46, 170], [-43, 166]],
-    [[37, 126], [45, 142], [31, 146]],
-    [[-12, 45], [-25, 50], [-22, 43]]
-];
 
 function loadFilters() {
     try {
@@ -160,7 +72,7 @@ function loadFilters() {
         const stored = JSON.parse(raw);
         if (!stored || typeof stored !== 'object') return;
 
-        globalThis.mapFilters = {
+        state.mapFilters = {
             year: stored.year || 'all',
             region: stored.region || 'all',
             layers: { ...DEFAULT_FILTERS.layers, ...(stored.layers || {}) },
@@ -168,14 +80,14 @@ function loadFilters() {
             basemap: stored.basemap || 'satellite',
             routeSet: stored.routeSet || 'all'
         };
-        globalThis.placesVisible = mapFilters.layers.pois;
+        state.placesVisible = state.mapFilters.layers.pois;
     } catch (_error) {
     }
 }
 
 function saveFilters() {
     try {
-        localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(mapFilters));
+        localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(state.mapFilters));
     } catch (_error) {
     }
 }
@@ -183,16 +95,16 @@ function saveFilters() {
 // Async loader for the heavier Adventures map runtime.
 function loadAdventuresMapBundle() {
     if (window.AdventuresMap) return Promise.resolve(window.AdventuresMap);
-    if (globalThis.adventuresMapBundlePromise) return globalThis.adventuresMapBundlePromise;
+    if (state.adventuresMapBundlePromise) return state.adventuresMapBundlePromise;
 
     // Phase 5 (slice 12): native dynamic import. Vite/Astro emits a separate
     // chunk for the heavy map runtime — kept off the initial adventures bundle.
-    globalThis.adventuresMapBundlePromise = import('./adventures-map.js').then(() => {
+    state.adventuresMapBundlePromise = import('./adventures-map.js').then(() => {
         if (!window.AdventuresMap) throw new Error('Adventures map API was not registered');
         return window.AdventuresMap;
     });
 
-    return globalThis.adventuresMapBundlePromise;
+    return state.adventuresMapBundlePromise;
 }
 
 function setupWorldMapLazyLoad(adventures) {
@@ -211,7 +123,7 @@ function setupWorldMapLazyLoad(adventures) {
     });
 }
 
-function ensureWorldMap(adventures = allAdventures) {
+function ensureWorldMap(adventures = state.allAdventures) {
     return loadAdventuresMapBundle().then((api) => api.ensureWorldMap(adventures));
 }
 
@@ -293,7 +205,7 @@ function createCompactCard(adventure) {
 }
 
 function selectAdventure(id) {
-    const adventure = allAdventures.find((item) => item.id === id);
+    const adventure = state.allAdventures.find((item) => item.id === id);
     if (!adventure) return;
 
     document.querySelectorAll('.adventure-compact-card').forEach((card) => {
@@ -303,7 +215,7 @@ function selectAdventure(id) {
     const selectedCard = document.getElementById(`card-${id}`);
     if (selectedCard) selectedCard.classList.add('active');
 
-    globalThis.selectedAdventureId = id;
+    state.selectedAdventureId = id;
     highlightAdventureOnMap(adventure);
     showAdventureDetail(adventure);
 }
@@ -389,41 +301,41 @@ function closeAdventureDetail() {
         card.classList.remove('active');
     });
 
-    globalThis.selectedAdventureId = null;
+    state.selectedAdventureId = null;
     clearMapHighlight();
 }
 
 function highlightAdventureOnMap(adventure) {
-    if (!worldMap) {
+    if (!state.worldMap) {
         ensureWorldMap().then(() => highlightAdventureOnMap(adventure));
         return;
     }
     if (!adventure || !adventure.mapCenter) return;
 
-    const targetLng = nearestWrappedLongitude(adventure.mapCenter.lng, worldMap.getCenter().lng);
-    worldMap.setView([adventure.mapCenter.lat, targetLng], 5, {
+    const targetLng = nearestWrappedLongitude(adventure.mapCenter.lng, state.worldMap.getCenter().lng);
+    state.worldMap.setView([adventure.mapCenter.lat, targetLng], 5, {
         animate: true,
         duration: 0.5
     });
 }
 
 function clearMapHighlight() {
-    if (!worldMap) {
+    if (!state.worldMap) {
         if (window.AdventuresMap) window.AdventuresMap.ensureWorldMap().then(clearMapHighlight);
         return;
     }
-    worldMap.setView([20, 0], 2, {
+    state.worldMap.setView([20, 0], 2, {
         animate: true,
         duration: 0.5
     });
 }
 
 function openLightbox(adventureId, index) {
-    const adventure = allAdventures.find((item) => item.id === adventureId);
+    const adventure = state.allAdventures.find((item) => item.id === adventureId);
     if (!adventure || !adventure.gallery) return;
 
-    globalThis.lightboxImages = adventure.gallery;
-    globalThis.lightboxIndex = index;
+    state.lightboxImages = adventure.gallery;
+    state.lightboxIndex = index;
 
     updateLightboxImage();
     document.getElementById('lightbox').classList.add('active');
@@ -436,25 +348,14 @@ function closeLightbox() {
 }
 
 function nextImage() {
-    globalThis.lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+    state.lightboxIndex = (state.lightboxIndex + 1) % state.lightboxImages.length;
     updateLightboxImage();
 }
 
 function prevImage() {
-    globalThis.lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+    state.lightboxIndex = (state.lightboxIndex - 1 + state.lightboxImages.length) % state.lightboxImages.length;
     updateLightboxImage();
 }
-
-function updateLightboxImage() {
-    const photo = lightboxImages[lightboxIndex];
-    document.getElementById('lightbox-image').src = photo.src;
-    document.getElementById('lightbox-caption').textContent = photo.caption || '';
-    document.getElementById('lightbox-counter').textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
-}
-
-// Phase 3 slice 3.2 (Tier 1+2 plan): adventures-map.js calls updateLightboxImage
-// when the map's photo lightbox is opened.
-globalThis.updateLightboxImage = updateLightboxImage;
 
 document.addEventListener('keydown', (event) => {
     const lightbox = document.getElementById('lightbox');
@@ -493,11 +394,11 @@ function populateSidebar(adventures) {
 }
 
 function toggleFilter(region, buttonEl) {
-    if (activeFilters.has(region)) {
-        activeFilters.delete(region);
+    if (state.activeFilters.has(region)) {
+        state.activeFilters.delete(region);
         buttonEl.classList.remove('active');
     } else {
-        activeFilters.add(region);
+        state.activeFilters.add(region);
         buttonEl.classList.add('active');
     }
 
@@ -506,30 +407,30 @@ function toggleFilter(region, buttonEl) {
 }
 
 function resetFilters(buttonEl) {
-    activeFilters.clear();
+    state.activeFilters.clear();
     document.querySelectorAll('.filter-pill:not([data-region="all"])').forEach((btn) => {
         btn.classList.remove('active');
     });
 
     buttonEl.classList.add('active');
     closeAdventureDetail();
-    renderAdventures(allAdventures);
-    updateAdventureCount(allAdventures.length);
+    renderAdventures(state.allAdventures);
+    updateAdventureCount(state.allAdventures.length);
 }
 
 function updateAllButtonState() {
     const allBtn = document.querySelector('.filter-pill[data-region="all"]');
     if (!allBtn) return;
-    allBtn.classList.toggle('active', activeFilters.size === 0);
+    allBtn.classList.toggle('active', state.activeFilters.size === 0);
 }
 
 function applyFilters() {
-    let filtered = allAdventures;
+    let filtered = state.allAdventures;
 
-    if (activeFilters.size > 0) {
-        filtered = allAdventures.filter((adventure) => {
+    if (state.activeFilters.size > 0) {
+        filtered = state.allAdventures.filter((adventure) => {
             const region = (adventure.region || 'other').toLowerCase();
-            return activeFilters.has(region);
+            return state.activeFilters.has(region);
         });
     }
 
@@ -585,7 +486,7 @@ function switchMobileView(view) {
     if (view === 'map') {
         pageContainer.classList.add('map-view');
         ensureWorldMap();
-        if (worldMap) setTimeout(() => worldMap.invalidateSize(), 100);
+        if (state.worldMap) setTimeout(() => state.worldMap.invalidateSize(), 100);
         return;
     }
 
@@ -612,7 +513,7 @@ function bindAdventureActions() {
         }
 
         if (action === 'scrollToStory') {
-            const adventure = allAdventures.find((item) => item.id === selectedAdventureId);
+            const adventure = state.allAdventures.find((item) => item.id === state.selectedAdventureId);
             if (adventure) renderInlineStory(adventure);
         }
     });
@@ -631,20 +532,6 @@ function nearestWrappedLongitude(lng, referenceLng) {
     return wrappedLng;
 }
 
-async function fetchJson(url, fallback = null) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) return fallback;
-        return await response.json();
-    } catch (_error) {
-        return fallback;
-    }
-}
-
-// Phase 3 slice 3.1 (Tier 1+2 plan): adventures-map.js calls fetchJson as a
-// bare reference. Expose on globalThis for cross-module resolution.
-globalThis.fetchJson = fetchJson;
-
 async function loadAdventures() {
     const data = await fetchJson(ADVENTURES_DATA_URL);
     if (!data || !Array.isArray(data.adventures)) {
@@ -652,13 +539,13 @@ async function loadAdventures() {
         showErrorMessage();
         return;
     }
-    globalThis.allAdventures = data.adventures.filter((item) => item.status === 'published');
-    allAdventures.sort((left, right) => new Date(right.startDate) - new Date(left.startDate));
+    state.allAdventures = data.adventures.filter((item) => item.status === 'published');
+    state.allAdventures.sort((left, right) => new Date(right.startDate) - new Date(left.startDate));
 
-    renderAdventures(allAdventures);
-    populateSidebar(allAdventures);
-    setupWorldMapLazyLoad(allAdventures);
-    updateAdventureCount(allAdventures.length);
+    renderAdventures(state.allAdventures);
+    populateSidebar(state.allAdventures);
+    setupWorldMapLazyLoad(state.allAdventures);
+    updateAdventureCount(state.allAdventures.length);
 }
 
 function initAdventuresPage() {

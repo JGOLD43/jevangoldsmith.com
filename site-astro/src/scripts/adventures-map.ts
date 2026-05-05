@@ -3,6 +3,15 @@
 // Adventures Page Data + Map Runtime
 // ============================================
 
+import {
+    state, fetchJson, updateLightboxImage,
+    ADVENTURES_DATA_URL, PLACES_DATA_URL, ROUTES_DATA_URL,
+    POPULAR_ROUTES_URL, POPULAR_ROUTES_INDEX_URL, PHOTOS_DATA_URL,
+    COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL, FILTERS_STORAGE_KEY,
+    WEB_MERCATOR_MAX_LAT, HORIZONTAL_WRAP_BOUND, ROUTE_TYPE_COLORS,
+    BASEMAPS, DEFAULT_FILTERS, FAST_BASEMAP_LAND
+} from './adventures-state';
+
 function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, popupAnchor, popupHtml, onClick, riseOnHover = false, layer }) {
     const iconOpts = { className: iconClass, html: iconHtml, iconSize };
     if (iconAnchor) iconOpts.iconAnchor = iconAnchor;
@@ -44,11 +53,11 @@ function injectVendorBundle({ cssHrefs = [], scriptSrc, marker }) {
 async function loadPlacesOfInterest() {
     const data = await fetchJson(PLACES_DATA_URL);
     if (!data) return;
-    globalThis.allPlaces = Array.isArray(data.places) ? data.places : [];
-    globalThis.placeCategories = Array.isArray(data.categories) ? data.categories : [];
-    for (const category of placeCategories) {
-        if (mapFilters.poiCategories[category.id] === undefined) {
-            mapFilters.poiCategories[category.id] = true;
+    state.allPlaces = Array.isArray(data.places) ? data.places : [];
+    state.placeCategories = Array.isArray(data.categories) ? data.categories : [];
+    for (const category of state.placeCategories) {
+        if (state.mapFilters.poiCategories[category.id] === undefined) {
+            state.mapFilters.poiCategories[category.id] = true;
         }
     }
     saveFilters();
@@ -57,19 +66,19 @@ async function loadPlacesOfInterest() {
 // Phase 1.2: countries data is gated on the layer toggle. DEFAULT_FILTERS
 // has `countries: false`, so by default this file (~248KB) never ships.
 // First time the user enables the layer, ensureCountriesData() fetches
-// once + caches via globalThis.countriesPromise, then renderCountryLayer
+// once + caches via state.countriesPromise, then renderCountryLayer
 // re-runs to draw the geometry.
 async function loadCountriesData() {
-    if (globalThis.countriesPromise) return globalThis.countriesPromise;
-    globalThis.countriesPromise = (async () => {
+    if (state.countriesPromise) return state.countriesPromise;
+    state.countriesPromise = (async () => {
         const [geo, visited] = await Promise.all([
             fetchJson(COUNTRIES_GEO_URL),
             fetchJson(COUNTRIES_VISITED_URL)
         ]);
-        if (geo) globalThis.countryGeo = geo;
-        if (visited) globalThis.visitedIso = new Set(Array.isArray(visited.iso) ? visited.iso : []);
+        if (geo) state.countryGeo = geo;
+        if (visited) state.visitedIso = new Set(Array.isArray(visited.iso) ? visited.iso : []);
     })();
-    return globalThis.countriesPromise;
+    return state.countriesPromise;
 }
 
 // Phase 1.2: split routes into primary (small, eager) + popular bucket-list
@@ -78,12 +87,12 @@ async function loadCountriesData() {
 // initial Total Bytes. routeSet === 'mine' skips them entirely.
 async function loadRoutes() {
     const primary = await fetchJson(ROUTES_DATA_URL, { routes: [] });
-    globalThis.allRoutes = Array.isArray(primary?.routes) ? primary.routes : [];
+    state.allRoutes = Array.isArray(primary?.routes) ? primary.routes : [];
 }
 
 async function loadPopularRoutes() {
-    if (globalThis.popularRoutesPromise) return globalThis.popularRoutesPromise;
-    globalThis.popularRoutesPromise = (async () => {
+    if (state.popularRoutesPromise) return state.popularRoutesPromise;
+    state.popularRoutesPromise = (async () => {
         const index = await fetchJson(POPULAR_ROUTES_INDEX_URL);
         const chunks = Array.isArray(index?.chunks) ? index.chunks : [];
         let payload;
@@ -97,18 +106,18 @@ async function loadPopularRoutes() {
         }
         const additions = Array.isArray(payload?.routes) ? payload.routes : [];
         // Avoid duplicating if loadPopularRoutes runs twice via race.
-        const have = new Set(globalThis.allRoutes.map((r) => r.id || `${r.adventureId}:${r.name}`));
+        const have = new Set(state.allRoutes.map((r) => r.id || `${r.adventureId}:${r.name}`));
         for (const route of additions) {
             const key = route.id || `${route.adventureId}:${route.name}`;
-            if (!have.has(key)) globalThis.allRoutes.push(route);
+            if (!have.has(key)) state.allRoutes.push(route);
         }
         return payload;
     })();
-    return globalThis.popularRoutesPromise;
+    return state.popularRoutesPromise;
 }
 
 function shouldLoadPopularRoutes() {
-    return mapFilters.layers.routes && mapFilters.routeSet !== 'mine';
+    return state.mapFilters.layers.routes && state.mapFilters.routeSet !== 'mine';
 }
 
 // Phase 1.2: kick off the (~2MB) popular-routes fetch only on actual user
@@ -117,52 +126,52 @@ function shouldLoadPopularRoutes() {
 // pay the bytes; first interaction does.
 function schedulePopularRoutes(force = false) {
     if (!shouldLoadPopularRoutes()) return;
-    if (globalThis.popularRoutesPromise) return;
+    if (state.popularRoutesPromise) return;
     const run = () => {
         loadPopularRoutes()
             .then(() => { renderRouteLayer(); })
             .catch((error) => console.error('Error loading popular routes', error));
     };
     if (force) { run(); return; }
-    if (!worldMap) {
+    if (!state.worldMap) {
         // Map not mounted yet — caller will retry once it is.
         return;
     }
     const onFirstInteraction = () => {
-        worldMap.off('movestart', onFirstInteraction);
-        worldMap.off('zoomstart', onFirstInteraction);
-        worldMap.off('mousedown', onFirstInteraction);
-        worldMap.off('touchstart', onFirstInteraction);
+        state.worldMap.off('movestart', onFirstInteraction);
+        state.worldMap.off('zoomstart', onFirstInteraction);
+        state.worldMap.off('mousedown', onFirstInteraction);
+        state.worldMap.off('touchstart', onFirstInteraction);
         run();
     };
-    worldMap.on('movestart', onFirstInteraction);
-    worldMap.on('zoomstart', onFirstInteraction);
-    worldMap.on('mousedown', onFirstInteraction);
-    worldMap.on('touchstart', onFirstInteraction);
+    state.worldMap.on('movestart', onFirstInteraction);
+    state.worldMap.on('zoomstart', onFirstInteraction);
+    state.worldMap.on('mousedown', onFirstInteraction);
+    state.worldMap.on('touchstart', onFirstInteraction);
 }
 
 async function loadPhotos() {
     const data = await fetchJson(PHOTOS_DATA_URL, { photos: [] });
-    globalThis.allPhotos = Array.isArray(data?.photos) ? data.photos : [];
+    state.allPhotos = Array.isArray(data?.photos) ? data.photos : [];
 }
 
 async function loadMapDatasets() {
-    if (mapDataPromise) return mapDataPromise;
+    if (state.mapDataPromise) return state.mapDataPromise;
     // Phase 1.2: drop loadCountriesData() + loadPopularRoutes() from the
     // eager Promise.all. Countries data is gated on the layer toggle
     // (default off) — see renderCountryLayer. Popular routes (~2MB)
     // wait for an idle window via schedulePopularRoutes after the map
     // mounts.
-    globalThis.mapDataPromise = Promise.all([
+    state.mapDataPromise = Promise.all([
         loadPlacesOfInterest(),
         loadRoutes(),
         loadPhotos()
     ]);
-    return mapDataPromise;
+    return state.mapDataPromise;
 }
 
 function refreshMapDatasets() {
-    if (!worldMap || !window.L) return;
+    if (!state.worldMap || !window.L) return;
     renderPlaceMarkers();
     renderCountryLayer();
     renderRouteLayer();
@@ -173,15 +182,15 @@ function refreshMapDatasets() {
 
 function loadMarkerCluster() {
     if (window.L && window.L.markerClusterGroup) return Promise.resolve();
-    if (markerClusterPromise) return markerClusterPromise;
-    globalThis.markerClusterPromise = injectVendorBundle({
+    if (state.markerClusterPromise) return state.markerClusterPromise;
+    state.markerClusterPromise = injectVendorBundle({
         cssHrefs: [
             'vendor/leaflet.markercluster/MarkerCluster.css',
             'vendor/leaflet.markercluster/MarkerCluster.Default.css'
         ],
         scriptSrc: 'vendor/leaflet.markercluster/leaflet.markercluster.js'
     });
-    return markerClusterPromise;
+    return state.markerClusterPromise;
 }
 
 function nearestWrappedLongitude(lng, referenceLng) {
@@ -193,13 +202,13 @@ function nearestWrappedLongitude(lng, referenceLng) {
 
 function loadLeaflet() {
     if (window.L) return Promise.resolve(window.L);
-    if (leafletPromise) return leafletPromise;
-    globalThis.leafletPromise = injectVendorBundle({
+    if (state.leafletPromise) return state.leafletPromise;
+    state.leafletPromise = injectVendorBundle({
         cssHrefs: ['vendor/leaflet/leaflet.css'],
         scriptSrc: 'vendor/leaflet/leaflet.js',
         marker: 'data-leaflet-css'
     }).then(() => window.L);
-    return leafletPromise;
+    return state.leafletPromise;
 }
 
 function addFastBaseMap(map) {
@@ -233,17 +242,17 @@ function addFastBaseMap(map) {
 }
 
 function addSatelliteTiles(map) {
-    setBasemap(map, mapFilters.basemap || 'satellite');
+    setBasemap(map, state.mapFilters.basemap || 'satellite');
 }
 
 function setBasemap(map, name) {
     if (!window.L || !map) return;
     const def = BASEMAPS[name] || BASEMAPS.satellite;
 
-    if (basemapTileLayer && map === worldMap) {
-        if (Array.isArray(basemapTileLayer)) basemapTileLayer.forEach((layer) => map.removeLayer(layer));
-        else map.removeLayer(basemapTileLayer);
-        globalThis.basemapTileLayer = null;
+    if (state.basemapTileLayer && map === state.worldMap) {
+        if (Array.isArray(state.basemapTileLayer)) state.basemapTileLayer.forEach((layer) => map.removeLayer(layer));
+        else map.removeLayer(state.basemapTileLayer);
+        state.basemapTileLayer = null;
     }
 
     const options = {
@@ -264,7 +273,7 @@ function setBasemap(map, name) {
         overlayLayer = L.tileLayer(def.overlay, { ...options, subdomains: '' }).addTo(map);
     }
 
-    if (map === worldMap) basemapTileLayer = overlayLayer ? [layer, overlayLayer] : layer;
+    if (map === state.worldMap) state.basemapTileLayer = overlayLayer ? [layer, overlayLayer] : layer;
 }
 
 function setupWorldMapLazyLoad(adventures) {
@@ -287,9 +296,9 @@ function setupWorldMapLazyLoad(adventures) {
     requestAnimationFrame(() => setTimeout(load, 100));
 }
 
-async function ensureWorldMap(adventures = allAdventures) {
-    if (worldMapRequested || worldMap) return;
-    globalThis.worldMapRequested = true;
+async function ensureWorldMap(adventures = state.allAdventures) {
+    if (state.worldMapRequested || state.worldMap) return;
+    state.worldMapRequested = true;
     await loadLeaflet();
     initWorldMap(adventures);
     setTimeout(() => {
@@ -307,7 +316,7 @@ async function ensureWorldMap(adventures = allAdventures) {
 
 function initWorldMap(adventures) {
     const mapContainer = document.getElementById('world-map');
-    if (!mapContainer || worldMap || !window.L) return;
+    if (!mapContainer || state.worldMap || !window.L) return;
 
     const adventuresWithLocation = adventures.filter((adventure) => adventure.mapCenter);
     if (adventuresWithLocation.length === 0) {
@@ -320,7 +329,7 @@ function initWorldMap(adventures) {
         [WEB_MERCATOR_MAX_LAT, HORIZONTAL_WRAP_BOUND]
     );
 
-    globalThis.worldMap = L.map('world-map', {
+    state.worldMap = L.map('world-map', {
         preferCanvas: true,
         zoomControl: true,
         attributionControl: false,
@@ -345,8 +354,8 @@ function initWorldMap(adventures) {
         markerZoomAnimation: true
     }).setView([25, 40], 3);
 
-    addFastBaseMap(worldMap);
-    addSatelliteTiles(worldMap);
+    addFastBaseMap(state.worldMap);
+    addSatelliteTiles(state.worldMap);
 
     const worldCopyOffsets = [-360, 0, 360];
     adventures.forEach((adventure) => {
@@ -375,9 +384,9 @@ function initWorldMap(adventures) {
                 popupHtml,
                 onClick: () => selectAdventure(adventure.id),
                 riseOnHover: true,
-                layer: worldMap
+                layer: state.worldMap
             });
-            if (index === 1) adventureMarkers[adventure.id] = marker;
+            if (index === 1) state.adventureMarkers[adventure.id] = marker;
         });
     });
 
@@ -388,11 +397,11 @@ function initWorldMap(adventures) {
         adventure.mapCenter.lat,
         adventure.mapCenter.lng
     ]));
-    worldMap.fitBounds(markerBounds.pad(0.28), { animate: false, maxZoom: 3 });
+    state.worldMap.fitBounds(markerBounds.pad(0.28), { animate: false, maxZoom: 3 });
 
     requestAnimationFrame(() => {
-        worldMap.invalidateSize();
-        worldMap.fitBounds(markerBounds.pad(0.28), { animate: false, maxZoom: 3 });
+        state.worldMap.invalidateSize();
+        state.worldMap.fitBounds(markerBounds.pad(0.28), { animate: false, maxZoom: 3 });
     });
 
     if ('ResizeObserver' in window) {
@@ -401,7 +410,7 @@ function initWorldMap(adventures) {
             if (resizeRaf) cancelAnimationFrame(resizeRaf);
             resizeRaf = requestAnimationFrame(() => {
                 resizeRaf = 0;
-                if (worldMap) worldMap.invalidateSize();
+                if (state.worldMap) state.worldMap.invalidateSize();
             });
         });
         observer.observe(mapContainer);
@@ -410,37 +419,37 @@ function initWorldMap(adventures) {
     const split = document.querySelector('.adventures-page-split');
     if (split) {
         split.addEventListener('transitionend', (event) => {
-            if (event.propertyName === 'grid-template-columns' && worldMap) {
-                worldMap.invalidateSize();
+            if (event.propertyName === 'grid-template-columns' && state.worldMap) {
+                state.worldMap.invalidateSize();
             }
         });
     }
 }
 
 function renderPlaceMarkers() {
-    if (!worldMap || !window.L) return;
+    if (!state.worldMap || !window.L) return;
 
-    placeMarkers.forEach((marker) => worldMap.removeLayer(marker));
-    globalThis.placeMarkers = [];
+    state.placeMarkers.forEach((marker) => state.worldMap.removeLayer(marker));
+    state.placeMarkers = [];
 
-    if (!mapFilters.layers.pois || allPlaces.length === 0) return;
+    if (!state.mapFilters.layers.pois || state.allPlaces.length === 0) return;
 
     const worldCopyOffsets = [-360, 0, 360];
     const categoryColor = (id) => {
-        const category = placeCategories.find((item) => item.id === id);
+        const category = state.placeCategories.find((item) => item.id === id);
         return (category && category.color) || '#2b6cb0';
     };
     const categoryLabel = (id) => {
-        const category = placeCategories.find((item) => item.id === id);
+        const category = state.placeCategories.find((item) => item.id === id);
         return (category && category.label) || 'Place of interest';
     };
 
-    allPlaces.forEach((place) => {
+    state.allPlaces.forEach((place) => {
         if (typeof place.lat !== 'number' || typeof place.lng !== 'number') return;
         if (!matchesRegionFilter(place.region)) return;
 
         const category = place.category || 'wishlist';
-        if (mapFilters.poiCategories[category] === false) return;
+        if (state.mapFilters.poiCategories[category] === false) return;
 
         const color = categoryColor(category);
         const label = categoryLabel(category);
@@ -464,17 +473,17 @@ function renderPlaceMarkers() {
                 popupAnchor: [0, -9],
                 popupHtml,
                 riseOnHover: true,
-                layer: worldMap
+                layer: state.worldMap
             });
-            placeMarkers.push(marker);
+            state.placeMarkers.push(marker);
         });
     });
 }
 
 function togglePlacesOfInterest(buttonEl) {
-    mapFilters.layers.pois = !mapFilters.layers.pois;
-    globalThis.placesVisible = mapFilters.layers.pois;
-    if (buttonEl) buttonEl.classList.toggle('active', mapFilters.layers.pois);
+    state.mapFilters.layers.pois = !state.mapFilters.layers.pois;
+    state.placesVisible = state.mapFilters.layers.pois;
+    if (buttonEl) buttonEl.classList.toggle('active', state.mapFilters.layers.pois);
     saveFilters();
     renderPlaceMarkers();
 }
@@ -486,7 +495,7 @@ function loadFilters() {
         const stored = JSON.parse(raw);
         if (!stored || typeof stored !== 'object') return;
 
-        globalThis.mapFilters = {
+        state.mapFilters = {
             year: stored.year || 'all',
             region: stored.region || 'all',
             layers: { ...DEFAULT_FILTERS.layers, ...(stored.layers || {}) },
@@ -494,14 +503,14 @@ function loadFilters() {
             basemap: stored.basemap || 'satellite',
             routeSet: stored.routeSet || 'all'
         };
-        globalThis.placesVisible = mapFilters.layers.pois;
+        state.placesVisible = state.mapFilters.layers.pois;
     } catch (_error) {
     }
 }
 
 function saveFilters() {
     try {
-        localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(mapFilters));
+        localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(state.mapFilters));
     } catch (_error) {
     }
 }
@@ -513,14 +522,14 @@ function adventureYear(adventure) {
 }
 
 function matchesYearFilter(year) {
-    if (mapFilters.year === 'all' || mapFilters.year === null) return true;
-    return String(year) === String(mapFilters.year);
+    if (state.mapFilters.year === 'all' || state.mapFilters.year === null) return true;
+    return String(year) === String(state.mapFilters.year);
 }
 
 function matchesRegionFilter(region) {
-    if (mapFilters.region === 'all' || !mapFilters.region) return true;
+    if (state.mapFilters.region === 'all' || !state.mapFilters.region) return true;
     if (!region) return false;
-    return String(region).toLowerCase() === String(mapFilters.region).toLowerCase();
+    return String(region).toLowerCase() === String(state.mapFilters.region).toLowerCase();
 }
 
 function matchesAdventureFilters(adventure) {
@@ -541,38 +550,38 @@ function applyAllFilters() {
 }
 
 function applyAdventureMarkerFilter() {
-    if (!worldMap) return;
-    Object.entries(adventureMarkers).forEach(([id, marker]) => {
-        const adventure = allAdventures.find((item) => item.id === id);
-        const visible = mapFilters.layers.adventures && adventure && matchesAdventureFilters(adventure);
+    if (!state.worldMap) return;
+    Object.entries(state.adventureMarkers).forEach(([id, marker]) => {
+        const adventure = state.allAdventures.find((item) => item.id === id);
+        const visible = state.mapFilters.layers.adventures && adventure && matchesAdventureFilters(adventure);
         if (visible) {
-            if (!worldMap.hasLayer(marker)) worldMap.addLayer(marker);
+            if (!state.worldMap.hasLayer(marker)) state.worldMap.addLayer(marker);
             return;
         }
-        if (worldMap.hasLayer(marker)) worldMap.removeLayer(marker);
+        if (state.worldMap.hasLayer(marker)) state.worldMap.removeLayer(marker);
     });
 }
 
 function renderCountryLayer() {
-    if (!worldMap || !window.L) return;
-    if (countryLayer) {
-        worldMap.removeLayer(countryLayer);
-        globalThis.countryLayer = null;
+    if (!state.worldMap || !window.L) return;
+    if (state.countryLayer) {
+        state.worldMap.removeLayer(state.countryLayer);
+        state.countryLayer = null;
     }
-    if (!mapFilters.layers.countries) return;
+    if (!state.mapFilters.layers.countries) return;
     // Phase 1.2: lazy-fetch countries data on first toggle. Re-renders
     // once the geometry resolves.
-    if (!countryGeo) {
+    if (!state.countryGeo) {
         loadCountriesData()
             .then(() => renderCountryLayer())
             .catch((error) => console.error('Error loading countries data', error));
         return;
     }
 
-    globalThis.countryLayer = L.geoJSON(countryGeo, {
+    state.countryLayer = L.geoJSON(state.countryGeo, {
         renderer: L.svg(),
         pane: 'overlayPane',
-        filter: (feature) => visitedIso.has(feature.properties.iso),
+        filter: (feature) => state.visitedIso.has(feature.properties.iso),
         style: () => ({
             stroke: true,
             color: '#C9A86C',
@@ -584,26 +593,26 @@ function renderCountryLayer() {
         onEachFeature: (feature, layer) => {
             layer.bindTooltip(feature.properties.name || feature.properties.iso, { sticky: true });
         }
-    }).addTo(worldMap);
+    }).addTo(state.worldMap);
 }
 
 function renderRouteLayer() {
-    if (!worldMap || !window.L) return;
-    if (routeLayer) {
-        worldMap.removeLayer(routeLayer);
-        globalThis.routeLayer = null;
+    if (!state.worldMap || !window.L) return;
+    if (state.routeLayer) {
+        state.worldMap.removeLayer(state.routeLayer);
+        state.routeLayer = null;
     }
-    if (!mapFilters.layers.routes || allRoutes.length === 0) return;
+    if (!state.mapFilters.layers.routes || state.allRoutes.length === 0) return;
 
     const group = L.layerGroup();
-    const routeSet = mapFilters.routeSet || 'all';
+    const routeSet = state.mapFilters.routeSet || 'all';
 
-    allRoutes.forEach((route) => {
+    state.allRoutes.forEach((route) => {
         const isBucket = route.adventureId === 'popular-routes';
         if (routeSet === 'mine' && isBucket) return;
         if (routeSet === 'bucket' && !isBucket) return;
 
-        const adventure = allAdventures.find((item) => item.id === route.adventureId);
+        const adventure = state.allAdventures.find((item) => item.id === route.adventureId);
         if (adventure && !matchesAdventureFilters(adventure)) return;
         if (!route.geometry) return;
 
@@ -631,23 +640,23 @@ function renderRouteLayer() {
                 if (route.adventureId && !isBucket) selectAdventure(route.adventureId);
                 const bounds = polyline.getBounds();
                 if (bounds.isValid()) {
-                    worldMap.fitBounds(bounds.pad(0.25), { animate: true, duration: 0.6, maxZoom: 13 });
+                    state.worldMap.fitBounds(bounds.pad(0.25), { animate: true, duration: 0.6, maxZoom: 13 });
                 }
             });
             group.addLayer(polyline);
         });
     });
 
-    globalThis.routeLayer = group.addTo(worldMap);
+    state.routeLayer = group.addTo(state.worldMap);
 }
 
 function renderPhotoLayer() {
-    if (!worldMap || !window.L) return;
-    if (photoLayer) {
-        worldMap.removeLayer(photoLayer);
-        globalThis.photoLayer = null;
+    if (!state.worldMap || !window.L) return;
+    if (state.photoLayer) {
+        state.worldMap.removeLayer(state.photoLayer);
+        state.photoLayer = null;
     }
-    if (!mapFilters.layers.photos || allPhotos.length === 0) return;
+    if (!state.mapFilters.layers.photos || state.allPhotos.length === 0) return;
 
     const createLayer = () => {
         const cluster = window.L.markerClusterGroup
@@ -659,10 +668,10 @@ function renderPhotoLayer() {
             })
             : L.layerGroup();
 
-        allPhotos.forEach((photo, index) => {
+        state.allPhotos.forEach((photo, index) => {
             if (typeof photo.lat !== 'number' || typeof photo.lng !== 'number') return;
 
-            const adventure = allAdventures.find((item) => item.id === photo.adventureId);
+            const adventure = state.allAdventures.find((item) => item.id === photo.adventureId);
             if (adventure && !matchesAdventureFilters(adventure)) return;
 
             const thumb = photo.thumb || photoUrl(photo.driveId, 200);
@@ -684,7 +693,7 @@ function renderPhotoLayer() {
             cluster.addLayer(marker);
         });
 
-        globalThis.photoLayer = cluster.addTo(worldMap);
+        state.photoLayer = cluster.addTo(state.worldMap);
     };
 
     if (window.L.markerClusterGroup) createLayer();
@@ -697,14 +706,14 @@ function photoUrl(driveId, size) {
 }
 
 function openPhotoLightbox(index) {
-    globalThis.lightboxImages = allPhotos
+    state.lightboxImages = state.allPhotos
         .filter((photo) => typeof photo.lat === 'number' && typeof photo.lng === 'number')
         .map((photo) => ({
             src: photo.full || photoUrl(photo.driveId, 1600),
             caption: photo.caption || ''
         }));
 
-    globalThis.lightboxIndex = Math.max(0, Math.min(index, lightboxImages.length - 1));
+    state.lightboxIndex = Math.max(0, Math.min(index, state.lightboxImages.length - 1));
     updateLightboxImage();
 
     const lightbox = document.getElementById('lightbox');
@@ -714,12 +723,12 @@ function openPhotoLightbox(index) {
 }
 
 function buildMapControlStack() {
-    if (!worldMap) return;
+    if (!state.worldMap) return;
     const mapEl = document.getElementById('world-map');
     if (!mapEl || mapEl.querySelector('.map-controls-stack')) return;
 
-    const years = [...new Set(allAdventures.map(adventureYear).filter(Boolean))].sort((left, right) => right - left);
-    const regions = [...new Set(allAdventures.map((adventure) => adventure.region).filter(Boolean))].sort();
+    const years = [...new Set(state.allAdventures.map(adventureYear).filter(Boolean))].sort((left, right) => right - left);
+    const regions = [...new Set(state.allAdventures.map((adventure) => adventure.region).filter(Boolean))].sort();
 
     const wrapper = document.createElement('div');
     wrapper.className = 'map-controls-stack';
@@ -737,29 +746,29 @@ function buildMapControlStack() {
             <div class="map-controls-group">
                 <label class="map-controls-label" for="map-filter-routeset">Route set</label>
                 <select id="map-filter-routeset" class="map-controls-select">
-                    <option value="all" ${mapFilters.routeSet === 'all' ? 'selected' : ''}>All routes</option>
-                    <option value="mine" ${mapFilters.routeSet === 'mine' ? 'selected' : ''}>Mine only</option>
-                    <option value="bucket" ${mapFilters.routeSet === 'bucket' ? 'selected' : ''}>Bucket list only</option>
+                    <option value="all" ${state.mapFilters.routeSet === 'all' ? 'selected' : ''}>All routes</option>
+                    <option value="mine" ${state.mapFilters.routeSet === 'mine' ? 'selected' : ''}>Mine only</option>
+                    <option value="bucket" ${state.mapFilters.routeSet === 'bucket' ? 'selected' : ''}>Bucket list only</option>
                 </select>
             </div>
             <div class="map-controls-group">
                 <label class="map-controls-label" for="map-filter-year">Year</label>
                 <select id="map-filter-year" class="map-controls-select">
                     <option value="all">All</option>
-                    ${years.map((year) => `<option value="${year}" ${String(mapFilters.year) === String(year) ? 'selected' : ''}>${year}</option>`).join('')}
+                    ${years.map((year) => `<option value="${year}" ${String(state.mapFilters.year) === String(year) ? 'selected' : ''}>${year}</option>`).join('')}
                 </select>
             </div>
             <div class="map-controls-group">
                 <label class="map-controls-label" for="map-filter-region">Region</label>
                 <select id="map-filter-region" class="map-controls-select">
                     <option value="all">All</option>
-                    ${regions.map((region) => `<option value="${escapeAttr(region)}" ${String(mapFilters.region).toLowerCase() === String(region).toLowerCase() ? 'selected' : ''}>${escapeHTML(region)}</option>`).join('')}
+                    ${regions.map((region) => `<option value="${escapeAttr(region)}" ${String(state.mapFilters.region).toLowerCase() === String(region).toLowerCase() ? 'selected' : ''}>${escapeHTML(region)}</option>`).join('')}
                 </select>
             </div>
             <div class="map-controls-group">
                 <label class="map-controls-label" for="map-filter-basemap">Basemap</label>
                 <select id="map-filter-basemap" class="map-controls-select">
-                    ${Object.entries(BASEMAPS).map(([key, value]) => `<option value="${key}" ${mapFilters.basemap === key ? 'selected' : ''}>${escapeHTML(value.label)}</option>`).join('')}
+                    ${Object.entries(BASEMAPS).map(([key, value]) => `<option value="${key}" ${state.mapFilters.basemap === key ? 'selected' : ''}>${escapeHTML(value.label)}</option>`).join('')}
                 </select>
             </div>
         </div>
@@ -781,34 +790,34 @@ function buildMapControlStack() {
     wrapper.addEventListener('change', (event) => {
         const target = event.target;
         if (target.matches('input[data-layer]')) {
-            mapFilters.layers[target.dataset.layer] = target.checked;
+            state.mapFilters.layers[target.dataset.layer] = target.checked;
             applyAllFilters();
             return;
         }
         if (target.matches('input[data-poi-category]')) {
-            mapFilters.poiCategories[target.dataset.poiCategory] = target.checked;
+            state.mapFilters.poiCategories[target.dataset.poiCategory] = target.checked;
             saveFilters();
             renderPlaceMarkers();
             return;
         }
         if (target.id === 'map-filter-year') {
-            mapFilters.year = target.value;
+            state.mapFilters.year = target.value;
             applyAllFilters();
             return;
         }
         if (target.id === 'map-filter-region') {
-            mapFilters.region = target.value;
+            state.mapFilters.region = target.value;
             applyAllFilters();
             return;
         }
         if (target.id === 'map-filter-basemap') {
-            mapFilters.basemap = target.value;
+            state.mapFilters.basemap = target.value;
             saveFilters();
-            setBasemap(worldMap, target.value);
+            setBasemap(state.worldMap, target.value);
             return;
         }
         if (target.id === 'map-filter-routeset') {
-            mapFilters.routeSet = target.value;
+            state.mapFilters.routeSet = target.value;
             saveFilters();
             // Phase 1.2: switching the route filter is explicit user
             // intent — fire the fetch immediately rather than waiting
@@ -830,17 +839,17 @@ function renderLayerToggles() {
 
     return layers.map(([key, label]) => `
         <label class="map-controls-check">
-            <input type="checkbox" data-layer="${key}" ${mapFilters.layers[key] ? 'checked' : ''}>
+            <input type="checkbox" data-layer="${key}" ${state.mapFilters.layers[key] ? 'checked' : ''}>
             <span>${escapeHTML(label)}</span>
         </label>
     `).join('');
 }
 
 function renderPoiToggles() {
-    if (!placeCategories.length) return '<p class="map-controls-empty">No categories</p>';
-    return placeCategories.map((category) => `
+    if (!state.placeCategories.length) return '<p class="map-controls-empty">No categories</p>';
+    return state.placeCategories.map((category) => `
         <label class="map-controls-check">
-            <input type="checkbox" data-poi-category="${escapeAttr(category.id)}" ${mapFilters.poiCategories[category.id] !== false ? 'checked' : ''}>
+            <input type="checkbox" data-poi-category="${escapeAttr(category.id)}" ${state.mapFilters.poiCategories[category.id] !== false ? 'checked' : ''}>
             <span style="--poi-dot:${escapeAttr(category.color || '#666')}">${escapeHTML(category.label)}</span>
         </label>
     `).join('');
