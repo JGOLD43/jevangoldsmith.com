@@ -51,7 +51,10 @@ export function bookCoverUrl(book: BookData): string {
   return localize(`https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg`);
 }
 
-export function renderBookCardHtml(book: BookData): string {
+// `eager` flips the cover from lazy/auto to eager/high — used for the
+// first row of cards that sit above the fold so the LCP candidate paints
+// without waiting for the lazy-loading observer.
+export function renderBookCardHtml(book: BookData, eager = false): string {
   const title = String(book.title ?? '');
   const author = String(book.author ?? '');
   const yearStr = book.year != null && book.year !== '' ? String(book.year) : '';
@@ -90,8 +93,10 @@ export function renderBookCardHtml(book: BookData): string {
   const cardClass = `book-card js-zoom-item${isUnread ? ' is-unread' : ''}${review ? ' has-review' : ''}`;
   const dataId = isbn || title;
 
+  const loading = eager ? 'eager' : 'lazy';
+  const fp = eager ? ' fetchpriority="high"' : '';
   const coverImg = coverUrl
-    ? `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(title)}" class="book-cover" loading="lazy" decoding="async" data-book-cover-fallback="true">`
+    ? `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(title)}" class="book-cover" loading="${loading}"${fp} decoding="async" data-book-cover-fallback="true">`
     : '';
 
   const yearSpan = yearStr ? `<span class="book-year">${escapeHtml(yearStr)}</span>` : '';

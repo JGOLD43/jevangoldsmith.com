@@ -12,7 +12,12 @@ const canonical = 'https://jevangoldsmith.com/books.html';
 // server-render every book card at build time. books.js detects
 // an already-populated container and skips the initial wipe-and-render.
 const books = await getCollection('books');
-const bookCardsHtml = books.map((b: any) => renderBookCardHtml(b.data)).join('');
+// First 16 cards sit above the fold across desktop + tablet — flag them
+// eager + fetchpriority="high" so their covers paint without waiting for
+// the lazy-loading IntersectionObserver. Cards 16+ stay lazy.
+const bookCardsHtml = books
+  .map((b: any, i: number) => renderBookCardHtml(b.data, i < 16))
+  .join('');
 
 // Resolve a remote OpenLibrary cover URL to a local pre-generated jpg.
 // remote-assets.generated.json holds the mapping built by

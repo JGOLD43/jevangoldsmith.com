@@ -34,10 +34,10 @@ function sourceTypeFor(person: Person): string {
   return person.sourceType || (person.title?.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
 }
 
-// index-aware loading. The first 12 cards (above the fold at
-// 1280×800) get loading="eager"; index 0 also gets fetchpriority="high"
-// as the LCP candidate. All other cards remain native lazy + async.
-const EAGER_ABOVE_FOLD = 12;
+// index-aware loading. The first 16 cards (above the fold across the
+// desktop+tablet grid) get loading="eager" + fetchpriority="high" so the
+// LCP candidate paints without waiting for the lazy-loading observer.
+const EAGER_ABOVE_FOLD = 16;
 
 export function renderPersonCardHtml(person: Person, index = Number.MAX_SAFE_INTEGER): string {
   const name = person.name ?? '';
@@ -52,7 +52,7 @@ export function renderPersonCardHtml(person: Person, index = Number.MAX_SAFE_INT
   const sourceLabel = sourceType === 'fiction' ? 'Fiction' : 'Non-fiction';
   const eager = index < EAGER_ABOVE_FOLD;
   const loadingAttr = eager ? 'eager' : 'lazy';
-  const priorityAttr = index === 0 ? ' fetchpriority="high"' : '';
+  const priorityAttr = eager ? ' fetchpriority="high"' : '';
 
   return `<article class="person-card" data-category="${escapeHtml(category)}" data-person-id="${escapeHtml(personId)}" data-search="${escapeHtml(searchText)}" data-source-type="${escapeHtml(sourceType)}" role="button" tabindex="0">
         <div class="person-image-container">
