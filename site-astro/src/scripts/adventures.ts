@@ -11,8 +11,6 @@ import {
 type AnyObj = any;
 const escapeHTML = window.escapeHTML as (s: unknown) => string;
 const escapeAttr = window.escapeAttr as (s: unknown) => string;
-const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
-void escapeAttr; void sanitizeUrl;
 
 // ============================================
 // Adventures Page Runtime State
@@ -440,21 +438,7 @@ function applyFilters() {
     updateAdventureCount(filtered.length);
 }
 
-function formatDateRange(startDate: string | Date, endDate: string | Date) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const options: Intl.DateTimeFormatOptions = { month: 'short', year: 'numeric' };
-
-    if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
-        return start.toLocaleDateString('en-US', options);
-    }
-
-    if (start.getFullYear() === end.getFullYear()) {
-        return `${start.toLocaleDateString('en-US', { month: 'short' })} - ${end.toLocaleDateString('en-US', options)}`;
-    }
-
-    return `${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}`;
-}
+import { formatDateRange } from '../lib/dates';
 
 function updateAdventureCount(count: number) {
     const countEl = document.getElementById('adventure-count');

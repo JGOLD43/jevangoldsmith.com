@@ -1,7 +1,8 @@
+import { monthKey, monthLabel, dayLabel } from '../lib/dates';
+
 (function () {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   type AnyObj = any;
-  const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   const els = {
     feed: document.getElementById('feed'),
@@ -36,16 +37,6 @@
       return fallback;
     }
     return fallback;
-  }
-
-  function monthKey(iso: string) { return iso.slice(0, 7); }
-  function monthLabel(key: string) {
-    const [y, m] = key.split('-');
-    return `${MONTH_NAMES[parseInt(m, 10) - 1]} ${y}`;
-  }
-  function dayLabel(iso: string) {
-    const d = new Date(iso + 'T12:00:00');
-    return `${MONTH_NAMES[d.getMonth()]} ${d.getDate()}`;
   }
 
   function renderFeed(items: AnyObj[], cats: AnyObj[]) {

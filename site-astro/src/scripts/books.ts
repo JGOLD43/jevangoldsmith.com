@@ -2,9 +2,6 @@
 type AnyObj = any;
 const escapeHTML = window.escapeHTML as (s: unknown) => string;
 const escapeAttr = window.escapeAttr as (s: unknown) => string;
-const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
-const sanitizeHTML = window.sanitizeHTML as ((s: string) => string) | undefined;
-void sanitizeUrl; void sanitizeHTML;
 
 // Books page orchestrator. Inlines what used to live in
 // js/books-state.js, js/books-filters.js, js/books-modal.js,

@@ -2,8 +2,6 @@
 type AnyObj = any;
 const escapeHTML = window.escapeHTML as (s: unknown) => string;
 const escapeAttr = window.escapeAttr as (s: unknown) => string;
-const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
-void sanitizeUrl;
 
 // Movies/letterboxd page orchestrator. Inlines js/letterboxd-state.js,
 // js/letterboxd-filters.js, js/letterboxd-modal.js, js/letterboxd-events.js,
@@ -125,15 +123,7 @@ const genreIcons: Record<string, string> = {
     'Thriller': '😱', 'Western': '🤠', 'Uncategorized': '🎬'
 };
 
-function formatRuntime(minutes: number) {
-    const totalMinutes = Number(minutes) || 0;
-    if (totalMinutes <= 0) return '';
-    const hours = Math.floor(totalMinutes / 60);
-    const remainder = totalMinutes % 60;
-    if (hours === 0) return `${remainder} min`;
-    if (remainder === 0) return `${hours}h`;
-    return `${hours}h ${remainder}m`;
-}
+import { formatRuntime } from '../lib/dates';
 
 function normalizeMovieData(movie: AnyObj) {
     const metadata = movieMetadata[movie.title] || {};

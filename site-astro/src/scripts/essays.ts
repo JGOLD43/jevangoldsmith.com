@@ -2,9 +2,7 @@
 type AnyObj = any;
 const escapeHTML = window.escapeHTML as (s: unknown) => string;
 const escapeAttr = window.escapeAttr as (s: unknown) => string;
-const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
 const sanitizeHTML = window.sanitizeHTML as ((s: string) => string) | undefined;
-void escapeAttr; void sanitizeUrl; void sanitizeHTML;
 
 const collectionUi = window.JGCollectionUI as AnyObj;
 const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
@@ -100,15 +98,7 @@ function findEssayIndex(essays: AnyObj[], essayId: string) {
     return essays.findIndex((essay) => essay.id === essayId);
 }
 
-function formatDate(dateString: string) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-}
-
-function formatDateShort(dateString: string) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-}
+import { formatDate, formatDateShort } from '../lib/dates';
 
 function createEssayArticle(essay: AnyObj) {
     const article = document.createElement('article');

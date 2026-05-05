@@ -27,27 +27,7 @@ function buildCollectionController() {
     });
 }
 
-function formatEpisodeDuration(ms: number) {
-    if (!ms || typeof ms !== 'number' || ms <= 0) return '';
-    const totalMin = Math.round(ms / 60000);
-    if (totalMin < 60) return `${totalMin} min`;
-    const h = Math.floor(totalMin / 60);
-    const m = totalMin % 60;
-    return m === 0 ? `${h}h` : `${h}h ${m}m`;
-}
-
-function formatRelativeDate(iso: string) {
-    if (!iso) return '';
-    const date = new Date(iso);
-    if (Number.isNaN(date.getTime())) return '';
-    const diffMs = Date.now() - date.getTime();
-    const day = 86400000;
-    if (diffMs < day) return 'today';
-    if (diffMs < day * 2) return 'yesterday';
-    if (diffMs < day * 7) return `${Math.floor(diffMs / day)} days ago`;
-    if (diffMs < day * 30) return `${Math.floor(diffMs / (day * 7))} wk ago`;
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
+import { formatEpisodeDuration, formatRelativeDate } from '../lib/dates';
 
 function buildSpotifyEpisodeCard(ep: AnyObj) {
     const card = document.createElement('div');
