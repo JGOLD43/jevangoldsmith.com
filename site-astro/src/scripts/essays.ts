@@ -1,9 +1,14 @@
-// @ts-nocheck — pending typed migration
-const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyObj = any;
+const escapeHTML = window.escapeHTML as (s: unknown) => string;
+const escapeAttr = window.escapeAttr as (s: unknown) => string;
+const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
+const sanitizeHTML = window.sanitizeHTML as ((s: string) => string) | undefined;
+void escapeAttr; void sanitizeUrl; void sanitizeHTML;
 
-const collectionUi = window.JGCollectionUI;
-const dataFetch = window.JGDataFetch;
-let essaysRuntime = null;
+const collectionUi = window.JGCollectionUI as AnyObj;
+const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
+let essaysRuntime: AnyObj = null;
 
 // Essays page orchestrator. State, filters, and view rendering live here because
 // this page is their only consumer.
@@ -30,35 +35,35 @@ const essaysState = (() => {
                 filteredEssays: [...state.filteredEssays]
             };
         },
-        setActiveCategory(category) {
+        setActiveCategory(category: string) {
             state.activeCategory = category || 'all';
         },
-        setCurrentIndex(index) {
+        setCurrentIndex(index: number) {
             state.currentIndex = index;
         },
-        setEssays(essays) {
+        setEssays(essays: AnyObj[]) {
             state.essays = Array.isArray(essays) ? essays : [];
         },
-        setFilteredEssays(essays) {
+        setFilteredEssays(essays: AnyObj[]) {
             state.filteredEssays = Array.isArray(essays) ? essays : [];
         },
-        setSearchTerm(term) {
+        setSearchTerm(term: string) {
             state.searchTerm = String(term || '').trim().toLowerCase();
         },
-        setSidebarCollapsed(collapsed) {
+        setSidebarCollapsed(collapsed: boolean) {
             state.sidebarCollapsed = Boolean(collapsed);
         }
     };
 })();
 
-function filterEssaysByCategory(essays, category) {
+function filterEssaysByCategory(essays: AnyObj[], category: string) {
     if (category === 'all') {
         return essays;
     }
     return essays.filter((essay) => String(essay.category || '').toLowerCase() === category);
 }
 
-function filterEssaysBySearch(essays, term) {
+function filterEssaysBySearch(essays: AnyObj[], term: string) {
     const normalized = String(term || '').trim().toLowerCase();
     if (!normalized) {
         return essays;
@@ -76,7 +81,7 @@ function filterEssaysBySearch(essays, term) {
     });
 }
 
-function groupEssaysByCategory(essays) {
+function groupEssaysByCategory(essays: AnyObj[]) {
     const groups = ESSAY_CATEGORY_KEYS.reduce((memo, key) => {
         memo[key] = [];
         return memo;
@@ -92,21 +97,21 @@ function groupEssaysByCategory(essays) {
     return groups;
 }
 
-function findEssayIndex(essays, essayId) {
+function findEssayIndex(essays: AnyObj[], essayId: string) {
     return essays.findIndex((essay) => essay.id === essayId);
 }
 
-function formatDate(dateString) {
+function formatDate(dateString: string) {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-function formatDateShort(dateString) {
+function formatDateShort(dateString: string) {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
-function createEssayArticle(essay) {
+function createEssayArticle(essay: AnyObj) {
     const article = document.createElement('article');
     article.className = 'article-full';
     article.id = essay.id;
@@ -122,7 +127,7 @@ function createEssayArticle(essay) {
     return article;
 }
 
-function createEssayNav(filteredEssays, currentIndex) {
+function createEssayNav(filteredEssays: AnyObj[], currentIndex: number) {
     const nav = document.createElement('div');
     nav.className = 'essay-nav';
     const total = filteredEssays.length;
@@ -151,13 +156,13 @@ function createEssayNav(filteredEssays, currentIndex) {
     return nav;
 }
 
-function updateActiveSidebarLink(essayId) {
+function updateActiveSidebarLink(essayId: string) {
     document.querySelectorAll('.essay-link').forEach((link) => {
         link.classList.toggle('active', link.getAttribute('href') === `#${essayId}`);
     });
 }
 
-function renderCurrentEssay(filteredEssays, currentIndex) {
+function renderCurrentEssay(filteredEssays: AnyObj[], currentIndex: number) {
     const container = document.getElementById('essays-container');
     if (!container) return;
 
@@ -174,21 +179,21 @@ function renderCurrentEssay(filteredEssays, currentIndex) {
     updateActiveSidebarLink(essay.id);
 }
 
-function renderEssaySidebar(groups) {
+function renderEssaySidebar(groups: Record<string, AnyObj[]>) {
     const countAll = document.getElementById('count-all');
     if (countAll) {
         const total = Object.values(groups).reduce((sum, essays) => sum + essays.length, 0);
-        countAll.textContent = total;
+        countAll.textContent = String(total);
     }
 
     Object.keys(groups).forEach((category) => {
         const essays = groups[category];
         const countEl = document.getElementById(`count-${category}`);
-        const section = countEl?.closest('.sidebar-section');
+        const section = countEl?.closest('.sidebar-section') as HTMLElement | null;
         const container = document.getElementById(`category-${category}`);
 
         if (countEl) {
-            countEl.textContent = essays.length;
+            countEl.textContent = String(essays.length);
         }
 
         if (section) {
@@ -196,7 +201,7 @@ function renderEssaySidebar(groups) {
         }
 
         if (container) {
-            container.innerHTML = essays.map((essay) => `
+            container.innerHTML = essays.map((essay: AnyObj) => `
                 <a href="#${escapeAttr(essay.id)}" class="essay-link" data-action="scrollToEssay" data-action-args="${encodeURIComponent(essay.id)}" data-action-eventobj="true">
                     <div>${escapeHTML(essay.title)}</div>
                     <div class="essay-link-date">${escapeHTML(formatDateShort(essay.date))}</div>
@@ -206,10 +211,10 @@ function renderEssaySidebar(groups) {
     });
 }
 
-function updateEssayCount(count) {
+function updateEssayCount(count: number) {
     const countEl = document.getElementById('essay-count');
     if (countEl) {
-        countEl.textContent = count;
+        countEl.textContent = String(count);
     }
 }
 
@@ -237,9 +242,9 @@ function scrollEssaysToTop() {
 async function loadEssays() {
     try {
         const data = await dataFetch.fetchJson('data/essays.json');
-        const publishedEssays = data.essays
-            .filter((essay) => essay.status === 'published')
-            .sort((left, right) => new Date(right.date) - new Date(left.date));
+        const publishedEssays = (data.essays as AnyObj[])
+            .filter((essay: AnyObj) => essay.status === 'published')
+            .sort((left: AnyObj, right: AnyObj) => new Date(right.date).getTime() - new Date(left.date).getTime());
 
         essaysState.setEssays(publishedEssays);
         essaysState.setFilteredEssays(publishedEssays);
@@ -256,7 +261,7 @@ function getDerivedEssays() {
     return filterEssaysBySearch(categoryFiltered, state.searchTerm);
 }
 
-function getVisibleEssayState(filteredEssays) {
+function getVisibleEssayState(filteredEssays: AnyObj[]) {
     const state = essaysState.get();
     const currentIndex = Math.max(0, Math.min(state.currentIndex, Math.max(filteredEssays.length - 1, 0)));
     essaysState.setFilteredEssays(filteredEssays);
@@ -275,16 +280,16 @@ function buildCollectionController() {
     essaysRuntime = window.JGCollectionRuntime.create({
         getState: () => essaysState.get(),
         getFilteredItems: () => getDerivedEssays(),
-        getVisibleItems: (filteredEssays) => getVisibleEssayState(filteredEssays),
+        getVisibleItems: (filteredEssays: AnyObj[]) => getVisibleEssayState(filteredEssays),
         renderSidebar: () => renderEssaySidebar(groupEssaysByCategory(essaysState.get().essays)),
         groupItems: () => groupEssaysByCategory(essaysState.get().essays),
-        renderVisibleItems: (visibleState) => renderCurrentEssay(visibleState.essays, visibleState.currentIndex),
-        updateCount: (visibleState) => updateEssayCount(visibleState.essays.length),
-        updateControls: (state) => collectionUi.toggleClearButton('search-clear-btn', Boolean(state.searchTerm), 'block'),
+        renderVisibleItems: (visibleState: AnyObj) => renderCurrentEssay(visibleState.essays, visibleState.currentIndex),
+        updateCount: (visibleState: AnyObj) => updateEssayCount(visibleState.essays.length),
+        updateControls: (state: AnyObj) => collectionUi.toggleClearButton('search-clear-btn', Boolean(state.searchTerm), 'block'),
         group: {
             allButtonSelector: '[data-action="toggleCategory"][data-action-args="all"]',
             buttonSelector: '.sidebar-category',
-            panelForValue: (category) => category === 'all' ? null : document.getElementById(`category-${category}`),
+            panelForValue: (category: string) => category === 'all' ? null : document.getElementById(`category-${category}`),
             panelSelector: '.category-essays'
         },
         searchClearButtonId: 'search-clear-btn',
@@ -296,8 +301,8 @@ function buildCollectionController() {
     });
 }
 
-function toggleCategory(category, event) {
-    const button = event?.target?.closest('.sidebar-category');
+function toggleCategory(category: string, event?: Event) {
+    const button = (event?.target as Element | undefined)?.closest('.sidebar-category');
     const panel = category === 'all' ? null : document.getElementById(`category-${category}`);
 
     essaysRuntime?.toggleGroup({
@@ -315,7 +320,7 @@ function toggleCategory(category, event) {
     });
 }
 
-const searchEssays = collectionUi.debounce((term) => {
+const searchEssays = collectionUi.debounce((term: string) => {
     essaysState.setSearchTerm(term);
     essaysState.setActiveCategory('all');
     essaysState.setCurrentIndex(0);
@@ -348,7 +353,7 @@ function nextEssay() {
     scrollEssaysToTop();
 }
 
-function scrollToEssay(essayId, event) {
+function scrollToEssay(essayId: string, event?: Event) {
     event?.preventDefault();
 
     const state = essaysState.get();

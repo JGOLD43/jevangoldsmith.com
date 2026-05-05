@@ -1,15 +1,17 @@
-// @ts-nocheck — pending typed migration
 // Dateme funnel orchestrator. Inlines js/dateme-content.js,
 // js/dateme-state.js, js/dateme-flow.js, js/dateme-view.js, and the
 // empty stub js/dateme-events.js. The shards only ever exposed
 // window.JGDateMe* globals consumed by this file, so collapsing them
 // drops 5 globals + 5 script tags + ~80 LOC of plumbing.
 
-import { toneContent, personalityMap, stage1Questions, stage2Questions } from './dateme-content';
+import { toneContent, stage1Questions, stage2Questions } from './dateme-content';
 import { dateMeState, dateMeFlow } from './dateme-state';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyObj = any;
+
 // --- view helpers ---
-function animateIn(container) {
+function animateIn(container: HTMLElement | null | undefined) {
     const screen = container?.querySelector('.funnel-screen');
     if (!screen) return;
     requestAnimationFrame(() => {
@@ -17,13 +19,13 @@ function animateIn(container) {
     });
 }
 
-function attachQuestionHandlers({ onSubmitTextAnswer }) {
-    const textarea = document.getElementById('text-answer');
+function attachQuestionHandlers({ onSubmitTextAnswer }: { onSubmitTextAnswer: () => void }) {
+    const textarea = document.getElementById('text-answer') as HTMLTextAreaElement | null;
     const counter = document.getElementById('char-count');
     if (!textarea || !counter) return;
-    textarea.addEventListener('input', () => { counter.textContent = textarea.value.length; });
+    textarea.addEventListener('input', () => { counter.textContent = String(textarea.value.length); });
     textarea.focus();
-    textarea.addEventListener('keydown', (event) => {
+    textarea.addEventListener('keydown', (event: KeyboardEvent) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
             onSubmitTextAnswer();
@@ -32,22 +34,22 @@ function attachQuestionHandlers({ onSubmitTextAnswer }) {
 }
 
 function attachContactHandlers() {
-    const textarea = document.getElementById('note');
+    const textarea = document.getElementById('note') as HTMLTextAreaElement | null;
     const counter = document.getElementById('note-char-count');
     if (textarea && counter) {
-        textarea.addEventListener('input', () => { counter.textContent = textarea.value.length; });
+        textarea.addEventListener('input', () => { counter.textContent = String(textarea.value.length); });
     }
-    document.getElementById('name')?.focus();
+    (document.getElementById('name') as HTMLInputElement | null)?.focus?.();
 }
 
-function renderInto(container, html, afterRender = null) {
+function renderInto(container: HTMLElement, html: string, afterRender: (() => void) | null = null) {
     container.innerHTML = html;
     afterRender?.();
     animateIn(container);
 }
 
 // --- orchestrator ---
-let funnelContainer;
+let funnelContainer: HTMLElement;
 
 function currentState() { return dateMeState.get(); }
 
@@ -83,7 +85,7 @@ function renderLanding() {
 
 function renderQuestion() {
     const snapshot = currentState();
-    const questionData = dateMeFlow.getCurrentQuestionData();
+    const questionData = dateMeFlow.getCurrentQuestionData() as AnyObj;
     const stage1Total = stage1Questions.length;
     const stage2Total = stage2Questions.length;
     const overallCurrent = snapshot.stage === 'stage1'
@@ -95,7 +97,7 @@ function renderQuestion() {
 
     let optionsHtml = '';
     if (questionData.type === 'choice') {
-        optionsHtml = questionData.options.map((option) => `
+        optionsHtml = questionData.options.map((option: AnyObj) => `
             <button class="funnel-option" data-reaction="${option.reaction || ''}" data-action="selectAnswer" data-action-args="${encodeURIComponent(questionData.id)}|${encodeURIComponent(option.value)}|${encodeURIComponent(String(option.pass !== false))}" data-action-this="true">
                 <span class="option-text">${option.text}</span>
             </button>
@@ -136,7 +138,7 @@ function renderQuestion() {
     });
 }
 
-function showReaction(text, callback) {
+function showReaction(text: string, callback: () => void) {
     const reactionEl = document.createElement('div');
     reactionEl.className = 'funnel-reaction';
     reactionEl.innerHTML = `<span>${text}</span>`;
@@ -172,9 +174,9 @@ function renderStageTransition() {
     `);
 }
 
-function renderRejection(failMessage) {
+function renderRejection(failMessage: AnyObj) {
     dateMeState.setStage('rejected');
-    const buttonsHtml = failMessage.buttons.map((button) => {
+    const buttonsHtml = failMessage.buttons.map((button: AnyObj) => {
         if (button.action === 'restart') {
             return `<button class="funnel-btn ${button.primary ? 'funnel-btn-primary' : 'funnel-btn-secondary'}" data-action="renderLanding">${button.text}</button>`;
         }
@@ -210,7 +212,7 @@ function renderResults() {
                     <div class="personality-score"><div class="score-circle"><span class="score-number">${insights.score}%</span><span class="score-label">match</span></div></div>
                     <div class="personality-traits">
                         <h3>Your vibe:</h3>
-                        <div class="trait-tags">${insights.traits.map((trait) => `<span class="trait-tag">${trait}</span>`).join('')}</div>
+                        <div class="trait-tags">${insights.traits.map((trait: string) => `<span class="trait-tag">${trait}</span>`).join('')}</div>
                     </div>
                     <div class="personality-summary"><p>${insights.summary}</p></div>
                 </div>
@@ -317,7 +319,7 @@ function advanceQuestionFlow() {
     renderResults();
 }
 
-function selectAnswer(questionId, value, passes, buttonEl) {
+function selectAnswer(questionId: string, value: string, passes: boolean | string, buttonEl: HTMLElement) {
     const didPass = passes === true || passes === 'true';
     dateMeState.setAnswer(questionId, value);
 
@@ -341,8 +343,8 @@ function selectAnswer(questionId, value, passes, buttonEl) {
     setTimeout(handleNext, 200);
 }
 
-function submitTextAnswer(questionId) {
-    const textarea = document.getElementById('text-answer');
+function submitTextAnswer(questionId: string) {
+    const textarea = document.getElementById('text-answer') as HTMLTextAreaElement | null;
     const value = textarea?.value.trim() || '';
     if (value.length < 3) {
         if (textarea) {
@@ -356,33 +358,35 @@ function submitTextAnswer(questionId) {
     advanceQuestionFlow();
 }
 
-function updateTone(value) {
-    const toneLevel = Number.parseInt(value, 10);
+function updateTone(value: unknown) {
+    const toneLevel = Number.parseInt(String(value), 10);
     dateMeState.setToneLevel(toneLevel);
-    const tone = toneContent[toneLevel];
-    document.getElementById('contact-title').textContent = tone.title;
-    document.getElementById('contact-subtitle').textContent = tone.subtitle;
-    document.getElementById('tone-indicator').textContent = tone.label;
-    document.getElementById('note-label').textContent = tone.noteLabel;
-    document.getElementById('note').placeholder = tone.notePlaceholder;
-    document.getElementById('submit-btn').textContent = tone.cta;
-    document.getElementById('guarantee-text').textContent = tone.guarantee;
-    document.getElementById('submit-btn').classList.toggle('desperate-shake', toneLevel === 4);
+    const tone = (toneContent as AnyObj)[toneLevel];
+    (document.getElementById('contact-title') as HTMLElement).textContent = tone.title;
+    (document.getElementById('contact-subtitle') as HTMLElement).textContent = tone.subtitle;
+    (document.getElementById('tone-indicator') as HTMLElement).textContent = tone.label;
+    (document.getElementById('note-label') as HTMLElement).textContent = tone.noteLabel;
+    (document.getElementById('note') as HTMLTextAreaElement).placeholder = tone.notePlaceholder;
+    (document.getElementById('submit-btn') as HTMLElement).textContent = tone.cta;
+    (document.getElementById('guarantee-text') as HTMLElement).textContent = tone.guarantee;
+    (document.getElementById('submit-btn') as HTMLElement).classList.toggle('desperate-shake', toneLevel === 4);
 }
 
-function submitForm(event) {
+function submitForm(event: Event) {
     event.preventDefault();
-    const form = document.getElementById('contact-form');
-    const trap = form.querySelector('input[name="_trap"]');
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (!form) return;
+    const trap = form.querySelector('input[name="_trap"]') as HTMLInputElement | null;
     if (trap && trap.value.trim()) return;
     const formData = new FormData(form);
-    dateMeFlow.getAllowedQuizAnswers().forEach(([key, value]) => {
+    dateMeFlow.getAllowedQuizAnswers().forEach(([key, value]: [string, string]) => {
         formData.append(`quiz_${key}`, value);
     });
-    formData.append('compatibility_score', dateMeFlow.calculatePersonality().score);
-    formData.append('tone_level', currentState().toneLevel);
+    formData.append('compatibility_score', String(dateMeFlow.calculatePersonality().score));
+    formData.append('tone_level', String(currentState().toneLevel));
 
-    const submitBtn = form.querySelector('.funnel-submit');
+    const submitBtn = form.querySelector('.funnel-submit') as HTMLButtonElement | null;
+    if (!submitBtn) return;
     const originalText = submitBtn.textContent;
     submitBtn.textContent = currentState().toneLevel === 4 ? 'SENDING SENDING SENDING...' : 'Sending...';
     submitBtn.disabled = true;
