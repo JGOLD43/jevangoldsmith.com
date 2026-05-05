@@ -64,7 +64,4 @@
     };
 }());
 
-// Phase 3 slice 3.1: named ES export aliasing the IIFE-installed namespace.
-// Consumers should prefer `import { collectionHelpers } from '../scripts/collection-helpers.ts'`
-// over `window.JGCollectionHelpers` so Vite can tree-shake.
 export const collectionHelpers = window.JGCollectionHelpers;

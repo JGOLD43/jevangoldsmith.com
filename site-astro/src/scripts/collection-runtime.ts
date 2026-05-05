@@ -315,8 +315,4 @@
     window.JGCollectionRuntime = { create };
 }());
 
-// Phase 3 slice 3.1: named ES export aliasing the IIFE-installed function.
-// Consumers should prefer `import { createCollectionRuntime } from
-// '../scripts/collection-runtime.ts'` over `window.JGCollectionRuntime.create`
-// — Vite tree-shakes named imports it can't tree-shake `window.JG*` reads.
 export const createCollectionRuntime = window.JGCollectionRuntime.create;

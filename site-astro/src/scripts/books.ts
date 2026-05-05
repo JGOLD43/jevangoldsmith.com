@@ -1,7 +1,4 @@
 // @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
-// Phase 7 (slice 8): bind sanitize helpers from window so strict-mode
-// ES modules resolve bare `escapeHTML`/`escapeAttr`/`sanitizeUrl`/`sanitizeHTML`
-// references that the legacy classic-script code depended on.
 const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
 
 // Books page orchestrator. Inlines what used to live in
@@ -159,7 +156,7 @@ const categoryDisplayNames = {
 function createBooksView(controller) {
     let currentViewMode = 'list';
 
-    // Phase B follow-up: Astro SSRs every card at build time, so the page
+    // follow-up: Astro SSRs every card at build time, so the page
     // ships with all 122 cards already in the DOM. Filter / search no longer
     // re-renders; it toggles each card's visibility based on the matched
     // set. createBookCard() is deleted entirely (~50 lines), shrinking the

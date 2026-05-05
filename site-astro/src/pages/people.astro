@@ -6,7 +6,7 @@ import { renderPersonCardHtml } from '../lib/person-card';
 
 const canonical = 'https://jevangoldsmith.com/people.html';
 
-// Phase 1.1: SSR all 98 cards from the build-time-merged collection.
+// SSR all 98 cards from the build-time-merged collection.
 // scripts/build/merge-people.js generates data/people.merged.generated.json
 // before astro build. people.js no longer fetches books/movies/profiles —
 // it reads the inline JSON below for modal interaction.
@@ -15,7 +15,7 @@ const peopleCardsHtml = peopleEntries
   .map((p: any, i: number) => renderPersonCardHtml(p.data, i))
   .join('');
 
-// Phase 2.5: legacy fragments inlined directly into the page. The
+// legacy fragments inlined directly into the page. The
 // sidebar source filter + main body wrapper used to live as raw HTML
 // imports under src/legacy/collections/people/.
 const sidebarFiltersHtml = `<div class="people-source-filter sidebar-filter-section" aria-label="Filter people by source">
@@ -85,7 +85,7 @@ const config = ({
 <script type="application/json" id="people-merged-data" set:html={peopleMergedJson} />
 
 <script>
-  // Phase 5 (slice 9) + Phase 7 (slice 4): people + infra deps as native modules.
+  // (slice 9) + Phase 7 (slice 4): people + infra deps as native modules.
   import '../scripts/grid-zoom.ts';
   import '../scripts/collection-ui.ts';
   import '../scripts/collection-runtime.ts';

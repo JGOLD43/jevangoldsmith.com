@@ -1,4 +1,4 @@
-// Phase B: build-time-rendered book card HTML.
+// build-time-rendered book card HTML.
 //
 // Mirrors the createBookCard() string in js/books.js so a card pre-rendered
 // here is byte-identical to one books.js would produce at runtime. That

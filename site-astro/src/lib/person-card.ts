@@ -1,4 +1,4 @@
-// Phase 6 (slice 2): server-side renderer for the people-grid card. Mirrors
+// server-side renderer for the people-grid card. Mirrors
 // the runtime createPersonCard from src/scripts/people.ts byte-for-byte so
 // pre-rendered cards match the runtime output. people.js detects an already-
 // populated grid and skips its initial wipe-and-render.
@@ -17,7 +17,7 @@ interface Person {
   sourceType?: string | null;
 }
 
-// Phase 1.1: Slug-form normalization. Must match people.js
+// Slug-form normalization. Must match people.js
 // normalizePersonName + scripts/build/merge-people.js so SSR'd
 // data-person-id values line up with the runtime peopleById map.
 function normalizePersonName(name: string): string {
@@ -34,7 +34,7 @@ function sourceTypeFor(person: Person): string {
   return person.sourceType || (person.title?.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
 }
 
-// Phase 1.1: index-aware loading. The first 12 cards (above the fold at
+// index-aware loading. The first 12 cards (above the fold at
 // 1280×800) get loading="eager"; index 0 also gets fetchpriority="high"
 // as the LCP candidate. All other cards remain native lazy + async.
 const EAGER_ABOVE_FOLD = 12;

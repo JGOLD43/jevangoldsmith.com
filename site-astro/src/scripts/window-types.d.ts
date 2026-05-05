@@ -1,8 +1,8 @@
-// Phase 4 slice 4.3 (Tier 1+2 plan): ambient types for the window-mounted
+// ambient types for the window-mounted
 // namespaces that the legacy script files set + read. Quiet the
 // ts(2568) hints from `astro check` without TS-converting every file.
 
-// Phase 3.2: bare-identifier reads in adventures.ts / adventures-map.ts
+// bare-identifier reads in adventures.ts / adventures-map.ts
 // resolve via globalThis. Declare them as ambient globals so the TS
 // compiler stops complaining about ts(2304) "Cannot find name". The
 // values are still set + read through globalThis at runtime; this is

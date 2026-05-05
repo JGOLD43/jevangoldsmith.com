@@ -1,4 +1,4 @@
-// Phase 3.1: chrome rendering split out from collection-chrome.ts.
+// chrome rendering split out from collection-chrome.ts.
 // Pure presenter — emits the shared sidebar/main/search markup as an
 // HTML string. Consumed by CollectionPage.astro + TaskCollectionPage.astro.
 // Section presets + per-collection data live in collection-sections.ts.

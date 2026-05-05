@@ -1,6 +1,6 @@
 // @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 // Shared sanitization utilities for XSS prevention.
-// Phase 1 slice 1.1: DOMPurify split out into a separate `sanitize-html.js`
+// DOMPurify split out into a separate `sanitize-html.js`
 // module so non-essays pages don't ship the ~22KB DOMPurify payload.
 
 function escapeHTML(str) {

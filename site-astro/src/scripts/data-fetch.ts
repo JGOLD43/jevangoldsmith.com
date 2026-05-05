@@ -65,7 +65,4 @@
     };
 }());
 
-// Phase 3 slice 3.1: named ES export aliasing the IIFE-installed namespace.
-// Consumers should prefer `import { dataFetch } from '../scripts/data-fetch.ts'`
-// over `window.JGDataFetch` so Vite can tree-shake.
 export const dataFetch = window.JGDataFetch;

@@ -6,7 +6,7 @@ import { renderMovieCardHtml } from '../lib/movie-card';
 
 const canonical = 'https://jevangoldsmith.com/movies.html';
 
-// Phase 1 slice 1.2: server-render every movie card. data/movies.json is
+// server-render every movie card. data/movies.json is
 // kept fresh by `npm run movies:sync` (Letterboxd RSS sync). letterboxd.js
 // detects the populated grid and skips the initial wipe, so SSR'd cards
 // stay on screen until the runtime fetch completes (if it runs at all).
@@ -14,7 +14,7 @@ const canonical = 'https://jevangoldsmith.com/movies.html';
 const movies = (await getCollection('movies')).map((m: any) => m.data);
 const movieCardsHtml = movies.map((m: any) => renderMovieCardHtml(m)).join('');
 
-// Phase 2.5: legacy fragments inlined. Sidebar filter (rating + times
+// legacy fragments inlined. Sidebar filter (rating + times
 // watched) + main body (error placeholder, stats panel, grid) used to
 // live as raw HTML imports under src/legacy/collections/movies/.
 const sidebarFiltersHtml = `<div class="sidebar-filter-section">
@@ -137,7 +137,7 @@ const config = ({
 />
 
 <script>
-  // Phase 5 (slice 10) + Phase 7 (slice 4): movies + infra deps as native modules.
+  // (slice 10) + Phase 7 (slice 4): movies + infra deps as native modules.
   import '../scripts/grid-zoom.ts';
   import '../scripts/collection-ui.ts';
   import '../scripts/collection-runtime.ts';

@@ -1,4 +1,4 @@
-// Phase B: build-time-rendered curated-podcast card.
+// build-time-rendered curated-podcast card.
 // Mirrors buildCuratedPodcastCard() in js/podcasts.js so renderCuratedPodcasts
 // adopts the SSR'd cards on first call instead of wiping them.
 import { escapeAttr as escape } from './html-escape';
@@ -13,7 +13,7 @@ interface PodcastData {
   searchText?: string | null;
 }
 
-// Phase 1.4: index-aware loading. The first card is the LCP candidate
+// index-aware loading. The first card is the LCP candidate
 // — give it loading="eager" + fetchpriority="high". Cards 6+ stay
 // native loading="lazy" so they never block paint.
 export function renderPodcastCardHtml(podcast: PodcastData, index = Number.MAX_SAFE_INTEGER): string {

@@ -144,7 +144,4 @@
   window.JGGridZoom = { init, release: function (grid) { release(grid); } };
 }());
 
-// Phase 3 slice 3.1: named ES export aliasing the IIFE-installed namespace.
-// Consumers should prefer `import { gridZoom } from '../scripts/grid-zoom.ts'`
-// over `window.JGGridZoom` so Vite can tree-shake.
 export const gridZoom = window.JGGridZoom;

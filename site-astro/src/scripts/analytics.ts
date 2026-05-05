@@ -129,7 +129,4 @@
   } };
 }());
 
-// Phase 3 slice 3.1: named ES export aliasing the IIFE-installed namespace.
-// Consumers should prefer `import { analytics } from '../scripts/analytics.ts'`
-// over `window.JGAnalytics` so Vite can tree-shake.
 export const analytics = window.JGAnalytics;

@@ -6,7 +6,7 @@ import { renderPodcastCardHtml } from '../lib/podcast-card';
 
 const canonical = 'https://jevangoldsmith.com/podcasts.html';
 
-// Phase B: pre-render curated podcast cards.
+// pre-render curated podcast cards.
 const podcasts = await getCollection('podcasts');
 const podcastCardsHtml = podcasts
   .map((p: any, i: number) => renderPodcastCardHtml(p.data as Record<string, unknown>, i))
@@ -75,7 +75,7 @@ const config = ({
 />
 
 <script>
-  // Phase 5 (slice 7) + Phase 7 (slice 4): podcasts + infra deps as native modules.
+  // (slice 7) + Phase 7 (slice 4): podcasts + infra deps as native modules.
   import '../scripts/grid-zoom.ts';
   import '../scripts/collection-ui.ts';
   import '../scripts/collection-runtime.ts';

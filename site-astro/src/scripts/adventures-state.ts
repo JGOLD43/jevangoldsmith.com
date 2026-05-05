@@ -1,4 +1,4 @@
-// Phase 3.3: shared state + constants for the adventures page. Replaces
+// shared state + constants for the adventures page. Replaces
 // the globalThis.X assignments that adventures.ts and adventures-map.ts
 // previously used to communicate. Both files import from this module;
 // ES module caching gives them the same `state` instance and the same

@@ -1,7 +1,4 @@
 // @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
-// Phase 7 (slice 8): bind sanitize helpers from window so strict-mode
-// ES modules resolve bare `escapeHTML`/`escapeAttr`/`sanitizeUrl`/`sanitizeHTML`
-// references that the legacy classic-script code depended on.
 import {
     state, fetchJson, updateLightboxImage,
     ADVENTURES_DATA_URL, PLACES_DATA_URL, ROUTES_DATA_URL,
@@ -19,11 +16,10 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
 
 
 
-// Phase 3.3: state defaults live in adventures-state.ts. constants
+// state defaults live in adventures-state.ts. constants
 // (BASEMAPS, DEFAULT_FILTERS, *_DATA_URL, ...) imported from the same
 // module — no more globalThis.X = X exposure for cross-module reads.
 
-// Phase 4 (additive): namespaced surface for AdventuresState/Urls/Constants.
 if (typeof window !== 'undefined') {
     window.AdventuresState = {
         get adventures() { return state.allAdventures; },
@@ -97,7 +93,7 @@ function loadAdventuresMapBundle() {
     if (window.AdventuresMap) return Promise.resolve(window.AdventuresMap);
     if (state.adventuresMapBundlePromise) return state.adventuresMapBundlePromise;
 
-    // Phase 5 (slice 12): native dynamic import. Vite/Astro emits a separate
+    // native dynamic import. Vite/Astro emits a separate
     // chunk for the heavy map runtime — kept off the initial adventures bundle.
     state.adventuresMapBundlePromise = import('./adventures-map.js').then(() => {
         if (!window.AdventuresMap) throw new Error('Adventures map API was not registered');
@@ -127,11 +123,6 @@ function ensureWorldMap(adventures = state.allAdventures) {
     return loadAdventuresMapBundle().then((api) => api.ensureWorldMap(adventures));
 }
 
-// Phase 5 (slice 12): in legacy classic-script land, adventures-ui.js
-// re-declared `highlightAdventureOnMap` and `clearMapHighlight` AFTER the
-// loader and won via hoisting. As one ES module that's a duplicate-name
-// error, so the loader's proxy versions are removed; the ui versions
-// (further below) handle both first-load and post-load paths.
 
 // ============================================
 // Adventures Page UI
@@ -151,7 +142,7 @@ function renderAdventures(adventures) {
         return;
     }
 
-    // Phase H: Astro SSRs every card with explicit width/height. On the
+    // Astro SSRs every card with explicit width/height. On the
     // first render call, if the DOM already matches the data, just attach
     // click handlers to the existing cards instead of wiping + re-rendering.
     // Skipping the rebuild kills the CLS spike caused by re-renders that
@@ -522,7 +513,7 @@ function bindAdventureActions() {
 // Adventures Page Bootstrap
 // ============================================
 
-// Phase 3 slice 3.2 (Tier 1+2 plan): copy of nearestWrappedLongitude so
+// copy of nearestWrappedLongitude so
 // adventures.js's highlightAdventureOnMap path doesn't depend on the
 // map-module having loaded. Same impl as adventures-map.js.
 function nearestWrappedLongitude(lng, referenceLng) {

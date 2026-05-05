@@ -1,4 +1,4 @@
-// Phase 2.5: home page body extracted from src/legacy/pages/index.html
+// home page body extracted from src/legacy/pages/index.html
 // so the legacy folder can be deleted. index.astro consumes this string
 // and replaces the data-home-stat counters at build time.
 export const HOME_BODY = `    <!-- Side Navigation Dots -->

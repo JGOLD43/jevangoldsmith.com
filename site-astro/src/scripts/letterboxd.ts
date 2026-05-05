@@ -1,7 +1,4 @@
 // @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
-// Phase 7 (slice 8): bind sanitize helpers from window so strict-mode
-// ES modules resolve bare `escapeHTML`/`escapeAttr`/`sanitizeUrl`/`sanitizeHTML`
-// references that the legacy classic-script code depended on.
 const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
 
 // Movies/letterboxd page orchestrator. Inlines js/letterboxd-state.js,
@@ -209,7 +206,7 @@ let hasAdoptedSsrMovies = false;
 function displayMovies(movies) {
     const container = document.getElementById('movies-container');
     if (!container) return;
-    // Phase 1 slice 1.2: Astro SSRs every movie card from data/movies.json.
+    // Astro SSRs every movie card from data/movies.json.
     // On first call (initial render), if the DOM already has the SSR'd cards,
     // we skip the wipe so users see no flash. Subsequent calls (filter /
     // search) always re-render — that's the runtime path.
@@ -478,7 +475,7 @@ function setMovies(movies) {
     handleLinkedMovie();
 }
 
-// Phase 1.3: runtime path is pure SSR-then-cached-fetch. The Letterboxd
+// runtime path is pure SSR-then-cached-fetch. The Letterboxd
 // RSS proxy fetch was a CLS source (variable count → wipe + relayout)
 // and racy via allorigins.win. data/movies.json is now refreshed
 // nightly by .github/workflows/letterboxd-sync.yml so the cached path

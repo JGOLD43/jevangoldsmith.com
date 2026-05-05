@@ -1,7 +1,4 @@
 // @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
-// Phase 7 (slice 8): bind sanitize helpers from window so strict-mode
-// ES modules resolve bare `escapeHTML`/`escapeAttr`/`sanitizeUrl`/`sanitizeHTML`
-// references that the legacy classic-script code depended on.
 const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
 
 const dataFetch = window.JGDataFetch;
@@ -116,7 +113,7 @@ async function loadPeopleCards() {
     const grid = document.getElementById('people-grid');
     if (!grid) return;
 
-    // Phase 1.1: All 98 cards are SSR'd from data/people.merged.generated.json.
+    // All 98 cards are SSR'd from data/people.merged.generated.json.
     // The merged data is inlined as JSON in #people-merged-data for the
     // detail modal. No runtime fetch / merge required.
     let mergedPeople = [];

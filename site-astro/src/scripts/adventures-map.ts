@@ -63,7 +63,7 @@ async function loadPlacesOfInterest() {
     saveFilters();
 }
 
-// Phase 1.2: countries data is gated on the layer toggle. DEFAULT_FILTERS
+// countries data is gated on the layer toggle. DEFAULT_FILTERS
 // has `countries: false`, so by default this file (~248KB) never ships.
 // First time the user enables the layer, ensureCountriesData() fetches
 // once + caches via state.countriesPromise, then renderCountryLayer
@@ -81,7 +81,7 @@ async function loadCountriesData() {
     return state.countriesPromise;
 }
 
-// Phase 1.2: split routes into primary (small, eager) + popular bucket-list
+// split routes into primary (small, eager) + popular bucket-list
 // routes (~2MB across chunks, deferred). Popular routes load lazily on
 // first map interaction or after a short idle delay so they don't dominate
 // initial Total Bytes. routeSet === 'mine' skips them entirely.
@@ -120,7 +120,7 @@ function shouldLoadPopularRoutes() {
     return state.mapFilters.layers.routes && state.mapFilters.routeSet !== 'mine';
 }
 
-// Phase 1.2: kick off the (~2MB) popular-routes fetch only on actual user
+// kick off the (~2MB) popular-routes fetch only on actual user
 // engagement with the map — pointerdown / pan / zoom / wheel — or via
 // any explicit filter change that needs them. Default page load doesn't
 // pay the bytes; first interaction does.
@@ -157,7 +157,7 @@ async function loadPhotos() {
 
 async function loadMapDatasets() {
     if (state.mapDataPromise) return state.mapDataPromise;
-    // Phase 1.2: drop loadCountriesData() + loadPopularRoutes() from the
+    // drop loadCountriesData() + loadPopularRoutes() from the
     // eager Promise.all. Countries data is gated on the layer toggle
     // (default off) — see renderCountryLayer. Popular routes (~2MB)
     // wait for an idle window via schedulePopularRoutes after the map
@@ -305,7 +305,7 @@ async function ensureWorldMap(adventures = state.allAdventures) {
         loadMapDatasets()
             .then(() => {
                 refreshMapDatasets();
-                // Phase 1.2: defer popular-routes (~2MB) until idle so the
+                // defer popular-routes (~2MB) until idle so the
                 // initial Total Bytes drops. The route layer renders again
                 // once these resolve.
                 schedulePopularRoutes();
@@ -538,7 +538,7 @@ function matchesAdventureFilters(adventure) {
 
 function applyAllFilters() {
     saveFilters();
-    // Phase 1.2: enabling the routes layer kicks off popular-routes
+    // enabling the routes layer kicks off popular-routes
     // fetch if it hasn't run yet. No-op if already loading or routeSet
     // is "mine".
     schedulePopularRoutes();
@@ -569,7 +569,7 @@ function renderCountryLayer() {
         state.countryLayer = null;
     }
     if (!state.mapFilters.layers.countries) return;
-    // Phase 1.2: lazy-fetch countries data on first toggle. Re-renders
+    // lazy-fetch countries data on first toggle. Re-renders
     // once the geometry resolves.
     if (!state.countryGeo) {
         loadCountriesData()
@@ -819,7 +819,7 @@ function buildMapControlStack() {
         if (target.id === 'map-filter-routeset') {
             state.mapFilters.routeSet = target.value;
             saveFilters();
-            // Phase 1.2: switching the route filter is explicit user
+            // switching the route filter is explicit user
             // intent — fire the fetch immediately rather than waiting
             // for a map gesture.
             schedulePopularRoutes(true);

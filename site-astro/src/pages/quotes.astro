@@ -73,10 +73,6 @@ function titleCase(s: string) {
 </Base>
 
 <script>
-  // Phase 5 (slice 1): native ES-module replacement for /js/collection-filters.js
-  // on the quotes page. Astro/Vite fingerprints this, the post-build bundler
-  // leaves /_astro/* tags untouched, and the page no longer needs the
-  // /js/collection-filters.js global script.
   type CardEl = HTMLElement & { hidden: boolean };
 
   function setup() {

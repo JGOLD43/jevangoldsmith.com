@@ -5,7 +5,7 @@
 // partials directly from /_src/partials means we never have to maintain a
 // hand-ported copy in this repo.
 
-// Phase 2.5: nav + footer source live as TS template-literal modules
+// nav + footer source live as TS template-literal modules
 // so we can drop the src/legacy/ folder and the Vite ?raw plugin step.
 import { NAV_TEMPLATE as NAV_TEMPLATE_RAW } from './nav-template';
 import { FOOTER_TEMPLATE as FOOTER_TEMPLATE_RAW } from './footer-template';

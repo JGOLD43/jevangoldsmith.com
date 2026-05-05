@@ -1,4 +1,4 @@
-// Phase 3.1: sidebar section presets, task-list configs, project/challenge
+// sidebar section presets, task-list configs, project/challenge
 // rendering — split out from collection-chrome.ts. Rendering helpers live
 // in collection-shell.ts. Pages import section constants from this module.
 

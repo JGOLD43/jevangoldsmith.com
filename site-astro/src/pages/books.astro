@@ -6,12 +6,12 @@ import { renderBookCardHtml } from '../lib/book-card';
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
-// Phase B: server-render every book card at build time. books.js detects
+// server-render every book card at build time. books.js detects
 // an already-populated container and skips the initial wipe-and-render.
 const books = await getCollection('books');
 const bookCardsHtml = books.map((b: any) => renderBookCardHtml(b.data)).join('');
 
-// Phase 2.5: legacy fragments inlined directly into the page.
+// legacy fragments inlined directly into the page.
 const sidebarFiltersHtml = `<div class="sidebar-filter-section">
     <div class="filter-header">
         <div class="filter-label">Filter by Rating</div>
@@ -176,7 +176,7 @@ const config = ({
 />
 
 <script>
-  // Phase 5 (slice 11) + Phase 7 (slice 4): books + infra deps as native modules.
+  // (slice 11) + Phase 7 (slice 4): books + infra deps as native modules.
   import '../scripts/grid-zoom.ts';
   import '../scripts/collection-ui.ts';
   import '../scripts/collection-runtime.ts';

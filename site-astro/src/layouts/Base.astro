@@ -1,7 +1,7 @@
 ---
 // Shared layout. Ported from _src/layouts/base.html.
 //
-// Phase 1 mirrors the legacy structure (title, description, canonical, og,
+// mirrors the legacy structure (title, description, canonical, og,
 // twitter, JSON-LD slot). Later phases will introduce a typed <Seo> component
 // that produces byte-identical <head> output to satisfy the SEO fixture.
 import Nav from '../components/Nav.astro';
@@ -67,7 +67,7 @@ const siteName = SITE_NAME;
 const rawPath = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
 const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split('/').pop()!;
 
-// Phase 2.1: per-page preconnect hints for cross-origin image hosts. One
+// per-page preconnect hints for cross-origin image hosts. One
 // DNS+TLS round-trip up front beats paying it on every <img> request.
 const preconnectOrigins: string[] = [];
 if (seoSlug === 'movies') preconnectOrigins.push('https://a.ltrbxd.com');
