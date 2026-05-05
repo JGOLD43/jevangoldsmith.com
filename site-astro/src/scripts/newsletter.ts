@@ -1,8 +1,7 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 (function() {
     'use strict';
 
-    function setStatus(form, message) {
+    function setStatus(form: HTMLFormElement, message: string): void {
         let status = form.querySelector('[data-newsletter-status]');
         if (!status) {
             status = document.createElement('p');
@@ -14,13 +13,13 @@
         status.textContent = message;
     }
 
-    async function submitNewsletter(event) {
-        const form = event.currentTarget;
+    async function submitNewsletter(event: SubmitEvent): Promise<void> {
+        const form = event.currentTarget as HTMLFormElement;
         const endpoint = form.getAttribute('data-endpoint');
         if (!endpoint) return;
 
         event.preventDefault();
-        const button = form.querySelector('button[type="submit"]');
+        const button = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
         const original = button ? button.textContent : '';
         if (button) {
             button.disabled = true;
@@ -49,7 +48,7 @@
     }
 
     document.querySelectorAll('[data-newsletter-form]').forEach((form) => {
-        form.addEventListener('submit', submitNewsletter);
+        form.addEventListener('submit', submitNewsletter as EventListener);
     });
 })();
 

@@ -1,4 +1,3 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 // DOMPurify-backed HTML sanitizer split out from
 // sanitize.js so it only ships to pages that actually render
 // rich-text content (essays + adventure detail). Non-essays
@@ -18,7 +17,7 @@ const ALLOWED_ATTR = [
     'width', 'height', 'loading', 'decoding'
 ];
 
-export function sanitizeHTML(html) {
+export function sanitizeHTML(html: string): string {
     if (!html) return '';
     return DOMPurify.sanitize(html, {
         ALLOWED_TAGS,

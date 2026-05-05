@@ -1,8 +1,9 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 
 import * as Runtime from './collection-runtime';
 
-export function createTaskList(config) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createTaskList(config: any): any {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const runtime = Runtime.createCollectionRuntime({
         actions: config.actions,
         buttonSelector: '.sidebar-category',
@@ -19,13 +20,15 @@ export function createTaskList(config) {
         }
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const r = runtime as any;
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => runtime.init(), { once: true });
+        document.addEventListener('DOMContentLoaded', () => r.init(), { once: true });
     } else {
-        runtime.init();
+        r.init();
     }
 
-    return runtime;
+    return r;
 }
 
 if (typeof window !== 'undefined') {
