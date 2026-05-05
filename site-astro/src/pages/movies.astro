@@ -21,7 +21,7 @@ const movieCardsHtml = movies.map((m: any) => renderMovieCardHtml(m)).join('');
 const populatedMainBody = mainBodyRaw
   .trim()
   .replace(
-    '<div id="movies-container" class="movies-grid" style="display: none;"></div>',
+    '<div id="movies-container" class="movies-grid"></div>',
     `<div id="movies-container" class="movies-grid">${movieCardsHtml}</div>`
   );
 

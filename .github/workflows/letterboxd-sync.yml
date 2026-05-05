@@ -1,0 +1,40 @@
+name: Letterboxd - Sync Movies
+
+on:
+  schedule:
+    # Daily at 04:30 UTC. Pulls Letterboxd RSS via the existing
+    # scripts/sync-letterboxd.js and merges new entries into
+    # data/movies.json so movies.astro can SSR every card. Runtime
+    # CORS fetch is gone (slice 1.3) so this cron is the data source.
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: letterboxd-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Sync Letterboxd RSS
+        run: node scripts/sync-letterboxd.js
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/movies.json; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/movies.json
+          git commit -m "chore: sync Letterboxd RSS into data/movies.json"
+          git push

@@ -477,72 +477,24 @@ async function loadCachedMovies() {
     return movies.map(normalizeMovieData);
 }
 
-function shouldFetchLiveLetterboxd() {
-    return new URLSearchParams(window.location.search).get('source') === 'live';
-}
-
 function setMovies(movies) {
     movieState.setMovies(movies.map(normalizeMovieData));
     renderFromState();
     handleLinkedMovie();
 }
 
-async function fetchLiveLetterboxdMovies() {
-    const rssUrl = `https://letterboxd.com/${LETTERBOXD_USERNAME}/rss/`;
-    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
-    const response = await fetch(proxyUrl);
-    if (!response.ok) throw new Error('Failed to fetch RSS feed');
-    const xmlText = await response.text();
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-    if (xmlDoc.querySelector('parsererror')) throw new Error('Error parsing RSS feed');
-
-    const items = Array.from(xmlDoc.querySelectorAll('item')).slice(0, 20);
-    if (items.length === 0) throw new Error('No movies found in feed');
-
-    const movieItems = items.map((item) => {
-        const getElementText = (tagName) => {
-            const el = item.querySelector(tagName);
-            return el ? el.textContent : '';
-        };
-        const categories = Array.from(item.querySelectorAll('category')).map((cat) => cat.textContent);
-        const genre = categories.length > 0 ? categories[0] : 'Uncategorized';
-        return {
-            description: getElementText('description'),
-            genre,
-            link: getElementText('link'),
-            pubDate: getElementText('pubDate'),
-            title: getElementText('title')
-        };
-    });
-
-    const movies = movieItems
-        .filter((item) => item.description && !item.title.includes('created a list'))
-        .map(parseMovieData);
-    if (movies.length === 0) throw new Error('No watch entries found in feed');
-    return movies;
-}
-
+// Phase 1.3: runtime path is pure SSR-then-cached-fetch. The Letterboxd
+// RSS proxy fetch was a CLS source (variable count → wipe + relayout)
+// and racy via allorigins.win. data/movies.json is now refreshed
+// nightly by .github/workflows/letterboxd-sync.yml so the cached path
+// is always current.
 async function fetchLetterboxdMovies() {
     try {
         const cachedMovies = await loadCachedMovies();
         setMovies(cachedMovies);
-        if (!shouldFetchLiveLetterboxd()) return;
-    } catch (cacheError) {
-        console.warn('Cached movie data unavailable, trying Letterboxd feed:', cacheError);
-    }
-    try {
-        const liveMovies = await fetchLiveLetterboxdMovies();
-        setMovies(liveMovies);
     } catch (error) {
-        console.warn('Letterboxd feed unavailable, trying cached movies:', error);
-        try {
-            const fallbackMovies = await loadCachedMovies();
-            setMovies(fallbackMovies);
-        } catch (fallbackError) {
-            console.error('Error loading movie data:', fallbackError);
-            movieView.setError();
-        }
+        console.error('Error loading movie data:', error);
+        movieView.setError();
     }
 }
 
