@@ -18,10 +18,7 @@
 
   if (!els.feed) return;
 
-  const ESC_MAP: { [k: string]: string } = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-  function escapeHtml(s: unknown): string {
-    return String(s).replace(/[&<>"']/g, (c) => ESC_MAP[c]);
-  }
+  const escapeHtml = window.escapeHTML as (s: unknown) => string;
 
   function safeUrl(url: unknown, fallback = '#'): string {
     const raw = String(url || '').trim();

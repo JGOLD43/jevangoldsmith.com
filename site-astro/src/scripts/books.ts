@@ -39,28 +39,9 @@ const booksState = (function createState() {
     };
 }());
 
-// --- filters ---
-const CATEGORY_MAP: Record<string, string> = {
-    'Advertising and Copywriting': 'advertising',
-    'Autobiographies': 'autobiographies',
-    'Big Ideas': 'bigideas',
-    'Learning': 'learning',
-    'Mental Endurance': 'mentalendurance',
-    'Out of the Box Thinking': 'outofthebox',
-    'Patience and Clear Thinking': 'patience',
-    'Persuasion': 'persuasion',
-    'Psychology Books': 'psychology',
-    'Science': 'science',
-    'Storytelling': 'storytelling',
-    'Strategy and War': 'strategy',
-    'The Great Books': 'greatbooks',
-    'Who Am I?': 'whoami'
-};
-const CATEGORY_NAME_BY_KEY: Record<string, string> = Object.entries(CATEGORY_MAP).reduce((lookup: Record<string, string>, [name, key]) => {
-    lookup[key] = name;
-    return lookup;
-}, {} as Record<string, string>);
+import { CATEGORY_MAP, CATEGORY_NAME_BY_KEY } from '../lib/book-categories';
 
+// --- filters ---
 function filterBooks(books: AnyObj[], state: AnyObj): AnyObj[] {
     const query = String(state.searchQuery || '').toLowerCase();
     return books.filter((book) => {
@@ -91,10 +72,9 @@ function getBooksForCategory(books: AnyObj[], categoryKey: string) {
 }
 
 function groupBooksByCategory(books: AnyObj[]): Record<string, AnyObj[]> {
-    const groups = Object.values(CATEGORY_MAP).reduce((memo: Record<string, AnyObj[]>, key) => {
-        memo[key] = [];
-        return memo;
-    }, {} as Record<string, AnyObj[]>);
+    const groups: Record<string, AnyObj[]> = Object.fromEntries(
+        Object.values(CATEGORY_MAP).map((key) => [key, []])
+    );
     books.forEach((book) => {
         const categoryKey = CATEGORY_MAP[book.category];
         if (categoryKey && groups[categoryKey]) groups[categoryKey].push(book);
@@ -171,7 +151,7 @@ function createBooksView(controller: AnyObj) {
         if (!container) return;
         const visible = new Set<string>();
         for (const b of books) visible.add(b.isbn || b.title);
-        for (const card of Array.from(container.children) as HTMLElement[]) {
+        for (const card of container.querySelectorAll<HTMLElement>(':scope > *')) {
             const id = card.dataset.isbn || card.dataset.title || '';
             card.style.display = visible.has(id) ? '' : 'none';
         }

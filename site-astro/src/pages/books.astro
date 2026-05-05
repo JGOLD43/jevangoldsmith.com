@@ -5,6 +5,7 @@ import { tasteListOptions, BOOK_SECTIONS } from '../lib/collection-sections';
 import { renderBookCardHtml } from '../lib/book-card';
 import { escapeAttr } from '../lib/html-escape';
 import remoteAssets from '../../../data/remote-assets.generated.json';
+import { CATEGORY_MAP } from '../lib/book-categories';
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
@@ -12,25 +13,6 @@ const canonical = 'https://jevangoldsmith.com/books.html';
 // an already-populated container and skips the initial wipe-and-render.
 const books = await getCollection('books');
 const bookCardsHtml = books.map((b: any) => renderBookCardHtml(b.data)).join('');
-
-// Pre-render the carousel + per-category sidebar lists so the page
-// paints with everything in place — no flicker as JS populates them.
-const CATEGORY_MAP: Record<string, string> = {
-  'Advertising and Copywriting': 'advertising',
-  'Autobiographies': 'autobiographies',
-  'Big Ideas': 'bigideas',
-  'Learning': 'learning',
-  'Mental Endurance': 'mentalendurance',
-  'Out of the Box Thinking': 'outofthebox',
-  'Patience and Clear Thinking': 'patience',
-  'Persuasion': 'persuasion',
-  'Psychology Books': 'psychology',
-  'Science': 'science',
-  'Storytelling': 'storytelling',
-  'Strategy and War': 'strategy',
-  'The Great Books': 'greatbooks',
-  'Who Am I?': 'whoami'
-};
 
 // Resolve a remote OpenLibrary cover URL to a local pre-generated jpg.
 // remote-assets.generated.json holds the mapping built by

@@ -82,10 +82,9 @@ function filterEssaysBySearch(essays: AnyObj[], term: string) {
 }
 
 function groupEssaysByCategory(essays: AnyObj[]) {
-    const groups = ESSAY_CATEGORY_KEYS.reduce((memo, key) => {
-        memo[key] = [];
-        return memo;
-    }, {});
+    const groups: Record<string, AnyObj[]> = Object.fromEntries(
+        ESSAY_CATEGORY_KEYS.map((key) => [key, []])
+    );
 
     essays.forEach((essay) => {
         const key = String(essay.category || '').toLowerCase();

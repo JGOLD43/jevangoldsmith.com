@@ -20,16 +20,9 @@
     };
   }
 
-  const ESC_MAP: { [k: string]: string } = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-  function escapeHTML(s: unknown): string {
-    return String(s ?? '').replace(/[&<>"']/g, (c) => ESC_MAP[c]);
-  }
-  function escapeAttr(s: unknown): string { return escapeHTML(s); }
-  function sanitizeUrl(u: string | undefined): string {
-    if (!u) return '#';
-    if (/^javascript:/i.test(u)) return '#';
-    return u;
-  }
+  const escapeHTML = window.escapeHTML as (s: unknown) => string;
+  const escapeAttr = window.escapeAttr as (s: unknown) => string;
+  const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
 
   function normalize(v: unknown): string { return String(v ?? '').toLowerCase().trim(); }
   function recordText(r: SearchRecord): string {
