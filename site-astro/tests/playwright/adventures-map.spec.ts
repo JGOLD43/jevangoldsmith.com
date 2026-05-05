@@ -7,8 +7,6 @@ import { test, expect } from '@playwright/test';
 // Markers + route polylines are added once `mapDataPromise` resolves.
 
 test('adventures map mounts leaflet container + markers', async ({ page }) => {
-  // setupWorldMapLazyLoad runs on DCL and decides whether to mount the
-  // map based on viewport width — set wide BEFORE the goto.
   await page.setViewportSize({ width: 1400, height: 900 });
   await page.goto('/adventures.html');
 
@@ -18,6 +16,7 @@ test('adventures map mounts leaflet container + markers', async ({ page }) => {
     { timeout: 10_000 }
   );
 
+  await page.dispatchEvent('#world-map', 'pointerenter');
   await page.waitForSelector('.leaflet-container', { timeout: 25_000 });
 
   // Once the container is in the DOM, markers should be added once the
@@ -37,6 +36,7 @@ test('adventures map renders place + adventure markers', async ({ page }) => {
   await page.setViewportSize({ width: 1400, height: 900 });
   await page.goto('/adventures.html');
 
+  await page.dispatchEvent('#world-map', 'pointerenter');
   await page.waitForSelector('.leaflet-container', { timeout: 25_000 });
 
   // The map runtime renders place-of-interest markers + per-adventure
@@ -55,4 +55,5 @@ test('adventures world-map element exists in SSR HTML', async ({ page }) => {
   await page.goto('/adventures.html');
   await expect(page.locator('#world-map')).toBeAttached();
   await expect(page.locator('.adventures-main-map')).toBeAttached();
+  await expect(page.locator('[data-action="loadWorldMap"]')).toBeVisible();
 });

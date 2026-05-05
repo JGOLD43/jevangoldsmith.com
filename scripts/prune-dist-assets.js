@@ -41,12 +41,35 @@ function sizeOf(target) {
   return total;
 }
 
+function walk(dir) {
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...walk(full));
+    else if (entry.isFile()) out.push(full);
+  }
+  return out;
+}
+
 for (const rel of targets) {
   const full = path.join(DIST, rel);
   if (!fs.existsSync(full)) continue;
   bytes += sizeOf(full);
   fs.rmSync(full, { recursive: true, force: true });
   removed++;
+}
+
+const generatedDir = path.join(DIST, 'images', 'generated');
+if (fs.existsSync(generatedDir)) {
+  for (const file of walk(generatedDir)) {
+    if (!file.endsWith('.webp')) continue;
+    const rel = path.relative(generatedDir, file).split(path.sep).join('/');
+    if (rel.startsWith('logo/')) continue;
+    bytes += sizeOf(file);
+    fs.rmSync(file, { force: true });
+    removed++;
+  }
 }
 
 console.log(`[prune-dist] removed ${removed} production-excluded asset path(s), ${(bytes / 1024 / 1024).toFixed(1)}MB`);

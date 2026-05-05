@@ -114,10 +114,28 @@ if (seoSlug === 'adventures') preconnectOrigins.push('https://images.unsplash.co
       <script is:inline src={src} defer></script>
     )}
     <slot name="scripts" />
-    {/* Phase 7 (slice 6): site-wide theme + analytics as native Astro modules. */}
+    {/* Site chrome is immediate; analytics is loaded off the first-paint path. */}
     <script>
       import '../scripts/theme.ts';
-      import '../scripts/analytics.ts';
+
+      let analyticsPromise: Promise<unknown> | undefined;
+      const loadAnalytics = () => {
+        analyticsPromise ||= import('../scripts/analytics.ts').catch(() => {});
+        return analyticsPromise;
+      };
+
+      const scheduleAnalytics = () => {
+        const requestIdle = window.requestIdleCallback;
+        if (typeof requestIdle === 'function') {
+          requestIdle.call(window, loadAnalytics, { timeout: 2500 });
+          return;
+        }
+        window.addEventListener('load', () => setTimeout(loadAnalytics, 250), { once: true });
+      };
+
+      window.addEventListener('pointerdown', loadAnalytics, { once: true, passive: true });
+      window.addEventListener('keydown', loadAnalytics, { once: true });
+      scheduleAnalytics();
     </script>
     {/* Phase E: register the repeat-visit service worker. The SW caches
         hashed assets cache-first and HTMLs network-first with a short

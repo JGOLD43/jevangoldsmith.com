@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npm run --prefix site-astro dev",
     "predev": "npm run people:merge",
-    "build": "npm run content:validate && npm run search:audit:strict && npm run snap:routes && npm run routes:split && npm run assets:optimize && npm run people:merge && npm run --prefix site-astro build && npm run normalize:html && npm run purge:css && npm run prune:dist && npm run perf:budget",
+    "build": "npm run lint && npm run check && npm run content:validate && npm run search:audit:strict && npm run snap:routes && npm run routes:split && npm run assets:optimize && npm run people:merge && npm run --prefix site-astro build && npm run normalize:html && npm run purge:css && npm run prune:dist && npm run perf:budget",
     "build:fast": "npm run content:validate && npm run search:audit:strict && npm run routes:split && npm run people:merge && npm run --prefix site-astro build && npm run normalize:html && npm run purge:css && npm run prune:dist && npm run perf:budget",
     "people:merge": "node scripts/build/merge-people.js",
     "search:audit:strict": "node scripts/audit-search-index.js --strict",
@@ -22,11 +22,14 @@
     "snap:routes": "node scripts/snap-popular-routes.js",
     "routes:split": "node scripts/split-popular-routes.js",
     "assets:optimize": "node scripts/optimize-assets.js",
+    "assets:inventory": "node scripts/asset-inventory.js",
+    "check": "npm run --prefix site-astro astro check",
     "normalize:html": "node scripts/normalize-astro-html.js --dist=dist",
     "purge:css": "node scripts/purge-css-per-page.js --dist=dist",
     "prune:dist": "node scripts/prune-dist-assets.js --dist=dist",
     "perf:budget": "node scripts/check-performance-budgets.js --dist=dist",
     "lint": "npx biome check js scripts",
+    "verify": "node scripts/verify.js",
     "enrich:movies": "node scripts/enrich-movies.js",
     "photos:sync": "node scripts/sync-photos.js"
   },

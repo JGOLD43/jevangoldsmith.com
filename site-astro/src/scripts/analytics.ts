@@ -115,12 +115,18 @@
     });
   });
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function trackPageView() {
     track('page_view', {
       title: document.title,
       section: document.body?.dataset?.section || ''
     });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', trackPageView, { once: true });
+  } else {
+    trackPageView();
+  }
 
   window.JGAnalytics = { track, flushDebugEvents: function () {
     const events = JSON.parse(window.localStorage.getItem(queueKey) || '[]');

@@ -245,21 +245,32 @@
         }
     }
 
+    function runWhenIdle(callback) {
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(callback, { timeout: 2500 });
+            return;
+        }
+        window.addEventListener('load', () => setTimeout(callback, 250), { once: true });
+    }
+
+    function initDeferredChrome() {
+        initWisdomTicker();
+        initLogoVideo();
+    }
+
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             initTheme();
-            initWisdomTicker();
-            initLogoVideo();
             initMobileNav();
             initNavHeight();
+            runWhenIdle(initDeferredChrome);
         });
     } else {
         initTheme();
-        initWisdomTicker();
-        initLogoVideo();
         initMobileNav();
         initNavHeight();
+        runWhenIdle(initDeferredChrome);
     }
 
     // Listen for system theme changes

@@ -114,12 +114,17 @@ function setupWorldMapLazyLoad(adventures) {
         return;
     }
 
-    requestAnimationFrame(() => {
-        setTimeout(() => ensureWorldMap(adventures), 100);
-    });
+    const load = () => ensureWorldMap(adventures);
+    const opts = { once: true, passive: true };
+    mapContainer.addEventListener('pointerenter', load, opts);
+    mapContainer.addEventListener('pointerdown', load, opts);
+    mapContainer.addEventListener('touchstart', load, opts);
+    mapContainer.addEventListener('focusin', load, { once: true });
 }
 
 function ensureWorldMap(adventures = state.allAdventures) {
+    const mapContainer = document.getElementById('world-map');
+    mapContainer?.classList.add('map-loading');
     return loadAdventuresMapBundle().then((api) => api.ensureWorldMap(adventures));
 }
 
@@ -506,6 +511,11 @@ function bindAdventureActions() {
         if (action === 'scrollToStory') {
             const adventure = state.allAdventures.find((item) => item.id === state.selectedAdventureId);
             if (adventure) renderInlineStory(adventure);
+            return;
+        }
+
+        if (action === 'loadWorldMap') {
+            ensureWorldMap();
         }
     });
 }
