@@ -21,6 +21,7 @@ const ROOT = path.resolve(__dirname, '..');
 
 const DIST = process.argv.find((a) => a.startsWith('--dist='))?.slice(7)
   || path.join(ROOT, 'dist-astro');
+const CHECK_ONLY = process.argv.includes('--check');
 
 if (!fs.existsSync(DIST)) {
   console.error(`[normalize] missing dir: ${DIST}`);
@@ -165,9 +166,11 @@ for (const file of files) {
     const delta = after.length - before.length;
     totalDelta += delta;
     if (sample.length < 5) sample.push({ rel, delta });
-    fs.writeFileSync(file, after);
+    if (!CHECK_ONLY) fs.writeFileSync(file, after);
   }
 }
 
-console.log(`[normalize] processed ${files.length} files, mutated ${changed}, total delta ${totalDelta >= 0 ? '+' : ''}${totalDelta} bytes`);
+const verb = CHECK_ONLY ? 'would mutate' : 'mutated';
+console.log(`[normalize] processed ${files.length} files, ${verb} ${changed}, total delta ${totalDelta >= 0 ? '+' : ''}${totalDelta} bytes`);
 for (const s of sample) console.log(`  ${s.rel} ${s.delta >= 0 ? '+' : ''}${s.delta}`);
+if (CHECK_ONLY && changed > 0) process.exit(1);
