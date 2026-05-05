@@ -66,6 +66,13 @@ const siteName = SITE_NAME;
 // the matching legacy related-cards entry without each page passing a prop.
 const rawPath = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
 const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split('/').pop()!;
+
+// Phase 2.1: per-page preconnect hints for cross-origin image hosts. One
+// DNS+TLS round-trip up front beats paying it on every <img> request.
+const preconnectOrigins: string[] = [];
+if (seoSlug === 'movies') preconnectOrigins.push('https://a.ltrbxd.com');
+if (seoSlug === 'videos') preconnectOrigins.push('https://i.ytimg.com');
+if (seoSlug === 'adventures') preconnectOrigins.push('https://images.unsplash.com');
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -76,6 +83,9 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
     <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     <link rel="stylesheet" href="/css/legacy-style.css" fetchpriority="high" />
+    {preconnectOrigins.map((origin) => (
+      <link rel="preconnect" href={origin} crossorigin />
+    ))}
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
     {description && <meta name="description" content={description} />}
     <meta name="robots" content="index, follow, max-image-preview:large" />

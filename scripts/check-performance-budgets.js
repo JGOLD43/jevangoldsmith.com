@@ -117,7 +117,11 @@ for (const [rel, max] of Object.entries(RUNTIME_JSON_BUDGETS)) {
 
 for (const html of walk(DIST).filter((file) => file.endsWith('.html'))) {
   const text = fs.readFileSync(html, 'utf8');
-  if (text.includes('images.unsplash.com')) fail(`${path.relative(DIST, html)} references Unsplash at runtime`);
+  // Phase 2.1: a <link rel="preconnect"> hint to images.unsplash.com is
+  // a DNS pre-resolution, not a runtime image fetch. Strip preconnect
+  // tags before scanning so the budget catches real <img>/CSS refs.
+  const stripped = text.replace(/<link[^>]+rel=["']preconnect["'][^>]*>/g, '');
+  if (stripped.includes('images.unsplash.com')) fail(`${path.relative(DIST, html)} references Unsplash at runtime`);
   if (/<script[^>]*src=["'][^"']*\/js\/adventures-map\.js["']/.test(text)) fail(`${path.relative(DIST, html)} eagerly references adventures-map.js`);
 }
 
