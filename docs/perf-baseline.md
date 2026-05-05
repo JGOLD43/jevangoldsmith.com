@@ -39,13 +39,13 @@ Notes:
 
 | Route | Score | LCP | CLS | TBT | FCP | SI | Total Bytes |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| / | 100 | 630ms | 0.000 | 0ms | 486ms | 486ms | 545.7KB |
-| /books.html | 99 | 860ms | 0.054 | 0ms | 648ms | 648ms | 1392.3KB |
-| /movies.html | 100 | 568ms | 0.000 | 0ms | 506ms | 506ms | 566.4KB |
-| /people.html | 99 | 920ms | 0.001 | 0ms | 652ms | 652ms | 1958.6KB |
-| /adventures.html | 94 | 1678ms | 0.000 | 1ms | 408ms | 691ms | 1083.5KB |
-| /podcasts.html | 99 | 952ms | 0.000 | 0ms | 490ms | 490ms | 729.5KB |
-| /essays.html | 100 | 604ms | 0.000 | 0ms | 506ms | 506ms | 231.6KB |
-| /search.html | 100 | 605ms | 0.007 | 0ms | 425ms | 425ms | 313.8KB |
+| / | 100 | 627ms | 0.000 | 0ms | 490ms | 490ms | 545.7KB |
+| /books.html | 98 | 981ms | 0.060 | 0ms | 670ms | 670ms | 1392.3KB |
+| /movies.html | 100 | 567ms | 0.000 | 0ms | 506ms | 506ms | 566.4KB |
+| /people.html | 99 | 928ms | 0.001 | 0ms | 653ms | 653ms | 1958.6KB |
+| /adventures.html | 94 | 1631ms | 0.000 | 0ms | 407ms | 686ms | 1082.7KB |
+| /podcasts.html | 99 | 995ms | 0.000 | 0ms | 487ms | 487ms | 729.5KB |
+| /essays.html | 100 | 605ms | 0.000 | 0ms | 504ms | 504ms | 231.6KB |
+| /search.html | 100 | 645ms | 0.007 | 0ms | 426ms | 426ms | 313.8KB |
 
 Captured by `scripts/perf-lighthouse.js`. Re-run with `npm run perf:lighthouse`.
