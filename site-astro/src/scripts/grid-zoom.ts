@@ -7,12 +7,6 @@
 
   const instances: State[] = [];
 
-  function track(name: string, details?: Record<string, unknown>) {
-    if (window.JGAnalytics && typeof window.JGAnalytics.track === 'function') {
-      window.JGAnalytics.track(name, details);
-    }
-  }
-
   function apply(grid: HTMLElement, item: HTMLElement, opts: Opts) {
     const gridRect = grid.getBoundingClientRect();
     const anchor: Element = opts && opts.anchorSelector
@@ -74,7 +68,6 @@
       fillH: config.fillH,
       anchorSelector: config.anchorSelector
     };
-    const eventName = config.eventName || 'zoom_item_open';
 
     const state: State = { grid, activeItem: null, itemSelector, triggerSelector, opts };
 
@@ -92,10 +85,6 @@
       if (state.activeItem) release(state.grid);
       state.activeItem = item;
       apply(state.grid, item, state.opts);
-      track(eventName, {
-        id: item.dataset.id || item.id || '',
-        title: item.dataset.title || ''
-      });
     }
 
     grid.addEventListener('click', function (event: Event) {

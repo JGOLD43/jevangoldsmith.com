@@ -28,29 +28,6 @@ function sourceTypeFor(person: AnyObj) {
     return person.sourceType || (person.title?.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
 }
 
-function createPersonCard(person: AnyObj) {
-    const article = document.createElement('article');
-    article.className = 'person-card';
-    article.dataset.category = person.category || '';
-    article.dataset.personId = normalizePersonName(person.name);
-    article.dataset.search = person.searchText || `${person.name} ${person.title} ${person.lesson}`;
-    article.dataset.sourceType = sourceTypeFor(person);
-    article.setAttribute('role', 'button');
-    article.setAttribute('tabindex', '0');
-    article.innerHTML = `
-        <div class="person-image-container">
-            <img src="${escapeAttr(person.image)}" alt="${escapeAttr(person.name)}" class="person-image" srcset="${escapeAttr(person.srcset || '')}" sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading="lazy" decoding="async">
-        </div>
-        <div class="person-info">
-            <h3 class="person-name">${escapeHTML(person.name)}</h3>
-            <p class="person-source-type">${sourceTypeFor(person) === 'fiction' ? 'Fiction' : 'Non-fiction'}</p>
-            <p class="person-title">${escapeHTML(person.title)}</p>
-            <p class="person-lesson">${escapeHTML(person.lesson)}</p>
-        </div>
-    `;
-    return article;
-}
-
 function sourceMatches(card: HTMLElement) {
     return peopleSourceFilter === 'all' || card.dataset.sourceType === peopleSourceFilter;
 }
@@ -153,17 +130,13 @@ async function loadPeopleCards() {
         if (id) existingByPersonId.set(id, card);
     }
 
-    const fragment = document.createDocumentFragment();
+    // SSR renders all 98 person cards; the runtime simply binds existing
+    // DOM nodes to the merged data records used for filter/search/modal.
     const records: CardRecord[] = [];
-    let appendCount = 0;
     for (const person of mergedPeople) {
         const personId = normalizePersonName(person.name);
-        let card = existingByPersonId.get(personId);
-        if (!card) {
-            card = createPersonCard(person);
-            fragment.appendChild(card);
-            appendCount += 1;
-        }
+        const card = existingByPersonId.get(personId);
+        if (!card) continue;
         records.push({
             category: person.category || '',
             card,
@@ -172,7 +145,6 @@ async function loadPeopleCards() {
         });
     }
     peopleCards = records;
-    if (appendCount > 0) grid.appendChild(fragment);
 }
 
 function createMediaMarkup(person: AnyObj, key: string, label: string) {

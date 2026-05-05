@@ -3,12 +3,6 @@
 
   type ShelfCard = HTMLElement & { shelfFilterTimer?: number };
 
-  function track(name: string, details?: Record<string, unknown>) {
-    if (window.JGAnalytics && typeof window.JGAnalytics.track === 'function') {
-      window.JGAnalytics.track(name, details);
-    }
-  }
-
   function initFilters(zoom: { release: () => void } | null | undefined) {
     const filter = document.querySelector<HTMLElement>('[data-shelf-filter]');
     const cards = Array.from(document.querySelectorAll<ShelfCard>('[data-shelf-card]'));
@@ -43,7 +37,6 @@
       });
       setCards(category);
       if (zoom) zoom.release();
-      track('shelf_filter', { category });
     });
   }
 

@@ -10,7 +10,6 @@ import JsonLd from '../components/JsonLd.astro';
 import SeoRelated from '../components/SeoRelated.astro';
 import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type PageType } from '../lib/seo';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
-import { pageScriptsFor } from '../lib/page-scripts';
 // Critical-CSS-inline + async-load was tried and reverted: it cut FCP
 // modestly but caused a major CLS regression (0.084 → 0.726) when full
 // styles arrived. Below-fold layout would jump every render. The 187KB
@@ -110,32 +109,12 @@ if (seoSlug === 'adventures') preconnectOrigins.push('https://images.unsplash.co
     <slot />
     {!noChrome && !noSeoRelated && <SeoRelated slug={seoSlug} />}
     {!noChrome && <Footer />}
-    {(scripts.length > 0 ? scripts : pageScriptsFor(_currentPage)).map((src) =>
+    {scripts.map((src) =>
       <script is:inline src={src} defer></script>
     )}
     <slot name="scripts" />
-    {/* Site chrome is immediate; analytics is loaded off the first-paint path. */}
     <script>
       import '../scripts/theme.ts';
-
-      let analyticsPromise: Promise<unknown> | undefined;
-      const loadAnalytics = () => {
-        analyticsPromise ||= import('../scripts/analytics.ts').catch(() => {});
-        return analyticsPromise;
-      };
-
-      const scheduleAnalytics = () => {
-        const requestIdle = window.requestIdleCallback;
-        if (typeof requestIdle === 'function') {
-          requestIdle.call(window, loadAnalytics, { timeout: 2500 });
-          return;
-        }
-        window.addEventListener('load', () => setTimeout(loadAnalytics, 250), { once: true });
-      };
-
-      window.addEventListener('pointerdown', loadAnalytics, { once: true, passive: true });
-      window.addEventListener('keydown', loadAnalytics, { once: true });
-      scheduleAnalytics();
     </script>
     {/* Phase E: register the repeat-visit service worker. The SW caches
         hashed assets cache-first and HTMLs network-first with a short

@@ -125,7 +125,6 @@ declare global {
     // Legacy JG namespaces (still referenced by some consumers).
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     JGActions?: { register: (handlers: Record<string, any>) => unknown };
-    JGAnalytics?: { track: (name: string, details?: unknown) => unknown; flushDebugEvents?: () => unknown };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     JGCollectionUI?: Record<string, any>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -135,12 +134,6 @@ declare global {
     JGDataFetch?: { fetchJson: (url: string, opts?: unknown) => Promise<unknown>; fetchJsonWithFallback: (urls: string[], opts?: unknown) => Promise<unknown>; versionedUrl: (url: string) => Promise<string> };
     JGGridZoom?: { init: (config: unknown) => unknown; release: (grid: unknown) => unknown };
     JGTaskList?: { create: (config: unknown) => unknown };
-
-    // Plausible (analytics).
-    plausible?: (event: string, opts?: { props?: Record<string, unknown> }) => void;
-
-    // Analytics endpoint hint (set on home pages for routing).
-    JG_ANALYTICS_ENDPOINT?: string;
   }
 }
 

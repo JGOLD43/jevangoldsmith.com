@@ -5,51 +5,6 @@ const escapeAttr = window.escapeAttr;
 const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
 let podcastRuntime: AnyObj = null;
 
-function escapeValue(value: unknown) {
-    return String(value || '').replace(/[&<>"']/g, (char) => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-    }[char]));
-}
-
-function buildCuratedPodcastCard(podcast: AnyObj) {
-    const card = document.createElement('div');
-    card.className = `movie-card podcast-card js-zoom-item${podcast.badge ? ' has-review' : ''}`;
-    card.dataset.category = podcast.category || 'all';
-    card.dataset.search = podcast.searchText || '';
-    card.innerHTML = `
-        ${podcast.badge ? `<div class="times-read-badge movie-watch-badge">${escapeValue(podcast.badge)}</div>` : ''}
-        <div class="movie-poster-wrapper">
-            <img src="${escapeValue(podcast.image)}" alt="${escapeValue(podcast.host || podcast.title)}" class="podcast-cover" width="150" height="150" loading="lazy" decoding="async">
-        </div>
-        <div class="movie-info">
-            <div class="movie-title-row">
-                <h3 class="movie-title">${escapeValue(podcast.title)}</h3>
-            </div>
-            <div class="podcast-category-badge">${escapeValue(podcast.host)}</div>
-            <p class="movie-description">${escapeValue(podcast.description)}</p>
-        </div>
-    `;
-    return card;
-}
-
-async function renderCuratedPodcasts() {
-    const data = await dataFetch.fetchJson('data/podcasts.json');
-    const podcasts = Array.isArray(data.podcasts) ? data.podcasts : [];
-    const container = document.getElementById('podcasts-container');
-    if (!container) return;
-    // Astro now SSRs the curated cards. If the DOM already matches
-    // the data, leave it alone — page paints with content from the start.
-    if (container.children.length === podcasts.length) return;
-    container.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-    podcasts.forEach((podcast: AnyObj) => fragment.appendChild(buildCuratedPodcastCard(podcast)));
-    container.appendChild(fragment);
-}
-
 function buildCollectionController() {
     podcastRuntime = window.JGCollectionRuntime.create({
         actions: {
@@ -203,7 +158,6 @@ async function renderSpotifyFollowedShows() {
 
 async function initPodcastsPage() {
     buildCollectionController();
-    await renderCuratedPodcasts();
     podcastRuntime.init();
 
     const grid = document.getElementById('podcasts-container');
