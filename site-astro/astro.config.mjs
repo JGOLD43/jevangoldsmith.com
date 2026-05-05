@@ -1,11 +1,9 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import tailwindcss from '@tailwindcss/vite';
 
-// As of Phase 10 (dist swap), Astro is the default build. Output goes to
-// ../dist/ which Firebase Hosting serves. The legacy scripts/legacy-build/
-// is kept for emergency rollback; npm run build:legacy still works.
+// Astro is the canonical build. Output goes to ../dist/ which Firebase
+// Hosting serves.
 export default defineConfig({
   site: 'https://jevangoldsmith.com',
   output: 'static',
@@ -27,8 +25,5 @@ export default defineConfig({
       },
       filter: (page) => !page.endsWith('/data-smoke') && !page.endsWith('/data-smoke.html')
     })
-  ],
-  vite: {
-    plugins: [tailwindcss()]
-  }
+  ]
 });

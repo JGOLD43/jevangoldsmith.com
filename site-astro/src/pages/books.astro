@@ -53,7 +53,6 @@ function localizeCover(url: string, size: 'medium' | 'large'): string {
 }
 
 function coverUrl(book: any, size: 'medium' | 'large' = 'large'): string {
-  if (size === 'medium' && book.coverImageMedium) return localizeCover(book.coverImageMedium, size);
   if (book.coverImage) return localizeCover(book.coverImage, size);
   const isbn = String(book.isbn || '').replace(/[^0-9X]/gi, '');
   if (!isbn) return '';

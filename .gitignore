@@ -57,5 +57,5 @@ images/source/remote/
 sitemap.xml
 llms.txt
 .gstack/
-.perf-tmp/
+.perf-tmp/*.run-*.json
 .claude/scheduled_tasks.lock
