@@ -1,5 +1,5 @@
 // Phase 1 slice 1.2: server-side renderer for movie cards. Mirrors
-// `createMovieCardFromData` from src/scripts/letterboxd.js so SSR'd
+// `createMovieCardFromData` from src/scripts/letterboxd.ts so SSR'd
 // cards match runtime output. letterboxd.js detects an already-populated
 // grid and skips its initial wipe-and-render.
 

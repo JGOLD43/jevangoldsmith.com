@@ -1,3 +1,4 @@
+// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 // Cross-collection helpers: image error fallback, star drag handler,
 // escape-key closer. Replaces duplicated logic across books/letterboxd/podcasts.
 (function () {
@@ -64,6 +65,6 @@
 }());
 
 // Phase 3 slice 3.1: named ES export aliasing the IIFE-installed namespace.
-// Consumers should prefer `import { collectionHelpers } from '../scripts/collection-helpers.js'`
+// Consumers should prefer `import { collectionHelpers } from '../scripts/collection-helpers.ts'`
 // over `window.JGCollectionHelpers` so Vite can tree-shake.
 export const collectionHelpers = window.JGCollectionHelpers;

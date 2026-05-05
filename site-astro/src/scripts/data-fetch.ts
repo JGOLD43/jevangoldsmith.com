@@ -1,3 +1,4 @@
+// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 (function () {
     const manifestUrl = '/data/runtime-data-manifest.json';
     let manifestPromise = null;
@@ -65,6 +66,6 @@
 }());
 
 // Phase 3 slice 3.1: named ES export aliasing the IIFE-installed namespace.
-// Consumers should prefer `import { dataFetch } from '../scripts/data-fetch.js'`
+// Consumers should prefer `import { dataFetch } from '../scripts/data-fetch.ts'`
 // over `window.JGDataFetch` so Vite can tree-shake.
 export const dataFetch = window.JGDataFetch;

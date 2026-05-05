@@ -1,3 +1,4 @@
+// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 (function () {
   'use strict';
 
@@ -144,6 +145,6 @@
 }());
 
 // Phase 3 slice 3.1: named ES export aliasing the IIFE-installed namespace.
-// Consumers should prefer `import { gridZoom } from '../scripts/grid-zoom.js'`
+// Consumers should prefer `import { gridZoom } from '../scripts/grid-zoom.ts'`
 // over `window.JGGridZoom` so Vite can tree-shake.
 export const gridZoom = window.JGGridZoom;

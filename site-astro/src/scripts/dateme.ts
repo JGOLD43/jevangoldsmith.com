@@ -1,3 +1,4 @@
+// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 // Dateme funnel orchestrator. Inlines js/dateme-content.js,
 // js/dateme-state.js, js/dateme-flow.js, js/dateme-view.js, and the
 // empty stub js/dateme-events.js. The shards only ever exposed
@@ -832,3 +833,5 @@ if (document.readyState === 'loading') {
 } else {
     initDatemePage();
 }
+
+export {};

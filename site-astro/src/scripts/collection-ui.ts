@@ -1,3 +1,4 @@
+// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 (function () {
     function toggleClearButton(buttonOrId, show, displayValue = 'flex') {
         const button = typeof buttonOrId === 'string'
@@ -127,6 +128,6 @@
 }());
 
 // Phase 3 slice 3.1: named ES export aliasing the IIFE-installed namespace.
-// Consumers should prefer `import { collectionUi } from '../scripts/collection-ui.js'`
+// Consumers should prefer `import { collectionUi } from '../scripts/collection-ui.ts'`
 // over `window.JGCollectionUI` so Vite can tree-shake.
 export const collectionUi = window.JGCollectionUI;

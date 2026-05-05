@@ -1,3 +1,4 @@
+// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 (function () {
     function toArray(value) {
         return Array.from(value || []);
@@ -316,6 +317,6 @@
 
 // Phase 3 slice 3.1: named ES export aliasing the IIFE-installed function.
 // Consumers should prefer `import { createCollectionRuntime } from
-// '../scripts/collection-runtime.js'` over `window.JGCollectionRuntime.create`
+// '../scripts/collection-runtime.ts'` over `window.JGCollectionRuntime.create`
 // — Vite tree-shakes named imports it can't tree-shake `window.JG*` reads.
 export const createCollectionRuntime = window.JGCollectionRuntime.create;

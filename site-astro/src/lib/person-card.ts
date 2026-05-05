@@ -1,5 +1,5 @@
 // Phase 6 (slice 2): server-side renderer for the people-grid card. Mirrors
-// the runtime createPersonCard from src/scripts/people.js byte-for-byte so
+// the runtime createPersonCard from src/scripts/people.ts byte-for-byte so
 // pre-rendered cards match the runtime output. people.js detects an already-
 // populated grid and skips its initial wipe-and-render.
 

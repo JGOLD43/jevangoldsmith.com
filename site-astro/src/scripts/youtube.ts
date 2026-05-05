@@ -1,3 +1,4 @@
+// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 // YouTube Channel Integration. Self-contained module: includes minimal
 // escape helpers so it doesn't depend on the global sanitize.js bundle.
 const YOUTUBE_CHANNEL_HANDLE = 'JevanGoldsmith';
@@ -120,3 +121,5 @@ if (document.readyState === 'loading') {
 } else {
     fetchYouTubeVideos();
 }
+
+export {};

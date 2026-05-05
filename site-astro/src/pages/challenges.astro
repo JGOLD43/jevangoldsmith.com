@@ -36,11 +36,11 @@ const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibil
 
 <script>
   // Phase 3 slice 3.1: native named imports replace `window.JGTaskList`.
-  import '../scripts/grid-zoom.js';
-  import '../scripts/collection-ui.js';
-  import '../scripts/collection-runtime.js';
-  import '../scripts/action-dispatcher.js';
-  import { createTaskList } from '../scripts/task-list.js';
+  import '../scripts/grid-zoom.ts';
+  import '../scripts/collection-ui.ts';
+  import '../scripts/collection-runtime.ts';
+  import '../scripts/action-dispatcher.ts';
+  import { createTaskList } from '../scripts/task-list.ts';
 
   createTaskList({
     actions: {

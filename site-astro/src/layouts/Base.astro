@@ -116,8 +116,8 @@ if (seoSlug === 'adventures') preconnectOrigins.push('https://images.unsplash.co
     <slot name="scripts" />
     {/* Phase 7 (slice 6): site-wide theme + analytics as native Astro modules. */}
     <script>
-      import '../scripts/theme.js';
-      import '../scripts/analytics.js';
+      import '../scripts/theme.ts';
+      import '../scripts/analytics.ts';
     </script>
     {/* Phase E: register the repeat-visit service worker. The SW caches
         hashed assets cache-first and HTMLs network-first with a short
