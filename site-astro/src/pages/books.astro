@@ -88,10 +88,16 @@ const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section: any) => {
 // Carousel: most recent 20 books, doubled for the seamless scroll loop.
 const recentBooks = books.slice(-20).reverse().map((b: any) => b.data);
 const carouselBooks = [...recentBooks, ...recentBooks];
-const carouselTrackInner = carouselBooks.map((book: any) => {
-  const url = coverUrl(book, 'medium');
-  return `<img class="carousel-book" src="${escapeAttr(url)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
-}).join('');
+const carouselTrackInner = carouselBooks
+  .map((book: any) => {
+    const url = coverUrl(book, 'medium');
+    // Skip books with no resolvable cover (no ISBN, no coverImage). An
+    // empty src renders as a broken-image icon AND fires a fetch of the
+    // current page URL — both visible and wasteful.
+    if (!url) return '';
+    return `<img class="carousel-book" src="${escapeAttr(url)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
+  })
+  .join('');
 
 // legacy fragments inlined directly into the page.
 const sidebarFiltersHtml = `<div class="sidebar-filter-section">
