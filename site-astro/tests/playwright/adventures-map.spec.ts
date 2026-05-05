@@ -55,5 +55,4 @@ test('adventures world-map element exists in SSR HTML', async ({ page }) => {
   await page.goto('/adventures.html');
   await expect(page.locator('#world-map')).toBeAttached();
   await expect(page.locator('.adventures-main-map')).toBeAttached();
-  await expect(page.locator('[data-action="loadWorldMap"]')).toBeVisible();
 });

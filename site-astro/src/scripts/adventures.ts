@@ -107,19 +107,21 @@ function setupWorldMapLazyLoad(adventures) {
     const mapContainer = document.getElementById('world-map');
     if (!mapContainer) return;
 
+    // On mobile, the map starts hidden (tab-style layout). Don't mount
+    // until the user switches to the map tab.
     const split = document.querySelector('.adventures-page-split');
     const mobileToggle = document.querySelector('.adventures-mobile-toggle');
     const isMobileTabs = mobileToggle && getComputedStyle(mobileToggle).display !== 'none';
     if (isMobileTabs && !split?.classList.contains('map-view')) {
+        const load = () => ensureWorldMap(adventures);
+        mapContainer.addEventListener('pointerdown', load, { once: true, passive: true });
+        mapContainer.addEventListener('touchstart', load, { once: true, passive: true });
         return;
     }
 
-    const load = () => ensureWorldMap(adventures);
-    const opts = { once: true, passive: true };
-    mapContainer.addEventListener('pointerenter', load, opts);
-    mapContainer.addEventListener('pointerdown', load, opts);
-    mapContainer.addEventListener('touchstart', load, opts);
-    mapContainer.addEventListener('focusin', load, { once: true });
+    // Desktop: mount the map immediately. Users want to see the map, not
+    // a placeholder asking them to click Load.
+    ensureWorldMap(adventures);
 }
 
 function ensureWorldMap(adventures = state.allAdventures) {
