@@ -124,7 +124,7 @@ declare global {
 
     // Legacy JG namespaces (still referenced by some consumers).
     JGActions?: { register: (handlers: unknown) => unknown };
-    JGAnalytics?: { track: (name: string, details?: unknown) => unknown };
+    JGAnalytics?: { track: (name: string, details?: unknown) => unknown; flushDebugEvents?: () => unknown };
     JGCollectionUI?: Record<string, unknown>;
     JGCollectionRuntime?: { create: (config: unknown) => unknown };
     JGCollectionHelpers?: Record<string, unknown>;

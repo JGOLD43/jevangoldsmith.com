@@ -1,9 +1,9 @@
-// @ts-nocheck — strict typing deferred; runtime is covered by Playwright + smoke. See POST_AUDIT_PLAN slice 3.3.
 (function () {
-  const endpoint = document.querySelector('meta[name="analytics-endpoint"]')?.content || window.JG_ANALYTICS_ENDPOINT || '';
+  const endpoint = (document.querySelector('meta[name="analytics-endpoint"]') as HTMLMetaElement | null)?.content || window.JG_ANALYTICS_ENDPOINT || '';
   const queueKey = 'jg_analytics_events';
 
-  function eventPayload(name, details) {
+  type Payload = { name: string; details: Record<string, unknown>; path: string; search: string; referrer: string; timestamp: string };
+  function eventPayload(name: string, details: Record<string, unknown> | undefined): Payload {
     return {
       name,
       details: details || {},
@@ -14,9 +14,9 @@
     };
   }
 
-  function store(payload) {
+  function store(payload: Payload) {
     try {
-      const existing = JSON.parse(window.localStorage.getItem(queueKey) || '[]');
+      const existing: Payload[] = JSON.parse(window.localStorage.getItem(queueKey) || '[]');
       existing.push(payload);
       window.localStorage.setItem(queueKey, JSON.stringify(existing.slice(-50)));
     } catch {
@@ -24,13 +24,13 @@
     }
   }
 
-  function plausibleName(name) {
-    return name.split('_').map(function (part) {
+  function plausibleName(name: string): string {
+    return name.split('_').map(function (part: string) {
       return part.charAt(0).toUpperCase() + part.slice(1);
     }).join(' ');
   }
 
-  function send(payload) {
+  function send(payload: Payload) {
     if (window.plausible) {
       window.plausible(plausibleName(payload.name), { props: payload.details });
     }
@@ -56,14 +56,14 @@
     });
   }
 
-  function track(name, details) {
+  function track(name: string, details?: Record<string, unknown>) {
     const payload = eventPayload(name, details);
     window.dispatchEvent(new CustomEvent('jg:analytics', { detail: payload }));
     send(payload);
   }
 
-  function datasetDetails(element) {
-    const details = {};
+  function datasetDetails(element: HTMLElement): Record<string, string | undefined> {
+    const details: Record<string, string | undefined> = {};
     for (const key of Object.keys(element.dataset || {})) {
       if (key === 'analytics') continue;
       details[key] = element.dataset[key];
@@ -71,7 +71,7 @@
     return details;
   }
 
-  function classifyLink(link) {
+  function classifyLink(link: HTMLAnchorElement): string {
     const href = link.getAttribute('href') || '';
     if (link.dataset.analytics) return link.dataset.analytics;
     if (/^mailto:/i.test(href)) return 'contact';
@@ -84,7 +84,8 @@
   }
 
   document.addEventListener('click', function (event) {
-    const link = event.target.closest && event.target.closest('a[href]');
+    const target = event.target as Element | null;
+    const link = target?.closest?.('a[href]') as HTMLAnchorElement | null;
     if (!link) return;
     const type = classifyLink(link);
     if (!type) return;
@@ -101,13 +102,13 @@
       ...datasetDetails(link),
       type,
       href: link.getAttribute('href'),
-      label: link.textContent.trim().replace(/\s+/g, ' ').slice(0, 120)
+      label: (link.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 120)
     });
   });
 
   document.addEventListener('submit', function (event) {
-    const form = event.target;
-    if (!form || !form.matches('form')) return;
+    const form = event.target as HTMLFormElement | null;
+    if (!form || !form.matches?.('form')) return;
     track(form.matches('[data-newsletter-form]') ? 'newsletter_submit' : 'form_submit', {
       id: form.id || '',
       className: form.className || '',

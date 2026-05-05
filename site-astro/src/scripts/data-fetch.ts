@@ -1,12 +1,12 @@
 (function () {
     const manifestUrl = '/data/runtime-data-manifest.json';
-    let manifestPromise = null;
+    let manifestPromise: Promise<{ assets?: Record<string, string> }> | null = null;
 
-    function isJsonPath(url) {
+    function isJsonPath(url: string) {
         return /\.json(?:$|\?)/i.test(url);
     }
 
-    function relativeAssetPath(url) {
+    function relativeAssetPath(url: string) {
         try {
             const absolute = new URL(url, window.location.origin);
             return absolute.pathname.replace(/^\/+/, '');
@@ -24,7 +24,7 @@
         return manifestPromise;
     }
 
-    async function versionedUrl(url) {
+    async function versionedUrl(url: string) {
         if (!url || /^https?:\/\//i.test(url) || !isJsonPath(url)) return url;
         const manifest = await loadManifest();
         const assetPath = relativeAssetPath(url.split('#')[0]);
@@ -45,8 +45,8 @@
         return response.json();
     }
 
-    async function fetchJsonWithFallback(urls, options = {}) {
-        let lastError = null;
+    async function fetchJsonWithFallback(urls: string[], options: { cache?: RequestCache } = {}) {
+        let lastError: unknown = null;
         for (const url of urls) {
             try {
                 return await fetchJson(url, options);

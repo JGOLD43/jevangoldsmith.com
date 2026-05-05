@@ -1,18 +1,21 @@
-// @ts-nocheck — Phase 3.2: legacy script ported from .js by mechanical rename. window-types.d.ts declares ambient globals so cross-module ReferenceError still trips, but DOM narrowing in event handlers + dynamic dictionary indexing would need pervasive casts. Per-file opt-in to strict typing is incremental work.
 (function () {
   'use strict';
 
-  const instances = [];
+  type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string };
+  type State = { grid: HTMLElement; activeItem: HTMLElement | null; itemSelector: string; triggerSelector: string; opts: Opts };
+  type Config = { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; eventName?: string };
 
-  function track(name, details) {
+  const instances: State[] = [];
+
+  function track(name: string, details?: Record<string, unknown>) {
     if (window.JGAnalytics && typeof window.JGAnalytics.track === 'function') {
       window.JGAnalytics.track(name, details);
     }
   }
 
-  function apply(grid, item, opts) {
+  function apply(grid: HTMLElement, item: HTMLElement, opts: Opts) {
     const gridRect = grid.getBoundingClientRect();
-    const anchor = opts && opts.anchorSelector
+    const anchor: Element = opts && opts.anchorSelector
       ? item.querySelector(opts.anchorSelector) || item
       : item;
     const itemRect = anchor.getBoundingClientRect();
@@ -46,21 +49,21 @@
     document.body.classList.add('zoom-open');
   }
 
-  function release(grid) {
+  function release(grid: HTMLElement) {
     grid.style.setProperty('--tx', '0px');
     grid.style.setProperty('--ty', '0px');
     grid.style.setProperty('--scale', '1');
     grid.classList.remove('is-zoomed');
-    grid.querySelectorAll('.is-zoom-target').forEach(function (el) {
+    grid.querySelectorAll('.is-zoom-target').forEach(function (el: Element) {
       el.classList.remove('is-zoom-target');
     });
     document.body.classList.remove('zoom-open');
   }
 
-  function init(config) {
-    const grid = typeof config.grid === 'string'
+  function init(config: Config) {
+    const grid = (typeof config.grid === 'string'
       ? document.querySelector(config.grid)
-      : config.grid;
+      : config.grid) as HTMLElement | null;
     if (!grid) return null;
 
     const itemSelector = config.itemSelector || '.zoom-item';
@@ -73,7 +76,7 @@
     };
     const eventName = config.eventName || 'zoom_item_open';
 
-    const state = { grid, activeItem: null, itemSelector, triggerSelector, opts };
+    const state: State = { grid, activeItem: null, itemSelector, triggerSelector, opts };
 
     function closeActive() {
       if (!state.activeItem) return;
@@ -81,7 +84,7 @@
       state.activeItem = null;
     }
 
-    function openItem(item) {
+    function openItem(item: HTMLElement) {
       if (state.activeItem === item) {
         closeActive();
         return;
@@ -95,26 +98,29 @@
       });
     }
 
-    grid.addEventListener('click', function (event) {
-      if (event.target.closest('.zoom-detail-link, a')) {
-        const link = event.target.closest('a');
+    grid.addEventListener('click', function (event: Event) {
+      const target = event.target as Element | null;
+      if (target?.closest('.zoom-detail-link, a')) {
+        const link = target.closest('a') as HTMLAnchorElement | null;
         if (link && link.getAttribute('href') && link.getAttribute('href') !== '#') return;
       }
-      const trigger = event.target.closest(triggerSelector);
+      const trigger = target?.closest(triggerSelector);
       if (!trigger) return;
-      const item = trigger.closest(itemSelector) || trigger;
+      const item = (trigger.closest(itemSelector) || trigger) as HTMLElement;
       if (!item) return;
       event.preventDefault();
       event.stopPropagation();
       openItem(item);
     });
 
-    grid.addEventListener('keydown', function (event) {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
-      const trigger = event.target.closest(triggerSelector);
+    grid.addEventListener('keydown', function (event: Event) {
+      const ke = event as KeyboardEvent;
+      if (ke.key !== 'Enter' && ke.key !== ' ') return;
+      const target = event.target as Element | null;
+      const trigger = target?.closest(triggerSelector);
       if (!trigger) return;
       if (/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/i.test(trigger.tagName)) return;
-      const item = trigger.closest(itemSelector) || trigger;
+      const item = (trigger.closest(itemSelector) || trigger) as HTMLElement;
       if (!item) return;
       event.preventDefault();
       openItem(item);
@@ -122,7 +128,7 @@
 
     document.addEventListener('click', function (event) {
       if (!state.activeItem) return;
-      if (event.target.closest(itemSelector)) return;
+      if ((event.target as Element | null)?.closest(itemSelector)) return;
       closeActive();
     });
 
@@ -141,7 +147,7 @@
     };
   }
 
-  window.JGGridZoom = { init, release: function (grid) { release(grid); } };
+  window.JGGridZoom = { init: init as (c: unknown) => unknown, release: function (grid: unknown) { release(grid as HTMLElement); } };
 }());
 
 export const gridZoom = window.JGGridZoom;
