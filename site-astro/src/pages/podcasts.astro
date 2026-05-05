@@ -11,7 +11,9 @@ const canonical = 'https://jevangoldsmith.com/podcasts.html';
 
 // Phase B: pre-render curated podcast cards.
 const podcasts = await getCollection('podcasts');
-const podcastCardsHtml = podcasts.map((p: any) => renderPodcastCardHtml(p.data as Record<string, unknown>)).join('');
+const podcastCardsHtml = podcasts
+  .map((p: any, i: number) => renderPodcastCardHtml(p.data as Record<string, unknown>, i))
+  .join('');
 
 const config = ({
   layout: { id: 'podcasts-layout', className: 'movies-layout podcasts-layout collection-layout sidebar-collapsed' },

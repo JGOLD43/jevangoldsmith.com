@@ -13,7 +13,10 @@ interface PodcastData {
   searchText?: string | null;
 }
 
-export function renderPodcastCardHtml(podcast: PodcastData): string {
+// Phase 1.4: index-aware loading. The first card is the LCP candidate
+// — give it loading="eager" + fetchpriority="high". Cards 6+ stay
+// native loading="lazy" so they never block paint.
+export function renderPodcastCardHtml(podcast: PodcastData, index = Number.MAX_SAFE_INTEGER): string {
   const title = String(podcast.title ?? '');
   const host = String(podcast.host ?? '');
   const desc = String(podcast.description ?? '');
@@ -22,11 +25,14 @@ export function renderPodcastCardHtml(podcast: PodcastData): string {
   const image = String(podcast.image ?? '');
   const badge = podcast.badge ? String(podcast.badge) : '';
   const cardClass = `movie-card podcast-card js-zoom-item${badge ? ' has-review' : ''}`;
+  const eager = index < 6;
+  const loadingAttr = eager ? 'eager' : 'lazy';
+  const priorityAttr = index === 0 ? ' fetchpriority="high"' : '';
   return [
     `<div class="${cardClass}" data-category="${escape(category)}" data-search="${escape(search)}">`,
     badge ? `<div class="times-read-badge movie-watch-badge">${escape(badge)}</div>` : '',
     `<div class="movie-poster-wrapper">`,
-    `<img src="${escape(image)}" alt="${escape(host || title)}" class="podcast-cover" width="150" height="150" loading="lazy" decoding="async">`,
+    `<img src="${escape(image)}" alt="${escape(host || title)}" class="podcast-cover" width="150" height="150" loading="${loadingAttr}" decoding="async"${priorityAttr}>`,
     `</div>`,
     `<div class="movie-info">`,
     `<div class="movie-title-row"><h3 class="movie-title">${escape(title)}</h3></div>`,
