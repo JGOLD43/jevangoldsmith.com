@@ -6,11 +6,6 @@ import {
   BOOK_SECTIONS
 } from '../lib/collection-chrome';
 import { renderBookCardHtml } from '../lib/book-card';
-import sidebarFiltersRaw from '../legacy/collections/books/sidebar-filters.html?raw';
-import mainBodyRaw from '../legacy/collections/books/main-body.html?raw';
-import headerCarouselRaw from '../legacy/collections/books/header-carousel.html?raw';
-import headerViewToggleRaw from '../legacy/collections/books/header-view-toggle.html?raw';
-import afterMainRaw from '../legacy/collections/books/after-main.html?raw';
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
@@ -18,12 +13,126 @@ const canonical = 'https://jevangoldsmith.com/books.html';
 // an already-populated container and skips the initial wipe-and-render.
 const books = await getCollection('books');
 const bookCardsHtml = books.map((b: any) => renderBookCardHtml(b.data)).join('');
-const populatedMainBody = mainBodyRaw
-  .trim()
-  .replace(
-    '<div id="books-container" class="books-grid"></div>',
-    `<div id="books-container" class="books-grid">${bookCardsHtml}</div>`
-  );
+
+// Phase 2.5: legacy fragments inlined directly into the page.
+const sidebarFiltersHtml = `<div class="sidebar-filter-section">
+    <div class="filter-header">
+        <div class="filter-label">Filter by Rating</div>
+        <a href="#" class="show-all-link" data-action="clear-star-filter">Show All</a>
+    </div>
+    <div class="star-rating-filter">
+        <div class="star-filter-container" id="star-filter-container">
+            <span class="filter-star" data-star="1">★</span>
+            <span class="filter-star" data-star="2">★</span>
+            <span class="filter-star" data-star="3">★</span>
+            <span class="filter-star" data-star="4">★</span>
+            <span class="filter-star" data-star="5">★</span>
+            <span class="filter-rating-text" id="filter-rating-text"></span>
+        </div>
+    </div>
+</div>
+
+<div class="sidebar-filter-section">
+    <div class="filter-header">
+        <div class="filter-label">Filter by Times Read</div>
+    </div>
+    <div class="timesread-filter">
+        <div class="timesread-filter-container">
+            <span class="filter-timesread-icon">📖</span>
+            <div class="timesread-slider-wrapper">
+                <input type="range" min="0" max="10" value="0" class="timesread-slider" id="timesread-slider">
+                <div class="timesread-ticks" id="timesread-ticks">
+                    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+                </div>
+            </div>
+            <span class="filter-timesread-text" id="filter-timesread-text"></span>
+        </div>
+    </div>
+</div>`;
+
+const headerCarouselHtml = `<div class="recent-books-carousel">
+    <span class="carousel-label">Recently Added</span>
+    <div class="carousel-track" id="carousel-track"></div>
+</div>`;
+
+const headerViewToggleHtml = `<div class="view-toggle main-view-toggle">
+    <button class="view-toggle-btn active" id="list-view-btn-main" data-action="set-view-mode" data-mode="list" title="List view">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+    </button>
+    <button class="view-toggle-btn" id="grid-view-btn-main" data-action="set-view-mode" data-mode="grid" title="Grid view">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+    </button>
+</div>`;
+
+const populatedMainBody = `<div id="books-container" class="books-grid">${bookCardsHtml}</div>
+<div class="category-grid-view" id="category-grid-view" style="display: none;">
+    <header class="main-header grid-view-header">
+        <div class="header-content">
+            <h1>Bookshelf</h1>
+            <div class="philosophy-link-wrapper">
+                <a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a>
+                <span class="read-first-note">← read this first</span>
+            </div>
+        </div>
+        <div class="view-toggle grid-view-toggle">
+            <button class="view-toggle-btn" id="list-view-btn-grid" data-action="set-view-mode" data-mode="list" title="List view">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+            </button>
+            <button class="view-toggle-btn active" id="grid-view-btn-grid" data-action="set-view-mode" data-mode="grid" title="Grid view">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+            </button>
+        </div>
+    </header>
+    <div class="category-grid" id="category-grid"></div>
+</div>`;
+
+const afterMainHtml = `<section class="seo-related-section" data-seo-related>
+    <p class="seo-related-eyebrow">Related thread</p>
+    <h2>Keep exploring this idea</h2>
+    <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
+    <div class="seo-related-grid">
+        <a class="seo-related-card" href="reading-philosophy.html"><span>How I Read: A Practical Reading Philosophy</span><p>Notes on reading for judgment, taste, decision-making, and a better personal operating system.</p></a>
+        <a class="seo-related-card" href="field-notes.html" data-analytics="cta" data-cta-id="newsletter" data-cta-location="books"><span>Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments</span><p>One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive.</p></a>
+        <a class="seo-related-card" href="index.html"><span>Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech</span><p>Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas.</p></a>
+        <a class="seo-related-card" href="free-resources.html" data-analytics="cta" data-cta-id="free-resources" data-cta-location="books"><span>Useful Resources for Thinking, Building &amp; Learning</span><p>Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work.</p></a>
+    </div>
+</section>
+
+<div id="book-modal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" data-action="close-book-modal">&times;</span>
+        <div class="modal-body">
+            <div class="modal-header">
+                <img id="modal-book-cover" src="" alt="" class="modal-cover" decoding="async">
+                <div class="modal-info">
+                    <h2 id="modal-book-title"></h2>
+                    <p id="modal-book-author" class="modal-author"></p>
+                    <div id="modal-book-rating" class="modal-rating"></div>
+                </div>
+            </div>
+            <div class="modal-review">
+                <h3>My Review</h3>
+                <p id="modal-book-review" class="review-text"></p>
+            </div>
+        </div>
+    </div>
+</div>`;
 
 const config = ({
   layout: { id: 'books-layout', className: 'books-layout collection-layout sidebar-collapsed' },
@@ -42,7 +151,7 @@ const config = ({
       clearAction: 'clear-search',
       wrapperClass: 'search-input-wrapper search-bubble'
     },
-    extraHtml: sidebarFiltersRaw.trim(),
+    extraHtml: sidebarFiltersHtml,
     footerText: 'Books with a badge have my full review',
     sections: BOOK_SECTIONS
   },
@@ -51,15 +160,15 @@ const config = ({
     titleTag: 'h2',
     title: 'Bookshelf',
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a><span class="read-first-note">← read this first</span></div>',
-    headerExtraHtml: headerCarouselRaw.trim(),
-    counterExtraHtml: headerViewToggleRaw.trim(),
+    headerExtraHtml: headerCarouselHtml,
+    counterExtraHtml: headerViewToggleHtml,
     counterGroupClass: 'header-right',
     counterId: 'book-count',
     counterLabelId: 'counter-label',
     counterLabel: 'Total Books Read',
     bodyHtml: populatedMainBody
   },
-  afterMainHtml: afterMainRaw.trim()
+  afterMainHtml: afterMainHtml
 });
 ---
 <CollectionPage

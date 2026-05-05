@@ -1,4 +1,5 @@
-<nav class="navbar">
+// Phase 2.5: nav partial extracted from src/legacy/partials/nav.html.
+export const NAV_TEMPLATE = `<nav class="navbar">
         <div class="container">
             <div class="navbar-left">
                 <a href="index.html" class="logo">
@@ -135,4 +136,4 @@
                 </div>
             </div>
         </div>
-    </nav>
+    </nav>`;

@@ -1,4 +1,5 @@
-<footer class="footer">
+// Phase 2.5: footer partial extracted from src/legacy/partials/footer.html.
+export const FOOTER_TEMPLATE = `<footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div>
@@ -13,4 +14,4 @@
                 </ul>
             </div>
         </div>
-    </footer>
+    </footer>`;

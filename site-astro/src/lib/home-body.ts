@@ -1,12 +1,7 @@
----
-title: "Jevan Goldsmith - Finance, RE Development, Writing & Tech"
-description: "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
-layout: "base"
-fontWeights: "100;300;400;600;700"
-scripts: '<script src="js/sanitize.js"></script><script src="js/theme.js"></script><script src="js/home.js"></script><script src="js/newsletter.js"></script><script src="js/analytics.js"></script>'
-extraHead: '<link rel="preload" as="image" type="image/avif" href="images/generated/profile/profile-720.avif" imagesrcset="images/generated/profile/profile-360.avif 360w, images/generated/profile/profile-520.avif 520w, images/generated/profile/profile-720.avif 720w, images/generated/profile/profile-960.avif 960w" imagesizes="(max-width: 768px) 82vw, 42vw" fetchpriority="high">'
----
-    <!-- Side Navigation Dots -->
+// Phase 2.5: home page body extracted from src/legacy/pages/index.html
+// so the legacy folder can be deleted. index.astro consumes this string
+// and replaces the data-home-stat counters at build time.
+export const HOME_BODY = `    <!-- Side Navigation Dots -->
     <nav class="side-nav" id="side-nav">
         <a href="#hero" class="side-nav-dot active" data-section="hero" title="Intro" aria-label="Intro"></a>
         <a href="#newsletter-cta" class="side-nav-dot" data-section="newsletter-cta" title="Field Notes" aria-label="Field Notes"></a>
@@ -348,4 +343,4 @@ extraHead: '<link rel="preload" as="image" type="image/avif" href="images/genera
                 <a href="https://x.com/JevanGoldsmith" target="_blank" class="btn-secondary">Follow Along on X</a>
             </div>
         </div>
-    </section>
+    </section>`;

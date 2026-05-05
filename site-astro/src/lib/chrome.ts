@@ -5,16 +5,16 @@
 // partials directly from /_src/partials means we never have to maintain a
 // hand-ported copy in this repo.
 
-// Vite ?raw imports inline the file contents at build time, so we don't
-// need filesystem access from the bundled module.
-import navTemplateRaw from '../legacy/partials/nav.html?raw';
-import footerTemplateRaw from '../legacy/partials/footer.html?raw';
+// Phase 2.5: nav + footer source live as TS template-literal modules
+// so we can drop the src/legacy/ folder and the Vite ?raw plugin step.
+import { NAV_TEMPLATE as NAV_TEMPLATE_RAW } from './nav-template';
+import { FOOTER_TEMPLATE as FOOTER_TEMPLATE_RAW } from './footer-template';
 import pages from '../../../data/pages.json';
 import ctas from '../../../data/ctas.json';
 import { escapeAttr as escapeHtmlAttr } from './html-escape';
 
-const NAV_TEMPLATE = navTemplateRaw.trim();
-const FOOTER_TEMPLATE = footerTemplateRaw.trim();
+const NAV_TEMPLATE = NAV_TEMPLATE_RAW.trim();
+const FOOTER_TEMPLATE = FOOTER_TEMPLATE_RAW.trim();
 
 const SECTION_BY_FILE = new Map<string, string>(
   ((pages as Array<{ path?: string; section?: string }>) ?? [])

@@ -5,8 +5,6 @@ import {
   PEOPLE_SECTIONS
 } from '../lib/collection-chrome';
 import { renderPersonCardHtml } from '../lib/person-card';
-import sidebarFiltersRaw from '../legacy/collections/people/sidebar-filters.html?raw';
-import mainBodyRaw from '../legacy/collections/people/main-body.html?raw';
 
 const canonical = 'https://jevangoldsmith.com/people.html';
 
@@ -18,12 +16,33 @@ const peopleEntries = await getCollection('peopleMerged');
 const peopleCardsHtml = peopleEntries
   .map((p: any, i: number) => renderPersonCardHtml(p.data, i))
   .join('');
-const populatedMainBody = mainBodyRaw
-  .trim()
-  .replace(
-    '<div class="people-grid" id="people-grid"></div>',
-    `<div class="people-grid" id="people-grid">${peopleCardsHtml}</div>`
-  );
+
+// Phase 2.5: legacy fragments inlined directly into the page. The
+// sidebar source filter + main body wrapper used to live as raw HTML
+// imports under src/legacy/collections/people/.
+const sidebarFiltersHtml = `<div class="people-source-filter sidebar-filter-section" aria-label="Filter people by source">
+    <div class="filter-header">
+        <span class="filter-label">Source</span>
+    </div>
+    <div class="people-source-filter-list">
+        <button class="people-source-filter-btn active" type="button" data-action="filterPeopleSource" data-action-args="all" data-action-eventobj="true">
+            <span class="people-source-label">All</span>
+            <span class="people-source-count" id="people-source-count-all">0</span>
+        </button>
+        <button class="people-source-filter-btn" type="button" data-action="filterPeopleSource" data-action-args="nonfiction" data-action-eventobj="true">
+            <span class="people-source-label">Non-fiction</span>
+            <span class="people-source-count" id="people-source-count-nonfiction">0</span>
+        </button>
+        <button class="people-source-filter-btn" type="button" data-action="filterPeopleSource" data-action-args="fiction" data-action-eventobj="true">
+            <span class="people-source-label">Fiction</span>
+            <span class="people-source-count" id="people-source-count-fiction">0</span>
+        </button>
+    </div>
+</div>`;
+
+const populatedMainBody = `<div id="people-container">
+    <div class="people-grid" id="people-grid">${peopleCardsHtml}</div>
+</div>`;
 
 // Inline merged data for the modal so people.js avoids a runtime fetch.
 const peopleMergedJson = JSON.stringify(peopleEntries.map((p: any) => p.data));
@@ -45,7 +64,7 @@ const config = ({
       searchEvent: 'input',
       wrapperClass: 'search-bubble'
     },
-    extraHtml: sidebarFiltersRaw.trim(),
+    extraHtml: sidebarFiltersHtml,
     sections: PEOPLE_SECTIONS
   },
   main: {
