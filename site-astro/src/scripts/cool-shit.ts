@@ -1,5 +1,6 @@
-// @ts-nocheck — pending typed migration
 (function () {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type AnyObj = any;
   const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   const els = {
@@ -11,19 +12,18 @@
     heroCount: document.getElementById('hero-count'),
     heroCats: document.getElementById('hero-cats'),
     heroUpdated: document.getElementById('hero-updated'),
-    layout: document.querySelector('.cool-page'),
-    tabs: document.querySelectorAll('.cool-tab'),
+    layout: document.querySelector('.cool-page') as HTMLElement | null,
+    tabs: document.querySelectorAll<HTMLElement>('.cool-tab'),
   };
 
   if (!els.feed) return;
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, (c) => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-    }[c]));
+  const ESC_MAP: { [k: string]: string } = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  function escapeHtml(s: unknown): string {
+    return String(s).replace(/[&<>"']/g, (c) => ESC_MAP[c]);
   }
 
-  function safeUrl(url, fallback = '#') {
+  function safeUrl(url: unknown, fallback = '#'): string {
     const raw = String(url || '').trim();
     if (!raw) return fallback;
     if (raw.startsWith('#') || raw.startsWith('/') || raw.startsWith('./') || raw.startsWith('../')) {
@@ -41,19 +41,19 @@
     return fallback;
   }
 
-  function monthKey(iso) { return iso.slice(0, 7); }
-  function monthLabel(key) {
+  function monthKey(iso: string) { return iso.slice(0, 7); }
+  function monthLabel(key: string) {
     const [y, m] = key.split('-');
     return `${MONTH_NAMES[parseInt(m, 10) - 1]} ${y}`;
   }
-  function dayLabel(iso) {
+  function dayLabel(iso: string) {
     const d = new Date(iso + 'T12:00:00');
     return `${MONTH_NAMES[d.getMonth()]} ${d.getDate()}`;
   }
 
-  function renderFeed(items, cats) {
-    const catLookup = Object.fromEntries(cats.map((c) => [c.id, c]));
-    els.feed.innerHTML = items.map((item) => {
+  function renderFeed(items: AnyObj[], cats: AnyObj[]) {
+    const catLookup: Record<string, AnyObj> = Object.fromEntries(cats.map((c) => [c.id, c]));
+    els.feed!.innerHTML = items.map((item) => {
       const cat = catLookup[item.category] || { label: item.category, emoji: '' };
       const imgHtml = item.image
         ? `<img class="feed-item-image" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async">`
@@ -76,21 +76,21 @@
           </div>
         </article>`;
     }).join('');
-    els.feedCount.textContent = `${items.length} items`;
+    if (els.feedCount) els.feedCount.textContent = `${items.length} items`;
   }
 
-  const userToggledMonths = new Set();
+  const userToggledMonths = new Set<string>();
 
-  function renderTimeline(items) {
-    const groups = new Map();
+  function renderTimeline(items: AnyObj[]) {
+    const groups = new Map<string, AnyObj[]>();
     for (const it of items) {
       const k = monthKey(it.date);
       if (!groups.has(k)) groups.set(k, []);
-      groups.get(k).push(it);
+      groups.get(k)!.push(it);
     }
     const keys = [...groups.keys()].sort().reverse();
-    els.timeline.innerHTML = keys.map((k, i) => {
-      const entries = groups.get(k).map((it) => `
+    els.timeline!.innerHTML = keys.map((k, i) => {
+      const entries = groups.get(k)!.map((it: AnyObj) => `
         <li class="timeline-entry" data-target="item-${escapeHtml(it.id)}">
           <span class="timeline-entry-date">${escapeHtml(dayLabel(it.date))}</span>
           ${escapeHtml(it.title)}
@@ -100,7 +100,7 @@
           <button type="button" class="timeline-month-label" aria-expanded="${i === 0 ? 'true' : 'false'}">
             <span>${escapeHtml(monthLabel(k))}</span>
             <span style="display:inline-flex;align-items:center;gap:6px">
-              <span class="timeline-month-count">${groups.get(k).length}</span>
+              <span class="timeline-month-count">${groups.get(k)!.length}</span>
               <span class="timeline-month-chev">▾</span>
             </span>
           </button>
@@ -108,18 +108,19 @@
         </div>`;
     }).join('');
 
-    els.timeline.addEventListener('click', (e) => {
-      const monthBtn = e.target.closest('.timeline-month-label');
+    els.timeline!.addEventListener('click', (e: Event) => {
+      const target0 = e.target as Element | null;
+      const monthBtn = target0?.closest?.('.timeline-month-label') as HTMLElement | null;
       if (monthBtn) {
-        const month = monthBtn.closest('.timeline-month');
+        const month = monthBtn.closest('.timeline-month') as HTMLElement;
         const collapsed = month.classList.toggle('collapsed');
         monthBtn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-        userToggledMonths.add(month.dataset.month);
+        userToggledMonths.add(month.dataset.month || '');
         return;
       }
-      const entry = e.target.closest('.timeline-entry');
+      const entry = target0?.closest?.('.timeline-entry') as HTMLElement | null;
       if (!entry) return;
-      const id = entry.dataset.target;
+      const id = entry.dataset.target || '';
       const target = document.getElementById(id);
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -130,28 +131,28 @@
     const toggleAll = document.getElementById('timeline-toggle-all');
     if (toggleAll) {
       toggleAll.addEventListener('click', () => {
-        const months = els.timeline.querySelectorAll('.timeline-month');
+        const months = els.timeline!.querySelectorAll<HTMLElement>('.timeline-month');
         const anyExpanded = [...months].some((m) => !m.classList.contains('collapsed'));
         months.forEach((m) => {
           m.classList.toggle('collapsed', anyExpanded);
           const btn = m.querySelector('.timeline-month-label');
           if (btn) btn.setAttribute('aria-expanded', anyExpanded ? 'false' : 'true');
-          userToggledMonths.add(m.dataset.month);
+          userToggledMonths.add(m.dataset.month || '');
         });
         toggleAll.textContent = anyExpanded ? 'Expand all' : 'Collapse all';
       });
     }
   }
 
-  function setActiveTimelineEntry(itemId) {
-    let activeMonthKey = null;
-    els.timeline.querySelectorAll('.timeline-entry').forEach((el) => {
+  function setActiveTimelineEntry(itemId: string) {
+    let activeMonthKey: string | null = null;
+    els.timeline!.querySelectorAll<HTMLElement>('.timeline-entry').forEach((el) => {
       const active = el.dataset.target === itemId;
       el.classList.toggle('active', active);
       if (active) {
-        const month = el.closest('.timeline-month');
+        const month = el.closest('.timeline-month') as HTMLElement | null;
         if (month) {
-          activeMonthKey = month.dataset.month;
+          activeMonthKey = month.dataset.month || null;
           if (month.classList.contains('collapsed')) {
             month.classList.remove('collapsed');
             const btn = month.querySelector('.timeline-month-label');
@@ -161,9 +162,9 @@
       }
     });
     if (!activeMonthKey) return;
-    els.timeline.querySelectorAll('.timeline-month').forEach((month) => {
-      const key = month.dataset.month;
-      if (key <= activeMonthKey) return;
+    els.timeline!.querySelectorAll<HTMLElement>('.timeline-month').forEach((month) => {
+      const key = month.dataset.month || '';
+      if (key <= (activeMonthKey as string)) return;
       if (userToggledMonths.has(key)) return;
       if (month.classList.contains('collapsed')) return;
       month.classList.add('collapsed');
@@ -183,15 +184,15 @@
     cards.forEach((c) => obs.observe(c));
   }
 
-  function renderTagRail(items, cats) {
+  function renderTagRail(items: AnyObj[], cats: AnyObj[]) {
     if (!els.tagRail) return;
-    const byCat = new Map();
+    const byCat = new Map<string, number>();
     for (const it of items) {
       byCat.set(it.category, (byCat.get(it.category) || 0) + 1);
     }
-    const ordered = cats.filter((c) => byCat.has(c.id));
+    const ordered = cats.filter((c: AnyObj) => byCat.has(c.id));
     const allPill = `<button type="button" class="cool-tag-pill active" data-cat="all">All <span class="count">${items.length}</span></button>`;
-    const catPills = ordered.map((c) => `
+    const catPills = ordered.map((c: AnyObj) => `
       <button type="button" class="cool-tag-pill" data-cat="${escapeHtml(c.id)}">
         <span aria-hidden="true">${escapeHtml(c.emoji || '')}</span>${escapeHtml(c.label)}
         <span class="count">${byCat.get(c.id)}</span>
@@ -199,21 +200,21 @@
     els.tagRail.innerHTML = allPill + catPills;
 
     els.tagRail.addEventListener('click', (e) => {
-      const pill = e.target.closest('.cool-tag-pill');
+      const pill = (e.target as Element | null)?.closest?.('.cool-tag-pill') as HTMLElement | null;
       if (!pill) return;
-      const cat = pill.dataset.cat;
+      const cat = pill.dataset.cat || 'all';
       setFilter(cat);
     });
   }
 
-  function setFilter(cat) {
+  function setFilter(cat: string) {
     if (els.tagRail) {
-      els.tagRail.querySelectorAll('.cool-tag-pill').forEach((p) => {
+      els.tagRail.querySelectorAll<HTMLElement>('.cool-tag-pill').forEach((p) => {
         p.classList.toggle('active', p.dataset.cat === cat);
       });
     }
     let visible = 0;
-    document.querySelectorAll('.feed-item').forEach((el) => {
+    document.querySelectorAll<HTMLElement>('.feed-item').forEach((el) => {
       const match = cat === 'all' || el.dataset.category === cat;
       el.hidden = !match;
       if (match) visible += 1;
@@ -222,11 +223,11 @@
     if (els.feedEmpty) els.feedEmpty.hidden = visible !== 0;
   }
 
-  function relativeUpdated(iso) {
+  function relativeUpdated(iso: string) {
     if (!iso) return '—';
     const now = new Date();
     const then = new Date(iso + 'T12:00:00');
-    const days = Math.max(0, Math.round((now - then) / 86400000));
+    const days = Math.max(0, Math.round((now.getTime() - then.getTime()) / 86400000));
     if (days === 0) return 'Today';
     if (days === 1) return '1d ago';
     if (days < 30) return `${days}d ago`;
@@ -236,27 +237,27 @@
     return `${years}y ago`;
   }
 
-  function renderHeroStats(items, cats) {
-    if (els.heroCount) els.heroCount.textContent = items.length;
-    const usedCats = new Set(items.map((it) => it.category));
-    if (els.heroCats) els.heroCats.textContent = usedCats.size || cats.length;
+  function renderHeroStats(items: AnyObj[], cats: AnyObj[]) {
+    if (els.heroCount) els.heroCount.textContent = String(items.length);
+    const usedCats = new Set(items.map((it: AnyObj) => it.category));
+    if (els.heroCats) els.heroCats.textContent = String(usedCats.size || cats.length);
     const latest = items[0] && items[0].date;
     if (els.heroUpdated) els.heroUpdated.textContent = relativeUpdated(latest);
   }
 
-  function setTab(name) {
+  function setTab(name: string) {
     els.tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === name));
-    els.layout.dataset.active = name;
+    if (els.layout) els.layout.dataset.active = name;
   }
 
   function wireTabs() {
     els.tabs.forEach((t) => {
-      t.addEventListener('click', () => setTab(t.dataset.tab));
+      t.addEventListener('click', () => setTab(t.dataset.tab || ''));
     });
   }
 
   async function init() {
-    let data;
+    let data: AnyObj;
     try {
       const res = await fetch('data/cool-shit.json', { cache: 'no-cache' });
       data = await res.json();

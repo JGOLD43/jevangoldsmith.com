@@ -1,4 +1,3 @@
-// @ts-nocheck — pending typed migration
 
 import * as Runtime from './collection-runtime';
 

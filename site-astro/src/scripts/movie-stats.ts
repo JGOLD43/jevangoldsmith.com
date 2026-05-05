@@ -1,5 +1,5 @@
-// @ts-nocheck — pending typed migration
-const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !== "undefined" ? window : globalThis);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyObj = any;
 
 // Compute + render movie watch stats from enriched movie data.
 // Exposes window.MovieStats.render(movies) which (re)builds the stats panel.
@@ -8,23 +8,23 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
 
     const PANEL_ID = 'movie-stats-panel';
 
-    function decadeFor(year) {
+    function decadeFor(year: unknown) {
         const y = Number(year);
         if (!y) return null;
         return `${Math.floor(y / 10) * 10}s`;
     }
 
-    function safeRating(movie) {
+    function safeRating(movie: AnyObj): number | null {
         const n = Number(movie.starCount);
         return Number.isFinite(n) && n > 0 ? n : null;
     }
 
-    function watchCount(movie) {
+    function watchCount(movie: AnyObj): number {
         const n = Number(movie.timesWatched);
         return Number.isFinite(n) && n > 0 ? n : 1;
     }
 
-    function compute(movies) {
+    function compute(movies: AnyObj[]) {
         const list = Array.isArray(movies) ? movies : [];
         const filmsWithRuntime = list.filter((m) => Number(m.runtime) > 0);
 
@@ -41,14 +41,14 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
               )
             : 0;
 
-        let longest = null;
-        let shortest = null;
+        let longest: AnyObj = null;
+        let shortest: AnyObj = null;
         for (const m of filmsWithRuntime) {
             if (!longest || Number(m.runtime) > Number(longest.runtime)) longest = m;
             if (!shortest || Number(m.runtime) < Number(shortest.runtime)) shortest = m;
         }
 
-        const hoursByGenre = {};
+        const hoursByGenre: Record<string, number> = {};
         for (const m of list) {
             const minutes = Number(m.runtime || 0) * watchCount(m);
             if (minutes <= 0) continue;
@@ -56,20 +56,20 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
             hoursByGenre[genre] = (hoursByGenre[genre] || 0) + minutes;
         }
 
-        const filmsByDecade = {};
+        const filmsByDecade: Record<string, number> = {};
         for (const m of list) {
             const d = decadeFor(m.year);
             if (!d) continue;
             filmsByDecade[d] = (filmsByDecade[d] || 0) + 1;
         }
 
-        const filmsByRating = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        const filmsByRating: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         for (const m of list) {
             const r = safeRating(m);
             if (r != null) filmsByRating[r] = (filmsByRating[r] || 0) + 1;
         }
 
-        const ratingTotals = {};
+        const ratingTotals: Record<string, { sum: number; count: number }> = {};
         for (const m of list) {
             const r = safeRating(m);
             if (r == null) continue;
@@ -104,7 +104,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         };
     }
 
-    function escapeHTML(str) {
+    function escapeHTML(str: unknown): string {
         if (str == null) return '';
         return String(str)
             .replace(/&/g, '&amp;')
@@ -114,7 +114,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
             .replace(/'/g, '&#39;');
     }
 
-    function fmtRuntime(minutes) {
+    function fmtRuntime(minutes: unknown): string {
         const m = Number(minutes) || 0;
         if (m <= 0) return '—';
         const h = Math.floor(m / 60);
@@ -124,13 +124,13 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         return `${h}h ${rem}m`;
     }
 
-    function fmtHours(minutes) {
+    function fmtHours(minutes: number): string {
         const h = minutes / 60;
         if (h >= 100) return `${Math.round(h)} hr`;
         return `${h.toFixed(1)} hr`;
     }
 
-    function renderHeadline(stats) {
+    function renderHeadline(stats: AnyObj) {
         return `
             <div class="stats-headline-grid">
                 <div class="stats-headline-card">
@@ -153,8 +153,8 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         `;
     }
 
-    function renderExtremes(stats) {
-        const card = (title, movie) => {
+    function renderExtremes(stats: AnyObj) {
+        const card = (title: string, movie: AnyObj) => {
             if (!movie) return '';
             return `
                 <div class="stats-extreme-card">
@@ -177,8 +177,8 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         `;
     }
 
-    function renderHoursByGenreBars(stats) {
-        const entries = Object.entries(stats.hoursByGenre).sort((a, b) => b[1] - a[1]);
+    function renderHoursByGenreBars(stats: AnyObj) {
+        const entries = (Object.entries(stats.hoursByGenre) as [string, number][]).sort((a, b) => b[1] - a[1]);
         if (entries.length === 0) return '';
         const max = entries[0][1];
         return `
@@ -200,8 +200,8 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         `;
     }
 
-    function renderFilmsByDecade(stats) {
-        const entries = Object.entries(stats.filmsByDecade).sort((a, b) => a[0].localeCompare(b[0]));
+    function renderFilmsByDecade(stats: AnyObj) {
+        const entries = (Object.entries(stats.filmsByDecade) as [string, number][]).sort((a, b) => a[0].localeCompare(b[0]));
         if (entries.length === 0) return '';
         const max = entries.reduce((m, [, v]) => Math.max(m, v), 0);
         return `
@@ -223,7 +223,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         `;
     }
 
-    function renderRatingHistogram(stats) {
+    function renderRatingHistogram(stats: AnyObj) {
         const entries = [5, 4, 3, 2, 1].map((r) => [r, stats.filmsByRating[r] || 0]);
         const total = entries.reduce((acc, [, v]) => acc + v, 0);
         if (total === 0) return '';
@@ -247,7 +247,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         `;
     }
 
-    function renderAvgRatingByGenre(stats) {
+    function renderAvgRatingByGenre(stats: AnyObj) {
         if (!stats.avgRatingByGenre.length) return '';
         return `
             <section class="stats-section">
@@ -268,7 +268,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         `;
     }
 
-    function renderMostRewatched(stats) {
+    function renderMostRewatched(stats: AnyObj) {
         if (!stats.mostRewatched.length) return '';
         return `
             <section class="stats-section">
@@ -276,7 +276,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
                 <ul class="stats-rewatch-list">
                     ${stats.mostRewatched
                         .map(
-                            (m) => `
+                            (m: AnyObj) => `
                         <li>
                             <span class="stats-rewatch-count">${watchCount(m)}×</span>
                             <span class="stats-rewatch-title">${escapeHTML(m.title)}</span>
@@ -290,7 +290,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         `;
     }
 
-    function renderEmpty(missing) {
+    function renderEmpty(missing: number) {
         return `
             <div class="stats-empty">
                 <p>No runtime data yet. Run <code>npm run enrich:movies</code> with a TMDB API key to populate stats.</p>
@@ -299,10 +299,10 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         `;
     }
 
-    function render(movies) {
+    function render(movies: AnyObj[]) {
         const panel = document.getElementById(PANEL_ID);
         if (!panel) return;
-        const body = panel.querySelector('.stats-body');
+        const body = panel.querySelector('.stats-body') as HTMLElement | null;
         if (!body) return;
 
         const stats = compute(movies);
@@ -325,7 +325,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
     function toggle() {
         const panel = document.getElementById(PANEL_ID);
         if (!panel) return;
-        const body = panel.querySelector('.stats-body');
+        const body = panel.querySelector('.stats-body') as HTMLElement | null;
         const btn = panel.querySelector('.stats-toggle');
         const collapsed = panel.classList.toggle('collapsed');
         if (body) body.style.display = collapsed ? 'none' : '';
@@ -353,7 +353,7 @@ const { escapeHTML, escapeAttr, sanitizeUrl, sanitizeHTML } = (typeof window !==
         }
         if (collapsed) {
             panel.classList.add('collapsed');
-            const body = panel.querySelector('.stats-body');
+            const body = panel.querySelector('.stats-body') as HTMLElement | null;
             if (body) body.style.display = 'none';
             if (btn) {
                 btn.setAttribute('aria-expanded', 'false');

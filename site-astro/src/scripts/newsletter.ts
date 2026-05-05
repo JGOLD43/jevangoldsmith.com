@@ -1,4 +1,3 @@
-// @ts-nocheck — pending typed migration
 (function() {
     'use strict';
 
