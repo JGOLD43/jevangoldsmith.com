@@ -106,7 +106,7 @@ declare global {
     // Adventures pile (set by site-astro/src/scripts/adventures.ts +
     // adventures-map.js).
     AdventuresMap?: {
-      ensureWorldMap: (adventures: unknown) => Promise<unknown> | unknown;
+      ensureWorldMap: (adventures?: unknown) => Promise<unknown>;
       highlightAdventureOnMap?: (adventure: unknown) => unknown;
       clearMapHighlight?: () => unknown;
     };
