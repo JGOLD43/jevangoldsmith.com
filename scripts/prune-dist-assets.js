@@ -25,6 +25,7 @@ const targets = [
     'images/zen-nature.jpg',
     'images/.DS_Store',
     'data/sources',
+    'data/remote-assets.generated.json',
     // After purge-css runs, every page links chrome.HASH.css + inlines its
     // per-page slice. The original 187KB legacy-style.css is unreferenced.
     'css/legacy-style.css'
