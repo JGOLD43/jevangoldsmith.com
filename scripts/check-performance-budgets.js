@@ -122,8 +122,19 @@ for (const html of walk(DIST).filter((file) => file.endsWith('.html'))) {
   // Phase 2.1: a <link rel="preconnect"> hint to images.unsplash.com is
   // a DNS pre-resolution, not a runtime image fetch. Strip preconnect
   // tags before scanning so the budget catches real <img>/CSS refs.
-  const stripped = text.replace(/<link[^>]+rel=["']preconnect["'][^>]*>/g, '');
+  // Also strip dns-prefetch for the same reason.
+  const stripped = text
+    .replace(/<link[^>]+rel=["']preconnect["'][^>]*>/g, '')
+    .replace(/<link[^>]+rel=["']dns-prefetch["'][^>]*>/g, '');
   if (stripped.includes('images.unsplash.com')) fail(`${path.relative(DIST, html)} references Unsplash at runtime`);
+  // Guard previously enforced by scripts/normalize-astro-html.js. SSR
+  // should be self-sufficient on legacy hard-coded image paths; remote
+  // covers (OpenLibrary, Letterboxd) are intentionally allowed as
+  // graceful-degradation fallbacks when an asset is missing from the
+  // generated manifest.
+  if (/\bimages\/(?:logo\.png|profile\.jpg|zen-nature\.jpg|logo-animated\.mp4)\b/.test(stripped)) {
+    fail(`${path.relative(DIST, html)} references legacy non-generated image path`);
+  }
   if (/<script[^>]*src=["'][^"']*\/js\/adventures-map\.js["']/.test(text)) fail(`${path.relative(DIST, html)} eagerly references adventures-map.js`);
 }
 

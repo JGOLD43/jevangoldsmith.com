@@ -27,7 +27,6 @@
     "assets:prune:dry": "node scripts/prune-generated-assets.js --dry-run",
     "assets:prune": "node scripts/prune-generated-assets.js",
     "check": "npm run --prefix site-astro astro check",
-    "normalize:html": "node scripts/normalize-astro-html.js --dist=dist",
     "purge:css": "node scripts/purge-css-per-page.js --dist=dist",
     "slim:json": "node scripts/slim-runtime-json.js --dist=dist",
     "prune:dist": "node scripts/prune-dist-assets.js --dist=dist",
