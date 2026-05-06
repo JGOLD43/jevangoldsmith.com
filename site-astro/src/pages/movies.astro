@@ -136,6 +136,15 @@ const config = ({
   canonical={canonical}
 />
 
+<style is:inline>
+  /* Same content-visibility trick as /people: skip layout/paint for
+     off-screen movie cards, reserve their slot to keep scroll stable. */
+  .movie-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 220px 360px;
+  }
+</style>
+
 <script>
   // (slice 10) + Phase 7 (slice 4): movies + infra deps as native modules.
   import '../scripts/grid-zoom.ts';

@@ -82,6 +82,19 @@ const config = ({
   canonical={canonical}
 />
 
+<style is:inline>
+  /* content-visibility lets the browser skip layout + paint for cards
+     that are off-screen until they scroll into view. contain-intrinsic
+     size reserves the slot so scrollbar + scroll position stay stable
+     (no CLS). person-card is a fixed-aspect grid item so a static size
+     is safe. Browsers without support (older Safari) just paint
+     normally. Zero behavior change for users. */
+  .person-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 320px 380px;
+  }
+</style>
+
 <script is:inline type="application/json" id="people-merged-data" set:html={peopleMergedJson} />
 
 <script>
