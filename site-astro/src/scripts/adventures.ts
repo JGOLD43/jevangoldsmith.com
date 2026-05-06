@@ -97,7 +97,7 @@ function loadAdventuresMapBundle() {
 
     // native dynamic import. Vite/Astro emits a separate
     // chunk for the heavy map runtime — kept off the initial adventures bundle.
-    state.adventuresMapBundlePromise = import('./adventures-map.js').then(() => {
+    state.adventuresMapBundlePromise = import('./adventures-map').then(() => {
         if (!window.AdventuresMap) throw new Error('Adventures map API was not registered');
         return window.AdventuresMap;
     });

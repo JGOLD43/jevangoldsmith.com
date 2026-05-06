@@ -412,7 +412,6 @@ const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb
 const collectionUi = window.JGCollectionUI as AnyObj;
 const movieModal = createMovieModal();
 let moviesRuntime: AnyObj = null;
-void movieModal;
 
 function getFilteredMovies() {
     return movieFilters.filterMovies(movieState.getMovies(), movieState.get());
@@ -508,13 +507,6 @@ function setStarFilter(rating: string) {
     renderFromState();
 }
 
-function clearStarFilter() {
-    movieState.clearStarFilter();
-    movieState.setActiveGenre('all');
-    moviesRuntime?.resetGrouping();
-    renderFromState();
-}
-
 function setTimesWatchedFilter(count: string) {
     movieState.setTimesWatchedFilter(count);
     movieState.setActiveGenre('all');
@@ -578,21 +570,9 @@ function toggleListDropdown() {
     moviesRuntime?.toggleListDropdown();
 }
 
-function openMovieModal(movieData: AnyObj) {
-    movieModal.open(movieData);
-}
-
 function closeMovieModal() {
     movieModal.close();
 }
-
-function openMovieByTitle(movieTitle: string) {
-    const movie = movieState.getMovies().find((entry: AnyObj) => entry.title === movieTitle && entry.review);
-    if (!movie) return;
-    openMovieModal(movie);
-}
-void openMovieByTitle;
-void clearStarFilter;
 
 function initMoviesZoom() {
     const moviesGrid = document.getElementById('movies-container');

@@ -55,13 +55,6 @@ function refreshMapDatasets() {
     buildMapControlStack();
 }
 
-function nearestWrappedLongitude(lng: number, referenceLng: number) {
-    let wrappedLng = lng;
-    while (wrappedLng - referenceLng > 180) wrappedLng -= 360;
-    while (wrappedLng - referenceLng < -180) wrappedLng += 360;
-    return wrappedLng;
-}
-
 function addFastBaseMap(map: AnyObj) {
     const L = getL();
     if (!L || !map || map._fastBaseMapAdded) return;
@@ -127,25 +120,6 @@ function setBasemap(map: AnyObj, name: string) {
     }
 
     if (map === state.worldMap) state.basemapTileLayer = overlayLayer ? [layer, overlayLayer] : layer;
-}
-
-function setupWorldMapLazyLoad(adventures: AnyObj[]) {
-    const mapContainer = document.getElementById('world-map');
-    if (!mapContainer) return;
-
-    const split = document.querySelector('.adventures-page-split');
-    const mobileToggle = document.querySelector('.adventures-mobile-toggle');
-    const isMobileTabs = mobileToggle && getComputedStyle(mobileToggle).display !== 'none';
-    if (isMobileTabs && !split?.classList.contains('map-view')) {
-        return;
-    }
-
-    const load = () => ensureWorldMap(adventures);
-    const opts = { once: true, passive: true };
-    mapContainer.addEventListener('pointerenter', load, opts);
-    mapContainer.addEventListener('pointerdown', load, opts);
-    mapContainer.addEventListener('touchstart', load, opts);
-    mapContainer.addEventListener('focusin', load, { once: true });
 }
 
 async function ensureWorldMap(adventures = state.allAdventures) {
@@ -669,11 +643,13 @@ function renderPoiToggles() {
     `).join('');
 }
 
-// Mark internally-only-referenced symbols as used so the unused-locals check
-// doesn't fire — these are entry points called from other modules / HTML data-actions.
-void togglePlacesOfInterest;
-void setupWorldMapLazyLoad;
-void nearestWrappedLongitude;
+// togglePlacesOfInterest is wired via data-action on the "Want to Visit"
+// filter pill in adventures.astro. Register so the action dispatcher can
+// dispatch it.
+window.JGActions?.register({ togglePlacesOfInterest });
+
+// adventures.ts is the canonical source for these — re-imported here only
+// to keep the cross-module ambient typing happy.
 void fetchJson; void loadFilters;
 
 setRouteRerender(() => renderRouteLayer());

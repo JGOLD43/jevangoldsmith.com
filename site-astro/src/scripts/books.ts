@@ -483,7 +483,6 @@ const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb
 const booksModal = createBooksModal({ getCoverUrl });
 let booksView: AnyObj = null;
 let booksRuntime: AnyObj = null;
-void booksModal;
 
 async function loadBooksData() {
     if (booksState.getBooks().length > 0) return booksState.getBooks();
@@ -501,10 +500,6 @@ function getCoverUrl(bookOrIsbn: AnyObj, size: string = "large") {
     }
     const cleanIsbn = String(bookOrIsbn).replace(/[^0-9X]/gi, '');
     return cleanIsbn ? `https://covers.openlibrary.org/b/isbn/${cleanIsbn}-${size === 'medium' ? 'M' : 'L'}.jpg` : null;
-}
-
-function getAllCategoryButton() {
-    return document.querySelector('.sidebar-category[data-category="all"]');
 }
 
 function getFilteredBooks() {
@@ -698,10 +693,6 @@ async function initBooksPage() {
         showBooksUnavailable();
     }
 }
-
-// Mark as intentionally referenced — currently unused at module scope but
-// retained to ease future re-introduction.
-void getAllCategoryButton;
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initBooksPage, { once: true });

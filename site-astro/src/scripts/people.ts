@@ -5,14 +5,11 @@ const escapeAttr = window.escapeAttr as (s: unknown) => string;
 
 const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
 
-type CardRecord = { category: string; card: HTMLElement; searchText: string; sourceType: string };
-let peopleCards: CardRecord[] = [];
 let peopleRuntime: AnyObj = null;
 let peopleById = new Map<string, AnyObj>();
 let lastFocusedPerson: HTMLElement | null = null;
 
 let peopleSourceFilter = 'all';
-void peopleCards;
 
 function normalizePersonName(name: unknown): string {
     return String(name || '')
@@ -22,10 +19,6 @@ function normalizePersonName(name: unknown): string {
         .replace(/&/g, ' and ')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
-}
-
-function sourceTypeFor(person: AnyObj) {
-    return person.sourceType || (person.title?.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
 }
 
 function sourceMatches(card: HTMLElement) {
@@ -119,32 +112,10 @@ async function loadPeopleCards() {
         }
     }
 
+    // peopleById is consumed by the detail modal click + keydown handlers.
+    // The DOM nodes themselves carry filter/search state via data-* attrs,
+    // so no separate runtime record list is needed.
     peopleById = new Map(mergedPeople.map((person) => [normalizePersonName(person.name), person]));
-
-    // SSR'd cards already cover every merged person. Walk the existing
-    // .person-card nodes and bind records from the inline data — no DOM
-    // mutation, no CLS, no fetch.
-    const existingByPersonId = new Map<string, HTMLElement>();
-    for (const card of grid.querySelectorAll<HTMLElement>('.person-card')) {
-        const id = card.getAttribute('data-person-id');
-        if (id) existingByPersonId.set(id, card);
-    }
-
-    // SSR renders all 98 person cards; the runtime simply binds existing
-    // DOM nodes to the merged data records used for filter/search/modal.
-    const records: CardRecord[] = [];
-    for (const person of mergedPeople) {
-        const personId = normalizePersonName(person.name);
-        const card = existingByPersonId.get(personId);
-        if (!card) continue;
-        records.push({
-            category: person.category || '',
-            card,
-            searchText: String(person.searchText || `${person.name} ${person.title} ${person.lesson}`).toLowerCase(),
-            sourceType: sourceTypeFor(person)
-        });
-    }
-    peopleCards = records;
 }
 
 function createMediaMarkup(person: AnyObj, key: string, label: string) {
