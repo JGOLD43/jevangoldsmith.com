@@ -1,7 +1,5 @@
-// server-side renderer for the people-grid card. Mirrors
-// the runtime createPersonCard from src/scripts/people.ts byte-for-byte so
-// pre-rendered cards match the runtime output. people.js detects an already-
-// populated grid and skips its initial wipe-and-render.
+// Server-side renderer for people-grid cards. people.ts binds behavior to the
+// SSR'd cards instead of creating duplicate runtime markup.
 
 import { escapeAttr as escapeHtml } from './html-escape';
 

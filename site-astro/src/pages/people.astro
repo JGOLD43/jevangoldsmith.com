@@ -1,8 +1,10 @@
 ---
 import CollectionPage from '../components/CollectionPage.astro';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import { PEOPLE_SECTIONS } from '../lib/collection-sections';
 import { renderPersonCardHtml } from '../lib/person-card';
+import type { PeopleMerged } from '../content.config';
 
 const canonical = 'https://jevangoldsmith.com/people.html';
 
@@ -10,9 +12,9 @@ const canonical = 'https://jevangoldsmith.com/people.html';
 // scripts/build/merge-people.js generates data/people.merged.generated.json
 // before astro build. people.js no longer fetches books/movies/profiles —
 // it reads the inline JSON below for modal interaction.
-const peopleEntries = await getCollection('peopleMerged');
+const peopleEntries = await getCollection('peopleMerged') as CollectionEntry<'peopleMerged'>[];
 const peopleCardsHtml = peopleEntries
-  .map((p: any, i: number) => renderPersonCardHtml(p.data, i))
+  .map((p, i) => renderPersonCardHtml(p.data, i))
   .join('');
 
 // legacy fragments inlined directly into the page. The
@@ -43,7 +45,8 @@ const populatedMainBody = `<div id="people-container">
 </div>`;
 
 // Inline merged data for the modal so people.js avoids a runtime fetch.
-const peopleMergedJson = JSON.stringify(peopleEntries.map((p: any) => p.data));
+const mergedPeople = peopleEntries.map((p) => p.data) satisfies PeopleMerged[];
+const peopleMergedJson = JSON.stringify(mergedPeople);
 
 const config = ({
   layout: { id: 'people-layout', className: 'people-layout collection-layout sidebar-collapsed' },
