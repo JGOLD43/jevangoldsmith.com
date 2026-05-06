@@ -16,7 +16,7 @@ interface Person {
 }
 
 // Slug-form normalization. Must match people.js
-// normalizePersonName + scripts/build/merge-people.js so SSR'd
+// normalizePersonName + scripts/merge-people.js so SSR'd
 // data-person-id values line up with the runtime peopleById map.
 function normalizePersonName(name: string): string {
   return String(name || '')

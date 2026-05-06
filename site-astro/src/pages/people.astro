@@ -9,7 +9,7 @@ import type { PeopleMerged } from '../content.config';
 const canonical = 'https://jevangoldsmith.com/people.html';
 
 // SSR all 98 cards from the build-time-merged collection.
-// scripts/build/merge-people.js generates data/people.merged.generated.json
+// scripts/merge-people.js generates data/people.merged.generated.json
 // before astro build. people.js no longer fetches books/movies/profiles —
 // it reads the inline JSON below for modal interaction.
 const peopleEntries = await getCollection('peopleMerged') as CollectionEntry<'peopleMerged'>[];

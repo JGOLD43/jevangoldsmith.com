@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "npm run --prefix site-astro dev",
     "predev": "npm run people:merge",
-    "build": "npm run lint && npm run check && npm run content:validate && npm run search:audit:strict && npm run snap:routes && npm run routes:split && npm run assets:optimize && npm run people:merge && npm run --prefix site-astro build && npm run normalize:html -- --check && npm run purge:css && npm run prune:dist && npm run perf:budget",
-    "build:fast": "npm run content:validate && npm run search:audit:strict && npm run routes:split && npm run people:merge && npm run --prefix site-astro build && npm run normalize:html -- --check && npm run purge:css && npm run prune:dist && npm run perf:budget",
-    "people:merge": "node scripts/build/merge-people.js",
+    "build": "node scripts/build.js",
+    "build:fast": "node scripts/build.js --fast",
+    "people:merge": "node scripts/merge-people.js",
     "search:audit:strict": "node scripts/audit-search-index.js --strict",
     "content:validate": "node scripts/validate-content.js",
     "content:validate:strict": "node scripts/validate-content.js --strict",

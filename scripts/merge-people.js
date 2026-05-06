@@ -6,12 +6,10 @@
 // people.astro reads the merged collection and SSRs all 98 cards.
 // people.js detects the populated grid and skips wipe-and-render.
 
-import { readFileSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+const { readFileSync, writeFileSync } = require('node:fs');
+const { resolve } = require('node:path');
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(__dirname, '..', '..');
+const ROOT = resolve(__dirname, '..');
 const DATA = resolve(ROOT, 'data');
 
 const BOOK_PEOPLE = {
