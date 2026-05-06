@@ -1,6 +1,5 @@
 ---
-// Server-renders the legacy footer partial (_src/partials/footer.html) at
-// build time, with data-analytics decoration via lib/chrome.
+// Server-renders the footer partial at build time.
 import { renderFooter, currentPageFromUrl } from '../lib/chrome';
 const html = renderFooter(currentPageFromUrl(Astro.url.pathname));
 ---

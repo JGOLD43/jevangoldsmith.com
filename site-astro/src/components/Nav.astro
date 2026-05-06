@@ -1,8 +1,6 @@
 ---
-// Server-renders the legacy nav partial (_src/partials/nav.html) at build
-// time, applying active-state and data-analytics decoration via lib/chrome.
-// Output is byte-identical to the legacy chrome renderer (see
-// scripts/legacy-build/build/chrome.js).
+// Server-renders the nav partial at build time, applying active-state
+// decoration via lib/chrome.
 import { renderNav, currentPageFromUrl } from '../lib/chrome';
 const html = renderNav(currentPageFromUrl(Astro.url.pathname));
 ---

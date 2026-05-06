@@ -184,17 +184,12 @@ export const PEOPLE_SECTIONS: SectionItem[] = [
 ];
 
 // === Shared "taste list" dropdown (books/movies/podcasts/products/people) ===
-function tasteListOptions(active: string, location: string): ListOption[] {
+function tasteListOptions(active: string, _location: string): ListOption[] {
   return [
     { href: 'books.html', label: 'Books', active: active === 'books' },
     { href: 'movies.html', label: 'Movies', active: active === 'movies' },
     { href: 'podcasts.html', label: 'Podcasts', active: active === 'podcasts' },
-    {
-      href: 'products.html',
-      label: 'Products',
-      active: active === 'products',
-      attrs: { 'data-analytics': 'cta', 'data-cta-id': 'product-recommendations', 'data-cta-location': location }
-    },
+    { href: 'products.html', label: 'Products', active: active === 'products' },
     { href: 'people.html', label: 'People of History', active: active === 'people' }
   ];
 }
@@ -547,15 +542,7 @@ export const CHALLENGES_TASK_CONFIG: TaskListConfig = {
   listOptions: [
     { href: 'projects.html', label: 'Projects' },
     { href: 'challenges.html', label: 'Challenges', active: true },
-    {
-      href: 'free-resources.html',
-      label: 'Resources',
-      attrs: {
-        'data-analytics': 'cta',
-        'data-cta-id': 'free-resources',
-        'data-cta-location': 'challenges'
-      }
-    },
+    { href: 'free-resources.html', label: 'Resources' },
     { href: 'lesson-logger.html', label: 'Lesson Logger' }
   ],
   listCurrentName: 'Challenges',
@@ -579,12 +566,7 @@ export const CHALLENGES_TASK_CONFIG: TaskListConfig = {
 };
 
 export const ESSAY_LIST_OPTIONS: ListOption[] = [
-  {
-    href: 'essays.html',
-    label: 'Essays',
-    active: true,
-    attrs: { 'data-analytics': 'cta', 'data-cta-id': 'best-essays', 'data-cta-location': 'essays' }
-  },
+  { href: 'essays.html', label: 'Essays', active: true },
   { href: 'books.html', label: 'Books' },
   { href: 'movies.html', label: 'Movies' },
   { href: 'podcasts.html', label: 'Podcasts' }

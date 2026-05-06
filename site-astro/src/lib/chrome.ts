@@ -10,9 +10,8 @@
 import { NAV_TEMPLATE as NAV_TEMPLATE_RAW } from './nav-template';
 import { FOOTER_TEMPLATE as FOOTER_TEMPLATE_RAW } from './footer-template';
 import pages from '../../../data/pages.json';
-import ctas from '../../../data/ctas.json';
 import quotes from '../../public/data/quotes.json';
-import { escapeAttr as escapeHtmlAttr, escapeHtml } from './html-escape';
+import { escapeHtml } from './html-escape';
 
 // Build-time wisdom ticker. The runtime fetch + shuffle in theme.ts has
 // been hoisted here: pick 5 random quotes once per build, repeat the
@@ -44,10 +43,6 @@ const SECTION_BY_FILE = new Map<string, string>(
     .map((p) => [p.path!, p.section ?? ''])
 );
 
-const CTA_BY_HREF = new Map<string, { id: string; href: string }>(
-  ((ctas as { ctas?: Array<{ id: string; href: string }> }).ctas ?? []).map((c) => [c.href, c])
-);
-
 // Maps a section ID from data/pages.json to the dropdown-trigger label in
 // nav.html. Only sections whose label matches a literal nav trigger are
 // listed; "experience" was removed because the nav uses "Ventures" and
@@ -56,25 +51,6 @@ const TRIGGER_BY_SECTION: Record<string, string> = {
   explore: 'Explore',
   taste: 'Taste'
 };
-
-function ctaLocationFor(file: string): string {
-  return file.replace(/\.html$/, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
-}
-
-function decorateTrackedLinks(file: string, html: string): string {
-  const location = ctaLocationFor(file);
-  return html.replace(/<a\b([^>]*?)href=(["'])([^"']+)\2([^>]*)>/gi, (match, before, quote, href, after) => {
-    if (/data-analytics=/.test(match)) return match;
-    const cta = CTA_BY_HREF.get(href);
-    if (cta) {
-      return `<a${before}href=${quote}${href}${quote}${after} data-analytics="cta" data-cta-id="${escapeHtmlAttr(cta.id)}" data-cta-location="${escapeHtmlAttr(location)}">`;
-    }
-    if (/^mailto:/i.test(href) || href.includes('contact.html') || href.includes('meet.html')) {
-      return `<a${before}href=${quote}${href}${quote}${after} data-analytics="contact" data-cta-location="${escapeHtmlAttr(location)}">`;
-    }
-    return match;
-  });
-}
 
 export function renderNav(file: string): string {
   // Step 1: clear any leftover active markers.
@@ -106,12 +82,11 @@ export function renderNav(file: string): string {
     );
   }
 
-  // Step 4: decorate tracked links (data-analytics + data-cta-location).
-  return decorateTrackedLinks(file, next);
+  return next;
 }
 
-export function renderFooter(file: string): string {
-  return decorateTrackedLinks(file, FOOTER_TEMPLATE);
+export function renderFooter(_file: string): string {
+  return FOOTER_TEMPLATE;
 }
 
 // Body-class map ported from dist-legacy-snap. Pages not in this map get

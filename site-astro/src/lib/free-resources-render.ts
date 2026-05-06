@@ -41,8 +41,8 @@ export function renderResourceCard(resource: Resource, categories: ResourceCateg
   const category = categories.find((c) => c.id === resource.category);
   const href = resource.downloadUrl || resource.checkoutUrl || '';
   const cta = href
-    ? `<a href="${escapeHtmlAttr(href)}" class="resource-link" data-analytics="resource" data-resource-id="${escapeHtmlAttr(resource.id)}" data-cta-location="resource-card">${escapeHTML(resource.ctaLabel || 'Download')}${iconSvg('arrow')}</a>`
-    : `<a href="contact.html?subject=${escapeHtmlAttr(encodeURIComponent(`Resource interest: ${resource.title}`))}" class="resource-link" data-analytics="cta" data-cta-id="contact" data-cta-location="resource-card">${escapeHTML(resource.ctaLabel === 'Coming Soon' ? 'Tell me you want this' : (resource.ctaLabel || 'Tell me you want this'))}${iconSvg('arrow')}</a>`;
+    ? `<a href="${escapeHtmlAttr(href)}" class="resource-link">${escapeHTML(resource.ctaLabel || 'Download')}${iconSvg('arrow')}</a>`
+    : `<a href="contact.html?subject=${escapeHtmlAttr(encodeURIComponent(`Resource interest: ${resource.title}`))}" class="resource-link">${escapeHTML(resource.ctaLabel === 'Coming Soon' ? 'Tell me you want this' : (resource.ctaLabel || 'Tell me you want this'))}${iconSvg('arrow')}</a>`;
 
   return `<article class="resource-card" id="${escapeHtmlAttr(resource.slug || resource.id)}">
                 <div class="resource-icon">${iconSvg(category?.icon || 'file')}</div>
