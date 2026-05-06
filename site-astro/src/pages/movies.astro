@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { tasteListOptions, MOVIE_SECTIONS } from '../lib/collection-sections';
 import { renderMovieCardHtml } from '../lib/movie-card';
+import moviesRuntimeData from '../../public/data/movies.json';
 
 const canonical = 'https://jevangoldsmith.com/movies.html';
 
@@ -14,6 +15,10 @@ const canonical = 'https://jevangoldsmith.com/movies.html';
 
 const movies = (await getCollection('movies') as CollectionEntry<'movies'>[]).map((m) => m.data);
 const movieCardsHtml = movies.map((m) => renderMovieCardHtml(m)).join('');
+
+// runtime payload (filter/star/genre state) inlined so letterboxd.ts can
+// avoid the post-FCP fetch round-trip.
+const moviesRuntimeJson = JSON.stringify(moviesRuntimeData);
 
 // legacy fragments inlined. Sidebar filter (rating + times
 // watched) + main body (error placeholder, stats panel, grid) used to
@@ -145,6 +150,8 @@ const config = ({
     contain-intrinsic-size: 220px 360px;
   }
 </style>
+
+<script type="application/json" id="jg-movies-data" set:html={moviesRuntimeJson} />
 
 <script>
   import '../scripts/collection-ui.ts';

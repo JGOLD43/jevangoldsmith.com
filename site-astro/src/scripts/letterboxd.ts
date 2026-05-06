@@ -388,6 +388,17 @@ function buildCollectionController() {
 }
 
 async function loadCachedMovies() {
+    const inline = document.getElementById('jg-movies-data');
+    if (inline?.textContent) {
+        try {
+            const movies = JSON.parse(inline.textContent);
+            if (Array.isArray(movies) && movies.length > 0) {
+                return movies.map(normalizeMovieData);
+            }
+        } catch {
+            // fall through to network fetch
+        }
+    }
     const movies = await fetchJson('data/movies.json');
     if (!Array.isArray(movies) || movies.length === 0) {
         throw new Error('Cached movie data is empty');

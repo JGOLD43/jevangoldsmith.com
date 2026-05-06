@@ -480,6 +480,18 @@ let booksRuntime: AnyObj = null;
 
 async function loadBooksData() {
     if (booksState.getBooks().length > 0) return booksState.getBooks();
+    const inline = document.getElementById('jg-books-data');
+    if (inline?.textContent) {
+        try {
+            const books = JSON.parse(inline.textContent);
+            if (Array.isArray(books) && books.length > 0) {
+                booksState.setBooks(books);
+                return books;
+            }
+        } catch {
+            // fall through to network fetch
+        }
+    }
     const books = await fetchJsonWithFallback(['data/books.generated.json', 'data/books.json']);
     booksState.setBooks(books);
     return books;

@@ -6,8 +6,14 @@ import { tasteListOptions, BOOK_SECTIONS } from '../lib/collection-sections';
 import { renderBookCardHtml } from '../lib/book-card';
 import { escapeAttr } from '../lib/html-escape';
 import remoteAssets from '../../../data/remote-assets.generated.json';
+import booksRuntimeData from '../../public/data/books.generated.json';
 import { CATEGORY_MAP } from '../lib/book-categories';
 import type { Book } from '../content.config';
+
+// runtime payload (filter/modal state) inlined so books.ts can avoid the
+// post-FCP fetch round-trip. data/books.generated.json stays available as
+// a public asset for fallback + external consumers.
+const booksRuntimeJson = JSON.stringify(booksRuntimeData);
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
@@ -250,6 +256,8 @@ const config = ({
   description="A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
   canonical={canonical}
 />
+
+<script type="application/json" id="jg-books-data" set:html={booksRuntimeJson} />
 
 <script>
   import '../scripts/collection-ui.ts';
