@@ -82,7 +82,6 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
   else ratingBlock = `<div class="book-rating"><span class="rating-number">${ratingValue}</span> ${stars}</div>`;
 
   const cardClass = `book-card js-zoom-item${isUnread ? ' is-unread' : ''}${review ? ' has-review' : ''}`;
-  const dataId = isbn || title;
 
   const loading = eager ? 'eager' : 'lazy';
   const fp = eager ? ' fetchpriority="high"' : '';
@@ -95,10 +94,14 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
     ? `<p class="book-description">${escapeHtml(shortDescription)}</p>`
     : '';
 
+  // data-id, data-rating, data-rereads removed: never read by JS.
+  // data-title duplicated on .book-cover-wrapper removed: readers can use
+  // .closest('.book-card').dataset.title.
+  // cursor:pointer moved to CSS rule on .book-card[role="button"].
   return [
-    `<div class="${cardClass}" data-isbn="${escapeAttr(isbn)}" data-id="${escapeAttr(dataId)}" data-title="${escapeAttr(title)}" data-rating="${ratingValue}" data-rereads="${reReads}" data-category="${escapeAttr(category)}" role="button" tabindex="0" style="cursor: pointer">`,
+    `<div class="${cardClass}" data-isbn="${escapeAttr(isbn)}" data-title="${escapeAttr(title)}" data-category="${escapeAttr(category)}" role="button" tabindex="0">`,
     topBadge,
-    `<div class="book-cover-wrapper" data-title="${escapeAttr(title)}">`,
+    `<div class="book-cover-wrapper">`,
     coverImg,
     `<div class="js-zoom-detail" aria-hidden="true">`,
     `<p class="zoom-detail-kicker">${escapeHtml(author)}${yearStr ? ` · ${escapeHtml(yearStr)}` : ''}</p>`,
