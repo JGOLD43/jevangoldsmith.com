@@ -1,3 +1,4 @@
+import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 // ============================================
 // Adventures Page Data + Map Runtime
 // ============================================

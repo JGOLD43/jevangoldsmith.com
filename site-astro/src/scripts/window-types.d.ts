@@ -104,11 +104,6 @@ declare global {
   // Free fetch helpers (legacy bare-identifier reads in *-map / detail).
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fetchJson(url: string, fallback?: any): Promise<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function escapeHTML(s: any): string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function escapeAttr(s: any): string;
-
   interface Window {
     // Adventures pile (set by site-astro/src/scripts/adventures.ts +
     // adventures-map.js).
@@ -121,9 +116,7 @@ declare global {
     AdventuresUrls?: Record<string, string>;
     AdventuresConstants?: Record<string, unknown>;
 
-    // Sanitize helpers exposed for legacy bare-identifier reads.
-    escapeHTML?: (s: unknown) => string;
-    escapeAttr?: (s: unknown) => string;
+    // Sanitize helpers exposed for legacy consumers.
     sanitizeUrl?: (s: unknown, fallback?: string) => string;
     sanitizeHTML?: (s: string) => string;
 

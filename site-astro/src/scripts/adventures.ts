@@ -1,3 +1,4 @@
+import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import {
     state, fetchJson, updateLightboxImage,
     ADVENTURES_DATA_URL, PLACES_DATA_URL, ROUTES_DATA_URL,

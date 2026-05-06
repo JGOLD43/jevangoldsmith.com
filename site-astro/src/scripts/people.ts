@@ -1,3 +1,4 @@
+import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
 
 let peopleRuntime: AnyObj = null;

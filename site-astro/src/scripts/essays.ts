@@ -1,3 +1,4 @@
+import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 const sanitizeHTML = window.sanitizeHTML as ((s: string) => string) | undefined;
 
 const collectionUi = window.JGCollectionUI as AnyObj;

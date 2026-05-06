@@ -1,3 +1,4 @@
+import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 // Books page orchestrator. Inlines what used to live in
 // js/books-state.js, js/books-filters.js, js/books-modal.js,
 // js/books-events.js, js/books-view.js — those shards only ever exported

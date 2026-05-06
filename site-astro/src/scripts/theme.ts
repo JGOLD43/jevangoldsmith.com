@@ -1,3 +1,4 @@
+import { escapeHtml as escapeHTML } from '../lib/html-escape';
 // Theme Toggle and Wisdom Ticker Functionality
 
 (function() {

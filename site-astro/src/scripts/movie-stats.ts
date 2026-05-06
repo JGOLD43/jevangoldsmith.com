@@ -1,3 +1,4 @@
+import { escapeHtml as escapeHTML } from '../lib/html-escape';
 // Compute + render movie watch stats from enriched movie data.
 // Exposes window.MovieStats.render(movies) which (re)builds the stats panel.
 (function () {
@@ -101,7 +102,6 @@
         };
     }
 
-    const escapeHTML = window.escapeHTML as (s: unknown) => string;
 
     function fmtRuntime(minutes: unknown): string {
         const m = Number(minutes) || 0;

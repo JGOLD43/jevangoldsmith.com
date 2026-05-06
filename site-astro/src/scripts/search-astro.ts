@@ -1,3 +1,4 @@
+import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 // Standalone search script for the Astro build. Self-contained — does not
 // depend on the legacy js/search.js (which expects JGDataFetch + JGCollectionUI
 // globals) so it can be loaded with a single <script> tag instead of three.
@@ -20,8 +21,6 @@
     };
   }
 
-  const escapeHTML = window.escapeHTML as (s: unknown) => string;
-  const escapeAttr = window.escapeAttr as (s: unknown) => string;
   const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
 
   function normalize(v: unknown): string { return String(v ?? '').toLowerCase().trim(); }

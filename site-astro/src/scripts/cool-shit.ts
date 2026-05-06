@@ -1,3 +1,4 @@
+import { escapeHtml as escapeHtml } from '../lib/html-escape';
 import { monthKey, monthLabel, dayLabel } from '../lib/dates';
 
 (function () {
@@ -16,7 +17,6 @@ import { monthKey, monthLabel, dayLabel } from '../lib/dates';
 
   if (!els.feed) return;
 
-  const escapeHtml = window.escapeHTML as (s: unknown) => string;
 
   function safeUrl(url: unknown, fallback = '#'): string {
     const raw = String(url || '').trim();

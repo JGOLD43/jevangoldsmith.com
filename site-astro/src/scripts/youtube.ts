@@ -1,12 +1,6 @@
-// YouTube Channel Integration. Self-contained module: includes minimal
-// escape helpers so it doesn't depend on the global sanitize.js bundle.
+import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+// YouTube Channel Integration.
 const YOUTUBE_CHANNEL_HANDLE = 'JevanGoldsmith';
-
-const HTML_ESCAPES: { [k: string]: string } = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-function escapeHTML(s: unknown): string {
-    return String(s ?? '').replace(/[&<>"']/g, (c) => HTML_ESCAPES[c]);
-}
-function escapeAttr(s: unknown): string { return escapeHTML(s); }
 
 type Video = { id: string; title: string; description: string; thumbnail: string; url: string; date: string };
 
