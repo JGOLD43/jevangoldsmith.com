@@ -4,9 +4,9 @@ Static personal website for `jevangoldsmith.com`, hosted on Firebase Hosting.
 The public experience is organized as a living archive, with Field Notes as the
 recurring audience thread.
 
-As of the Astro migration (May 2026), the build is **Astro 6 + Tailwind v4**.
-`npm run build` invokes Astro under the hood and writes generated HTML / CSS /
-JS to `dist/`, which Firebase Hosting serves.
+As of the Astro migration (May 2026), the build is **Astro 6 + per-page legacy
+CSS purge**. `npm run build` invokes Astro under the hood and writes generated
+HTML / CSS / JS to `dist/`, which Firebase Hosting serves.
 
 ## Start Here
 
@@ -22,9 +22,8 @@ engineering and release docs. Historical plans live under `docs/archive/`.
 │   │   ├── layouts/        # Base.astro
 │   │   ├── components/     # Nav, Footer, Card components, JsonLd, AdventureMap
 │   │   ├── pages/          # Astro pages → dist/<route>.html
-│   │   ├── styles/         # Tailwind + tokens + transitional chrome-legacy.css
 │   │   └── content.config.ts  # Zod schemas for ../data/*.json
-│   ├── public/             # Static passthrough (images symlinked, fonts symlinked)
+│   ├── public/             # Static passthrough (CSS, images symlinked, fonts symlinked)
 │   └── astro.config.mjs    # Site URL, output → ../dist/, integrations
 ├── data/                   # Source-of-truth JSON for every collection
 ├── images/                 # Source + generated images (symlinked into site-astro/public/)

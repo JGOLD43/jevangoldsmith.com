@@ -2,7 +2,7 @@
 
 Status: `canonical`
 Audience: `engineering`, `agents`
-Purpose: `describe the current static-site architecture (Astro 6 + Tailwind v4)`
+Purpose: `describe the current static-site architecture (Astro 6 + per-page CSS purge)`
 
 ## Runtime Shape
 
@@ -41,7 +41,9 @@ The site is an Astro project rooted at `site-astro/`:
   `collectionDescription` / `collectionSearchText` helpers
 - `site-astro/src/lib/collection-chrome.ts` — string-template chrome renderer
   used by `CollectionPage.astro` and `TaskCollectionPage.astro`
-- `site-astro/src/styles/` — Tailwind v4 entry, design tokens, fonts, transitional chrome-legacy.css and pages-legacy.css
+- `site-astro/public/css/legacy-style.css` — current CSS source. The build
+  rewrites this into one shared chrome stylesheet plus per-page inline CSS via
+  `scripts/purge-css-per-page.js`.
 - `data/*.json` — source of truth for books, movies, people, essays, podcasts, adventures, etc. Read by both Astro and the (archived) legacy build
 - `images/` — source + generated image variants (symlinked into `site-astro/public/images/`)
 - `fonts/chivo/` — self-hosted Chivo font (symlinked into `site-astro/public/fonts/`)
@@ -56,7 +58,7 @@ The site is an Astro project rooted at `site-astro/`:
 ```text
 data/*.json + site-astro/src/* + images/ + fonts/ + vendor/
   -> Astro 6 build (npm run build)
-  -> Tailwind v4 (via @tailwindcss/vite)
+  -> per-page legacy CSS purge
   -> dist/<route>.html, dist/_astro/<hash>.css, dist/sitemap-*.xml, dist/rss.xml
 ```
 
@@ -135,8 +137,6 @@ verifies Firebase ID tokens and second-factor state before writing data.
 
 ## Evolution Rule
 
-Retire `chrome-legacy.css` and `pages-legacy.css` by migrating every chrome
-rule to Tailwind utilities or `@layer components` in `site-astro/src/styles/`.
-
-For new pages, write Astro components that use Tailwind utilities directly.
-Do not append to the legacy stylesheets.
+Keep new styles scoped to Astro components where possible. When shared CSS is
+unavoidable, add it to `legacy-style.css` with stable selectors so
+`scripts/purge-css-per-page.js` can keep the shipped CSS small.
