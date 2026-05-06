@@ -85,7 +85,9 @@ else assertMax(adventuresMapChunk, 40 * KB);
 const chromeCss = findOne('css', /^css\/chrome\.[a-f0-9]+\.css$/);
 if (!chromeCss) fail('Missing hashed chrome CSS');
 else assertMax(chromeCss, 45 * KB);
-assertMax('data/popular-routes.index.json', 4 * KB);
+// Index now carries inline payload for tiny chunks (paddle, sail, ski,
+// hike — each well under 5KB). Budget allows for that plus headroom.
+assertMax('data/popular-routes.index.json', 12 * KB);
 
 // slim-runtime-json strips searchText + id from search-index records.
 // Budget at 90KB locks the win; without slim the file is ~170KB.

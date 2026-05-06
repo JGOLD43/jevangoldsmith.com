@@ -61,9 +61,20 @@ export async function loadPopularRoutes() {
     if (chunks.length === 0) {
       payload = await fetchJson(POPULAR_ROUTES_URL, { routes: [] });
     } else {
-      const payloads: any[] = await Promise.all(chunks.map((chunk: any) => fetchJson(chunk.href, { routes: [] })));
+      // Tiny chunks (paddle/sail/ski/hike) ship inline inside the index;
+      // heavy chunks (drive/bike) live as separate cacheable JSON files.
+      const inlineRoutes = chunks
+        .filter((chunk: any) => chunk?.inline && chunk?.payload)
+        .flatMap((chunk: any) => Array.isArray(chunk.payload.routes) ? chunk.payload.routes : []);
+      const externalChunks = chunks.filter((chunk: any) => chunk?.href);
+      const externalPayloads: any[] = await Promise.all(
+        externalChunks.map((chunk: any) => fetchJson(chunk.href, { routes: [] }))
+      );
       payload = {
-        routes: payloads.flatMap((p) => Array.isArray(p?.routes) ? p.routes : [])
+        routes: [
+          ...inlineRoutes,
+          ...externalPayloads.flatMap((p) => Array.isArray(p?.routes) ? p.routes : [])
+        ]
       };
     }
     const additions = Array.isArray(payload?.routes) ? payload.routes : [];

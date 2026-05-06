@@ -197,10 +197,21 @@ function createBooksView(controller: AnyObj) {
     function renderCarousel(books: AnyObj[]) {
         const track = document.getElementById('carousel-track');
         if (!track) return;
-        // /books pre-renders the carousel at build time. If the track
-        // already has children, SSR's done the work — don't re-render and
-        // cause the visible flash of swap-out / swap-in.
-        if (track.children.length > 0) return;
+        // /books SSRs the first half of the carousel (20 cards). Clone
+        // those nodes once to satisfy the seamless-scroll CSS animation
+        // that translateX(-50%)s the track. Cloning runs after first
+        // paint so the SSR'd images get to render immediately.
+        if (track.children.length > 0) {
+            const originals = Array.from(track.children);
+            // Already doubled (e.g. via earlier render) — leave alone.
+            if (originals.length >= 40 || track.dataset.cloned === 'true') return;
+            const frag = document.createDocumentFragment();
+            for (const node of originals) frag.appendChild(node.cloneNode(true));
+            track.appendChild(frag);
+            track.dataset.cloned = 'true';
+            return;
+        }
+        // No SSR copy — fully render from data (legacy fallback path).
         const recentBooks = books.slice(-20).reverse();
         const carouselBooks = [...recentBooks, ...recentBooks];
         track.style.animationDuration = `${recentBooks.length * 3}s`;
@@ -208,6 +219,7 @@ function createBooksView(controller: AnyObj) {
             const coverUrl = controller.getCoverUrl(book, 'medium');
             return `<img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" loading="lazy" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
         }).join('');
+        track.dataset.cloned = 'true';
     }
 
     function scrollToBookByIsbn(isbn: string) {

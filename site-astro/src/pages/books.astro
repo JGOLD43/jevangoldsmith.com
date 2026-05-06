@@ -79,10 +79,12 @@ const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section) => {
   return { ...section, count: String(list.length), panelInnerHtml: innerHtml };
 });
 
-// Carousel: most recent 20 books, doubled for the seamless scroll loop.
+// Carousel: most recent 20 books. Ships once; books.ts clones the track
+// children at runtime to satisfy the seamless-scroll CSS animation.
+// Cuts ~3KB of HTML and 20 image-prefetch hints versus emitting the
+// doubled list at SSR.
 const recentBooks = books.slice(-20).reverse().map((b) => b.data);
-const carouselBooks = [...recentBooks, ...recentBooks];
-const carouselTrackInner = carouselBooks
+const carouselTrackInner = recentBooks
   .map((book) => {
     const url = coverUrl(book, 'medium');
     // Skip books with no resolvable cover (no ISBN, no coverImage). An
