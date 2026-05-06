@@ -1,4 +1,7 @@
 import { escapeHtml as escapeHTML } from '../lib/html-escape';
+import { init as initGridZoom } from './grid-zoom';
+import { installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
+import { fetchJson } from './data-fetch';
 // Movies/letterboxd page orchestrator. Inlines js/letterboxd-state.js,
 // js/letterboxd-filters.js, js/letterboxd-modal.js, js/letterboxd-events.js,
 // js/letterboxd-render.js, js/letterboxd-view.js — those shards only ever
@@ -310,8 +313,7 @@ const movieRender = {
 
 // --- events ---
 function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilter, setTimesWatchedFilter }) {
-    const helpers = window.JGCollectionHelpers;
-    helpers.installEscapeCloser(closeMovieModal);
+    installEscapeCloser(closeMovieModal);
 
     document.addEventListener('click', (event) => {
         const modal = document.getElementById('movie-modal');
@@ -322,7 +324,7 @@ function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilt
         window.JGCollectionUI.closeDropdownOnOutsideClick('list-dropdown', event);
     });
 
-    helpers.bindStarRatingDrag(document, setStarFilter);
+    bindStarRatingDrag(document, setStarFilter);
 
     const slider = document.getElementById('timeswatched-slider');
     if (slider) {
@@ -338,7 +340,6 @@ function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilt
 }
 
 // --- orchestrator ---
-const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
 const collectionUi = window.JGCollectionUI as AnyObj;
 const movieModal = createMovieModal();
 let moviesRuntime: AnyObj = null;
@@ -387,7 +388,7 @@ function buildCollectionController() {
 }
 
 async function loadCachedMovies() {
-    const movies = await dataFetch.fetchJson('data/movies.json');
+    const movies = await fetchJson('data/movies.json');
     if (!Array.isArray(movies) || movies.length === 0) {
         throw new Error('Cached movie data is empty');
     }
@@ -506,9 +507,9 @@ function closeMovieModal() {
 
 function initMoviesZoom() {
     const moviesGrid = document.getElementById('movies-container');
-    if (!moviesGrid || !window.JGGridZoom) return;
+    if (!moviesGrid) return;
     moviesGrid.classList.add('js-zoom-grid');
-    window.JGGridZoom.init({
+    initGridZoom({
         eventName: 'movie_open',
         grid: moviesGrid,
         itemSelector: '.movie-card.has-review',

@@ -1,9 +1,17 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
-const sanitizeHTML = window.sanitizeHTML as ((s: string) => string) | undefined;
 
 const collectionUi = window.JGCollectionUI as AnyObj;
-const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
 let essaysRuntime: AnyObj = null;
+
+function readInlineEssaysData(): AnyObj | null {
+    const node = document.getElementById('jg-essays-data');
+    if (!node || !node.textContent) return null;
+    try {
+        return JSON.parse(node.textContent);
+    } catch {
+        return null;
+    }
+}
 
 // Essays page orchestrator. State, filters, and view rendering live here because
 // this page is their only consumer.
@@ -108,7 +116,7 @@ function createEssayArticle(essay: AnyObj) {
         </div>
         <h2>${escapeHTML(essay.title)}</h2>
         ${essay.subtitle ? `<p><em>${escapeHTML(essay.subtitle)}</em></p>` : ''}
-        ${sanitizeHTML(essay.content)}
+        ${essay.content || ''}
     `;
     return article;
 }
@@ -225,20 +233,19 @@ function scrollEssaysToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-async function loadEssays() {
-    try {
-        const data = await dataFetch.fetchJson('data/essays.json');
-        const publishedEssays = (data.essays as AnyObj[])
-            .filter((essay: AnyObj) => essay.status === 'published')
-            .sort((left: AnyObj, right: AnyObj) => new Date(right.date).getTime() - new Date(left.date).getTime());
-
-        essaysState.setEssays(publishedEssays);
-        essaysState.setFilteredEssays(publishedEssays);
-        renderFromState();
-    } catch (error) {
-        console.error('Error loading essays:', error);
+function loadEssays() {
+    const data = readInlineEssaysData();
+    if (!data || !Array.isArray(data.essays)) {
         showEssayErrorMessage();
+        return;
     }
+    const publishedEssays = (data.essays as AnyObj[])
+        .filter((essay: AnyObj) => essay.status === 'published')
+        .sort((left: AnyObj, right: AnyObj) => new Date(right.date).getTime() - new Date(left.date).getTime());
+
+    essaysState.setEssays(publishedEssays);
+    essaysState.setFilteredEssays(publishedEssays);
+    renderFromState();
 }
 
 function getDerivedEssays() {

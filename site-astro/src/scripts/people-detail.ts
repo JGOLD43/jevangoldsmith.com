@@ -57,7 +57,7 @@ function openPeopleDetail(person: AnyObj, trigger: HTMLElement | null) {
             <button class="person-detail-close" type="button" data-action="close-person-detail" aria-label="Close person detail">X</button>
             <div class="person-detail-hero">
                 <div class="person-detail-image-wrap">
-                    <img src="${escapeAttr(person.image)}" alt="${escapeAttr(person.name)}" class="person-detail-image" srcset="${escapeAttr(person.srcset || '')}" sizes="(max-width: 768px) 78vw, 320px" width="400" height="400">
+                    <img src="${escapeAttr(person.image)}" alt="${escapeAttr(person.name)}" class="person-detail-image" srcset="${escapeAttr(person.srcset || '')}" sizes="(max-width: 768px) 78vw, 320px" width="400" height="400" loading="lazy" decoding="async">
                 </div>
                 <div class="person-detail-copy">
                     <p class="person-detail-kicker">${escapeHTML(person.title)}</p>

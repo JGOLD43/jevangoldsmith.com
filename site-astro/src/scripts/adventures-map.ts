@@ -469,7 +469,7 @@ function renderPhotoLayer() {
                 iconSize: [36, 36],
                 popupHtml: `
                 <div class="photo-popup">
-                    <img src="${escapeAttr(full)}" alt="${escapeAttr(photo.caption || '')}" style="max-width:260px;max-height:200px;display:block;border-radius:6px;">
+                    <img src="${escapeAttr(full)}" alt="${escapeAttr(photo.caption || '')}" loading="lazy" decoding="async" style="max-width:260px;max-height:200px;display:block;border-radius:6px;">
                     ${photo.caption ? `<p style="margin:0.4rem 0 0;font-size:0.8rem;color:#444;">${escapeHTML(photo.caption)}</p>` : ''}
                 </div>
             `,

@@ -1,4 +1,4 @@
-const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
+import { fetchJson } from './data-fetch';
 
 export function normalizePersonName(name: unknown): string {
     return String(name || '')
@@ -24,7 +24,7 @@ export async function loadPeopleData(): Promise<Map<string, AnyObj>> {
 
     if (!mergedPeople.length) {
         try {
-            const fallback = await dataFetch.fetchJson('data/people.merged.generated.json');
+            const fallback = await fetchJson('data/people.merged.generated.json');
             mergedPeople = Array.isArray(fallback?.people) ? fallback.people : [];
         } catch (error) {
             console.error('people: merged data unavailable', error);

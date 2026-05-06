@@ -70,12 +70,6 @@ export function monthKey(iso: string): string {
   return iso.slice(0, 7);
 }
 
-// "2024-03" → "Mar 2024".
-export function monthLabel(key: string): string {
-  const [y, m] = key.split('-');
-  return `${MONTH_NAMES[parseInt(m, 10) - 1]} ${y}`;
-}
-
 // "2024-03-14" → "Mar 14"
 export function dayLabel(iso: string): string {
   const d = new Date(iso + 'T12:00:00');

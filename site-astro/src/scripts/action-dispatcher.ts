@@ -70,4 +70,4 @@
     window.JGActions = { register };
 }());
 
-export const actionDispatcher = window.JGActions;
+export {};

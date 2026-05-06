@@ -4,6 +4,7 @@
 // is intentionally typed as `any` — internal DOM access is narrowed.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Cfg = any;
+import { init as initGridZoom } from './grid-zoom';
 (function () {
     function toArray<T>(value: ArrayLike<T> | Iterable<T> | null | undefined): T[] {
         return Array.from(value || []);
@@ -261,11 +262,11 @@ type Cfg = any;
         }
 
         function initZoom() {
-            if (!config.zoom || !window.JGGridZoom) return;
+            if (!config.zoom) return;
             const grid = document.getElementById(config.gridId);
             if (!grid) return;
             grid.classList.add('js-zoom-grid');
-            window.JGGridZoom.init({
+            initGridZoom({
                 grid,
                 anchorSelector: config.zoom.anchorSelector,
                 fillH: config.zoom.fillH,

@@ -1,7 +1,8 @@
 ---
-// Ported from _src/pages/cool-shit.html via scripts/port-page.mjs.
-// SEO mirrors tests/seo-fixture.json.
 import Base from '../layouts/Base.astro';
+import coolShitData from '../../public/data/cool-shit.json';
+
+const coolShitJson = JSON.stringify(coolShitData);
 ---
 <Base
   title="Cool Shit: Objects, Ideas &amp; Useful Finds | Jevan Goldsmith"
@@ -10,14 +11,6 @@ import Base from '../layouts/Base.astro';
   pageType="CollectionPage"
 >
 <main class="cool-page" data-active="feed">
-        <aside class="cool-sidebar" aria-label="Timeline">
-            <div class="timeline-head">
-                <span class="timeline-title">Timeline</span>
-                <button type="button" class="timeline-toggle-all" id="timeline-toggle-all" aria-label="Collapse or expand all months">Collapse all</button>
-            </div>
-            <nav class="timeline" id="timeline"></nav>
-        </aside>
-
         <div class="cool-content">
             <div class="container">
                 <header class="cool-page-header">
@@ -25,10 +18,6 @@ import Base from '../layouts/Base.astro';
                     <h1>Cool Shit</h1>
                     <p>Interesting objects, tools, ideas, links, and finds that earned a permanent place in my attention.</p>
                 </header>
-                <div class="cool-tabs" role="tablist">
-                    <button class="cool-tab" data-tab="timeline" role="tab">Timeline</button>
-                    <button class="cool-tab active" data-tab="feed" role="tab">Feed</button>
-                </div>
 
                 <div class="cool-layout">
                     <section class="cool-col-feed" aria-label="Feed">
@@ -51,10 +40,19 @@ import Base from '../layouts/Base.astro';
             </div>
         </div>
 </main>
-</Base>
+
+{/* Timeline sidebar removed: the 260px sidebar column + per-month
+    render/scroll-spy logic was deadweight (~150 LOC + ~3KB JS, plus
+    layout cost). Override the legacy two-col grid so the remaining
+    feed fills the row. */}
+<style is:global>
+  .cool-page { grid-template-columns: 1fr; }
+</style>
+
+<script type="application/json" id="jg-cool-shit-data" set:html={coolShitJson} />
 
 <script>
-  // (slice 3) + Phase 7 (slice 5): cool-shit + sanitize as native modules.
   import '../scripts/sanitize.ts';
   import '../scripts/cool-shit.ts';
 </script>
+</Base>

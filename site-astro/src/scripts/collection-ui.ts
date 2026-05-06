@@ -1,3 +1,5 @@
+import { debounce } from '../lib/debounce';
+
 (function () {
     function toggleClearButton(buttonOrId: string | HTMLElement | null, show: boolean, displayValue = 'flex') {
         const button = typeof buttonOrId === 'string'
@@ -132,14 +134,6 @@
         return isCollapsed;
     }
 
-    function debounce<T extends (...args: unknown[]) => unknown>(fn: T, wait = 120): (...args: Parameters<T>) => void {
-        let timeoutId: number | null = null;
-        return function (this: unknown, ...args: Parameters<T>) {
-            if (timeoutId !== null) window.clearTimeout(timeoutId);
-            timeoutId = window.setTimeout(() => fn.apply(this, args), wait);
-        };
-    }
-
     window.JGCollectionUI = {
         activateOnly,
         closeDropdownOnOutsideClick,
@@ -153,4 +147,4 @@
     };
 }());
 
-export const collectionUi = window.JGCollectionUI;
+export {};

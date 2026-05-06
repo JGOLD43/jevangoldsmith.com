@@ -251,22 +251,9 @@ const config = ({
   canonical={canonical}
 />
 
-<style is:inline>
-  /* Same content-visibility trick as /people: skip layout/paint for
-     off-screen book cards, reserve their slot to keep scroll stable. */
-  .book-card {
-    content-visibility: auto;
-    contain-intrinsic-size: 220px 360px;
-  }
-</style>
-
 <script>
-  // (slice 11) + Phase 7 (slice 4): books + infra deps as native modules.
-  import '../scripts/grid-zoom.ts';
   import '../scripts/collection-ui.ts';
   import '../scripts/collection-runtime.ts';
-  import '../scripts/collection-helpers.ts';
-  import '../scripts/data-fetch.ts';
   import '../scripts/sanitize.ts';
   import '../scripts/books.ts';
 </script>

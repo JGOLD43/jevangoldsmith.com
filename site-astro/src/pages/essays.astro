@@ -1,8 +1,10 @@
 ---
 import CollectionPage from '../components/CollectionPage.astro';
 import { ESSAY_LIST_OPTIONS, ESSAY_SECTIONS } from '../lib/collection-sections';
+import essaysData from '../../public/data/essays.json';
 
 const canonical = 'https://jevangoldsmith.com/essays.html';
+const essaysJson = JSON.stringify(essaysData);
 
 // after-main.html (field-notes inline CTA + seo-related) is added by the
 // post-build normalizer + Base layout, so we leave it out here.
@@ -51,14 +53,13 @@ const config = ({
   canonical={canonical}
 />
 
+<script type="application/json" id="jg-essays-data" set:html={essaysJson} />
+
 <script>
   // (slice 8) + Phase 7 (slice 4): essays + infra deps as native modules.
   import '../scripts/collection-ui.ts';
   import '../scripts/collection-runtime.ts';
-  import '../scripts/data-fetch.ts';
   import '../scripts/action-dispatcher.ts';
   import '../scripts/sanitize.ts';
-  // DOMPurify lives in a separate chunk loaded only here.
-  import '../scripts/sanitize-html.ts';
   import '../scripts/essays.ts';
 </script>

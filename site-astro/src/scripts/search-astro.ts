@@ -1,4 +1,5 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+import { debounce } from '../lib/debounce';
 // Standalone search script for the Astro build. Self-contained — does not
 // depend on the legacy js/search.js (which expects JGDataFetch + JGCollectionUI
 // globals) so it can be loaded with a single <script> tag instead of three.
@@ -12,14 +13,6 @@ import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
     query: '',
     type: 'all'
   };
-
-  function debounce<T extends (...a: unknown[]) => unknown>(fn: T, wait = 120) {
-    let t: number | null = null;
-    return (...args: Parameters<T>) => {
-      if (t) clearTimeout(t);
-      t = window.setTimeout(() => fn(...args), wait);
-    };
-  }
 
   const sanitizeUrl = window.sanitizeUrl as (s: unknown, fallback?: string) => string;
 

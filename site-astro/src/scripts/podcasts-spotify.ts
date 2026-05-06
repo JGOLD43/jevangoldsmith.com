@@ -1,5 +1,6 @@
 import { formatEpisodeDuration, formatRelativeDate } from '../lib/dates';
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+import { fetchJson } from './data-fetch';
 
 function buildSpotifyEpisodeCard(ep: AnyObj) {
     const card = document.createElement('div');
@@ -60,7 +61,7 @@ function buildSpotifyShowCard(show: AnyObj) {
 
 async function loadJSON(url: string) {
     try {
-        return await window.JGDataFetch.fetchJson(url) as AnyObj;
+        return await fetchJson(url) as AnyObj;
     } catch {
         return null;
     }

@@ -30,7 +30,3 @@ export function createTaskList(config: any): any {
 
     return r;
 }
-
-if (typeof window !== 'undefined') {
-    window.JGTaskList = { create: createTaskList };
-}

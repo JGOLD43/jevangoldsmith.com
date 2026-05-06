@@ -1,4 +1,7 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+import { init as initGridZoom } from './grid-zoom';
+import { installImageErrorHandler, installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
+import { fetchJsonWithFallback } from './data-fetch';
 // Books page orchestrator. Inlines what used to live in
 // js/books-state.js, js/books-filters.js, js/books-modal.js,
 // js/books-events.js, js/books-view.js — those shards only ever exported
@@ -193,7 +196,7 @@ function createBooksView(controller: AnyObj) {
         track.style.animationDuration = `${recentBooks.length * 3}s`;
         track.innerHTML = carouselBooks.map((book: AnyObj) => {
             const coverUrl = controller.getCoverUrl(book, 'medium');
-            return `<img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
+            return `<img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" loading="lazy" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
         }).join('');
     }
 
@@ -407,11 +410,10 @@ function bindBooksEvents(handlers: AnyObj) {
         setReReadsFilter, setStarFilter, setViewMode,
         toggleListDropdown, toggleSidebar
     } = handlers;
-    const helpers = window.JGCollectionHelpers;
 
-    helpers.installImageErrorHandler();
-    helpers.installEscapeCloser(closeBookModal);
-    helpers.installEscapeCloser(closeCategoryModal);
+    installImageErrorHandler();
+    installEscapeCloser(closeBookModal);
+    installEscapeCloser(closeCategoryModal);
 
     document.addEventListener('click', (event: Event) => {
         const target = event.target as Element | null;
@@ -463,7 +465,7 @@ function bindBooksEvents(handlers: AnyObj) {
         });
     }
 
-    helpers.bindStarRatingDrag(
+    bindStarRatingDrag(
         document.getElementById('star-filter-container'),
         setStarFilter,
         { halfStars: true }
@@ -472,14 +474,13 @@ function bindBooksEvents(handlers: AnyObj) {
 
 // --- orchestrator ---
 const collectionUi = window.JGCollectionUI as AnyObj;
-const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj>; fetchJsonWithFallback: (urls: string[], opts?: AnyObj) => Promise<AnyObj> };
 const booksModal = createBooksModal({ getCoverUrl });
 let booksView: AnyObj = null;
 let booksRuntime: AnyObj = null;
 
 async function loadBooksData() {
     if (booksState.getBooks().length > 0) return booksState.getBooks();
-    const books = await dataFetch.fetchJsonWithFallback(['data/books.generated.json', 'data/books.json']);
+    const books = await fetchJsonWithFallback(['data/books.generated.json', 'data/books.json']);
     booksState.setBooks(books);
     return books;
 }
@@ -626,9 +627,9 @@ function openBookFromGrid(isbn: string) { booksView?.openBookFromGrid(isbn); }
 
 function initBooksZoom() {
     const booksGrid = document.getElementById('books-container');
-    if (!booksGrid || !window.JGGridZoom) return;
+    if (!booksGrid) return;
     booksGrid.classList.add('js-zoom-grid');
-    window.JGGridZoom.init({
+    initGridZoom({
         anchorSelector: '.book-cover',
         eventName: 'book_open',
         fillH: 0.48,

@@ -1,4 +1,5 @@
 import { renderSpotifyFollowedShows, renderSpotifyRecentEpisodes } from './podcasts-spotify';
+import { init as initGridZoom } from './grid-zoom';
 
 let podcastRuntime: AnyObj = null;
 
@@ -29,9 +30,9 @@ async function initPodcastsPage() {
     podcastRuntime.init();
 
     const grid = document.getElementById('podcasts-container');
-    if (grid && window.JGGridZoom) {
+    if (grid) {
         grid.classList.add('js-zoom-grid');
-        window.JGGridZoom.init({
+        initGridZoom({
             grid: grid,
             itemSelector: '.podcast-card',
             triggerSelector: '.podcast-card',

@@ -1,3 +1,5 @@
+import { init as initGridZoom } from './grid-zoom';
+
 (function () {
   'use strict';
 
@@ -48,12 +50,12 @@
       el.classList.add('js-zoom-item');
     });
 
-    const zoom = (window.JGGridZoom && window.JGGridZoom.init({
-      grid: grid,
+    const zoom = initGridZoom({
+      grid: grid as HTMLElement,
       itemSelector: '.shelf-item',
       triggerSelector: '[data-shelf-item]',
       eventName: 'shelf_object_open'
-    })) as { release: () => void } | null;
+    }) as { release: () => void } | null;
 
     initFilters(zoom);
   }
