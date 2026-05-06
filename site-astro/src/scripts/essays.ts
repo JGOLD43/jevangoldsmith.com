@@ -2,17 +2,12 @@ import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import { createCollectionRuntime } from './collection-runtime';
 import { debounce, toggleClearButton } from './collection-ui';
 import { registerActions } from './action-dispatcher';
+import { readInlineJson } from './data-fetch';
 
 let essaysRuntime: AnyObj = null;
 
 function readInlineEssaysData(): AnyObj | null {
-    const node = document.getElementById('jg-essays-data');
-    if (!node || !node.textContent) return null;
-    try {
-        return JSON.parse(node.textContent);
-    } catch {
-        return null;
-    }
+    return readInlineJson<AnyObj>('jg-essays-data');
 }
 
 // Essays page orchestrator. State, filters, and view rendering live here because

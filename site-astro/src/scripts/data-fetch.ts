@@ -10,3 +10,19 @@ export async function fetchJson(url: string, options: { cache?: RequestCache } =
     }
     return response.json();
 }
+
+// Read a build-time-inlined JSON payload from a <script type="application/json">
+// tag. Returns null if the tag is missing, empty, or malformed.
+//
+// Used by collection pages that SSR their data as inline JSON to skip the
+// post-FCP network round-trip. Fall through to fetchJson when the inline
+// path returns null.
+export function readInlineJson<T = unknown>(elementId: string): T | null {
+    const node = document.getElementById(elementId);
+    if (!node || !node.textContent) return null;
+    try {
+        return JSON.parse(node.textContent) as T;
+    } catch {
+        return null;
+    }
+}

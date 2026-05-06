@@ -1,7 +1,7 @@
 import { escapeHtml as escapeHTML } from '../lib/html-escape';
 import { init as initGridZoom } from './grid-zoom';
 import { installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
-import { fetchJson } from './data-fetch';
+import { fetchJson, readInlineJson } from './data-fetch';
 import { createCollectionRuntime } from './collection-runtime';
 import {
     closeDropdownOnOutsideClick as closeDropdownOnOutsideClickShared,
@@ -394,16 +394,9 @@ function buildCollectionController() {
 }
 
 async function loadCachedMovies() {
-    const inline = document.getElementById('jg-movies-data');
-    if (inline?.textContent) {
-        try {
-            const movies = JSON.parse(inline.textContent);
-            if (Array.isArray(movies) && movies.length > 0) {
-                return movies.map(normalizeMovieData);
-            }
-        } catch {
-            // fall through to network fetch
-        }
+    const inline = readInlineJson<AnyObj[]>('jg-movies-data');
+    if (Array.isArray(inline) && inline.length > 0) {
+        return inline.map(normalizeMovieData);
     }
     const movies = await fetchJson('data/movies.json');
     if (!Array.isArray(movies) || movies.length === 0) {

@@ -1,7 +1,7 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import { init as initGridZoom } from './grid-zoom';
 import { installImageErrorHandler, installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
-import { fetchJson } from './data-fetch';
+import { fetchJson, readInlineJson } from './data-fetch';
 import { createCollectionRuntime } from './collection-runtime';
 import {
     closeDropdownOnOutsideClick as closeDropdownOnOutsideClickShared,
@@ -502,17 +502,10 @@ let booksRuntime: AnyObj = null;
 
 async function loadBooksData() {
     if (booksState.getBooks().length > 0) return booksState.getBooks();
-    const inline = document.getElementById('jg-books-data');
-    if (inline?.textContent) {
-        try {
-            const books = JSON.parse(inline.textContent);
-            if (Array.isArray(books) && books.length > 0) {
-                booksState.setBooks(books);
-                return books;
-            }
-        } catch {
-            // fall through to network fetch
-        }
+    const inline = readInlineJson<AnyObj[]>('jg-books-data');
+    if (Array.isArray(inline) && inline.length > 0) {
+        booksState.setBooks(inline);
+        return inline;
     }
     const books = await fetchJson('data/books.generated.json');
     booksState.setBooks(books);

@@ -1,4 +1,4 @@
-import { fetchJson } from './data-fetch';
+import { fetchJson, readInlineJson } from './data-fetch';
 
 export function normalizePersonName(name: unknown): string {
     return String(name || '')
@@ -11,16 +11,8 @@ export function normalizePersonName(name: unknown): string {
 }
 
 export async function loadPeopleData(): Promise<Map<string, AnyObj>> {
-    let mergedPeople: AnyObj[] = [];
-    const dataNode = document.getElementById('people-merged-data');
-    if (dataNode?.textContent) {
-        try {
-            const parsed = JSON.parse(dataNode.textContent);
-            mergedPeople = Array.isArray(parsed) ? parsed : [];
-        } catch (error) {
-            console.error('people: failed to parse inlined merged data', error);
-        }
-    }
+    let mergedPeople = readInlineJson<AnyObj[]>('people-merged-data') ?? [];
+    if (!Array.isArray(mergedPeople)) mergedPeople = [];
 
     if (!mergedPeople.length) {
         try {

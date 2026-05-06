@@ -1,6 +1,7 @@
 import { escapeHtml as escapeHtml } from '../lib/html-escape';
 import { monthKey, dayLabel } from '../lib/dates';
 import { sanitizeUrl as safeUrl } from '../lib/safe-url';
+import { readInlineJson } from './data-fetch';
 
 (function () {
   const els = {
@@ -106,15 +107,8 @@ import { sanitizeUrl as safeUrl } from '../lib/safe-url';
   }
 
   function init() {
-    const node = document.getElementById('jg-cool-shit-data');
-    if (!node || !node.textContent) {
-      els.feed!.innerHTML = '<p style="color:var(--text-light)">Could not load feed.</p>';
-      return;
-    }
-    let data: AnyObj;
-    try {
-      data = JSON.parse(node.textContent);
-    } catch {
+    const data = readInlineJson<AnyObj>('jg-cool-shit-data');
+    if (!data) {
       els.feed!.innerHTML = '<p style="color:var(--text-light)">Could not load feed.</p>';
       return;
     }
