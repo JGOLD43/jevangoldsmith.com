@@ -60,3 +60,6 @@ llms.txt
 .perf-tmp/*.run-*.json
 .claude/scheduled_tasks.lock
 .codex_tmp/
+
+# OCR training artifact occasionally dropped at repo root by tooling
+eng.traineddata
