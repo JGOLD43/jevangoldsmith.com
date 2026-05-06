@@ -13,7 +13,8 @@ const phases = fast
       ['purge:css'],
       ['slim:json'],
       ['prune:dist'],
-      ['perf:budget']
+      ['perf:budget'],
+      ['csp:hashes']
     ]
   : [
       ['lint'],
@@ -28,7 +29,8 @@ const phases = fast
       ['purge:css'],
       ['slim:json'],
       ['prune:dist'],
-      ['perf:budget']
+      ['perf:budget'],
+      ['csp:hashes']
     ];
 
 const commands = {
@@ -38,6 +40,7 @@ const commands = {
   lint: ['npx', ['biome', 'check', 'scripts']],
   'people:merge': ['node', ['scripts/merge-people.js']],
   'perf:budget': ['node', ['scripts/check-performance-budgets.js', '--dist=dist']],
+  'csp:hashes': ['node', ['scripts/update-csp-hashes.js', '--dist=dist']],
   'prune:dist': ['node', ['scripts/prune-dist-assets.js', '--dist=dist']],
   'purge:css': ['node', ['scripts/purge-css-per-page.js', '--dist=dist']],
   'slim:json': ['node', ['scripts/slim-runtime-json.js', '--dist=dist']],

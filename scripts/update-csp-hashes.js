@@ -24,10 +24,21 @@ function walk(dir) {
 const scriptHashes = new Set();
 const styleHashes = new Set();
 
+// data-only <script> types (application/json, application/ld+json,
+// speculationrules, importmap) are NOT executed by the browser, so they
+// don't need a CSP script-src hash. Hashing them anyway bloats the CSP
+// header by ~5-10KB on a content-heavy site like this.
+const NON_EXECUTABLE_TYPES = /(?:application\/(?:json|ld\+json)|speculationrules|importmap)/i;
+
 for (const file of walk(DIST)) {
   const html = fs.readFileSync(file, 'utf8');
-  for (const match of html.matchAll(/<script\b(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)) {
-    if (match[1].trim()) scriptHashes.add(hashContent(match[1]));
+  for (const match of html.matchAll(/<script\b(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    const attrs = match[1] || '';
+    const body = match[2];
+    if (!body.trim()) continue;
+    const typeMatch = attrs.match(/\btype=["']([^"']+)["']/i);
+    if (typeMatch && NON_EXECUTABLE_TYPES.test(typeMatch[1])) continue;
+    scriptHashes.add(hashContent(body));
   }
   for (const match of html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) {
     if (match[1].trim()) styleHashes.add(hashContent(match[1]));

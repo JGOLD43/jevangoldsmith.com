@@ -117,6 +117,20 @@ for (const [rel, max] of Object.entries(RUNTIME_JSON_BUDGETS)) {
   if (exists(rel)) assertMax(rel, max);
 }
 
+// Theme-guard inline assertion. The first inline <script> in <head> sets
+// data-theme synchronously before first paint to prevent a flash of light
+// theme on dark-mode users. Externalizing it would defeat the FOUC fix.
+{
+  const indexHtml = path.join(DIST, 'index.html');
+  if (fs.existsSync(indexHtml)) {
+    const text = fs.readFileSync(indexHtml, 'utf8');
+    const headBlock = text.split('</head>')[0] || '';
+    if (!/document\.documentElement\.setAttribute\('data-theme'/.test(headBlock)) {
+      fail('Theme guard no longer inline in <head> — risk of dark-mode flash');
+    }
+  }
+}
+
 for (const html of walk(DIST).filter((file) => file.endsWith('.html'))) {
   const text = fs.readFileSync(html, 'utf8');
   // Phase 2.1: a <link rel="preconnect"> hint to images.unsplash.com is
