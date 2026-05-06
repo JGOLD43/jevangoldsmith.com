@@ -102,7 +102,6 @@ const RUNTIME_JSON_BUDGETS = {
   'data/placeofinterest.json': 60 * KB,
   'data/books.json': 50 * KB,
   'data/people.profiles.json': 30 * KB,
-  'data/seo.json': 25 * KB,
   'data/adventures.json': 25 * KB,
   'data/projects.json': 20 * KB,
   'data/products.json': 20 * KB,
