@@ -71,19 +71,51 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
 const preconnectOrigins: string[] = [];
 if (seoSlug === 'movies') preconnectOrigins.push('https://a.ltrbxd.com');
 if (seoSlug === 'videos') preconnectOrigins.push('https://i.ytimg.com');
-if (seoSlug === 'adventures') preconnectOrigins.push('https://images.unsplash.com');
+// Note: /adventures used to preconnect to images.unsplash.com, but the
+// build pipeline now self-hosts every Unsplash hero (assets:optimize +
+// html-normalize rewrite to /images/generated/remote/...). The browser
+// no longer crosses the third-party origin, so the hint was wasted.
+
+// Cheap dns-prefetch on entry pages (index, search) so the user is
+// already DNS-warm if they navigate into a collection page that uses
+// these hosts. Doesn't open a TLS connection like preconnect — just
+// resolves the name, ~10-30ms saved on the next nav.
+const dnsPrefetchOrigins: string[] = [];
+if (seoSlug === 'index' || seoSlug === 'search') {
+  // unsplash + openlibrary are self-hosted post-build, so no DNS to prime.
+  dnsPrefetchOrigins.push(
+    'https://a.ltrbxd.com',
+    'https://i.ytimg.com'
+  );
+}
 ---
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {/* FOUC guard: set data-theme synchronously before first paint so the
+        page renders in the user's resolved theme. The full theme module
+        (toggle button, system-pref listener) still runs at end of body —
+        this only fixes the initial paint. ~120 bytes minified. */}
+    <script is:inline>
+      (() => {
+        try {
+          const t = localStorage.getItem('jg-theme')
+            || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (_) { /* private mode / SSR can't read storage */ }
+      })();
+    </script>
     <meta name="theme-color" content="#F5F3ED" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     <link rel="stylesheet" href="/css/legacy-style.css" fetchpriority="high" />
     {preconnectOrigins.map((origin) => (
       <link rel="preconnect" href={origin} crossorigin />
+    ))}
+    {dnsPrefetchOrigins.map((origin) => (
+      <link rel="dns-prefetch" href={origin} />
     ))}
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
     {description && <meta name="description" content={description} />}
@@ -155,10 +187,12 @@ if (seoSlug === 'adventures') preconnectOrigins.push('https://images.unsplash.co
     {/* Inline script: hover-prefetch fallback for browsers without
         Speculation Rules support (older Firefox / Safari). Adds a
         <link rel="prefetch"> on first hover/touchstart on a same-origin
-        anchor. ~250 bytes inline, idempotent (each href prefetched
-        once), bails out if the page is offline. */}
+        anchor. Skipped when Speculation Rules are supported — Chrome's
+        prerender already covers hover and runs strictly more work than
+        a bare prefetch, so doubling up just wastes bandwidth. */}
     <script is:inline>
       (() => {
+        if (HTMLScriptElement.supports?.('speculationrules')) return;
         const seen = new Set();
         const prefetch = (href) => {
           if (seen.has(href)) return;
