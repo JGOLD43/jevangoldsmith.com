@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Astro rewrite of jevangoldsmith.com (in-progress migration from /scripts/build-site.js)",
+  "description": "Astro static site for jevangoldsmith.com",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
