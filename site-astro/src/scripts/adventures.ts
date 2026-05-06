@@ -7,11 +7,6 @@ import {
     BASEMAPS, DEFAULT_FILTERS
 } from './adventures-state';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyObj = any;
-const escapeHTML = window.escapeHTML as (s: unknown) => string;
-const escapeAttr = window.escapeAttr as (s: unknown) => string;
-
 // ============================================
 // Adventures Page Runtime State
 // ============================================

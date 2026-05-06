@@ -8,6 +8,13 @@
 // values are still set + read through globalThis at runtime; this is
 // only the type declaration surface.
 declare global {
+  // Shared shorthand for "we're crossing the typed/untyped boundary
+  // (DOM nodes, JSON-parsed records, etc.)". Used at the top of most
+  // page scripts. Centralized here so scripts don't each re-declare
+  // `type AnyObj = any` plus the matching eslint-disable line.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type AnyObj = any;
+
   // Leaflet — loaded via vendor bundle.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const L: any;

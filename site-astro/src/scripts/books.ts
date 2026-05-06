@@ -1,8 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyObj = any;
-const escapeHTML = window.escapeHTML as (s: unknown) => string;
-const escapeAttr = window.escapeAttr as (s: unknown) => string;
-
 // Books page orchestrator. Inlines what used to live in
 // js/books-state.js, js/books-filters.js, js/books-modal.js,
 // js/books-events.js, js/books-view.js — those shards only ever exported

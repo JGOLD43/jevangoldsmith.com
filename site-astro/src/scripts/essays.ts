@@ -1,7 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyObj = any;
-const escapeHTML = window.escapeHTML as (s: unknown) => string;
-const escapeAttr = window.escapeAttr as (s: unknown) => string;
 const sanitizeHTML = window.sanitizeHTML as ((s: string) => string) | undefined;
 
 const collectionUi = window.JGCollectionUI as AnyObj;

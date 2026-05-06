@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyObj = any;
-
 // Compute + render movie watch stats from enriched movie data.
 // Exposes window.MovieStats.render(movies) which (re)builds the stats panel.
 (function () {

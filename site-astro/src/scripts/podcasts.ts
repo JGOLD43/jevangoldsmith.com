@@ -1,7 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyObj = any;
-const escapeHTML = window.escapeHTML;
-const escapeAttr = window.escapeAttr;
 const dataFetch = window.JGDataFetch as unknown as { fetchJson: (url: string, fb?: AnyObj) => Promise<AnyObj> };
 let podcastRuntime: AnyObj = null;
 

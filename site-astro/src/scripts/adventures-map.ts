@@ -15,8 +15,6 @@ import {
     schedulePopularRoutes, setRouteRerender
 } from './adventures-map-data';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyObj = any;
 // Leaflet is injected by adventures-map-vendor's loadLeaflet() at runtime
 // AFTER this module is imported, so capture L lazily via a getter — never
 // at module scope.
