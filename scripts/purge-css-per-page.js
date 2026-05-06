@@ -368,15 +368,23 @@ for (const { file, html, kept } of perPage) {
   const outFile = `${slug}.${h}.css`;
   fs.writeFileSync(path.join(outDir, outFile), purged);
 
-  // Phase G: inline the per-page CSS in <head> instead of fetching it.
-  // chrome.css stays external (long-cached, shared across all pages), but
-  // the per-page slice is small (avg ~5.7KB) so a separate request just
-  // costs one RTT on FCP. Inlining drops that RTT entirely. The per-page
-  // file is still written to disk for inspection / debugging.
-  const inlineStyle = purged ? `\n  <style>${purged}</style>` : '';
+  // Per-page CSS is now an external long-cached <link> instead of inline
+  // <style>. Trade-off: first visit costs one extra RTT (mitigated by
+  // <link rel="preload" as="style"> emitted alongside chrome's preload),
+  // repeat visits get the per-page slice for free from the immutable
+  // cache (Cache-Control: public, max-age=31536000, immutable). HTML is
+  // max-age=0 must-revalidate, so inlining shipped 5-30KB of styles on
+  // every revalidate — wasteful for repeat visitors.
+  const perPageHref = `/css/per-page/${outFile}`;
+  const preload = purged
+    ? `<link rel="preload" as="style" href="${perPageHref}" fetchpriority="high">`
+    : '';
+  const linkExtra = purged
+    ? `\n  <link rel="stylesheet" href="${perPageHref}" fetchpriority="high">`
+    : '';
   const next = html.replace(
     /<link rel="stylesheet" href="\/css\/legacy-style\.css"([^>]*)>/g,
-    `<link rel="stylesheet" href="/css/${chromeFile}"$1>${inlineStyle}`
+    `${preload}<link rel="stylesheet" href="/css/${chromeFile}"$1>${linkExtra}`
   );
   if (next !== html) {
     fs.writeFileSync(file, next);
