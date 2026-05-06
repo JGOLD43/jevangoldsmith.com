@@ -101,7 +101,6 @@ const BODY_CLASS_BY_FILE: Record<string, string> = {
   'challenges.html': 'nav-compact',
   'changed-my-mind.html': 'changed-mind-page',
   'cool-shit.html': 'nav-compact',
-  'dateme.html': 'dateme-page',
   'essays.html': 'nav-compact',
   'field-notes.html': 'field-notes-page',
   'health.html': 'nav-compact',

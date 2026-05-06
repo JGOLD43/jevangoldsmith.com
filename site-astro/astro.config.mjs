@@ -25,9 +25,7 @@ export default defineConfig({
       },
       filter: (page) => ![
         '/data-smoke',
-        '/data-smoke.html',
-        '/dateme',
-        '/dateme.html'
+        '/data-smoke.html'
       ].some((suffix) => page.endsWith(suffix))
     })
   ]
