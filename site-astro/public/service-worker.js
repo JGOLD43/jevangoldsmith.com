@@ -42,12 +42,51 @@ function isFont(req) {
   return /\.(?:woff2?|ttf|otf|eot)$/i.test(url.pathname);
 }
 
-self.addEventListener('install', () => {
-  self.skipWaiting();
+// Shell precache: warm the cache on install with the chrome bytes that
+// every nav share. After first install, subsequent navigation paints
+// from cache before the network even responds.
+//
+// Kept intentionally small. Hashed CSS/JS bundles are added by the
+// network listener cache-first as the user visits pages — no need to
+// list them here. The font is the only large blocking asset on FCP, so
+// pre-caching it gives the biggest warm-paint win.
+const SHELL_URLS = [
+  '/',
+  '/fonts/chivo/chivo-latin-400-normal.woff2',
+  '/fonts/chivo/chivo-latin-700-normal.woff2',
+  '/images/favicon.svg',
+  '/images/generated/logo/logo-nav-176.png'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil((async () => {
+    try {
+      const cache = await caches.open(CACHE_ASSETS);
+      // addAll is atomic — if any URL 404s, the whole batch fails. Wrap
+      // each fetch individually so an absent asset (e.g. font filename
+      // change) doesn't block install.
+      await Promise.all(
+        SHELL_URLS.map((u) =>
+          fetch(u, { cache: 'reload' })
+            .then((res) => res.ok && cache.put(u, res))
+            .catch(() => {})
+        )
+      );
+    } catch (_) {
+      /* install must not fail on cache errors */
+    }
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil((async () => {
+    // Drop legacy cache versions if we ever bump CACHE_* names.
+    const keep = new Set([CACHE_HTML, CACHE_ASSETS, CACHE_IMG]);
+    const names = await caches.keys();
+    await Promise.all(names.filter((n) => !keep.has(n)).map((n) => caches.delete(n)));
+    await self.clients.claim();
+  })());
 });
 
 async function networkFirst(req, cacheName, timeoutMs) {
