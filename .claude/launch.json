@@ -18,6 +18,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["firebase", "emulators:start", "--only", "hosting"],
       "port": 5000
+    },
+    {
+      "name": "dist-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "dist", "-p", "8765", "-c-1", "--gzip"],
+      "port": 8765
     }
   ]
 }
