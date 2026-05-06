@@ -1,15 +1,16 @@
 ---
 import CollectionPage from '../components/CollectionPage.astro';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import { tasteListOptions, PODCAST_SECTIONS } from '../lib/collection-sections';
 import { renderPodcastCardHtml } from '../lib/podcast-card';
 
 const canonical = 'https://jevangoldsmith.com/podcasts.html';
 
 // pre-render curated podcast cards.
-const podcasts = await getCollection('podcasts');
+const podcasts = await getCollection('podcasts') as CollectionEntry<'podcasts'>[];
 const podcastCardsHtml = podcasts
-  .map((p: any, i: number) => renderPodcastCardHtml(p.data as Record<string, unknown>, i))
+  .map((p, i) => renderPodcastCardHtml(p.data, i))
   .join('');
 
 const config = ({
