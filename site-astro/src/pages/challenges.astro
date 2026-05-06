@@ -1,6 +1,6 @@
 ---
 import raw from '../../../data/challenges.json';
-import TaskCollectionPage from '../components/TaskCollectionPage.astro';
+import CollectionPage from '../components/CollectionPage.astro';
 import { renderChallengeCard, CHALLENGES_TASK_CONFIG } from '../lib/collection-sections';
 
 interface Challenge {
@@ -22,7 +22,8 @@ interface Challenge {
 const allChallenges: Challenge[] = (raw as { challenges?: Challenge[] }).challenges ?? [];
 const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibility !== 'private');
 ---
-<TaskCollectionPage
+<CollectionPage
+  kind="task"
   items={challenges}
   config={CHALLENGES_TASK_CONFIG}
   renderCard={renderChallengeCard}

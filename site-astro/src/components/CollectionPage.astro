@@ -1,29 +1,42 @@
 ---
-// Shared collection-page wrapper.
-//
-// Collapses the repeated Base + renderCollectionMain + <Fragment set:html>
-// pattern across books/movies/people/podcasts/essays into one component.
-// Output is byte-equivalent to the previous per-page composition.
-//
-// This is intentionally a thin wrapper. Renaming class hooks, replacing
-// string-template chrome with native Astro markup, and moving filter logic
-// into Astro components are deliberately deferred — the existing CSS/JS
-// dependencies in /js still target the legacy class names and ids.
+// Shared collection-page wrapper. Two modes:
+//   kind="collection" (default) — books, movies, people, podcasts, essays.
+//                                  Renders config via renderCollectionMain.
+//   kind="task"                 — challenges, projects. Renders items + a
+//                                  per-item renderCard via renderTaskListMain.
 
 import Base from '../layouts/Base.astro';
 import { renderCollectionMain } from '../lib/collection-shell';
 import type { CollectionConfig } from '../lib/collection-shell';
+import { renderTaskListMain } from '../lib/collection-sections';
+import type { TaskListConfig } from '../lib/collection-sections';
 
-interface Props {
-  config: CollectionConfig;
+interface CommonProps {
   title: string;
   description: string;
   canonical: string;
   pageType?: 'CollectionPage' | 'WebPage' | 'AboutPage' | 'ContactPage';
 }
 
-const { config, title, description, canonical, pageType = 'CollectionPage' } = Astro.props;
-const main = renderCollectionMain(config);
+type CollectionProps = CommonProps & {
+  kind?: 'collection';
+  config: CollectionConfig;
+};
+
+type TaskProps = CommonProps & {
+  kind: 'task';
+  config: TaskListConfig;
+  items: any[];
+  renderCard: (item: any) => string;
+};
+
+type Props = CollectionProps | TaskProps;
+
+const props = Astro.props as Props;
+const { title, description, canonical, pageType = 'CollectionPage' } = props;
+const main = props.kind === 'task'
+  ? renderTaskListMain(props.items, props.config, props.renderCard)
+  : renderCollectionMain(props.config);
 ---
 <Base
   title={title}

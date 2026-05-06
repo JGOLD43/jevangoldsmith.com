@@ -1,6 +1,6 @@
 // chrome rendering split out from collection-chrome.ts.
 // Pure presenter — emits the shared sidebar/main/search markup as an
-// HTML string. Consumed by CollectionPage.astro + TaskCollectionPage.astro.
+// HTML string. Consumed by CollectionPage.astro (collection + task modes).
 // Section presets + per-collection data live in collection-sections.ts.
 
 // Build-time renderer for the legacy collection-page chrome (sidebar +

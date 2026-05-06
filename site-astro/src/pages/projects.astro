@@ -1,6 +1,6 @@
 ---
 import raw from '../../../data/projects.json';
-import TaskCollectionPage from '../components/TaskCollectionPage.astro';
+import CollectionPage from '../components/CollectionPage.astro';
 import { renderProjectCard, PROJECTS_TASK_CONFIG } from '../lib/collection-sections';
 
 interface Project {
@@ -20,7 +20,8 @@ interface Project {
 const allProjects: Project[] = (raw as { projects?: Project[] }).projects ?? [];
 const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility !== 'private');
 ---
-<TaskCollectionPage
+<CollectionPage
+  kind="task"
   items={projects}
   config={PROJECTS_TASK_CONFIG}
   renderCard={renderProjectCard}
