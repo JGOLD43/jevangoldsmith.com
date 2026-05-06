@@ -57,8 +57,14 @@ interface Category {
   icon?: string;
 }
 
-const products: Product[] = (raw as any).products ?? [];
-const categories: Category[] = (raw as any).productCategories ?? [];
+type ProductsData = {
+  products?: Product[];
+  productCategories?: Category[];
+};
+
+const productsData = raw as ProductsData;
+const products = productsData.products ?? [];
+const categories = productsData.productCategories ?? [];
 ---
 <Base
   title="The Shelf: Tools, Objects &amp; Gear That Earned Their Place | Jevan Goldsmith"

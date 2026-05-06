@@ -1,22 +1,24 @@
 ---
 import CollectionPage from '../components/CollectionPage.astro';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import { tasteListOptions, BOOK_SECTIONS } from '../lib/collection-sections';
 import { renderBookCardHtml } from '../lib/book-card';
 import { escapeAttr } from '../lib/html-escape';
 import remoteAssets from '../../../data/remote-assets.generated.json';
 import { CATEGORY_MAP } from '../lib/book-categories';
+import type { Book } from '../content.config';
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
 // server-render every book card at build time. books.js detects
 // an already-populated container and skips the initial wipe-and-render.
-const books = await getCollection('books');
+const books = await getCollection('books') as CollectionEntry<'books'>[];
 // First 16 cards sit above the fold across desktop + tablet — flag them
 // eager + fetchpriority="high" so their covers paint without waiting for
 // the lazy-loading IntersectionObserver. Cards 16+ stay lazy.
 const bookCardsHtml = books
-  .map((b: any, i: number) => renderBookCardHtml(b.data, i < 16))
+  .map((b, i) => renderBookCardHtml(b.data, i < 16))
   .join('');
 
 // Resolve a remote OpenLibrary cover URL to a local pre-generated jpg.
@@ -39,7 +41,7 @@ function localizeCover(url: string, size: 'medium' | 'large'): string {
   return jpg ? `/${jpg}` : url;
 }
 
-function coverUrl(book: any, size: 'medium' | 'large' = 'large'): string {
+function coverUrl(book: Book, size: 'medium' | 'large' = 'large'): string {
   if (book.coverImage) return localizeCover(book.coverImage, size);
   const isbn = String(book.isbn || '').replace(/[^0-9X]/gi, '');
   if (!isbn) return '';
@@ -47,16 +49,16 @@ function coverUrl(book: any, size: 'medium' | 'large' = 'large'): string {
   return localizeCover(remote, size);
 }
 
-const booksByCategoryKey: Record<string, any[]> = {};
+const booksByCategoryKey: Record<string, Book[]> = {};
 for (const entry of books) {
-  const data = entry.data as any;
+  const data = entry.data;
   const key = CATEGORY_MAP[data.category];
   if (!key) continue;
   (booksByCategoryKey[key] ||= []).push(data);
 }
 
 // Inject per-category list HTML + counts into the cloned section configs.
-const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section: any) => {
+const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section) => {
   // The "All Books" section has no panelId — just stamp the total count
   // so the badge ships with 122 instead of the placeholder 0.
   if (!section.panelId) return { ...section, count: String(books.length) };
@@ -72,10 +74,10 @@ const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section: any) => {
 });
 
 // Carousel: most recent 20 books, doubled for the seamless scroll loop.
-const recentBooks = books.slice(-20).reverse().map((b: any) => b.data);
+const recentBooks = books.slice(-20).reverse().map((b) => b.data);
 const carouselBooks = [...recentBooks, ...recentBooks];
 const carouselTrackInner = carouselBooks
-  .map((book: any) => {
+  .map((book) => {
     const url = coverUrl(book, 'medium');
     // Skip books with no resolvable cover (no ISBN, no coverImage). An
     // empty src renders as a broken-image icon AND fires a fetch of the

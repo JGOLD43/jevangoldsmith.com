@@ -67,102 +67,174 @@ function jsonArrayLoader(file: string, opts: {
   };
 }
 
+const bookSchema = z.looseObject({
+  id: z.string(),
+  title: z.string(),
+  author: z.string(),
+  isbn: nstr(),
+  year: z.union([z.string(), z.number()]).nullable().optional(),
+  rating: z.number(),
+  reReads: nnum(),
+  category: nstr(),
+  coverImage: nstr(),
+  shortDescription: nstr(),
+  review: nstr(),
+  read: nbool()
+});
+export type Book = z.infer<typeof bookSchema>;
+
+const movieSchema = z.looseObject({
+  id: z.string(),
+  title: z.string(),
+  date: nstr(),
+  link: nstr(),
+  rating: nstr(),
+  starCount: nnum(),
+  year: z.union([z.string(), z.number()]).nullable().optional(),
+  poster: nstr(),
+  genre: nstr(),
+  timesWatched: nnum(),
+  tmdbId: nnum(),
+  runtime: nnum(),
+  tmdbGenres: z.array(z.string()).nullable().optional(),
+  overview: nstr(),
+  backdrop: nstr()
+});
+export type Movie = z.infer<typeof movieSchema>;
+
+const personSchema = z.looseObject({
+  id: z.string(),
+  name: z.string(),
+  title: nstr(),
+  lesson: nstr(),
+  category: nstr(),
+  image: nstr(),
+  srcset: nstr(),
+  searchText: nstr()
+});
+export type Person = z.infer<typeof personSchema>;
+
+const essaySchema = z.looseObject({
+  id: z.string(),
+  title: z.string(),
+  subtitle: nstr(),
+  author: nstr(),
+  date: nstr(),
+  category: nstr(),
+  status: nstr(),
+  content: z.string()
+});
+export type Essay = z.infer<typeof essaySchema>;
+
+const podcastSchema = z.looseObject({
+  id: z.string(),
+  title: z.string(),
+  host: nstr(),
+  description: nstr(),
+  category: nstr(),
+  badge: nstr(),
+  image: nstr(),
+  searchText: nstr()
+});
+export type Podcast = z.infer<typeof podcastSchema>;
+
+const adventureSchema = z.looseObject({
+  id: z.string(),
+  title: z.string(),
+  subtitle: nstr(),
+  location: nstr(),
+  region: nstr(),
+  startDate: nstr(),
+  endDate: nstr(),
+  duration: nstr(),
+  heroImage: nstr(),
+  shortDescription: nstr(),
+  content: nstr(),
+  highlights: z.array(z.string()).nullable().optional()
+});
+export type Adventure = z.infer<typeof adventureSchema>;
+
+const peopleProfileSchema = z.looseObject({
+  id: z.string(),
+  name: z.string(),
+  title: nstr(),
+  thesis: nstr(),
+  bio: nstr(),
+  image: nstr(),
+  srcset: nstr(),
+  timeline: z.array(z.object({
+    year: nstr(),
+    title: nstr(),
+    note: nstr()
+  })).nullable().optional(),
+  bookTitles: z.array(z.string()).nullable().optional(),
+  resources: z.array(z.object({
+    type: nstr(),
+    title: nstr(),
+    url: nstr(),
+    note: nstr()
+  })).nullable().optional()
+});
+export type PeopleProfile = z.infer<typeof peopleProfileSchema>;
+
+const peopleMergedSchema = z.looseObject({
+  id: z.string(),
+  name: z.string(),
+  title: nstr(),
+  lesson: nstr(),
+  category: nstr(),
+  image: nstr(),
+  srcset: nstr(),
+  searchText: nstr(),
+  sourceType: nstr(),
+  bio: nstr(),
+  thesis: nstr(),
+  profileHref: nstr(),
+  books: z.array(z.looseObject({
+    title: z.string(),
+    label: z.string(),
+    author: nstr(),
+    coverImage: nstr(),
+    href: nstr()
+  })).nullable().optional(),
+  movies: z.array(z.looseObject({
+    title: z.string(),
+    label: z.string(),
+    year: z.union([z.string(), z.number()]).nullable().optional(),
+    coverImage: nstr(),
+    href: nstr()
+  })).nullable().optional()
+});
+export type PeopleMerged = z.infer<typeof peopleMergedSchema>;
+
 const books = defineCollection({
   loader: jsonArrayLoader('books.json', { idFrom: 'isbn', idDisambiguator: 'author' }),
-  schema: z.looseObject({
-    id: z.string(),
-    title: z.string(),
-    author: z.string(),
-    isbn: nstr(),
-    year: z.union([z.string(), z.number()]).nullable().optional(),
-    rating: z.number(),
-    reReads: nnum(),
-    category: nstr(),
-    shortDescription: nstr(),
-    review: nstr(),
-    read: nbool()
-  })
+  schema: bookSchema
 });
 
 const movies = defineCollection({
   loader: jsonArrayLoader('movies.json', { idFrom: 'tmdbId' }),
-  schema: z.looseObject({
-    id: z.string(),
-    title: z.string(),
-    date: nstr(),
-    link: nstr(),
-    rating: nstr(),
-    starCount: nnum(),
-    year: z.union([z.string(), z.number()]).nullable().optional(),
-    poster: nstr(),
-    genre: nstr(),
-    timesWatched: nnum(),
-    tmdbId: nnum(),
-    runtime: nnum(),
-    tmdbGenres: z.array(z.string()).nullable().optional(),
-    overview: nstr(),
-    backdrop: nstr()
-  })
+  schema: movieSchema
 });
 
 const people = defineCollection({
   loader: jsonArrayLoader('people.json', { key: 'people' }),
-  schema: z.looseObject({
-    id: z.string(),
-    name: z.string(),
-    title: nstr(),
-    lesson: nstr(),
-    category: nstr(),
-    image: nstr(),
-    srcset: nstr(),
-    searchText: nstr()
-  })
+  schema: personSchema
 });
 
 const essays = defineCollection({
   loader: jsonArrayLoader('essays.json', { key: 'essays' }),
-  schema: z.looseObject({
-    id: z.string(),
-    title: z.string(),
-    subtitle: nstr(),
-    author: nstr(),
-    date: nstr(),
-    category: nstr(),
-    status: nstr(),
-    content: z.string()
-  })
+  schema: essaySchema
 });
 
 const podcasts = defineCollection({
   loader: jsonArrayLoader('podcasts.json', { key: 'podcasts' }),
-  schema: z.looseObject({
-    id: z.string(),
-    title: z.string(),
-    host: nstr(),
-    description: nstr(),
-    category: nstr(),
-    badge: nstr(),
-    image: nstr(),
-    searchText: nstr()
-  })
+  schema: podcastSchema
 });
 
 const adventures = defineCollection({
   loader: jsonArrayLoader('adventures.json', { key: 'adventures' }),
-  schema: z.looseObject({
-    id: z.string(),
-    title: z.string(),
-    subtitle: nstr(),
-    location: nstr(),
-    region: nstr(),
-    startDate: nstr(),
-    endDate: nstr(),
-    duration: nstr(),
-    heroImage: nstr(),
-    shortDescription: nstr(),
-    content: nstr(),
-    highlights: z.array(z.string()).nullable().optional()
-  })
+  schema: adventureSchema
 });
 
 const challenges = defineCollection({
@@ -186,27 +258,7 @@ const topics = defineCollection({
 
 const peopleProfiles = defineCollection({
   loader: jsonArrayLoader('people.profiles.json', { key: 'profiles' }),
-  schema: z.looseObject({
-    id: z.string(),
-    name: z.string(),
-    title: nstr(),
-    thesis: nstr(),
-    bio: nstr(),
-    image: nstr(),
-    srcset: nstr(),
-    timeline: z.array(z.object({
-      year: nstr(),
-      title: nstr(),
-      note: nstr()
-    })).nullable().optional(),
-    bookTitles: z.array(z.string()).nullable().optional(),
-    resources: z.array(z.object({
-      type: nstr(),
-      title: nstr(),
-      url: nstr(),
-      note: nstr()
-    })).nullable().optional()
-  })
+  schema: peopleProfileSchema
 });
 
 // build-time-merged people (people.json + books + movies + profiles).
@@ -215,34 +267,7 @@ const peopleProfiles = defineCollection({
 // books.generated.json + movies.json + profiles.json.
 const peopleMerged = defineCollection({
   loader: jsonArrayLoader('people.merged.generated.json', { key: 'people' }),
-  schema: z.looseObject({
-    id: z.string(),
-    name: z.string(),
-    title: nstr(),
-    lesson: nstr(),
-    category: nstr(),
-    image: nstr(),
-    srcset: nstr(),
-    searchText: nstr(),
-    sourceType: nstr(),
-    bio: nstr(),
-    thesis: nstr(),
-    profileHref: nstr(),
-    books: z.array(z.looseObject({
-      title: z.string(),
-      label: z.string(),
-      author: nstr(),
-      coverImage: nstr(),
-      href: nstr()
-    })).nullable().optional(),
-    movies: z.array(z.looseObject({
-      title: z.string(),
-      label: z.string(),
-      year: z.union([z.string(), z.number()]).nullable().optional(),
-      coverImage: nstr(),
-      href: nstr()
-    })).nullable().optional()
-  })
+  schema: peopleMergedSchema
 });
 
 export const collections = { books, movies, people, essays, podcasts, adventures, challenges, projects, topics, peopleProfiles, peopleMerged };
