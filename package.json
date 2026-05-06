@@ -32,7 +32,7 @@
     "perf:budget": "node scripts/check-performance-budgets.js --dist=dist",
     "csp:hashes": "node scripts/update-csp-hashes.js --dist=dist",
     "sw:version": "node scripts/version-service-worker.js --dist=dist",
-    "lint": "npx biome check js scripts",
+    "lint": "npx biome check scripts",
     "verify": "node scripts/verify.js",
     "enrich:movies": "node scripts/enrich-movies.js",
     "photos:sync": "node scripts/sync-photos.js"

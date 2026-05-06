@@ -37,7 +37,7 @@ const commands = {
   'astro:build': ['npm', ['run', '--prefix', 'site-astro', 'build']],
   check: ['npm', ['run', '--prefix', 'site-astro', 'astro', 'check']],
   'content:validate': ['node', ['scripts/validate-content.js']],
-  lint: ['npx', ['biome', 'check', 'js', 'scripts']],
+  lint: ['npx', ['biome', 'check', 'scripts']],
   'normalize:html:check': ['node', ['scripts/normalize-astro-html.js', '--dist=dist', '--check']],
   'people:merge': ['node', ['scripts/merge-people.js']],
   'perf:budget': ['node', ['scripts/check-performance-budgets.js', '--dist=dist']],
