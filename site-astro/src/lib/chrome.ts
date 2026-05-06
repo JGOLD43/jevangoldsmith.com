@@ -11,9 +11,31 @@ import { NAV_TEMPLATE as NAV_TEMPLATE_RAW } from './nav-template';
 import { FOOTER_TEMPLATE as FOOTER_TEMPLATE_RAW } from './footer-template';
 import pages from '../../../data/pages.json';
 import ctas from '../../../data/ctas.json';
-import { escapeAttr as escapeHtmlAttr } from './html-escape';
+import quotes from '../../public/data/quotes.json';
+import { escapeAttr as escapeHtmlAttr, escapeHtml } from './html-escape';
 
-const NAV_TEMPLATE = NAV_TEMPLATE_RAW.trim();
+// Build-time wisdom ticker. The runtime fetch + shuffle in theme.ts has
+// been hoisted here: pick 5 random quotes once per build, repeat the
+// first to satisfy the seamless-loop CSS animation (6 positions).
+function renderWisdomTickerHtml(): string {
+  const list = (quotes as { tickerQuotes?: string[] }).tickerQuotes ?? [];
+  if (list.length < 5) return '';
+  const shuffled = [...list].sort(() => Math.random() - 0.5).slice(0, 5);
+  shuffled.push(shuffled[0]);
+  return shuffled.map((phrase) => `<a href="quotes.html" class="wisdom-item">${escapeHtml(phrase)}</a>`).join('');
+}
+
+const TICKER_TRACK_INNER = renderWisdomTickerHtml();
+const NAV_TEMPLATE_BASE = NAV_TEMPLATE_RAW.trim();
+
+// Replace the placeholder ticker block in the nav template once at module
+// load with the build-time-shuffled set so renderNav doesn't redo work.
+const NAV_TEMPLATE = TICKER_TRACK_INNER
+  ? NAV_TEMPLATE_BASE.replace(
+      /<div class="wisdom-ticker-track">[\s\S]*?<\/div>/,
+      `<div class="wisdom-ticker-track">${TICKER_TRACK_INNER}</div>`
+    )
+  : NAV_TEMPLATE_BASE;
 const FOOTER_TEMPLATE = FOOTER_TEMPLATE_RAW.trim();
 
 const SECTION_BY_FILE = new Map<string, string>(

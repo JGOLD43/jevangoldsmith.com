@@ -1,5 +1,5 @@
-import { escapeHtml as escapeHTML } from '../lib/html-escape';
-// Theme Toggle and Wisdom Ticker Functionality
+// Theme toggle, mobile nav, logo video, nav-height sync.
+// (Wisdom ticker is rendered at build time in lib/chrome.ts.)
 
 (function() {
     'use strict';
@@ -44,63 +44,6 @@ import { escapeHtml as escapeHTML } from '../lib/html-escape';
         if (toggleBtn) {
             toggleBtn.addEventListener('click', toggleTheme);
         }
-    }
-
-    // Wisdom Ticker - Short quotes that cycle through
-    // Fallback quotes in case JSON fetch fails
-    const fallbackQuotes = [
-        "Stay curious, stay humble",
-        "Build for decades, not quarters",
-        "First principles thinking",
-        "Actions reveal priorities",
-        "Compound interest in all things",
-        "Learn in public",
-        "Question assumptions",
-        "Simple is harder than complex",
-        "The obstacle is the way",
-        "Be so good they can't ignore you",
-        "Comfort is the enemy of progress"
-    ];
-
-    function renderWisdomTicker(quotes: string[]) {
-        const track = document.querySelector('.wisdom-ticker-track');
-        if (!track) return;
-
-        // Shuffle quotes
-        const shuffled = [...quotes].sort(() => Math.random() - 0.5);
-
-        // Take first 5 unique items, then add first one at end for seamless loop
-        // This creates exactly 6 items to match the CSS animation (6 positions)
-        const selected = shuffled.slice(0, 5);
-        selected.push(selected[0]);
-
-        // Build HTML with clickable links to quotes page
-        track.innerHTML = selected.map(phrase =>
-            `<a href="quotes.html" class="wisdom-item">${typeof escapeHTML === 'function' ? escapeHTML(phrase) : phrase}</a>`
-        ).join('');
-    }
-
-    async function initWisdomTicker() {
-        const track = document.querySelector('.wisdom-ticker-track');
-        if (!track) return;
-
-        try {
-            // Try to fetch quotes from JSON file
-            const response = await fetch('data/quotes.json');
-            if (response.ok) {
-                const data = await response.json();
-                // Use tickerQuotes array from JSON
-                if (data.tickerQuotes && data.tickerQuotes.length >= 5) {
-                    renderWisdomTicker(data.tickerQuotes);
-                    return;
-                }
-            }
-        } catch (e) {
-            // Fetch failed, use fallback
-        }
-
-        // Use fallback quotes if fetch failed
-        renderWisdomTicker(fallbackQuotes);
     }
 
     // Logo video hover effect (lazy-load video source on first interaction)
@@ -255,7 +198,6 @@ import { escapeHtml as escapeHTML } from '../lib/html-escape';
     }
 
     function initDeferredChrome() {
-        initWisdomTicker();
         initLogoVideo();
     }
 
