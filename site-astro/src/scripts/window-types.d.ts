@@ -116,9 +116,6 @@ declare global {
     AdventuresUrls?: Record<string, string>;
     AdventuresConstants?: Record<string, unknown>;
 
-    // Sanitize helpers exposed for legacy consumers.
-    sanitizeUrl?: (s: unknown, fallback?: string) => string;
-
     MovieStats?: { render: (movies: unknown) => void; compute: (movies: unknown) => unknown };
 
     // Legacy JG namespaces (still referenced by some consumers).
