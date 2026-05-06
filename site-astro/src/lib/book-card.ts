@@ -87,7 +87,7 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
   const loading = eager ? 'eager' : 'lazy';
   const fp = eager ? ' fetchpriority="high"' : '';
   const coverImg = coverUrl
-    ? `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(title)}" class="book-cover" loading="${loading}"${fp} decoding="async" data-book-cover-fallback="true">`
+    ? `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(title)}" class="book-cover" width="150" height="230" loading="${loading}"${fp} decoding="async" data-book-cover-fallback="true">`
     : '';
 
   const yearSpan = yearStr ? `<span class="book-year">${escapeHtml(yearStr)}</span>` : '';

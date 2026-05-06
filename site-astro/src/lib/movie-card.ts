@@ -76,7 +76,7 @@ export function renderMovieCardHtml(movie: Movie): string {
   return `<div class="${classes.join(' ')}" data-movie-title="${escapeHtml(title)}" data-title="${escapeHtml(title)}" data-id="${escapeHtml(title)}"${cursorStyle}>
         ${timesWatchedBadge}
         <div class="movie-poster-wrapper">
-            ${poster ? `<img src="${escapeHtml(poster)}" alt="${escapeHtml(title)}" class="movie-poster" loading="lazy" decoding="async">` : `<div class="movie-poster-placeholder">${escapeHtml(title)}</div>`}
+            ${poster ? `<img src="${escapeHtml(poster)}" alt="${escapeHtml(title)}" class="movie-poster" width="150" height="230" loading="lazy" decoding="async">` : `<div class="movie-poster-placeholder">${escapeHtml(title)}</div>`}
         </div>
         <div class="movie-info">
             <div class="movie-title-row">
