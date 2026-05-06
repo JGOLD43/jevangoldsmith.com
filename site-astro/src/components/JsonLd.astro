@@ -9,6 +9,7 @@ import {
   pageEnrichment,
   pageNode,
   type BreadcrumbStep,
+  type ExtraSchema,
   type PageType
 } from '../lib/seo';
 import { currentPageFromUrl } from '../lib/chrome';
@@ -21,7 +22,7 @@ interface Props {
   image?: string;
   breadcrumbs?: BreadcrumbStep[];
   /** Additional schema.org @graph nodes (Article, Book, Movie, ItemList, ...). */
-  extraSchema?: Array<Record<string, unknown>>;
+  extraSchema?: ExtraSchema[];
 }
 
 const {

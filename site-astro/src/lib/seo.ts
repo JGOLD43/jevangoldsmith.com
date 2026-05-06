@@ -113,6 +113,70 @@ interface PageEnrichment {
   };
 }
 
+type SchemaListItem = {
+  '@type': 'ListItem';
+  position: number;
+  url?: string;
+  name: string;
+};
+
+export type ArticleSchema = {
+  '@type': 'Article';
+  '@id'?: string;
+  headline?: string;
+  name?: string;
+  description?: string;
+  image?: string;
+};
+
+export type BookSchema = {
+  '@type': 'Book';
+  '@id'?: string;
+  name: string;
+  author?: string | { '@type': 'Person'; name: string };
+  image?: string;
+  description?: string;
+  isbn?: string;
+};
+
+export type MovieSchema = {
+  '@type': 'Movie';
+  '@id'?: string;
+  name: string;
+  image?: string;
+  description?: string;
+  datePublished?: string | number;
+};
+
+export type PersonSchema = {
+  '@type': 'Person';
+  '@id'?: string;
+  name: string;
+  jobTitle?: string | null;
+  description?: string | null;
+  image?: string;
+};
+
+export type TouristTripSchema = {
+  '@type': 'TouristTrip';
+  '@id'?: string;
+  name: string;
+  description?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  itinerary?: { '@type': 'ItemList'; itemListElement: SchemaListItem[] };
+  image?: string;
+  provider?: { '@id': string };
+};
+
+export type ItemListSchema = {
+  '@type': 'ItemList';
+  '@id'?: string;
+  itemListElement: SchemaListItem[];
+};
+
+export type ExtraSchema = ArticleSchema | BookSchema | MovieSchema | PersonSchema | TouristTripSchema | ItemListSchema;
+
 /**
  * Mirrors scripts/legacy-build/build/page-metadata.js: reads data/pages.json
  * + data/topics.json and returns the extra @graph fields the legacy build
@@ -256,7 +320,7 @@ export function personSchema(opts: {
   jobTitle?: string | null;
   description?: string | null;
   image?: string;
-}) {
+}): PersonSchema {
   return {
     '@id': `${opts.canonical}#subject`,
     '@type': 'Person',
@@ -275,7 +339,7 @@ export function tripSchema(opts: {
   endDate?: string | null;
   itinerary?: Array<{ name: string }> | null;
   image?: string;
-}) {
+}): TouristTripSchema {
   return {
     '@id': `${opts.canonical}#trip`,
     '@type': 'TouristTrip',
@@ -290,4 +354,3 @@ export function tripSchema(opts: {
     provider: { '@id': `${SITE_URL}/#person` }
   };
 }
-

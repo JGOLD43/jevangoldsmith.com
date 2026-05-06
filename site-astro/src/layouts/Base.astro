@@ -8,7 +8,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import JsonLd from '../components/JsonLd.astro';
 import SeoRelated from '../components/SeoRelated.astro';
-import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type PageType } from '../lib/seo';
+import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type ExtraSchema, type PageType } from '../lib/seo';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
 // Critical-CSS-inline + async-load was tried and reverted: it cut FCP
 // modestly but caused a major CLS regression (0.084 → 0.726) when full
@@ -35,7 +35,7 @@ interface Props {
   /** Skip JSON-LD (e.g. for /data-smoke or other non-public pages). */
   noJsonLd?: boolean;
   /** Per-page schema.org @graph nodes (Article, Book, Movie, ItemList, ...). */
-  extraSchema?: Array<Record<string, unknown>>;
+  extraSchema?: ExtraSchema[];
   /** Skip the auto SeoRelated section (e.g. for pages where the body owns it). */
   noSeoRelated?: boolean;
   /** Extra <script src="/js/X.js"> tags to load before the closing body tag.
