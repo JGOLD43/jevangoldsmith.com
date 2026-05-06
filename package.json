@@ -5,6 +5,7 @@
   "description": "Static personal website for jevangoldsmith.com",
   "scripts": {
     "dev": "npm run --prefix site-astro dev",
+    "serve": "npx firebase-tools emulators:start --only hosting",
     "predev": "npm run people:merge",
     "prepare": "git config core.hooksPath .githooks || true",
     "build": "node scripts/build.js",

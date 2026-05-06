@@ -26,7 +26,8 @@ npm run check
 For behavior-sensitive changes, serve generated output:
 
 ```bash
-python3 -m http.server 4173 --directory dist
+npm run build:fast
+npm run serve
 ```
 
 Smoke test at least:
