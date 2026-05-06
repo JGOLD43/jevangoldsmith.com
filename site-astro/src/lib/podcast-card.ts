@@ -1,6 +1,5 @@
-// build-time-rendered curated-podcast card.
-// Mirrors buildCuratedPodcastCard() in js/podcasts.js so renderCuratedPodcasts
-// adopts the SSR'd cards on first call instead of wiping them.
+// Server-side renderer for curated podcast cards. podcasts.ts binds behavior
+// to these SSR'd cards.
 import { escapeAttr as escape } from './html-escape';
 
 interface PodcastData {

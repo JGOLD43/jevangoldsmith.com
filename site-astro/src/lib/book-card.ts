@@ -1,14 +1,5 @@
-// build-time-rendered book card HTML.
-//
-// Mirrors the createBookCard() string in js/books.js so a card pre-rendered
-// here is byte-identical to one books.js would produce at runtime. That
-// lets us SSR all 122 cards into the static HTML — the page paints with
-// content immediately, and books.js still binds its zoom + modal handlers
-// to the same DOM shape.
-//
-// books.js no longer needs to render the initial card list; on load it
-// detects an already-populated container and skips the wipe-and-reappend
-// step (see js/books.js → renderBooks).
+// Server-side renderer for book cards. books.ts binds behavior to these SSR'd
+// cards and filters by toggling visibility.
 
 interface BookData {
   title?: string;

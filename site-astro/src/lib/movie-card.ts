@@ -1,7 +1,5 @@
-// server-side renderer for movie cards. Mirrors
-// `createMovieCardFromData` from src/scripts/letterboxd.ts so SSR'd
-// cards match runtime output. letterboxd.js detects an already-populated
-// grid and skips its initial wipe-and-render.
+// Server-side renderer for movie cards. letterboxd.ts binds behavior to these
+// SSR'd cards and filters by toggling visibility.
 
 import { escapeAttr as escapeHtml } from './html-escape';
 

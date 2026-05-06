@@ -135,10 +135,8 @@ verifies Firebase ID tokens and second-factor state before writing data.
 
 ## Evolution Rule
 
-After Phase 11 cleanup, retire `chrome-legacy.css` and `pages-legacy.css`
-(currently inlined for visual parity) by migrating every chrome rule to
-Tailwind utilities or `@layer components` in `site-astro/src/styles/`.
-That cuts the CSS bundle from ~166KB to a target of ~15KB.
+Retire `chrome-legacy.css` and `pages-legacy.css` by migrating every chrome
+rule to Tailwind utilities or `@layer components` in `site-astro/src/styles/`.
 
 For new pages, write Astro components that use Tailwind utilities directly.
 Do not append to the legacy stylesheets.

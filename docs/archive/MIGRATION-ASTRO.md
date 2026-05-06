@@ -17,7 +17,7 @@ Astro replaces the build orchestrator and template system. Tailwind replaces the
 ## Target end state
 
 | Layer | Now | After | Cut |
-|---|---|---|---|
+|---|---|---|
 | JS | 9.9k | ~3k | 70% |
 | CSS source | 13.4k | ~1k | 92% |
 | Build scripts | 5.4k | ~300 | 94% |
@@ -32,7 +32,7 @@ Per-page payload: 40–80% smaller. Dev loop: ~600× faster (HMR vs full rebuild
 These fixtures lock current behavior. Migration ships only when all pass.
 
 | Fixture | What it locks | Capture | Check |
-|---|---|---|---|
+|---|---|---|
 | `tests/seo-fixture.json` | 79 pages × full `<head>` | `npm run check:seo:capture` | `npm run check:seo` |
 | `tests/content-fixture.json` | 79 pages × heading outline + link/image counts + word count + data-action surface + landmarks | `npm run check:content:capture` | `npm run check:content` |
 | `tests/visual-baselines/` | 79 pages × 3 viewports (PNG SHA-256) | `npm run check:visual:capture` | `npm run check:visual` |
@@ -46,23 +46,21 @@ These fixtures lock current behavior. Migration ships only when all pass.
 Each phase is independently shippable + reversible. Parity gate must be green
 before merging the phase.
 
-| # | Phase | Scope | Days |
-|---|---|---|---|
-| 0 | Parity harness | Lock current state across SEO, content, visual, perf | 1 |
-| 1 | Astro skeleton | `npm create astro` in `site-astro/` subdir, port `Base.astro` chrome | 1 |
-| 2 | Tailwind + tokens | `@theme` block, port `01-tokens.css`, shared button/card components | 1 |
-| 3 | Data layer | Copy `data/*.json` to `src/data/`, write Zod schemas | 1 |
-| 4 | Simple content pages | About, contact, meet, etc. (~24 pages, 5/PR) | 3 |
-| 5 | Collection factory | `<Collection>` component + Card components for books/movies/essays/people/podcasts | 3 |
-| 6 | Detail pages | person/[slug], adventure/[slug], skill/[slug] dynamic routes | 2 |
-| 7 | Adventures + maps | Leaflet as `client:visible` island, GPX pipeline preserved | 2 |
-| 8 | SEO + sitemap + RSS | `@astrojs/sitemap`, structured-data helper component | 1 |
-| 9 | Image + asset pipeline | `astro:assets` + remote-asset localization | 1 |
-| 10 | Dist swap | Move `site-astro/` → root, archive legacy build, update Firebase deploy | 1 |
-| 11 | Cleanup | Delete `site-astro/src/`, `css/src/`, old `js/`, `scripts/build/` | 1 |
-| 12 | Polish | view transitions, content collections, real CMS auth | ongoing |
-
-**Total: ~3 weeks part-time.**
+| # | Phase | Scope |
+|---|---|---|
+| 0 | Parity harness | Lock current state across SEO, content, visual, perf |
+| 1 | Astro skeleton | `npm create astro` in `site-astro/` subdir, port `Base.astro` chrome |
+| 2 | Tailwind + tokens | `@theme` block, port `01-tokens.css`, shared button/card components |
+| 3 | Data layer | Copy `data/*.json` to `src/data/`, write Zod schemas |
+| 4 | Simple content pages | About, contact, meet, etc. |
+| 5 | Collection factory | `<Collection>` component + Card components for books/movies/essays/people/podcasts |
+| 6 | Detail pages | person/[slug], adventure/[slug], skill/[slug] dynamic routes |
+| 7 | Adventures + maps | Leaflet as `client:visible` island, GPX pipeline preserved |
+| 8 | SEO + sitemap + RSS | `@astrojs/sitemap`, structured-data helper component |
+| 9 | Image + asset pipeline | `astro:assets` + remote-asset localization |
+| 10 | Dist swap | Move `site-astro/` → root, archive legacy build, update Firebase deploy |
+| 11 | Cleanup | Delete `site-astro/src/`, `css/src/`, old `js/`, `scripts/build/` |
+| 12 | Polish | view transitions, content collections, real CMS auth |
 
 ## Branch strategy
 

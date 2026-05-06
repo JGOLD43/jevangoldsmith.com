@@ -134,11 +134,8 @@ const categoryDisplayNames: Record<string, string> = {
 function createBooksView(controller: AnyObj) {
     let currentViewMode = 'list';
 
-    // follow-up: Astro SSRs every card at build time, so the page
-    // ships with all 122 cards already in the DOM. Filter / search no longer
-    // re-renders; it toggles each card's visibility based on the matched
-    // set. createBookCard() is deleted entirely (~50 lines), shrinking the
-    // page-books bundle by ~3KB minified.
+    // Astro SSRs every card at build time. Filter / search toggles each
+    // card's visibility based on the matched set.
     function renderBooks(books: AnyObj[]) {
         const container = document.getElementById('books-container');
         if (!container) return;

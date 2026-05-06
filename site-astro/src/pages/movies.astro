@@ -1,6 +1,7 @@
 ---
 import CollectionPage from '../components/CollectionPage.astro';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import { tasteListOptions, MOVIE_SECTIONS } from '../lib/collection-sections';
 import { renderMovieCardHtml } from '../lib/movie-card';
 
@@ -11,8 +12,8 @@ const canonical = 'https://jevangoldsmith.com/movies.html';
 // detects the populated grid and skips the initial wipe, so SSR'd cards
 // stay on screen until the runtime fetch completes (if it runs at all).
 
-const movies = (await getCollection('movies')).map((m: any) => m.data);
-const movieCardsHtml = movies.map((m: any) => renderMovieCardHtml(m)).join('');
+const movies = (await getCollection('movies') as CollectionEntry<'movies'>[]).map((m) => m.data);
+const movieCardsHtml = movies.map((m) => renderMovieCardHtml(m)).join('');
 
 // legacy fragments inlined. Sidebar filter (rating + times
 // watched) + main body (error placeholder, stats panel, grid) used to
