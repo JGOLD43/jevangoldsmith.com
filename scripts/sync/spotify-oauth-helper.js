@@ -7,7 +7,7 @@
 // revoked (password change, manual revoke at spotify.com/account/apps).
 //
 // Usage:
-//   node scripts/spotify-oauth-helper.js
+//   node scripts/sync/spotify-oauth-helper.js
 //
 // Prereqs:
 //   1. Register a Spotify app at https://developer.spotify.com/dashboard

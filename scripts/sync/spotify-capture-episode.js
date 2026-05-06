@@ -150,7 +150,7 @@ async function main() {
         accessToken = await refreshAccessToken(clientId, clientSecret, refreshToken);
     } catch (err) {
         if (err.revoked) {
-            console.error('Refresh token revoked. Re-run scripts/spotify-oauth-helper.js and update SPOTIFY_REFRESH_TOKEN secret.');
+            console.error('Refresh token revoked. Re-run scripts/sync/spotify-oauth-helper.js and update SPOTIFY_REFRESH_TOKEN secret.');
             // exit 0 so we don't get an email every hour
             process.exit(0);
         }

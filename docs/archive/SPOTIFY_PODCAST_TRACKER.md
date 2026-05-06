@@ -16,9 +16,9 @@ ongoing cost.
 
 ## Files
 
-- `scripts/spotify-oauth-helper.js` — one-time local script to obtain refresh token
-- `scripts/spotify-capture-episode.js` — hourly capture, called by Action
-- `scripts/spotify-sync-shows.js` — monthly sync, called by Action
+- `scripts/sync/spotify-oauth-helper.js` — one-time local script to obtain refresh token
+- `scripts/sync/spotify-capture-episode.js` — hourly capture, called by Action
+- `scripts/sync/spotify-sync-shows.js` — monthly sync, called by Action
 - `.github/workflows/spotify-capture-episodes.yml` — hourly workflow
 - `.github/workflows/spotify-sync-shows.yml` — monthly workflow
 - `data/podcast-episodes.json` — append-only log (capped at 500 most recent)
@@ -51,7 +51,7 @@ SPOTIFY_CLIENT_SECRET=<your client secret>
 Run:
 
 ```
-node scripts/spotify-oauth-helper.js
+node scripts/sync/spotify-oauth-helper.js
 ```
 
 It will:
@@ -91,7 +91,7 @@ After verification, both workflows run automatically on their schedule.
 
 | Failure | What happens | Fix |
 |---|---|---|
-| Refresh token revoked (e.g., Spotify password change, manual revoke at spotify.com/account/apps) | Capture script logs `invalid_grant` error and exits 0; episodes stop being logged | Re-run `node scripts/spotify-oauth-helper.js`, update `SPOTIFY_REFRESH_TOKEN` secret |
+| Refresh token revoked (e.g., Spotify password change, manual revoke at spotify.com/account/apps) | Capture script logs `invalid_grant` error and exits 0; episodes stop being logged | Re-run `node scripts/sync/spotify-oauth-helper.js`, update `SPOTIFY_REFRESH_TOKEN` secret |
 | Spotify API down | Workflow fails this run; retries next schedule | Nothing — self-heals |
 | You listened but nothing was logged | Episode shorter than 1 hour and finished between polls; or you listened in a Private Session; or Spotify Connect device not registering | Inherent limitation. Capture rate is ~85-90%, not 100% |
 | Workflow stops running after long inactivity | GitHub disables scheduled workflows in repos with no commits for 60 days | You commit regularly to this repo; not a real risk |
@@ -109,7 +109,7 @@ hours/month. Free tier is 33 hours/month for private repos. ~18% used.
 `data/podcast-episodes.json` is committed to the repo and served on the public
 site. Anyone visiting the podcasts page can see what you've been listening to.
 If you want to exclude specific shows, add a check in
-`scripts/spotify-capture-episode.js` that skips any episode whose `showId` is
+`scripts/sync/spotify-capture-episode.js` that skips any episode whose `showId` is
 in an exclusion list, before the dedupe/append step.
 
 ## Removing an episode
