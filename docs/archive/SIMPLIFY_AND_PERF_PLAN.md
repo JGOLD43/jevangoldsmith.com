@@ -446,7 +446,7 @@ Each slice is independent. None gates on the others.
 
 ---
 
-## Phase 6 — Long-term observability (ongoing)
+## Phase 6 — Long-term observability
 
 Not a one-time slice. Establishes:
 

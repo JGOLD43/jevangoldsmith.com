@@ -13,7 +13,7 @@ A clean, phase-by-phase plan with concrete acceptance criteria so we don't repea
 
 ---
 
-## Phase 0 — Foundation & verification harness (2 days)
+## Phase 0 — Foundation & verification harness
 
 The biggest reason past sessions went sideways: no automated way to know when a page was "done." Fix that first.
 
@@ -40,7 +40,7 @@ The biggest reason past sessions went sideways: no automated way to know when a 
 
 ---
 
-## Phase 1 — Lock down chrome (1 day)
+## Phase 1 — Lock down chrome
 
 The shared bits across every page. These have to be byte-identical or near it before anything else matters.
 
@@ -54,7 +54,7 @@ The shared bits across every page. These have to be byte-identical or near it be
 
 ---
 
-## Phase 2 — Static content pages (2-3 days)
+## Phase 2 — Static content pages
 
 The lowest-hanging fruit. Correct HTML + matching CSS classes. No interactivity.
 
@@ -84,7 +84,7 @@ For each page: open legacy at `/page.html`, open astro at `/page.html`, compare 
 
 ---
 
-## Phase 3 — Collection list pages (3-4 days)
+## Phase 3 — Collection list pages
 
 Pages with cards + filters + search. The legacy interactivity has to be ported.
 
@@ -114,11 +114,11 @@ Per page: define an Astro client island that owns the page's interactive state. 
 
 ---
 
-## Phase 4 — Special pages (5-7 days, longest phase)
+## Phase 4 — Special pages
 
 Pages with bespoke UI that doesn't fit the collection pattern.
 
-### 4.1 Homepage (1-2 days)
+### 4.1 Homepage
 - Hero: headline, welcome, CTA card, profile picture (responsive `<picture>`)
 - **Snapshot toggle:** "ABOUT ME" floating button → animated card with bio details
 - **Side-nav dots:** right-edge scrollspy navigation between sections
@@ -129,7 +129,7 @@ Pages with bespoke UI that doesn't fit the collection pattern.
 - Current-focus section
 - Final CTA
 
-### 4.2 Adventures (1-2 days)
+### 4.2 Adventures
 - Sidebar with adventure list + count
 - Leaflet map with markers
 - **GPX route polylines** (legacy reads from `data/routes.generated.json`)
@@ -138,34 +138,34 @@ Pages with bespoke UI that doesn't fit the collection pattern.
 - Mobile list/map toggle button
 - "Adventures" header with trip count
 
-### 4.3 Cool-shit (1 day)
+### 4.3 Cool-shit
 - Timeline scrollspy (sticky left sidebar with month markers)
 - Tag rail filter (right column)
 - Category counts in rail
 - Expand/collapse months
 - "Field Archive · Cool Shit" eyebrow + count
 
-### 4.4 Products / The Shelf (1 day)
+### 4.4 Products / The Shelf
 - Category filter buttons that actually filter
 - `.shelf-item` cards with photo + name + verdict
 - **Zoom interaction:** click an item → grid pulls back, item enlarges, detail panel slides in
 - Disclosure footer
 
-### 4.5 Search (½ day)
+### 4.5 Search
 - Search input + URL `?q=` persistence
 - Type filter pills (all / books / essays / people / etc.)
 - Results card list with type badge
 
-### 4.6 Dateme (½ day)
+### 4.6 Dateme
 - Multi-step funnel state machine
 - Step transitions, validation, summary screen
 - Form submit to formsubmit.co
 
-### 4.7 Important-or-not (½ day)
+### 4.7 Important-or-not
 - Filter pills with live counts
 - Card animations on filter change
 
-### 4.8 Lesson-logger (½ day)
+### 4.8 Lesson-logger
 - Real lesson data from `data/`
 - Date sort, search
 - "Learned from: [book/adventure]" cross-links
@@ -174,7 +174,7 @@ Pages with bespoke UI that doesn't fit the collection pattern.
 
 ---
 
-## Phase 5 — Detail routes (1-2 days)
+## Phase 5 — Detail routes
 
 - `adventure-[slug]`: hero image, story body, highlights tags, location/date metadata, photo gallery, "Back to Adventures" link
 - `people/[slug]`: bio, thesis, life timeline, books they wrote/recommended, resources/links, Wikipedia external link
@@ -183,7 +183,7 @@ Pages with bespoke UI that doesn't fit the collection pattern.
 
 ---
 
-## Phase 6 — Polish & ship (1-2 days)
+## Phase 6 — Polish & ship
 
 - `npm run check:parity` reports 41/41 within tolerance.
 - `npm run check:visual` reports 0 perceptual diffs >2%.
@@ -191,17 +191,11 @@ Pages with bespoke UI that doesn't fit the collection pattern.
 - Per-page JSON-LD validates in Google Rich Results test.
 - Performance budgets in `data/site.config.json` met.
 - Playwright `test:browser` passes.
-- Production canary: deploy `refactor/astro` to Firebase preview channel, browse 1 day, then merge to main.
+- Production canary: deploy `refactor/astro` to Firebase preview channel, verify production behavior, then merge to main.
 
 **Done when:** `main` builds with `npm run build:astro` and the production site is the Astro build, with `dist-legacy-snap/` retained as a rollback artifact for ~1 month.
 
 ---
-
-## Estimated total
-
-- Pace: focused 4-hour sessions, 5 days a week
-- **2.5 to 3.5 weeks** of real work
-- Or **6-8 weeks** at part-time pace
 
 ## Risk register
 

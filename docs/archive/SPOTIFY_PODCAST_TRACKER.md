@@ -1,8 +1,7 @@
 # Spotify Podcast Tracker
 
 Pulls your podcast listening history and followed shows from Spotify into the
-podcasts page. Runs entirely on GitHub Actions — no Firebase, no servers, no
-ongoing cost.
+podcasts page. Runs entirely on GitHub Actions — no Firebase and no servers.
 
 ## What it does
 
@@ -85,14 +84,14 @@ Repo → **Actions** tab.
 
 If either fails, GitHub will email you. Check the Action logs for the error.
 
-After verification, both workflows run automatically on their schedule.
+After verification, both workflows run automatically.
 
 ## Failure modes
 
 | Failure | What happens | Fix |
 |---|---|---|
 | Refresh token revoked (e.g., Spotify password change, manual revoke at spotify.com/account/apps) | Capture script logs `invalid_grant` error and exits 0; episodes stop being logged | Re-run `node scripts/sync/spotify-oauth-helper.js`, update `SPOTIFY_REFRESH_TOKEN` secret |
-| Spotify API down | Workflow fails this run; retries next schedule | Nothing — self-heals |
+| Spotify API down | Workflow fails this run; retries on the next workflow run | Nothing — self-heals |
 | You listened but nothing was logged | Episode shorter than 1 hour and finished between polls; or you listened in a Private Session; or Spotify Connect device not registering | Inherent limitation. Capture rate is ~85-90%, not 100% |
 | Workflow stops running after long inactivity | GitHub disables scheduled workflows in repos with no commits for 60 days | You commit regularly to this repo; not a real risk |
 | Repo gets too many auto-commits | At most 1 commit per hour, only when episode actually changes. Realistic: 5-30 commits/month | If noisy, increase dedupe window in `spotify-capture-episode.js` |
@@ -119,5 +118,5 @@ re-add the same episode unless you re-listen and the dedupe window has passed.
 
 ## Manual trigger anytime
 
-Both workflows have `workflow_dispatch` enabled — you can trigger either one
-on demand from the Actions tab without waiting for the schedule.
+Both workflows have `workflow_dispatch` enabled, so you can trigger either one
+on demand from the Actions tab.

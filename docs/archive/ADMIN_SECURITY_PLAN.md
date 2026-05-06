@@ -56,7 +56,7 @@ against that window.
 
 ## Phased delivery
 
-### G.1 — Cloud Functions skeleton (1 day)
+### G.1 — Cloud Functions skeleton
 - Create `functions/` package with TypeScript or JS, your choice.
 - Wire `firebase.json` rewrites:
   ```json
@@ -81,7 +81,7 @@ against that window.
   identity. Use this to validate the verification flow before moving
   any writes.
 
-### G.2 — Move 2FA to a server-issued claim (1 day)
+### G.2 — Move 2FA to a server-issued claim
 - Add `verify-2fa` callable function: takes a TOTP code, verifies it
   against the stored shared secret (currently in `admin/js/totp.js`
   client logic; move secret to Functions config), and on success calls
@@ -92,7 +92,7 @@ against that window.
 - Remove client-side TOTP verification (no longer trusted). Keep the
   UI flow the same.
 
-### G.3 — Migrate writes one collection at a time (2-3 days)
+### G.3 — Migrate writes one collection at a time
 - Per-collection write functions in Cloud Functions: `addBook`,
   `updateBook`, `deleteBook`, etc. Validate payload shape using the
   same schemas you'd export from `scripts/check/harness.js`
@@ -102,7 +102,7 @@ against that window.
   `fetch('/api/admin/books/add', { ... })`.
 - One commit per collection migrated.
 
-### G.4 — Lock down Firestore rules (30 min)
+### G.4 — Lock down Firestore rules
 After every admin write goes through Cloud Functions:
 
 ```
@@ -113,7 +113,7 @@ match /admin/{document=**} {
 
 Functions still write via Admin SDK, which bypasses rules.
 
-### G.5 — Verify (half day)
+### G.5 — Verify
 - Pen-test 1: try `firestore.collection('admin').add({})` from authenticated
   browser console. Expected: PERMISSION_DENIED.
 - Pen-test 2: call `/api/admin/books/add` with a stale token (auth_time
