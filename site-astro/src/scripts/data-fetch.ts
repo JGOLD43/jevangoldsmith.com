@@ -1,43 +1,10 @@
-const manifestUrl = '/data/runtime-data-manifest.json';
-let manifestPromise: Promise<{ assets?: Record<string, string> }> | null = null;
-
-function isJsonPath(url: string) {
-    return /\.json(?:$|\?)/i.test(url);
-}
-
-function relativeAssetPath(url: string) {
-    try {
-        const absolute = new URL(url, window.location.origin);
-        return absolute.pathname.replace(/^\/+/, '');
-    } catch {
-        return String(url || '').replace(/^\/+/, '');
-    }
-}
-
-async function loadManifest() {
-    if (!manifestPromise) {
-        manifestPromise = fetch(manifestUrl, { cache: 'default' })
-            .then((response) => response.ok ? response.json() : { assets: {} })
-            .catch(() => ({ assets: {} }));
-    }
-    return manifestPromise;
-}
-
-export async function versionedUrl(url: string) {
-    if (!url || /^https?:\/\//i.test(url) || !isJsonPath(url)) return url;
-    const manifest = await loadManifest();
-    const assetPath = relativeAssetPath(url.split('#')[0]);
-    const version = manifest.assets?.[assetPath];
-    if (!version) return url;
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}v=${version}`;
-}
+// Runtime JSON fetch helpers. Cache-busting was previously routed through
+// /data/runtime-data-manifest.json, but that file was never generated —
+// every fetch paid an extra 404 round-trip. Direct fetch is faster and
+// relies on Firebase Hosting's standard Cache-Control on JSON.
 
 export async function fetchJson(url: string, options: { cache?: RequestCache } = {}) {
-    const target = await versionedUrl(url);
-    const response = await fetch(target, {
-        cache: options.cache || 'default'
-    });
+    const response = await fetch(url, { cache: options.cache ?? 'default' });
     if (!response.ok) {
         throw new Error(`Failed to load ${url}: ${response.status}`);
     }
