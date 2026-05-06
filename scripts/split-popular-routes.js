@@ -36,6 +36,26 @@ if (!fs.existsSync(SOURCE)) {
 
 const data = JSON.parse(fs.readFileSync(SOURCE, 'utf8'));
 const routes = Array.isArray(data.routes) ? data.routes : [];
+
+// Round route coordinates to 5 decimal places (~1m precision). Source
+// data carries 6 decimals (~10cm) which is wasted detail at every map
+// zoom level we render. Trims drive.json and bike.json by ~30-40%.
+const COORD_PRECISION = 1e5;
+function roundCoord(n) {
+  return Number.isFinite(n) ? Math.round(n * COORD_PRECISION) / COORD_PRECISION : n;
+}
+function trimGeometry(geom) {
+  if (!geom || !Array.isArray(geom.coordinates)) return geom;
+  // GeoJSON LineString: array of [lng, lat] pairs.
+  return {
+    ...geom,
+    coordinates: geom.coordinates.map((pair) => Array.isArray(pair) ? pair.map(roundCoord) : pair)
+  };
+}
+for (const route of routes) {
+  if (route?.geometry) route.geometry = trimGeometry(route.geometry);
+}
+
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
 // Wipe stale chunk files (e.g. previously emitted small types now inlined).
