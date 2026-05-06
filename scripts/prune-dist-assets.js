@@ -28,7 +28,17 @@ const targets = [
     'data/remote-assets.generated.json',
     // After purge-css runs, every page links chrome.HASH.css + inlines its
     // per-page slice. The original 187KB legacy-style.css is unreferenced.
-    'css/legacy-style.css'
+    'css/legacy-style.css',
+    // Build-time-only data files. Imported by lib/chrome.ts, lib/seo.ts,
+    // collection-sections.ts at build; never fetched at runtime. The
+    // canonical externally-advertised copies live under /api/v1/.
+    'data/pages.json',
+    'data/topics.json',
+    'data/ctas.json',
+    // Source-of-truth before merge-people.js. Runtime reads
+    // people.merged.generated.json (or the SSR'd inline copy).
+    'data/people.profiles.json',
+    'data/people.json'
 ];
 
 let removed = 0;
