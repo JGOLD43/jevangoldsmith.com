@@ -59,7 +59,7 @@ before merging the phase.
 | 8 | SEO + sitemap + RSS | `@astrojs/sitemap`, structured-data helper component | 1 |
 | 9 | Image + asset pipeline | `astro:assets` + remote-asset localization | 1 |
 | 10 | Dist swap | Move `site-astro/` → root, archive legacy build, update Firebase deploy | 1 |
-| 11 | Cleanup | Delete `_src/`, `css/src/`, old `js/`, `scripts/build/` | 1 |
+| 11 | Cleanup | Delete `site-astro/src/`, `css/src/`, old `js/`, `scripts/build/` | 1 |
 | 12 | Polish | view transitions, content collections, real CMS auth | ongoing |
 
 **Total: ~3 weeks part-time.**

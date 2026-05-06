@@ -8,8 +8,8 @@ Purpose: `inventory reusable website components and their ownership`
 
 | Component | Source | Behavior | Used By |
 |---|---|---|---|
-| Navbar | `_src/partials/nav.html` | Active state, dropdowns, mobile menu via `js/theme.js`. | All public pages except `meet.html`. |
-| Footer | `_src/partials/footer.html` | Static footer links/copyright. | Most public pages. |
+| Navbar | `site-astro/src/partials/nav.html` | Active state, dropdowns, mobile menu via `js/theme.js`. | All public pages except `meet.html`. |
+| Footer | `site-astro/src/partials/footer.html` | Static footer links/copyright. | Most public pages. |
 | Theme toggle | `js/theme.js` | Persists light/dark preference in local storage. | Shared nav pages. |
 | Wisdom ticker | `js/theme.js`, `data/quotes.json` | Renders rotating quotes. | Shared nav pages. |
 | Logo video hover | `js/theme.js` | Lazy-loads animated logo video. | Shared nav pages. |
@@ -21,7 +21,7 @@ Purpose: `inventory reusable website components and their ownership`
 
 ## Ownership Rules
 
-- Shared component markup should move toward `_src/components/`.
+- Shared component markup should move toward `site-astro/src/components/`.
 - Shared behavior should move toward module-style files in `js/`.
 - Shared styles should move out of `css/src/legacy.css` into
   `css/src/30-components/`.

@@ -9,19 +9,19 @@ Purpose: `define which files own each part of the website`
 | Concern | Source Of Truth | Generated/Consumed By |
 |---|---|---|
 | Firebase deploy output | Source files plus `scripts/build-site.js` | `dist/` |
-| Public HTML output | exactly one source per route: `_src/pages/*.html` or collection renderer | `dist/*.html` |
+| Public HTML output | exactly one source per route: `site-astro/src/pages/*.html` or collection renderer | `dist/*.html` |
 | Shared CSS output | `css/src/*.css` | `css/style.css`, `dist/assets/css/*` |
 | Per-page CSS bundles | `css/src/*.css`, `scripts/build/page-manifest.js` | `css/page-*.css`, `dist/assets/css/*` |
 | Hashed asset paths | `scripts/build/assets.js` | `dist/asset-manifest.json` |
 | Versioned static JSON paths | generated `dist/data/*.json`, `dist/api/v1/*.json` | `dist/data/runtime-data-manifest.json` |
 | Generated file manifest | `scripts/build-site.js` | `data/generated-manifest.json` |
 | Route ownership allowlist | `data/source-ownership.json` | `npm run check:source` |
-| Page index | public page sources, `_src/pages/`, collection data | `data/pages.json`, `dist/data/pages.json` |
+| Page index | public page sources, `site-astro/src/pages/`, collection data | `data/pages.json`, `dist/data/pages.json` |
 | Sitemap | public page sources, `data/site.json` | `sitemap.xml`, `dist/sitemap.xml` |
 | Robots | `data/site.json` | `robots.txt`, `dist/robots.txt` |
 | Agent instructions | public page sources, collection data | `llms.txt`, `dist/llms.txt` |
 | Primary calls to action | `data/ctas.json` | `dist/api/v1/ctas.json`, future page CTA modules |
-| Field Notes audience model | `data/newsletter.json`, `_src/pages/field-notes.html` | `field-notes.html`, `dist/api/v1/newsletter.json` |
+| Field Notes audience model | `data/newsletter.json`, `site-astro/src/pages/field-notes.html` | `field-notes.html`, `dist/api/v1/newsletter.json` |
 | Topic taxonomy | `data/topics.json` | `dist/api/v1/topics.json`, search/topic trails |
 | Popular route geometry | `data/popular-routes.json` compact JSON | `dist/data/popular-routes.json`, adventures map |
 
@@ -30,7 +30,7 @@ Never hand-edit generated `dist/` files.
 Generated root artifacts such as `css/style.css`, `css/page-*.css`,
 `data/pages.json`, `data/generated-manifest.json`, `sitemap.xml`, and
 `llms.txt` are recreated by `npm run build`. Public source lives in
-`_src/pages/` plus collection renderers; topic pages are generated into
+`site-astro/src/pages/` plus collection renderers; topic pages are generated into
 `dist/topics/` from `data/topics.json` and SEO metadata. `npm run check:repo`
 prevents generated files from being accidentally staged for commit,
 `npm run check:source` protects route ownership, and `npm run check:structure`
@@ -46,11 +46,11 @@ Raw `images/products/` files remain source assets and should not ship to `dist/`
 |---|---|
 | Site identity, domain, social links, core assets | `data/site.json` |
 | Deploy, CSP, external allowlist, performance budgets | `data/site.config.json` |
-| Shared navigation | `_src/partials/nav.html` |
-| Shared footer | `_src/partials/footer.html` |
+| Shared navigation | `site-astro/src/partials/nav.html` |
+| Shared footer | `site-astro/src/partials/footer.html` |
 | CSS source layers | `css/src/` |
-| Shared base page layout | `_src/layouts/base.html` |
-| Public page source | `_src/pages/` or collection renderers, never both for the same route |
+| Shared base page layout | `site-astro/src/layouts/base.html` |
+| Public page source | `site-astro/src/pages/` or collection renderers, never both for the same route |
 | Books content | `data/books.json` |
 | Adventures content | `data/adventures.json` |
 | Essays content | `data/essays.json` |
@@ -72,7 +72,7 @@ Raw `images/products/` files remain source assets and should not ship to `dist/`
 The active source model is:
 
 ```text
-_src/
+site-astro/src/
   pages/
   layouts/
   partials/
@@ -81,6 +81,6 @@ _src/
   styles/
 ```
 
-Public routes are now sourced from `_src/pages/` and collection renderers, then
-emitted into `dist/`. Shared chrome flows through `_src/layouts/base.html` plus
+Public routes are now sourced from `site-astro/src/pages/` and collection renderers, then
+emitted into `dist/`. Shared chrome flows through `site-astro/src/layouts/base.html` plus
 the shared partials. The old root-page migration is complete.

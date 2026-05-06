@@ -46,10 +46,9 @@ The site is an Astro project rooted at `site-astro/`:
 - `images/` — source + generated image variants (symlinked into `site-astro/public/images/`)
 - `fonts/chivo/` — self-hosted Chivo font (symlinked into `site-astro/public/fonts/`)
 - `vendor/leaflet/` — self-hosted Leaflet (copied into `site-astro/public/vendor/`)
-- `scripts/` — enrichment + sync scripts (Letterboxd, Spotify, TMDB), parity
-  check harness in `scripts/check/`, the Phase 2 content guard
-  (`validate-content.js`), and the Phase 10 smoke harness (`smoke-check.js`)
-- `scripts/legacy-build/` — archived hand-rolled SSG (build-site.js + 38 helper modules). Available via `npm run build:legacy` for emergency rollback. Removed in Phase 11 cleanup.
+- `scripts/` — enrichment + sync scripts (Letterboxd, Spotify, TMDB), content
+  guard (`validate-content.js`), performance budgets, and smoke harness
+  (`smoke-check.js`)
 - `admin/` — browser-based admin interface, excluded from Hosting
 
 ## Build Flow

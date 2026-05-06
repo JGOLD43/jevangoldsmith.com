@@ -20,7 +20,7 @@ migration safer.
 ### Keep Root HTML As Transitional Source
 
 Root `.html` files remain the current source while the project migrates toward
-`_src/pages/`. This avoids a risky all-at-once rewrite.
+`site-astro/src/pages/`. This avoids a risky all-at-once rewrite.
 
 ### Self-Host Leaflet
 

@@ -21,10 +21,10 @@ Purpose: `define current and target content ownership`
 ## Target Content Shape
 
 Move repeatable content to explicit data files or Markdown/frontmatter under
-`_src/content/`:
+`site-astro/src/content/`:
 
 ```text
-_src/content/
+site-astro/src/content/
   pages/
   adventures/
   essays/

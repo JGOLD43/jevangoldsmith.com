@@ -276,7 +276,7 @@ pattern.
 
 **Work:**
 
-- For each `_src/legacy/collections/<page>/*.html` fragment, port the
+- For each `site-astro/src/legacy/collections/<page>/*.html` fragment, port the
   markup directly into the corresponding `.astro` page or component.
 - Drop the `?raw` imports.
 - Delete `site-astro/src/legacy/` entirely.

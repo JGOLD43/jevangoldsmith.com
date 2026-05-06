@@ -7,7 +7,7 @@
       "**/node_modules/**",
       "admin/**",
       "functions/**",
-      "_src/**",
+      "site-astro/src/**",
       "scripts/**",
       "css/src/**"
     ],

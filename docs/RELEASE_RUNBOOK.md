@@ -45,7 +45,7 @@ Do not deploy source-only folders:
 
 - `admin/`
 - `functions/`
-- `_src/`
+- `site-astro/src/`
 - `scripts/`
 - `css/src/`
 

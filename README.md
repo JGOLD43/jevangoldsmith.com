@@ -6,15 +6,12 @@ recurring audience thread.
 
 As of the Astro migration (May 2026), the build is **Astro 6 + Tailwind v4**.
 `npm run build` invokes Astro under the hood and writes generated HTML / CSS /
-JS to `dist/`, which Firebase Hosting serves. The legacy hand-rolled SSG is
-preserved at `scripts/legacy-build/` for emergency rollback (`npm run
-build:legacy`); Phase 11 cleanup will retire it once parity is fully verified.
+JS to `dist/`, which Firebase Hosting serves.
 
 ## Start Here
 
 Read [docs/START_HERE.md](docs/START_HERE.md) first. It links to the active
-engineering, product, design, content, and release docs. The migration plan
-lives at [docs/MIGRATION-ASTRO.md](docs/MIGRATION-ASTRO.md).
+engineering and release docs. Historical plans live under `docs/archive/`.
 
 ## Structure
 
@@ -32,10 +29,8 @@ lives at [docs/MIGRATION-ASTRO.md](docs/MIGRATION-ASTRO.md).
 ├── data/                   # Source-of-truth JSON for every collection
 ├── images/                 # Source + generated images (symlinked into site-astro/public/)
 ├── fonts/                  # Self-hosted Chivo (symlinked into site-astro/public/)
-├── tests/                  # Parity harness fixtures + Playwright tests
 ├── scripts/
-│   ├── check/              # Parity harness (SEO, content, perf, visual)
-│   ├── legacy-build/       # Archived hand-rolled SSG (rollback only)
+│   ├── sync/               # External sync helpers
 │   └── *.js                # Enrichment + sync scripts (Letterboxd, Spotify, TMDB)
 ├── admin/                  # Admin source, excluded from public Hosting deploys
 ├── dist/                   # Generated Firebase Hosting output; ignored
@@ -66,7 +61,7 @@ current behavior during the in-progress Astro migration:
 npm run check:parity:capture
 ```
 
-See [docs/MIGRATION-ASTRO.md](docs/MIGRATION-ASTRO.md) for the migration plan.
+Historical migration notes live under `docs/archive/`.
 
 Verify live Firebase output (without requiring custom domain cutover):
 
@@ -95,13 +90,9 @@ breakdown, rating histogram, and most-rewatched.
 
 ## Generated Files Policy
 
-The canonical generated-file policy lives in
-[docs/SOURCE_OF_TRUTH.md](docs/SOURCE_OF_TRUTH.md). In short: author source in
-`_src/`, `css/src/`, `data/*.json` except generated indexes, root legacy HTML
-while still source, `js/`, `scripts/`, `docs/`, `tests/`, and `vendor/`.
-Generated bundles, indexes, deploy output, and test artifacts stay ignored.
-Route ownership is tracked in `data/source-ownership.json`; structure cleanup
-is enforced by `npm run check:source` and `npm run check:structure`.
+In short: author source in `site-astro/src/`, `data/*.json`, `scripts/`,
+`docs/`, and `vendor/`. Generated bundles, indexes, deploy output, and test
+artifacts stay ignored.
 
 ## Deployment
 
@@ -122,21 +113,16 @@ Relevant files:
 
 ## Content Model
 
-The site currently uses a hybrid content model:
+The site currently uses an Astro content model:
 
-- many pages are still hand-authored root HTML files
-- migrated pages live in `_src/pages/`
-- root route ownership is classified in `data/source-ownership.json`
-- shared nav/footer source lives in `_src/partials/`
+- pages live in `site-astro/src/pages/`
+- shared nav/footer source lives in `site-astro/src/components/`
 - collections live in `data/*.json` where migrated
 - primary commercial actions live in `data/ctas.json`
 - Field Notes configuration lives in `data/newsletter.json`
 - topic taxonomy starts in `data/topics.json`
-- books live in `data/books.json` and are rendered by `js/books.js`
+- books live in `data/books.json` and are rendered by Astro
 - admin tools are present, but not all content types persist through a backend
-
-The next major structural improvement is to continue migrating root HTML pages
-into `_src/pages/`, then generate the same public HTML output through templates.
 
 ## Static Agent API
 
@@ -149,13 +135,12 @@ with canonical URLs for citation and future commerce/resource surfaces. Agents
 can use `/api/v1/search-index.json` as the cheapest discovery map before
 fetching larger content payloads.
 
-See [docs/STATIC_AGENT_API.md](docs/STATIC_AGENT_API.md).
+Historical static-agent API notes live under `docs/archive/`.
 
 ## Analytics
 
 Analytics events are privacy-friendly and configured through
-`data/site.config.json`. See [docs/ANALYTICS.md](docs/ANALYTICS.md) for what is
-tracked, what is intentionally not tracked, and how to debug local events.
+`data/site.config.json`.
 
 ## Security Notes
 
