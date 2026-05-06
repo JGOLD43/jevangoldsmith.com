@@ -28,7 +28,12 @@ const summary = [
   { name: 'topics', count: topics.length, sample: (topics[0]?.data as { title?: string })?.title }
 ];
 ---
-<Base title="Data smoke test" canonical="https://jevangoldsmith.com/_data-smoke">
+<Base
+  title="Data smoke test"
+  canonical="https://jevangoldsmith.com/_data-smoke"
+  robots="noindex"
+  noJsonLd
+>
   <main class="container" style="padding: 4rem 2rem;">
     <h1>Content collections smoke test</h1>
     <p>Every collection loads + validates against its Zod schema.</p>

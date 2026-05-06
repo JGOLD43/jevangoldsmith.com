@@ -23,7 +23,12 @@ export default defineConfig({
         }
         return item;
       },
-      filter: (page) => !page.endsWith('/data-smoke') && !page.endsWith('/data-smoke.html')
+      filter: (page) => ![
+        '/data-smoke',
+        '/data-smoke.html',
+        '/dateme',
+        '/dateme.html'
+      ].some((suffix) => page.endsWith(suffix))
     })
   ]
 });
