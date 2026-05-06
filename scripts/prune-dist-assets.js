@@ -38,7 +38,12 @@ const targets = [
     // Source-of-truth before merge-people.js. Runtime reads
     // people.merged.generated.json (or the SSR'd inline copy).
     'data/people.profiles.json',
-    'data/people.json'
+    'data/people.json',
+    // Inlined into HTML at SSR time (jg-books-data, people-merged-data
+    // <script type=application/json> blocks). The runtime fallback
+    // fetch was deleted; these files are no longer requested.
+    'data/people.merged.generated.json',
+    'data/books.generated.json'
 ];
 
 let removed = 0;

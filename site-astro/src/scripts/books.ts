@@ -1,7 +1,7 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import { init as initGridZoom } from './grid-zoom';
 import { installImageErrorHandler, installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
-import { fetchJson, readInlineJson } from './data-fetch';
+import { readInlineJson } from './data-fetch';
 import { createCollectionRuntime } from './collection-runtime';
 import {
     closeDropdownOnOutsideClick as closeDropdownOnOutsideClickShared,
@@ -500,16 +500,15 @@ const booksModal = createBooksModal({ getCoverUrl });
 let booksView: AnyObj = null;
 let booksRuntime: AnyObj = null;
 
-async function loadBooksData() {
+function loadBooksData() {
     if (booksState.getBooks().length > 0) return booksState.getBooks();
     const inline = readInlineJson<AnyObj[]>('jg-books-data');
-    if (Array.isArray(inline) && inline.length > 0) {
-        booksState.setBooks(inline);
-        return inline;
+    if (!Array.isArray(inline) || inline.length === 0) {
+        // SSR always emits jg-books-data. Reaching here is a build bug.
+        throw new Error('books: inline SSR data missing or empty');
     }
-    const books = await fetchJson('data/books.generated.json');
-    booksState.setBooks(books);
-    return books;
+    booksState.setBooks(inline);
+    return inline;
 }
 
 function getCoverUrl(bookOrIsbn: AnyObj, size: string = "large") {
@@ -679,7 +678,7 @@ async function initBooksPage() {
     try {
         buildCollectionController();
         restoreSidebarState();
-        await loadBooksData();
+        loadBooksData();
 
         booksView = createBooksView({
             getBooks: () => booksState.getBooks(),

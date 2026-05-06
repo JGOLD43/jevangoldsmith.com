@@ -6,10 +6,10 @@ import { createCollectionRuntime } from './collection-runtime';
 let peopleRuntime: AnyObj = null;
 let peopleById = new Map<string, AnyObj>();
 
-async function loadPeopleCards() {
+function loadPeopleCards() {
     const grid = document.getElementById('people-grid');
     if (!grid) return;
-    peopleById = await loadPeopleData();
+    peopleById = loadPeopleData();
 }
 
 async function initPeoplePage() {
@@ -34,7 +34,7 @@ async function initPeoplePage() {
         onRender: applyPeopleSourceFilter,
         useDisplayStyle: true
     });
-    await loadPeopleCards();
+    loadPeopleCards();
     registerPeopleFilterActions(() => peopleRuntime);
     peopleRuntime.init();
     initPeopleDetail(() => peopleById);
