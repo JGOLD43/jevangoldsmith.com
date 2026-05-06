@@ -1,9 +1,6 @@
 import { monthKey, monthLabel, dayLabel } from '../lib/dates';
 
 (function () {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  type AnyObj = any;
-
   const els = {
     feed: document.getElementById('feed'),
     feedCount: document.getElementById('feed-count'),

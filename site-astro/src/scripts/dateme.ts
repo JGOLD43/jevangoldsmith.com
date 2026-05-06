@@ -7,9 +7,6 @@
 import { toneContent, stage1Questions, stage2Questions } from './dateme-content';
 import { dateMeState, dateMeFlow } from './dateme-state';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyObj = any;
-
 // --- view helpers ---
 function animateIn(container: HTMLElement | null | undefined) {
     const screen = container?.querySelector('.funnel-screen');
