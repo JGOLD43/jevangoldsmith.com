@@ -1,3 +1,5 @@
+import { registerActions } from './action-dispatcher';
+
 let peopleSourceFilter = 'all';
 
 function sourceMatches(card: HTMLElement) {
@@ -53,7 +55,7 @@ export function applyPeopleSourceFilter({ allCards, visibleCards }: { allCards: 
 }
 
 export function registerPeopleFilterActions(getRuntime: () => AnyObj) {
-    window.JGActions?.register({
+    registerActions({
         filterPeopleSource(source: string, event?: Event) {
             peopleSourceFilter = source || 'all';
             const button = (event?.target as Element | undefined)?.closest('.people-source-filter-btn');

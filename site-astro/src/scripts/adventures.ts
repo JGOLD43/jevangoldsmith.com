@@ -7,6 +7,7 @@ import {
     WEB_MERCATOR_MAX_LAT, HORIZONTAL_WRAP_BOUND, ROUTE_TYPE_COLORS,
     BASEMAPS, DEFAULT_FILTERS
 } from './adventures-state';
+import { registerActions } from './action-dispatcher';
 
 // ============================================
 // Adventures Page Runtime State
@@ -560,7 +561,7 @@ function initAdventuresPage() {
 }
 
 // Register data-action handlers used by HTML markup.
-window.JGActions?.register({
+registerActions({
     saveFilters,
     toggleFilter,
     resetFilters,

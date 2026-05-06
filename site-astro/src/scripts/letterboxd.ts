@@ -2,6 +2,13 @@ import { escapeHtml as escapeHTML } from '../lib/html-escape';
 import { init as initGridZoom } from './grid-zoom';
 import { installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
 import { fetchJson } from './data-fetch';
+import { createCollectionRuntime } from './collection-runtime';
+import {
+    closeDropdownOnOutsideClick as closeDropdownOnOutsideClickShared,
+    highlightAndScroll,
+    toggleClearButton
+} from './collection-ui';
+import { registerActions } from './action-dispatcher';
 // Movies/letterboxd page orchestrator. Inlines js/letterboxd-state.js,
 // js/letterboxd-filters.js, js/letterboxd-modal.js, js/letterboxd-events.js,
 // js/letterboxd-render.js, js/letterboxd-view.js — those shards only ever
@@ -285,11 +292,11 @@ function updateTimesWatchedFilterDisplay(value: string | number) {
 }
 
 function scrollToMovieByTitle(movieTitle: string, event?: Event) {
-    const movieCards = Array.from(document.querySelectorAll('.movie-card'));
+    const movieCards = Array.from(document.querySelectorAll('.movie-card')) as HTMLElement[];
     const targetCard = movieCards.find((card) => card.getAttribute('data-movie-title') === movieTitle);
     if (!targetCard) return;
-    window.JGCollectionUI?.highlightAndScroll?.(targetCard, {
-        activeElement: (event?.target as Element | undefined)?.closest('.movie-link'),
+    highlightAndScroll(targetCard, {
+        activeElement: (event?.target as Element | undefined)?.closest('.movie-link') ?? null,
         activeSelector: '.movie-link'
     });
 }
@@ -321,7 +328,7 @@ function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilt
             closeMovieModal();
             return;
         }
-        window.JGCollectionUI.closeDropdownOnOutsideClick('list-dropdown', event);
+        closeDropdownOnOutsideClickShared('list-dropdown', event);
     });
 
     bindStarRatingDrag(document, setStarFilter);
@@ -340,7 +347,6 @@ function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilt
 }
 
 // --- orchestrator ---
-const collectionUi = window.JGCollectionUI as AnyObj;
 const movieModal = createMovieModal();
 let moviesRuntime: AnyObj = null;
 
@@ -353,7 +359,7 @@ function renderFromState() {
 }
 
 function buildCollectionController() {
-    moviesRuntime = window.JGCollectionRuntime.create({
+    moviesRuntime = createCollectionRuntime({
         getState: () => movieState.get(),
         getFilteredItems: () => getFilteredMovies(),
         getVisibleItems: (filteredMovies: AnyObj[], state: AnyObj) => movieFilters.getMoviesForGenre(filteredMovies, state.activeGenre),
@@ -367,7 +373,7 @@ function buildCollectionController() {
         updateControls: (state: AnyObj, filteredMovies: AnyObj[]) => {
             movieView.updateStarFilterDisplay(state.starFilter);
             movieView.updateTimesWatchedFilterDisplay(state.timesWatchedFilter);
-            collectionUi.toggleClearButton('movie-search-clear-btn', Boolean(state.searchQuery));
+            toggleClearButton('movie-search-clear-btn', Boolean(state.searchQuery));
             if (window.MovieStats && typeof window.MovieStats.render === 'function') {
                 window.MovieStats.render(filteredMovies);
             }
@@ -528,7 +534,7 @@ function initMoviesZoom() {
     });
 }
 
-window.JGActions.register({
+registerActions({
     clearAllFilters,
     clearMovieSearch,
     closeMovieModal,

@@ -31,12 +31,6 @@ const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility 
 />
 
 <script>
-  // native named imports replace `window.JGTaskList`.
-  // Vite tree-shakes the unused infra exports.
-  import '../scripts/grid-zoom.ts';
-  import '../scripts/collection-ui.ts';
-  import '../scripts/collection-runtime.ts';
-  import '../scripts/action-dispatcher.ts';
   import { createTaskList } from '../scripts/task-list.ts';
 
   createTaskList({

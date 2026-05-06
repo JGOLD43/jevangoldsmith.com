@@ -1,6 +1,7 @@
 import { loadPeopleData } from './people-data';
 import { initPeopleDetail } from './people-detail';
 import { applyPeopleSourceFilter, registerPeopleFilterActions } from './people-filter';
+import { createCollectionRuntime } from './collection-runtime';
 
 let peopleRuntime: AnyObj = null;
 let peopleById = new Map<string, AnyObj>();
@@ -12,7 +13,7 @@ async function loadPeopleCards() {
 }
 
 async function initPeoplePage() {
-    peopleRuntime = window.JGCollectionRuntime.create({
+    peopleRuntime = createCollectionRuntime({
         actions: {
             clearSearch: 'clearPeopleSearch',
             filter: 'filterByCategory',

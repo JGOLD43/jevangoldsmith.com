@@ -1,10 +1,11 @@
 import { renderSpotifyFollowedShows, renderSpotifyRecentEpisodes } from './podcasts-spotify';
 import { init as initGridZoom } from './grid-zoom';
+import { createCollectionRuntime } from './collection-runtime';
 
 let podcastRuntime: AnyObj = null;
 
 function buildCollectionController() {
-    podcastRuntime = window.JGCollectionRuntime.create({
+    podcastRuntime = createCollectionRuntime({
         actions: {
             clearSearch: 'clearPodcastSearch',
             filter: 'filterPodcasts',

@@ -2,6 +2,16 @@ import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import { init as initGridZoom } from './grid-zoom';
 import { installImageErrorHandler, installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
 import { fetchJson } from './data-fetch';
+import { createCollectionRuntime } from './collection-runtime';
+import {
+    closeDropdownOnOutsideClick as closeDropdownOnOutsideClickShared,
+    debounce,
+    highlightAndScroll
+} from './collection-ui';
+// books page registers data-action handlers transitively through the
+// collection runtime; importing action-dispatcher keeps the document
+// listeners installed even when the runtime isn't initialized yet.
+import './action-dispatcher';
 // Books page orchestrator. Inlines what used to live in
 // js/books-state.js, js/books-filters.js, js/books-modal.js,
 // js/books-events.js, js/books-view.js — those shards only ever exported
@@ -201,23 +211,23 @@ function createBooksView(controller: AnyObj) {
     }
 
     function scrollToBookByIsbn(isbn: string) {
-        const bookCard = document.querySelector(`[data-isbn="${isbn}"]`);
+        const bookCard = document.querySelector(`[data-isbn="${isbn}"]`) as HTMLElement | null;
         if (!bookCard) return;
-        window.JGCollectionUI?.highlightAndScroll?.(bookCard, {
+        highlightAndScroll(bookCard, {
             duration: 1000,
             shadow: '0 8px 24px rgba(0,0,0,0.2)'
         });
     }
 
     function scrollToBookByTitle(bookTitle: string, event?: Event) {
-        const bookCards = Array.from(document.querySelectorAll('.book-card'));
+        const bookCards = Array.from(document.querySelectorAll('.book-card')) as HTMLElement[];
         const targetCard = bookCards.find((card) => {
             const titleElement = card.querySelector('.book-title');
             return titleElement?.textContent === bookTitle;
         });
         if (!targetCard) return;
-        window.JGCollectionUI?.highlightAndScroll?.(targetCard, {
-            activeElement: (event?.target as Element | undefined)?.closest('.book-link'),
+        highlightAndScroll(targetCard, {
+            activeElement: (event?.target as Element | undefined)?.closest('.book-link') ?? null,
             activeSelector: '.book-link'
         });
     }
@@ -448,13 +458,13 @@ function bindBooksEvents(handlers: AnyObj) {
     });
 
     document.addEventListener('click', (event) => {
-        window.JGCollectionUI?.closeDropdownOnOutsideClick?.('list-dropdown', event);
+        closeDropdownOnOutsideClickShared('list-dropdown', event);
     });
 
     const searchInput = document.getElementById('book-search') as HTMLInputElement | null;
     if (searchInput) {
-        const debouncedSearch = window.JGCollectionUI?.debounce?.((value: string) => searchBooks(value), 120);
-        if (debouncedSearch) searchInput.addEventListener('input', () => debouncedSearch(searchInput.value));
+        const debouncedSearch = debounce((value: string) => searchBooks(value), 120);
+        searchInput.addEventListener('input', () => debouncedSearch(searchInput.value));
     }
 
     const slider = document.getElementById('timesread-slider');
@@ -473,7 +483,7 @@ function bindBooksEvents(handlers: AnyObj) {
 }
 
 // --- orchestrator ---
-const collectionUi = window.JGCollectionUI as AnyObj;
+import { toggleClearButton } from './collection-ui';
 const booksModal = createBooksModal({ getCoverUrl });
 let booksView: AnyObj = null;
 let booksRuntime: AnyObj = null;
@@ -527,7 +537,7 @@ function renderFromState() {
 }
 
 function buildCollectionController() {
-    booksRuntime = window.JGCollectionRuntime.create({
+    booksRuntime = createCollectionRuntime({
         getState: () => booksState.get(),
         getFilteredItems: () => getFilteredBooks(),
         getVisibleItems: (filteredBooks: AnyObj[], state: AnyObj) => getBooksForCategory(filteredBooks, state.activeCategory),
@@ -538,7 +548,7 @@ function buildCollectionController() {
         updateControls: (state: AnyObj) => {
             booksView?.updateStarFilterDisplay(state.starFilter);
             booksView?.updateReReadsFilterDisplay(state.reReadsFilter);
-            collectionUi.toggleClearButton('search-clear-btn', Boolean(state.searchQuery));
+            toggleClearButton('search-clear-btn', Boolean(state.searchQuery));
         },
         group: {
             allButtonSelector: '.sidebar-category[data-category="all"]',

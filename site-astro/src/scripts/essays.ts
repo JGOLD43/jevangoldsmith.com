@@ -1,6 +1,8 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+import { createCollectionRuntime } from './collection-runtime';
+import { debounce, toggleClearButton } from './collection-ui';
+import { registerActions } from './action-dispatcher';
 
-const collectionUi = window.JGCollectionUI as AnyObj;
 let essaysRuntime: AnyObj = null;
 
 function readInlineEssaysData(): AnyObj | null {
@@ -270,7 +272,7 @@ function renderFromState() {
 }
 
 function buildCollectionController() {
-    essaysRuntime = window.JGCollectionRuntime.create({
+    essaysRuntime = createCollectionRuntime({
         getState: () => essaysState.get(),
         getFilteredItems: () => getDerivedEssays(),
         getVisibleItems: (filteredEssays: AnyObj[]) => getVisibleEssayState(filteredEssays),
@@ -278,7 +280,7 @@ function buildCollectionController() {
         groupItems: () => groupEssaysByCategory(essaysState.get().essays),
         renderVisibleItems: (visibleState: AnyObj) => renderCurrentEssay(visibleState.essays, visibleState.currentIndex),
         updateCount: (visibleState: AnyObj) => updateEssayCount(visibleState.essays.length),
-        updateControls: (state: AnyObj) => collectionUi.toggleClearButton('search-clear-btn', Boolean(state.searchTerm), 'block'),
+        updateControls: (state: AnyObj) => toggleClearButton('search-clear-btn', Boolean(state.searchTerm), 'block'),
         group: {
             allButtonSelector: '[data-action="toggleCategory"][data-action-args="all"]',
             buttonSelector: '.sidebar-category',
@@ -313,7 +315,7 @@ function toggleCategory(category: string, event?: Event) {
     });
 }
 
-const searchEssays = collectionUi.debounce((term: string) => {
+const searchEssays = debounce((term: string) => {
     essaysState.setSearchTerm(term);
     essaysState.setActiveCategory('all');
     essaysState.setCurrentIndex(0);
@@ -382,7 +384,7 @@ function toggleListDropdown() {
     essaysRuntime?.toggleListDropdown();
 }
 
-window.JGActions.register({
+registerActions({
     clearEssaySearch,
     nextEssay,
     prevEssay,

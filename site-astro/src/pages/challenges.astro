@@ -33,11 +33,6 @@ const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibil
 />
 
 <script>
-  // native named imports replace `window.JGTaskList`.
-  import '../scripts/grid-zoom.ts';
-  import '../scripts/collection-ui.ts';
-  import '../scripts/collection-runtime.ts';
-  import '../scripts/action-dispatcher.ts';
   import { createTaskList } from '../scripts/task-list.ts';
 
   createTaskList({

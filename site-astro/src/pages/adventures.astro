@@ -151,9 +151,7 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
 </Base>
 
 <script>
-  // adventures fully on native modules. The 4 main files
-  // are concatenated into adventures.js (state shared via globalThis.X);
-  // adventures-map.js is dynamically imported on first map view.
-  import '../scripts/action-dispatcher.ts';
+  // adventures.ts imports action-dispatcher transitively; the map
+  // module is dynamically imported on first map view.
   import '../scripts/adventures.ts';
 </script>

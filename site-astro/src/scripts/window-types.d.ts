@@ -117,23 +117,6 @@ declare global {
     AdventuresConstants?: Record<string, unknown>;
 
     MovieStats?: { render: (movies: unknown) => void; compute: (movies: unknown) => unknown };
-
-    // Legacy JG namespaces (still referenced by some consumers).
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    JGActions?: { register: (handlers: Record<string, any>) => unknown };
-    JGCollectionUI?: {
-      activateOnly?: (buttons: Element[] | NodeListOf<Element>, active: Element | null) => void;
-      closeDropdownOnOutsideClick?: (id: string, event: Event) => void;
-      collapseGroups?: (config: Record<string, unknown>) => void;
-      debounce?: <F extends (...args: unknown[]) => unknown>(fn: F, wait?: number) => (...args: Parameters<F>) => void;
-      highlightAndScroll?: (target: Element, opts?: Record<string, unknown>) => void;
-      restoreCollapsedState?: (config: Record<string, unknown>) => boolean;
-      setCollapsedState?: (config: Record<string, unknown>) => void;
-      toggleCollapsedState?: (config: Record<string, unknown>) => boolean;
-      toggleClearButton?: (id: string, hasValue: boolean, displayValue?: string) => void;
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    JGCollectionRuntime?: { create: (config: unknown) => any };
   }
 }
 

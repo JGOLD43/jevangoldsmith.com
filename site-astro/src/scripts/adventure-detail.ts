@@ -1,3 +1,7 @@
+// Side-effect import: the page's data-action buttons need the
+// dispatcher's document-level click listener installed.
+import './action-dispatcher';
+
 (() => {
     const dataEl = document.getElementById('adventure-detail-data');
     if (!dataEl) return;

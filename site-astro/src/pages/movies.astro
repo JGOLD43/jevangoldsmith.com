@@ -154,9 +154,6 @@ const config = ({
 <script is:inline type="application/json" id="jg-movies-data" set:html={moviesRuntimeJson} />
 
 <script>
-  import '../scripts/collection-ui.ts';
-  import '../scripts/collection-runtime.ts';
-  import '../scripts/action-dispatcher.ts';
   // movie-stats must run before letterboxd so window.MovieStats is registered.
   import '../scripts/movie-stats.ts';
   import '../scripts/letterboxd.ts';

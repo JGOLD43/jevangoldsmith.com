@@ -645,7 +645,8 @@ function renderPoiToggles() {
 // togglePlacesOfInterest is wired via data-action on the "Want to Visit"
 // filter pill in adventures.astro. Register so the action dispatcher can
 // dispatch it.
-window.JGActions?.register({ togglePlacesOfInterest });
+import { registerActions as registerActionsForMap } from './action-dispatcher';
+registerActionsForMap({ togglePlacesOfInterest });
 
 // adventures.ts is the canonical source for these — re-imported here only
 // to keep the cross-module ambient typing happy.

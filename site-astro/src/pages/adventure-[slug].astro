@@ -213,9 +213,7 @@ const detailData = JSON.stringify({
 </Base>
 
 <script>
-  // (slice 17) + Phase 7 (slice 5): adventure-detail + sanitize +
-  // action-dispatcher as native modules. Loaded after Leaflet (above) so
-  // window.L is available.
-  import '../scripts/action-dispatcher.ts';
+  // adventure-detail imports action-dispatcher transitively. Loaded
+  // after Leaflet (above) so window.L is available.
   import '../scripts/adventure-detail.ts';
 </script>
