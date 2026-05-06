@@ -49,7 +49,7 @@ const coolShitJson = JSON.stringify(coolShitData);
   .cool-page { grid-template-columns: 1fr; }
 </style>
 
-<script type="application/json" id="jg-cool-shit-data" set:html={coolShitJson} />
+<script is:inline type="application/json" id="jg-cool-shit-data" set:html={coolShitJson} />
 
 <script>
   import '../scripts/cool-shit.ts';
