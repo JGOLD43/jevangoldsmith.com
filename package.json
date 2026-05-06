@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "npm run --prefix site-astro dev",
     "predev": "npm run people:merge",
+    "prepare": "git config core.hooksPath .githooks || true",
     "build": "node scripts/build.js",
     "build:fast": "node scripts/build.js --fast",
     "people:merge": "node scripts/merge-people.js",
@@ -29,6 +30,8 @@
     "purge:css": "node scripts/purge-css-per-page.js --dist=dist",
     "prune:dist": "node scripts/prune-dist-assets.js --dist=dist",
     "perf:budget": "node scripts/check-performance-budgets.js --dist=dist",
+    "csp:hashes": "node scripts/update-csp-hashes.js --dist=dist",
+    "sw:version": "node scripts/version-service-worker.js --dist=dist",
     "lint": "npx biome check js scripts",
     "verify": "node scripts/verify.js",
     "enrich:movies": "node scripts/enrich-movies.js",
