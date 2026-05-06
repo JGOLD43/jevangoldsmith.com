@@ -1,7 +1,7 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import { init as initGridZoom } from './grid-zoom';
 import { installImageErrorHandler, installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
-import { fetchJsonWithFallback } from './data-fetch';
+import { fetchJson } from './data-fetch';
 // Books page orchestrator. Inlines what used to live in
 // js/books-state.js, js/books-filters.js, js/books-modal.js,
 // js/books-events.js, js/books-view.js — those shards only ever exported
@@ -492,7 +492,7 @@ async function loadBooksData() {
             // fall through to network fetch
         }
     }
-    const books = await fetchJsonWithFallback(['data/books.generated.json', 'data/books.json']);
+    const books = await fetchJson('data/books.generated.json');
     booksState.setBooks(books);
     return books;
 }

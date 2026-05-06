@@ -10,15 +10,3 @@ export async function fetchJson(url: string, options: { cache?: RequestCache } =
     }
     return response.json();
 }
-
-export async function fetchJsonWithFallback(urls: string[], options: { cache?: RequestCache } = {}) {
-    let lastError: unknown = null;
-    for (const url of urls) {
-        try {
-            return await fetchJson(url, options);
-        } catch (error) {
-            lastError = error;
-        }
-    }
-    throw lastError || new Error('Failed to load JSON');
-}
