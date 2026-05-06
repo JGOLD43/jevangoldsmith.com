@@ -1,0 +1,15 @@
+   41328 dist/important-or-not.html
+   41978 dist/free-resources.html
+   42375 dist/north-star.html
+   42868 dist/adventures.html
+   44183 dist/products.html
+   44507 dist/living-manifesto.html
+   54263 dist/projects.html
+   54994 dist/challenges.html
+   60140 dist/essays.html
+   60344 dist/podcasts.html
+   75299 dist/index.html
+   78293 dist/movies.html
+  276417 dist/people.html
+  309002 dist/books.html
+ 3352347 total
