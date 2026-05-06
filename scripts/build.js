@@ -10,9 +10,9 @@ const phases = fast
       ['routes:split'],
       ['people:merge'],
       ['astro:build'],
-      ['sw:version'],
       ['normalize:html:check'],
       ['purge:css'],
+      ['slim:json'],
       ['prune:dist'],
       ['perf:budget']
     ]
@@ -26,9 +26,9 @@ const phases = fast
       ['assets:optimize'],
       ['people:merge'],
       ['astro:build'],
-      ['sw:version'],
       ['normalize:html:check'],
       ['purge:css'],
+      ['slim:json'],
       ['prune:dist'],
       ['perf:budget']
     ];
@@ -43,9 +43,9 @@ const commands = {
   'perf:budget': ['node', ['scripts/check-performance-budgets.js', '--dist=dist']],
   'prune:dist': ['node', ['scripts/prune-dist-assets.js', '--dist=dist']],
   'purge:css': ['node', ['scripts/purge-css-per-page.js', '--dist=dist']],
+  'slim:json': ['node', ['scripts/slim-runtime-json.js', '--dist=dist']],
   'routes:split': ['node', ['scripts/split-popular-routes.js']],
   'search:audit:strict': ['node', ['scripts/audit-search-index.js', '--strict']],
-  'sw:version': ['node', ['scripts/version-service-worker.js', '--dist=dist']],
   'snap:routes': ['node', ['scripts/snap-popular-routes.js']],
   'assets:optimize': ['node', ['scripts/optimize-assets.js']]
 };

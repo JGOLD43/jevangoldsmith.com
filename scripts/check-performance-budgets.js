@@ -87,6 +87,10 @@ if (!chromeCss) fail('Missing hashed chrome CSS');
 else assertMax(chromeCss, 45 * KB);
 assertMax('data/popular-routes.index.json', 4 * KB);
 
+// slim-runtime-json strips searchText + id from search-index records.
+// Budget at 90KB locks the win; without slim the file is ~170KB.
+assertMax('api/v1/search-index.json', 90 * KB);
+
 const routeChunks = walk(path.join(DIST, 'data/popular-routes')).filter((file) => file.endsWith('.json'));
 if (routeChunks.length === 0) fail('Missing popular route chunks');
 

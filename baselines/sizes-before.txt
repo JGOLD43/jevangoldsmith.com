@@ -1,0 +1,5 @@
+616K	dist/css/
+192K	dist/api/v1/search-index.json
+128K	dist/api/v1/pages.json
+128K	dist/api/v1/content.json
+128K	dist/api/v1/books.json

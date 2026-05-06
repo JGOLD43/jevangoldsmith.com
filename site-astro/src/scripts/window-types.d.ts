@@ -118,22 +118,25 @@ declare global {
 
     // Sanitize helpers exposed for legacy consumers.
     sanitizeUrl?: (s: unknown, fallback?: string) => string;
-    sanitizeHTML?: (s: string) => string;
 
     MovieStats?: { render: (movies: unknown) => void; compute: (movies: unknown) => unknown };
 
     // Legacy JG namespaces (still referenced by some consumers).
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     JGActions?: { register: (handlers: Record<string, any>) => unknown };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    JGCollectionUI?: Record<string, any>;
+    JGCollectionUI?: {
+      activateOnly?: (buttons: Element[] | NodeListOf<Element>, active: Element | null) => void;
+      closeDropdownOnOutsideClick?: (id: string, event: Event) => void;
+      collapseGroups?: (config: Record<string, unknown>) => void;
+      debounce?: <F extends (...args: unknown[]) => unknown>(fn: F, wait?: number) => (...args: Parameters<F>) => void;
+      highlightAndScroll?: (target: Element, opts?: Record<string, unknown>) => void;
+      restoreCollapsedState?: (config: Record<string, unknown>) => boolean;
+      setCollapsedState?: (config: Record<string, unknown>) => void;
+      toggleCollapsedState?: (config: Record<string, unknown>) => boolean;
+      toggleClearButton?: (id: string, hasValue: boolean, displayValue?: string) => void;
+    };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     JGCollectionRuntime?: { create: (config: unknown) => any };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    JGCollectionHelpers?: Record<string, any>;
-    JGDataFetch?: { fetchJson: (url: string, opts?: unknown) => Promise<unknown>; fetchJsonWithFallback: (urls: string[], opts?: unknown) => Promise<unknown>; versionedUrl: (url: string) => Promise<string> };
-    JGGridZoom?: { init: (config: unknown) => unknown; release: (grid: unknown) => unknown };
-    JGTaskList?: { create: (config: unknown) => unknown };
   }
 }
 

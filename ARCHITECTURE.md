@@ -75,9 +75,16 @@ Build time: ~4s for 82 routes. Legacy was ~30s.
    (`content:validate:strict` flips warnings to errors).
 2. `routes:split` — explodes `popular-routes.json` into per-route chunks.
 3. `astro build` — page HTML + asset graph.
-4. `normalize:html`, `bundle:js`, `purge:css`, `prune:dist` — compatibility
-   layer that lives until Phase 7 retires each piece.
-5. `perf:budget` — fails the build if any production budget regresses.
+4. `normalize:html`, `purge:css`, `slim:json`, `prune:dist` — post-build
+   payload optimization. `purge:css` rewrites every page from one 187KB
+   `legacy-style.css` to a 40KB shared `chrome.HASH.css` plus per-page
+   inline `<style>` (avg 5.5KB) — 77% first-visit transfer reduction,
+   97% repeat-visit. `slim:json` drops `searchText` + `id` from
+   `api/v1/search-index.json` records (the runtime in
+   `src/scripts/search-astro.ts` reconstructs searchText from
+   title+summary+section+type+tags) — 53% reduction.
+5. `perf:budget` — fails the build if any production budget regresses,
+   including hashed chrome CSS ≤45KB and search-index ≤90KB.
 
 Browser smoke harness (`npm run smoke`) hits a running dev server (or any
 `BASE_URL`) and asserts stable structural anchors per page.
