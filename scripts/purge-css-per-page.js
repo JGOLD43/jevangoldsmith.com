@@ -27,7 +27,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 
 const ROOT = path.resolve(__dirname, '..');
-const DIST = process.argv.find((a) => a.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist-astro');
+const DIST = process.argv.find((a) => a.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
 const SOURCE_CSS = path.join(DIST, 'css/legacy-style.css');
 
 if (!fs.existsSync(SOURCE_CSS)) {
