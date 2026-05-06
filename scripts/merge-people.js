@@ -6,7 +6,7 @@
 // people.astro reads the merged collection and SSRs all 98 cards.
 // people.js detects the populated grid and skips wipe-and-render.
 
-const { readFileSync, writeFileSync } = require('node:fs');
+const { existsSync, readFileSync, statSync, writeFileSync } = require('node:fs');
 const { resolve } = require('node:path');
 
 const ROOT = resolve(__dirname, '..');
@@ -424,7 +424,25 @@ function readJson(path) {
   return JSON.parse(readFileSync(resolve(DATA, path), 'utf8'));
 }
 
+function outputIsFresh(outputPath, inputPaths) {
+  if (!existsSync(outputPath)) return false;
+  const outputMtime = statSync(outputPath).mtimeMs;
+  return inputPaths.every((inputPath) => existsSync(inputPath) && statSync(inputPath).mtimeMs <= outputMtime);
+}
+
 function main() {
+  const inputPaths = [
+    resolve(DATA, 'people.json'),
+    resolve(DATA, 'books.generated.json'),
+    resolve(DATA, 'movies.json'),
+    resolve(DATA, 'people.profiles.json')
+  ];
+  const outPath = resolve(DATA, 'people.merged.generated.json');
+  if (outputIsFresh(outPath, inputPaths)) {
+    console.log('merge-people: skipped, generated data is fresh');
+    return;
+  }
+
   const peopleRaw = readJson('people.json');
   const booksGenerated = readJson('books.generated.json');
   const movies = readJson('movies.json');
@@ -437,7 +455,6 @@ function main() {
 
   const merged = mergeBookPeople(people, books, movieList, profiles);
   const out = { people: merged };
-  const outPath = resolve(DATA, 'people.merged.generated.json');
   writeFileSync(outPath, JSON.stringify(out, null, 2) + '\n');
   console.log(`merge-people: wrote ${merged.length} merged records to ${outPath}`);
 }
