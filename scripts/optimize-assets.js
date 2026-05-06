@@ -55,6 +55,12 @@ function removeIfExists(file) {
   if (fs.existsSync(file)) fs.rmSync(file, { force: true });
 }
 
+function writeFileIfChanged(file, contents) {
+  if (fs.existsSync(file) && fs.readFileSync(file, 'utf8') === contents) return false;
+  fs.writeFileSync(file, contents);
+  return true;
+}
+
 function pruneUnusedGeneratedWebp() {
   if (!fs.existsSync(generatedDir)) return;
   const stack = [generatedDir];
@@ -234,7 +240,8 @@ async function generateRemoteAssetSet() {
   }
 
   const manifestPath = path.join(root, 'data', 'remote-assets.generated.json');
-  fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  const changed = writeFileIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  if (!changed) console.log('optimize-assets: remote asset manifest unchanged');
 }
 
 function runFfmpeg(args) {
