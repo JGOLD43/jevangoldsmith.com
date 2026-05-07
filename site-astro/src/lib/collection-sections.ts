@@ -26,7 +26,7 @@ function categorySection({ label, key, iconKey = '', icon, tooltip = label, coun
 
 type AllPreset = { label: string; tooltip?: string; countId?: string; iconKey?: string; icon?: string; count?: string };
 type CategoryPresetGroup = { all: AllPreset; categories: Array<string[]> };
-const presets = sectionPresets as {
+const presets = sectionPresets as unknown as {
   essay: CategoryPresetGroup;
   podcast: Array<[string, string, string, string, string]>;
   movie: CategoryPresetGroup;
@@ -93,144 +93,101 @@ function tasteListOptions(active: string): ListOption[] {
 
 // === Task list (projects, challenges) ===
 
-interface CategoryMeta {
-  label: string;
-  emoji: string;
-  placeholder?: string;
-}
+interface CategoryMeta { label: string; emoji: string; placeholder?: string }
+type StatusMeta = { label: string; emoji: string };
 
-const PROJECT_CATEGORY_META: Record<string, CategoryMeta> = {
-  software: { label: 'Software', emoji: '💻', placeholder: 'placeholder-software' },
-  research: { label: 'Research', emoji: '📚', placeholder: 'placeholder-research' },
-  ai: { label: 'AI', emoji: '🤖', placeholder: 'placeholder-ai' },
-  writing: { label: 'Writing', emoji: '✍️', placeholder: 'placeholder-writing' },
-  'real-estate': { label: 'Real Estate', emoji: '🏠', placeholder: 'placeholder-real-estate' },
-  finance: { label: 'Finance', emoji: '💰', placeholder: 'placeholder-finance' }
-};
+const taskMeta = (sectionPresets as AnyTaskMeta).taskMeta;
+const PROJECT_CATEGORY_META = taskMeta.project.categories as Record<string, CategoryMeta>;
+const PROJECT_STATUS_META = taskMeta.project.statuses as Record<string, StatusMeta>;
+const CHALLENGE_CATEGORY_META = taskMeta.challenge.categories as Record<string, CategoryMeta>;
+const CHALLENGE_STATUS_META = taskMeta.challenge.statuses as Record<string, StatusMeta>;
 
-const PROJECT_STATUS_META: Record<string, { label: string; emoji: string }> = {
-  active: { label: 'Active', emoji: '⚡' },
-  completed: { label: 'Completed', emoji: '✅' },
-  planned: { label: 'Planned', emoji: '📋' }
-};
-
-const CHALLENGE_CATEGORY_META: Record<string, CategoryMeta> = {
-  learning: { label: 'Learning', emoji: '📚', placeholder: 'placeholder-learning' },
-  fitness: { label: 'Fitness', emoji: '💪', placeholder: 'placeholder-fitness' },
-  creative: { label: 'Creative', emoji: '✍️', placeholder: 'placeholder-creative' },
-  financial: { label: 'Financial', emoji: '💰', placeholder: 'placeholder-financial' }
-};
-
-const CHALLENGE_STATUS_META: Record<string, { label: string; emoji: string }> = {
-  active: { label: 'Active', emoji: '⚡' },
-  upcoming: { label: 'Upcoming', emoji: '📋' },
-  completed: { label: 'Completed', emoji: '✅' }
-};
-
-function titleCase(s: string): string {
-  return s.replace(/\b[a-z]/g, (c) => c.toUpperCase());
-}
-
-function projectCategoryMeta(category: string): CategoryMeta {
-  const key = (category || '').toLowerCase();
-  return PROJECT_CATEGORY_META[key] ?? {
-    label: titleCase(category || 'General'),
-    emoji: '🛠️',
-    placeholder: 'placeholder-software'
+interface AnyTaskMeta {
+  taskMeta: {
+    project: { categories: Record<string, CategoryMeta>; statuses: Record<string, StatusMeta> };
+    challenge: { categories: Record<string, CategoryMeta>; statuses: Record<string, StatusMeta> };
   };
 }
 
-function challengeCategoryMeta(category: string): CategoryMeta {
+const titleCase = (s: string) => s.replace(/\b[a-z]/g, (c) => c.toUpperCase());
+
+const lookupCategoryMeta = (map: Record<string, CategoryMeta>, category: string, fallbackEmoji: string, fallbackPlaceholder: string): CategoryMeta => {
   const key = (category || '').toLowerCase();
-  return CHALLENGE_CATEGORY_META[key] ?? {
-    label: titleCase(category || 'General'),
-    emoji: '🎯',
-    placeholder: 'placeholder-learning'
-  };
-}
+  return map[key] ?? { label: titleCase(category || 'General'), emoji: fallbackEmoji, placeholder: fallbackPlaceholder };
+};
 
-export interface Project {
-  id: string;
-  slug?: string;
-  title: string;
-  shortDescription?: string;
-  description?: string;
-  status?: string;
-  category?: string;
-  visibility?: string;
+interface TaskRecord {
+  id: string; slug?: string; title: string;
+  shortDescription?: string; description?: string;
+  status?: string; category?: string; visibility?: string;
   tags?: string[];
-  technologies?: string[];
-  topics?: string[];
 }
-
-export interface Challenge {
-  id: string;
-  slug?: string;
-  title: string;
-  shortDescription?: string;
-  description?: string;
-  status?: string;
-  category?: string;
-  timeframe?: string;
-  visibility?: string;
-  tags?: string[];
-  searchTerms?: string[];
-  icon?: string;
+export interface Project extends TaskRecord {
+  technologies?: string[]; topics?: string[];
+}
+export interface Challenge extends TaskRecord {
+  timeframe?: string; searchTerms?: string[]; icon?: string;
   progress?: { label?: string; value?: string; percent?: number | string };
 }
 
-export function renderProjectCard(project: Project): string {
-  const status = (project.status || 'planned').toLowerCase();
-  const category = (project.category || '').toLowerCase();
-  const meta = projectCategoryMeta(category);
-  const statusLabelText = PROJECT_STATUS_META[status]?.label ?? titleCase(status);
-  const description = project.shortDescription || project.description || '';
+interface TaskCardOpts {
+  defaultStatus: string;
+  cardClass: string;            // 'project-card' | 'challenge-card'
+  categoryMap: Record<string, CategoryMeta>;
+  statusMap: Record<string, StatusMeta>;
+  fallbackEmoji: string;
+  fallbackPlaceholder: string;
+  // Per-type extras
+  searchExtras?: string[];
+  trailingHtml?: string;
+  iconOverride?: string;
+  categoryLineSuffix?: string;  // challenge appends timeframe
+}
+
+function renderTaskCard(record: TaskRecord, opts: TaskCardOpts): string {
+  const status = (record.status || opts.defaultStatus).toLowerCase();
+  const category = (record.category || '').toLowerCase();
+  const meta = lookupCategoryMeta(opts.categoryMap, category, opts.fallbackEmoji, opts.fallbackPlaceholder);
+  const statusEntry = opts.statusMap[status] ?? { label: titleCase(status), emoji: '' };
+  const description = record.shortDescription || record.description || '';
   const searchTerms = [
-    project.title,
-    project.shortDescription,
-    project.description,
-    meta.label,
-    statusLabelText,
-    ...(project.tags || []),
-    ...(project.technologies || []),
-    ...(project.topics || [])
+    record.title, record.shortDescription, record.description,
+    meta.label, statusEntry.label,
+    ...(record.tags || []),
+    ...(opts.searchExtras || [])
   ].filter(Boolean).join(' ');
   const dataCategory = [status, category].filter(Boolean).join(' ');
+  const icon = opts.iconOverride || meta.emoji;
+  const categoryLine = opts.categoryLineSuffix ? [meta.label, opts.categoryLineSuffix].filter(Boolean).join(' · ') : meta.label;
 
-  return `<div class="movie-card project-card js-zoom-item" data-status="${escapeAttr(status)}" data-category="${escapeAttr(dataCategory)}" data-search="${escapeAttr(searchTerms)}" id="${escapeAttr(project.slug || project.id)}">
+  return `<div class="movie-card ${opts.cardClass} js-zoom-item" data-status="${escapeAttr(status)}" data-category="${escapeAttr(dataCategory)}" data-search="${escapeAttr(searchTerms)}" id="${escapeAttr(record.slug || record.id)}">
                     <div class="movie-poster-wrapper">
-                        <div class="podcast-cover-placeholder ${meta.placeholder ?? ''}">${meta.emoji}</div>
+                        <div class="podcast-cover-placeholder ${meta.placeholder ?? ''}">${icon}</div>
                     </div>
                     <div class="movie-info">
-                        <div class="times-read-badge movie-watch-badge status-${escapeAttr(status)}">${escapeHtml(statusLabelText)}</div>
+                        <div class="times-read-badge movie-watch-badge status-${escapeAttr(status)}">${escapeHtml(statusEntry.label)}</div>
                         <div class="movie-title-row">
-                            <h3 class="movie-title">${escapeHtml(project.title)}</h3>
+                            <h3 class="movie-title">${escapeHtml(record.title)}</h3>
                         </div>
-                        <div class="podcast-category-badge">${escapeHtml(meta.label)}</div>
-                        <p class="movie-description">${escapeHtml(description)}</p>
+                        <div class="podcast-category-badge">${escapeHtml(categoryLine)}</div>
+                        <p class="movie-description">${escapeHtml(description)}</p>${opts.trailingHtml || ''}
                     </div>
                 </div>`;
 }
 
+export function renderProjectCard(project: Project): string {
+  return renderTaskCard(project, {
+    defaultStatus: 'planned',
+    cardClass: 'project-card',
+    categoryMap: PROJECT_CATEGORY_META,
+    statusMap: PROJECT_STATUS_META,
+    fallbackEmoji: '🛠️',
+    fallbackPlaceholder: 'placeholder-software',
+    searchExtras: [...(project.technologies || []), ...(project.topics || [])]
+  });
+}
+
 export function renderChallengeCard(challenge: Challenge): string {
-  const status = (challenge.status || 'upcoming').toLowerCase();
-  const category = (challenge.category || '').toLowerCase();
-  const meta = challengeCategoryMeta(category);
-  const statusMeta = CHALLENGE_STATUS_META[status] ?? { label: titleCase(status), emoji: '' };
-  const description = challenge.shortDescription || challenge.description || '';
-  const timeframe = challenge.timeframe || '';
-  const categoryLine = [meta.label, timeframe].filter(Boolean).join(' · ');
-  const searchTerms = [
-    challenge.title,
-    challenge.shortDescription,
-    challenge.description,
-    meta.label,
-    statusMeta.label,
-    timeframe,
-    ...(challenge.tags || []),
-    ...(challenge.searchTerms || [])
-  ].filter(Boolean).join(' ');
-  const dataCategory = [status, category].filter(Boolean).join(' ');
   const progress = challenge.progress;
   const progressHtml = progress
     ? `<div class="challenge-progress">
@@ -243,23 +200,18 @@ export function renderChallengeCard(challenge: Challenge): string {
                             </div>
                         </div>`
     : '';
-
-  const icon = challenge.icon || meta.emoji;
-
-  return `<div class="movie-card challenge-card js-zoom-item" data-status="${escapeAttr(status)}" data-category="${escapeAttr(dataCategory)}" data-search="${escapeAttr(searchTerms)}" id="${escapeAttr(challenge.slug || challenge.id)}">
-                    <div class="movie-poster-wrapper">
-                        <div class="podcast-cover-placeholder ${meta.placeholder ?? ''}">${icon}</div>
-                    </div>
-                    <div class="movie-info">
-                        <div class="times-read-badge movie-watch-badge status-${escapeAttr(status)}">${escapeHtml(statusMeta.label)}</div>
-                        <div class="movie-title-row">
-                            <h3 class="movie-title">${escapeHtml(challenge.title)}</h3>
-                        </div>
-                        <div class="podcast-category-badge">${escapeHtml(categoryLine)}</div>
-                        <p class="movie-description">${escapeHtml(description)}</p>
-                        ${progressHtml}
-                    </div>
-                </div>`;
+  return renderTaskCard(challenge, {
+    defaultStatus: 'upcoming',
+    cardClass: 'challenge-card',
+    categoryMap: CHALLENGE_CATEGORY_META,
+    statusMap: CHALLENGE_STATUS_META,
+    fallbackEmoji: '🎯',
+    fallbackPlaceholder: 'placeholder-learning',
+    searchExtras: [challenge.timeframe || '', ...(challenge.searchTerms || [])],
+    categoryLineSuffix: challenge.timeframe || '',
+    iconOverride: challenge.icon,
+    trailingHtml: `\n                        ${progressHtml}`
+  });
 }
 
 export interface TaskListConfig {
@@ -402,71 +354,25 @@ export function renderTaskListMain<T extends Project | Challenge>(
     </main>`;
 }
 
+// Task configs are defined as data in section-presets.json; we only fold in
+// the typed metadata maps that can't live in JSON.
+type TaskCfgRaw = Omit<TaskListConfig, 'statusMeta' | 'categoryMap' | 'categoryFallback'> & {
+  categoryFallbackEmoji: string;
+};
+const taskCfg = (sectionPresets as { taskConfig: { projects: TaskCfgRaw; challenges: TaskCfgRaw } }).taskConfig;
+
 export const PROJECTS_TASK_CONFIG: TaskListConfig = {
-  defaultStatus: 'planned',
-  statusOrder: ['active', 'completed', 'planned'],
+  ...taskCfg.projects,
   statusMeta: PROJECT_STATUS_META,
   categoryMap: PROJECT_CATEGORY_META,
-  categoryFallback: { emoji: '🛠️' },
-  filterAction: 'filterProjects',
-  listOptions: [
-    { href: 'projects.html', label: 'Projects', active: true },
-    { href: 'challenges.html', label: 'Challenges' },
-    { href: 'free-resources.html', label: 'Resources' },
-    { href: 'lesson-logger.html', label: 'Lesson Logger' }
-  ],
-  listCurrentName: 'Projects',
-  toggleSidebarAction: 'toggleProjectSidebar',
-  toggleListDropdownAction: 'toggleProjectListDropdown',
-  layoutId: 'projects-layout',
-  sidebarId: 'projects-sidebar',
-  searchInputId: 'project-search',
-  searchPlaceholder: 'Search projects...',
-  searchAction: 'searchProjects',
-  searchClearButtonId: 'project-search-clear-btn',
-  searchClearAction: 'clearProjectSearch',
-  allLabel: 'All Projects',
-  allCountId: 'count-all-projects',
-  sidebarFooter: 'Things I am building, exploring, and planning',
-  headerTitle: 'Projects',
-  headerSubtitle: 'Things I am building, exploring, and learning in public.',
-  counterId: 'project-count',
-  counterLabel: 'Projects',
-  gridId: 'projects-container'
+  categoryFallback: { emoji: taskCfg.projects.categoryFallbackEmoji }
 };
 
 export const CHALLENGES_TASK_CONFIG: TaskListConfig = {
-  defaultStatus: 'upcoming',
-  statusOrder: ['active', 'upcoming', 'completed'],
+  ...taskCfg.challenges,
   statusMeta: CHALLENGE_STATUS_META,
-  categoryOrder: ['learning', 'fitness', 'creative', 'financial'],
   categoryMap: CHALLENGE_CATEGORY_META,
-  categoryFallback: { emoji: '🎯' },
-  filterAction: 'filterChallenges',
-  listOptions: [
-    { href: 'projects.html', label: 'Projects' },
-    { href: 'challenges.html', label: 'Challenges', active: true },
-    { href: 'free-resources.html', label: 'Resources' },
-    { href: 'lesson-logger.html', label: 'Lesson Logger' }
-  ],
-  listCurrentName: 'Challenges',
-  toggleSidebarAction: 'toggleChallengeSidebar',
-  toggleListDropdownAction: 'toggleChallengeListDropdown',
-  layoutId: 'challenges-layout',
-  sidebarId: 'challenges-sidebar',
-  searchInputId: 'challenge-search',
-  searchPlaceholder: 'Search challenges...',
-  searchAction: 'searchChallenges',
-  searchClearButtonId: 'challenge-search-clear-btn',
-  searchClearAction: 'clearChallengeSearch',
-  allLabel: 'All Challenges',
-  allCountId: 'count-all-challenges',
-  sidebarFooter: 'Personal challenges, constraints, and experiments',
-  headerTitle: 'Challenges',
-  headerSubtitle: "Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.",
-  counterId: 'challenge-count',
-  counterLabel: 'Challenges',
-  gridId: 'challenges-container'
+  categoryFallback: { emoji: taskCfg.challenges.categoryFallbackEmoji }
 };
 
 export const ESSAY_LIST_OPTIONS: ListOption[] = [

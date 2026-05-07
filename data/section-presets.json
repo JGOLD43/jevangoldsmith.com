@@ -64,5 +64,98 @@
     ["podcasts.html", "Podcasts", "podcasts"],
     ["products.html", "Products", "products"],
     ["people.html", "People of History", "people"]
-  ]
+  ],
+  "taskMeta": {
+    "project": {
+      "categories": {
+        "software":     { "label": "Software",     "emoji": "💻", "placeholder": "placeholder-software" },
+        "research":     { "label": "Research",     "emoji": "📚", "placeholder": "placeholder-research" },
+        "ai":           { "label": "AI",           "emoji": "🤖", "placeholder": "placeholder-ai" },
+        "writing":      { "label": "Writing",      "emoji": "✍️", "placeholder": "placeholder-writing" },
+        "real-estate":  { "label": "Real Estate",  "emoji": "🏠", "placeholder": "placeholder-real-estate" },
+        "finance":      { "label": "Finance",      "emoji": "💰", "placeholder": "placeholder-finance" }
+      },
+      "statuses": {
+        "active":    { "label": "Active",    "emoji": "⚡" },
+        "completed": { "label": "Completed", "emoji": "✅" },
+        "planned":   { "label": "Planned",   "emoji": "📋" }
+      }
+    },
+    "challenge": {
+      "categories": {
+        "learning":  { "label": "Learning",  "emoji": "📚", "placeholder": "placeholder-learning" },
+        "fitness":   { "label": "Fitness",   "emoji": "💪", "placeholder": "placeholder-fitness" },
+        "creative":  { "label": "Creative",  "emoji": "✍️", "placeholder": "placeholder-creative" },
+        "financial": { "label": "Financial", "emoji": "💰", "placeholder": "placeholder-financial" }
+      },
+      "statuses": {
+        "active":    { "label": "Active",    "emoji": "⚡" },
+        "upcoming":  { "label": "Upcoming",  "emoji": "📋" },
+        "completed": { "label": "Completed", "emoji": "✅" }
+      }
+    }
+  },
+  "taskConfig": {
+    "projects": {
+      "defaultStatus": "planned",
+      "statusOrder": ["active", "completed", "planned"],
+      "categoryFallbackEmoji": "🛠️",
+      "filterAction": "filterProjects",
+      "listOptions": [
+        { "href": "projects.html", "label": "Projects", "active": true },
+        { "href": "challenges.html", "label": "Challenges" },
+        { "href": "free-resources.html", "label": "Resources" },
+        { "href": "lesson-logger.html", "label": "Lesson Logger" }
+      ],
+      "listCurrentName": "Projects",
+      "toggleSidebarAction": "toggleProjectSidebar",
+      "toggleListDropdownAction": "toggleProjectListDropdown",
+      "layoutId": "projects-layout",
+      "sidebarId": "projects-sidebar",
+      "searchInputId": "project-search",
+      "searchPlaceholder": "Search projects...",
+      "searchAction": "searchProjects",
+      "searchClearButtonId": "project-search-clear-btn",
+      "searchClearAction": "clearProjectSearch",
+      "allLabel": "All Projects",
+      "allCountId": "count-all-projects",
+      "sidebarFooter": "Things I am building, exploring, and planning",
+      "headerTitle": "Projects",
+      "headerSubtitle": "Things I am building, exploring, and learning in public.",
+      "counterId": "project-count",
+      "counterLabel": "Projects",
+      "gridId": "projects-container"
+    },
+    "challenges": {
+      "defaultStatus": "upcoming",
+      "statusOrder": ["active", "upcoming", "completed"],
+      "categoryOrder": ["learning", "fitness", "creative", "financial"],
+      "categoryFallbackEmoji": "🎯",
+      "filterAction": "filterChallenges",
+      "listOptions": [
+        { "href": "projects.html", "label": "Projects" },
+        { "href": "challenges.html", "label": "Challenges", "active": true },
+        { "href": "free-resources.html", "label": "Resources" },
+        { "href": "lesson-logger.html", "label": "Lesson Logger" }
+      ],
+      "listCurrentName": "Challenges",
+      "toggleSidebarAction": "toggleChallengeSidebar",
+      "toggleListDropdownAction": "toggleChallengeListDropdown",
+      "layoutId": "challenges-layout",
+      "sidebarId": "challenges-sidebar",
+      "searchInputId": "challenge-search",
+      "searchPlaceholder": "Search challenges...",
+      "searchAction": "searchChallenges",
+      "searchClearButtonId": "challenge-search-clear-btn",
+      "searchClearAction": "clearChallengeSearch",
+      "allLabel": "All Challenges",
+      "allCountId": "count-all-challenges",
+      "sidebarFooter": "Personal challenges, constraints, and experiments",
+      "headerTitle": "Challenges",
+      "headerSubtitle": "Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.",
+      "counterId": "challenge-count",
+      "counterLabel": "Challenges",
+      "gridId": "challenges-container"
+    }
+  }
 }
