@@ -13,22 +13,12 @@
  */
 const fs = require('node:fs');
 const path = require('node:path');
+const { ROOT, flagValue, distDir } = require('./_lib/paths');
+const { walk } = require('./_lib/walk');
 
-const ROOT = path.resolve(__dirname, '..');
-const dist = process.argv.find((a) => a.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
-const generated = process.argv.find((a) => a.startsWith('--generated='))?.slice(12) || path.join(ROOT, 'images', 'generated');
+const dist = distDir();
+const generated = flagValue('--generated=', path.join(ROOT, 'images', 'generated'));
 const dryRun = process.argv.includes('--dry-run');
-
-function walk(dir) {
-  if (!fs.existsSync(dir)) return [];
-  const out = [];
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...walk(full));
-    else if (entry.isFile()) out.push(full);
-  }
-  return out;
-}
 
 function bytes(n) {
   if (n >= 1024 * 1024) return `${(n / 1024 / 1024).toFixed(1)}MB`;

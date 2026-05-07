@@ -1,4 +1,6 @@
-import { escapeHtml as escapeHTML } from '../lib/html-escape';
+import { escapeHtml } from '../lib/html-escape';
+import { tryReadString, tryWrite } from '../lib/storage';
+
 // Compute + render movie watch stats from enriched movie data.
 // Exports render + compute as ES module names. letterboxd.ts imports
 // render directly; the module-level init kicks off the initial empty
@@ -147,12 +149,12 @@ const PANEL_ID = 'movie-stats-panel';
             if (!movie) return '';
             return `
                 <div class="stats-extreme-card">
-                    <div class="stats-extreme-title">${escapeHTML(title)}</div>
+                    <div class="stats-extreme-title">${escapeHtml(title)}</div>
                     <div class="stats-extreme-movie">
-                        ${movie.poster ? `<img src="${escapeHTML(movie.poster)}" alt="" class="stats-extreme-poster" loading="lazy" decoding="async">` : ''}
+                        ${movie.poster ? `<img src="${escapeHtml(movie.poster)}" alt="" class="stats-extreme-poster" loading="lazy" decoding="async">` : ''}
                         <div>
-                            <div class="stats-extreme-name">${escapeHTML(movie.title)}</div>
-                            <div class="stats-extreme-meta">${escapeHTML(movie.year || '')} · ${escapeHTML(fmtRuntime(movie.runtime))}</div>
+                            <div class="stats-extreme-name">${escapeHtml(movie.title)}</div>
+                            <div class="stats-extreme-meta">${escapeHtml(movie.year || '')} · ${escapeHtml(fmtRuntime(movie.runtime))}</div>
                         </div>
                     </div>
                 </div>
@@ -178,9 +180,9 @@ const PANEL_ID = 'movie-stats-panel';
                         const pct = max > 0 ? Math.max(2, Math.round((mins / max) * 100)) : 0;
                         return `
                             <div class="stats-bar-row">
-                                <span class="stats-bar-label">${escapeHTML(genre)}</span>
+                                <span class="stats-bar-label">${escapeHtml(genre)}</span>
                                 <span class="stats-bar-track"><span class="stats-bar-fill" style="width: ${pct}%"></span></span>
-                                <span class="stats-bar-value">${escapeHTML(fmtHours(mins))}</span>
+                                <span class="stats-bar-value">${escapeHtml(fmtHours(mins))}</span>
                             </div>
                         `;
                     })
@@ -201,7 +203,7 @@ const PANEL_ID = 'movie-stats-panel';
                         const pct = max > 0 ? Math.max(2, Math.round((count / max) * 100)) : 0;
                         return `
                             <div class="stats-bar-row">
-                                <span class="stats-bar-label">${escapeHTML(decade)}</span>
+                                <span class="stats-bar-label">${escapeHtml(decade)}</span>
                                 <span class="stats-bar-track"><span class="stats-bar-fill" style="width: ${pct}%"></span></span>
                                 <span class="stats-bar-value">${count}</span>
                             </div>
@@ -246,7 +248,7 @@ const PANEL_ID = 'movie-stats-panel';
                         const pct = Math.max(2, Math.round((avg / 5) * 100));
                         return `
                             <div class="stats-bar-row">
-                                <span class="stats-bar-label">${escapeHTML(genre)}</span>
+                                <span class="stats-bar-label">${escapeHtml(genre)}</span>
                                 <span class="stats-bar-track"><span class="stats-bar-fill" style="width: ${pct}%"></span></span>
                                 <span class="stats-bar-value">${avg.toFixed(2)}★ <span class="stats-bar-aside">(${count})</span></span>
                             </div>
@@ -268,8 +270,8 @@ const PANEL_ID = 'movie-stats-panel';
                             (m: AnyObj) => `
                         <li>
                             <span class="stats-rewatch-count">${watchCount(m)}×</span>
-                            <span class="stats-rewatch-title">${escapeHTML(m.title)}</span>
-                            <span class="stats-rewatch-year">${escapeHTML(m.year || '')}</span>
+                            <span class="stats-rewatch-title">${escapeHtml(m.title)}</span>
+                            <span class="stats-rewatch-year">${escapeHtml(m.year || '')}</span>
                         </li>
                     `
                         )
@@ -322,11 +324,7 @@ const PANEL_ID = 'movie-stats-panel';
             btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
             btn.setAttribute('aria-label', collapsed ? 'Show stats' : 'Hide stats');
         }
-        try {
-            localStorage.setItem('movie-stats-collapsed', collapsed ? '1' : '0');
-        } catch (_) {
-            // ignore storage errors
-        }
+        tryWrite('movie-stats-collapsed', collapsed ? '1' : '0');
     }
 
     function init() {
@@ -334,12 +332,7 @@ const PANEL_ID = 'movie-stats-panel';
         if (!panel) return;
         const btn = panel.querySelector('.stats-toggle');
         if (btn) btn.addEventListener('click', toggle);
-        let collapsed = false;
-        try {
-            collapsed = localStorage.getItem('movie-stats-collapsed') === '1';
-        } catch (_) {
-            // ignore
-        }
+        const collapsed = tryReadString('movie-stats-collapsed') === '1';
         if (collapsed) {
             panel.classList.add('collapsed');
             const body = panel.querySelector('.stats-body') as HTMLElement | null;
@@ -357,4 +350,4 @@ const PANEL_ID = 'movie-stats-panel';
         init();
     }
 
-export { render, compute };
+export { compute, render };

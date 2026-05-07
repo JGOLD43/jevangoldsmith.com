@@ -21,7 +21,10 @@ const contentWidths = [320, 480, 720, 960, 1200];
 const peopleWidths = [200, 400, 800];
 const productWidths = [240, 400, 640, 800];
 const remoteWidths = [320, 480, 800, 1200];
-const coverWidths = [160, 240, 360, 480];
+// 160w was historically generated for thumbnails but no rendered HTML
+// references it (zero matches across all 81 dist pages). 240w covers the
+// smallest displayed size; dropped 160 to skip the wasted variants.
+const coverWidths = [240, 360, 480];
 const videoWidths = [176, 352, 528];
 
 function ensureDir(dir) {

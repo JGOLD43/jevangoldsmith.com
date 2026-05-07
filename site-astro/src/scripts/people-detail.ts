@@ -1,4 +1,4 @@
-import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
 
 let lastFocusedPerson: HTMLElement | null = null;
 
@@ -7,14 +7,14 @@ function createMediaMarkup(person: AnyObj, key: string, label: string) {
     if (!entries.length) return '';
     return `
         <div class="person-detail-books">
-            <p class="person-detail-section-label">${escapeHTML(label)}</p>
+            <p class="person-detail-section-label">${escapeHtml(label)}</p>
             <div class="person-detail-book-list">
                 ${entries.map((item: AnyObj) => `
                     <a class="person-detail-book-link" href="${escapeAttr(item.href)}">
                         ${item.coverImage ? `<img class="person-detail-book-cover" src="${escapeAttr(item.coverImage)}" alt="${escapeAttr(item.title)} cover" loading="lazy" decoding="async">` : '<span class="person-detail-book-cover person-detail-book-cover-fallback" aria-hidden="true"></span>'}
                         <span class="person-detail-book-meta">
-                            <span class="person-detail-book-title">${escapeHTML(item.label)}</span>
-                            ${item.author ? `<span class="person-detail-book-author">${escapeHTML(item.author)}</span>` : ''}
+                            <span class="person-detail-book-title">${escapeHtml(item.label)}</span>
+                            ${item.author ? `<span class="person-detail-book-author">${escapeHtml(item.author)}</span>` : ''}
                         </span>
                     </a>
                 `).join('')}
@@ -60,10 +60,10 @@ function openPeopleDetail(person: AnyObj, trigger: HTMLElement | null) {
                     <img src="${escapeAttr(person.image)}" alt="${escapeAttr(person.name)}" class="person-detail-image" srcset="${escapeAttr(person.srcset || '')}" sizes="(max-width: 768px) 78vw, 320px" width="400" height="400" loading="lazy" decoding="async">
                 </div>
                 <div class="person-detail-copy">
-                    <p class="person-detail-kicker">${escapeHTML(person.title)}</p>
-                    <h2 id="person-detail-title">${escapeHTML(person.name)}</h2>
-                    <p class="person-detail-bio">${escapeHTML(person.bio || person.lesson)}</p>
-                    <p class="person-detail-blurb">${escapeHTML(person.lesson)}</p>
+                    <p class="person-detail-kicker">${escapeHtml(person.title)}</p>
+                    <h2 id="person-detail-title">${escapeHtml(person.name)}</h2>
+                    <p class="person-detail-bio">${escapeHtml(person.bio || person.lesson)}</p>
+                    <p class="person-detail-blurb">${escapeHtml(person.lesson)}</p>
                     ${person.profileHref ? `<a class="person-detail-profile-link" href="${escapeAttr(person.profileHref)}">View profile</a>` : ''}
                 </div>
             </div>

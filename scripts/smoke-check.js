@@ -112,14 +112,20 @@ function checkBody(body, must, mustNot) {
 // fetches at runtime and a minimum-byte floor that catches accidental
 // truncation (e.g. a generator producing `[]`). The perf-budget script owns
 // the upper bound; this owns the lower bound + 200 OK reachability.
+//
+// The list mirrors the actual runtime fetches in site-astro/src/scripts:
+//   adventures.ts -> data/adventures.json
+//   books.ts -> data/books.generated.json (cover paths included)
+//   letterboxd.ts -> data/movies.json
+//   people-data.ts -> api/v1/people-modal.json
+// Build-time-only data files (quotes/projects/products/essays/podcasts)
+// are pruned from dist by prune-dist-assets.js — runtime never fetches
+// them, so a smoke assertion would be a stale contract.
 const RUNTIME_MANIFESTS = [
   { url: '/data/adventures.json', minBytes: 1024 },
-  { url: '/data/people.json', minBytes: 1024 },
-  { url: '/data/books.json', minBytes: 4096 },
-  { url: '/data/podcasts.json', minBytes: 512 },
-  { url: '/data/projects.json', minBytes: 512 },
-  { url: '/data/challenges.json', minBytes: 512 },
-  { url: '/data/quotes.json', minBytes: 512 },
+  { url: '/data/books.generated.json', minBytes: 4096 },
+  { url: '/data/movies.json', minBytes: 512 },
+  { url: '/api/v1/people-modal.json', minBytes: 1024 },
   { url: '/api/v1/search-index.json', minBytes: 4096 }
 ];
 

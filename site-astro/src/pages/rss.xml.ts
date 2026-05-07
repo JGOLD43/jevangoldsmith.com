@@ -1,5 +1,5 @@
-import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
+import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
 
 // RSS 2.0 feed for the essays collection. Mirrors what the legacy site is

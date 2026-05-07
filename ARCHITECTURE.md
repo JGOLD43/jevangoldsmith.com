@@ -30,17 +30,12 @@ The site is an Astro project rooted at `site-astro/`:
   - `rss.xml.ts` for the essays RSS feed
 - `site-astro/src/layouts/Base.astro` — shared HTML layout (head, nav, footer, JSON-LD)
 - `site-astro/src/components/` — Nav, Footer, JsonLd, SeoRelated, plus the
-  Phase 3 collection wrappers `CollectionPage.astro` and
-  `TaskCollectionPage.astro` that thin out the per-page boilerplate
+  shared `CollectionPage.astro` wrapper that thins out per-page boilerplate
 - `site-astro/src/content.config.ts` — Zod schemas + custom loaders that read `../data/*.json` directly (no copy)
 - `site-astro/src/lib/seo.ts` — schema.org Person / WebSite descriptors
-- `site-astro/src/lib/content-types.ts` — Phase 2 normalized collection types
-  (`NormalizedItem`, `COLLECTION_CONTRACTS`)
-- `site-astro/src/lib/collection-normalizers.ts` — pure normalizers per
-  collection plus `isPublished` / `collectionUrl` / `collectionImage` /
-  `collectionDescription` / `collectionSearchText` helpers
-- `site-astro/src/lib/collection-chrome.ts` — string-template chrome renderer
-  used by `CollectionPage.astro` and `TaskCollectionPage.astro`
+- `site-astro/src/lib/collection-shell.ts` + `collection-sections.ts` —
+  string-template chrome renderer + section presets consumed by
+  `CollectionPage.astro`
 - `site-astro/public/css/legacy-style.css` — current CSS source. The build
   rewrites this into one shared chrome stylesheet plus per-page inline CSS via
   `scripts/purge-css-per-page.js`.
@@ -74,15 +69,15 @@ Build time: ~4s for 82 routes. Legacy was ~30s.
    titles in source JSON; warns on missing description/image until cleanup
    (`content:validate:strict` flips warnings to errors).
 2. `routes:split` — explodes `popular-routes.json` into per-route chunks.
-3. `astro build` — page HTML + asset graph.
-4. `normalize:html`, `purge:css`, `slim:json`, `prune:dist` — post-build
-   payload optimization. `purge:css` rewrites every page from one 187KB
-   `legacy-style.css` to a 40KB shared `chrome.HASH.css` plus per-page
-   inline `<style>` (avg 5.5KB) — 77% first-visit transfer reduction,
-   97% repeat-visit. `slim:json` drops `searchText` + `id` from
-   `api/v1/search-index.json` records (the runtime in
-   `src/scripts/search-astro.ts` reconstructs searchText from
-   title+summary+section+type+tags) — 53% reduction.
+3. `astro build` — page HTML + asset graph (Vite manualChunks hoists
+   shared collection deps into `collection-shared.HASH.js`).
+4. `purge:css`, `critical:css`, `css:validate`, `sw:finalize`,
+   `modulepreload`, `html:min`, `slim:json`, `prune:dist`, `csp:hashes` —
+   post-build payload optimization. `purge:css` rewrites every page from
+   one 187KB `legacy-style.css` to a 38KB shared `chrome.HASH.css` plus
+   per-page inline/external slice. `slim:json` drops `searchText` + `id`
+   from `api/v1/search-index.json` records (runtime reconstructs from
+   title+summary+section+type+tags).
 5. `perf:budget` — fails the build if any production budget regresses,
    including hashed chrome CSS ≤45KB and search-index ≤90KB.
 

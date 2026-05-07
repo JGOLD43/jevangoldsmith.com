@@ -4,6 +4,7 @@
 // page bundle.
 
 import { debounce } from '../lib/debounce';
+import { tryReadString, tryWrite } from '../lib/storage';
 
 export { debounce };
 
@@ -113,7 +114,7 @@ export function restoreCollapsedState({
     const layout = document.getElementById(layoutId);
     const sidebar = document.getElementById(sidebarId);
     if (!layout || !sidebar) return false;
-    const storedValue = localStorage.getItem(storageKey);
+    const storedValue = tryReadString(storageKey);
     const isCollapsed = storedValue == null
         ? defaultCollapsed
         : storedValue !== 'false' && storedValue !== '0';
@@ -135,7 +136,7 @@ export function toggleCollapsedState({
     if (!layout || !sidebar) return false;
     const isCollapsed = !sidebar.classList.contains(sidebarClass);
     setCollapsedState({ layout, sidebar, isCollapsed, layoutClass, sidebarClass });
-    localStorage.setItem(storageKey, isCollapsed ? 'true' : 'false');
+    tryWrite(storageKey, isCollapsed ? 'true' : 'false');
     onChange?.(isCollapsed);
     return isCollapsed;
 }

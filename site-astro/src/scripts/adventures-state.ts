@@ -5,13 +5,15 @@
 // constant values without leaking onto window.
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyValue = any;
+import FAST_BASEMAP_LAND_DATA from '../../../data/fast-basemap-land.json';
+
+type AnyObj = any;
 
 // All fields are typed `any` because the runtime mutates them with values
 // from the leaflet vendor bundle (no shipped types) + dynamic JSON. The
 // goal of this slice is to remove globalThis pollution, not to add full
 // type coverage to adventures-map.ts (that's tracked separately).
-export const state: Record<string, AnyValue> = {
+export const state: Record<string, AnyObj> = {
   allAdventures: [],
   allPlaces: [],
   placeCategories: [],
@@ -67,7 +69,7 @@ export const ROUTE_TYPE_COLORS: Record<string, string> = {
   track: '#C9A86C'
 };
 
-export const BASEMAPS: Record<string, AnyValue> = {
+export const BASEMAPS: Record<string, AnyObj> = {
   streets: { label: 'Streets', tile: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19, subdomains: 'abc' },
   satellite: { label: 'Satellite', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
   hybrid: { label: 'Satellite + Labels', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19, overlay: 'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}' },
@@ -93,33 +95,24 @@ state.mapFilters = { ...DEFAULT_FILTERS, layers: { ...DEFAULT_FILTERS.layers }, 
 
 export { fetchJsonOr } from './data-fetch';
 
+import { tryRead, tryWrite } from '../lib/storage';
 
 export function loadFilters(): void {
-  try {
-    const raw = localStorage.getItem(FILTERS_STORAGE_KEY);
-    if (!raw) return;
-    const stored = JSON.parse(raw);
-    if (!stored || typeof stored !== 'object') return;
-    state.mapFilters = {
-      year: stored.year || 'all',
-      region: stored.region || 'all',
-      layers: { ...DEFAULT_FILTERS.layers, ...(stored.layers || {}) },
-      poiCategories: { ...(stored.poiCategories || {}) },
-      basemap: stored.basemap || 'satellite',
-      routeSet: stored.routeSet || 'all'
-    };
-    state.placesVisible = state.mapFilters.layers.pois;
-  } catch (_error) {
-    // localStorage access can throw in privacy mode; ignore.
-  }
+  const stored = tryRead<AnyObj>(FILTERS_STORAGE_KEY, null);
+  if (!stored || typeof stored !== 'object') return;
+  state.mapFilters = {
+    year: stored.year || 'all',
+    region: stored.region || 'all',
+    layers: { ...DEFAULT_FILTERS.layers, ...(stored.layers || {}) },
+    poiCategories: { ...(stored.poiCategories || {}) },
+    basemap: stored.basemap || 'satellite',
+    routeSet: stored.routeSet || 'all'
+  };
+  state.placesVisible = state.mapFilters.layers.pois;
 }
 
 export function saveFilters(): void {
-  try {
-    localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(state.mapFilters));
-  } catch (_error) {
-    // localStorage access can throw in privacy mode; ignore.
-  }
+  tryWrite(FILTERS_STORAGE_KEY, state.mapFilters);
 }
 
 export function adventureYear(adventure: { startDate?: string }): number | null {
@@ -128,7 +121,7 @@ export function adventureYear(adventure: { startDate?: string }): number | null 
   return Number.isNaN(date.getTime()) ? null : date.getUTCFullYear();
 }
 
-export function matchesYearFilter(year: number | null | string): boolean {
+function matchesYearFilter(year: number | null | string): boolean {
   if (state.mapFilters.year === 'all' || state.mapFilters.year === null) return true;
   return String(year) === String(state.mapFilters.year);
 }
@@ -154,13 +147,4 @@ export function updateLightboxImage(): void {
   if (counter) counter.textContent = `${state.lightboxIndex + 1} / ${state.lightboxImages.length}`;
 }
 
-export const FAST_BASEMAP_LAND: number[][][] = [
-  [[72, -168], [68, -52], [56, -58], [48, -70], [32, -81], [19, -105], [24, -125], [39, -124], [51, -134], [59, -151]],
-  [[34, -116], [29, -95], [17, -88], [8, -80], [-4, -81], [-18, -75], [-35, -70], [-55, -66], [-52, -45], [-30, -39], [-7, -35], [8, -50], [18, -63], [24, -82]],
-  [[72, -10], [70, 42], [62, 98], [55, 145], [42, 158], [28, 124], [8, 104], [6, 78], [21, 59], [31, 35], [40, 23], [45, 5], [54, -7]],
-  [[35, -18], [30, 32], [14, 45], [-3, 40], [-20, 30], [-35, 19], [-34, 1], [-20, -12], [5, -17], [22, -16]],
-  [[-11, 112], [-11, 154], [-28, 154], [-39, 145], [-35, 116]],
-  [[-34, 166], [-36, 178], [-46, 170], [-43, 166]],
-  [[37, 126], [45, 142], [31, 146]],
-  [[-12, 45], [-25, 50], [-22, 43]]
-];
+export const FAST_BASEMAP_LAND: number[][][] = FAST_BASEMAP_LAND_DATA;

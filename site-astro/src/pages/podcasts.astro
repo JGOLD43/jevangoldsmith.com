@@ -1,8 +1,8 @@
 ---
-import CollectionPage from '../components/CollectionPage.astro';
-import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { tasteListOptions, PODCAST_SECTIONS } from '../lib/collection-sections';
+import { getCollection } from 'astro:content';
+import CollectionPage from '../components/CollectionPage.astro';
+import { PODCAST_SECTIONS, tasteListOptions } from '../lib/collection-sections';
 import { renderPodcastCardHtml } from '../lib/podcast-card';
 
 const canonical = 'https://jevangoldsmith.com/podcasts.html';
@@ -21,7 +21,7 @@ const config = ({
     collapseAction: 'togglePodcastSidebar',
     listAction: 'togglePodcastListDropdown',
     currentListName: 'Podcasts',
-    listOptions: tasteListOptions('podcasts', 'podcasts'),
+    listOptions: tasteListOptions('podcasts'),
     search: {
       inputId: 'podcast-search',
       inputClass: 'movie-search-input collection-search-input',
@@ -76,5 +76,53 @@ const config = ({
 />
 
 <script>
-  import '../scripts/podcasts.ts';
+  import { createCollectionRuntime } from '../scripts/collection-runtime';
+  import { onDomReady } from '../scripts/dom-ready';
+  import { init as initGridZoom } from '../scripts/grid-zoom';
+  import { renderSpotifyFollowedShows, renderSpotifyRecentEpisodes } from '../scripts/podcasts-spotify';
+
+  let podcastRuntime: AnyObj = null;
+
+  function buildCollectionController() {
+      podcastRuntime = createCollectionRuntime({
+          actions: {
+              clearSearch: 'clearPodcastSearch',
+              filter: 'filterPodcasts',
+              search: 'searchPodcasts',
+              toggleDropdown: 'togglePodcastListDropdown',
+              toggleSidebar: 'togglePodcastSidebar'
+          },
+          allButtonSelector: '.sidebar-category[data-podcast-category="all"]',
+          buttonSelector: '.sidebar-category',
+          cardSelector: '.podcast-card',
+          categoryMode: 'exact',
+          counterId: 'podcast-count',
+          layoutId: 'podcasts-layout',
+          searchClearButtonId: 'podcast-search-clear-btn',
+          searchInputId: 'podcast-search',
+          sidebarId: 'podcasts-sidebar',
+          storageKey: 'podcasts-sidebar-collapsed'
+      });
+  }
+
+  async function initPodcastsPage() {
+      buildCollectionController();
+      podcastRuntime.init();
+
+      const grid = document.getElementById('podcasts-container');
+      if (grid) {
+          grid.classList.add('js-zoom-grid');
+          initGridZoom({
+              grid: grid,
+              itemSelector: '.podcast-card',
+              triggerSelector: '.podcast-card',
+              eventName: 'podcast_open'
+          });
+      }
+
+      renderSpotifyRecentEpisodes();
+      renderSpotifyFollowedShows();
+  }
+
+  onDomReady(initPodcastsPage, 'podcasts init');
 </script>

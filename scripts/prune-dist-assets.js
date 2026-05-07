@@ -6,9 +6,10 @@
  */
 const fs = require('node:fs');
 const path = require('node:path');
+const { distDir } = require('./_lib/paths');
+const { walk } = require('./_lib/walk');
 
-const ROOT = path.resolve(__dirname, '..');
-const DIST = process.argv.find((a) => a.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
+const DIST = distDir();
 
 if (!fs.existsSync(DIST)) {
   console.error(`[prune-dist] missing dir: ${DIST}`);
@@ -41,7 +42,26 @@ const targets = [
     'data/people.json',
     // Build-time only — books.ts and people lazy-fetch their slim runtime
     // counterparts under /data/ and /api/v1/ respectively.
-    'data/people.merged.generated.json'
+    'data/people.merged.generated.json',
+    // Astro SSR-time imports only. Runtime never fetches these — the
+    // canonical externally-advertised copies live under /api/v1/, and
+    // every consumer is either a build-time `import` or one of the
+    // explicit runtime fetches in adventures/books/movies/podcasts.
+    // Saves ~70KB of redundant edge-cache payload that misled future
+    // maintainers about which file is the source of truth.
+    'data/books.json',
+    'data/quotes.json',
+    'data/projects.json',
+    'data/products.json',
+    'data/essays.json',
+    'data/podcasts.json',
+    'data/cool-shit.json',
+    'data/challenges.json',
+    'data/resources.json',
+    'data/skills.json',
+    'data/site.json',
+    'data/site.config.json',
+    'data/newsletter.json'
 ];
 
 let removed = 0;
@@ -56,17 +76,6 @@ function sizeOf(target) {
     total += sizeOf(path.join(target, entry.name));
   }
   return total;
-}
-
-function walk(dir) {
-  const out = [];
-  if (!fs.existsSync(dir)) return out;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...walk(full));
-    else if (entry.isFile()) out.push(full);
-  }
-  return out;
 }
 
 for (const rel of targets) {

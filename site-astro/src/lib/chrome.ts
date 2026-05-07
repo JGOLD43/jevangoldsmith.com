@@ -1,97 +1,11 @@
-// Build-time renderer for the legacy nav + footer partials.
-//
-// Mirrors scripts/legacy-build/build/chrome.js so the Astro output is
-// byte-identical to the legacy output for the shared chrome. Reading the
-// partials directly from /_src/partials means we never have to maintain a
-// hand-ported copy in this repo.
+// Chrome helpers shared by Base.astro and the Nav/Footer components.
+// Phase 12 inlined the nav + footer markup into native Astro components,
+// so the regex-based active-marker dance and the wisdom-ticker shuffle
+// that lived here moved into Nav.astro. Only the body-class map and the
+// pathname-to-file helper still need a shared home.
 
-// nav + footer source live as TS template-literal modules
-// so we can drop the src/legacy/ folder and the Vite ?raw plugin step.
-import { NAV_TEMPLATE as NAV_TEMPLATE_RAW } from './nav-template';
-import { FOOTER_TEMPLATE as FOOTER_TEMPLATE_RAW } from './footer-template';
-import pages from '../../../data/pages.json';
-import quotes from '../../public/data/quotes.json';
-import { escapeHtml } from './html-escape';
-
-// Build-time wisdom ticker. The runtime fetch + shuffle in theme.ts has
-// been hoisted here: pick 5 random quotes once per build, repeat the
-// first to satisfy the seamless-loop CSS animation (6 positions).
-function renderWisdomTickerHtml(): string {
-  const list = (quotes as { tickerQuotes?: string[] }).tickerQuotes ?? [];
-  if (list.length < 5) return '';
-  const shuffled = [...list].sort(() => Math.random() - 0.5).slice(0, 5);
-  shuffled.push(shuffled[0]);
-  return shuffled.map((phrase) => `<a href="quotes.html" class="wisdom-item">${escapeHtml(phrase)}</a>`).join('');
-}
-
-const TICKER_TRACK_INNER = renderWisdomTickerHtml();
-const NAV_TEMPLATE_BASE = NAV_TEMPLATE_RAW.trim();
-
-// Replace the placeholder ticker block in the nav template once at module
-// load with the build-time-shuffled set so renderNav doesn't redo work.
-const NAV_TEMPLATE = TICKER_TRACK_INNER
-  ? NAV_TEMPLATE_BASE.replace(
-      /<div class="wisdom-ticker-track">[\s\S]*?<\/div>/,
-      `<div class="wisdom-ticker-track">${TICKER_TRACK_INNER}</div>`
-    )
-  : NAV_TEMPLATE_BASE;
-const FOOTER_TEMPLATE = FOOTER_TEMPLATE_RAW.trim();
-
-const SECTION_BY_FILE = new Map<string, string>(
-  ((pages as Array<{ path?: string; section?: string }>) ?? [])
-    .filter((p) => p.path)
-    .map((p) => [p.path!, p.section ?? ''])
-);
-
-// Maps a section ID from data/pages.json to the dropdown-trigger label in
-// nav.html. Only sections whose label matches a literal nav trigger are
-// listed; "experience" was removed because the nav uses "Ventures" and
-// the matcher never fired.
-const TRIGGER_BY_SECTION: Record<string, string> = {
-  explore: 'Explore',
-  taste: 'Taste'
-};
-
-export function renderNav(file: string): string {
-  // Step 1: clear any leftover active markers.
-  const cleared = NAV_TEMPLATE
-    .replace(/\sclass="active"/g, '')
-    .replace(/\sclass="dropdown-trigger active"/g, ' class="dropdown-trigger"');
-
-  // Step 2: mark the leaf nav-link active for this page (adventure-* roll up
-  // to adventures.html). Searches the <ul class="nav-links"> block so the
-  // active marker doesn't leak into a footer link with the same href.
-  const activeHref = file.startsWith('adventure-') ? 'adventures.html' : file;
-  const navLinksStart = cleared.indexOf('<ul class="nav-links">');
-  const literalActiveTag = `<a href="${activeHref}">`;
-  let next = cleared;
-  if (navLinksStart >= 0) {
-    const idx = cleared.indexOf(literalActiveTag, navLinksStart);
-    if (idx >= 0) {
-      next = cleared.slice(0, idx) + `<a href="${activeHref}" class="active">` + cleared.slice(idx + literalActiveTag.length);
-    }
-  }
-
-  // Step 3: mark the section's dropdown-trigger active.
-  const section = SECTION_BY_FILE.get(file) ?? '';
-  const triggerLabel = TRIGGER_BY_SECTION[section];
-  if (triggerLabel) {
-    next = next.replace(
-      `class="dropdown-trigger">${triggerLabel}</a>`,
-      `class="dropdown-trigger active">${triggerLabel}</a>`
-    );
-  }
-
-  return next;
-}
-
-export function renderFooter(_file: string): string {
-  return FOOTER_TEMPLATE;
-}
-
-// Body-class map ported from dist-legacy-snap. Pages not in this map get
-// no body class. Layouts derive this automatically when the page doesn't
-// pass an explicit bodyClass prop.
+// Body-class map. Pages not in this map get no body class. Layouts derive
+// this automatically when the page doesn't pass an explicit bodyClass prop.
 const BODY_CLASS_BY_FILE: Record<string, string> = {
   'adventures.html': 'nav-compact',
   'books.html': 'nav-compact',

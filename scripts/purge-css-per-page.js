@@ -25,9 +25,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { ROOT, distDir } = require('./_lib/paths');
+const { walk: walkAll } = require('./_lib/walk');
 
-const ROOT = path.resolve(__dirname, '..');
-const DIST = process.argv.find((a) => a.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
+const DIST = distDir();
 const SOURCE_CSS = path.join(DIST, 'css/legacy-style.css');
 
 if (!fs.existsSync(SOURCE_CSS)) {
@@ -286,15 +287,7 @@ function purge(rules, tokens) {
 
 const allRules = parseRules(css);
 
-function walk(dir) {
-  const out = [];
-  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, e.name);
-    if (e.isDirectory()) out.push(...walk(full));
-    else if (e.isFile() && e.name.endsWith('.html')) out.push(full);
-  }
-  return out;
-}
+const walk = (dir) => walkAll(dir).filter((p) => p.endsWith('.html'));
 
 const outDir = path.join(DIST, 'css/per-page');
 fs.mkdirSync(outDir, { recursive: true });
@@ -382,8 +375,12 @@ for (const { file, html, kept } of perPage) {
         ? `${family}-shared.${h}.css`
         : `${slug}.${h}.css`);
   if (!sharedFiles.has(h)) sharedFiles.set(h, outFile);
-  // Tiny slices (<2KB) ride inline below — skip writing those too.
-  const _INLINE_THRESHOLD = 2048;
+  // Tiny slices (<4KB) ride inline below — skip writing those too. The
+  // threshold was 2048; at 4096 several mid-tail pages (notes, contact,
+  // about, north-star…) move from a render-blocking <link> to inline
+  // <style>, eliminating one critical-path request without bloating the
+  // HTML beyond the HTTP/2 frame budget.
+  const _INLINE_THRESHOLD = 4096;
   if (purged.length > 0 && purged.length > _INLINE_THRESHOLD) {
     fs.writeFileSync(path.join(outDir, outFile), purged);
   }
@@ -395,11 +392,12 @@ for (const { file, html, kept } of perPage) {
   // cache (Cache-Control: public, max-age=31536000, immutable). HTML is
   // max-age=0 must-revalidate, so inlining shipped 5-30KB of styles on
   // every revalidate — wasteful for repeat visitors.
-  // Tiny per-page slices (<2KB) ride inline as <style> instead of an
+  // Tiny per-page slices (<4KB) ride inline as <style> instead of an
   // external request. Saves 1 RTT on first visit. Repeat-visit pays
-  // ~1.5KB extra HTML revalidation, but at this size the round-trip
-  // overhead exceeds the bytes — net win.
-  const INLINE_CSS_THRESHOLD = 2048;
+  // ~3KB extra HTML revalidation, but at this size the round-trip
+  // overhead still exceeds the bytes — net win for cold visitors,
+  // negligible for warm ones.
+  const INLINE_CSS_THRESHOLD = 4096;
   const inlineCss = purged && purged.length <= INLINE_CSS_THRESHOLD;
   const perPageHref = `/css/per-page/${outFile}`;
   const linkExtra = !purged

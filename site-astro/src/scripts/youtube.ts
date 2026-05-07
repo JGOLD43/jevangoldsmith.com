@@ -1,4 +1,5 @@
-import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
+
 // YouTube Channel Integration.
 const YOUTUBE_CHANNEL_HANDLE = 'JevanGoldsmith';
 
@@ -99,10 +100,10 @@ function createVideoCard(video: Video) {
     card.innerHTML = `
         <img src="${escapeAttr(video.thumbnail)}" alt="${escapeAttr(video.title)}" class="video-thumbnail" loading="lazy" decoding="async">
         <div class="video-info">
-            <h3 class="video-title">${escapeHTML(video.title)}</h3>
-            ${video.description ? `<p class="video-description">${escapeHTML(video.description)}</p>` : ''}
+            <h3 class="video-title">${escapeHtml(video.title)}</h3>
+            ${video.description ? `<p class="video-description">${escapeHtml(video.description)}</p>` : ''}
             <div class="video-meta">
-                <span>${escapeHTML(video.date)}</span>
+                <span>${escapeHtml(video.date)}</span>
             </div>
         </div>
     `;

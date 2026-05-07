@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { HOME_BODY } from '../lib/home-body';
 
 const essays = await getCollection('essays', ({ data }: any) => data.status !== 'draft');
 const books = await getCollection('books');
@@ -13,13 +12,6 @@ const counts: Record<string, number> = {
   projects: projects.length,
   resources: 0
 };
-
-const body = HOME_BODY.replace(
-  /<span class="stat-number" data-home-stat="([a-z]+)">[^<]*<\/span>/g,
-  (match, key) => Object.prototype.hasOwnProperty.call(counts, key)
-    ? `<span class="stat-number" data-home-stat="${key}">${counts[key]}</span>`
-    : match
-);
 ---
 <Base
   title="Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
@@ -33,7 +25,348 @@ const body = HOME_BODY.replace(
         reach the <img> deep in <body>. */}
     <link rel="preload" as="image" href="/images/generated/profile/profile-720.jpg" fetchpriority="high" />
   </Fragment>
-  <Fragment set:html={body} />
+    <!-- Side Navigation Dots -->
+    <nav class="side-nav" id="side-nav">
+        <a href="#hero" class="side-nav-dot active" data-section="hero" title="Intro" aria-label="Intro"></a>
+        <a href="#newsletter-cta" class="side-nav-dot" data-section="newsletter-cta" title="Field Notes" aria-label="Field Notes"></a>
+        <a href="#featured" class="side-nav-dot" data-section="featured" title="Featured" aria-label="Featured"></a>
+        <a href="#value-prop" class="side-nav-dot" data-section="value-prop" title="What I Do" aria-label="What I Do"></a>
+        <a href="#essays" class="side-nav-dot" data-section="essays" title="Essays" aria-label="Essays"></a>
+        <a href="#focus" class="side-nav-dot" data-section="focus" title="Current Focus" aria-label="Current Focus"></a>
+    </nav>
+
+    <header class="hero" id="hero">
+        <div class="hero-container">
+            <div class="hero-left">
+                <h1 class="hero-headline">Hi I'm Jevan.</h1>
+                <p class="hero-welcome">In an effort to better remember my life and the lessons learned along the way I built this site to keep a tab on things (Literally). I thought sharing it for anyone who may get a sliver of value from it would be fun and useful.</p>
+                <!-- Hidden for now; uncomment to re-enable.
+                <a href="meet.html" class="hero-cta-left">
+                    <span class="cta-title">Schedule a meeting / coffee chat</span>
+                    <p class="cta-text">Best way to reach me is <span class="cta-link">email</span> or <span class="cta-link">X</span></p>
+                </a>
+                -->
+
+            </div>
+            <div class="hero-right">
+                <div class="profile-container">
+                    <picture class="hero-picture">
+                        <source type="image/avif" srcset="images/generated/profile/profile-360.avif 360w, images/generated/profile/profile-520.avif 520w, images/generated/profile/profile-720.avif 720w, images/generated/profile/profile-960.avif 960w" sizes="(max-width: 768px) 82vw, 42vw">
+                        <img src="images/generated/profile/profile-720.jpg" srcset="images/generated/profile/profile-360.jpg 360w, images/generated/profile/profile-520.jpg 520w, images/generated/profile/profile-720.jpg 720w, images/generated/profile/profile-960.jpg 960w" sizes="(max-width: 768px) 82vw, 42vw" alt="Jevan Goldsmith" class="hero-image" width="713" height="778" decoding="async" fetchpriority="high">
+                    </picture>
+
+                    <!-- Quick Snapshot Toggle Button -->
+                    <button class="snapshot-toggle" data-snapshot-toggle aria-label="Toggle Quick Snapshot">
+                        ABOUT ME
+                    </button>
+
+                    <!-- Animated Snapshot Card (Hidden by default) -->
+                    <div class="snapshot-card" id="snapshot-card">
+                        <div class="snapshot-header">
+                            <span class="snapshot-eyebrow">QUICK SNAPSHOT</span>
+                            <svg class="snapshot-camera-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 32">
+                                <!-- Flash starburst -->
+                                <g class="flash-burst">
+                                    <polygon points="26,2 27,5 30,4 28,7 31,9 28,10 29,13 26,11 24,14 24,11 21,12 23,9 20,8 23,6 22,3 25,5" fill="#FFD700"/>
+                                    <circle cx="25" cy="8" r="2" fill="#FFF5CC"/>
+                                </g>
+                                <!-- Retro camera body - black -->
+                                <rect x="2" y="10" width="22" height="16" rx="2" fill="#1a1a1a" stroke="#333" stroke-width="0.5"/>
+                                <!-- Viewfinder bump -->
+                                <rect x="6" y="6" width="8" height="5" rx="1" fill="#1a1a1a" stroke="#333" stroke-width="0.5"/>
+                                <!-- Flash cube on top -->
+                                <rect x="16" y="7" width="4" height="4" fill="#444" stroke="#555" stroke-width="0.5"/>
+                                <!-- Main lens ring - silver -->
+                                <circle cx="13" cy="18" r="6" fill="#2a2a2a" stroke="#666" stroke-width="1"/>
+                                <circle cx="13" cy="18" r="4.5" fill="#1a1a1a" stroke="#888" stroke-width="0.5"/>
+                                <!-- Lens glass - dark with reflection -->
+                                <circle cx="13" cy="18" r="3" fill="#0a0a0a"/>
+                                <ellipse cx="12" cy="17" rx="1" ry="0.6" fill="rgba(255,255,255,0.15)"/>
+                                <!-- Shutter button - red accent -->
+                                <circle cx="20" cy="13" r="1.5" fill="#cc3333"/>
+                                <!-- Grip lines -->
+                                <line x1="3" y1="14" x2="3" y2="22" stroke="#333" stroke-width="0.5"/>
+                                <line x1="4.5" y1="14" x2="4.5" y2="22" stroke="#333" stroke-width="0.5"/>
+                            </svg>
+                            <button class="snapshot-close" data-snapshot-toggle aria-label="Close">&times;</button>
+                        </div>
+                        <div class="snapshot-content">
+                            <div class="snapshot-row">
+                                <div class="snapshot-label">School</div>
+                                <div class="snapshot-value">UniSC Commerce Degree</div>
+                            </div>
+                            <div class="snapshot-row">
+                                <div class="snapshot-label">Focus</div>
+                                <div class="snapshot-value">Building Beautiful Products</div>
+                            </div>
+                            <div class="snapshot-row">
+                                <div class="snapshot-label">Values</div>
+                                <div class="snapshot-value">Impact • Mastery • Adventure</div>
+                            </div>
+                            <div class="snapshot-row">
+                                <div class="snapshot-label">Stats</div>
+                                <div class="snapshot-value">Age 24 • Height 183cm • <img src="images/flags/au.png" alt="Australian Flag" class="snapshot-flag" width="80" height="40" loading="lazy" decoding="async"></div>
+                            </div>
+                            <a href="about.html" class="snapshot-bio-link">Read Full Bio</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-social-links">
+                    <a href="https://x.com/JevanGoldsmith" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                        <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-x"/></svg>
+                    </a>
+                    <a href="https://youtube.com/@JevanGoldsmith" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                        <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-youtube"/></svg>
+                    </a>
+                    <a href="https://letterboxd.com/contentwatch" target="_blank" rel="noopener noreferrer" aria-label="Letterboxd">
+                        <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-letterboxd"/></svg>
+                    </a>
+                    <a href="https://linkedin.com/in/jevan-goldsmith-7b885a185" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-linkedin"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Newsletter CTA Section -->
+    <section class="newsletter-cta-section" id="newsletter-cta">
+        <div class="newsletter-cta-container">
+            <div class="newsletter-cta-content">
+                <p class="newsletter-eyebrow">Field Notes</p>
+                <h2 class="newsletter-cta-title">What took me months to figure out, in 5 minutes</h2>
+                <p class="newsletter-cta-description">One useful idea, object, book, question, or experiment from the archive. Short notes on what I am reading, using, building, noticing, and changing my mind about.</p>
+                <form class="newsletter-cta-form" action="https://formsubmit.co/hello@jevangoldsmith.com" method="POST" data-newsletter-form data-endpoint="https://formsubmit.co/ajax/hello@jevangoldsmith.com">
+                    <input type="hidden" name="_subject" value="Field Notes signup">
+                    <input type="hidden" name="_template" value="table">
+                    <label class="sr-only" for="home-field-notes-email">Email for Field Notes</label>
+                    <input id="home-field-notes-email" type="email" placeholder="Your email" class="newsletter-cta-input" name="email" autocomplete="email" required>
+                    <button type="submit" class="newsletter-cta-button">Join Field Notes</button>
+                </form>
+                <p class="newsletter-cta-disclaimer">Weekly-ish. Short. Useful. No spam.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Carousel Section -->
+    <section class="featured-carousel-section" id="featured">
+        <div class="carousel-header">
+            <h2 class="carousel-title">Things I have been up to</h2>
+            <a href="search.html" class="carousel-discover">Explore everything →</a>
+        </div>
+        <div class="carousel-controls">
+            <button class="carousel-arrow carousel-prev" data-carousel-direction="-1" aria-label="Previous">‹</button>
+            <button class="carousel-arrow carousel-next" data-carousel-direction="1" aria-label="Next">›</button>
+        </div>
+        <div class="carousel-container">
+            <div class="feature-carousel-track" id="carousel-track">
+                <!-- Adventure -->
+                <a href="adventures.html#japan-adventure" class="feature-card">
+                    <img src="/images/generated/remote/bedf9633d8221e-800.jpg" alt="Temples & Cherry Blossoms" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
+                    <div class="feature-content">
+                        <span class="feature-kicker">Adventure</span>
+                        <h3 class="feature-title">Temples & Cherry Blossoms</h3>
+                        <p class="feature-description">Kyoto, Japan • 12 days</p>
+                    </div>
+                </a>
+
+                <!-- Essay -->
+                <a href="essays.html#feed-my-addiction" class="feature-card">
+                    <img src="/images/generated/remote/cd2aacee7b912f-800.jpg" alt="Feed My Addiction" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
+                    <div class="feature-content">
+                        <span class="feature-kicker">Essay</span>
+                        <h3 class="feature-title">Feed My Addiction</h3>
+                        <p class="feature-description">The way of modern life</p>
+                    </div>
+                </a>
+
+                <!-- Project -->
+                <a href="projects.html#development-ai" class="feature-card">
+                    <img src="/images/generated/remote/3764adabb88a12-800.jpg" alt="Development AI" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
+                    <div class="feature-content">
+                        <span class="feature-kicker">Project</span>
+                        <h3 class="feature-title">Development AI</h3>
+                        <p class="feature-description">Separating speed from taste</p>
+                    </div>
+                </a>
+
+                <!-- Cool Shit -->
+                <a href="cool-shit.html" class="feature-card">
+                    <img src="/images/generated/remote/0c026ddcd6c4bb-800.jpg" alt="AI agents that actually work" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
+                    <div class="feature-content">
+                        <span class="feature-kicker">Cool Shit</span>
+                        <h3 class="feature-title">AI agents that actually work</h3>
+                        <p class="feature-description">Crossed the threshold from demo to useful</p>
+                    </div>
+                </a>
+
+                <!-- Adventure -->
+                <a href="adventures.html#sample-adventure" class="feature-card">
+                    <img src="/images/generated/remote/cf593c7e611076-800.jpg" alt="Mountain Exploration" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
+                    <div class="feature-content">
+                        <span class="feature-kicker">Adventure</span>
+                        <h3 class="feature-title">Mountain Exploration</h3>
+                        <p class="feature-description">Europe • 5 days</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="carousel-dots" id="carousel-dots">
+            <span class="dot active" data-carousel-slide="0"></span>
+            <span class="dot" data-carousel-slide="1"></span>
+            <span class="dot" data-carousel-slide="2"></span>
+            <span class="dot" data-carousel-slide="3"></span>
+        </div>
+    </section>
+
+    <!-- Section 1: The Rabbit Holes -->
+    <section class="value-prop-section" id="value-prop">
+        <div class="value-prop-grid">
+            <div class="value-prop-main">
+                <p class="value-prop-eyebrow">DOWN THE RABBIT HOLE</p>
+                <h2 class="value-prop-headline">I think too much about things most people ignore</h2>
+                <p class="value-prop-subtext">Why do some businesses become cults while others fail? What makes a decision "good" when you can't know the outcome? How do you build wealth without becoming its servant? These are the questions I can't stop exploring.</p>
+                <a href="essays.html" class="btn-primary">Explore the Essays</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: The Numbers -->
+    <section class="credibility-section">
+        <div class="credibility-bar">
+            <div class="credibility-stat">
+                <span class="stat-number" data-home-stat="essays">{counts.essays ?? 0}</span>
+                <span class="stat-label">Essays Written</span>
+            </div>
+            <div class="credibility-divider"></div>
+            <div class="credibility-stat">
+                <span class="stat-number" data-home-stat="books">{counts.books ?? 0}</span>
+                <span class="stat-label">Books Logged</span>
+            </div>
+            <div class="credibility-divider"></div>
+            <div class="credibility-stat">
+                <span class="stat-number" data-home-stat="projects">{counts.projects ?? 0}</span>
+                <span class="stat-label">Projects Documented</span>
+            </div>
+            <div class="credibility-divider"></div>
+            <div class="credibility-stat">
+                <span class="stat-number" data-home-stat="resources">{counts.resources ?? 0}</span>
+                <span class="stat-label">Resources Collected</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Featured Essays -->
+    <section class="featured-essays-section" id="essays">
+        <div class="section-header">
+            <div class="section-header-left">
+                <p class="section-eyebrow">FROM THE ARCHIVE</p>
+                <h2>Things I've Written</h2>
+            </div>
+            <a href="essays.html" class="section-link">See all essays <span>→</span></a>
+        </div>
+
+        <div class="featured-essays-grid">
+            <article class="essay-card essay-card-featured">
+                <div class="essay-card-image">
+                    <img src="/images/generated/remote/cd2aacee7b912f-800.jpg" alt="Essay thumbnail" loading="lazy" decoding="async" width="800" height="600">
+                    <span class="essay-card-badge">MOST READ</span>
+                </div>
+                <div class="essay-card-content">
+                    <div class="essay-meta">
+                        <span class="essay-date">July 2024</span>
+                        <span class="essay-category">Philosophy</span>
+                    </div>
+                    <h3><a href="essays.html#feed-my-addiction">Feed My Addiction: The Way of Modern Life</a></h3>
+                    <p>We've built an entire economy around capturing attention. What happens when we realize we're both the product and the customer?</p>
+                    <a href="essays.html#feed-my-addiction" class="essay-read-more">Read this one →</a>
+                </div>
+            </article>
+
+            <article class="essay-card">
+                <div class="essay-card-content">
+                    <div class="essay-meta">
+                        <span class="essay-date">June 2024</span>
+                        <span class="essay-category">Philosophy</span>
+                    </div>
+                    <h3><a href="essays.html#beginning-end">The Beginning is the End</a></h3>
+                    <p>An essay about time, meaning, and why 'when' is the only question that matters.</p>
+                    <a href="essays.html#beginning-end" class="essay-read-more">Read this one →</a>
+                </div>
+            </article>
+
+            <article class="essay-card">
+                <div class="essay-card-content">
+                    <div class="essay-meta">
+                        <span class="essay-date">June 2024</span>
+                        <span class="essay-category">Business</span>
+                    </div>
+                    <h3><a href="essays.html#hot-spas">Hot Spas Never Go Out of Style</a></h3>
+                    <p>Why company culture isn't ping pong tables and free lunch — it's the invisible force that determines everything.</p>
+                    <a href="essays.html#hot-spas" class="essay-read-more">Read this one →</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Section 5: Current Focus -->
+    <section class="current-focus-section" id="focus">
+        <div class="focus-header">
+            <p class="section-eyebrow">THE CURRENT CHAPTER</p>
+            <h2>Where My Attention Lives</h2>
+        </div>
+
+        <div class="focus-timeline">
+            <div class="focus-item focus-item-active">
+                <div class="focus-indicator"></div>
+                <div class="focus-content">
+                    <span class="focus-label">PRIMARY</span>
+                    <h3>Real Estate Development</h3>
+                    <p>Learning how buildings actually get made. Currently exploring residential projects on the Sunshine Coast where I grew up.</p>
+                </div>
+            </div>
+
+            <div class="focus-item">
+                <div class="focus-indicator"></div>
+                <div class="focus-content">
+                    <span class="focus-label">ALWAYS</span>
+                    <h3>Writing</h3>
+                    <p>Trying to figure out what I actually think by putting words on a page. Sometimes it works.</p>
+                </div>
+            </div>
+
+            <div class="focus-item">
+                <div class="focus-indicator"></div>
+                <div class="focus-content">
+                    <span class="focus-label">OBSESSED WITH</span>
+                    <h3>How Organizations Work</h3>
+                    <p>Why do some companies have amazing cultures while others are miserable? I can't stop thinking about this.</p>
+                </div>
+            </div>
+
+            <div class="focus-item">
+                <div class="focus-indicator"></div>
+                <div class="focus-content">
+                    <span class="focus-label">SIDE QUESTS</span>
+                    <h3>Software & Tools</h3>
+                    <p>Building things when I find problems that bother me enough. This website is one of them.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Section 7: Final CTA -->
+    <section class="final-cta-section">
+        <div class="final-cta-content">
+            <h2>Let's Talk</h2>
+            <p>If you're working on something interesting, thinking about hard problems, or just want to argue about which books are actually worth reading — I'd love to hear from you.</p>
+            <div class="final-cta-buttons">
+                <a href="contact.html" class="btn-primary">Send a Message</a>
+                <a href="https://x.com/JevanGoldsmith" target="_blank" class="btn-secondary">Follow Along on X</a>
+            </div>
+        </div>
+    </section>
 </Base>
 
 <script>

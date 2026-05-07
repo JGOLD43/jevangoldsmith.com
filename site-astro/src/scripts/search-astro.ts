@@ -1,6 +1,7 @@
-import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import { debounce } from '../lib/debounce';
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { sanitizeUrl } from '../lib/safe-url';
+
 // Standalone search script for the Astro build. Self-contained — does not
 // depend on the legacy js/search.js (which expects JGDataFetch + JGCollectionUI
 // globals) so it can be loaded with a single <script> tag instead of three.
@@ -31,7 +32,7 @@ import { sanitizeUrl } from '../lib/safe-url';
     if (!filters) return;
     const types = ['all', ...Array.from(new Set(state.records.map((r) => r.type))).sort()];
     filters.innerHTML = types.map((type) => (
-      `<button class="site-search-filter ${type === state.type ? 'active' : ''}" type="button" data-search-type="${escapeAttr(type)}">${escapeHTML(displayType(type))}</button>`
+      `<button class="site-search-filter ${type === state.type ? 'active' : ''}" type="button" data-search-type="${escapeAttr(type)}">${escapeHtml(displayType(type))}</button>`
     )).join('');
   }
 
@@ -54,9 +55,9 @@ import { sanitizeUrl } from '../lib/safe-url';
     }
     results.innerHTML = records.slice(0, 80).map((r) => {
       const safeHref = sanitizeUrl(r.url);
-      const safeTitle = escapeHTML(r.title);
-      const safeSummary = escapeHTML(r.summary || '');
-      const safeType = escapeHTML(displayType(r.type));
+      const safeTitle = escapeHtml(r.title);
+      const safeSummary = escapeHtml(r.summary || '');
+      const safeType = escapeHtml(displayType(r.type));
       return '<a class="search-result-card" ' + 'hr' + 'ef="' + safeHref + '">' +
         '<span><span class="search-result-title">' + safeTitle + '</span>' +
         '<span class="search-result-summary">' + safeSummary + '</span></span>' +

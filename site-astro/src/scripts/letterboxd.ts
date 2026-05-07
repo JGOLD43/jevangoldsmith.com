@@ -1,54 +1,45 @@
-import { escapeHtml as escapeHTML } from '../lib/html-escape';
-import { init as initGridZoom } from './grid-zoom';
-import { installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
-import { fetchJson, readInlineJson } from './data-fetch';
+import { escapeHtml } from '../lib/html-escape';
+import { registerActions } from './action-dispatcher';
+import { applyCardVisibility, bindStarRatingDrag, installEscapeCloser } from './collection-helpers';
 import { createCollectionRuntime } from './collection-runtime';
 import {
-    closeDropdownOnOutsideClick as closeDropdownOnOutsideClickShared,
+    closeDropdownOnOutsideClick,
     highlightAndScroll,
     toggleClearButton
 } from './collection-ui';
-import { registerActions } from './action-dispatcher';
-import { render as renderMovieStats } from './movie-stats';
-// Movies/letterboxd page orchestrator. Inlines js/letterboxd-state.js,
-// js/letterboxd-filters.js, js/letterboxd-modal.js, js/letterboxd-events.js,
-// js/letterboxd-render.js, js/letterboxd-view.js — those shards only ever
-// exposed window.JGLetterboxd* globals consumed here.
+import { fetchJson, readInlineJson } from './data-fetch';
+import { onDomReady } from './dom-ready';
+import { init as initGridZoom } from './grid-zoom';
 
-let linkedMovieHandled = false;
+// Movie stats panel lives below-the-fold; lazy-import on first controls update.
+let renderMovieStatsPromise: Promise<(movies: AnyObj[]) => void> | null = null;
+async function renderMovieStats(filteredMovies: AnyObj[]): Promise<void> {
+    if (!renderMovieStatsPromise) {
+        renderMovieStatsPromise = import('./movie-stats').then((mod) => mod.render);
+    }
+    const fn = await renderMovieStatsPromise;
+    fn(filteredMovies);
+}
 
 // --- state ---
-const movieState = (function createState() {
-    const state: { activeGenre: string; movies: AnyObj[]; searchQuery: string; sidebarCollapsed: boolean; starFilter: string; timesWatchedFilter: string } = {
-        activeGenre: 'all',
-        movies: [],
-        searchQuery: '',
-        sidebarCollapsed: true,
-        starFilter: 'all',
-        timesWatchedFilter: 'all'
-    };
-    return {
-        clearSearchQuery() { state.searchQuery = ''; },
-        clearStarFilter() { state.starFilter = 'all'; },
-        clearTimesWatchedFilter() { state.timesWatchedFilter = 'all'; },
-        get() { return { ...state }; },
-        getMovies() { return state.movies; },
-        setActiveGenre(g: string) { state.activeGenre = g || 'all'; },
-        setMovies(m: AnyObj[]) { state.movies = Array.isArray(m) ? m : []; },
-        setSearchQuery(q: string) { state.searchQuery = String(q || '').trim(); },
-        setSidebarCollapsed(v: boolean) { state.sidebarCollapsed = Boolean(v); },
-        setStarFilter(r: string) { state.starFilter = r; },
-        setTimesWatchedFilter(c: string) { state.timesWatchedFilter = c; }
-    };
-}());
+const state = {
+    activeGenre: 'all',
+    movies: [] as AnyObj[],
+    searchQuery: '',
+    sidebarCollapsed: true,
+    starFilter: 'all' as string,
+    timesWatchedFilter: 'all' as string
+};
+let linkedMovieHandled = false;
+let moviesRuntime: AnyObj = null;
 
 // --- filters ---
 function normalizeGenreKey(genre: unknown): string {
     return String(genre || 'Uncategorized').toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-function filterMoviesData(movies: AnyObj[], state: AnyObj): AnyObj[] {
-    const query = String(state.searchQuery || '').toLowerCase();
+function filterMoviesData(movies: AnyObj[]): AnyObj[] {
+    const query = state.searchQuery.toLowerCase();
     return movies.filter((movie) => {
         if (query) {
             const matchesQuery = [movie.title, movie.genre || '', movie.year ? String(movie.year) : '']
@@ -72,51 +63,18 @@ function groupMoviesByGenre(movies: AnyObj[]) {
         if (!groups[genre]) groups[genre] = [];
         groups[genre].push(movie);
         return groups;
-    }, {});
+    }, {} as Record<string, AnyObj[]>);
 }
-
-const movieFilters = {
-    filterMovies: filterMoviesData,
-    getMoviesForGenre,
-    groupMoviesByGenre,
-    normalizeGenreKey
-};
 
 // --- modal ---
-function createMovieModal() {
-    function close() {
-        const modal = document.getElementById('movie-modal');
-        if (!modal) return;
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-    function open(movieData: AnyObj) {
-        const modal = document.getElementById('movie-modal');
-        if (!modal) return false;
-        (document.getElementById('modal-movie-title') as HTMLElement).textContent = movieData.title;
-        (document.getElementById('modal-movie-year') as HTMLElement).textContent = movieData.year || '';
-        (document.getElementById('modal-movie-rating') as HTMLElement).textContent = movieData.rating || '';
-        (document.getElementById('modal-movie-date') as HTMLElement).textContent = `Watched: ${movieData.date}`;
-        (document.getElementById('modal-movie-review') as HTMLElement).textContent = movieData.review || 'No review available.';
-        (document.getElementById('modal-letterboxd-link') as HTMLAnchorElement).href = movieData.link;
-        const posterImg = document.getElementById('modal-movie-poster') as HTMLImageElement | null;
-        if (movieData.poster && posterImg) {
-            posterImg.src = movieData.poster;
-            posterImg.alt = movieData.title;
-            posterImg.style.display = 'block';
-        } else if (posterImg) {
-            posterImg.style.display = 'none';
-        }
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-        return true;
-    }
-    return { close, open };
+function closeMovieModal() {
+    const modal = document.getElementById('movie-modal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
 }
 
-// --- render ---
-import { formatRuntime } from '../lib/dates';
-
+// --- normalize / parse ---
 function normalizeMovieData(movie: AnyObj) {
     const starCount = Number(movie.starCount || 0);
     return {
@@ -139,59 +97,19 @@ function normalizeMovieData(movie: AnyObj) {
     };
 }
 
-function displayMovies(movies: AnyObj[]) {
-    const container = document.getElementById('movies-container');
-    if (!container) return;
-    const visibleTitles = new Set(movies.map((movie) => String(movie.title || '')));
-    container.querySelectorAll<HTMLElement>('.movie-card').forEach((card) => {
-        card.style.display = visibleTitles.has(card.dataset.movieTitle || '') ? '' : 'none';
-    });
-}
-
-function parseMovieData(item: AnyObj) {
-    const data: AnyObj = {
-        title: item.title,
-        date: new Date(item.pubDate).toLocaleDateString('en-US', {
-            year: 'numeric', month: 'long', day: 'numeric'
-        }),
-        link: item.link,
-        rating: null,
-        starCount: 0,
-        year: null,
-        poster: null,
-        review: null,
-        shortDescription: null,
-        genre: null,
-        timesWatched: 1
-    };
-    const ratingMatch = item.title.match(/★+/);
-    if (ratingMatch) {
-        const stars = ratingMatch[0].length;
-        data.starCount = stars;
-        data.rating = '★'.repeat(stars) + '☆'.repeat(5 - stars);
-    }
-    const yearMatch = item.title.match(/,\s*(\d{4})/);
-    if (yearMatch) {
-        data.year = yearMatch[1];
-        data.title = item.title.replace(/,\s*\d{4}.*$/, '').trim();
-    }
-    const posterMatch = item.description.match(/<img[^>]+src="([^"]+)"/);
-    if (posterMatch) data.poster = posterMatch[1];
-    const reviewText = item.description
-        .replace(/<img[^>]*>/g, '')
-        .replace(/<[^>]+>/g, '')
-        .replace(/★+/g, '')
-        .replace(/Watched on.*$/i, '')
-        .trim();
-    if (reviewText.length > 10) {
-        data.review = reviewText;
-        data.shortDescription = reviewText.length > 150 ? `${reviewText.substring(0, 150)}...` : reviewText;
-    }
-    data.genre = item.genre || 'Uncategorized';
-    return data;
-}
 
 // --- view ---
+function displayMovies(movies: AnyObj[]) {
+    const container = document.getElementById('movies-container');
+    const visibleTitles = new Set(movies.map((movie) => String(movie.title || '')));
+    applyCardVisibility(
+        container,
+        visibleTitles,
+        '.movie-card',
+        (card) => [card.dataset.movieTitle || '']
+    );
+}
+
 function setSidebarLoaded() {
     const loadingSidebar = document.getElementById('loading-sidebar');
     const sidebarContent = document.getElementById('sidebar-content');
@@ -246,8 +164,8 @@ function renderSidebar(genreGroups: AnyObj) {
         if (container) {
             container.innerHTML = movies.map((movie: AnyObj) => `
                 <a href="#" class="movie-link" data-action="scrollToMovie" data-action-args="${encodeURIComponent(movie.title)}" data-action-eventobj="true">
-                    <div>${escapeHTML(movie.title)}</div>
-                    <div class="movie-link-year">${escapeHTML(movie.year || '')}</div>
+                    <div>${escapeHtml(movie.title)}</div>
+                    <div class="movie-link-year">${escapeHtml(movie.year || '')}</div>
                 </a>
             `).join('');
         }
@@ -291,79 +209,25 @@ function scrollToMovieByTitle(movieTitle: string, event?: Event) {
     });
 }
 
-const movieView = {
-    renderSidebar,
-    scrollToMovie: scrollToMovieByTitle,
-    setError,
-    setMainLoaded,
-    updateMovieCount,
-    updateStarFilterDisplay,
-    updateTimesWatchedFilterDisplay
-};
-
-const movieRender = {
-    displayMovies,
-    formatRuntime,
-    normalizeMovieData,
-    parseMovieData
-};
-
-// --- events ---
-function bindMovieEvents({ clearTimesWatchedFilter, closeMovieModal, setStarFilter, setTimesWatchedFilter }) {
-    installEscapeCloser(closeMovieModal);
-
-    document.addEventListener('click', (event) => {
-        const modal = document.getElementById('movie-modal');
-        if (event.target === modal) {
-            closeMovieModal();
-            return;
-        }
-        closeDropdownOnOutsideClickShared('list-dropdown', event);
-    });
-
-    bindStarRatingDrag(document, setStarFilter);
-
-    const slider = document.getElementById('timeswatched-slider');
-    if (slider) {
-        slider.addEventListener('input', (event: Event) => {
-            const count = Number.parseInt((event.target as HTMLInputElement).value, 10);
-            if (count === 0) {
-                clearTimesWatchedFilter();
-                return;
-            }
-            setTimesWatchedFilter(count);
-        });
-    }
-}
-
-// --- orchestrator ---
-const movieModal = createMovieModal();
-let moviesRuntime: AnyObj = null;
-
-function getFilteredMovies() {
-    return movieFilters.filterMovies(movieState.getMovies(), movieState.get());
-}
-
-function renderFromState() {
-    moviesRuntime?.render();
-}
+// --- runtime + actions ---
+function renderFromState() { moviesRuntime?.render(); }
 
 function buildCollectionController() {
     moviesRuntime = createCollectionRuntime({
-        getState: () => movieState.get(),
-        getFilteredItems: () => getFilteredMovies(),
-        getVisibleItems: (filteredMovies: AnyObj[], state: AnyObj) => movieFilters.getMoviesForGenre(filteredMovies, state.activeGenre),
-        groupItems: (filteredMovies: AnyObj[]) => movieFilters.groupMoviesByGenre(filteredMovies),
-        renderSidebar: (groups: AnyObj) => movieView.renderSidebar(groups),
+        getState: () => ({ ...state }),
+        getFilteredItems: () => filterMoviesData(state.movies),
+        getVisibleItems: (filteredMovies: AnyObj[], s: AnyObj) => getMoviesForGenre(filteredMovies, s.activeGenre),
+        groupItems: (filteredMovies: AnyObj[]) => groupMoviesByGenre(filteredMovies),
+        renderSidebar,
         renderVisibleItems: (visibleMovies: AnyObj[]) => {
-            movieView.setMainLoaded();
-            movieRender.displayMovies(visibleMovies);
+            setMainLoaded();
+            displayMovies(visibleMovies);
         },
-        updateCount: (visibleMovies: AnyObj[]) => movieView.updateMovieCount(visibleMovies.length),
-        updateControls: (state: AnyObj, filteredMovies: AnyObj[]) => {
-            movieView.updateStarFilterDisplay(state.starFilter);
-            movieView.updateTimesWatchedFilterDisplay(state.timesWatchedFilter);
-            toggleClearButton('movie-search-clear-btn', Boolean(state.searchQuery));
+        updateCount: (visibleMovies: AnyObj[]) => updateMovieCount(visibleMovies.length),
+        updateControls: (s: AnyObj, filteredMovies: AnyObj[]) => {
+            updateStarFilterDisplay(s.starFilter);
+            updateTimesWatchedFilterDisplay(s.timesWatchedFilter);
+            toggleClearButton('movie-search-clear-btn', Boolean(s.searchQuery));
             renderMovieStats(filteredMovies);
         },
         group: {
@@ -381,6 +245,77 @@ function buildCollectionController() {
     });
 }
 
+function applyFilter(mutate: () => void) {
+    mutate();
+    state.activeGenre = 'all';
+    moviesRuntime?.resetGrouping();
+    renderFromState();
+}
+
+function searchMovies(query: string) {
+    applyFilter(() => { state.searchQuery = String(query || '').trim(); });
+}
+
+function clearMovieSearch() {
+    moviesRuntime?.clearSearchInput();
+    applyFilter(() => { state.searchQuery = ''; });
+}
+
+function setStarFilter(rating: string | number) {
+    applyFilter(() => { state.starFilter = String(rating); });
+}
+
+function setTimesWatchedFilter(count: string | number) {
+    applyFilter(() => { state.timesWatchedFilter = String(count); });
+}
+
+function clearTimesWatchedFilter() {
+    applyFilter(() => { state.timesWatchedFilter = 'all'; });
+}
+
+function clearAllFilters() {
+    moviesRuntime?.clearSearchInput();
+    applyFilter(() => {
+        state.searchQuery = '';
+        state.starFilter = 'all';
+        state.timesWatchedFilter = 'all';
+    });
+}
+
+function toggleMovieGenre(genre: string, event?: Event) {
+    const button = (event?.target as Element | undefined)?.closest('.sidebar-category');
+    moviesRuntime?.toggleGroup({
+        value: genre,
+        button,
+        onCollapse: () => { state.activeGenre = 'all'; },
+        onExpand: () => { state.activeGenre = genre; }
+    });
+}
+
+function scrollToMovie(movieTitle: string, event?: Event) {
+    event?.preventDefault();
+    scrollToMovieByTitle(movieTitle, event);
+}
+
+function handleLinkedMovie() {
+    if (linkedMovieHandled) return;
+    const linkedMovieTitle = new URLSearchParams(window.location.search).get('movie');
+    if (!linkedMovieTitle) return;
+    linkedMovieHandled = true;
+    window.requestAnimationFrame(() => scrollToMovie(linkedMovieTitle, undefined));
+}
+
+function toggleSidebar() {
+    state.sidebarCollapsed = Boolean(moviesRuntime?.toggleSidebar());
+}
+
+function restoreSidebarState() {
+    state.sidebarCollapsed = Boolean(moviesRuntime?.restoreSidebar());
+}
+
+function toggleListDropdown() { moviesRuntime?.toggleListDropdown(); }
+
+// --- data load ---
 async function loadCachedMovies() {
     const inline = readInlineJson<AnyObj[]>('jg-movies-data');
     if (Array.isArray(inline) && inline.length > 0) {
@@ -394,113 +329,47 @@ async function loadCachedMovies() {
 }
 
 function setMovies(movies: AnyObj[]) {
-    movieState.setMovies(movies.map(normalizeMovieData));
+    state.movies = movies.map(normalizeMovieData);
     renderFromState();
     handleLinkedMovie();
 }
 
-// runtime path is pure SSR-then-cached-fetch. The Letterboxd
-// RSS proxy fetch was a CLS source (variable count → wipe + relayout)
-// and racy via allorigins.win. data/movies.json is now refreshed
-// nightly by .github/workflows/letterboxd-sync.yml so the cached path
-// is always current.
 async function fetchLetterboxdMovies() {
     try {
         const cachedMovies = await loadCachedMovies();
         setMovies(cachedMovies);
     } catch (error) {
         console.error('Error loading movie data:', error);
-        movieView.setError();
+        setError();
     }
 }
 
-function searchMovies(query: string) {
-    movieState.setSearchQuery(query);
-    movieState.setActiveGenre('all');
-    moviesRuntime?.resetGrouping();
-    renderFromState();
-}
+// --- events ---
+function bindMovieEvents() {
+    installEscapeCloser(closeMovieModal);
 
-function clearMovieSearch() {
-    moviesRuntime?.clearSearchInput();
-    movieState.clearSearchQuery();
-    movieState.setActiveGenre('all');
-    moviesRuntime?.resetGrouping();
-    renderFromState();
-}
-
-function setStarFilter(rating: string) {
-    movieState.setStarFilter(rating);
-    movieState.setActiveGenre('all');
-    moviesRuntime?.resetGrouping();
-    renderFromState();
-}
-
-function setTimesWatchedFilter(count: string) {
-    movieState.setTimesWatchedFilter(count);
-    movieState.setActiveGenre('all');
-    moviesRuntime?.resetGrouping();
-    renderFromState();
-}
-
-function clearTimesWatchedFilter() {
-    movieState.clearTimesWatchedFilter();
-    movieState.setActiveGenre('all');
-    moviesRuntime?.resetGrouping();
-    renderFromState();
-}
-
-function toggleMovieGenre(genre: string, event?: Event) {
-    const button = (event?.target as Element | undefined)?.closest('.sidebar-category');
-    moviesRuntime?.toggleGroup({
-        value: genre,
-        button,
-        onCollapse: () => { movieState.setActiveGenre('all'); },
-        onExpand: () => { movieState.setActiveGenre(genre); }
+    document.addEventListener('click', (event) => {
+        const modal = document.getElementById('movie-modal');
+        if (event.target === modal) {
+            closeMovieModal();
+            return;
+        }
+        closeDropdownOnOutsideClick('list-dropdown', event);
     });
-}
 
-function scrollToMovie(movieTitle: string, event?: Event) {
-    event?.preventDefault();
-    movieView.scrollToMovie(movieTitle, event);
-}
+    bindStarRatingDrag(document, setStarFilter);
 
-function handleLinkedMovie() {
-    if (linkedMovieHandled) return;
-    const linkedMovieTitle = new URLSearchParams(window.location.search).get('movie');
-    if (!linkedMovieTitle) return;
-    linkedMovieHandled = true;
-    window.requestAnimationFrame(() => {
-        scrollToMovie(linkedMovieTitle, undefined);
-    });
-}
-
-function clearAllFilters() {
-    moviesRuntime?.clearSearchInput();
-    movieState.clearSearchQuery();
-    movieState.clearStarFilter();
-    movieState.clearTimesWatchedFilter();
-    movieState.setActiveGenre('all');
-    moviesRuntime?.resetGrouping();
-    renderFromState();
-}
-
-function toggleSidebar() {
-    const isCollapsed = moviesRuntime?.toggleSidebar();
-    movieState.setSidebarCollapsed(isCollapsed);
-}
-
-function restoreSidebarState() {
-    const isCollapsed = moviesRuntime?.restoreSidebar();
-    movieState.setSidebarCollapsed(isCollapsed);
-}
-
-function toggleListDropdown() {
-    moviesRuntime?.toggleListDropdown();
-}
-
-function closeMovieModal() {
-    movieModal.close();
+    const slider = document.getElementById('timeswatched-slider');
+    if (slider) {
+        slider.addEventListener('input', (event: Event) => {
+            const count = Number.parseInt((event.target as HTMLInputElement).value, 10);
+            if (count === 0) {
+                clearTimesWatchedFilter();
+                return;
+            }
+            setTimesWatchedFilter(count);
+        });
+    }
 }
 
 function initMoviesZoom() {
@@ -529,20 +398,9 @@ registerActions({
 function initMoviesPage() {
     buildCollectionController();
     restoreSidebarState();
-    bindMovieEvents({
-        clearTimesWatchedFilter,
-        closeMovieModal,
-        setStarFilter,
-        setTimesWatchedFilter
-    });
+    bindMovieEvents();
     fetchLetterboxdMovies();
     initMoviesZoom();
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMoviesPage, { once: true });
-} else {
-    initMoviesPage();
-}
-
-export {};
+onDomReady(initMoviesPage, 'movies init');

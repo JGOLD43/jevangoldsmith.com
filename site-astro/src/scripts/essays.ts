@@ -1,7 +1,7 @@
-import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
+import { registerActions } from './action-dispatcher';
 import { createCollectionRuntime } from './collection-runtime';
 import { debounce, toggleClearButton } from './collection-ui';
-import { registerActions } from './action-dispatcher';
 import { readInlineJson } from './data-fetch';
 
 let essaysRuntime: AnyObj = null;
@@ -101,6 +101,7 @@ function findEssayIndex(essays: AnyObj[], essayId: string) {
 }
 
 import { formatDate, formatDateShort } from '../lib/dates';
+import { onDomReady } from './dom-ready';
 
 function createEssayArticle(essay: AnyObj) {
     const article = document.createElement('article');
@@ -108,11 +109,11 @@ function createEssayArticle(essay: AnyObj) {
     article.id = essay.id;
     article.innerHTML = `
         <div class="post-meta">
-            <span class="post-date">${escapeHTML(formatDate(essay.date))}</span>
-            <span class="post-category">${escapeHTML(essay.category)}</span>
+            <span class="post-date">${escapeHtml(formatDate(essay.date))}</span>
+            <span class="post-category">${escapeHtml(essay.category)}</span>
         </div>
-        <h2>${escapeHTML(essay.title)}</h2>
-        ${essay.subtitle ? `<p><em>${escapeHTML(essay.subtitle)}</em></p>` : ''}
+        <h2>${escapeHtml(essay.title)}</h2>
+        ${essay.subtitle ? `<p><em>${escapeHtml(essay.subtitle)}</em></p>` : ''}
         ${essay.content || ''}
     `;
     return article;
@@ -132,14 +133,14 @@ function createEssayNav(filteredEssays: AnyObj[], currentIndex: number) {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             <span class="essay-nav-label">
                 <span class="essay-nav-direction">Previous</span>
-                ${prevTitle ? `<span class="essay-nav-title">${escapeHTML(prevTitle)}</span>` : ''}
+                ${prevTitle ? `<span class="essay-nav-title">${escapeHtml(prevTitle)}</span>` : ''}
             </span>
         </button>
         <span class="essay-nav-counter">${currentIndex + 1} / ${total}</span>
         <button class="essay-nav-btn essay-nav-next" ${atEnd ? 'disabled' : ''} data-action="nextEssay">
             <span class="essay-nav-label essay-nav-label-right">
                 <span class="essay-nav-direction">Next</span>
-                ${nextTitle ? `<span class="essay-nav-title">${escapeHTML(nextTitle)}</span>` : ''}
+                ${nextTitle ? `<span class="essay-nav-title">${escapeHtml(nextTitle)}</span>` : ''}
             </span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
@@ -194,8 +195,8 @@ function renderEssaySidebar(groups: Record<string, AnyObj[]>) {
         if (container) {
             container.innerHTML = essays.map((essay: AnyObj) => `
                 <a href="#${escapeAttr(essay.id)}" class="essay-link" data-action="scrollToEssay" data-action-args="${encodeURIComponent(essay.id)}" data-action-eventobj="true">
-                    <div>${escapeHTML(essay.title)}</div>
-                    <div class="essay-link-date">${escapeHTML(formatDateShort(essay.date))}</div>
+                    <div>${escapeHtml(essay.title)}</div>
+                    <div class="essay-link-date">${escapeHtml(formatDateShort(essay.date))}</div>
                 </a>
             `).join('');
         }
@@ -399,10 +400,6 @@ function initEssaysPage() {
     loadEssays();
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initEssaysPage, { once: true });
-} else {
-    initEssaysPage();
-}
+onDomReady(initEssaysPage, 'essays init');
 
 export {};

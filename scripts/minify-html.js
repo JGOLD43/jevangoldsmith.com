@@ -8,21 +8,12 @@
  * Run after purge:css + modulepreload, before slim:json.
  */
 const fs = require('node:fs');
-const path = require('node:path');
 const { minify } = require('html-minifier-terser');
+const { distDir } = require('./_lib/paths');
+const { walk: walkAll } = require('./_lib/walk');
 
-const ROOT = path.resolve(__dirname, '..');
-const DIST = process.argv.find((a) => a.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
-
-function walk(dir) {
-  const out = [];
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...walk(full));
-    else if (entry.isFile() && entry.name.endsWith('.html')) out.push(full);
-  }
-  return out;
-}
+const DIST = distDir();
+const walk = (dir) => walkAll(dir).filter((p) => p.endsWith('.html'));
 
 const opts = {
   collapseWhitespace: true,

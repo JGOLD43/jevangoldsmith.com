@@ -1,0 +1,68 @@
+{
+  "essay": {
+    "all": { "label": "All Essays", "tooltip": "All Essays", "countId": "count-all", "iconKey": "file" },
+    "categories": [
+      ["Philosophy", "philosophy", "question"],
+      ["Management", "management", "bars"],
+      ["Technology", "technology", "monitor"],
+      ["Personal", "personal", "user"],
+      ["Finance", "finance", "dollar"],
+      ["Writing", "writing", "edit"]
+    ]
+  },
+  "podcast": [
+    ["All Podcasts", "count-all-podcasts", "10", "🎧", "all"],
+    ["Business & Investing", "count-business", "3", "💼", "business"],
+    ["Science & Ideas", "count-ideas", "2", "🧠", "ideas"],
+    ["Personal Development", "count-development", "2", "⚡", "development"],
+    ["Must-Listen Episodes", "count-episodes", "3", "★", "episodes"]
+  ],
+  "movie": {
+    "all": { "label": "All Movies", "tooltip": "All Movies", "countId": "count-all-movies", "icon": "🎬" },
+    "categories": [
+      ["Action", "Action", "💥"],
+      ["Comedy", "Comedy", "😂"],
+      ["Drama", "Drama", "🎭"],
+      ["Horror", "Horror", "👻"],
+      ["Sci-Fi", "Sci-Fi", "🚀"],
+      ["Romance", "Romance", "💕"],
+      ["Thriller", "Thriller", "😱"],
+      ["Documentary", "Documentary", "📹"]
+    ]
+  },
+  "book": {
+    "all": { "label": "All Books", "tooltip": "All Books", "countId": "count-all", "iconKey": "book" },
+    "categories": [
+      ["Advertising and Copywriting", "advertising", "megaphone", "Advertising"],
+      ["Autobiographies", "autobiographies", "user", "Autobiographies"],
+      ["Big Ideas", "bigideas", "lightbulb", "Big Ideas"],
+      ["The Great Books", "greatbooks", "openBook", "The Great Books"],
+      ["Out of the Box Thinking", "outofthebox", "grid", "Out of the Box"],
+      ["Patience and Clear Thinking", "patience", "clock", "Patience"],
+      ["Mental Endurance", "mentalendurance", "heart", "Mental Endurance"],
+      ["Learning", "learning", "graduation", "Learning"],
+      ["Persuasion", "persuasion", "target", "Persuasion"],
+      ["Psychology Books", "psychology", "brain", "Psychology"],
+      ["Science", "science", "flask", "Science"],
+      ["Storytelling", "storytelling", "edit", "Storytelling"],
+      ["Strategy and War", "strategy", "bolt", "Strategy"],
+      ["Who Am I?", "whoami", "question", "Who Am I?"]
+    ]
+  },
+  "people": {
+    "all": { "label": "All People", "iconKey": "users", "countId": "count-people-all", "count": "0" },
+    "categories": [
+      ["Business & Investing", "business", "dollar"],
+      ["Writers & Thinkers", "writers", "edit"],
+      ["Science & Technology", "science", "globe"],
+      ["Creators & Artists", "creators", "star"]
+    ]
+  },
+  "tasteList": [
+    ["books.html", "Books", "books"],
+    ["movies.html", "Movies", "movies"],
+    ["podcasts.html", "Podcasts", "podcasts"],
+    ["products.html", "Products", "products"],
+    ["people.html", "People of History", "people"]
+  ]
+}

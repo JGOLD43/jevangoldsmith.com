@@ -1,20 +1,21 @@
-import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
+
 // ============================================
 // Adventures Page Data + Map Runtime
 // ============================================
 
 import {
-    state, fetchJsonOr, updateLightboxImage,
-    saveFilters, loadFilters, matchesAdventureFilters,
-    matchesRegionFilter, adventureYear,
-    ROUTE_TYPE_COLORS, BASEMAPS, FAST_BASEMAP_LAND,
-    WEB_MERCATOR_MAX_LAT, HORIZONTAL_WRAP_BOUND
-} from './adventures-state';
-import { loadLeaflet, loadMarkerCluster } from './adventures-map-vendor';
-import {
     loadCountriesData, loadMapDatasets,
     schedulePopularRoutes, setRouteRerender
 } from './adventures-map-data';
+import { loadLeaflet, loadMarkerCluster } from './adventures-map-vendor';
+import {adventureYear,BASEMAPS, FAST_BASEMAP_LAND,HORIZONTAL_WRAP_BOUND, matchesAdventureFilters,
+    matchesRegionFilter, 
+    ROUTE_TYPE_COLORS, 
+    saveFilters, 
+    state, updateLightboxImage,
+    WEB_MERCATOR_MAX_LAT 
+} from './adventures-state';
 
 // Leaflet is injected by adventures-map-vendor's loadLeaflet() at runtime
 // AFTER this module is imported, so capture L lazily via a getter — never
@@ -192,8 +193,8 @@ function initWorldMap(adventures: AnyObj[]) {
 
         const popupHtml = `
             <div style="min-width: 180px; text-align: center; padding: 0.5rem;">
-                <strong style="font-size: 1rem;">${escapeHTML(adventure.title)}</strong><br>
-                <span style="color: #666; font-size: 0.85rem;">${escapeHTML(adventure.location)}</span><br>
+                <strong style="font-size: 1rem;">${escapeHtml(adventure.title)}</strong><br>
+                <span style="color: #666; font-size: 0.85rem;">${escapeHtml(adventure.location)}</span><br>
                 <button data-action="select-adventure" data-adventure-id="${escapeAttr(adventure.id)}"
                    style="margin-top: 0.5rem; padding: 0.4rem 1rem; background: #C9A86C; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">
                    View Details
@@ -284,10 +285,10 @@ function renderPlaceMarkers() {
         const label = categoryLabel(category);
         const popupHtml = `
             <div style="min-width: 180px; padding: 0.5rem;">
-                <strong style="font-size: 0.95rem;">${escapeHTML(place.name)}</strong><br>
-                ${place.location ? `<span style="color: #666; font-size: 0.8rem;">${escapeHTML(place.location)}</span><br>` : ''}
-                ${place.notes ? `<p style="margin: 0.4rem 0 0; font-size: 0.85rem; color: #444;">${escapeHTML(place.notes)}</p>` : ''}
-                <span style="display:inline-block;margin-top:0.4rem;padding:0.15rem 0.5rem;background:${color};color:#fff;border-radius:3px;font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;">${escapeHTML(label)}</span>
+                <strong style="font-size: 0.95rem;">${escapeHtml(place.name)}</strong><br>
+                ${place.location ? `<span style="color: #666; font-size: 0.8rem;">${escapeHtml(place.location)}</span><br>` : ''}
+                ${place.notes ? `<p style="margin: 0.4rem 0 0; font-size: 0.85rem; color: #444;">${escapeHtml(place.notes)}</p>` : ''}
+                <span style="display:inline-block;margin-top:0.4rem;padding:0.15rem 0.5rem;background:${color};color:#fff;border-radius:3px;font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;">${escapeHtml(label)}</span>
             </div>
         `;
 
@@ -414,8 +415,8 @@ function renderRouteLayer() {
                 className: `route-line-${route.type || 'track'}${isBucket ? ' route-line-bucket' : ''}`
             });
             const label = isBucket
-                ? `🪣 ${escapeHTML(route.name || 'Route')} · ${route.distanceKm || 0} km${route.country ? ` · ${escapeHTML(route.country)}` : ''}`
-                : `${escapeHTML(route.name || 'Route')} · ${route.distanceKm || 0} km`;
+                ? `🪣 ${escapeHtml(route.name || 'Route')} · ${route.distanceKm || 0} km${route.country ? ` · ${escapeHtml(route.country)}` : ''}`
+                : `${escapeHtml(route.name || 'Route')} · ${route.distanceKm || 0} km`;
 
             polyline.bindTooltip(label, { sticky: true });
             polyline.on('click', (event: AnyObj) => {
@@ -470,7 +471,7 @@ function renderPhotoLayer() {
                 popupHtml: `
                 <div class="photo-popup">
                     <img src="${escapeAttr(full)}" alt="${escapeAttr(photo.caption || '')}" loading="lazy" decoding="async" style="max-width:260px;max-height:200px;display:block;border-radius:6px;">
-                    ${photo.caption ? `<p style="margin:0.4rem 0 0;font-size:0.8rem;color:#444;">${escapeHTML(photo.caption)}</p>` : ''}
+                    ${photo.caption ? `<p style="margin:0.4rem 0 0;font-size:0.8rem;color:#444;">${escapeHtml(photo.caption)}</p>` : ''}
                 </div>
             `,
                 onClick: () => openPhotoLightbox(index)
@@ -552,13 +553,13 @@ function buildMapControlStack() {
                 <label class="map-controls-label" for="map-filter-region">Region</label>
                 <select id="map-filter-region" class="map-controls-select">
                     <option value="all">All</option>
-                    ${regions.map((region: string) => `<option value="${escapeAttr(region)}" ${String(state.mapFilters.region).toLowerCase() === String(region).toLowerCase() ? 'selected' : ''}>${escapeHTML(region)}</option>`).join('')}
+                    ${regions.map((region: string) => `<option value="${escapeAttr(region)}" ${String(state.mapFilters.region).toLowerCase() === String(region).toLowerCase() ? 'selected' : ''}>${escapeHtml(region)}</option>`).join('')}
                 </select>
             </div>
             <div class="map-controls-group">
                 <label class="map-controls-label" for="map-filter-basemap">Basemap</label>
                 <select id="map-filter-basemap" class="map-controls-select">
-                    ${Object.entries(BASEMAPS).map(([key, value]: [string, AnyObj]) => `<option value="${key}" ${state.mapFilters.basemap === key ? 'selected' : ''}>${escapeHTML(value.label)}</option>`).join('')}
+                    ${Object.entries(BASEMAPS).map(([key, value]: [string, AnyObj]) => `<option value="${key}" ${state.mapFilters.basemap === key ? 'selected' : ''}>${escapeHtml(value.label)}</option>`).join('')}
                 </select>
             </div>
         </div>
@@ -632,7 +633,7 @@ function renderLayerToggles() {
     return layers.map(([key, label]: [string, string]) => `
         <label class="map-controls-check">
             <input type="checkbox" data-layer="${key}" ${state.mapFilters.layers[key] ? 'checked' : ''}>
-            <span>${escapeHTML(label)}</span>
+            <span>${escapeHtml(label)}</span>
         </label>
     `).join('');
 }
@@ -642,7 +643,7 @@ function renderPoiToggles() {
     return state.placeCategories.map((category: AnyObj) => `
         <label class="map-controls-check">
             <input type="checkbox" data-poi-category="${escapeAttr(category.id)}" ${state.mapFilters.poiCategories[category.id] !== false ? 'checked' : ''}>
-            <span style="--poi-dot:${escapeAttr(category.color || '#666')}">${escapeHTML(category.label)}</span>
+            <span style="--poi-dot:${escapeAttr(category.color || '#666')}">${escapeHtml(category.label)}</span>
         </label>
     `).join('');
 }
@@ -651,11 +652,8 @@ function renderPoiToggles() {
 // filter pill in adventures.astro. Register so the action dispatcher can
 // dispatch it.
 import { registerActions as registerActionsForMap } from './action-dispatcher';
-registerActionsForMap({ togglePlacesOfInterest });
 
-// adventures.ts is the canonical source for these — re-imported here only
-// to keep the cross-module ambient typing happy.
-void fetchJsonOr; void loadFilters;
+registerActionsForMap({ togglePlacesOfInterest });
 
 setRouteRerender(() => renderRouteLayer());
 

@@ -1,11 +1,72 @@
 // Collection runtime is a config-driven dynamic adapter consumed by every
-// collection page (books, podcasts, people, ...). The Config shape varies
-// per page (renderers, action names, group helpers), so the public surface
-// is intentionally typed as `any` — internal DOM access is narrowed.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Cfg = any;
+// collection page (books, podcasts, people, ...). Pages pass the same
+// shape with page-specific selectors + render callbacks.
 
-import { init as initGridZoom } from './grid-zoom';
+interface CollectionRuntimeGroupCfg {
+    allButtonSelector?: string;
+    buttonSelector?: string;
+    panelSelector?: string;
+    panelForValue?: (value: string) => Element | null;
+}
+
+interface CollectionRuntimeActions {
+    clearSearch?: string;
+    filter?: string;
+    search?: string;
+    toggleSidebar?: string;
+    toggleDropdown?: string;
+}
+
+export interface CollectionRuntimeConfig {
+    // Selectors / dom ids
+    cardSelector?: string;
+    buttonSelector?: string;
+    allButtonSelector?: string;
+    counterId?: string;
+    layoutId?: string;
+    sidebarId?: string;
+    searchInputId?: string;
+    searchClearButtonId?: string;
+    searchClearDisplay?: string;
+    visibleDisplay?: string;
+    dropdownId?: string;
+    gridId?: string;
+
+    // Datasets / behavior flags
+    categoryDataset?: string;
+    searchDataset?: string;
+    categoryMode?: 'exact' | 'tokens';
+    defaultCategory?: string;
+    storageKey?: string;
+    defaultCollapsed?: boolean;
+    useDisplayStyle?: boolean;
+    resetCategoryOnSearch?: boolean;
+
+    // Action name registry
+    actions?: CollectionRuntimeActions;
+
+    // Group toggling (sidebar collapsing categories)
+    group?: CollectionRuntimeGroupCfg;
+
+    // Optional grid-zoom config (passed straight to initGridZoom).
+    zoom?: AnyObj;
+
+    // Render hooks (managed mode)
+    getState?: () => AnyObj;
+    getFilteredItems?: (state: AnyObj) => AnyObj;
+    getVisibleItems?: (filtered: AnyObj, state: AnyObj) => AnyObj;
+    groupItems?: (filtered: AnyObj) => AnyObj;
+    renderSidebar?: (groups: AnyObj, state: AnyObj) => void;
+    renderVisibleItems?: (items: AnyObj, state: AnyObj) => void;
+    updateCount?: (visible: AnyObj, state: AnyObj) => void;
+    updateControls?: (state: AnyObj, filtered: AnyObj, visible: AnyObj) => void;
+    onRender?: (info?: AnyObj) => void;
+}
+
+// Internal callsites still use AnyObj for the dataset reads + render
+// callbacks. The public Cfg is now narrowed.
+type Cfg = CollectionRuntimeConfig & Record<string, AnyObj>;
+
 import { registerActions } from './action-dispatcher';
 import {
     activateOnly,
@@ -15,6 +76,7 @@ import {
     toggleClearButton as toggleClearButtonShared,
     toggleCollapsedState
 } from './collection-ui';
+import { init as initGridZoom } from './grid-zoom';
 
 function toArray<T>(value: ArrayLike<T> | Iterable<T> | null | undefined): T[] {
     return Array.from(value || []);
@@ -35,20 +97,21 @@ function resolveActionButton(buttonOrEvent: Cfg, selector: string): HTMLElement 
     return null;
 }
 
-export function createCollectionRuntime(config: Cfg) {
+export function createCollectionRuntime(config: CollectionRuntimeConfig) {
+    const cfg = config as Cfg;
     const state = {
-        category: config.defaultCategory || 'all',
+        category: cfg.defaultCategory || 'all',
         search: ''
     };
     let initialized = false;
 
     function cards(): HTMLElement[] {
-        return toArray(document.querySelectorAll<HTMLElement>(config.cardSelector));
+        return toArray(document.querySelectorAll<HTMLElement>(cfg.cardSelector));
     }
 
     function categoryTokens(card: HTMLElement): string[] {
-        const raw = datasetValue(card, config.categoryDataset || 'category').toLowerCase();
-        if (config.categoryMode === 'exact') return [raw];
+        const raw = datasetValue(card, cfg.categoryDataset || 'category').toLowerCase();
+        if (cfg.categoryMode === 'exact') return [raw];
         return raw.split(/\s+/).filter(Boolean);
     }
 
@@ -60,7 +123,7 @@ export function createCollectionRuntime(config: Cfg) {
     function matchesSearch(card: HTMLElement): boolean {
         const query = state.search.toLowerCase();
         if (!query) return true;
-        return datasetValue(card, config.searchDataset || 'search').toLowerCase().includes(query);
+        return datasetValue(card, cfg.searchDataset || 'search').toLowerCase().includes(query);
     }
 
     function visibleCards(allCards: HTMLElement[] = cards()): HTMLElement[] {
@@ -68,40 +131,40 @@ export function createCollectionRuntime(config: Cfg) {
     }
 
     function setActiveButton(button: Element | null | undefined) {
-        const buttons = toArray(document.querySelectorAll(config.buttonSelector || '.sidebar-category'));
+        const buttons = toArray(document.querySelectorAll(cfg.buttonSelector || '.sidebar-category'));
         activateOnly(buttons, button ?? null);
     }
 
     function allButton() {
-        if (config.allButtonSelector) return document.querySelector(config.allButtonSelector);
-        return document.querySelector(`${config.buttonSelector || '.sidebar-category'}[data-action-args="all"]`);
+        if (cfg.allButtonSelector) return document.querySelector(cfg.allButtonSelector);
+        return document.querySelector(`${cfg.buttonSelector || '.sidebar-category'}[data-action-args="all"]`);
     }
 
     function updateClearButton() {
-        if (!config.searchClearButtonId) return;
-        const displayValue = config.searchClearDisplay || 'flex';
-        toggleClearButtonShared(config.searchClearButtonId, Boolean(state.search), displayValue);
+        if (!cfg.searchClearButtonId) return;
+        const displayValue = cfg.searchClearDisplay || 'flex';
+        toggleClearButtonShared(cfg.searchClearButtonId, Boolean(state.search), displayValue);
     }
 
     function updateCount(count: number) {
-        if (!config.counterId) return;
-        const counter = document.getElementById(config.counterId);
+        if (!cfg.counterId) return;
+        const counter = document.getElementById(cfg.counterId);
         if (counter) counter.textContent = String(count);
     }
 
     function groupButtons() {
-        return toArray(document.querySelectorAll(config.group?.buttonSelector || config.buttonSelector || '.sidebar-category'));
+        return toArray(document.querySelectorAll(cfg.group?.buttonSelector || cfg.buttonSelector || '.sidebar-category'));
     }
 
     function resetGrouping() {
-        const activeButton = config.group?.allButtonSelector
-            ? document.querySelector(config.group.allButtonSelector)
+        const activeButton = cfg.group?.allButtonSelector
+            ? document.querySelector(cfg.group.allButtonSelector)
             : allButton();
-        if (config.group?.panelSelector) {
+        if (cfg.group?.panelSelector) {
             collapseGroups({
                 activeButton,
-                buttonSelector: config.group.buttonSelector,
-                panelSelector: config.group.panelSelector
+                buttonSelector: cfg.group.buttonSelector,
+                panelSelector: cfg.group.panelSelector
             });
             return;
         }
@@ -109,12 +172,12 @@ export function createCollectionRuntime(config: Cfg) {
     }
 
     function activateGrouping(button: Element | null | undefined, panel: Element | null = null) {
-        if (config.group?.panelSelector) {
+        if (cfg.group?.panelSelector) {
             collapseGroups({
                 activeButton: button ?? null,
                 activePanel: panel,
-                buttonSelector: config.group.buttonSelector,
-                panelSelector: config.group.panelSelector
+                buttonSelector: cfg.group.buttonSelector,
+                panelSelector: cfg.group.panelSelector
             });
             return;
         }
@@ -122,20 +185,20 @@ export function createCollectionRuntime(config: Cfg) {
     }
 
     function renderManaged() {
-        const managedState = config.getState();
-        const filteredItems = config.getFilteredItems(managedState);
-        const visibleItems = typeof config.getVisibleItems === 'function'
-            ? config.getVisibleItems(filteredItems, managedState)
+        const managedState = cfg.getState();
+        const filteredItems = cfg.getFilteredItems(managedState);
+        const visibleItems = typeof cfg.getVisibleItems === 'function'
+            ? cfg.getVisibleItems(filteredItems, managedState)
             : filteredItems;
 
-        if (config.renderSidebar && config.groupItems) {
-            config.renderSidebar(config.groupItems(filteredItems), managedState);
+        if (cfg.renderSidebar && cfg.groupItems) {
+            cfg.renderSidebar(cfg.groupItems(filteredItems), managedState);
         }
 
-        config.renderVisibleItems?.(visibleItems, managedState);
-        config.updateCount?.(visibleItems, managedState);
-        config.updateControls?.(managedState, filteredItems, visibleItems);
-        config.onRender?.({ filteredItems, state: managedState, visibleItems });
+        cfg.renderVisibleItems?.(visibleItems, managedState);
+        cfg.updateCount?.(visibleItems, managedState);
+        cfg.updateControls?.(managedState, filteredItems, visibleItems);
+        cfg.onRender?.({ filteredItems, state: managedState, visibleItems });
         return visibleItems;
     }
 
@@ -144,27 +207,27 @@ export function createCollectionRuntime(config: Cfg) {
         const visible = visibleCards(allCards);
         const visibleSet = new Set(visible);
         for (const card of allCards) {
-            if (config.useDisplayStyle) {
-                card.style.display = visibleSet.has(card) ? (config.visibleDisplay || 'block') : 'none';
+            if (cfg.useDisplayStyle) {
+                card.style.display = visibleSet.has(card) ? (cfg.visibleDisplay || 'block') : 'none';
             } else {
                 card.hidden = !visibleSet.has(card);
             }
         }
         updateCount(visible.length);
         updateClearButton();
-        config.onRender?.({ allCards, state: { ...state }, visibleCards: visible });
+        cfg.onRender?.({ allCards, state: { ...state }, visibleCards: visible });
         return visible;
     }
 
     function render() {
-        if (typeof config.getFilteredItems === 'function') return renderManaged();
+        if (typeof cfg.getFilteredItems === 'function') return renderManaged();
         return renderCards();
     }
 
     function filter(category: string, buttonOrEvent?: Cfg) {
         state.category = category || 'all';
-        const button = resolveActionButton(buttonOrEvent, config.buttonSelector || '.sidebar-category')
-            || document.querySelector(`${config.buttonSelector || '.sidebar-category'}[data-action-args="${selectorValue(state.category)}"]`)
+        const button = resolveActionButton(buttonOrEvent, cfg.buttonSelector || '.sidebar-category')
+            || document.querySelector(`${cfg.buttonSelector || '.sidebar-category'}[data-action-args="${selectorValue(state.category)}"]`)
             || allButton();
         setActiveButton(button);
         return render();
@@ -172,7 +235,7 @@ export function createCollectionRuntime(config: Cfg) {
 
     function search(query: string) {
         state.search = String(query || '').trim();
-        if (config.resetCategoryOnSearch !== false) {
+        if (cfg.resetCategoryOnSearch !== false) {
             state.category = 'all';
             setActiveButton(allButton());
         }
@@ -180,7 +243,7 @@ export function createCollectionRuntime(config: Cfg) {
     }
 
     function clearSearchInput() {
-        const input = document.getElementById(config.searchInputId) as HTMLInputElement | null;
+        const input = document.getElementById(cfg.searchInputId) as HTMLInputElement | null;
         if (input) input.value = '';
     }
 
@@ -194,34 +257,34 @@ export function createCollectionRuntime(config: Cfg) {
 
     function toggleSidebar() {
         return toggleCollapsedState({
-            storageKey: config.storageKey,
-            layoutId: config.layoutId,
-            sidebarId: config.sidebarId
+            storageKey: cfg.storageKey,
+            layoutId: cfg.layoutId,
+            sidebarId: cfg.sidebarId
         });
     }
 
     function restoreSidebar() {
-        if (!config.storageKey) return false;
+        if (!cfg.storageKey) return false;
         return restoreCollapsedState({
-            storageKey: config.storageKey,
-            layoutId: config.layoutId,
-            sidebarId: config.sidebarId,
-            defaultCollapsed: config.defaultCollapsed ?? true
+            storageKey: cfg.storageKey,
+            layoutId: cfg.layoutId,
+            sidebarId: cfg.sidebarId,
+            defaultCollapsed: cfg.defaultCollapsed ?? true
         });
     }
 
     function toggleListDropdown() {
-        document.getElementById(config.dropdownId || 'list-dropdown')?.classList.toggle('open');
+        document.getElementById(cfg.dropdownId || 'list-dropdown')?.classList.toggle('open');
     }
 
     function closeDropdownOnOutsideClick(event: Event) {
-        closeDropdownOnOutsideClickShared(config.dropdownId || 'list-dropdown', event);
+        closeDropdownOnOutsideClickShared(cfg.dropdownId || 'list-dropdown', event);
     }
 
     function toggleGroup({ button = null, onCollapse = null, onExpand = null, panel = null, value = 'all' }: { button?: Element | null; onCollapse?: (() => void) | null; onExpand?: (() => void) | null; panel?: Element | null; value?: string }) {
-        if (!config.group) return render();
-        if (config.group.panelSelector) {
-            const resolvedPanel = panel || config.group.panelForValue?.(value) || null;
+        if (!cfg.group) return render();
+        if (cfg.group.panelSelector) {
+            const resolvedPanel = panel || cfg.group.panelForValue?.(value) || null;
             const isExpanded = Boolean(resolvedPanel?.classList.contains('expanded'));
             if (value === 'all' || isExpanded) {
                 onCollapse?.();
@@ -239,30 +302,30 @@ export function createCollectionRuntime(config: Cfg) {
     }
 
     function initZoom() {
-        if (!config.zoom) return;
-        const grid = document.getElementById(config.gridId);
+        if (!cfg.zoom) return;
+        const grid = document.getElementById(cfg.gridId);
         if (!grid) return;
         grid.classList.add('js-zoom-grid');
         initGridZoom({
             grid,
-            anchorSelector: config.zoom.anchorSelector,
-            fillH: config.zoom.fillH,
-            fillW: config.zoom.fillW,
-            itemSelector: config.zoom.itemSelector || config.cardSelector,
-            maxScale: config.zoom.maxScale,
-            triggerSelector: config.zoom.triggerSelector || config.cardSelector,
-            eventName: config.zoom.eventName
+            anchorSelector: cfg.zoom.anchorSelector,
+            fillH: cfg.zoom.fillH,
+            fillW: cfg.zoom.fillW,
+            itemSelector: cfg.zoom.itemSelector || cfg.cardSelector,
+            maxScale: cfg.zoom.maxScale,
+            triggerSelector: cfg.zoom.triggerSelector || cfg.cardSelector,
+            eventName: cfg.zoom.eventName
         });
     }
 
     function registerRuntimeActions() {
-        if (!config.actions) return;
+        if (!cfg.actions) return;
         const actions: Record<string, unknown> = {};
-        if (config.actions.clearSearch) actions[config.actions.clearSearch] = clearSearch;
-        if (config.actions.filter) actions[config.actions.filter] = filter;
-        if (config.actions.search) actions[config.actions.search] = search;
-        if (config.actions.toggleDropdown) actions[config.actions.toggleDropdown] = toggleListDropdown;
-        if (config.actions.toggleSidebar) actions[config.actions.toggleSidebar] = toggleSidebar;
+        if (cfg.actions.clearSearch) actions[cfg.actions.clearSearch] = clearSearch;
+        if (cfg.actions.filter) actions[cfg.actions.filter] = filter;
+        if (cfg.actions.search) actions[cfg.actions.search] = search;
+        if (cfg.actions.toggleDropdown) actions[cfg.actions.toggleDropdown] = toggleListDropdown;
+        if (cfg.actions.toggleSidebar) actions[cfg.actions.toggleSidebar] = toggleSidebar;
         registerActions(actions);
     }
 

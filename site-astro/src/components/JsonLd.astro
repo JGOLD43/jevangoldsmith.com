@@ -1,18 +1,18 @@
 ---
+import { currentPageFromUrl } from '../lib/chrome';
 // Renders a single <script type="application/ld+json"> with the site-wide
 // Person + WebSite graph plus a per-page BreadcrumbList + page node + any
 // per-page entity schemas (Article, Book, Movie, ItemList, etc).
 import {
-  WEBSITE_SCHEMA,
+  type BreadcrumbStep,
   breadcrumbList,
+  type ExtraSchema,
+  type PageType, 
   pageEnrichment,
   pageNode,
   personSchemaFor,
-  type BreadcrumbStep,
-  type ExtraSchema,
-  type PageType
+  WEBSITE_SCHEMA
 } from '../lib/seo';
-import { currentPageFromUrl } from '../lib/chrome';
 
 interface Props {
   canonical: string;

@@ -1,21 +1,8 @@
 ---
 import raw from '../../../data/projects.json';
 import CollectionPage from '../components/CollectionPage.astro';
-import { renderProjectCard, PROJECTS_TASK_CONFIG } from '../lib/collection-sections';
-
-interface Project {
-  id: string;
-  slug?: string;
-  title: string;
-  status?: string;
-  category?: string;
-  shortDescription?: string;
-  description?: string;
-  visibility?: string;
-  tags?: string[];
-  technologies?: string[];
-  topics?: string[];
-}
+import type { Project } from '../lib/collection-sections';
+import { PROJECTS_TASK_CONFIG, renderProjectCard } from '../lib/collection-sections';
 
 const allProjects: Project[] = (raw as { projects?: Project[] }).projects ?? [];
 const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility !== 'private');
@@ -31,9 +18,9 @@ const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility 
 />
 
 <script>
-  import { createTaskList } from '../scripts/task-list.ts';
+  import { createCollectionRuntime } from '../scripts/collection-runtime';
 
-  createTaskList({
+  const runtime: any = createCollectionRuntime({
     actions: {
       clearSearch: 'clearProjectSearch',
       filter: 'filterProjects',
@@ -41,6 +28,7 @@ const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility 
       toggleDropdown: 'toggleProjectListDropdown',
       toggleSidebar: 'toggleProjectSidebar'
     },
+    buttonSelector: '.sidebar-category',
     cardSelector: '.project-card',
     counterId: 'project-count',
     gridId: 'projects-container',
@@ -49,6 +37,11 @@ const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility 
     searchInputId: 'project-search',
     sidebarId: 'projects-sidebar',
     storageKey: 'projects-sidebar-collapsed',
-    zoomEvent: 'project_open'
+    zoom: { eventName: 'project_open' }
   });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => runtime.init(), { once: true });
+  } else {
+    runtime.init();
+  }
 </script>

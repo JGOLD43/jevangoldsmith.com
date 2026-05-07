@@ -1,5 +1,5 @@
 import { formatEpisodeDuration, formatRelativeDate } from '../lib/dates';
-import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { fetchJson } from './data-fetch';
 
 function buildSpotifyEpisodeCard(ep: AnyObj) {
@@ -7,10 +7,10 @@ function buildSpotifyEpisodeCard(ep: AnyObj) {
     card.className = 'movie-card podcast-card js-zoom-item';
     card.dataset.spotify = 'episode';
 
-    const showName = escapeHTML(ep.showName || 'Unknown show');
-    const episodeName = escapeHTML(ep.episodeName || 'Untitled episode');
-    const duration = escapeHTML(formatEpisodeDuration(ep.durationMs));
-    const listenedAt = escapeHTML(formatRelativeDate(ep.listenedAt));
+    const showName = escapeHtml(ep.showName || 'Unknown show');
+    const episodeName = escapeHtml(ep.episodeName || 'Untitled episode');
+    const duration = escapeHtml(formatEpisodeDuration(ep.durationMs));
+    const listenedAt = escapeHtml(formatRelativeDate(ep.listenedAt));
     const image = ep.image
         ? `<img src="${escapeAttr(ep.image)}" alt="${escapeAttr(ep.showName || ep.episodeName || '')}" class="podcast-cover" width="150" height="150" loading="lazy" decoding="async">`
         : `<div class="podcast-cover-placeholder">🎧</div>`;
@@ -37,8 +37,8 @@ function buildSpotifyShowCard(show: AnyObj) {
     card.className = 'movie-card podcast-card js-zoom-item';
     card.dataset.spotify = 'show';
 
-    const name = escapeHTML(show.name || 'Untitled show');
-    const publisher = escapeHTML(show.publisher || '');
+    const name = escapeHtml(show.name || 'Untitled show');
+    const publisher = escapeHtml(show.publisher || '');
     const image = show.image
         ? `<img src="${escapeAttr(show.image)}" alt="${escapeAttr(show.name || '')}" class="podcast-cover" width="150" height="150" loading="lazy" decoding="async">`
         : `<div class="podcast-cover-placeholder">🎙️</div>`;

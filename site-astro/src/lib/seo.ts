@@ -4,10 +4,10 @@
 // see no behavioral diff.
 
 import pagesData from '../../../data/pages.json';
-import topicsData from '../../../data/topics.json';
-import quotesData from '../../../data/quotes.json';
 import productsData from '../../../data/products.json';
 import projectsData from '../../../data/projects.json';
+import quotesData from '../../../data/quotes.json';
+import topicsData from '../../../data/topics.json';
 
 const SITE_URL = 'https://jevangoldsmith.com';
 
@@ -19,7 +19,7 @@ export const DEFAULT_OG_IMAGE = `${SITE_URL}/images/generated/logo/logo-nav-176.
 // stub Person reference (just @id + @type + name), which crawlers
 // resolve via the canonical home-page graph. Saves ~2KB JSON-LD per
 // non-primary page across 80+ pages.
-export const PERSON_SCHEMA = {
+const PERSON_SCHEMA = {
   '@id': `${SITE_URL}/#person`,
   '@type': 'Person',
   name: 'Jevan Goldsmith',
@@ -45,7 +45,7 @@ export const PERSON_SCHEMA = {
   ]
 } as const;
 
-export const PERSON_REF = {
+const PERSON_REF = {
   '@id': `${SITE_URL}/#person`,
   '@type': 'Person',
   name: 'Jevan Goldsmith'
@@ -145,7 +145,7 @@ type SchemaListItem = {
   name: string;
 };
 
-export type ArticleSchema = {
+type ArticleSchema = {
   '@type': 'Article';
   '@id'?: string;
   headline?: string;
@@ -154,7 +154,7 @@ export type ArticleSchema = {
   image?: string;
 };
 
-export type BookSchema = {
+type BookSchema = {
   '@type': 'Book';
   '@id'?: string;
   name: string;
@@ -164,7 +164,7 @@ export type BookSchema = {
   isbn?: string;
 };
 
-export type MovieSchema = {
+type MovieSchema = {
   '@type': 'Movie';
   '@id'?: string;
   name: string;
@@ -173,7 +173,7 @@ export type MovieSchema = {
   datePublished?: string | number;
 };
 
-export type PersonSchema = {
+type PersonSchema = {
   '@type': 'Person';
   '@id'?: string;
   name: string;
@@ -182,7 +182,7 @@ export type PersonSchema = {
   image?: string;
 };
 
-export type TouristTripSchema = {
+type TouristTripSchema = {
   '@type': 'TouristTrip';
   '@id'?: string;
   name: string;
@@ -194,7 +194,7 @@ export type TouristTripSchema = {
   provider?: { '@id': string };
 };
 
-export type ItemListSchema = {
+type ItemListSchema = {
   '@type': 'ItemList';
   '@id'?: string;
   itemListElement: SchemaListItem[];
@@ -251,24 +251,34 @@ interface CollectionItem {
   name: string;
 }
 
+// JSON-LD ItemList is a representative sample, not an exhaustive
+// enumeration — Google reads page body text for the canonical content.
+// Cap at 12 items per page so quotes.html (the worst offender at ~5.6KB
+// JSON-LD) drops back to ~2KB without hurting rich-results coverage.
+const ITEM_LIST_LIMIT = 12;
+// Quote names previously sliced to 80 chars. 50 trims another ~600 bytes
+// without losing the snippet's intent — Google still has the full text in
+// page body anyway.
+const QUOTE_NAME_LIMIT = 50;
+
 function collectionItemsFor(currentPage: string, meta: PageMeta): CollectionItem[] {
   // Specific collection branches from legacy collectionItemsForSchema().
   if (currentPage === 'quotes.html') {
-    const quotes = ((quotesData as { fullQuotes?: Array<{ id: string; slug?: string; text: string }> }).fullQuotes ?? []).slice(0, 20);
+    const quotes = ((quotesData as { fullQuotes?: Array<{ id: string; slug?: string; text: string }> }).fullQuotes ?? []).slice(0, ITEM_LIST_LIMIT);
     return quotes.map((q) => ({
       url: `${SITE_URL}/quotes.html#${q.slug ?? q.id}`,
-      name: q.text.slice(0, 80)
+      name: q.text.length > QUOTE_NAME_LIMIT ? `${q.text.slice(0, QUOTE_NAME_LIMIT - 1)}…` : q.text
     }));
   }
   if (currentPage === 'products.html') {
-    const products = ((productsData as { products?: Array<{ id: string; slug?: string; title: string }> }).products ?? []);
+    const products = ((productsData as { products?: Array<{ id: string; slug?: string; title: string }> }).products ?? []).slice(0, ITEM_LIST_LIMIT);
     return products.map((p) => ({
       url: `${SITE_URL}/products.html#${p.slug ?? p.id}`,
       name: p.title
     }));
   }
   if (currentPage === 'free-resources.html') {
-    const resources = ((productsData as { resources?: Array<{ id: string; slug?: string; title: string }> }).resources ?? []);
+    const resources = ((productsData as { resources?: Array<{ id: string; slug?: string; title: string }> }).resources ?? []).slice(0, ITEM_LIST_LIMIT);
     return resources.map((r) => ({
       url: `${SITE_URL}/free-resources.html#${r.slug ?? r.id}`,
       name: r.title
@@ -276,7 +286,8 @@ function collectionItemsFor(currentPage: string, meta: PageMeta): CollectionItem
   }
   if (currentPage === 'projects.html') {
     const projects = ((projectsData as { projects?: Array<{ id: string; slug?: string; title: string; status?: string; visibility?: string }> }).projects ?? [])
-      .filter((p) => p.status !== 'draft' && p.visibility !== 'private');
+      .filter((p) => p.status !== 'draft' && p.visibility !== 'private')
+      .slice(0, ITEM_LIST_LIMIT);
     return projects.map((p) => ({
       url: `${SITE_URL}/projects.html#${p.slug ?? p.id}`,
       name: p.title
@@ -284,7 +295,7 @@ function collectionItemsFor(currentPage: string, meta: PageMeta): CollectionItem
   }
   // Default: relatedPages from data/pages.json (matches legacy default branch).
   if (meta.relatedPages && meta.relatedPages.length > 0) {
-    return meta.relatedPages.slice(0, 12).map((href) => ({
+    return meta.relatedPages.slice(0, ITEM_LIST_LIMIT).map((href) => ({
       url: `${SITE_URL}/${href.replace(/^\//, '')}`,
       name: PAGE_TITLE_BY_FILE.get(href) ?? href
     }));

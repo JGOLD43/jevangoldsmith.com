@@ -9,7 +9,7 @@
 // collection-config.js byte-for-byte so collection pages (books, essays,
 // movies, people, podcasts) reach parity without per-page rewrites.
 
-import { escapeAttr as escapeHTML, escapeAttr as escapeHtmlAttr } from './html-escape';
+import { escapeAttr, escapeHtml } from './html-escape';
 import { getIcon as iconSvg } from './icons';
 
 export interface SectionItem {
@@ -86,15 +86,15 @@ function renderAttrs(attrs: Record<string, string> = {}, extraClass = ''): strin
   for (const [key, value] of Object.entries(attrs)) {
     if (value === '' || value == null) continue;
     if (key === 'class') continue;
-    entries.push(`${key}="${escapeHtmlAttr(String(value))}"`);
+    entries.push(`${key}="${escapeAttr(String(value))}"`);
   }
   const className = [attrs.class || '', extraClass].filter(Boolean).join(' ').trim();
-  if (className) entries.unshift(`class="${escapeHtmlAttr(className)}"`);
+  if (className) entries.unshift(`class="${escapeAttr(className)}"`);
   return entries.length ? ` ${entries.join(' ')}` : '';
 }
 
 export function renderSidebarHeader(collapseAction?: string): string {
-  const actionAttr = collapseAction ? ` data-action="${escapeHtmlAttr(collapseAction)}"` : '';
+  const actionAttr = collapseAction ? ` data-action="${escapeAttr(collapseAction)}"` : '';
   return `<div class="sidebar-header">
                 <button class="sidebar-collapse-btn"${actionAttr} title="Collapse sidebar">
                     <svg class="ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-sidebarCollapse"/></svg>
@@ -105,16 +105,16 @@ export function renderSidebarHeader(collapseAction?: string): string {
 
 export function renderListDropdown(sidebar: CollectionConfig['sidebar']): string {
   if (!sidebar.listOptions || sidebar.listOptions.length === 0) return '';
-  const actionAttr = sidebar.listAction ? ` data-action="${escapeHtmlAttr(sidebar.listAction)}"` : '';
+  const actionAttr = sidebar.listAction ? ` data-action="${escapeAttr(sidebar.listAction)}"` : '';
   const options = sidebar.listOptions.map((item) => {
     const attrs = renderAttrs(item.attrs ?? {}, item.active ? 'list-option active' : 'list-option');
-    return `<a href="${escapeHtmlAttr(item.href)}"${attrs}>${escapeHTML(item.label)}</a>`;
+    return `<a href="${escapeAttr(item.href)}"${attrs}>${escapeHtml(item.label)}</a>`;
   }).join('\n                        ');
 
   return `<div class="sidebar-list-selector">
                 <div class="list-dropdown" id="list-dropdown">
                     <button class="list-dropdown-btn"${actionAttr}>
-                        <span id="current-list-name">${escapeHTML(sidebar.currentListName ?? '')}</span>
+                        <span id="current-list-name">${escapeHtml(sidebar.currentListName ?? '')}</span>
                         <svg class="ico-stroke ico-12" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-chevronDown"/></svg>
                     </button>
                     <div class="list-dropdown-menu" id="list-dropdown-menu">
@@ -143,7 +143,7 @@ export function renderSearch(sidebar: CollectionConfig['sidebar']): string {
   const wrapperClass = search.wrapperClass ?? 'search-input-wrapper search-bubble';
 
   return `<div class="sidebar-search">
-                <div class="${escapeHtmlAttr(wrapperClass)}">
+                <div class="${escapeAttr(wrapperClass)}">
                     <svg class="search-icon ico-stroke" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-search"/></svg>
                     <input type="text"${inputAttrs}>
                     <button${clearAttrs}>
@@ -156,17 +156,17 @@ export function renderSearch(sidebar: CollectionConfig['sidebar']): string {
 function renderSection(item: SectionItem): string {
   const attrs = renderAttrs(item.attrs ?? {}, 'sidebar-category');
   const iconSource = item.iconKey ? iconSvg(item.iconKey) : (item.icon ?? '');
-  const icon = iconSource.trim().startsWith('<') ? iconSource : escapeHTML(iconSource);
-  const countIdAttr = item.countId ? ` id="${escapeHtmlAttr(item.countId)}"` : '';
+  const icon = iconSource.trim().startsWith('<') ? iconSource : escapeHtml(iconSource);
+  const countIdAttr = item.countId ? ` id="${escapeAttr(item.countId)}"` : '';
   const panel = item.panelId
-    ? `\n                <div class="${escapeHtmlAttr(item.panelClass ?? '')}" id="${escapeHtmlAttr(item.panelId)}">${item.panelInnerHtml ?? ''}</div>`
+    ? `\n                <div class="${escapeAttr(item.panelClass ?? '')}" id="${escapeAttr(item.panelId)}">${item.panelInnerHtml ?? ''}</div>`
     : '';
 
   return `<div class="sidebar-section">
-                <button${attrs}${item.tooltip ? ` data-tooltip="${escapeHtmlAttr(item.tooltip)}"` : ''}>
-                    <span class="category-icon"${item.tooltip ? ` title="${escapeHtmlAttr(item.label)}"` : ''}>${icon}</span>
-                    <span class="category-name">${escapeHTML(item.label)}</span>
-                    <span class="category-count"${countIdAttr}>${escapeHTML(item.count ?? '0')}</span>
+                <button${attrs}${item.tooltip ? ` data-tooltip="${escapeAttr(item.tooltip)}"` : ''}>
+                    <span class="category-icon"${item.tooltip ? ` title="${escapeAttr(item.label)}"` : ''}>${icon}</span>
+                    <span class="category-name">${escapeHtml(item.label)}</span>
+                    <span class="category-count"${countIdAttr}>${escapeHtml(item.count ?? '0')}</span>
                     ${item.panelId ? '<span class="expand-icon">▼</span>' : ''}
                 </button>${panel}
             </div>`;
@@ -175,42 +175,42 @@ function renderSection(item: SectionItem): string {
 export function renderCollectionMain(config: CollectionConfig): string {
   const sectionsHtml = (config.sidebar.sections ?? []).map(renderSection).join('\n\n                ');
   const sectionsWrapped = config.sidebar.sectionsWrapperId
-    ? `<div id="${escapeHtmlAttr(config.sidebar.sectionsWrapperId)}" style="display: none;">
+    ? `<div id="${escapeAttr(config.sidebar.sectionsWrapperId)}" style="display: none;">
                 ${sectionsHtml}
             </div>`
     : sectionsHtml;
   const footerHtml = config.sidebar.footerText
-    ? `<div class="sidebar-footer"${config.sidebar.footerId ? ` id="${escapeHtmlAttr(config.sidebar.footerId)}"` : ''}${config.sidebar.footerHidden ? ' style="display: none;"' : ''}>
-                <p>${escapeHTML(config.sidebar.footerText)}</p>
+    ? `<div class="sidebar-footer"${config.sidebar.footerId ? ` id="${escapeAttr(config.sidebar.footerId)}"` : ''}${config.sidebar.footerHidden ? ' style="display: none;"' : ''}>
+                <p>${escapeHtml(config.sidebar.footerText)}</p>
             </div>`
     : '';
   const subtitleHtml = config.main.subtitleHtml
     ? config.main.subtitleHtml
-    : (config.main.subtitleText ? `<p class="header-subtitle">${escapeHTML(config.main.subtitleText)}</p>` : '');
+    : (config.main.subtitleText ? `<p class="header-subtitle">${escapeHtml(config.main.subtitleText)}</p>` : '');
   const counterInnerHtml = `${config.main.counterExtraHtml ?? ''}
                     <div class="header-counter collection-header-counter">
-                        <span class="counter-number collection-counter-number" id="${escapeHtmlAttr(config.main.counterId)}">0</span>
-                        <span class="counter-label collection-counter-label"${config.main.counterLabelId ? ` id="${escapeHtmlAttr(config.main.counterLabelId)}"` : ''}>${escapeHTML(config.main.counterLabel)}</span>
+                        <span class="counter-number collection-counter-number" id="${escapeAttr(config.main.counterId)}">0</span>
+                        <span class="counter-label collection-counter-label"${config.main.counterLabelId ? ` id="${escapeAttr(config.main.counterLabelId)}"` : ''}>${escapeHtml(config.main.counterLabel)}</span>
                     </div>`;
   const renderedCounter = config.main.counterGroupClass
-    ? `<div class="${escapeHtmlAttr(config.main.counterGroupClass)}">${counterInnerHtml}</div>`
+    ? `<div class="${escapeAttr(config.main.counterGroupClass)}">${counterInnerHtml}</div>`
     : counterInnerHtml;
 
-  return `<main class="${escapeHtmlAttr(config.layout.className)}" id="${escapeHtmlAttr(config.layout.id)}">
-        <aside class="${escapeHtmlAttr(config.sidebar.className)}" id="${escapeHtmlAttr(config.sidebar.id)}">
+  return `<main class="${escapeAttr(config.layout.className)}" id="${escapeAttr(config.layout.id)}">
+        <aside class="${escapeAttr(config.sidebar.className)}" id="${escapeAttr(config.sidebar.id)}">
             ${renderSidebarHeader(config.sidebar.collapseAction)}
             ${renderListDropdown(config.sidebar)}
             ${renderSearch(config.sidebar)}
             ${config.sidebar.extraHtml ?? ''}
-            ${config.sidebar.loadingMessage ? `<div id="loading-sidebar" class="loading" style="padding: 1rem;"><p style="font-size: 0.85rem;">${escapeHTML(config.sidebar.loadingMessage)}</p></div>` : ''}
+            ${config.sidebar.loadingMessage ? `<div id="loading-sidebar" class="loading" style="padding: 1rem;"><p style="font-size: 0.85rem;">${escapeHtml(config.sidebar.loadingMessage)}</p></div>` : ''}
             ${sectionsWrapped}
             ${footerHtml}
         </aside>
 
-        <div class="${escapeHtmlAttr(config.main.className)}">
+        <div class="${escapeAttr(config.main.className)}">
             <header class="main-header collection-header">
                 <div class="header-content">
-                    <${config.main.titleTag ?? 'h1'}>${escapeHTML(config.main.title)}</${config.main.titleTag ?? 'h1'}>
+                    <${config.main.titleTag ?? 'h1'}>${escapeHtml(config.main.title)}</${config.main.titleTag ?? 'h1'}>
                     ${subtitleHtml}
                 </div>
                 ${config.main.headerExtraHtml ?? ''}

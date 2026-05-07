@@ -12,6 +12,33 @@ export default defineConfig({
   build: {
     format: 'file'
   },
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          // Hoist shared collection-page deps into one chunk so navigating
+          // books → movies → people hits the cache instead of re-downloading
+          // html-escape, debounce, storage, dom-ready, action-dispatcher,
+          // collection-helpers/ui/runtime, data-fetch.
+          manualChunks(id) {
+            if (!id.includes('/site-astro/src/')) return undefined;
+            if (id.includes('/lib/html-escape')
+              || id.includes('/lib/debounce')
+              || id.includes('/lib/storage')
+              || id.includes('/scripts/dom-ready')
+              || id.includes('/scripts/action-dispatcher')
+              || id.includes('/scripts/collection-helpers')
+              || id.includes('/scripts/collection-ui')
+              || id.includes('/scripts/collection-runtime')
+              || id.includes('/scripts/data-fetch')) {
+              return 'collection-shared';
+            }
+            return undefined;
+          }
+        }
+      }
+    }
+  },
   integrations: [
     mdx(),
     sitemap({

@@ -1,24 +1,12 @@
 // Server-side renderer for movie cards. letterboxd.ts binds behavior to these
 // SSR'd cards and filters by toggling visibility.
 
-import { escapeAttr as escapeHtml } from './html-escape';
+import type { Movie as MovieRecord } from '../content.config';
+import { escapeAttr, escapeHtml } from './html-escape';
 
-interface Movie {
-  title: string;
-  date?: string | null;
-  link?: string | null;
-  rating?: string | null;
-  starCount?: number | null;
-  year?: string | number | null;
-  poster?: string | null;
-  genre?: string | null;
-  timesWatched?: number | null;
-  runtime?: number | null;
-  review?: string | null;
-  shortDescription?: string | null;
-  tmdbId?: number | null;
-  overview?: string | null;
-}
+// Card renderer accepts a partial shape — all fields optional so legacy records
+// with missing data still render gracefully.
+type Movie = Partial<MovieRecord>;
 
 const GENRE_ICONS: Record<string, string> = {
   Action: '💥', Adventure: '🗺️', Animation: '🎨', Comedy: '😂',
@@ -67,7 +55,7 @@ export function renderMovieCardHtml(movie: Movie): string {
             ${rating ? `<p class="zoom-detail-lead">${escapeHtml(rating)}</p>` : ''}
             <p class="zoom-detail-line"><span>Review —</span> ${escapeHtml(review)}</p>
             ${date ? `<p class="zoom-detail-line"><span>Watched —</span> ${escapeHtml(date)}</p>` : ''}
-            ${link && link !== '#' ? `<a class="zoom-detail-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">Letterboxd</a>` : ''}
+            ${link && link !== '#' ? `<a class="zoom-detail-link" href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer">Letterboxd</a>` : ''}
         </div>`
     : '';
 
@@ -75,10 +63,10 @@ export function renderMovieCardHtml(movie: Movie): string {
 
   // Only data-movie-title is read by letterboxd.ts. data-title and data-id
   // were emitted as duplicates; nothing reads them.
-  return `<div class="${classes.join(' ')}" data-movie-title="${escapeHtml(title)}"${cursorStyle}>
+  return `<div class="${classes.join(' ')}" data-movie-title="${escapeAttr(title)}"${cursorStyle}>
         ${timesWatchedBadge}
         <div class="movie-poster-wrapper">
-            ${poster ? `<img src="${escapeHtml(poster)}" alt="${escapeHtml(title)}" class="movie-poster" width="150" height="230" loading="lazy" decoding="async">` : `<div class="movie-poster-placeholder">${escapeHtml(title)}</div>`}
+            ${poster ? `<img src="${escapeAttr(poster)}" alt="${escapeAttr(title)}" class="movie-poster" width="150" height="230" loading="lazy" decoding="async">` : `<div class="movie-poster-placeholder">${escapeHtml(title)}</div>`}
         </div>
         <div class="movie-info">
             <div class="movie-title-row">

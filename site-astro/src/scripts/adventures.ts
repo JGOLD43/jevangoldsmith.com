@@ -1,46 +1,10 @@
-import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
-import {
-    state, fetchJsonOr, updateLightboxImage,
-    ADVENTURES_DATA_URL, FILTERS_STORAGE_KEY, DEFAULT_FILTERS
-} from './adventures-state';
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
+import { tryReadString, tryWrite } from '../lib/storage';
 import { registerActions } from './action-dispatcher';
-
-// ============================================
-// Adventures Page Runtime State
-// ============================================
-
-
-
-// state defaults live in adventures-state.ts. constants
-// (BASEMAPS, DEFAULT_FILTERS, *_DATA_URL, ...) imported from the same
-// module.
-
-function loadFilters() {
-    try {
-        const raw = localStorage.getItem(FILTERS_STORAGE_KEY);
-        if (!raw) return;
-        const stored = JSON.parse(raw);
-        if (!stored || typeof stored !== 'object') return;
-
-        state.mapFilters = {
-            year: stored.year || 'all',
-            region: stored.region || 'all',
-            layers: { ...DEFAULT_FILTERS.layers, ...(stored.layers || {}) },
-            poiCategories: { ...(stored.poiCategories || {}) },
-            basemap: stored.basemap || 'satellite',
-            routeSet: stored.routeSet || 'all'
-        };
-        state.placesVisible = state.mapFilters.layers.pois;
-    } catch (_error) {
-    }
-}
-
-function saveFilters() {
-    try {
-        localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(state.mapFilters));
-    } catch (_error) {
-    }
-}
+import {
+    ADVENTURES_DATA_URL, fetchJsonOr, loadFilters, saveFilters,
+    state, updateLightboxImage
+} from './adventures-state';
 
 // Async loader for the heavier Adventures map runtime. Vite/Astro emits
 // a separate chunk for it, kept off the initial adventures bundle.
@@ -142,9 +106,9 @@ function createCompactCard(adventure: AnyObj) {
     card.innerHTML = `
         <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-compact-image" width="80" height="80" loading="eager" decoding="async">
         <div class="adventure-compact-info">
-            <div class="adventure-compact-location">${escapeHTML(adventure.location)}</div>
-            <h3 class="adventure-compact-title">${escapeHTML(adventure.title)}</h3>
-            <div class="adventure-compact-meta">${escapeHTML(formattedDate)} · ${escapeHTML(adventure.duration)}</div>
+            <div class="adventure-compact-location">${escapeHtml(adventure.location)}</div>
+            <h3 class="adventure-compact-title">${escapeHtml(adventure.title)}</h3>
+            <div class="adventure-compact-meta">${escapeHtml(formattedDate)} · ${escapeHtml(adventure.duration)}</div>
         </div>
     `;
 
@@ -178,13 +142,13 @@ function showAdventureDetail(adventure: AnyObj) {
     content.innerHTML = `
         <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-detail-hero" loading="lazy" decoding="async">
         <div class="adventure-detail-body">
-            <div class="adventure-location">${escapeHTML(adventure.location)}</div>
-            <h2 class="adventure-title">${escapeHTML(adventure.title)}</h2>
+            <div class="adventure-location">${escapeHtml(adventure.location)}</div>
+            <h2 class="adventure-title">${escapeHtml(adventure.title)}</h2>
             <div class="adventure-meta">
-                <span>${escapeHTML(formattedDate)}</span>
-                <span>${escapeHTML(adventure.duration)}</span>
+                <span>${escapeHtml(formattedDate)}</span>
+                <span>${escapeHtml(adventure.duration)}</span>
             </div>
-            <p class="adventure-description">${escapeHTML(adventure.shortDescription)}</p>
+            <p class="adventure-description">${escapeHtml(adventure.shortDescription)}</p>
             <button type="button" class="view-full-story-btn" data-action="scrollToStory">Read Full Story</button>
         </div>
     `;
@@ -205,27 +169,27 @@ function renderInlineStory(adventure: AnyObj) {
         <div class="adventure-story-hero">
             <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" loading="lazy" decoding="async">
             <div class="adventure-story-hero-overlay">
-                <div class="adventure-story-location">${escapeHTML(adventure.location)}</div>
-                <h2 class="adventure-story-title">${escapeHTML(adventure.title)}</h2>
-                ${adventure.subtitle ? `<p class="adventure-story-subtitle">${escapeHTML(adventure.subtitle)}</p>` : ''}
+                <div class="adventure-story-location">${escapeHtml(adventure.location)}</div>
+                <h2 class="adventure-story-title">${escapeHtml(adventure.title)}</h2>
+                ${adventure.subtitle ? `<p class="adventure-story-subtitle">${escapeHtml(adventure.subtitle)}</p>` : ''}
             </div>
         </div>
         <div class="adventure-story-body">
             <div class="adventure-story-meta">
-                <span>${escapeHTML(formattedDate)}</span>
-                <span>${escapeHTML(adventure.duration)}</span>
+                <span>${escapeHtml(formattedDate)}</span>
+                <span>${escapeHtml(adventure.duration)}</span>
             </div>
             <div class="adventure-story-content">${adventure.content || ''}</div>
             ${highlights.length ? `<div class="adventure-story-highlights">
                 <h3>Highlights</h3>
-                <ul>${highlights.map((item: AnyObj) => `<li>${escapeHTML(item)}</li>`).join('')}</ul>
+                <ul>${highlights.map((item: AnyObj) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
             </div>` : ''}
             ${gallery.length ? `<div class="adventure-story-gallery">
                 <h3>Gallery</h3>
                 <div class="adventure-story-gallery-grid">
                     ${gallery.map((item: AnyObj, index: number) => `<figure class="adventure-story-gallery-item" data-action="open-adventure-lightbox" data-adventure-id="${escapeAttr(adventure.id)}" data-index="${index}">
                         <img src="${escapeAttr(item.thumbnail || item.src)}" alt="${escapeAttr(item.caption || '')}" loading="lazy" decoding="async">
-                        ${item.caption ? `<figcaption>${escapeHTML(item.caption)}</figcaption>` : ''}
+                        ${item.caption ? `<figcaption>${escapeHtml(item.caption)}</figcaption>` : ''}
                     </figure>`).join('')}
                 </div>
             </div>` : ''}
@@ -499,7 +463,7 @@ function initAdventuresPage() {
     const button = document.getElementById('adventures-sidebar-toggle');
     if (!split || !button) return;
 
-    if (localStorage.getItem(key) !== '0') {
+    if (tryReadString(key) !== '0') {
         split.classList.add('sidebar-collapsed');
         button.setAttribute('aria-expanded', 'false');
         button.setAttribute('aria-label', 'Expand sidebar');
@@ -507,7 +471,7 @@ function initAdventuresPage() {
 
     button.addEventListener('click', () => {
         const collapsed = split.classList.toggle('sidebar-collapsed');
-        localStorage.setItem(key, collapsed ? '1' : '0');
+        tryWrite(key, collapsed ? '1' : '0');
         button.setAttribute('aria-expanded', String(!collapsed));
         button.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
     });

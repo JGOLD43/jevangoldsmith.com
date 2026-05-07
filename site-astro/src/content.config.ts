@@ -1,7 +1,7 @@
 import { defineCollection } from 'astro:content';
-import { z } from 'astro/zod';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { z } from 'astro/zod';
 
 // Read the project-root data/*.json directly so legacy build and Astro stay
 // on a single source of truth. No copy, no sync, no drift.

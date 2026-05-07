@@ -1,25 +1,14 @@
 ---
-// Shared layout. Ported from _src/layouts/base.html.
-//
-// mirrors the legacy structure (title, description, canonical, og,
-// twitter, JSON-LD slot). Later phases will introduce a typed <Seo> component
-// that produces byte-identical <head> output to satisfy the SEO fixture.
-import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import JsonLd from '../components/JsonLd.astro';
+import Nav from '../components/Nav.astro';
 import SeoRelated from '../components/SeoRelated.astro';
-import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type ExtraSchema, type PageType } from '../lib/seo';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
-// FCP path:
-//   1. Critical CSS (~15KB) inlines via scripts/extract-critical-css.js
-//      — covers reset, theme tokens, nav, typography, footer.
-//   2. Full chrome.css (~38KB) loads async via preload + JS rel-flip.
-//      No render-block; below-fold styles arrive shortly after first
-//      paint without CLS because the critical bucket includes all
-//      structural rules above the fold.
-//   3. Per-page slice inlines if <2KB, externalizes otherwise.
-// The 187KB legacy-style.css source is build-time only (purged out of
-// dist via prune-dist-assets.js).
+import { type BreadcrumbStep, DEFAULT_OG_IMAGE, type ExtraSchema, type PageType, SITE_NAME } from '../lib/seo';
+
+// FCP path: inline theme guard (~120B sync, prevents dark-mode FOUC) →
+// chrome.css (~38KB render-blocking, priority high) → per-page slice
+// (inline if <4KB, external otherwise).
 
 interface Props {
   title: string;

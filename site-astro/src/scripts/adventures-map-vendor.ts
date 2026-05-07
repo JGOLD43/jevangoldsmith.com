@@ -4,7 +4,7 @@
 // one fetch.
 import { state } from './adventures-state';
 
-export function injectVendorBundle({ cssHrefs = [], scriptSrc, marker }: {
+function injectVendorBundle({ cssHrefs = [], scriptSrc, marker }: {
   cssHrefs?: string[];
   scriptSrc: string;
   marker?: string;

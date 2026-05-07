@@ -8,9 +8,10 @@
  */
 const fs = require('node:fs');
 const path = require('node:path');
+const { distDir } = require('./_lib/paths');
+const { walk } = require('./_lib/walk');
 
-const ROOT = path.resolve(__dirname, '..');
-const DIST = process.argv.find((a) => a.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
+const DIST = distDir();
 
 const KB = 1024;
 const MB = 1024 * KB;
@@ -26,17 +27,6 @@ function exists(rel) {
 
 function size(rel) {
   return fs.statSync(path.join(DIST, rel)).size;
-}
-
-function walk(dir) {
-  const out = [];
-  if (!fs.existsSync(dir)) return out;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...walk(full));
-    else if (entry.isFile()) out.push(full);
-  }
-  return out;
 }
 
 function findOne(dir, pattern) {
@@ -99,21 +89,15 @@ if (routeChunks.length === 0) fail('Missing popular route chunks');
 // Phase 6 runtime data budgets. These are the JSON files browser code
 // fetches at runtime; growth here directly hits page load. Numbers chosen
 // from current measured sizes + ~25% headroom so adding new content does
-// not silently regress payload size.
+// not silently regress payload size. Build-time-only data files
+// (quotes/projects/products/essays/podcasts/books.json source) are pruned
+// from dist by prune-dist-assets.js, so they're not budgeted here.
 const RUNTIME_JSON_BUDGETS = {
   'data/countries.slim.generated.json': 320 * KB,
   'data/remote-assets.generated.json': 240 * KB,
-  'data/pages.json': 130 * KB,
   'data/books.generated.json': 70 * KB,
   'data/placeofinterest.json': 60 * KB,
-  'data/books.json': 50 * KB,
-  'data/people.profiles.json': 30 * KB,
-  'data/adventures.json': 25 * KB,
-  'data/projects.json': 20 * KB,
-  'data/products.json': 20 * KB,
-  'data/quotes.json': 12 * KB,
-  'data/people.json': 10 * KB,
-  'data/podcasts.json': 10 * KB
+  'data/adventures.json': 25 * KB
 };
 for (const [rel, max] of Object.entries(RUNTIME_JSON_BUDGETS)) {
   if (exists(rel)) assertMax(rel, max);

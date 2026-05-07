@@ -1,24 +1,30 @@
 #!/usr/bin/env node
 /**
- * Critical CSS extraction. Identifies a small subset of chrome.css
- * (typography reset, theme tokens, nav, hero, footer, container) and
- * inlines that subset in <head>. The rest of chrome.css is loaded
- * async via the preload-onload trick. The per-page CSS already
- * inlines for tiny slices and externalizes for large ones.
+ * Critical-CSS extraction. Pulls a small subset of dist/css/chrome.<hash>.css
+ * (theme tokens, reset, typography, navbar layout, closed-state rules) and
+ * inlines it as `<style>` in every dist/*.html <head>. The full chrome.css
+ * keeps loading async via the preload + onload rel-flip pattern.
  *
- * Why: render-blocking chrome.css fetches add ~150-400ms FCP on slow
- * connections. Inlining the critical subset (~5KB) lets first paint
- * happen against the HTML byte-stream alone, with chrome.css arriving
- * non-blocking shortly after. Speculation Rules prerender already pre-
- * warms the chrome.css cache for hover-to-nav, so the cold-first-visit
- * case is the only one that wins, and that's the one that's most
- * painful on mobile networks.
+ * Why a NEW extractor instead of reviving the prior shelved one:
+ *   The earlier attempt missed dropdown/modal `display: none` base rules and
+ *   the nav rendered fully expanded until async chrome.css landed. This one
+ *   includes EVERY closed-state rule by selector pattern so the closed-by-
+ *   default UI stays closed before the async stylesheet arrives.
  *
- * The visual baseline harness (npm run check:visual) catches CLS or
- * FOUC regressions by snapshotting frame state at desktop/tablet/mobile
- * widths. Run that after this script lands.
+ * Inclusion patterns (kept narrow on purpose — every byte ships ×80 pages):
+ *   - :root, [data-theme=...] (CSS variables for theming)
+ *   - * universal selectors + ::before/::after (box-sizing, etc.)
+ *   - html, body
+ *   - h1-h6, p, a, a:hover (typography baseline)
+ *   - .container, .skip-link, .sr-only (layout primitives)
+ *   - .navbar, .nav-*, .logo, .dropdown-* (above-fold nav layout)
+ *   - .hero, .hero-* (homepage above-fold)
+ *   - .theme-toggle, .mobile-menu-toggle (visible chrome controls)
+ *   - .modal:not(.active), [hidden], [aria-hidden="true"] (closed-state)
+ *   - @font-face (font sources)
  *
- * Run after purge:css, before modulepreload.
+ * Run after purge:css writes chrome.<hash>.css; before csp:hashes (it'll
+ * pick up the new <style> blob's sha256).
  */
 const fs = require('node:fs');
 const path = require('node:path');
@@ -26,140 +32,154 @@ const path = require('node:path');
 const ROOT = path.resolve(__dirname, '..');
 const DIST = process.argv.find((a) => a.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
 
-// Selector regex matchers for what stays critical. Anything matching
-// these is inlined; everything else stays in the async chrome.css.
-//
-// The list is pessimistic toward CLS prevention — anything that affects
-// layout or above-fold rendering goes in. Tooltip/dropdown content and
-// modal overlays do NOT go in (deferred = fine).
-// Tightened to only the rules that affect first-paint structure.
-// Below-fold and interaction-state styles (dropdowns when open, modals,
-// mobile nav menus) stay in the async chrome.css. Anything in this list
-// is a rule that, if missing on first paint, would cause CLS or visual
-// flash. Keep this list small — every entry adds ~N bytes × 80 pages.
-const CRITICAL_SELECTOR_PATTERNS = [
-  /^:root\b/,
-  /^\[data-theme/,
-  /^\*$/,
-  /^\*::/,
-  /^html\b/,
-  /^body\b/,
-  /^h[1-6]\b/,
-  /^a$/,
-  /^p$/,
-  /^:focus-visible\b/,
-  /^\.container$/,
-  /^\.sr-only\b/,
-  // Nav chrome — collapsed to top-level structure only. Dropdown menus
-  // fall through to the async sheet (closed state has display:none, so
-  // a brief unstyled flash isn't visible).
-  /^\.navbar$/,
-  /^\.navbar-left\b/,
-  /^\.navbar-right\b/,
-  /^\.nav-links\b/,
-  /^\.nav-dropdown$/,
-  /^\.logo$/,
-  /^\.logo-static\b/,
-  /^\.logo-image\b/,
-  /^\.theme-toggle$/,
-  /^\.wisdom-ticker$/,
-  /^\.wisdom-ticker-track\b/,
-  // Sprite icon helpers (used immediately by nav)
-  /^\.ico-/
+// Patterns to KEEP critical. Match against the trimmed selector text.
+// IMPORTANT: do NOT match interaction/open-state rules (.foo.open, :hover-only
+// expansion, .modal.active, etc.) — those should stay in async chrome.css so
+// the inlined block is small and there's no FOUC of an open dropdown.
+const CRITICAL_PATTERNS = [
+  // Theme + reset
+  /^:root(?![\w-])/,
+  /^\[data-theme=/,
+  /^\*$/, /^\*::before/, /^\*::after/, /^\*,/,
+  /^html(?![\w-])/,
+  /^body(?![\w-])/,
+  // Typography baseline
+  /^h[1-6](?![\w-])/, /^h[1-6],/,
+  /^p(?![\w-])/, /^p,/,
+  /^a(?![\w-])/, /^a:hover/,
+  /^:focus-visible/,
+  // Layout primitives
+  /^\.container(?![\w-])/,
+  /^\.skip-link/,
+  /^\.sr-only/,
+  // Nav above-fold layout (closed-state dropdowns by default)
+  /^\.navbar(?![\w-])/,
+  /^body\.nav-compact/,
+  /^\.nav-container/,
+  /^\.nav-content/,
+  /^\.nav-links(?![\w-])/,
+  /^\.nav-links>li/,
+  /^\.nav-dropdown(?![\w-])/,
+  /^\.dropdown-trigger(?![\w-])/,
+  /^\.dropdown-menu(?![\w-])/,
+  /^\.dropdown-columns/,
+  /^\.dropdown-column/,
+  /^\.dropdown-wide-header/,
+  /^\.dropdown-icon-link/,
+  /^\.logo(?![\w-])/,
+  /^\.logo-static/,
+  /^\.logo-image/,
+  /^\.logo-video/,
+  /^\.wisdom-ticker(?![\w-])/,
+  /^\.wisdom-ticker-track/,
+  /^\.wisdom-item/,
+  /^\.navbar-left/,
+  /^\.navbar-right/,
+  /^\.navbar-contact(?![\w-])/,
+  /^\.navbar-contact-btn/,
+  /^\.navbar-contact-dropdown/,
+  /^\.contact-dropdown-/,
+  /^\.theme-toggle(?![\w-])/,
+  /^\.theme-toggle-icon/,
+  /^\.mobile-menu-toggle/,
+  /^\.hamburger/,
+  // Hero (homepage above fold)
+  /^\.hero(?![\w-])/,
+  /^\.hero-/,
+  /^\.side-nav(?![\w-])/,
+  /^\.side-nav-dot/,
+  // Sun/moon theme icon swap
+  /^\[data-theme="dark"\] \.icon-sun/,
+  /^\[data-theme="dark"\] \.icon-moon/,
+  /^\.icon-sun(?![\w-])/,
+  /^\.icon-moon(?![\w-])/,
+  // Closed-state guards: explicit hidden + aria-hidden
+  /^\.hidden(?![\w-])/,
+  /^\[hidden\]/,
+  /^\[aria-hidden="true"\]/,
+  // Icon size primitives (referenced by sprite <use> wrappers everywhere)
+  /^\.ico-(stroke|fill|12|14|18|24)/
 ];
 
-function isCriticalSelector(selectorList) {
-  // Comma-separated; if ANY individual selector matches we keep the rule.
-  return selectorList.split(',').some((sel) => {
-    const s = sel.trim();
-    return CRITICAL_SELECTOR_PATTERNS.some((p) => p.test(s));
-  });
-}
-
-function parseRules(text) {
+function parseRules(css) {
   const rules = [];
-  let i = 0;
-  const len = text.length;
-  while (i < len) {
-    while (i < len && /\s/.test(text[i])) i++;
-    if (i >= len) break;
-    if (text[i] === '@') {
+  let pos = 0;
+  const n = css.length;
+  while (pos < n) {
+    while (pos < n && /[\s]/.test(css[pos])) pos++;
+    if (pos >= n) break;
+    if (css[pos] === '@') {
+      // @-rule. Capture the at-rule prelude up to '{' or ';'
+      let i = pos;
+      while (i < n && css[i] !== '{' && css[i] !== ';') i++;
+      if (i >= n) break;
+      if (css[i] === ';') { pos = i + 1; continue; }
+      // Block @-rule (e.g. @media, @supports, @font-face)
+      let depth = 1; i++;
       const start = i;
-      while (i < len && text[i] !== ';' && text[i] !== '{') i++;
-      if (i < len && text[i] === ';') {
+      while (i < n && depth > 0) {
+        if (css[i] === '{') depth++;
+        else if (css[i] === '}') depth--;
         i++;
-        rules.push({ atRule: text.slice(start, i), block: false });
-        continue;
       }
-      let depth = 0;
-      do {
-        if (text[i] === '{') depth++;
-        else if (text[i] === '}') depth--;
-        i++;
-      } while (i < len && depth > 0);
-      rules.push({ atRule: text.slice(start, i), block: true });
+      const prelude = css.slice(pos, css.indexOf('{', pos)).trim();
+      const innerStart = css.indexOf('{', pos) + 1;
+      const innerEnd = i - 1;
+      rules.push({ kind: 'at', prelude, raw: css.slice(pos, i), inner: css.slice(innerStart, innerEnd) });
+      pos = i;
       continue;
     }
-    const selStart = i;
-    while (i < len && text[i] !== '{') i++;
-    const selector = text.slice(selStart, i).trim();
-    if (i >= len) break;
-    let depth = 0;
-    do {
-      if (text[i] === '{') depth++;
-      else if (text[i] === '}') depth--;
+    const brace = css.indexOf('{', pos);
+    if (brace < 0) break;
+    const sel = css.slice(pos, brace).trim();
+    let depth = 1; let i = brace + 1;
+    while (i < n && depth > 0) {
+      if (css[i] === '{') depth++;
+      else if (css[i] === '}') depth--;
       i++;
-    } while (i < len && depth > 0);
-    rules.push({ selector, body: text.slice(selStart + selector.length, i) });
+    }
+    rules.push({ kind: 'rule', sel, raw: css.slice(pos, i), body: css.slice(brace + 1, i - 1) });
+    pos = i;
   }
   return rules;
 }
 
-function splitCss(text) {
-  const rules = parseRules(text);
-  const critical = [];
-  const deferred = [];
+function selMatchesAny(sel, patterns) {
+  // Selector list (comma-separated) — keep if ANY piece matches.
+  const pieces = sel.split(',').map((p) => p.trim());
+  return pieces.some((p) => patterns.some((rx) => rx.test(p)));
+}
+
+function extractCritical(css) {
+  const rules = parseRules(css);
+  const kept = [];
   for (const r of rules) {
-    if (r.atRule) {
-      const at = r.atRule;
-      if (/^@(font-face|charset|import|namespace|property|counter-style|page)\b/.test(at)) {
-        // @font-face must run as soon as possible — keep critical.
-        if (/^@font-face\b/.test(at)) critical.push(at);
-        else deferred.push(at);
-        continue;
+    if (r.kind === 'at') {
+      // Always keep @font-face. For @media etc., recurse and keep matching inner rules.
+      if (r.prelude.startsWith('@font-face')) { kept.push(r.raw); continue; }
+      if (r.prelude.startsWith('@charset')) { kept.push(r.raw); continue; }
+      // For @media and @supports, recursively extract inner critical rules.
+      const inner = extractCritical(r.inner);
+      if (inner.trim()) {
+        kept.push(`${r.prelude}{${inner}}`);
       }
-      if (/^@keyframes\b/.test(at)) {
-        // keyframes are referenced by .wisdom-ticker-track and a few
-        // other animations the nav uses; inline them too.
-        critical.push(at);
-        continue;
-      }
-      if (/^@(media|supports|container)\b/.test(at)) {
-        // Drill into media-block. Only keep the inner rules that match
-        // the critical list; if any survive, ship the wrapping at-rule.
-        const head = at.match(/^@\w+[^{]*\{/)?.[0] ?? '';
-        const inner = at.slice(head.length, -1);
-        const innerRules = parseRules(inner);
-        const keptCritical = innerRules
-          .filter((r2) => !r2.atRule && isCriticalSelector(r2.selector))
-          .map((r2) => r2.selector + r2.body)
-          .join('');
-        if (keptCritical) critical.push(head + keptCritical + '}');
-        // The full media block stays in deferred too (covers everything else).
-        deferred.push(at);
-        continue;
-      }
-      deferred.push(at);
       continue;
     }
-    if (isCriticalSelector(r.selector)) critical.push(r.selector + r.body);
-    else deferred.push(r.selector + r.body);
+    if (selMatchesAny(r.sel, CRITICAL_PATTERNS)) kept.push(r.raw);
   }
-  return { critical: critical.join(''), deferred: deferred.join('') };
+  return kept.join('');
+}
+
+function findChromeCss() {
+  const cssDir = path.join(DIST, 'css');
+  if (!fs.existsSync(cssDir)) return null;
+  const file = fs.readdirSync(cssDir).find((f) => /^chrome\.[a-f0-9]+\.css$/.test(f));
+  return file ? path.join(cssDir, file) : null;
 }
 
 function walkHtml(dir) {
   const out = [];
+  if (!fs.existsSync(dir)) return out;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) out.push(...walkHtml(full));
@@ -168,50 +188,36 @@ function walkHtml(dir) {
   return out;
 }
 
-const cssDir = path.join(DIST, 'css');
-const chromeCssFile = fs.readdirSync(cssDir).find((f) => /^chrome\.[a-f0-9]+\.css$/.test(f));
-if (!chromeCssFile) {
-  console.error('[critical-css] missing chrome.HASH.css');
-  process.exit(1);
-}
-const chromeCssPath = path.join(cssDir, chromeCssFile);
-const chromeCss = fs.readFileSync(chromeCssPath, 'utf8');
-const { critical } = splitCss(chromeCss);
-// Only print stats; chrome.css is deliberately left intact so async
-// fallback still ships every rule. Inlining a strict critical subset and
-// keeping the full file as the async sheet means a critical-rule miss
-// still gets covered by the async stylesheet — no FOUC of unstyled
-// content, only a brief moment of un-fully-styled chrome before async
-// arrives. Belt and braces.
+function main() {
+  const chromePath = findChromeCss();
+  if (!chromePath) {
+    console.error('[critical-css] chrome.<hash>.css not found in dist/css/. Skipping.');
+    return;
+  }
+  const chromeRel = `/css/${path.basename(chromePath)}`;
+  const fullCss = fs.readFileSync(chromePath, 'utf8');
+  const critical = extractCritical(fullCss);
+  console.log(`[critical-css] chrome=${(fullCss.length / 1024).toFixed(1)}KB → critical=${(critical.length / 1024).toFixed(1)}KB (${((critical.length / fullCss.length) * 100).toFixed(1)}%)`);
 
-const html = walkHtml(DIST);
-let mutated = 0;
-const wrappedCritical = `<style data-critical>${critical}</style>`;
-
-for (const file of html) {
-  let text = fs.readFileSync(file, 'utf8');
-  // Already injected? skip.
-  if (text.includes('data-critical')) continue;
-  // Insert before the chrome.css link, then convert the chrome.css link
-  // to async-load via the preload-onload trick.
-  const chromeLinkRe = /<link rel="stylesheet" href="\/css\/chrome\.[a-f0-9]+\.css"([^>]*)>/;
-  const m = text.match(chromeLinkRe);
-  if (!m) continue;
-  const href = m[0].match(/href="([^"]+)"/)?.[1];
-  if (!href) continue;
-  // Async-load chrome.css. We can't use the `onload="this.rel='stylesheet'"`
-  // trick because the site's CSP doesn't allow inline event handlers
-  // (would require 'unsafe-hashes' / 'unsafe-inline'). Instead we emit
-  // an external preload + an inline <script> that flips rel after a
-  // microtask, plus a <noscript> fallback for no-JS clients. The inline
-  // script is identical on every page so update-csp-hashes.js adds a
-  // single hash entry to script-src.
-  const sheetId = 'jg-async-chrome';
-  const asyncSheet = `<link id="${sheetId}" rel="preload" href="${href}" as="style"><script>(function(){var l=document.getElementById('${sheetId}');if(l){l.rel='stylesheet'}})();</script><noscript><link rel="stylesheet" href="${href}"></noscript>`;
-  text = text.replace(chromeLinkRe, wrappedCritical + asyncSheet);
-  fs.writeFileSync(file, text);
-  mutated++;
+  // For every HTML file: replace the existing render-blocking <link>
+  // for chrome.css with inline <style>{critical}</style> + a preload-onload
+  // pattern that promotes the link to a stylesheet once it loads.
+  const htmlFiles = walkHtml(DIST);
+  let mutated = 0;
+  for (const file of htmlFiles) {
+    let html = fs.readFileSync(file, 'utf8');
+    if (html.includes('data-critical-css="true"')) continue; // already processed
+    const linkPattern = new RegExp(`<link rel="stylesheet" href="${chromeRel}"[^>]*>`);
+    if (!linkPattern.test(html)) continue;
+    // Inline-script promote pattern: avoids `onload=` inline handler so
+    // CSP can stay restrictive (no 'unsafe-hashes' / per-handler hashes).
+    // The script gets a sha256 from update-csp-hashes.js automatically.
+    const replacement = `<style data-critical-css="true">${critical}</style><link id="jg-chrome-css" rel="preload" href="${chromeRel}" as="style"><noscript><link rel="stylesheet" href="${chromeRel}"></noscript><script>(()=>{const l=document.getElementById('jg-chrome-css');if(l){l.rel='stylesheet';l.removeAttribute('id');}})();</script>`;
+    html = html.replace(linkPattern, replacement);
+    fs.writeFileSync(file, html);
+    mutated++;
+  }
+  console.log(`[critical-css] inlined into ${mutated}/${htmlFiles.length} pages, async-loading chrome.css`);
 }
 
-const KB = 1024;
-console.log(`[critical-css] critical=${(critical.length / KB).toFixed(1)}KB inlined into ${mutated} page(s); chrome=${(chromeCss.length / KB).toFixed(1)}KB stays async`);
+main();

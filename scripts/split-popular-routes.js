@@ -56,21 +56,71 @@ if (!isStale()) {
 const data = JSON.parse(fs.readFileSync(SOURCE, 'utf8'));
 const routes = Array.isArray(data.routes) ? data.routes : [];
 
-// Round route coordinates to 5 decimal places (~1m precision). Source
-// data carries 6 decimals (~10cm) which is wasted detail at every map
-// zoom level we render. Trims drive.json and bike.json by ~30-40%.
+// Round to 5 decimal places (~1m precision) and decimate via
+// Douglas-Peucker. Drive/bike routes have hundreds of densely-packed
+// waypoints from OSRM snapping; at the zoom levels the world map renders,
+// 0.0005° tolerance (~50m) is visually identical to the source.
 const COORD_PRECISION = 1e5;
+const DOUGLAS_PEUCKER_TOLERANCE = 0.0005;
+
 function roundCoord(n) {
   return Number.isFinite(n) ? Math.round(n * COORD_PRECISION) / COORD_PRECISION : n;
 }
+
+// Perpendicular distance from point p to the line through a..b.
+function perpDistance(p, a, b) {
+  const [px, py] = p;
+  const [ax, ay] = a;
+  const [bx, by] = b;
+  const dx = bx - ax;
+  const dy = by - ay;
+  if (dx === 0 && dy === 0) {
+    const ex = px - ax;
+    const ey = py - ay;
+    return Math.sqrt(ex * ex + ey * ey);
+  }
+  const t = ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy);
+  const cx = ax + t * dx;
+  const cy = ay + t * dy;
+  const ex = px - cx;
+  const ey = py - cy;
+  return Math.sqrt(ex * ex + ey * ey);
+}
+
+function douglasPeucker(points, tolerance) {
+  if (points.length < 3) return points;
+  const keep = new Uint8Array(points.length);
+  keep[0] = 1;
+  keep[points.length - 1] = 1;
+  const stack = [[0, points.length - 1]];
+  while (stack.length) {
+    const [start, end] = stack.pop();
+    let maxDist = 0;
+    let idx = -1;
+    for (let i = start + 1; i < end; i++) {
+      const d = perpDistance(points[i], points[start], points[end]);
+      if (d > maxDist) { maxDist = d; idx = i; }
+    }
+    if (idx !== -1 && maxDist > tolerance) {
+      keep[idx] = 1;
+      stack.push([start, idx], [idx, end]);
+    }
+  }
+  const out = [];
+  for (let i = 0; i < points.length; i++) {
+    if (keep[i]) out.push(points[i]);
+  }
+  return out;
+}
+
 function trimGeometry(geom) {
   if (!geom || !Array.isArray(geom.coordinates)) return geom;
   // GeoJSON LineString: array of [lng, lat] pairs.
-  return {
-    ...geom,
-    coordinates: geom.coordinates.map((pair) => Array.isArray(pair) ? pair.map(roundCoord) : pair)
-  };
+  const rounded = geom.coordinates.map((pair) => Array.isArray(pair) ? pair.map(roundCoord) : pair);
+  const decimated = douglasPeucker(rounded, DOUGLAS_PEUCKER_TOLERANCE);
+  return { ...geom, coordinates: decimated };
 }
+
 for (const route of routes) {
   if (route?.geometry) route.geometry = trimGeometry(route.geometry);
 }

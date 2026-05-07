@@ -1,5 +1,26 @@
 // Cross-collection helpers: image error fallback, star drag handler,
-// escape-key closer. Replaces duplicated logic across books/letterboxd/podcasts.
+// escape-key closer, card visibility toggle. Replaces duplicated logic
+// across books/letterboxd/podcasts/people.
+
+// Toggle visibility of cards inside a container based on a Set of IDs
+// derived from each card's dataset. Pages SSR every card; filter passes
+// just hide/show. ids() is a function so callers can pull from any
+// dataset key (data-isbn for books, data-movie-title for movies, etc).
+export function applyCardVisibility(
+    container: HTMLElement | null,
+    visibleIds: Set<string>,
+    cardSelector: string,
+    idsFor: (card: HTMLElement) => string[]
+): void {
+    if (!container) return;
+    container.querySelectorAll<HTMLElement>(cardSelector).forEach((card) => {
+        const ids = idsFor(card);
+        const visible = ids.some((id) => visibleIds.has(id));
+        card.style.display = visible ? '' : 'none';
+    });
+}
+
+
 
 let imageErrorInstalled = false;
 export function installImageErrorHandler() {

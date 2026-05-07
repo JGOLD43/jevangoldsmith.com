@@ -1,60 +1,24 @@
 ---
-import CollectionPage from '../components/CollectionPage.astro';
-import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { tasteListOptions, BOOK_SECTIONS } from '../lib/collection-sections';
-import { renderBookCardHtml } from '../lib/book-card';
-import { escapeAttr } from '../lib/html-escape';
-import remoteAssets from '../../../data/remote-assets.generated.json';
-import { CATEGORY_MAP } from '../lib/book-categories';
+import { getCollection } from 'astro:content';
+import CollectionPage from '../components/CollectionPage.astro';
 import type { Book } from '../content.config';
+import { bookCoverUrl, renderBookCardHtml } from '../lib/book-card';
+import { CATEGORY_MAP } from '../lib/book-categories';
+import { BOOK_SECTIONS, renderRatingFilterSection, renderSliderFilterSection, tasteListOptions } from '../lib/collection-sections';
+import { escapeAttr } from '../lib/html-escape';
+import booksRuntimeData from '../../../data/books.generated.json';
 
-// books.ts now lazy-fetches /data/books.generated.json on init. Saves
-// ~44KB of inline JSON on every books.html visit (HTML must-revalidate
-// re-downloaded the inline blob each visit). The fetch fires at the
-// same moment the script runs, and the file is prefetched via the head
-// hint below — net zero perceived latency, big bytes win.
+// Books data is fetched at runtime from /data/books.generated.json.
+// books.ts adopts SSR'd cards in place and only re-renders for filter changes.
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
-// server-render every book card at build time. books.js detects
-// an already-populated container and skips the initial wipe-and-render.
+// SSR every book card. Eager-load the first 6 covers (above-fold on mobile + desktop).
 const books = await getCollection('books') as CollectionEntry<'books'>[];
-// Mobile (360px) fits ~4 book covers above the fold; desktop ~6. Beyond
-// that, the eager fetchpriority="high" hint stops being useful and
-// starts competing with chrome.css for connection bandwidth on first
-// paint. Was 16; dropped to 6.
 const bookCardsHtml = books
   .map((b, i) => renderBookCardHtml(b.data, i < 6))
   .join('');
-
-// Resolve a remote OpenLibrary cover URL to a local pre-generated jpg.
-// remote-assets.generated.json holds the mapping built by
-// scripts/optimize-assets.js (cover widths: 160, 240, 360, 480). Local
-// paths paint instantly from /images/generated/remote/. Without this the
-// browser still hits openlibrary on first visit and covers visibly load
-// in below the fold even on a fast connection.
-type RemoteEntry = { source: string; widths: number[]; formats: Record<string, { avif?: string; jpg?: string }> };
-const REMOTE = remoteAssets as Record<string, RemoteEntry>;
-function localizeCover(url: string, size: 'medium' | 'large'): string {
-  // optimize-assets indexes ISBN covers under the -L URL only (it
-  // generates 160/240/360/480 widths from that single source). Normalize
-  // an -M lookup back to its -L key so the manifest hit lands.
-  const lookupKey = url.replace(/-M\.jpg(\?.*)?$/, '-L.jpg');
-  const entry = REMOTE[lookupKey] || REMOTE[url];
-  if (!entry) return url;
-  const targetWidth = size === 'medium' ? 240 : 480;
-  const jpg = entry.formats[String(targetWidth)]?.jpg;
-  return jpg ? `/${jpg}` : url;
-}
-
-function coverUrl(book: Book, size: 'medium' | 'large' = 'large'): string {
-  if (book.coverImage) return localizeCover(book.coverImage, size);
-  const isbn = String(book.isbn || '').replace(/[^0-9X]/gi, '');
-  if (!isbn) return '';
-  const remote = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
-  return localizeCover(remote, size);
-}
 
 const booksByCategoryKey: Record<string, Book[]> = {};
 for (const entry of books) {
@@ -64,73 +28,29 @@ for (const entry of books) {
   (booksByCategoryKey[key] ||= []).push(data);
 }
 
-// Inject per-category list HTML + counts into the cloned section configs.
+// Sidebar lists hydrate at runtime from the books.generated.json fetch.
+// SSR ships only the per-section counts so the badges paint correctly.
 const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section) => {
-  // The "All Books" section has no panelId — just stamp the total count
-  // so the badge ships with 122 instead of the placeholder 0.
   if (!section.panelId) return { ...section, count: String(books.length) };
   const key = section.panelId.replace(/^category-/, '');
   const list = booksByCategoryKey[key] || [];
-  const innerHtml = list.map((book) => `
-                <a href="#" class="book-link" data-action="book-link" data-book-title="${escapeAttr(book.title)}">
-                    <div>${escapeAttr(book.title)}</div>
-                    <div class="book-link-author">${escapeAttr(book.author)}</div>
-                </a>
-              `).join('');
-  return { ...section, count: String(list.length), panelInnerHtml: innerHtml };
+  return { ...section, count: String(list.length) };
 });
 
-// Carousel: most recent 20 books. Ships once; books.ts clones the track
-// children at runtime to satisfy the seamless-scroll CSS animation.
-// Cuts ~3KB of HTML and 20 image-prefetch hints versus emitting the
-// doubled list at SSR.
+// Carousel: most recent 20 books — books.ts clones nodes at runtime
+// to satisfy the seamless-scroll CSS animation.
 const recentBooks = books.slice(-20).reverse().map((b) => b.data);
 const carouselTrackInner = recentBooks
   .map((book) => {
-    const url = coverUrl(book, 'medium');
-    // Skip books with no resolvable cover (no ISBN, no coverImage). An
-    // empty src renders as a broken-image icon AND fires a fetch of the
-    // current page URL — both visible and wasteful.
+    const url = bookCoverUrl(book, 'medium');
+    // Skip books with no resolvable cover; empty src would fetch the page URL.
     if (!url) return '';
     return `<img class="carousel-book" src="${escapeAttr(url)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
   })
   .join('');
 
-// legacy fragments inlined directly into the page.
-const sidebarFiltersHtml = `<div class="sidebar-filter-section">
-    <div class="filter-header">
-        <div class="filter-label">Filter by Rating</div>
-        <a href="#" class="show-all-link" data-action="clear-star-filter">Show All</a>
-    </div>
-    <div class="star-rating-filter">
-        <div class="star-filter-container" id="star-filter-container">
-            <span class="filter-star" data-star="1">★</span>
-            <span class="filter-star" data-star="2">★</span>
-            <span class="filter-star" data-star="3">★</span>
-            <span class="filter-star" data-star="4">★</span>
-            <span class="filter-star" data-star="5">★</span>
-            <span class="filter-rating-text" id="filter-rating-text"></span>
-        </div>
-    </div>
-</div>
-
-<div class="sidebar-filter-section">
-    <div class="filter-header">
-        <div class="filter-label">Filter by Times Read</div>
-    </div>
-    <div class="timesread-filter">
-        <div class="timesread-filter-container">
-            <span class="filter-timesread-icon">📖</span>
-            <div class="timesread-slider-wrapper">
-                <input type="range" min="0" max="10" value="0" class="timesread-slider" id="timesread-slider">
-                <div class="timesread-ticks" id="timesread-ticks">
-                    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
-                </div>
-            </div>
-            <span class="filter-timesread-text" id="filter-timesread-text"></span>
-        </div>
-    </div>
-</div>`;
+const sidebarFiltersHtml = renderRatingFilterSection({ clearAction: 'clear-star-filter' })
+    + '\n\n' + renderSliderFilterSection({ label: 'Filter by Times Read', icon: '📖', id: 'timesread' });
 
 const headerCarouselHtml = `<div class="recent-books-carousel">
     <span class="carousel-label">Recently Added</span>
@@ -139,14 +59,10 @@ const headerCarouselHtml = `<div class="recent-books-carousel">
 
 const headerViewToggleHtml = `<div class="view-toggle main-view-toggle">
     <button class="view-toggle-btn active" id="list-view-btn-main" data-action="set-view-mode" data-mode="list" title="List view">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line>
-        </svg>
+        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
     </button>
     <button class="view-toggle-btn" id="grid-view-btn-main" data-action="set-view-mode" data-mode="grid" title="Grid view">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
-        </svg>
+        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
     </button>
 </div>`;
 
@@ -162,22 +78,10 @@ const populatedMainBody = `<div id="books-container" class="books-grid">${bookCa
         </div>
         <div class="view-toggle grid-view-toggle">
             <button class="view-toggle-btn" id="list-view-btn-grid" data-action="set-view-mode" data-mode="list" title="List view">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="8" y1="6" x2="21" y2="6"></line>
-                    <line x1="8" y1="12" x2="21" y2="12"></line>
-                    <line x1="8" y1="18" x2="21" y2="18"></line>
-                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                </svg>
+                <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
             </button>
             <button class="view-toggle-btn active" id="grid-view-btn-grid" data-action="set-view-mode" data-mode="grid" title="Grid view">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
+                <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
             </button>
         </div>
     </header>
@@ -224,7 +128,7 @@ const config = ({
     collapseAction: 'toggle-sidebar',
     listAction: 'toggle-list-dropdown',
     currentListName: 'Books',
-    listOptions: tasteListOptions('books', 'books'),
+    listOptions: tasteListOptions('books'),
     search: {
       inputId: 'book-search',
       inputClass: 'book-search-input collection-search-input',
@@ -259,10 +163,9 @@ const config = ({
   description="A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
   canonical={canonical}
 >
-  <Fragment slot="head">
-    <link rel="prefetch" href="/data/books.generated.json" as="fetch" crossorigin />
-  </Fragment>
 </CollectionPage>
+
+<script is:inline id="jg-books-data" type="application/json" set:html={JSON.stringify(booksRuntimeData)}></script>
 
 <style is:inline>
   /* content-visibility skips offscreen book cards' layout/paint until they

@@ -11,20 +11,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const lightningcss = require('lightningcss');
+const { distDir } = require('./_lib/paths');
+const { walk: walkAll } = require('./_lib/walk');
 
-const ROOT = path.resolve(__dirname, '..');
-const DIST = process.argv.find((a) => a.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
-
-function walk(dir) {
-  const out = [];
-  if (!fs.existsSync(dir)) return out;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...walk(full));
-    else if (entry.isFile() && entry.name.endsWith('.css')) out.push(full);
-  }
-  return out;
-}
+const DIST = distDir();
+const walk = (dir) => walkAll(dir).filter((p) => p.endsWith('.css'));
 
 const files = walk(path.join(DIST, 'css'));
 let beforeTotal = 0;

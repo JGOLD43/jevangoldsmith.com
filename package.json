@@ -42,7 +42,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.12",
-    "@fontsource-variable/chivo": "^5.2.8",
     "html-minifier-terser": "^7.2.0",
     "http-server": "^14.1.1",
     "lightningcss": "^1.32.0",

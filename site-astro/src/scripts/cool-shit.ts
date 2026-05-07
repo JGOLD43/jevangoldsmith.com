@@ -1,5 +1,5 @@
+import { dayLabel, monthKey } from '../lib/dates';
 import { escapeHtml as escapeHtml } from '../lib/html-escape';
-import { monthKey, dayLabel } from '../lib/dates';
 import { sanitizeUrl as safeUrl } from '../lib/safe-url';
 import { readInlineJson } from './data-fetch';
 

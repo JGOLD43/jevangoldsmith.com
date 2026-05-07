@@ -1,23 +1,8 @@
 ---
 import raw from '../../../data/challenges.json';
 import CollectionPage from '../components/CollectionPage.astro';
-import { renderChallengeCard, CHALLENGES_TASK_CONFIG } from '../lib/collection-sections';
-
-interface Challenge {
-  id: string;
-  slug?: string;
-  title: string;
-  status?: string;
-  category?: string;
-  timeframe?: string;
-  shortDescription?: string;
-  description?: string;
-  visibility?: string;
-  tags?: string[];
-  searchTerms?: string[];
-  icon?: string;
-  progress?: { label?: string; value?: string; percent?: number | string };
-}
+import type { Challenge } from '../lib/collection-sections';
+import { CHALLENGES_TASK_CONFIG, renderChallengeCard } from '../lib/collection-sections';
 
 const allChallenges: Challenge[] = (raw as { challenges?: Challenge[] }).challenges ?? [];
 const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibility !== 'private');
@@ -33,9 +18,9 @@ const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibil
 />
 
 <script>
-  import { createTaskList } from '../scripts/task-list.ts';
+  import { createCollectionRuntime } from '../scripts/collection-runtime';
 
-  createTaskList({
+  const runtime: any = createCollectionRuntime({
     actions: {
       clearSearch: 'clearChallengeSearch',
       filter: 'filterChallenges',
@@ -43,6 +28,7 @@ const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibil
       toggleDropdown: 'toggleChallengeListDropdown',
       toggleSidebar: 'toggleChallengeSidebar'
     },
+    buttonSelector: '.sidebar-category',
     cardSelector: '.challenge-card',
     counterId: 'challenge-count',
     gridId: 'challenges-container',
@@ -51,6 +37,11 @@ const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibil
     searchInputId: 'challenge-search',
     sidebarId: 'challenges-sidebar',
     storageKey: 'challenges-sidebar-collapsed',
-    zoomEvent: 'challenge_open'
+    zoom: { eventName: 'challenge_open' }
   });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => runtime.init(), { once: true });
+  } else {
+    runtime.init();
+  }
 </script>

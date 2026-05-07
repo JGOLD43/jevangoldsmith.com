@@ -6,10 +6,10 @@
 //                                  per-item renderCard via renderTaskListMain.
 
 import Base from '../layouts/Base.astro';
-import { renderCollectionMain } from '../lib/collection-shell';
-import type { CollectionConfig } from '../lib/collection-shell';
-import { renderTaskListMain } from '../lib/collection-sections';
 import type { TaskListConfig } from '../lib/collection-sections';
+import { renderTaskListMain } from '../lib/collection-sections';
+import type { CollectionConfig } from '../lib/collection-shell';
+import { renderCollectionMain } from '../lib/collection-shell';
 
 interface CommonProps {
   title: string;

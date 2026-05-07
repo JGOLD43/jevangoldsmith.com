@@ -1,23 +1,13 @@
 #!/usr/bin/env node
 const fs = require('node:fs');
 const path = require('node:path');
+const { ROOT, flagValue, distDir } = require('./_lib/paths');
+const { walk } = require('./_lib/walk');
 
-const ROOT = path.resolve(__dirname, '..');
-const dist = process.argv.find((arg) => arg.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
-const generated = process.argv.find((arg) => arg.startsWith('--generated='))?.slice(12) || path.join(ROOT, 'images', 'generated');
+const dist = distDir();
+const generated = flagValue('--generated=', path.join(ROOT, 'images', 'generated'));
 const dryRunPrune = process.argv.includes('--prune-dry-run');
-const writePruneList = process.argv.find((arg) => arg.startsWith('--write-prune-list='))?.slice(20);
-
-function walk(dir) {
-  if (!fs.existsSync(dir)) return [];
-  const out = [];
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...walk(full));
-    else if (entry.isFile()) out.push(full);
-  }
-  return out;
-}
+const writePruneList = flagValue('--write-prune-list=');
 
 function bytes(n) {
   if (n >= 1024 * 1024) return `${(n / 1024 / 1024).toFixed(1)}MB`;

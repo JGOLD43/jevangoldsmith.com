@@ -1,22 +1,14 @@
 // Server-side renderer for book cards. books.ts binds behavior to these SSR'd
 // cards and filters by toggling visibility.
 
-interface BookData {
-  title?: string;
-  author?: string;
-  isbn?: string | null;
-  year?: string | number | null;
-  rating?: number | null;
-  reReads?: number | null;
-  category?: string | null;
-  shortDescription?: string | null;
-  review?: string | null;
-  read?: boolean | null;
-  coverImage?: string | null;
-}
-
-import { escapeHtml, escapeAttr } from './html-escape';
+import type { Book } from '../content.config';
 import remoteAssets from '../../../data/remote-assets.generated.json';
+import { escapeAttr, escapeHtml } from './html-escape';
+import { lcpAttrs } from './lcp-attrs';
+
+// Card renderers accept a Partial<Book> shape — all fields optional so legacy
+// records with missing fields still render gracefully.
+type BookData = Partial<Book>;
 
 type RemoteEntry = { source: string; widths: number[]; formats: Record<string, { avif?: string; jpg?: string }> };
 const REMOTE = remoteAssets as Record<string, RemoteEntry>;
@@ -25,21 +17,29 @@ const REMOTE = remoteAssets as Record<string, RemoteEntry>;
 // (build-time download from optimize-assets.js → images/generated/remote/).
 // Fall back to the remote URL when the manifest doesn't have it (first
 // build before optimize-assets has run, or a non-OpenLibrary cover).
-function localize(url: string): string {
+//
+// Card covers display ~150px wide so 360 (2x DPR) is ideal; carousel
+// thumbs display ~64px so 240 paints faster without visible quality
+// loss. Caller picks via `size`. Phase 12 consolidated the duplicate
+// localizer that lived in books.astro into this single source of truth.
+const COVER_WIDTHS = { medium: ['240', '360', '480'], large: ['360', '480', '240'] } as const;
+function localize(url: string, size: 'medium' | 'large' = 'large'): string {
   if (!url) return '';
   const lookupKey = url.replace(/-M\.jpg(\?.*)?$/, '-L.jpg');
   const entry = REMOTE[lookupKey] || REMOTE[url];
   if (!entry) return url;
-  // 360 is the visible width for a card cover (~150px display, 2x DPR).
-  const jpg = entry.formats['360']?.jpg || entry.formats['480']?.jpg;
-  return jpg ? `/${jpg}` : url;
+  for (const width of COVER_WIDTHS[size]) {
+    const jpg = entry.formats[width]?.jpg;
+    if (jpg) return `/${jpg}`;
+  }
+  return url;
 }
 
-export function bookCoverUrl(book: BookData): string {
-  if (book.coverImage) return localize(book.coverImage);
+export function bookCoverUrl(book: BookData, size: 'medium' | 'large' = 'large'): string {
+  if (book.coverImage) return localize(book.coverImage, size);
   const cleanIsbn = String(book.isbn ?? '').replace(/[^0-9X]/g, '');
   if (!cleanIsbn) return '';
-  return localize(`https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg`);
+  return localize(`https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg`, size);
 }
 
 // `eager` flips the cover from lazy/auto to eager/high — used for the
@@ -85,10 +85,8 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
 
   const cardClass = `book-card js-zoom-item${isUnread ? ' is-unread' : ''}${review ? ' has-review' : ''}`;
 
-  const loading = eager ? 'eager' : 'lazy';
-  const fp = eager ? ' fetchpriority="high"' : '';
   const coverImg = coverUrl
-    ? `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(title)}" class="book-cover" width="150" height="230" loading="${loading}"${fp} decoding="async" data-book-cover-fallback="true">`
+    ? `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(title)}" class="book-cover" width="150" height="230" ${lcpAttrs(eager ? 0 : 1, 1)} decoding="async" data-book-cover-fallback="true">`
     : '';
 
   const yearSpan = yearStr ? `<span class="book-year">${escapeHtml(yearStr)}</span>` : '';

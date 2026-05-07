@@ -23,11 +23,24 @@ const HTML_CACHE = `html-${CACHE_VERSION}`;
 const ASSET_CACHE = `assets-${CACHE_VERSION}`;
 const DATA_CACHE = `data-${CACHE_VERSION}`;
 
+// Top-traffic pages that benefit from being warm in cache before the
+// user visits them. Best-effort prefetch — failures are swallowed.
+const PRECACHE_HTML = ['/', '/books.html', '/movies.html', '/people.html', '/adventures.html'];
+
 self.addEventListener('install', (event) => {
-  // Activate immediately on first install — no waiting for all open
-  // tabs to close. Site is small enough that the SW takes over within
-  // a few hundred ms.
-  self.skipWaiting();
+  event.waitUntil((async () => {
+    try {
+      const cache = await caches.open(HTML_CACHE);
+      await Promise.allSettled(PRECACHE_HTML.map(async (url) => {
+        const response = await fetch(url, { credentials: 'same-origin' });
+        if (response.ok) await cache.put(url, response);
+      }));
+    } catch {
+      // Precache is opportunistic; never block install.
+    }
+    // Activate immediately — site is small, SW takes over within a few hundred ms.
+    self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', (event) => {

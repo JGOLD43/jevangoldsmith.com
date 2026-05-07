@@ -7,11 +7,11 @@
 // initial Total Bytes don't pay for them. Switching the routeSet filter
 // forces the fetch immediately.
 import {
-  state, fetchJsonOr,
-  PLACES_DATA_URL, ROUTES_DATA_URL,
-  POPULAR_ROUTES_INDEX_URL, PHOTOS_DATA_URL,
-  COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL,
-  saveFilters
+  COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL,fetchJsonOr,PHOTOS_DATA_URL,
+  PLACES_DATA_URL, 
+  POPULAR_ROUTES_INDEX_URL, ROUTES_DATA_URL,
+  saveFilters, 
+  state 
 } from './adventures-state';
 
 // schedulePopularRoutes needs to call back into the renderer once the
@@ -21,7 +21,7 @@ import {
 let routeRerender: () => void = () => {};
 export function setRouteRerender(fn: () => void) { routeRerender = fn; }
 
-export async function loadPlacesOfInterest() {
+async function loadPlacesOfInterest() {
   const data: any = await fetchJsonOr(PLACES_DATA_URL);
   if (!data) return;
   state.allPlaces = Array.isArray(data.places) ? data.places : [];
@@ -47,12 +47,12 @@ export async function loadCountriesData() {
   return state.countriesPromise;
 }
 
-export async function loadRoutes() {
+async function loadRoutes() {
   const primary: any = await fetchJsonOr(ROUTES_DATA_URL, { routes: [] });
   state.allRoutes = Array.isArray(primary?.routes) ? primary.routes : [];
 }
 
-export async function loadPopularRoutes() {
+async function loadPopularRoutes() {
   if (state.popularRoutesPromise) return state.popularRoutesPromise;
   state.popularRoutesPromise = (async () => {
     const index: any = await fetchJsonOr(POPULAR_ROUTES_INDEX_URL);
@@ -84,7 +84,7 @@ export async function loadPopularRoutes() {
   return state.popularRoutesPromise;
 }
 
-export function shouldLoadPopularRoutes() {
+function shouldLoadPopularRoutes() {
   return state.mapFilters.layers.routes && state.mapFilters.routeSet !== 'mine';
 }
 
@@ -111,7 +111,7 @@ export function schedulePopularRoutes(force = false) {
   state.worldMap.on('touchstart', onFirstInteraction);
 }
 
-export async function loadPhotos() {
+async function loadPhotos() {
   const data: any = await fetchJsonOr(PHOTOS_DATA_URL, { photos: [] });
   state.allPhotos = Array.isArray(data?.photos) ? data.photos : [];
 }

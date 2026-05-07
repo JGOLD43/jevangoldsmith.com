@@ -1,16 +1,9 @@
 // Real User Monitoring. Reports Core Web Vitals (LCP, FCP, CLS, INP,
-// TTFB) to a beacon endpoint. Loaded at idle so the measurement doesn't
-// compete with first-paint resources.
-//
-// Beacon endpoint defaults to `/api/rum-beacon` — configure a Cloud
-// Function or Cloudflare Worker to receive these. If no endpoint is
-// configured at runtime, the values still log to console in dev for
-// inspection but no network request goes out.
-//
-// Tradeoff: 1KB extra JS for visibility into actual user-experienced
-// perf. Without it, optimization is blind.
+// TTFB) to a beacon endpoint. Loaded at idle (theme.ts) only when the
+// RUM_ENDPOINT build flag is set; without it the dynamic import is tree-
+// shaken and this module never ships.
 
-import { onCLS, onFCP, onINP, onLCP, onTTFB, type Metric } from 'web-vitals';
+import { type Metric, onCLS, onFCP, onINP, onLCP, onTTFB } from 'web-vitals';
 
 interface RumPayload extends Pick<Metric, 'name' | 'value' | 'rating' | 'id' | 'navigationType'> {
     page: string;
@@ -18,8 +11,8 @@ interface RumPayload extends Pick<Metric, 'name' | 'value' | 'rating' | 'id' | '
     connection?: string;
 }
 
-const ENDPOINT: string | null = null; // set this when a beacon receiver is online
-const SAMPLE_RATE = 1.0; // 100% — drop later if beacon volume is a concern
+const ENDPOINT: string | null = import.meta.env.RUM_ENDPOINT || null;
+const SAMPLE_RATE = 1.0;
 
 function shouldSample() {
     return Math.random() < SAMPLE_RATE;

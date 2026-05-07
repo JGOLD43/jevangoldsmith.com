@@ -25,65 +25,12 @@ const EPISODES_PATH = path.join(ROOT, 'data', 'podcast-episodes.json');
 const MAX_EPISODES = 500; // cap file size; oldest pruned
 const DEDUPE_WINDOW_MS = 30 * 60 * 1000; // same episode within 30 min = no-op
 
-function loadEnvLocal() {
-    if (!fs.existsSync(ENV_LOCAL)) return;
-    const content = fs.readFileSync(ENV_LOCAL, 'utf8');
-    for (const line of content.split('\n')) {
-        const trimmed = line.trim();
-        if (!trimmed || trimmed.startsWith('#')) continue;
-        const eq = trimmed.indexOf('=');
-        if (eq === -1) continue;
-        const key = trimmed.slice(0, eq).trim();
-        let val = trimmed.slice(eq + 1).trim();
-        if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-            val = val.slice(1, -1);
-        }
-        if (!process.env[key]) process.env[key] = val;
-    }
-}
+// dotenv reads .env.local. Token refresh + GET helpers live in _spotify-lib.js.
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env.local') });
+const { refreshAccessToken, spotifyFetch, readSpotifyEnv } = require('./_spotify-lib');
 
-async function refreshAccessToken(clientId, clientSecret, refreshToken) {
-    const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
-    const body = new URLSearchParams({
-        grant_type: 'refresh_token',
-        refresh_token: refreshToken
-    });
-    const res = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-            Authorization: `Basic ${auth}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: body.toString()
-    });
-    if (res.status === 400) {
-        const text = await res.text();
-        // invalid_grant = revoked refresh token; surface clearly without crashing CI
-        const err = new Error(`Spotify token refresh failed (${res.status}): ${text}`);
-        err.revoked = true;
-        throw err;
-    }
-    if (!res.ok) {
-        throw new Error(`Spotify token refresh failed: ${res.status} ${await res.text()}`);
-    }
-    const json = await res.json();
-    return json.access_token;
-}
-
-async function fetchCurrentlyPlaying(accessToken) {
-    const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing?additional_types=episode', {
-        headers: { Authorization: `Bearer ${accessToken}` }
-    });
-    if (res.status === 204) return null; // nothing playing
-    if (res.status === 429) {
-        console.warn('Spotify rate-limited; skipping this poll');
-        return null;
-    }
-    if (!res.ok) {
-        throw new Error(`currently-playing failed: ${res.status} ${await res.text()}`);
-    }
-    return res.json();
-}
+const fetchCurrentlyPlaying = (token) =>
+  spotifyFetch('https://api.spotify.com/v1/me/player/currently-playing?additional_types=episode', token);
 
 function readEpisodes() {
     if (!fs.existsSync(EPISODES_PATH)) {
@@ -136,14 +83,7 @@ function mapEpisode(item) {
 }
 
 async function main() {
-    loadEnvLocal();
-    const clientId = process.env.SPOTIFY_CLIENT_ID;
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-    const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
-    if (!clientId || !clientSecret || !refreshToken) {
-        console.error('Missing Spotify credentials. Set SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN.');
-        process.exit(1);
-    }
+    const { clientId, clientSecret, refreshToken } = readSpotifyEnv();
 
     let accessToken;
     try {

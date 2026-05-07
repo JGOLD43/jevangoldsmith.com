@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
+import remoteAssets from '../../../../data/remote-assets.generated.json';
 import Base from '../../layouts/Base.astro';
 import { personSchema } from '../../lib/seo';
-import remoteAssets from '../../../../data/remote-assets.generated.json';
 
 export async function getStaticPaths() {
   const profiles = await getCollection('peopleProfiles');

@@ -1,8 +1,6 @@
-'use strict';
-
 type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string };
 type State = { grid: HTMLElement; activeItem: HTMLElement | null; itemSelector: string; triggerSelector: string; opts: Opts };
-export type GridZoomConfig = { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; eventName?: string };
+type GridZoomConfig = { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; eventName?: string };
 
 const instances: State[] = [];
 
@@ -42,7 +40,7 @@ function apply(grid: HTMLElement, item: HTMLElement, opts: Opts) {
   document.body.classList.add('zoom-open');
 }
 
-export function release(grid: HTMLElement) {
+function release(grid: HTMLElement) {
   grid.style.setProperty('--tx', '0px');
   grid.style.setProperty('--ty', '0px');
   grid.style.setProperty('--scale', '1');

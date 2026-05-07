@@ -2,23 +2,15 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
+const { ROOT, distDir } = require('./_lib/paths');
+const { walk: walkAll } = require('./_lib/walk');
 
-const ROOT = path.resolve(__dirname, '..');
-const DIST = process.argv.find((arg) => arg.startsWith('--dist='))?.slice(7) || path.join(ROOT, 'dist');
+const DIST = distDir();
 const FIREBASE = path.join(ROOT, 'firebase.json');
+const walk = (dir) => walkAll(dir).filter((p) => p.endsWith('.html'));
 
 function hashContent(value) {
   return `'sha256-${crypto.createHash('sha256').update(value.trim()).digest('base64')}'`;
-}
-
-function walk(dir) {
-  const out = [];
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...walk(full));
-    else if (entry.isFile() && entry.name.endsWith('.html')) out.push(full);
-  }
-  return out;
 }
 
 const scriptHashes = new Set();
