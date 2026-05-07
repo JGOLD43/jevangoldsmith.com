@@ -1,0 +1,10 @@
+   33699 dist/projects.html
+   33866 dist/challenges.html
+   34938 dist/living-manifesto.html
+   35053 dist/podcasts.html
+   35535 dist/essays.html
+   43251 dist/index.html
+   44823 dist/movies.html
+  250008 dist/people.html
+  253125 dist/books.html
+ 2403985 total
