@@ -52,7 +52,6 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
   const isbn = String(book.isbn ?? '');
   const review = String(book.review ?? '').trim();
   const shortDescription = String(book.shortDescription ?? '');
-  const category = String(book.category ?? '');
   const ratingValue = Number(book.rating ?? 0);
   const reReads = Number(book.reReads ?? 0);
   const isUnread = book.read === false;
@@ -63,7 +62,10 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
     ? '★'.repeat(ratingValue) + '☆'.repeat(5 - ratingValue)
     : '';
 
-  const detailBody = review || shortDescription || `${title} by ${author}`;
+  // detailBody is empty when no real review/shortDescription exists. The
+  // dead `${title} by ${author}` fallback was a duplicate of zoom-detail-
+  // title + zoom-detail-kicker — pure bytes for nothing.
+  const detailBody = review || shortDescription;
   const detailLabel = review ? 'Review' : 'Notes';
 
   const coverUrl = bookCoverUrl(book);
@@ -94,12 +96,17 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
     ? `<p class="book-description">${escapeHtml(shortDescription)}</p>`
     : '';
 
-  // data-id, data-rating, data-rereads removed: never read by JS.
-  // data-title duplicated on .book-cover-wrapper removed: readers can use
-  // .closest('.book-card').dataset.title.
-  // cursor:pointer moved to CSS rule on .book-card[role="button"].
+  // data-isbn is the canonical key. data-title is a fallback ID for the 7
+  // books missing an ISBN (read at books.ts:158). data-category was emitted
+  // for parity with movie/people cards but books.ts never reads it (filter
+  // works against the in-memory book objects, not the DOM dataset) — drop
+  // it. detailLine is omitted entirely when no real review/notes exist.
+  const detailLine = detailBody
+    ? `<p class="zoom-detail-line"><span>${detailLabel} —</span> ${escapeHtml(detailBody)}</p>`
+    : '';
+  const titleAttr = isbn ? '' : ` data-title="${escapeAttr(title)}"`;
   return [
-    `<div class="${cardClass}" data-isbn="${escapeAttr(isbn)}" data-title="${escapeAttr(title)}" data-category="${escapeAttr(category)}" role="button" tabindex="0">`,
+    `<div class="${cardClass}" data-isbn="${escapeAttr(isbn)}"${titleAttr} role="button" tabindex="0">`,
     topBadge,
     `<div class="book-cover-wrapper">`,
     coverImg,
@@ -107,7 +114,7 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
     `<p class="zoom-detail-kicker">${escapeHtml(author)}${yearStr ? ` · ${escapeHtml(yearStr)}` : ''}</p>`,
     `<p class="zoom-detail-title">${escapeHtml(title)}</p>`,
     zoomLead,
-    `<p class="zoom-detail-line"><span>${detailLabel} —</span> ${escapeHtml(detailBody)}</p>`,
+    detailLine,
     `</div></div>`,
     `<div class="book-info">`,
     `<div class="book-title-row"><h3 class="book-title">${escapeHtml(title)}</h3>${yearSpan}</div>`,

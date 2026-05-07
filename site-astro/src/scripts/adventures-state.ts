@@ -76,10 +76,14 @@ export const BASEMAPS: Record<string, AnyValue> = {
   light: { label: 'Light', tile: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', maxZoom: 19, subdomains: 'abcd' }
 };
 
+// First-visit default: every map data layer OFF. The map opens to a
+// clean world-map background and the user enables only what they want
+// to see from the controls panel. Saved preferences (localStorage
+// adventures-map-filters-v1) override these on subsequent visits.
 export const DEFAULT_FILTERS = {
   year: 'all',
   region: 'all',
-  layers: { adventures: true, routes: true, photos: true, pois: true, countries: false },
+  layers: { adventures: false, routes: false, photos: false, pois: false, countries: false },
   poiCategories: {},
   basemap: 'satellite',
   routeSet: 'all'

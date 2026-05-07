@@ -20,11 +20,12 @@ const canonical = 'https://jevangoldsmith.com/books.html';
 // server-render every book card at build time. books.js detects
 // an already-populated container and skips the initial wipe-and-render.
 const books = await getCollection('books') as CollectionEntry<'books'>[];
-// First 16 cards sit above the fold across desktop + tablet — flag them
-// eager + fetchpriority="high" so their covers paint without waiting for
-// the lazy-loading IntersectionObserver. Cards 16+ stay lazy.
+// Mobile (360px) fits ~4 book covers above the fold; desktop ~6. Beyond
+// that, the eager fetchpriority="high" hint stops being useful and
+// starts competing with chrome.css for connection bandwidth on first
+// paint. Was 16; dropped to 6.
 const bookCardsHtml = books
-  .map((b, i) => renderBookCardHtml(b.data, i < 16))
+  .map((b, i) => renderBookCardHtml(b.data, i < 6))
   .join('');
 
 // Resolve a remote OpenLibrary cover URL to a local pre-generated jpg.

@@ -32,10 +32,11 @@ function sourceTypeFor(person: Person): string {
   return person.sourceType || (person.title?.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
 }
 
-// index-aware loading. The first 16 cards (above the fold across the
-// desktop+tablet grid) get loading="eager" + fetchpriority="high" so the
-// LCP candidate paints without waiting for the lazy-loading observer.
-const EAGER_ABOVE_FOLD = 16;
+// index-aware loading. Mobile (360px) fits ~4–6 person cards above the
+// fold; desktop fits 6–8. Cards beyond that paint via the lazy-loading
+// IntersectionObserver and don't compete for connection bandwidth on
+// first paint. Was 16; dropped to 6 to stop crowding the LCP candidate.
+const EAGER_ABOVE_FOLD = 6;
 
 export function renderPersonCardHtml(person: Person, index = Number.MAX_SAFE_INTEGER): string {
   const name = person.name ?? '';

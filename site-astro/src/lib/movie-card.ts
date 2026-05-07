@@ -73,7 +73,9 @@ export function renderMovieCardHtml(movie: Movie): string {
 
   const cursorStyle = hasReview ? ' style="cursor: pointer;"' : '';
 
-  return `<div class="${classes.join(' ')}" data-movie-title="${escapeHtml(title)}" data-title="${escapeHtml(title)}" data-id="${escapeHtml(title)}"${cursorStyle}>
+  // Only data-movie-title is read by letterboxd.ts. data-title and data-id
+  // were emitted as duplicates; nothing reads them.
+  return `<div class="${classes.join(' ')}" data-movie-title="${escapeHtml(title)}"${cursorStyle}>
         ${timesWatchedBadge}
         <div class="movie-poster-wrapper">
             ${poster ? `<img src="${escapeHtml(poster)}" alt="${escapeHtml(title)}" class="movie-poster" width="150" height="230" loading="lazy" decoding="async">` : `<div class="movie-poster-placeholder">${escapeHtml(title)}</div>`}

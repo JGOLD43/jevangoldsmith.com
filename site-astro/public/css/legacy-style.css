@@ -6,5 +6,7 @@
    (currentColor fill, no stroke). Sized via .ico-NN modifiers. */
 .ico-stroke{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ico-fill{fill:currentColor;stroke:none}
+.ico-12{width:12px;height:12px}
+.ico-14{width:14px;height:14px}
 .ico-18{width:18px;height:18px}
 .ico-24{width:24px;height:24px}
