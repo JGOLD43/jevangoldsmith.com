@@ -7,7 +7,7 @@
 // initial Total Bytes don't pay for them. Switching the routeSet filter
 // forces the fetch immediately.
 import {
-  state, fetchJson,
+  state, fetchJsonOr,
   PLACES_DATA_URL, ROUTES_DATA_URL, POPULAR_ROUTES_URL,
   POPULAR_ROUTES_INDEX_URL, PHOTOS_DATA_URL,
   COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL,
@@ -22,7 +22,7 @@ let routeRerender: () => void = () => {};
 export function setRouteRerender(fn: () => void) { routeRerender = fn; }
 
 export async function loadPlacesOfInterest() {
-  const data: any = await fetchJson(PLACES_DATA_URL);
+  const data: any = await fetchJsonOr(PLACES_DATA_URL);
   if (!data) return;
   state.allPlaces = Array.isArray(data.places) ? data.places : [];
   state.placeCategories = Array.isArray(data.categories) ? data.categories : [];
@@ -38,8 +38,8 @@ export async function loadCountriesData() {
   if (state.countriesPromise) return state.countriesPromise;
   state.countriesPromise = (async () => {
     const [geo, visited]: any = await Promise.all([
-      fetchJson(COUNTRIES_GEO_URL),
-      fetchJson(COUNTRIES_VISITED_URL)
+      fetchJsonOr(COUNTRIES_GEO_URL),
+      fetchJsonOr(COUNTRIES_VISITED_URL)
     ]);
     if (geo) state.countryGeo = geo;
     if (visited) state.visitedIso = new Set(Array.isArray(visited.iso) ? visited.iso : []);
@@ -48,18 +48,18 @@ export async function loadCountriesData() {
 }
 
 export async function loadRoutes() {
-  const primary: any = await fetchJson(ROUTES_DATA_URL, { routes: [] });
+  const primary: any = await fetchJsonOr(ROUTES_DATA_URL, { routes: [] });
   state.allRoutes = Array.isArray(primary?.routes) ? primary.routes : [];
 }
 
 export async function loadPopularRoutes() {
   if (state.popularRoutesPromise) return state.popularRoutesPromise;
   state.popularRoutesPromise = (async () => {
-    const index: any = await fetchJson(POPULAR_ROUTES_INDEX_URL);
+    const index: any = await fetchJsonOr(POPULAR_ROUTES_INDEX_URL);
     const chunks = Array.isArray(index?.chunks) ? index.chunks : [];
     let payload: any;
     if (chunks.length === 0) {
-      payload = await fetchJson(POPULAR_ROUTES_URL, { routes: [] });
+      payload = await fetchJsonOr(POPULAR_ROUTES_URL, { routes: [] });
     } else {
       // Tiny chunks (paddle/sail/ski/hike) ship inline inside the index;
       // heavy chunks (drive/bike) live as separate cacheable JSON files.
@@ -68,7 +68,7 @@ export async function loadPopularRoutes() {
         .flatMap((chunk: any) => Array.isArray(chunk.payload.routes) ? chunk.payload.routes : []);
       const externalChunks = chunks.filter((chunk: any) => chunk?.href);
       const externalPayloads: any[] = await Promise.all(
-        externalChunks.map((chunk: any) => fetchJson(chunk.href, { routes: [] }))
+        externalChunks.map((chunk: any) => fetchJsonOr(chunk.href, { routes: [] }))
       );
       payload = {
         routes: [
@@ -117,7 +117,7 @@ export function schedulePopularRoutes(force = false) {
 }
 
 export async function loadPhotos() {
-  const data: any = await fetchJson(PHOTOS_DATA_URL, { photos: [] });
+  const data: any = await fetchJsonOr(PHOTOS_DATA_URL, { photos: [] });
   state.allPhotos = Array.isArray(data?.photos) ? data.photos : [];
 }
 

@@ -88,9 +88,13 @@ export const DEFAULT_FILTERS = {
 
 state.mapFilters = { ...DEFAULT_FILTERS, layers: { ...DEFAULT_FILTERS.layers }, poiCategories: {} };
 
-// Shared helpers — used by both adventures.ts and adventures-map.ts.
-// Kept here (not in either file) to avoid a cyclic import.
-export async function fetchJson(url: string, fallback: unknown = null): Promise<unknown> {
+// Adventures-flavored fetchJson: returns a fallback on network/parse
+// failure instead of throwing. Different from data-fetch.fetchJson
+// (which throws). Kept distinct on purpose because the map page
+// degrades gracefully when one dataset 404s instead of bailing the
+// whole render. Renamed to fetchJsonOr to make the difference visible
+// at the call site.
+export async function fetchJsonOr<T = unknown>(url: string, fallback: T | null = null): Promise<T | null> {
   try {
     const response = await fetch(url);
     if (!response.ok) return fallback;
@@ -99,6 +103,7 @@ export async function fetchJson(url: string, fallback: unknown = null): Promise<
     return fallback;
   }
 }
+
 
 export function loadFilters(): void {
   try {

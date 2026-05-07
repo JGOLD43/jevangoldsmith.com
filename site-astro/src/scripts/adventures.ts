@@ -1,6 +1,6 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import {
-    state, fetchJson, updateLightboxImage,
+    state, fetchJsonOr, updateLightboxImage,
     ADVENTURES_DATA_URL, FILTERS_STORAGE_KEY, DEFAULT_FILTERS
 } from './adventures-state';
 import { registerActions } from './action-dispatcher';
@@ -474,7 +474,7 @@ function nearestWrappedLongitude(lng: number, referenceLng: number) {
 }
 
 async function loadAdventures() {
-    const data = await fetchJson(ADVENTURES_DATA_URL) as AnyObj;
+    const data = await fetchJsonOr(ADVENTURES_DATA_URL) as AnyObj;
     if (!data || !Array.isArray(data.adventures)) {
         console.error('Error loading adventures');
         showErrorMessage();

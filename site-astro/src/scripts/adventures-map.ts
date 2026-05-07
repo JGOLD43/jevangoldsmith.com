@@ -4,7 +4,7 @@ import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 // ============================================
 
 import {
-    state, fetchJson, updateLightboxImage,
+    state, fetchJsonOr, updateLightboxImage,
     saveFilters, loadFilters, matchesAdventureFilters,
     matchesRegionFilter, adventureYear,
     ROUTE_TYPE_COLORS, BASEMAPS, FAST_BASEMAP_LAND,
@@ -650,7 +650,7 @@ registerActionsForMap({ togglePlacesOfInterest });
 
 // adventures.ts is the canonical source for these — re-imported here only
 // to keep the cross-module ambient typing happy.
-void fetchJson; void loadFilters;
+void fetchJsonOr; void loadFilters;
 
 setRouteRerender(() => renderRouteLayer());
 
