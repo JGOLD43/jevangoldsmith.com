@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 // Astro is the canonical build. Output goes to ../dist/ which Firebase
@@ -40,7 +39,6 @@ export default defineConfig({
     }
   },
   integrations: [
-    mdx(),
     sitemap({
       // Match legacy URL form so external backlinks + Search Console don't
       // see a URL change.

@@ -18,7 +18,7 @@ export async function fetchJsonOr<T = unknown>(url: string, fallback: T | null =
         const response = await fetch(url);
         if (!response.ok) return fallback;
         return await response.json();
-    } catch (_error) {
+    } catch {
         return fallback;
     }
 }

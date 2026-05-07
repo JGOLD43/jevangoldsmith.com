@@ -1,8 +1,9 @@
 import { formatDate, formatDateShort } from '../lib/dates';
+import { debounce } from '../lib/debounce';
 import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { registerActions } from './action-dispatcher';
 import { createCollectionRuntime } from './collection-runtime';
-import { debounce, toggleClearButton } from './collection-ui';
+import { toggleClearButton } from './collection-ui';
 import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 

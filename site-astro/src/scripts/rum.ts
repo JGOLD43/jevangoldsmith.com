@@ -2,10 +2,23 @@
 // TTFB) to a beacon endpoint. Loaded at idle (theme.ts) only when the
 // RUM_ENDPOINT build flag is set; without it the dynamic import is tree-
 // shaken and this module never ships.
+//
+// Hand-rolled PerformanceObserver wrappers (replaces the `web-vitals`
+// dep). Same {name, value, id, navigationType, rating} shape so the
+// beacon endpoint contract is unchanged.
 
-import { type Metric, onCLS, onFCP, onINP, onLCP, onTTFB } from 'web-vitals';
+type MetricName = 'CLS' | 'FCP' | 'INP' | 'LCP' | 'TTFB';
+type Rating = 'good' | 'needs-improvement' | 'poor';
 
-interface RumPayload extends Pick<Metric, 'name' | 'value' | 'rating' | 'id' | 'navigationType'> {
+interface Metric {
+    name: MetricName;
+    value: number;
+    rating: Rating;
+    id: string;
+    navigationType: string;
+}
+
+interface RumPayload extends Metric {
     page: string;
     referrer: string;
     connection?: string;
@@ -14,8 +27,28 @@ interface RumPayload extends Pick<Metric, 'name' | 'value' | 'rating' | 'id' | '
 const ENDPOINT: string | null = import.meta.env.RUM_ENDPOINT || null;
 const SAMPLE_RATE = 1.0;
 
-function shouldSample() {
-    return Math.random() < SAMPLE_RATE;
+const THRESHOLDS: Record<MetricName, [number, number]> = {
+    LCP: [2500, 4000],
+    FCP: [1800, 3000],
+    CLS: [0.1, 0.25],
+    INP: [200, 500],
+    TTFB: [800, 1800]
+};
+
+function rate(name: MetricName, value: number): Rating {
+    const [good, poor] = THRESHOLDS[name];
+    if (value <= good) return 'good';
+    if (value <= poor) return 'needs-improvement';
+    return 'poor';
+}
+
+function uid() {
+    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function navType(): string {
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    return nav?.type || 'navigate';
 }
 
 let queued = false;
@@ -40,23 +73,18 @@ function flush() {
 function schedule() {
     if (queued) return;
     queued = true;
-    // Flush on visibility change (the moment Web Vitals is most likely
-    // to fire its final values) and as a fallback on pagehide.
     addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden') flush();
     });
     addEventListener('pagehide', flush);
 }
 
-function record(metric: Metric) {
-    if (!shouldSample()) return;
+function record(name: MetricName, value: number) {
+    if (!Number.isFinite(value)) return;
+    if (Math.random() >= SAMPLE_RATE) return;
     const conn = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection;
     queue.push({
-        name: metric.name,
-        value: metric.value,
-        rating: metric.rating,
-        id: metric.id,
-        navigationType: metric.navigationType,
+        name, value, rating: rate(name, value), id: uid(), navigationType: navType(),
         page: location.pathname,
         referrer: document.referrer,
         connection: conn?.effectiveType
@@ -64,10 +92,76 @@ function record(metric: Metric) {
     schedule();
 }
 
+function observe(type: string, fn: (entries: PerformanceEntry[]) => void, opts: PerformanceObserverInit = {}) {
+    try {
+        const po = new PerformanceObserver((list) => fn(list.getEntries()));
+        po.observe({ type, buffered: true, ...opts });
+        return po;
+    } catch { return null; }
+}
+
+function reportTTFB() {
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    if (nav) record('TTFB', Math.max(0, nav.responseStart - nav.startTime));
+}
+
+function reportFCP() {
+    observe('paint', (entries) => {
+        const fcp = entries.find((e) => e.name === 'first-contentful-paint');
+        if (fcp) record('FCP', fcp.startTime);
+    });
+}
+
+function reportLCP() {
+    let last = 0;
+    const po = observe('largest-contentful-paint', (entries) => {
+        const e = entries[entries.length - 1];
+        if (e) last = e.startTime;
+    });
+    const finalize = () => { if (last > 0) { record('LCP', last); last = 0; } po?.disconnect(); };
+    addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') finalize(); }, { once: true });
+    addEventListener('pagehide', finalize, { once: true });
+}
+
+function reportCLS() {
+    let cls = 0;
+    let sessionValue = 0;
+    let sessionEntries: PerformanceEntry[] = [];
+    const po = observe('layout-shift', (entries) => {
+        for (const e of entries as (PerformanceEntry & { value: number; hadRecentInput: boolean })[]) {
+            if (e.hadRecentInput) continue;
+            const first = sessionEntries[0];
+            const last = sessionEntries[sessionEntries.length - 1];
+            if (sessionEntries.length && (e.startTime - last.startTime > 1000 || e.startTime - first.startTime > 5000)) {
+                if (sessionValue > cls) cls = sessionValue;
+                sessionValue = 0; sessionEntries = [];
+            }
+            sessionValue += e.value;
+            sessionEntries.push(e);
+        }
+        if (sessionValue > cls) cls = sessionValue;
+    });
+    const finalize = () => { record('CLS', cls); po?.disconnect(); };
+    addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') finalize(); }, { once: true });
+    addEventListener('pagehide', finalize, { once: true });
+}
+
+function reportINP() {
+    let worst = 0;
+    const po = observe('event', (entries) => {
+        for (const e of entries as (PerformanceEntry & { duration: number; interactionId?: number })[]) {
+            if (e.interactionId && e.duration > worst) worst = e.duration;
+        }
+    }, { durationThreshold: 40 } as PerformanceObserverInit);
+    const finalize = () => { if (worst > 0) record('INP', worst); po?.disconnect(); };
+    addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') finalize(); }, { once: true });
+    addEventListener('pagehide', finalize, { once: true });
+}
+
 export function startRum() {
-    onCLS(record);
-    onFCP(record);
-    onINP(record);
-    onLCP(record);
-    onTTFB(record);
+    reportTTFB();
+    reportFCP();
+    reportLCP();
+    reportCLS();
+    reportINP();
 }

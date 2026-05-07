@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-const { spawn, spawnSync } = require('node:child_process');
+const { spawnSync } = require('node:child_process');
 const http = require('node:http');
 const net = require('node:net');
+const { serve } = require('./_lib/static-server.js');
 
 let serverPort = process.env.VERIFY_PORT || '';
 
@@ -53,16 +54,12 @@ function waitForServer(baseUrl, timeoutMs = 10_000) {
 async function withDistServer(fn) {
   if (!serverPort) serverPort = await getFreePort();
   const baseUrl = `http://127.0.0.1:${serverPort}`;
-  const server = spawn('npx', ['http-server', 'dist', '-p', serverPort, '-s', '--cors', '-c-1'], {
-    cwd: process.cwd(),
-    stdio: 'inherit',
-    shell: process.platform === 'win32'
-  });
+  const server = await serve('dist', Number(serverPort));
   try {
     await waitForServer(baseUrl);
     await fn(baseUrl);
   } finally {
-    server.kill();
+    server.close();
   }
 }
 

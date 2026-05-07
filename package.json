@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "npm run --prefix site-astro dev",
     "serve": "npx firebase-tools emulators:start --only hosting",
-    "predev": "npm run people:merge",
     "prepare": "git config core.hooksPath .githooks || true",
     "build": "node scripts/build.js",
     "build:fast": "node scripts/build.js --fast",
@@ -42,14 +41,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.12",
+    "dotenv": "^17.4.2",
     "html-minifier-terser": "^7.2.0",
-    "http-server": "^14.1.1",
     "lightningcss": "^1.32.0",
-    "sharp": "^0.34.5",
-    "web-vitals": "^5.2.0"
-  },
-  "dependencies": {
-    "dotenv": "^17.4.2"
+    "sharp": "^0.34.5"
   },
   "optionalDependencies": {
     "googleapis": "^171.4.0"

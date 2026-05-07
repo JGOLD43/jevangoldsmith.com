@@ -1,12 +1,12 @@
 import { bookCoverUrl } from '../lib/book-card';
 import { CATEGORY_MAP, CATEGORY_NAME_BY_KEY } from '../lib/book-categories';
+import { debounce } from '../lib/debounce';
 import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import './action-dispatcher';
 import { applyCardVisibility, bindStarRatingDrag, installEscapeCloser, installImageErrorHandler } from './collection-helpers';
 import { createCollectionRuntime } from './collection-runtime';
 import {
     closeDropdownOnOutsideClick,
-    debounce,
     highlightAndScroll,
     toggleClearButton
 } from './collection-ui';

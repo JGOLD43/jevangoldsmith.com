@@ -1,12 +1,6 @@
-// Shared collection-page UI helpers. Previously exposed via
-// window.JGCollectionUI; now standard ES module exports so consumers
-// import only what they use and Vite tree-shakes unused helpers per
-// page bundle.
+// Shared collection-page UI helpers.
 
-import { debounce } from '../lib/debounce';
 import { tryReadString, tryWrite } from '../lib/storage';
-
-export { debounce };
 
 export function toggleClearButton(buttonOrId: string | HTMLElement | null, show: boolean, displayValue = 'flex') {
     const button = typeof buttonOrId === 'string'
@@ -16,14 +10,12 @@ export function toggleClearButton(buttonOrId: string | HTMLElement | null, show:
     button.style.display = show ? displayValue : 'none';
 }
 
-function clearClasses(elements: Element[], classes: string[]) {
-    elements.forEach((element) => {
-        classes.forEach((className) => element.classList.remove(className));
-    });
-}
+const clearAll = (els: Iterable<Element>, classes: string[]) => {
+    for (const el of els) for (const c of classes) el.classList.remove(c);
+};
 
 export function activateOnly(elements: Element[], activeElement: Element | null, classes: string[] = ['active']) {
-    clearClasses(elements, classes);
+    clearAll(elements, classes);
     if (!activeElement) return;
     classes.forEach((className) => activeElement.classList.add(className));
 }
@@ -34,10 +26,8 @@ export function collapseGroups({ buttonSelector, panelSelector, activeButton = n
     activeButton?: Element | null;
     activePanel?: Element | null;
 }) {
-    const buttons = Array.from(document.querySelectorAll(buttonSelector));
-    const panels = Array.from(document.querySelectorAll(panelSelector));
-    clearClasses(buttons, ['active', 'expanded']);
-    clearClasses(panels, ['expanded']);
+    clearAll(document.querySelectorAll(buttonSelector), ['active', 'expanded']);
+    clearAll(document.querySelectorAll(panelSelector), ['expanded']);
     if (activeButton) activeButton.classList.add('active');
     if (activePanel) {
         activeButton?.classList.add('expanded');
@@ -61,9 +51,7 @@ export function highlightAndScroll(target: HTMLElement | null, { activeSelector 
         target.style.boxShadow = '';
     }, duration);
 
-    if (activeSelector) {
-        clearClasses(Array.from(document.querySelectorAll(activeSelector)), ['active']);
-    }
+    if (activeSelector) clearAll(document.querySelectorAll(activeSelector), ['active']);
     activeElement?.classList.add('active');
 }
 

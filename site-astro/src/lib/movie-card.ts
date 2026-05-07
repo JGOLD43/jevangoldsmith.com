@@ -2,6 +2,7 @@
 // SSR'd cards and filters by toggling visibility.
 
 import type { Movie as MovieRecord } from '../content.config';
+import { formatRuntime } from './dates';
 import { escapeAttr, escapeHtml } from './html-escape';
 
 // Card renderer accepts a partial shape — all fields optional so legacy records
@@ -14,15 +15,6 @@ const GENRE_ICONS: Record<string, string> = {
   Horror: '👻', Mystery: '🔍', Romance: '💕', 'Sci-Fi': '🚀',
   Thriller: '😱', Western: '🤠', Uncategorized: '🎬'
 };
-
-function formatRuntime(minutes: number): string {
-  if (!minutes || minutes <= 0) return '';
-  const h = Math.floor(minutes / 60);
-  const r = minutes % 60;
-  if (h === 0) return `${r} min`;
-  if (r === 0) return `${h}h`;
-  return `${h}h ${r}m`;
-}
 
 export function renderMovieCardHtml(movie: Movie): string {
   const title = movie.title ?? '';
