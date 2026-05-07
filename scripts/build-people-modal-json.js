@@ -48,11 +48,21 @@ const slim = merged.map((person) => ({
   profileHref: person.profileHref || ''
 }));
 
+const json = JSON.stringify(slim);
+
+// Write to both dist/ (production hosting copy) and site-astro/public/
+// (so the Astro dev server at /api/v1/people-modal.json serves it
+// without a full build). people.ts lazy-fetches this on idle; if the
+// file is 404 the modal opens with empty fields, so dev mode needs it
+// just like prod.
 const outDir = path.join(DIST, 'api/v1');
 fs.mkdirSync(outDir, { recursive: true });
 const outFile = path.join(outDir, 'people-modal.json');
-const json = JSON.stringify(slim);
 fs.writeFileSync(outFile, json);
+
+const publicDir = path.join(ROOT, 'site-astro/public/api/v1');
+fs.mkdirSync(publicDir, { recursive: true });
+fs.writeFileSync(path.join(publicDir, 'people-modal.json'), json);
 
 const sourceBytes = fs.statSync(SOURCE).size;
 console.log(`[people-modal] ${(sourceBytes / 1024).toFixed(1)}KB merged → ${(json.length / 1024).toFixed(1)}KB slim → ${path.relative(ROOT, outFile)}`);

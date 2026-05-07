@@ -16,7 +16,12 @@ const COMMON_TAIL = [
   // repeat-visit bytes. The script is left in-tree as documentation
   // and can be rewired if measurements ever show a different tradeoff.
   ['purge:css', 'node', ['scripts/purge-css-per-page.js', '--dist=dist']],
-  ['critical:css', 'node', ['scripts/extract-critical-css.js', '--dist=dist']],
+  // critical:css extraction was tried but the inlined critical subset
+  // missed dropdown/modal display:none rules — the nav rendered fully
+  // expanded until async chrome.css arrived. Reverting to render-
+  // blocking chrome.css; it's only 38KB and the FCP cost is acceptable.
+  // Script kept in-tree (scripts/extract-critical-css.js) for future
+  // revisit with a more conservative critical bucket.
   ['css:validate', 'node', ['scripts/validate-css-parse.js', '--dist=dist']],
   ['sw:finalize', 'node', ['scripts/finalize-sw.js', '--dist=dist']],
   ['modulepreload', 'node', ['scripts/inject-modulepreload.js', '--dist=dist']],

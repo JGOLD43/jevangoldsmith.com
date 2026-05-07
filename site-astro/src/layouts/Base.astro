@@ -8,7 +8,6 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import JsonLd from '../components/JsonLd.astro';
 import SeoRelated from '../components/SeoRelated.astro';
-import { ClientRouter } from 'astro:transitions';
 import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type ExtraSchema, type PageType } from '../lib/seo';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
 // FCP path:
@@ -140,18 +139,19 @@ if (seoSlug === 'index' || seoSlug === 'search') {
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
     <slot name="head" />
-    {/* Astro View Transitions — same-layout navigation morphs in
-        place with persistent <nav> + <footer> instead of full reload.
-        Stacks with Speculation Rules prerender (nav-prefetch.ts): the
-        prerendered DOM swaps in via a CSS animation, perceived nav
-        latency ~one frame. */}
-    <ClientRouter fallback="swap" />
+    {/* View Transitions (ClientRouter) was tried but Astro's swap-
+        merge replaces page-bound <script> modules without re-firing
+        their init logic. Per-page click handlers (people modal, books
+        modal, etc) detach after the first transition. Speculation
+        Rules in nav-prefetch.ts already prerender same-origin links on
+        hover, which gives near-instant navigation without intercepting
+        the page lifecycle, so we rely on that instead. */}
   </head>
   <body class={bodyClass}>
-    {!noChrome && <div transition:persist="site-nav"><Nav /></div>}
+    {!noChrome && <Nav />}
     <slot />
     {!noChrome && <SeoRelated slug={seoSlug} />}
-    {!noChrome && <div transition:persist="site-footer"><Footer /></div>}
+    {!noChrome && <Footer />}
     <slot name="scripts" />
     <script>
       import '../scripts/theme.ts';

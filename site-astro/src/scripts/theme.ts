@@ -211,17 +211,16 @@
         runWhenIdle(initDeferredChrome);
     }
 
-    // Initialize on DOM ready, and again on every Astro view transition
-    // swap (the persistent nav block avoids re-running everything, but
-    // dropdown listeners + theme button binding need rebinding when the
-    // swap pulls in a fresh page-shell — Astro re-fires this on every
-    // transitioned navigation).
+    // Initialize once on DOM ready. View Transitions integration was
+    // tried but broke per-page click handlers (Astro's swap-merge
+    // doesn't re-fire init for page-bound script modules), so the site
+    // uses Speculation Rules prerender for fast nav and full page-load
+    // semantics for the script lifecycle.
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', bootChrome);
     } else {
         bootChrome();
     }
-    document.addEventListener('astro:page-load', bootChrome);
 
     // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
