@@ -43,6 +43,9 @@ const targets = [
     // Build-time only — books.ts and people lazy-fetch their slim runtime
     // counterparts under /data/ and /api/v1/ respectively.
     'data/people.merged.generated.json',
+    // Build-time merge config for people; only consumed by merge-people.js
+    // which runs at build time. No runtime caller.
+    'data/people-merge-config.json',
     // Astro SSR-time imports only. Runtime never fetches these — the
     // canonical externally-advertised copies live under /api/v1/, and
     // every consumer is either a build-time `import` or one of the
