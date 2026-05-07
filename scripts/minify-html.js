@@ -36,22 +36,31 @@ const opts = {
   ]
 };
 
+async function minifyOne(file) {
+  const before = fs.readFileSync(file, 'utf8');
+  let after;
+  try { after = await minify(before, opts); }
+  catch (err) {
+    const path = require('node:path');
+    console.error(`[html-min] failed on ${path.relative(DIST, file)}: ${err.message}`);
+    after = before;
+  }
+  if (after !== before) fs.writeFileSync(file, after);
+  return { before: before.length, after: after.length };
+}
+
 (async () => {
   const files = walk(DIST);
+  // Process in parallel; html-minifier-terser is CPU-bound but each call
+  // is independent. Concurrency 8 saturates a typical dev box without
+  // thrashing.
+  const CONCURRENCY = 8;
   let beforeTotal = 0;
   let afterTotal = 0;
-  for (const file of files) {
-    const before = fs.readFileSync(file, 'utf8');
-    beforeTotal += before.length;
-    let after;
-    try {
-      after = await minify(before, opts);
-    } catch (err) {
-      console.error(`[html-min] failed on ${path.relative(DIST, file)}: ${err.message}`);
-      after = before;
-    }
-    afterTotal += after.length;
-    if (after !== before) fs.writeFileSync(file, after);
+  for (let i = 0; i < files.length; i += CONCURRENCY) {
+    const slice = files.slice(i, i + CONCURRENCY);
+    const results = await Promise.all(slice.map(minifyOne));
+    for (const r of results) { beforeTotal += r.before; afterTotal += r.after; }
   }
   const saved = beforeTotal - afterTotal;
   const pct = beforeTotal ? (100 * saved / beforeTotal).toFixed(1) : '0.0';
