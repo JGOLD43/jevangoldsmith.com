@@ -145,43 +145,9 @@ type SchemaListItem = {
   name: string;
 };
 
-type ArticleSchema = {
-  '@type': 'Article';
-  '@id'?: string;
-  headline?: string;
-  name?: string;
-  description?: string;
-  image?: string;
-};
-
-type BookSchema = {
-  '@type': 'Book';
-  '@id'?: string;
-  name: string;
-  author?: string | { '@type': 'Person'; name: string };
-  image?: string;
-  description?: string;
-  isbn?: string;
-};
-
-type MovieSchema = {
-  '@type': 'Movie';
-  '@id'?: string;
-  name: string;
-  image?: string;
-  description?: string;
-  datePublished?: string | number;
-};
-
-type PersonSchema = {
-  '@type': 'Person';
-  '@id'?: string;
-  name: string;
-  jobTitle?: string | null;
-  description?: string | null;
-  image?: string;
-};
-
+// Per-page schema.org @graph nodes injected via Base.astro's extraSchema
+// prop. Used by adventure-[slug] (TouristTrip) and people/[slug] (Person).
+// Add new shapes to this union as new page types need them.
 type TouristTripSchema = {
   '@type': 'TouristTrip';
   '@id'?: string;
@@ -194,13 +160,16 @@ type TouristTripSchema = {
   provider?: { '@id': string };
 };
 
-type ItemListSchema = {
-  '@type': 'ItemList';
+type PersonSchema = {
+  '@type': 'Person';
   '@id'?: string;
-  itemListElement: SchemaListItem[];
+  name: string;
+  jobTitle?: string | null;
+  description?: string | null;
+  image?: string;
 };
 
-export type ExtraSchema = ArticleSchema | BookSchema | MovieSchema | PersonSchema | TouristTripSchema | ItemListSchema;
+export type ExtraSchema = TouristTripSchema | PersonSchema;
 
 /**
  * Mirrors scripts/legacy-build/build/page-metadata.js: reads data/pages.json

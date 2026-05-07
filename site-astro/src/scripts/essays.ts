@@ -1,98 +1,48 @@
+import { formatDate, formatDateShort } from '../lib/dates';
 import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { registerActions } from './action-dispatcher';
 import { createCollectionRuntime } from './collection-runtime';
 import { debounce, toggleClearButton } from './collection-ui';
 import { readInlineJson } from './data-fetch';
+import { onDomReady } from './dom-ready';
+
+// Essays page orchestrator. State, filters, and view rendering live here
+// because this page is their only consumer.
+
+const ESSAY_CATEGORY_KEYS = ['philosophy', 'management', 'technology', 'personal', 'finance', 'writing'];
 
 let essaysRuntime: AnyObj = null;
 
-function readInlineEssaysData(): AnyObj | null {
-    return readInlineJson<AnyObj>('jg-essays-data');
-}
+const state = {
+    activeCategory: 'all',
+    currentIndex: 0,
+    essays: [] as AnyObj[],
+    filteredEssays: [] as AnyObj[],
+    searchTerm: '',
+    sidebarCollapsed: false
+};
 
-// Essays page orchestrator. State, filters, and view rendering live here because
-// this page is their only consumer.
-const ESSAY_CATEGORY_KEYS = ['philosophy', 'management', 'technology', 'personal', 'finance', 'writing'];
-
-const essaysState = (() => {
-    const state = {
-        activeCategory: 'all',
-        currentIndex: 0,
-        essays: [],
-        filteredEssays: [],
-        searchTerm: '',
-        sidebarCollapsed: false
-    };
-
-    return {
-        clearSearchTerm() {
-            state.searchTerm = '';
-        },
-        get() {
-            return {
-                ...state,
-                essays: [...state.essays],
-                filteredEssays: [...state.filteredEssays]
-            };
-        },
-        setActiveCategory(category: string) {
-            state.activeCategory = category || 'all';
-        },
-        setCurrentIndex(index: number) {
-            state.currentIndex = index;
-        },
-        setEssays(essays: AnyObj[]) {
-            state.essays = Array.isArray(essays) ? essays : [];
-        },
-        setFilteredEssays(essays: AnyObj[]) {
-            state.filteredEssays = Array.isArray(essays) ? essays : [];
-        },
-        setSearchTerm(term: string) {
-            state.searchTerm = String(term || '').trim().toLowerCase();
-        },
-        setSidebarCollapsed(collapsed: boolean) {
-            state.sidebarCollapsed = Boolean(collapsed);
-        }
-    };
-})();
-
+// --- filters ---
 function filterEssaysByCategory(essays: AnyObj[], category: string) {
-    if (category === 'all') {
-        return essays;
-    }
+    if (category === 'all') return essays;
     return essays.filter((essay) => String(essay.category || '').toLowerCase() === category);
 }
 
 function filterEssaysBySearch(essays: AnyObj[], term: string) {
-    const normalized = String(term || '').trim().toLowerCase();
-    if (!normalized) {
-        return essays;
-    }
-
+    const normalized = term.trim().toLowerCase();
+    if (!normalized) return essays;
     return essays.filter((essay) => {
-        const searchable = [
-            essay.title,
-            essay.subtitle || '',
-            essay.category,
-            essay.content || ''
-        ].join(' ').toLowerCase();
-
+        const searchable = [essay.title, essay.subtitle || '', essay.category, essay.content || ''].join(' ').toLowerCase();
         return searchable.includes(normalized);
     });
 }
 
 function groupEssaysByCategory(essays: AnyObj[]) {
-    const groups: Record<string, AnyObj[]> = Object.fromEntries(
-        ESSAY_CATEGORY_KEYS.map((key) => [key, []])
-    );
-
+    const groups: Record<string, AnyObj[]> = Object.fromEntries(ESSAY_CATEGORY_KEYS.map((key) => [key, []]));
     essays.forEach((essay) => {
         const key = String(essay.category || '').toLowerCase();
-        if (groups[key]) {
-            groups[key].push(essay);
-        }
+        if (groups[key]) groups[key].push(essay);
     });
-
     return groups;
 }
 
@@ -100,9 +50,7 @@ function findEssayIndex(essays: AnyObj[], essayId: string) {
     return essays.findIndex((essay) => essay.id === essayId);
 }
 
-import { formatDate, formatDateShort } from '../lib/dates';
-import { onDomReady } from './dom-ready';
-
+// --- view ---
 function createEssayArticle(essay: AnyObj) {
     const article = document.createElement('article');
     article.className = 'article-full';
@@ -157,14 +105,11 @@ function updateActiveSidebarLink(essayId: string) {
 function renderCurrentEssay(filteredEssays: AnyObj[], currentIndex: number) {
     const container = document.getElementById('essays-container');
     if (!container) return;
-
     container.innerHTML = '';
-
     if (!filteredEssays.length) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 3rem;">No essays published yet.</p>';
         return;
     }
-
     const essay = filteredEssays[currentIndex];
     container.appendChild(createEssayArticle(essay));
     container.appendChild(createEssayNav(filteredEssays, currentIndex));
@@ -177,21 +122,13 @@ function renderEssaySidebar(groups: Record<string, AnyObj[]>) {
         const total = Object.values(groups).reduce((sum, essays) => sum + essays.length, 0);
         countAll.textContent = String(total);
     }
-
     Object.keys(groups).forEach((category) => {
         const essays = groups[category];
         const countEl = document.getElementById(`count-${category}`);
         const section = countEl?.closest('.sidebar-section') as HTMLElement | null;
         const container = document.getElementById(`category-${category}`);
-
-        if (countEl) {
-            countEl.textContent = String(essays.length);
-        }
-
-        if (section) {
-            section.style.display = essays.length === 0 ? 'none' : 'block';
-        }
-
+        if (countEl) countEl.textContent = String(essays.length);
+        if (section) section.style.display = essays.length === 0 ? 'none' : 'block';
         if (container) {
             container.innerHTML = essays.map((essay: AnyObj) => `
                 <a href="#${escapeAttr(essay.id)}" class="essay-link" data-action="scrollToEssay" data-action-args="${encodeURIComponent(essay.id)}" data-action-eventobj="true">
@@ -205,15 +142,12 @@ function renderEssaySidebar(groups: Record<string, AnyObj[]>) {
 
 function updateEssayCount(count: number) {
     const countEl = document.getElementById('essay-count');
-    if (countEl) {
-        countEl.textContent = String(count);
-    }
+    if (countEl) countEl.textContent = String(count);
 }
 
 function showEssayErrorMessage() {
     const container = document.getElementById('essays-container');
     if (!container) return;
-
     container.innerHTML = `
         <div style="text-align: center; padding: 3rem;">
             <p style="color: var(--accent-color); font-size: 1.2rem; margin-bottom: 1rem;">Unable to load essays</p>
@@ -231,52 +165,45 @@ function scrollEssaysToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// --- data load ---
 function loadEssays() {
-    const data = readInlineEssaysData();
+    const data = readInlineJson<AnyObj>('jg-essays-data');
     if (!data || !Array.isArray(data.essays)) {
         showEssayErrorMessage();
         return;
     }
-    const publishedEssays = (data.essays as AnyObj[])
+    state.essays = (data.essays as AnyObj[])
         .filter((essay: AnyObj) => essay.status === 'published')
         .sort((left: AnyObj, right: AnyObj) => new Date(right.date).getTime() - new Date(left.date).getTime());
-
-    essaysState.setEssays(publishedEssays);
-    essaysState.setFilteredEssays(publishedEssays);
+    state.filteredEssays = state.essays;
     renderFromState();
 }
 
+// --- runtime ---
 function getDerivedEssays() {
-    const state = essaysState.get();
     const categoryFiltered = filterEssaysByCategory(state.essays, state.activeCategory);
     return filterEssaysBySearch(categoryFiltered, state.searchTerm);
 }
 
 function getVisibleEssayState(filteredEssays: AnyObj[]) {
-    const state = essaysState.get();
     const currentIndex = Math.max(0, Math.min(state.currentIndex, Math.max(filteredEssays.length - 1, 0)));
-    essaysState.setFilteredEssays(filteredEssays);
-    essaysState.setCurrentIndex(currentIndex);
-    return {
-        essays: filteredEssays,
-        currentIndex
-    };
+    state.filteredEssays = filteredEssays;
+    state.currentIndex = currentIndex;
+    return { essays: filteredEssays, currentIndex };
 }
 
-function renderFromState() {
-    essaysRuntime?.render();
-}
+function renderFromState() { essaysRuntime?.render(); }
 
 function buildCollectionController() {
     essaysRuntime = createCollectionRuntime({
-        getState: () => essaysState.get(),
+        getState: () => ({ ...state }),
         getFilteredItems: () => getDerivedEssays(),
         getVisibleItems: (filteredEssays: AnyObj[]) => getVisibleEssayState(filteredEssays),
-        renderSidebar: () => renderEssaySidebar(groupEssaysByCategory(essaysState.get().essays)),
-        groupItems: () => groupEssaysByCategory(essaysState.get().essays),
+        renderSidebar: () => renderEssaySidebar(groupEssaysByCategory(state.essays)),
+        groupItems: () => groupEssaysByCategory(state.essays),
         renderVisibleItems: (visibleState: AnyObj) => renderCurrentEssay(visibleState.essays, visibleState.currentIndex),
         updateCount: (visibleState: AnyObj) => updateEssayCount(visibleState.essays.length),
-        updateControls: (state: AnyObj) => toggleClearButton('search-clear-btn', Boolean(state.searchTerm), 'block'),
+        updateControls: (s: AnyObj) => toggleClearButton('search-clear-btn', Boolean(s.searchTerm), 'block'),
         group: {
             allButtonSelector: '[data-action="toggleCategory"][data-action-args="all"]',
             buttonSelector: '.sidebar-category',
@@ -292,93 +219,82 @@ function buildCollectionController() {
     });
 }
 
+function applyFilter(mutate: () => void) {
+    mutate();
+    state.activeCategory = 'all';
+    state.currentIndex = 0;
+    essaysRuntime?.resetGrouping();
+    renderFromState();
+}
+
 function toggleCategory(category: string, event?: Event) {
     const button = (event?.target as Element | undefined)?.closest('.sidebar-category');
     const panel = category === 'all' ? null : document.getElementById(`category-${category}`);
-
     essaysRuntime?.toggleGroup({
         value: category,
         button,
         panel,
         onCollapse: () => {
-            essaysState.setActiveCategory('all');
-            essaysState.setCurrentIndex(0);
+            state.activeCategory = 'all';
+            state.currentIndex = 0;
         },
         onExpand: () => {
-            essaysState.setActiveCategory(category);
-            essaysState.setCurrentIndex(0);
+            state.activeCategory = category;
+            state.currentIndex = 0;
         }
     });
 }
 
 const searchEssays = debounce((term: string) => {
-    essaysState.setSearchTerm(term);
-    essaysState.setActiveCategory('all');
-    essaysState.setCurrentIndex(0);
-    essaysRuntime?.resetGrouping();
-    renderFromState();
+    applyFilter(() => { state.searchTerm = String(term || '').trim().toLowerCase(); });
 });
 
 function clearEssaySearch() {
     essaysRuntime?.clearSearchInput();
-    essaysState.clearSearchTerm();
-    essaysState.setActiveCategory('all');
-    essaysState.setCurrentIndex(0);
-    essaysRuntime?.resetGrouping();
-    renderFromState();
+    applyFilter(() => { state.searchTerm = ''; });
 }
 
 function prevEssay() {
-    const state = essaysState.get();
     if (state.currentIndex <= 0) return;
-    essaysState.setCurrentIndex(state.currentIndex - 1);
+    state.currentIndex -= 1;
     renderFromState();
     scrollEssaysToTop();
 }
 
 function nextEssay() {
-    const state = essaysState.get();
     if (state.currentIndex >= state.filteredEssays.length - 1) return;
-    essaysState.setCurrentIndex(state.currentIndex + 1);
+    state.currentIndex += 1;
     renderFromState();
     scrollEssaysToTop();
 }
 
 function scrollToEssay(essayId: string, event?: Event) {
     event?.preventDefault();
-
-    const state = essaysState.get();
     const filteredIndex = findEssayIndex(state.filteredEssays, essayId);
     if (filteredIndex >= 0) {
-        essaysState.setCurrentIndex(filteredIndex);
+        state.currentIndex = filteredIndex;
         renderFromState();
         scrollEssaysToTop();
         return;
     }
-
     const fullIndex = findEssayIndex(state.essays, essayId);
     if (fullIndex < 0) return;
-
-    essaysState.setActiveCategory('all');
-    essaysState.setCurrentIndex(fullIndex);
+    state.activeCategory = 'all';
+    state.currentIndex = fullIndex;
     essaysRuntime?.resetGrouping();
     renderFromState();
     scrollEssaysToTop();
 }
 
 function toggleEssaysSidebar() {
-    const isCollapsed = essaysRuntime?.toggleSidebar();
-    essaysState.setSidebarCollapsed(isCollapsed);
+    state.sidebarCollapsed = Boolean(essaysRuntime?.toggleSidebar());
 }
 
 function restoreSidebarState() {
-    const isCollapsed = essaysRuntime?.restoreSidebar();
-    essaysState.setSidebarCollapsed(isCollapsed);
+    state.sidebarCollapsed = Boolean(essaysRuntime?.restoreSidebar());
 }
 
-function toggleListDropdown() {
-    essaysRuntime?.toggleListDropdown();
-}
+function toggleListDropdown() { essaysRuntime?.toggleListDropdown(); }
 
 registerActions({
     clearEssaySearch,
@@ -401,5 +317,3 @@ function initEssaysPage() {
 }
 
 onDomReady(initEssaysPage, 'essays init');
-
-export {};

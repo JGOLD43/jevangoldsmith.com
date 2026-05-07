@@ -34,7 +34,7 @@ export interface ListOption {
   attrs?: Record<string, string>;
 }
 
-export interface SearchConfig {
+interface SearchConfig {
   inputId: string;
   inputClass?: string;
   placeholder?: string;

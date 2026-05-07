@@ -133,5 +133,3 @@ function loadLeafletOnDemand(onReady: () => void) {
         else if (action === 'lightbox-prev') prevImage();
     });
 })();
-
-export {};

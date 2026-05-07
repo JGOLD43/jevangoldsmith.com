@@ -7,12 +7,13 @@
 // initial Total Bytes don't pay for them. Switching the routeSet filter
 // forces the fetch immediately.
 import {
-  COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL,fetchJsonOr,PHOTOS_DATA_URL,
-  PLACES_DATA_URL, 
+  COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL, PHOTOS_DATA_URL,
+  PLACES_DATA_URL,
   POPULAR_ROUTES_INDEX_URL, ROUTES_DATA_URL,
-  saveFilters, 
-  state 
+  saveFilters,
+  state
 } from './adventures-state';
+import { fetchJsonOr } from './data-fetch';
 
 // schedulePopularRoutes needs to call back into the renderer once the
 // data lands. Wired by the entry module via setRouteRerender so this

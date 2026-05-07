@@ -22,15 +22,6 @@
         ]
       },
       {
-        "source": "/assets/**",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=31536000, immutable"
-          }
-        ]
-      },
-      {
         "source": "/_astro/**",
         "headers": [
           {
@@ -40,16 +31,7 @@
         ]
       },
       {
-        "source": "/css/chrome.*.css",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=31536000, immutable"
-          }
-        ]
-      },
-      {
-        "source": "/css/per-page/**",
+        "source": "/css/**",
         "headers": [
           {
             "key": "Cache-Control",
@@ -145,7 +127,7 @@
           },
           {
             "key": "Content-Security-Policy",
-            "value": "default-src 'self'; script-src 'self' 'sha256-96MAWE8dU1hV0CuI1iRIFYHEMXMGa1zZVsDTnE+qUBk=' 'sha256-BNUJKuTmAW0D0X5kiMqabESLHAy4UDbfXdfiiDAjBIE=' 'sha256-GbcwBkpHyMF6bE89Z+UelbWF3WcJhNriK8ocZ0qLkTI=' 'sha256-iEb1UvPC6DMDwDmPZ4lGNhy5seUE5F9EAOYybFq4tGw=' 'sha256-ojGcl0F7C6GJHQdzZWsBE3pgtXPGJrQwrQJ/QDz5nhI='; style-src 'self' 'sha256-/t1eG4IP3no6Z9WxNHYjA5XSWuylPtJO5pJIEP5CFcw=' 'sha256-0qx8GBOeIElbtvKcGUvVsfYJyfwpdeaGzanPI+zdxPU=' 'sha256-1ZG95obVrY+tyPKnnv9V+m4qflE7beMsS8L9pXiGnP8=' 'sha256-40kyWu0e0ovW8BpEtrIg8bxnekcErC9kPnowXEf5Zbg=' 'sha256-4SUlbtBb/TxwESOviJSUDi5lJlSovLCf1mJQrIxkNXU=' 'sha256-4SmBmymAD8jNl5TjimU/EYqAimMRvzim0qXYa37NW4M=' 'sha256-7zyAYJ9tMG80s9QET1ATHInt7DP2OEkzowvl3j2Aov0=' 'sha256-AGAiDOVXppvsJOZk0OWZL5+Soi/39yEQ4kBcrH4MnF8=' 'sha256-DFQ6DlPXWYg8z6zS4KN8lnpEoRxi2JFqjg8A1IOLGtw=' 'sha256-F7kCErT9UYwqZQ3NTNqL04u50v1xleQfiEHXb5aceDo=' 'sha256-NmJUtqOqAZMJ6lt9Xj1hTwqmKq4oM/4Vma5MFD1bA8s=' 'sha256-S5kl6qHbe5/0ac7Y2s/LN6z9BHhpCjhtizlc3i8nH2Q=' 'sha256-TcoY+uu67ibJkGCz34scyItXLQXosHH9B3kPDbjemqQ=' 'sha256-h3bBCRgBYRTBMQGNmsDfRxwKDPaadVnGNELUgdXwFB8=' 'sha256-h6Qn3Q+KAF8Mcg5fhun097dEhfr8xp5woPb9S7PmixI=' 'sha256-lRe9554ROjp/o0XGCFXEx6CDWdkpecbBUT7cjT6qJYA=' 'sha256-m2SzYLJdEG/6q9DqgI+Y6PQOyxLPusFDSTftWpRZTMA=' 'sha256-pcW2MZZPlMF+8HV1nnIxZSM82ZWU2yLnlKt4mvI6ZA0=' 'sha256-w35Dg5HsngJoahcjKc20mQhunX+s2CQh8hnXEKTN2tg='; font-src 'self'; img-src 'self' https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com data:; connect-src 'self' https://api.allorigins.win https://formsubmit.co https://server.arcgisonline.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' mailto: https://formsubmit.co"
+            "value": "default-src 'self'; script-src 'self' 'sha256-96MAWE8dU1hV0CuI1iRIFYHEMXMGa1zZVsDTnE+qUBk=' 'sha256-BNUJKuTmAW0D0X5kiMqabESLHAy4UDbfXdfiiDAjBIE=' 'sha256-GbcwBkpHyMF6bE89Z+UelbWF3WcJhNriK8ocZ0qLkTI=' 'sha256-iEb1UvPC6DMDwDmPZ4lGNhy5seUE5F9EAOYybFq4tGw=' 'sha256-ojGcl0F7C6GJHQdzZWsBE3pgtXPGJrQwrQJ/QDz5nhI='; style-src 'self' 'sha256-/t1eG4IP3no6Z9WxNHYjA5XSWuylPtJO5pJIEP5CFcw=' 'sha256-0qx8GBOeIElbtvKcGUvVsfYJyfwpdeaGzanPI+zdxPU=' 'sha256-1ZG95obVrY+tyPKnnv9V+m4qflE7beMsS8L9pXiGnP8=' 'sha256-40kyWu0e0ovW8BpEtrIg8bxnekcErC9kPnowXEf5Zbg=' 'sha256-4SUlbtBb/TxwESOviJSUDi5lJlSovLCf1mJQrIxkNXU=' 'sha256-4SmBmymAD8jNl5TjimU/EYqAimMRvzim0qXYa37NW4M=' 'sha256-7zyAYJ9tMG80s9QET1ATHInt7DP2OEkzowvl3j2Aov0=' 'sha256-AGAiDOVXppvsJOZk0OWZL5+Soi/39yEQ4kBcrH4MnF8=' 'sha256-DFQ6DlPXWYg8z6zS4KN8lnpEoRxi2JFqjg8A1IOLGtw=' 'sha256-F7kCErT9UYwqZQ3NTNqL04u50v1xleQfiEHXb5aceDo=' 'sha256-H1Pz3PAQpyEeKdd1qp0Ap8AAWIV/vxuNrC7U5+L4kqs=' 'sha256-NmJUtqOqAZMJ6lt9Xj1hTwqmKq4oM/4Vma5MFD1bA8s=' 'sha256-TcoY+uu67ibJkGCz34scyItXLQXosHH9B3kPDbjemqQ=' 'sha256-h3bBCRgBYRTBMQGNmsDfRxwKDPaadVnGNELUgdXwFB8=' 'sha256-h6Qn3Q+KAF8Mcg5fhun097dEhfr8xp5woPb9S7PmixI=' 'sha256-lRe9554ROjp/o0XGCFXEx6CDWdkpecbBUT7cjT6qJYA=' 'sha256-m2SzYLJdEG/6q9DqgI+Y6PQOyxLPusFDSTftWpRZTMA=' 'sha256-pcW2MZZPlMF+8HV1nnIxZSM82ZWU2yLnlKt4mvI6ZA0=' 'sha256-w35Dg5HsngJoahcjKc20mQhunX+s2CQh8hnXEKTN2tg='; font-src 'self'; img-src 'self' https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com data:; connect-src 'self' https://api.allorigins.win https://formsubmit.co https://server.arcgisonline.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' mailto: https://formsubmit.co"
           }
         ]
       }

@@ -93,8 +93,6 @@ export const DEFAULT_FILTERS = {
 
 state.mapFilters = { ...DEFAULT_FILTERS, layers: { ...DEFAULT_FILTERS.layers }, poiCategories: {} };
 
-export { fetchJsonOr } from './data-fetch';
-
 import { tryRead, tryWrite } from '../lib/storage';
 
 export function loadFilters(): void {

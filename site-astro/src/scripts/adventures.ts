@@ -2,9 +2,10 @@ import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { tryReadString, tryWrite } from '../lib/storage';
 import { registerActions } from './action-dispatcher';
 import {
-    ADVENTURES_DATA_URL, fetchJsonOr, loadFilters, saveFilters,
+    ADVENTURES_DATA_URL, loadFilters, saveFilters,
     state, updateLightboxImage
 } from './adventures-state';
+import { fetchJsonOr } from './data-fetch';
 
 // Async loader for the heavier Adventures map runtime. Vite/Astro emits
 // a separate chunk for it, kept off the initial adventures bundle.

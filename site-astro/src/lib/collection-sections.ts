@@ -480,7 +480,7 @@ export { tasteListOptions };
 
 // Sidebar filter sections shared by books + movies (rating + slider).
 // Both pages SSR identical-shape HTML; this dedupes the source of truth.
-export interface RatingFilterOpts {
+interface RatingFilterOpts {
     clearAction: string;
     preventDefaultOnClear?: boolean;
 }
@@ -505,7 +505,7 @@ export function renderRatingFilterSection(opts: RatingFilterOpts): string {
 </div>`;
 }
 
-export interface SliderFilterOpts {
+interface SliderFilterOpts {
     label: string;
     icon: string;
     /** Filter id namespace, e.g. 'timesread' or 'timeswatched'. */

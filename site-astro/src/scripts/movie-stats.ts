@@ -1,5 +1,6 @@
 import { escapeHtml } from '../lib/html-escape';
 import { tryReadString, tryWrite } from '../lib/storage';
+import { onDomReady } from './dom-ready';
 
 // Compute + render movie watch stats from enriched movie data.
 // Exports render + compute as ES module names. letterboxd.ts imports
@@ -344,10 +345,6 @@ const PANEL_ID = 'movie-stats-panel';
         }
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init, { once: true });
-    } else {
-        init();
-    }
+    onDomReady(init, 'movie-stats init');
 
-export { compute, render };
+export { render };

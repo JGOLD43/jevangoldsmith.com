@@ -1,4 +1,5 @@
 import { escapeAttr, escapeHtml } from '../lib/html-escape';
+import { onDomReady } from './dom-ready';
 
 // YouTube Channel Integration.
 const YOUTUBE_CHANNEL_HANDLE = 'JevanGoldsmith';
@@ -111,13 +112,4 @@ function createVideoCard(video: Video) {
     return card;
 }
 
-// Load videos when page loads. Guarded for ES-module timing — when this
-// file is loaded as a module, DOMContentLoaded may have already fired
-// before the listener registers.
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fetchYouTubeVideos, { once: true });
-} else {
-    fetchYouTubeVideos();
-}
-
-export {};
+onDomReady(fetchYouTubeVideos, 'youtube init');

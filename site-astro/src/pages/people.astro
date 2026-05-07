@@ -105,6 +105,7 @@ const config = ({
 </style>
 
 <script>
+  import { scheduleIdleTask } from '../lib/idle';
   import { createCollectionRuntime } from '../scripts/collection-runtime';
   import { onDomReady } from '../scripts/dom-ready';
   import { loadPeopleModalData, preloadPeopleModalData } from '../scripts/people-data';
@@ -140,12 +141,7 @@ const config = ({
       initPeopleDetail(loadPeopleModalData);
       // Warm the modal-data cache during idle so the first card-click modal
       // opens against a cache hit instead of a network round-trip.
-      const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => void };
-      if (typeof w.requestIdleCallback === 'function') {
-          w.requestIdleCallback(preloadPeopleModalData, { timeout: 2500 });
-      } else {
-          setTimeout(preloadPeopleModalData, 1500);
-      }
+      scheduleIdleTask(preloadPeopleModalData);
   }
 
   onDomReady(initPeoplePage, 'people init');
