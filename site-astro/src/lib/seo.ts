@@ -14,6 +14,11 @@ const SITE_URL = 'https://jevangoldsmith.com';
 export const SITE_NAME = 'Jevan Goldsmith';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/images/generated/logo/logo-nav-176.png`;
 
+// Full Person schema is emitted on the home page and About-style pages
+// where the entity is the page's primary subject. Other pages emit a
+// stub Person reference (just @id + @type + name), which crawlers
+// resolve via the canonical home-page graph. Saves ~2KB JSON-LD per
+// non-primary page across 80+ pages.
 export const PERSON_SCHEMA = {
   '@id': `${SITE_URL}/#person`,
   '@type': 'Person',
@@ -39,6 +44,26 @@ export const PERSON_SCHEMA = {
     'https://letterboxd.com/contentwatch'
   ]
 } as const;
+
+export const PERSON_REF = {
+  '@id': `${SITE_URL}/#person`,
+  '@type': 'Person',
+  name: 'Jevan Goldsmith'
+} as const;
+
+// Pages where the Person entity is the primary subject and warrants the
+// full schema. Anywhere else, the stub PERSON_REF suffices and the
+// canonical Person graph lives on the home page.
+const FULL_PERSON_PAGES = new Set([
+  'index.html',
+  'about.html',
+  'contact.html',
+  'meet.html'
+]);
+
+export function personSchemaFor(file: string) {
+  return FULL_PERSON_PAGES.has(file) ? PERSON_SCHEMA : PERSON_REF;
+}
 
 export const WEBSITE_SCHEMA = {
   '@id': `${SITE_URL}/#website`,
