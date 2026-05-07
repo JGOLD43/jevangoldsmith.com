@@ -58,6 +58,15 @@
         ]
       },
       {
+        "source": "/sprite.svg",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=86400"
+          }
+        ]
+      },
+      {
         "source": "/images/generated/**",
         "headers": [
           {

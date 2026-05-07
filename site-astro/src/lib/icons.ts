@@ -33,6 +33,31 @@ export const ICON_SVGS: Record<string, string> = {
   users: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
 };
 
+// Pull viewBox + outer attrs from the inline SVG so the <use> wrapper
+// inherits the correct sizing. Most icons use viewBox="0 0 24 24"; a
+// couple (send) use explicit width/height instead.
+function viewBoxFor(svg: string): string {
+  const m = svg.match(/viewBox="([^"]+)"/);
+  return m ? m[1] : '0 0 24 24';
+}
+function widthFor(svg: string): string {
+  const m = svg.match(/\bwidth="([^"]+)"/);
+  return m ? m[1] : '';
+}
+function heightFor(svg: string): string {
+  const m = svg.match(/\bheight="([^"]+)"/);
+  return m ? m[1] : '';
+}
+
+// getIcon returns a <use>-based SVG that references /sprite.svg.
+// scripts/generate-icon-sprite.js emits the sprite at build time.
+// Saves ~150KB across the site (each icon body shipped once on the
+// sprite, not duplicated per occurrence).
 export function getIcon(name: string): string {
-  return ICON_SVGS[name] ?? ICON_SVGS.file;
+  const source = ICON_SVGS[name] ?? ICON_SVGS.file;
+  const viewBox = viewBoxFor(source);
+  const w = widthFor(source);
+  const h = heightFor(source);
+  const sizeAttrs = w && h ? ` width="${w}" height="${h}"` : '';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}"${sizeAttrs} fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/sprite.svg#icon-${name}"/></svg>`;
 }
