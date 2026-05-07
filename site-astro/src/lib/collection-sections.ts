@@ -435,8 +435,13 @@ export function renderTaskListMain<T extends Project | Challenge>(
     .map((category) => renderSidebarButton(category, categoryMetaFor(category), categoryCounts.get(category) || 0, `count-cat-${category}`))
     .join('\n            ');
 
-  return `<main class="movies-layout sidebar-collapsed" id="${escapeHtmlAttr(cfg.layoutId)}">
-        <aside class="movies-sidebar collapsed" id="${escapeHtmlAttr(cfg.sidebarId)}">
+  // The shared .collection-layout / .collection-sidebar classes carry
+  // the actual grid layout + sidebar positioning rules. Task lists
+  // (projects, challenges) need them just like the people / books pages
+  // do; without them the sidebar contents stack at the top of <main>
+  // because there's no grid context.
+  return `<main class="movies-layout collection-layout sidebar-collapsed" id="${escapeHtmlAttr(cfg.layoutId)}">
+        <aside class="movies-sidebar collection-sidebar collapsed" id="${escapeHtmlAttr(cfg.sidebarId)}">
             ${renderSidebarHeader(cfg.toggleSidebarAction)}
 
             ${renderListDropdown({
