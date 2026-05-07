@@ -1,0 +1,37 @@
+name: Lighthouse perf gate
+
+on:
+  pull_request:
+    paths:
+      - 'site-astro/**'
+      - 'scripts/**'
+      - 'data/**'
+      - 'package.json'
+      - 'firebase.json'
+      - '.github/workflows/lighthouse.yml'
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build:fast
+      - name: Run Lighthouse
+        run: npm run perf:lighthouse
+      - name: Check budgets
+        run: npm run perf:check
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: |
+            .perf-tmp/**
+            baselines/lighthouse-*.json
+          if-no-files-found: ignore

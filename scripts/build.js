@@ -3,63 +3,51 @@ const { spawnSync } = require('node:child_process');
 
 const fast = process.argv.includes('--fast');
 
+// Phase = [name, bin, [args...]]. Inline removed the previous indirection
+// through a separate `commands` map: every phase ran exactly once, so
+// the lookup added cognitive load without value.
+const COMMON_TAIL = [
+  ['astro:build', 'npm', ['run', '--prefix', 'site-astro', 'build']],
+  ['people:modal', 'node', ['scripts/build-people-modal-json.js', '--dist=dist']],
+  ['icons:sprite', 'node', ['scripts/generate-icon-sprite.js', '--dist=dist']],
+  // Inline sprite was tried (scripts/inline-sprite.js exists) but
+  // added 8KB to every HTML versus a single 4.6KB sprite request that
+  // the Service Worker pre-caches on install anyway. Net negative for
+  // repeat-visit bytes. The script is left in-tree as documentation
+  // and can be rewired if measurements ever show a different tradeoff.
+  ['purge:css', 'node', ['scripts/purge-css-per-page.js', '--dist=dist']],
+  ['critical:css', 'node', ['scripts/extract-critical-css.js', '--dist=dist']],
+  ['css:validate', 'node', ['scripts/validate-css-parse.js', '--dist=dist']],
+  ['sw:finalize', 'node', ['scripts/finalize-sw.js', '--dist=dist']],
+  ['modulepreload', 'node', ['scripts/inject-modulepreload.js', '--dist=dist']],
+  ['html:min', 'node', ['scripts/minify-html.js', '--dist=dist']],
+  ['slim:json', 'node', ['scripts/slim-runtime-json.js', '--dist=dist']],
+  ['prune:dist', 'node', ['scripts/prune-dist-assets.js', '--dist=dist']],
+  ['perf:budget', 'node', ['scripts/check-performance-budgets.js', '--dist=dist']],
+  ['csp:hashes', 'node', ['scripts/update-csp-hashes.js', '--dist=dist']]
+];
+
 const phases = fast
   ? [
-      ['content:validate'],
-      ['search:audit:strict'],
-      ['routes:split'],
-      ['people:merge'],
-      ['astro:build'],
-      ['icons:sprite'],
-      ['purge:css'],
-      ['slim:json'],
-      ['prune:dist'],
-      ['perf:budget'],
-      ['csp:hashes']
+      ['content:validate', 'node', ['scripts/validate-content.js']],
+      ['search:audit:strict', 'node', ['scripts/audit-search-index.js', '--strict']],
+      ['routes:split', 'node', ['scripts/split-popular-routes.js']],
+      ['people:merge', 'node', ['scripts/merge-people.js']],
+      ...COMMON_TAIL
     ]
   : [
-      ['lint'],
-      ['check'],
-      ['content:validate'],
-      ['search:audit:strict'],
-      ['snap:routes'],
-      ['routes:split'],
-      ['assets:optimize'],
-      ['people:merge'],
-      ['astro:build'],
-      ['icons:sprite'],
-      ['purge:css'],
-      ['slim:json'],
-      ['prune:dist'],
-      ['perf:budget'],
-      ['csp:hashes']
+      ['lint', 'npx', ['biome', 'check', 'scripts']],
+      ['check', 'npm', ['run', '--prefix', 'site-astro', 'astro', 'check']],
+      ['content:validate', 'node', ['scripts/validate-content.js']],
+      ['search:audit:strict', 'node', ['scripts/audit-search-index.js', '--strict']],
+      ['snap:routes', 'node', ['scripts/snap-popular-routes.js']],
+      ['routes:split', 'node', ['scripts/split-popular-routes.js']],
+      ['assets:optimize', 'node', ['scripts/optimize-assets.js']],
+      ['people:merge', 'node', ['scripts/merge-people.js']],
+      ...COMMON_TAIL
     ];
 
-const commands = {
-  'astro:build': ['npm', ['run', '--prefix', 'site-astro', 'build']],
-  check: ['npm', ['run', '--prefix', 'site-astro', 'astro', 'check']],
-  'content:validate': ['node', ['scripts/validate-content.js']],
-  lint: ['npx', ['biome', 'check', 'scripts']],
-  'people:merge': ['node', ['scripts/merge-people.js']],
-  'perf:budget': ['node', ['scripts/check-performance-budgets.js', '--dist=dist']],
-  'csp:hashes': ['node', ['scripts/update-csp-hashes.js', '--dist=dist']],
-  'icons:sprite': ['node', ['scripts/generate-icon-sprite.js', '--dist=dist']],
-  'prune:dist': ['node', ['scripts/prune-dist-assets.js', '--dist=dist']],
-  'purge:css': ['node', ['scripts/purge-css-per-page.js', '--dist=dist']],
-  'slim:json': ['node', ['scripts/slim-runtime-json.js', '--dist=dist']],
-  'routes:split': ['node', ['scripts/split-popular-routes.js']],
-  'search:audit:strict': ['node', ['scripts/audit-search-index.js', '--strict']],
-  'snap:routes': ['node', ['scripts/snap-popular-routes.js']],
-  'assets:optimize': ['node', ['scripts/optimize-assets.js']]
-};
-
-for (const [name] of phases) {
-  const command = commands[name];
-  if (!command) {
-    console.error(`[build] unknown phase: ${name}`);
-    process.exit(2);
-  }
-  const [bin, args] = command;
+for (const [name, bin, args] of phases) {
   console.log(`\n[build] ${name}`);
   const result = spawnSync(bin, args, {
     cwd: process.cwd(),

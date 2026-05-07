@@ -1,7 +1,7 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import { init as initGridZoom } from './grid-zoom';
 import { installImageErrorHandler, installEscapeCloser, bindStarRatingDrag } from './collection-helpers';
-import { readInlineJson } from './data-fetch';
+import { fetchJson, readInlineJson } from './data-fetch';
 import { createCollectionRuntime } from './collection-runtime';
 import {
     closeDropdownOnOutsideClick as closeDropdownOnOutsideClickShared,
@@ -500,15 +500,22 @@ const booksModal = createBooksModal({ getCoverUrl });
 let booksView: AnyObj = null;
 let booksRuntime: AnyObj = null;
 
-function loadBooksData() {
+async function loadBooksData() {
     if (booksState.getBooks().length > 0) return booksState.getBooks();
+    // Inline SSR fallback path — kept for the rare build that races the
+    // network. Primary path is now /data/books.generated.json (immutable
+    // cache via Firebase Hosting headers + prefetch hint in head).
     const inline = readInlineJson<AnyObj[]>('jg-books-data');
-    if (!Array.isArray(inline) || inline.length === 0) {
-        // SSR always emits jg-books-data. Reaching here is a build bug.
-        throw new Error('books: inline SSR data missing or empty');
+    if (Array.isArray(inline) && inline.length > 0) {
+        booksState.setBooks(inline);
+        return inline;
     }
-    booksState.setBooks(inline);
-    return inline;
+    const data = await fetchJson('/data/books.generated.json');
+    if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('books: runtime data missing or empty');
+    }
+    booksState.setBooks(data);
+    return data;
 }
 
 function getCoverUrl(bookOrIsbn: AnyObj, size: string = "large") {
@@ -678,7 +685,7 @@ async function initBooksPage() {
     try {
         buildCollectionController();
         restoreSidebarState();
-        loadBooksData();
+        await loadBooksData();
 
         booksView = createBooksView({
             getBooks: () => booksState.getBooks(),

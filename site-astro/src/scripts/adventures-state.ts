@@ -46,7 +46,6 @@ export const state: Record<string, AnyValue> = {
 export const ADVENTURES_DATA_URL = 'data/adventures.json';
 export const PLACES_DATA_URL = 'data/placeofinterest.json';
 export const ROUTES_DATA_URL = 'data/routes.generated.json';
-export const POPULAR_ROUTES_URL = 'data/popular-routes.json';
 export const POPULAR_ROUTES_INDEX_URL = 'data/popular-routes.index.json';
 export const PHOTOS_DATA_URL = 'data/photos.generated.json';
 export const COUNTRIES_GEO_URL = 'data/countries.slim.generated.json';
@@ -88,21 +87,7 @@ export const DEFAULT_FILTERS = {
 
 state.mapFilters = { ...DEFAULT_FILTERS, layers: { ...DEFAULT_FILTERS.layers }, poiCategories: {} };
 
-// Adventures-flavored fetchJson: returns a fallback on network/parse
-// failure instead of throwing. Different from data-fetch.fetchJson
-// (which throws). Kept distinct on purpose because the map page
-// degrades gracefully when one dataset 404s instead of bailing the
-// whole render. Renamed to fetchJsonOr to make the difference visible
-// at the call site.
-export async function fetchJsonOr<T = unknown>(url: string, fallback: T | null = null): Promise<T | null> {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) return fallback;
-    return await response.json();
-  } catch (_error) {
-    return fallback;
-  }
-}
+export { fetchJsonOr } from './data-fetch';
 
 
 export function loadFilters(): void {

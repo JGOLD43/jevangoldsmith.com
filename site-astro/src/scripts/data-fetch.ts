@@ -11,6 +11,18 @@ export async function fetchJson(url: string, options: { cache?: RequestCache } =
     return response.json();
 }
 
+// Soft variant: returns fallback on network/parse failure instead of throwing.
+// Used by the adventures map so one 404 doesn't bail the whole render.
+export async function fetchJsonOr<T = unknown>(url: string, fallback: T | null = null): Promise<T | null> {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) return fallback;
+        return await response.json();
+    } catch (_error) {
+        return fallback;
+    }
+}
+
 // Read a build-time-inlined JSON payload from a <script type="application/json">
 // tag. Returns null if the tag is missing, empty, or malformed.
 //

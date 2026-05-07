@@ -6,14 +6,14 @@ import { tasteListOptions, BOOK_SECTIONS } from '../lib/collection-sections';
 import { renderBookCardHtml } from '../lib/book-card';
 import { escapeAttr } from '../lib/html-escape';
 import remoteAssets from '../../../data/remote-assets.generated.json';
-import booksRuntimeData from '../../public/data/books.generated.json';
 import { CATEGORY_MAP } from '../lib/book-categories';
 import type { Book } from '../content.config';
 
-// runtime payload (filter/modal state) inlined so books.ts can avoid the
-// post-FCP fetch round-trip. data/books.generated.json stays available as
-// a public asset for fallback + external consumers.
-const booksRuntimeJson = JSON.stringify(booksRuntimeData);
+// books.ts now lazy-fetches /data/books.generated.json on init. Saves
+// ~44KB of inline JSON on every books.html visit (HTML must-revalidate
+// re-downloaded the inline blob each visit). The fetch fires at the
+// same moment the script runs, and the file is prefetched via the head
+// hint below — net zero perceived latency, big bytes win.
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
@@ -257,9 +257,21 @@ const config = ({
   title="Books I Recommend &amp; Notes From My Reading System"
   description="A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
   canonical={canonical}
-/>
+>
+  <Fragment slot="head">
+    <link rel="prefetch" href="/data/books.generated.json" as="fetch" crossorigin />
+  </Fragment>
+</CollectionPage>
 
-<script is:inline type="application/json" id="jg-books-data" set:html={booksRuntimeJson} />
+<style is:inline>
+  /* content-visibility skips offscreen book cards' layout/paint until they
+     scroll into view. contain-intrinsic-size reserves the slot so the
+     scroll position stays stable. Mirrors the people page treatment. */
+  .book-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 220px 360px;
+  }
+</style>
 
 <script>
   import '../scripts/books.ts';

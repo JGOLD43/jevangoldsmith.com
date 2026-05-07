@@ -34,6 +34,25 @@ if (!fs.existsSync(SOURCE)) {
   process.exit(0);
 }
 
+// mtime gate: if every output file is newer than the source, the split
+// outputs are still in sync with the input. Skip the work entirely
+// (~200ms saved on every incremental rebuild).
+function isStale() {
+  if (!fs.existsSync(INDEX)) return true;
+  const sourceMtime = fs.statSync(SOURCE).mtimeMs;
+  if (fs.statSync(INDEX).mtimeMs < sourceMtime) return true;
+  if (!fs.existsSync(OUT_DIR)) return true;
+  for (const entry of fs.readdirSync(OUT_DIR)) {
+    if (!entry.endsWith('.json')) continue;
+    if (fs.statSync(path.join(OUT_DIR, entry)).mtimeMs < sourceMtime) return true;
+  }
+  return false;
+}
+if (!isStale()) {
+  console.log('[routes:split] outputs are up to date, skipping');
+  process.exit(0);
+}
+
 const data = JSON.parse(fs.readFileSync(SOURCE, 'utf8'));
 const routes = Array.isArray(data.routes) ? data.routes : [];
 

@@ -44,5 +44,6 @@ const main = props.kind === 'task'
   canonical={canonical}
   pageType={pageType}
 >
+  <slot name="head" slot="head" />
   <Fragment set:html={main} />
 </Base>

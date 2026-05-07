@@ -36,14 +36,12 @@ const targets = [
     'data/topics.json',
     'data/ctas.json',
     // Source-of-truth before merge-people.js. Runtime reads
-    // people.merged.generated.json (or the SSR'd inline copy).
+    // /api/v1/people-modal.json (slim) or, in fallback, the merged copy.
     'data/people.profiles.json',
     'data/people.json',
-    // Inlined into HTML at SSR time (jg-books-data, people-merged-data
-    // <script type=application/json> blocks). The runtime fallback
-    // fetch was deleted; these files are no longer requested.
-    'data/people.merged.generated.json',
-    'data/books.generated.json'
+    // Build-time only — books.ts and people lazy-fetch their slim runtime
+    // counterparts under /data/ and /api/v1/ respectively.
+    'data/people.merged.generated.json'
 ];
 
 let removed = 0;
@@ -83,8 +81,6 @@ const generatedDir = path.join(DIST, 'images', 'generated');
 if (fs.existsSync(generatedDir)) {
   for (const file of walk(generatedDir)) {
     if (!file.endsWith('.webp')) continue;
-    const rel = path.relative(generatedDir, file).split(path.sep).join('/');
-    if (rel.startsWith('logo/')) continue;
     bytes += sizeOf(file);
     fs.rmSync(file, { force: true });
     removed++;

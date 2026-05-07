@@ -4,14 +4,17 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { PEOPLE_SECTIONS } from '../lib/collection-sections';
 import { renderPersonCardHtml } from '../lib/person-card';
-import type { PeopleMerged } from '../content.config';
 
 const canonical = 'https://jevangoldsmith.com/people.html';
 
 // SSR all 98 cards from the build-time-merged collection.
 // scripts/merge-people.js generates data/people.merged.generated.json
-// before astro build. people.js no longer fetches books/movies/profiles —
-// it reads the inline JSON below for modal interaction.
+// before astro build. Per-person modal-only fields (bio, thesis, books,
+// movies, profileHref) are emitted to /api/v1/people-modal.json by
+// scripts/build-people-modal-json.js and lazy-fetched on first
+// card-click. SSR card markup carries every field used in the grid
+// itself (name/title/lesson/image/srcset/searchText) so this fetch
+// only kicks in once a user actually opens a person detail modal.
 const peopleEntries = await getCollection('peopleMerged') as CollectionEntry<'peopleMerged'>[];
 const peopleCardsHtml = peopleEntries
   .map((p, i) => renderPersonCardHtml(p.data, i))
@@ -43,10 +46,6 @@ const sidebarFiltersHtml = `<div class="people-source-filter sidebar-filter-sect
 const populatedMainBody = `<div id="people-container">
     <div class="people-grid" id="people-grid">${peopleCardsHtml}</div>
 </div>`;
-
-// Inline merged data for the modal so people.js avoids a runtime fetch.
-const mergedPeople = peopleEntries.map((p) => p.data) satisfies PeopleMerged[];
-const peopleMergedJson = JSON.stringify(mergedPeople);
 
 const config = ({
   layout: { id: 'people-layout', className: 'people-layout collection-layout sidebar-collapsed' },
@@ -83,7 +82,14 @@ const config = ({
   title="People of History"
   description="A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment."
   canonical={canonical}
-/>
+>
+  <Fragment slot="head">
+    {/* Modal-only payload — bio/books/movies fields not present in card
+        markup. Prefetched at idle by people.ts so first card-click modal
+        opens instantly. */}
+    <link rel="prefetch" href="/api/v1/people-modal.json" as="fetch" crossorigin />
+  </Fragment>
+</CollectionPage>
 
 <style is:inline>
   /* content-visibility lets the browser skip layout + paint for cards
@@ -97,8 +103,6 @@ const config = ({
     contain-intrinsic-size: 320px 380px;
   }
 </style>
-
-<script is:inline type="application/json" id="people-merged-data" set:html={peopleMergedJson} />
 
 <script>
   import '../scripts/people.ts';

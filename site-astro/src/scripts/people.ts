@@ -1,16 +1,9 @@
-import { loadPeopleData } from './people-data';
+import { loadPeopleModalData, preloadPeopleModalData } from './people-data';
 import { initPeopleDetail } from './people-detail';
 import { applyPeopleSourceFilter, registerPeopleFilterActions } from './people-filter';
 import { createCollectionRuntime } from './collection-runtime';
 
 let peopleRuntime: AnyObj = null;
-let peopleById = new Map<string, AnyObj>();
-
-function loadPeopleCards() {
-    const grid = document.getElementById('people-grid');
-    if (!grid) return;
-    peopleById = loadPeopleData();
-}
 
 async function initPeoplePage() {
     peopleRuntime = createCollectionRuntime({
@@ -34,10 +27,17 @@ async function initPeoplePage() {
         onRender: applyPeopleSourceFilter,
         useDisplayStyle: true
     });
-    loadPeopleCards();
     registerPeopleFilterActions(() => peopleRuntime);
     peopleRuntime.init();
-    initPeopleDetail(() => peopleById);
+    initPeopleDetail(loadPeopleModalData);
+    // Warm the modal-data cache during idle so the first card-click modal
+    // opens against a hit, not a network request.
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => void };
+    if (typeof w.requestIdleCallback === 'function') {
+        w.requestIdleCallback(preloadPeopleModalData, { timeout: 2500 });
+    } else {
+        setTimeout(preloadPeopleModalData, 1500);
+    }
 }
 
 if (document.readyState === 'loading') {

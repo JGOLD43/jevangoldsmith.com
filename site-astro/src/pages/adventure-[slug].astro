@@ -207,9 +207,11 @@ const detailData = JSON.stringify({
 
   <script is:inline type="application/json" id="adventure-detail-data" set:html={detailData}></script>
 
-  {/* Leaflet drives the small Photo Locations map via #adventure-map. */}
-  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" slot="head" />
-  <script slot="scripts" is:inline src="/vendor/leaflet/leaflet.js"></script>
+  {/* Leaflet was previously eagerly loaded on every adventure-detail
+      page (147KB JS + 15KB CSS) just to render a small Photo Locations
+      map. Now adventure-detail.ts lazily injects Leaflet via an
+      IntersectionObserver only when the map element scrolls into view
+      — pages that never reach the map skip the cost entirely. */}
 </Base>
 
 <script>

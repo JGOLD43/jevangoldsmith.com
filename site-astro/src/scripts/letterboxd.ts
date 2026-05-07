@@ -16,14 +16,6 @@ import { render as renderMovieStats } from './movie-stats';
 // exposed window.JGLetterboxd* globals consumed here.
 
 let linkedMovieHandled = false;
-const movieMetadata: Record<string, AnyObj> = {
-    'What Dreams May Come': { genre: 'Drama', timesWatched: 1 },
-    'Before Sunset': { genre: 'Romance', timesWatched: 1 },
-    'Before Sunrise': { genre: 'Romance', timesWatched: 1 },
-    'Lawrence of Arabia': { genre: 'Drama', timesWatched: 2 },
-    "Breakfast at Tiffany's": { genre: 'Romance', timesWatched: 2 },
-    'The Place Beyond the Pines': { genre: 'Drama', timesWatched: 1 }
-};
 
 // --- state ---
 const movieState = (function createState() {
@@ -126,8 +118,7 @@ function createMovieModal() {
 import { formatRuntime } from '../lib/dates';
 
 function normalizeMovieData(movie: AnyObj) {
-    const metadata = movieMetadata[movie.title] || {};
-    const starCount = Number(movie.starCount || metadata.starCount || 0);
+    const starCount = Number(movie.starCount || 0);
     return {
         title: movie.title || 'Untitled',
         date: movie.date || '',
@@ -138,8 +129,8 @@ function normalizeMovieData(movie: AnyObj) {
         poster: movie.poster || null,
         review: movie.review || null,
         shortDescription: movie.shortDescription || null,
-        genre: metadata.genre || movie.genre || 'Uncategorized',
-        timesWatched: Number(movie.timesWatched || metadata.timesWatched || 1),
+        genre: movie.genre || 'Uncategorized',
+        timesWatched: Number(movie.timesWatched || 1),
         runtime: Number(movie.runtime || 0),
         tmdbId: movie.tmdbId || null,
         tmdbGenres: Array.isArray(movie.tmdbGenres) ? movie.tmdbGenres : [],
@@ -196,9 +187,7 @@ function parseMovieData(item: AnyObj) {
         data.review = reviewText;
         data.shortDescription = reviewText.length > 150 ? `${reviewText.substring(0, 150)}...` : reviewText;
     }
-    const metadata = movieMetadata[data.title] || {};
-    data.genre = metadata.genre || item.genre || 'Uncategorized';
-    data.timesWatched = metadata.timesWatched || data.timesWatched;
+    data.genre = item.genre || 'Uncategorized';
     return data;
 }
 

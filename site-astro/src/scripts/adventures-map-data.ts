@@ -8,7 +8,7 @@
 // forces the fetch immediately.
 import {
   state, fetchJsonOr,
-  PLACES_DATA_URL, ROUTES_DATA_URL, POPULAR_ROUTES_URL,
+  PLACES_DATA_URL, ROUTES_DATA_URL,
   POPULAR_ROUTES_INDEX_URL, PHOTOS_DATA_URL,
   COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL,
   saveFilters
@@ -57,26 +57,21 @@ export async function loadPopularRoutes() {
   state.popularRoutesPromise = (async () => {
     const index: any = await fetchJsonOr(POPULAR_ROUTES_INDEX_URL);
     const chunks = Array.isArray(index?.chunks) ? index.chunks : [];
-    let payload: any;
-    if (chunks.length === 0) {
-      payload = await fetchJsonOr(POPULAR_ROUTES_URL, { routes: [] });
-    } else {
-      // Tiny chunks (paddle/sail/ski/hike) ship inline inside the index;
-      // heavy chunks (drive/bike) live as separate cacheable JSON files.
-      const inlineRoutes = chunks
-        .filter((chunk: any) => chunk?.inline && chunk?.payload)
-        .flatMap((chunk: any) => Array.isArray(chunk.payload.routes) ? chunk.payload.routes : []);
-      const externalChunks = chunks.filter((chunk: any) => chunk?.href);
-      const externalPayloads: any[] = await Promise.all(
-        externalChunks.map((chunk: any) => fetchJsonOr(chunk.href, { routes: [] }))
-      );
-      payload = {
-        routes: [
-          ...inlineRoutes,
-          ...externalPayloads.flatMap((p) => Array.isArray(p?.routes) ? p.routes : [])
-        ]
-      };
-    }
+    // Tiny chunks (paddle/sail/ski/hike) ship inline inside the index;
+    // heavy chunks (drive/bike) live as separate cacheable JSON files.
+    const inlineRoutes = chunks
+      .filter((chunk: any) => chunk?.inline && chunk?.payload)
+      .flatMap((chunk: any) => Array.isArray(chunk.payload.routes) ? chunk.payload.routes : []);
+    const externalChunks = chunks.filter((chunk: any) => chunk?.href);
+    const externalPayloads: any[] = await Promise.all(
+      externalChunks.map((chunk: any) => fetchJsonOr(chunk.href, { routes: [] }))
+    );
+    const payload = {
+      routes: [
+        ...inlineRoutes,
+        ...externalPayloads.flatMap((p) => Array.isArray(p?.routes) ? p.routes : [])
+      ]
+    };
     const additions = Array.isArray(payload?.routes) ? payload.routes : [];
     // Avoid duplicating if loadPopularRoutes runs twice via race.
     const have = new Set(state.allRoutes.map((r: any) => r.id || `${r.adventureId}:${r.name}`));

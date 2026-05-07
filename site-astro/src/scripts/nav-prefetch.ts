@@ -20,16 +20,33 @@
         const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
         const saveData = conn?.saveData === true;
         const eagerness = saveData ? 'conservative' : 'moderate';
+        // Heavy pages downgrade from `prerender` to `prefetch`. Prerender
+        // pulls the full DOM + scripts (Leaflet on adventures, search
+        // index on /search), which wastes bandwidth on a hover that may
+        // never become a click. Prefetch only warms the HTTP cache.
         const rules = {
             prerender: [{
                 where: {
                     and: [
                         { href_matches: '/*.html' },
                         { not: { href_matches: '/data-smoke.html' } },
-                        { not: { href_matches: '/meet.html' } }
+                        { not: { href_matches: '/meet.html' } },
+                        { not: { href_matches: '/adventures.html' } },
+                        { not: { href_matches: '/search.html' } },
+                        { not: { href_matches: '/adventure-*.html' } }
                     ]
                 },
                 eagerness
+            }],
+            prefetch: [{
+                where: {
+                    or: [
+                        { href_matches: '/adventures.html' },
+                        { href_matches: '/search.html' },
+                        { href_matches: '/adventure-*.html' }
+                    ]
+                },
+                eagerness: saveData ? 'conservative' : 'moderate'
             }]
         };
         const script = document.createElement('script');

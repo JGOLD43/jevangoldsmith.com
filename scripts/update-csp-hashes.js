@@ -59,7 +59,7 @@ cspHeader.value = [
   `script-src 'self' ${Array.from(scriptHashes).sort().join(' ')}`,
   `style-src 'self' ${Array.from(styleHashes).sort().join(' ')}`,
   "font-src 'self'",
-  "img-src 'self' https://images.unsplash.com https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com data:",
+  "img-src 'self' https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com data:",
   "connect-src 'self' https://api.allorigins.win https://formsubmit.co https://server.arcgisonline.com",
   "frame-src 'none'",
   "object-src 'none'",

@@ -350,7 +350,7 @@ for (const { kept } of perPage.slice(1)) {
 }
 
 const chromeCss = chromeRulesOrdered.join('');
-const chromeHash = crypto.createHash('sha256').update(chromeCss).digest('hex').slice(0, 10);
+const chromeHash = crypto.createHash('sha256').update(chromeCss).digest('hex').slice(0, 8);
 const chromeFile = `chrome.${chromeHash}.css`;
 fs.writeFileSync(path.join(DIST, 'css', chromeFile), chromeCss);
 
@@ -360,16 +360,31 @@ fs.writeFileSync(path.join(DIST, 'css', chromeFile), chromeCss);
 const stats = [];
 let mutated = 0;
 
+// Content-keyed dedup: if N pages share an identical per-page slice
+// (e.g. all 8 topic pages, all 7 adventure-detail pages), write the
+// CSS once and point every consumer at the same URL. Otherwise the
+// browser caches N copies under N different paths.
+const sharedFiles = new Map(); // hash -> outFile
+
 for (const { file, html, kept } of perPage) {
   const pageRules = kept.filter((r) => !chromeRuleSet.has(r));
   const purged = pageRules.join('');
-  const h = crypto.createHash('sha256').update(purged).digest('hex').slice(0, 10);
+  const h = crypto.createHash('sha256').update(purged).digest('hex').slice(0, 8);
   const slug = path.relative(DIST, file).replace(/\.html$/, '').replace(/[\/]/g, '__');
-  const outFile = `${slug}.${h}.css`;
-  // Skip writing empty per-page CSS files. The HTML rewrite below also
-  // omits the <link>/<preload> when purged is empty, so the file would
-  // never be requested.
-  if (purged.length > 0) {
+  // If we've already written a file with this exact hash, reuse it
+  // (shared filename keyed by group prefix when slug matches a
+  // dedup-able family — adventures/topics/people/etc. — falling back
+  // to slug+hash for everything else).
+  const family = slug.replace(/^(topics|adventure|people|topic)__.*$/, '$1');
+  const outFile = sharedFiles.has(h)
+    ? sharedFiles.get(h)
+    : (family !== slug
+        ? `${family}-shared.${h}.css`
+        : `${slug}.${h}.css`);
+  if (!sharedFiles.has(h)) sharedFiles.set(h, outFile);
+  // Tiny slices (<2KB) ride inline below — skip writing those too.
+  const _INLINE_THRESHOLD = 2048;
+  if (purged.length > 0 && purged.length > _INLINE_THRESHOLD) {
     fs.writeFileSync(path.join(outDir, outFile), purged);
   }
 
@@ -380,16 +395,26 @@ for (const { file, html, kept } of perPage) {
   // cache (Cache-Control: public, max-age=31536000, immutable). HTML is
   // max-age=0 must-revalidate, so inlining shipped 5-30KB of styles on
   // every revalidate — wasteful for repeat visitors.
+  // Tiny per-page slices (<2KB) ride inline as <style> instead of an
+  // external request. Saves 1 RTT on first visit. Repeat-visit pays
+  // ~1.5KB extra HTML revalidation, but at this size the round-trip
+  // overhead exceeds the bytes — net win.
+  const INLINE_CSS_THRESHOLD = 2048;
+  const inlineCss = purged && purged.length <= INLINE_CSS_THRESHOLD;
   const perPageHref = `/css/per-page/${outFile}`;
-  const preload = purged
-    ? `<link rel="preload" as="style" href="${perPageHref}" fetchpriority="high">`
-    : '';
-  const linkExtra = purged
-    ? `\n  <link rel="stylesheet" href="${perPageHref}" fetchpriority="high">`
-    : '';
+  const linkExtra = !purged
+    ? ''
+    : inlineCss
+      ? `\n  <style>${purged}</style>`
+      : `\n  <link rel="stylesheet" href="${perPageHref}" fetchpriority="high">`;
+  // When the slice goes inline, skip writing the external file — the
+  // browser will never request it.
+  if (inlineCss) {
+    try { fs.unlinkSync(path.join(outDir, outFile)); } catch (_) { /* not yet written */ }
+  }
   const next = html.replace(
     /<link rel="stylesheet" href="\/css\/legacy-style\.css"([^>]*)>/g,
-    `${preload}<link rel="stylesheet" href="/css/${chromeFile}"$1>${linkExtra}`
+    `<link rel="stylesheet" href="/css/${chromeFile}"$1>${linkExtra}`
   );
   if (next !== html) {
     fs.writeFileSync(file, next);

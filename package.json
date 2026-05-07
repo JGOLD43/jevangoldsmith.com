@@ -42,8 +42,12 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.12",
+    "@fontsource-variable/chivo": "^5.2.8",
+    "html-minifier-terser": "^7.2.0",
     "http-server": "^14.1.1",
-    "sharp": "^0.34.5"
+    "lightningcss": "^1.32.0",
+    "sharp": "^0.34.5",
+    "web-vitals": "^5.2.0"
   },
   "dependencies": {
     "dotenv": "^17.4.2"

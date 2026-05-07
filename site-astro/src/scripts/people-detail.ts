@@ -76,16 +76,20 @@ function openPeopleDetail(person: AnyObj, trigger: HTMLElement | null) {
     (modal.querySelector('.person-detail-close') as HTMLElement | null)?.focus?.();
 }
 
-export function initPeopleDetail(getPeopleById: () => Map<string, AnyObj>) {
+export function initPeopleDetail(loadPeopleById: () => Promise<Map<string, AnyObj>>) {
     const grid = document.querySelector('.people-grid');
     if (!grid) return;
+
+    async function openFromCard(card: HTMLElement) {
+        const map = await loadPeopleById();
+        const person = map.get(card.dataset.personId || '');
+        if (person) openPeopleDetail(person, card);
+    }
 
     grid.addEventListener('click', (event) => {
         const card = (event.target as Element | null)?.closest?.('.person-card') as HTMLElement | null;
         if (!card) return;
-        const person = getPeopleById().get(card.dataset.personId || '');
-        if (!person) return;
-        openPeopleDetail(person, card);
+        openFromCard(card);
     });
 
     grid.addEventListener('keydown', (event) => {
@@ -94,8 +98,7 @@ export function initPeopleDetail(getPeopleById: () => Map<string, AnyObj>) {
         const card = (event.target as Element | null)?.closest?.('.person-card') as HTMLElement | null;
         if (!card) return;
         event.preventDefault();
-        const person = getPeopleById().get(card.dataset.personId || '');
-        if (person) openPeopleDetail(person, card);
+        openFromCard(card);
     });
 
     document.addEventListener('click', (event) => {

@@ -85,6 +85,37 @@
         ]
       },
       {
+        "source": "/sw.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          },
+          {
+            "key": "Service-Worker-Allowed",
+            "value": "/"
+          }
+        ]
+      },
+      {
+        "source": "/api/v1/people-modal.json",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300, stale-while-revalidate=86400"
+          }
+        ]
+      },
+      {
+        "source": "/api/v1/books-runtime.json",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300, stale-while-revalidate=86400"
+          }
+        ]
+      },
+      {
         "source": "**/*.html",
         "headers": [
           {
@@ -114,7 +145,7 @@
           },
           {
             "key": "Content-Security-Policy",
-            "value": "default-src 'self'; script-src 'self' 'sha256-96MAWE8dU1hV0CuI1iRIFYHEMXMGa1zZVsDTnE+qUBk=' 'sha256-GbcwBkpHyMF6bE89Z+UelbWF3WcJhNriK8ocZ0qLkTI=' 'sha256-iEb1UvPC6DMDwDmPZ4lGNhy5seUE5F9EAOYybFq4tGw=' 'sha256-ojGcl0F7C6GJHQdzZWsBE3pgtXPGJrQwrQJ/QDz5nhI='; style-src 'self' 'sha256-4SmBmymAD8jNl5TjimU/EYqAimMRvzim0qXYa37NW4M=' 'sha256-7zyAYJ9tMG80s9QET1ATHInt7DP2OEkzowvl3j2Aov0=' 'sha256-h6Qn3Q+KAF8Mcg5fhun097dEhfr8xp5woPb9S7PmixI=' 'sha256-w35Dg5HsngJoahcjKc20mQhunX+s2CQh8hnXEKTN2tg='; font-src 'self'; img-src 'self' https://images.unsplash.com https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com data:; connect-src 'self' https://api.allorigins.win https://formsubmit.co https://server.arcgisonline.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' mailto: https://formsubmit.co"
+            "value": "default-src 'self'; script-src 'self' 'sha256-96MAWE8dU1hV0CuI1iRIFYHEMXMGa1zZVsDTnE+qUBk=' 'sha256-9x5FdsG4SVC0XamUXvJ11vwhhGrkJxKKI7w3vo9fZ0o=' 'sha256-GbcwBkpHyMF6bE89Z+UelbWF3WcJhNriK8ocZ0qLkTI=' 'sha256-iEb1UvPC6DMDwDmPZ4lGNhy5seUE5F9EAOYybFq4tGw=' 'sha256-ojGcl0F7C6GJHQdzZWsBE3pgtXPGJrQwrQJ/QDz5nhI='; style-src 'self' 'sha256-1ZG95obVrY+tyPKnnv9V+m4qflE7beMsS8L9pXiGnP8=' 'sha256-4SUlbtBb/TxwESOviJSUDi5lJlSovLCf1mJQrIxkNXU=' 'sha256-4SmBmymAD8jNl5TjimU/EYqAimMRvzim0qXYa37NW4M=' 'sha256-C7jOfzEMg0sU5x0BLzsvrtkGfhTA9mbZnVcmkfdwGo0=' 'sha256-Ga+IXK55QmuZJxr0HqB+btghmZdlD2ttjzxINX2zsU8=' 'sha256-m2SzYLJdEG/6q9DqgI+Y6PQOyxLPusFDSTftWpRZTMA=' 'sha256-w0vzoqSlOU6XrigA5uA3IhlN2gwvEpqWIGQsEqaDokA=' 'sha256-w35Dg5HsngJoahcjKc20mQhunX+s2CQh8hnXEKTN2tg=' 'sha256-ylbTCSp44DA4uDYrOHr+Ceyh6Fo1ojc5HPgGLFbYWWs='; font-src 'self'; img-src 'self' https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com data:; connect-src 'self' https://api.allorigins.win https://formsubmit.co https://server.arcgisonline.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' mailto: https://formsubmit.co"
           }
         ]
       }

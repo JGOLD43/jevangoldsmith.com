@@ -8,14 +8,19 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import JsonLd from '../components/JsonLd.astro';
 import SeoRelated from '../components/SeoRelated.astro';
+import { ClientRouter } from 'astro:transitions';
 import { SITE_NAME, DEFAULT_OG_IMAGE, type BreadcrumbStep, type ExtraSchema, type PageType } from '../lib/seo';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
-// Critical-CSS-inline + async-load was tried and reverted: it cut FCP
-// modestly but caused a major CLS regression (0.084 → 0.726) when full
-// styles arrived. Below-fold layout would jump every render. The 187KB
-// legacy-style.css is the FCP bottleneck; the real fix is purging unused
-// selectors or migrating to per-page Tailwind utilities — both larger
-// projects than the parity refactor.
+// FCP path:
+//   1. Critical CSS (~15KB) inlines via scripts/extract-critical-css.js
+//      — covers reset, theme tokens, nav, typography, footer.
+//   2. Full chrome.css (~38KB) loads async via preload + JS rel-flip.
+//      No render-block; below-fold styles arrive shortly after first
+//      paint without CLS because the critical bucket includes all
+//      structural rules above the fold.
+//   3. Per-page slice inlines if <2KB, externalizes otherwise.
+// The 187KB legacy-style.css source is build-time only (purged out of
+// dist via prune-dist-assets.js).
 
 interface Props {
   title: string;
@@ -52,7 +57,7 @@ const {
   robots = 'index, follow, max-image-preview:large',
   noJsonLd = false,
   extraSchema,
-} = Astro.props;
+} = Astro.props as Props;
 
 const siteName = SITE_NAME;
 
@@ -106,13 +111,11 @@ if (seoSlug === 'index' || seoSlug === 'search') {
     <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     <link rel="stylesheet" href="/css/legacy-style.css" fetchpriority="high" />
-    {/* Preload the two most-used Chivo weights so the FOUT swap fires
-        before first paint instead of after the CSS finishes parsing.
-        600 = headings + UI labels (164 rules), 400 = body default
-        (implicit, all running text). 300/700 are used less often and
-        loaded lazily via @font-face when needed. */}
-    <link rel="preload" href="/fonts/chivo/chivo-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/chivo/chivo-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+    {/* Preload the single variable Chivo font (one file, weights 100-900)
+        so the FOUT swap fires before first paint. Replaces the 4 prior
+        static-weight files (60KB total) with a single ~33KB variable
+        file — net first-visit font bytes ~−27KB. */}
+    <link rel="preload" href="/fonts/chivo/chivo-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
     {preconnectOrigins.map((origin) => (
       <link rel="preconnect" href={origin} crossorigin />
     ))}
@@ -137,12 +140,18 @@ if (seoSlug === 'index' || seoSlug === 'search') {
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
     <slot name="head" />
+    {/* Astro View Transitions — same-layout navigation morphs in
+        place with persistent <nav> + <footer> instead of full reload.
+        Stacks with Speculation Rules prerender (nav-prefetch.ts): the
+        prerendered DOM swaps in via a CSS animation, perceived nav
+        latency ~one frame. */}
+    <ClientRouter fallback="swap" />
   </head>
   <body class={bodyClass}>
-    {!noChrome && <Nav />}
+    {!noChrome && <div transition:persist="site-nav"><Nav /></div>}
     <slot />
     {!noChrome && <SeoRelated slug={seoSlug} />}
-    {!noChrome && <Footer />}
+    {!noChrome && <div transition:persist="site-footer"><Footer /></div>}
     <slot name="scripts" />
     <script>
       import '../scripts/theme.ts';

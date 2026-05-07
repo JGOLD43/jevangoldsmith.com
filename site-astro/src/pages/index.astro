@@ -27,6 +27,12 @@ const body = HOME_BODY.replace(
   canonical="https://jevangoldsmith.com/"
   pageType="WebSite"
 >
+  <Fragment slot="head">
+    {/* LCP candidate — profile portrait. Preload so the fetch starts
+        alongside HTML parsing instead of waiting for the parser to
+        reach the <img> deep in <body>. */}
+    <link rel="preload" as="image" href="/images/generated/profile/profile-720.jpg" fetchpriority="high" />
+  </Fragment>
   <Fragment set:html={body} />
 </Base>
 
