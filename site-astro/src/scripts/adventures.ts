@@ -1,11 +1,7 @@
 import { escapeHtml as escapeHTML, escapeAttr } from '../lib/html-escape';
 import {
     state, fetchJson, updateLightboxImage,
-    ADVENTURES_DATA_URL, PLACES_DATA_URL, ROUTES_DATA_URL,
-    POPULAR_ROUTES_URL, POPULAR_ROUTES_INDEX_URL, PHOTOS_DATA_URL,
-    COUNTRIES_GEO_URL, COUNTRIES_VISITED_URL, FILTERS_STORAGE_KEY,
-    WEB_MERCATOR_MAX_LAT, HORIZONTAL_WRAP_BOUND, ROUTE_TYPE_COLORS,
-    BASEMAPS, DEFAULT_FILTERS
+    ADVENTURES_DATA_URL, FILTERS_STORAGE_KEY, DEFAULT_FILTERS
 } from './adventures-state';
 import { registerActions } from './action-dispatcher';
 
@@ -17,48 +13,7 @@ import { registerActions } from './action-dispatcher';
 
 // state defaults live in adventures-state.ts. constants
 // (BASEMAPS, DEFAULT_FILTERS, *_DATA_URL, ...) imported from the same
-// module — no more globalThis.X = X exposure for cross-module reads.
-
-if (typeof window !== 'undefined') {
-    window.AdventuresState = {
-        get adventures() { return state.allAdventures; },
-        set adventures(v) { state.allAdventures = v; },
-        get places() { return state.allPlaces; },
-        get placeCategories() { return state.placeCategories; },
-        get routes() { return state.allRoutes; },
-        get photos() { return state.allPhotos; },
-        get countries() { return state.countryGeo; },
-        get visited() { return state.visitedIso; },
-        get filters() { return state.mapFilters; },
-        get worldMap() { return state.worldMap; },
-        get adventureMaps() { return state.adventureMaps; },
-        get adventureMarkers() { return state.adventureMarkers; },
-        get selectedId() { return state.selectedAdventureId; },
-        set selectedId(v) { state.selectedAdventureId = v; },
-        get currentView() { return state.currentAdventureView; },
-        set currentView(v) { state.currentAdventureView = v; }
-    };
-    window.AdventuresUrls = {
-        adventures: ADVENTURES_DATA_URL,
-        places: PLACES_DATA_URL,
-        routes: ROUTES_DATA_URL,
-        popularRoutes: POPULAR_ROUTES_URL,
-        popularRoutesIndex: POPULAR_ROUTES_INDEX_URL,
-        photos: PHOTOS_DATA_URL,
-        countriesGeo: COUNTRIES_GEO_URL,
-        countriesVisited: COUNTRIES_VISITED_URL
-    };
-    window.AdventuresConstants = {
-        FILTERS_STORAGE_KEY,
-        WEB_MERCATOR_MAX_LAT,
-        HORIZONTAL_WRAP_BOUND,
-        ROUTE_TYPE_COLORS,
-        BASEMAPS,
-        DEFAULT_FILTERS
-    };
-}
-
-// FAST_BASEMAP_LAND consumed by adventures-map.js via globalThis.
+// module.
 
 function loadFilters() {
     try {
@@ -87,18 +42,14 @@ function saveFilters() {
     }
 }
 
-// Async loader for the heavier Adventures map runtime.
-function loadAdventuresMapBundle() {
-    if (window.AdventuresMap) return Promise.resolve(window.AdventuresMap);
+// Async loader for the heavier Adventures map runtime. Vite/Astro emits
+// a separate chunk for it, kept off the initial adventures bundle.
+function loadAdventuresMapBundle(): Promise<AnyObj> {
     if (state.adventuresMapBundlePromise) return state.adventuresMapBundlePromise;
-
-    // native dynamic import. Vite/Astro emits a separate
-    // chunk for the heavy map runtime — kept off the initial adventures bundle.
-    state.adventuresMapBundlePromise = import('./adventures-map').then(() => {
-        if (!window.AdventuresMap) throw new Error('Adventures map API was not registered');
-        return window.AdventuresMap;
+    state.adventuresMapBundlePromise = import('./adventures-map').then((mod) => {
+        if (typeof mod.ensureWorldMap !== 'function') throw new Error('adventures-map module did not export ensureWorldMap');
+        return mod;
     });
-
     return state.adventuresMapBundlePromise;
 }
 
@@ -318,7 +269,9 @@ function highlightAdventureOnMap(adventure: AnyObj) {
 
 function clearMapHighlight() {
     if (!state.worldMap) {
-        if (window.AdventuresMap) window.AdventuresMap.ensureWorldMap().then(clearMapHighlight);
+        if (state.adventuresMapBundlePromise) {
+            state.adventuresMapBundlePromise.then((api) => api.ensureWorldMap()).then(clearMapHighlight);
+        }
         return;
     }
     state.worldMap.setView([20, 0], 2, {

@@ -104,19 +104,6 @@ declare global {
   // Free fetch helpers (legacy bare-identifier reads in *-map / detail).
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fetchJson(url: string, fallback?: any): Promise<any>;
-  interface Window {
-    // Adventures pile (set by site-astro/src/scripts/adventures.ts +
-    // adventures-map.js).
-    AdventuresMap?: {
-      ensureWorldMap: (adventures?: unknown) => Promise<unknown>;
-      highlightAdventureOnMap?: (adventure: unknown) => unknown;
-      clearMapHighlight?: () => unknown;
-    };
-    AdventuresState?: Record<string, unknown>;
-    AdventuresUrls?: Record<string, string>;
-    AdventuresConstants?: Record<string, unknown>;
-
-  }
 }
 
 export {};

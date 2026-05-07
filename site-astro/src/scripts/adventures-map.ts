@@ -654,8 +654,6 @@ void fetchJson; void loadFilters;
 
 setRouteRerender(() => renderRouteLayer());
 
-window.AdventuresMap = {
-    ensureWorldMap
-};
-
-export {};
+// adventures.ts dynamically imports this module; ensureWorldMap is the
+// only public surface it consumes via the import promise.
+export { ensureWorldMap };
