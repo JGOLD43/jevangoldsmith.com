@@ -9,6 +9,7 @@ import {
     toggleClearButton
 } from './collection-ui';
 import { registerActions } from './action-dispatcher';
+import { render as renderMovieStats } from './movie-stats';
 // Movies/letterboxd page orchestrator. Inlines js/letterboxd-state.js,
 // js/letterboxd-filters.js, js/letterboxd-modal.js, js/letterboxd-events.js,
 // js/letterboxd-render.js, js/letterboxd-view.js — those shards only ever
@@ -374,9 +375,7 @@ function buildCollectionController() {
             movieView.updateStarFilterDisplay(state.starFilter);
             movieView.updateTimesWatchedFilterDisplay(state.timesWatchedFilter);
             toggleClearButton('movie-search-clear-btn', Boolean(state.searchQuery));
-            if (window.MovieStats && typeof window.MovieStats.render === 'function') {
-                window.MovieStats.render(filteredMovies);
-            }
+            renderMovieStats(filteredMovies);
         },
         group: {
             allButtonSelector: '[data-genre="all"]',

@@ -1,10 +1,10 @@
 import { escapeHtml as escapeHTML } from '../lib/html-escape';
 // Compute + render movie watch stats from enriched movie data.
-// Exposes window.MovieStats.render(movies) which (re)builds the stats panel.
-(function () {
-    'use strict';
+// Exports render + compute as ES module names. letterboxd.ts imports
+// render directly; the module-level init kicks off the initial empty
+// render on DOMContentLoaded.
 
-    const PANEL_ID = 'movie-stats-panel';
+const PANEL_ID = 'movie-stats-panel';
 
     function decadeFor(year: unknown) {
         const y = Number(year);
@@ -357,7 +357,4 @@ import { escapeHtml as escapeHTML } from '../lib/html-escape';
         init();
     }
 
-    window.MovieStats = { render, compute };
-})();
-
-export {};
+export { render, compute };

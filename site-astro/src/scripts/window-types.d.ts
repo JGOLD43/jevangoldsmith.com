@@ -116,7 +116,6 @@ declare global {
     AdventuresUrls?: Record<string, string>;
     AdventuresConstants?: Record<string, unknown>;
 
-    MovieStats?: { render: (movies: unknown) => void; compute: (movies: unknown) => unknown };
   }
 }
 
