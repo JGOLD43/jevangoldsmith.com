@@ -93,7 +93,9 @@ if (routeChunks.length === 0) fail('Missing popular route chunks');
 // (quotes/projects/products/essays/podcasts/books.json source) are pruned
 // from dist by prune-dist-assets.js, so they're not budgeted here.
 const RUNTIME_JSON_BUDGETS = {
-  'data/countries.slim.generated.json': 320 * KB,
+  // Filtered to ONLY visited countries by scripts/slim-countries.js;
+  // unrendered geometry never shipped (was 244KB).
+  'data/countries.slim.generated.json': 32 * KB,
   'data/remote-assets.generated.json': 240 * KB,
   'data/books.generated.json': 70 * KB,
   'data/placeofinterest.json': 60 * KB,
