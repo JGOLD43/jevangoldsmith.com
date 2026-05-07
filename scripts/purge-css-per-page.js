@@ -366,7 +366,12 @@ for (const { file, html, kept } of perPage) {
   const h = crypto.createHash('sha256').update(purged).digest('hex').slice(0, 10);
   const slug = path.relative(DIST, file).replace(/\.html$/, '').replace(/[\/]/g, '__');
   const outFile = `${slug}.${h}.css`;
-  fs.writeFileSync(path.join(outDir, outFile), purged);
+  // Skip writing empty per-page CSS files. The HTML rewrite below also
+  // omits the <link>/<preload> when purged is empty, so the file would
+  // never be requested.
+  if (purged.length > 0) {
+    fs.writeFileSync(path.join(outDir, outFile), purged);
+  }
 
   // Per-page CSS is now an external long-cached <link> instead of inline
   // <style>. Trade-off: first visit costs one extra RTT (mitigated by
