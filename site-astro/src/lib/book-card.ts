@@ -3,6 +3,7 @@
 
 import type { Book } from '../content.config';
 import remoteAssets from '../../../data/remote-assets.generated.json';
+import { cardFrame, topBadge } from './card';
 import { escapeAttr, escapeHtml } from './html-escape';
 import { lcpAttrs } from './lcp-attrs';
 
@@ -70,9 +71,9 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
 
   const coverUrl = bookCoverUrl(book);
 
-  let topBadge = '';
-  if (isUnread) topBadge = '<div class="to-read-badge">📚 To Read</div>';
-  else if (timesRead > 1) topBadge = `<div class="times-read-badge">📖 ${timesRead}x Read</div>`;
+  const badgeHtml = isUnread
+    ? '<div class="to-read-badge">📚 To Read</div>'
+    : topBadge(timesRead > 1 ? `📖 ${timesRead}x Read` : null);
 
   let zoomLead = `<p class="zoom-detail-lead">${stars}</p>`;
   if (isUnread) zoomLead = '<p class="zoom-detail-lead zoom-detail-unread">To Read</p>';
@@ -83,42 +84,25 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
   else if (!hasRating) ratingBlock = '<div class="book-rating book-rating-unrated">Read</div>';
   else ratingBlock = `<div class="book-rating"><span class="rating-number">${ratingValue}</span> ${stars}</div>`;
 
-  const cardClass = `book-card js-zoom-item${isUnread ? ' is-unread' : ''}${review ? ' has-review' : ''}`;
-
   const coverImg = coverUrl
     ? `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(title)}" class="book-cover" width="150" height="230" ${lcpAttrs(eager ? 0 : 1, 1)} decoding="async" data-book-cover-fallback="true">`
     : '';
-
   const yearSpan = yearStr ? `<span class="book-year">${escapeHtml(yearStr)}</span>` : '';
-  const reviewBlock = review
-    ? `<p class="book-description">${escapeHtml(shortDescription)}</p>`
-    : '';
-
-  // data-isbn is the canonical key. data-title is a fallback ID for the 7
-  // books missing an ISBN (read at books.ts:158). data-category was emitted
-  // for parity with movie/people cards but books.ts never reads it (filter
-  // works against the in-memory book objects, not the DOM dataset) — drop
-  // it. detailLine is omitted entirely when no real review/notes exist.
+  const reviewBlock = review ? `<p class="book-description">${escapeHtml(shortDescription)}</p>` : '';
   const detailLine = detailBody
     ? `<p class="zoom-detail-line"><span>${detailLabel} —</span> ${escapeHtml(detailBody)}</p>`
     : '';
-  const titleAttr = isbn ? '' : ` data-title="${escapeAttr(title)}"`;
-  return [
-    `<div class="${cardClass}" data-isbn="${escapeAttr(isbn)}"${titleAttr} role="button" tabindex="0">`,
-    topBadge,
-    `<div class="book-cover-wrapper">`,
-    coverImg,
-    `<div class="js-zoom-detail" aria-hidden="true">`,
-    `<p class="zoom-detail-kicker">${escapeHtml(author)}${yearStr ? ` · ${escapeHtml(yearStr)}` : ''}</p>`,
-    `<p class="zoom-detail-title">${escapeHtml(title)}</p>`,
-    zoomLead,
-    detailLine,
-    `</div></div>`,
-    `<div class="book-info">`,
-    `<div class="book-title-row"><h3 class="book-title">${escapeHtml(title)}</h3>${yearSpan}</div>`,
-    `<p class="book-author">by ${escapeHtml(author)}</p>`,
-    ratingBlock,
-    reviewBlock,
-    `</div></div>`
-  ].join('');
+
+  // data-isbn is the canonical key; data-title fallback for the 7 books
+  // missing an ISBN (read at books.ts:158).
+  const body = `${badgeHtml}<div class="book-cover-wrapper">${coverImg}<div class="js-zoom-detail" aria-hidden="true"><p class="zoom-detail-kicker">${escapeHtml(author)}${yearStr ? ` · ${escapeHtml(yearStr)}` : ''}</p><p class="zoom-detail-title">${escapeHtml(title)}</p>${zoomLead}${detailLine}</div></div><div class="book-info"><div class="book-title-row"><h3 class="book-title">${escapeHtml(title)}</h3>${yearSpan}</div><p class="book-author">by ${escapeHtml(author)}</p>${ratingBlock}${reviewBlock}</div>`;
+
+  const classes = ['book-card', 'js-zoom-item'];
+  if (isUnread) classes.push('is-unread');
+  if (review) classes.push('has-review');
+  return cardFrame({
+    classes,
+    data: { isbn, ...(isbn ? {} : { title }) },
+    role: 'button', tabindex: 0, body
+  });
 }

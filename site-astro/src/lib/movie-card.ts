@@ -2,11 +2,10 @@
 // SSR'd cards and filters by toggling visibility.
 
 import type { Movie as MovieRecord } from '../content.config';
+import { cardFrame, topBadge } from './card';
 import { formatRuntime } from './dates';
 import { escapeAttr, escapeHtml } from './html-escape';
 
-// Card renderer accepts a partial shape — all fields optional so legacy records
-// with missing data still render gracefully.
 type Movie = Partial<MovieRecord>;
 
 const GENRE_ICONS: Record<string, string> = {
@@ -30,13 +29,6 @@ export function renderMovieCardHtml(movie: Movie): string {
   const review = movie.review ?? '';
   const shortDescription = movie.shortDescription ?? '';
   const hasReview = Boolean(review);
-
-  const classes = ['movie-card', 'js-zoom-item'];
-  if (hasReview) classes.push('has-review');
-
-  const timesWatchedBadge = timesWatched > 1
-    ? `<div class="times-read-badge movie-watch-badge">${timesWatched}x Watched</div>`
-    : '';
   const genreIcon = (genre && GENRE_ICONS[genre]) || '🎬';
   const runtimeStr = runtime ? formatRuntime(runtime) : '';
 
@@ -51,12 +43,8 @@ export function renderMovieCardHtml(movie: Movie): string {
         </div>`
     : '';
 
-  const cursorStyle = hasReview ? ' style="cursor: pointer;"' : '';
-
-  // Only data-movie-title is read by letterboxd.ts. data-title and data-id
-  // were emitted as duplicates; nothing reads them.
-  return `<div class="${classes.join(' ')}" data-movie-title="${escapeAttr(title)}"${cursorStyle}>
-        ${timesWatchedBadge}
+  const body = `
+        ${topBadge(timesWatched > 1 ? `${timesWatched}x Watched` : null, 'movie-watch-badge')}
         <div class="movie-poster-wrapper">
             ${poster ? `<img src="${escapeAttr(poster)}" alt="${escapeAttr(title)}" class="movie-poster" width="150" height="230" loading="lazy" decoding="async">` : `<div class="movie-poster-placeholder">${escapeHtml(title)}</div>`}
         </div>
@@ -72,5 +60,14 @@ export function renderMovieCardHtml(movie: Movie): string {
             ${date ? `<p class="movie-date">Watched: ${escapeHtml(date)}</p>` : ''}
         </div>
         ${detailHtml}
-    </div>`;
+    `;
+
+  const classes = ['movie-card', 'js-zoom-item'];
+  if (hasReview) classes.push('has-review');
+  return cardFrame({
+    classes,
+    data: { 'movie-title': title },
+    style: hasReview ? 'cursor: pointer;' : undefined,
+    body
+  });
 }
