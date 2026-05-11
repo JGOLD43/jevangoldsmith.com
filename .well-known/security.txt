@@ -1,0 +1,7 @@
+# Security Policy for jevangoldsmith.com
+# https://securitytxt.org/
+
+Contact: mailto:hello@jevangoldsmith.com
+Preferred-Languages: en
+Canonical: https://jevangoldsmith.com/.well-known/security.txt
+Expires: 2027-02-15T00:00:00.000Z

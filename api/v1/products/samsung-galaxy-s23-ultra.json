@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "collection": "products",
+  "canonicalUrl": "https://jevangoldsmith.com/api/v1/products/samsung-galaxy-s23-ultra.json",
+  "item": {
+    "id": "samsung-galaxy-s23-ultra",
+    "slug": "samsung-galaxy-s23-ultra",
+    "title": "Galaxy S23 Ultra",
+    "brand": "Samsung",
+    "type": "recommendation",
+    "category": "tech",
+    "status": "available",
+    "price": "",
+    "shortDescription": "A big-screen Android phone with an excellent camera system, built-in S Pen, and enough battery to feel dependable all day.",
+    "description": "A flagship Android phone recommendation for capture, notes, and everyday mobile work.",
+    "rating": 4.7,
+    "badge": "Power Phone",
+    "usage": "Primary Android pick",
+    "icon": "phone",
+    "image": "images/generated/products/samsung-galaxy-s23-ultra-640.png",
+    "ctaLabel": "View Recommendation",
+    "checkoutUrl": "",
+    "verdict": "A phone that behaves more like a pocket workstation.",
+    "whyItStayed": "The big screen, strong cameras, and S Pen make it useful for capturing, annotating, and doing real work away from the desk.",
+    "howIUseIt": "Photos, quick notes, reading, navigation, travel planning, and mobile admin when opening a laptop would be overkill.",
+    "replaced": "A smaller phone that made mobile work feel cramped.",
+    "audience": [
+      "builders",
+      "creators"
+    ],
+    "topics": [
+      "tools-objects",
+      "ai-assisted-work"
+    ],
+    "tags": [
+      "phone",
+      "camera",
+      "android"
+    ],
+    "relatedContent": [
+      "videos.html"
+    ],
+    "collection": "products",
+    "canonicalUrl": "https://jevangoldsmith.com/products.html#samsung-galaxy-s23-ultra",
+    "shareable": true,
+    "summary": "A big-screen Android phone with an excellent camera system, built-in S Pen, and enough battery to feel dependable all day."
+  }
+}

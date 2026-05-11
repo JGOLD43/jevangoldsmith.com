@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Agent workflow with task nodes, feedback loop, and human review">
+  <rect width="600" height="400" fill="#f5f3ed"/>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2c3e50"/>
+    </marker>
+  </defs>
+
+  <g stroke="#2c3e50" stroke-width="2" fill="none" marker-end="url(#arr)">
+    <path d="M150 110 L260 110"/>
+    <path d="M340 110 L450 110"/>
+    <path d="M490 150 L490 230"/>
+    <path d="M450 290 L340 290"/>
+    <path d="M260 290 L150 290"/>
+    <path d="M110 250 L110 150"/>
+  </g>
+
+  <g font-family="Chivo,system-ui,sans-serif" font-size="14" font-weight="700" fill="#2c3e50">
+    <g>
+      <rect x="40" y="80" width="110" height="60" rx="10" fill="#fff" stroke="#2c3e50" stroke-width="2"/>
+      <text x="95" y="115" text-anchor="middle">PLAN</text>
+    </g>
+    <g>
+      <rect x="245" y="80" width="110" height="60" rx="10" fill="#fff" stroke="#2c3e50" stroke-width="2"/>
+      <text x="300" y="115" text-anchor="middle">ACT</text>
+    </g>
+    <g>
+      <rect x="450" y="80" width="110" height="60" rx="10" fill="#c9a86c" stroke="#2c3e50" stroke-width="2"/>
+      <text x="505" y="115" text-anchor="middle">OBSERVE</text>
+    </g>
+    <g>
+      <rect x="450" y="260" width="110" height="60" rx="10" fill="#fff" stroke="#2c3e50" stroke-width="2"/>
+      <text x="505" y="295" text-anchor="middle">CHECK</text>
+    </g>
+    <g>
+      <rect x="245" y="260" width="110" height="60" rx="10" fill="#f5c542" stroke="#2c3e50" stroke-width="2"/>
+      <text x="300" y="289" text-anchor="middle">HUMAN</text>
+      <text x="300" y="305" text-anchor="middle" font-size="11" font-weight="500">review</text>
+    </g>
+    <g>
+      <rect x="40" y="260" width="110" height="60" rx="10" fill="#fff" stroke="#2c3e50" stroke-width="2"/>
+      <text x="95" y="289" text-anchor="middle">DONE</text>
+      <text x="95" y="305" text-anchor="middle" font-size="11" font-weight="500">or loop</text>
+    </g>
+  </g>
+
+  <g fill="#2c3e50" font-family="Chivo,system-ui,sans-serif" font-size="11" font-weight="500" opacity="0.8">
+    <text x="205" y="100" text-anchor="middle">scope</text>
+    <text x="395" y="100" text-anchor="middle">tools</text>
+    <text x="395" y="280" text-anchor="middle">verify</text>
+    <text x="205" y="280" text-anchor="middle">handoff</text>
+  </g>
+</svg>

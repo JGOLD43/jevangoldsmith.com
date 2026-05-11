@@ -1,0 +1,1847 @@
+{
+  "categories": [
+    {
+      "id": "wishlist",
+      "label": "To visit",
+      "color": "#2b6cb0"
+    },
+    {
+      "id": "food",
+      "label": "Good food",
+      "color": "#dd6b20"
+    },
+    {
+      "id": "hike",
+      "label": "Hike",
+      "color": "#38a169"
+    },
+    {
+      "id": "view",
+      "label": "Viewpoint",
+      "color": "#805ad5"
+    },
+    {
+      "id": "dive",
+      "label": "Dive site",
+      "color": "#0987a0"
+    },
+    {
+      "id": "event",
+      "label": "Cultural event",
+      "color": "#e53e3e"
+    }
+  ],
+  "places": [
+    {
+      "id": "patagonia",
+      "name": "Patagonia",
+      "location": "Argentina / Chile",
+      "lat": -49.3,
+      "lng": -73.05,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Torres del Paine, Fitz Roy, glacier trekking.",
+      "priority": "high"
+    },
+    {
+      "id": "iceland",
+      "name": "Iceland ring road",
+      "location": "Iceland",
+      "lat": 64.9631,
+      "lng": -19.0208,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Two-week loop. Waterfalls, glaciers, hot springs.",
+      "priority": "high"
+    },
+    {
+      "id": "morocco",
+      "name": "Morocco",
+      "location": "Marrakech & Sahara",
+      "lat": 31.6295,
+      "lng": -7.9811,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Atlas mountains, desert nights, medina markets.",
+      "priority": "medium"
+    },
+    {
+      "id": "manhattan-nyc",
+      "name": "Manhattan",
+      "location": "New York, USA",
+      "lat": 40.7831,
+      "lng": -73.9712,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Bewildering energy of the city that never sleeps."
+    },
+    {
+      "id": "dubai",
+      "name": "Dubai",
+      "location": "United Arab Emirates",
+      "lat": 25.2048,
+      "lng": 55.2708,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Burj Khalifa, aquariums, futurist skyline."
+    },
+    {
+      "id": "tokyo",
+      "name": "Tokyo",
+      "location": "Japan",
+      "lat": 35.6762,
+      "lng": 139.6503,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Another world in every dimension."
+    },
+    {
+      "id": "hong-kong",
+      "name": "Hong Kong",
+      "location": "China",
+      "lat": 22.3193,
+      "lng": 114.1694,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Vibrant Southeast Asian metropolis."
+    },
+    {
+      "id": "singapore",
+      "name": "Singapore",
+      "location": "Singapore",
+      "lat": 1.3521,
+      "lng": 103.8198,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Hawker food, beaches, garden city."
+    },
+    {
+      "id": "rio-de-janeiro",
+      "name": "Rio de Janeiro",
+      "location": "Brazil",
+      "lat": -22.9068,
+      "lng": -43.1729,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Mountains, beaches, ocean — all at once."
+    },
+    {
+      "id": "paris",
+      "name": "Paris",
+      "location": "France",
+      "lat": 48.8566,
+      "lng": 2.3522,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Eiffel Tower, Notre Dame, Pompidou."
+    },
+    {
+      "id": "barcelona",
+      "name": "Barcelona",
+      "location": "Spain",
+      "lat": 41.3851,
+      "lng": 2.1734,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Gaudí architecture and La Rambla."
+    },
+    {
+      "id": "rome",
+      "name": "Rome",
+      "location": "Italy",
+      "lat": 41.9028,
+      "lng": 12.4964,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "The eternal city."
+    },
+    {
+      "id": "sydney",
+      "name": "Sydney",
+      "location": "Australia",
+      "lat": -33.8688,
+      "lng": 151.2093,
+      "region": "australia",
+      "category": "wishlist",
+      "notes": "Opera House, Bondi, Blue Mountains."
+    },
+    {
+      "id": "las-vegas",
+      "name": "Las Vegas",
+      "location": "Nevada, USA",
+      "lat": 36.1699,
+      "lng": -115.1398,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Strip casinos plus stunning desert nearby."
+    },
+    {
+      "id": "jerusalem",
+      "name": "Jerusalem",
+      "location": "Israel",
+      "lat": 31.7683,
+      "lng": 35.2137,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Old City — three faiths, layered history."
+    },
+    {
+      "id": "london",
+      "name": "London",
+      "location": "United Kingdom",
+      "lat": 51.5074,
+      "lng": -0.1278,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Historic European capital."
+    },
+    {
+      "id": "san-francisco",
+      "name": "San Francisco",
+      "location": "California, USA",
+      "lat": 37.7749,
+      "lng": -122.4194,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Hilly streets, Golden Gate Bridge."
+    },
+    {
+      "id": "st-petersburg",
+      "name": "St. Petersburg",
+      "location": "Russia",
+      "lat": 59.9311,
+      "lng": 30.3609,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "White Nights and bridges over the Neva."
+    },
+    {
+      "id": "venice",
+      "name": "Venice",
+      "location": "Italy",
+      "lat": 45.4408,
+      "lng": 12.3155,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Canal city; Murano glass."
+    },
+    {
+      "id": "kyoto",
+      "name": "Kyoto",
+      "location": "Japan",
+      "lat": 35.0116,
+      "lng": 135.7681,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Temples, gardens, former imperial capital."
+    },
+    {
+      "id": "grand-canyon",
+      "name": "Grand Canyon",
+      "location": "Arizona, USA",
+      "lat": 36.0544,
+      "lng": -112.1401,
+      "region": "americas",
+      "category": "view",
+      "notes": "Vast natural wonder; Skywalk for the brave."
+    },
+    {
+      "id": "sequoia-np",
+      "name": "Sequoia National Park",
+      "location": "California, USA",
+      "lat": 36.4864,
+      "lng": -118.5658,
+      "region": "americas",
+      "category": "view",
+      "notes": "Forest of giant trees."
+    },
+    {
+      "id": "alaska",
+      "name": "Alaska",
+      "location": "USA",
+      "lat": 63.0695,
+      "lng": -151.0074,
+      "region": "americas",
+      "category": "view",
+      "notes": "Volcanic landscapes, Denali, glaciers."
+    },
+    {
+      "id": "niagara-falls",
+      "name": "Niagara Falls",
+      "location": "USA / Canada border",
+      "lat": 43.0962,
+      "lng": -79.0377,
+      "region": "americas",
+      "category": "view",
+      "notes": "Powerful border waterfall."
+    },
+    {
+      "id": "yellowstone",
+      "name": "Yellowstone National Park",
+      "location": "Wyoming, USA",
+      "lat": 44.428,
+      "lng": -110.5885,
+      "region": "americas",
+      "category": "view",
+      "notes": "Geysers and volcanic features."
+    },
+    {
+      "id": "monument-valley",
+      "name": "Monument Valley & Antelope Canyon",
+      "location": "Arizona, USA",
+      "lat": 36.998,
+      "lng": -110.0985,
+      "region": "americas",
+      "category": "view",
+      "notes": "Red rock formations of the Southwest."
+    },
+    {
+      "id": "bonneville-salt-flats",
+      "name": "Bonneville Salt Flats",
+      "location": "Utah, USA",
+      "lat": 40.76,
+      "lng": -113.79,
+      "region": "americas",
+      "category": "view",
+      "notes": "Giant salt pan near Salt Lake City."
+    },
+    {
+      "id": "chichen-itza",
+      "name": "Chichen Itza",
+      "location": "Yucatán, Mexico",
+      "lat": 20.6843,
+      "lng": -88.5678,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Mayan pyramid complex."
+    },
+    {
+      "id": "teotihuacan",
+      "name": "Teotihuacan",
+      "location": "Mexico",
+      "lat": 19.6925,
+      "lng": -98.8438,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Ancient pyramid city."
+    },
+    {
+      "id": "cenotes-yucatan",
+      "name": "Yucatán cenotes",
+      "location": "near Cancún, Mexico",
+      "lat": 20.2114,
+      "lng": -87.4654,
+      "region": "americas",
+      "category": "dive",
+      "notes": "Underground rivers and lakes."
+    },
+    {
+      "id": "cuba",
+      "name": "Cuba",
+      "location": "Havana",
+      "lat": 23.1136,
+      "lng": -82.3666,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Classic cars, music, beaches."
+    },
+    {
+      "id": "machu-picchu",
+      "name": "Machu Picchu",
+      "location": "Peru",
+      "lat": -13.1631,
+      "lng": -72.545,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Forgotten Inca city in the Andes."
+    },
+    {
+      "id": "iguazu-falls",
+      "name": "Iguaçu Falls",
+      "location": "Brazil / Argentina",
+      "lat": -25.6953,
+      "lng": -54.4367,
+      "region": "americas",
+      "category": "view",
+      "notes": "Sprawling waterfall system."
+    },
+    {
+      "id": "panama-canal",
+      "name": "Panama Canal",
+      "location": "Panama",
+      "lat": 9.082,
+      "lng": -79.782,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Atlantic-Pacific shortcut."
+    },
+    {
+      "id": "angel-falls",
+      "name": "Angel Falls",
+      "location": "Venezuela",
+      "lat": 5.9701,
+      "lng": -62.5362,
+      "region": "americas",
+      "category": "view",
+      "notes": "World's tallest uninterrupted waterfall."
+    },
+    {
+      "id": "ecuador-volcanoes",
+      "name": "Ecuadorian volcanoes",
+      "location": "Ecuador (Cotopaxi)",
+      "lat": -0.684,
+      "lng": -78.4378,
+      "region": "americas",
+      "category": "hike",
+      "notes": "Andean volcanic peaks."
+    },
+    {
+      "id": "galapagos",
+      "name": "Galápagos Islands",
+      "location": "Ecuador",
+      "lat": -0.9538,
+      "lng": -90.9656,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Unique wildlife — Darwin's lab."
+    },
+    {
+      "id": "easter-island",
+      "name": "Easter Island",
+      "location": "Chile",
+      "lat": -27.1127,
+      "lng": -109.3497,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Moai statues facing the Pacific."
+    },
+    {
+      "id": "sicily",
+      "name": "Sicily",
+      "location": "Italy",
+      "lat": 37.6,
+      "lng": 14.0154,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Greek temples, Etna, seafood."
+    },
+    {
+      "id": "neapolitan-islands",
+      "name": "Neapolitan Islands",
+      "location": "Capri / Ischia, Italy",
+      "lat": 40.5532,
+      "lng": 14.2222,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Islands near Naples; Pompeii within reach."
+    },
+    {
+      "id": "crete",
+      "name": "Crete",
+      "location": "Greece",
+      "lat": 35.2401,
+      "lng": 24.8093,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Largest Greek island — gorges, ruins, beaches."
+    },
+    {
+      "id": "santorini",
+      "name": "Santorini",
+      "location": "Greece",
+      "lat": 36.3932,
+      "lng": 25.4615,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Mediterranean volcanic mind-mash."
+    },
+    {
+      "id": "greenland",
+      "name": "Greenland",
+      "location": "Greenland",
+      "lat": 71.7069,
+      "lng": -42.6043,
+      "region": "americas",
+      "category": "view",
+      "notes": "Arctic glaciers and fjords."
+    },
+    {
+      "id": "normandy-beaches",
+      "name": "Normandy beaches",
+      "location": "France",
+      "lat": 49.4144,
+      "lng": -0.8728,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "WWII landing sites."
+    },
+    {
+      "id": "scottish-highlands",
+      "name": "Scottish Highlands",
+      "location": "Scotland, UK",
+      "lat": 57.12,
+      "lng": -4.71,
+      "region": "europe",
+      "category": "hike",
+      "notes": "Mountains, lochs, distilleries."
+    },
+    {
+      "id": "norwegian-fjords",
+      "name": "Norwegian fjords",
+      "location": "Norway",
+      "lat": 62.1049,
+      "lng": 7.0931,
+      "region": "europe",
+      "category": "view",
+      "notes": "Geirangerfjord and the deep coast."
+    },
+    {
+      "id": "sardinia",
+      "name": "Sardinia",
+      "location": "Italy",
+      "lat": 40.1209,
+      "lng": 9.0129,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Mediterranean island; turquoise coves."
+    },
+    {
+      "id": "moscow-red-square",
+      "name": "Red Square & the Kremlin",
+      "location": "Moscow, Russia",
+      "lat": 55.7539,
+      "lng": 37.6208,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "St. Basil's onion domes."
+    },
+    {
+      "id": "solovetsky-islands",
+      "name": "Solovetsky Islands",
+      "location": "White Sea, Russia",
+      "lat": 65.0233,
+      "lng": 35.7167,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Arctic monastic archipelago."
+    },
+    {
+      "id": "altai",
+      "name": "Altai",
+      "location": "Siberia, Russia",
+      "lat": 49.071,
+      "lng": 86.58,
+      "region": "asia",
+      "category": "hike",
+      "notes": "Russian Shambala — mountains and steppe."
+    },
+    {
+      "id": "lena-pillars",
+      "name": "Lena Pillars",
+      "location": "Yakutia, Russia",
+      "lat": 61.0833,
+      "lng": 127.5,
+      "region": "asia",
+      "category": "view",
+      "notes": "Rock pillars over permafrost."
+    },
+    {
+      "id": "lake-baikal",
+      "name": "Lake Baikal",
+      "location": "Siberia, Russia",
+      "lat": 53.5587,
+      "lng": 108.165,
+      "region": "asia",
+      "category": "view",
+      "notes": "Deepest, oldest freshwater lake on Earth."
+    },
+    {
+      "id": "kamchatka",
+      "name": "Kamchatka & the Kurils",
+      "location": "Russia",
+      "lat": 53.0241,
+      "lng": 158.6435,
+      "region": "asia",
+      "category": "view",
+      "notes": "Volcanic peninsula and geyser valley."
+    },
+    {
+      "id": "dead-sea",
+      "name": "Dead Sea",
+      "location": "Israel / Jordan",
+      "lat": 31.5497,
+      "lng": 35.4732,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Salt lake — float effortlessly."
+    },
+    {
+      "id": "pamukkale",
+      "name": "Pamukkale",
+      "location": "Turkey",
+      "lat": 37.9203,
+      "lng": 29.1206,
+      "region": "other",
+      "category": "view",
+      "notes": "White travertine pools and hot springs."
+    },
+    {
+      "id": "cappadocia",
+      "name": "Cappadocia",
+      "location": "Turkey",
+      "lat": 38.6431,
+      "lng": 34.8289,
+      "region": "other",
+      "category": "view",
+      "notes": "Fairy chimneys; balloon flights at dawn."
+    },
+    {
+      "id": "petra",
+      "name": "Petra",
+      "location": "Jordan",
+      "lat": 30.3285,
+      "lng": 35.4444,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Ancient city carved into red rock."
+    },
+    {
+      "id": "baalbek-byblos",
+      "name": "Baalbek & Byblos",
+      "location": "Lebanon",
+      "lat": 34.0067,
+      "lng": 36.2039,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Roman temples and Phoenician port."
+    },
+    {
+      "id": "egyptian-pyramids",
+      "name": "Pyramids of Giza & Valley of the Kings",
+      "location": "Egypt",
+      "lat": 29.9792,
+      "lng": 31.1342,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Ancient world wonder."
+    },
+    {
+      "id": "isfahan",
+      "name": "Isfahan",
+      "location": "Iran",
+      "lat": 32.6546,
+      "lng": 51.668,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Palaces, mosques, painted bridges."
+    },
+    {
+      "id": "taj-mahal",
+      "name": "Taj Mahal",
+      "location": "Agra, India",
+      "lat": 27.1751,
+      "lng": 78.0421,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Marble mausoleum; magic at sunrise."
+    },
+    {
+      "id": "nepal-himalayas",
+      "name": "Nepal & the Himalayas",
+      "location": "Nepal",
+      "lat": 27.9881,
+      "lng": 86.925,
+      "region": "asia",
+      "category": "hike",
+      "notes": "Everest base camp, Annapurna circuit."
+    },
+    {
+      "id": "bagan",
+      "name": "Bagan & Mandalay",
+      "location": "Myanmar",
+      "lat": 21.1717,
+      "lng": 94.8585,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Plain of thousands of temples."
+    },
+    {
+      "id": "mount-fuji",
+      "name": "Mount Fuji",
+      "location": "Japan",
+      "lat": 35.3606,
+      "lng": 138.7274,
+      "region": "asia",
+      "category": "hike",
+      "notes": "Iconic volcanic cone."
+    },
+    {
+      "id": "great-wall",
+      "name": "Great Wall of China",
+      "location": "China (Badaling)",
+      "lat": 40.4319,
+      "lng": 116.5704,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "The wall that ate centuries to build."
+    },
+    {
+      "id": "beijing",
+      "name": "Beijing",
+      "location": "China",
+      "lat": 39.9163,
+      "lng": 116.3972,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Forbidden City and Tiananmen Square."
+    },
+    {
+      "id": "terracotta-army",
+      "name": "Terracotta Army",
+      "location": "Xi'an, China",
+      "lat": 34.3853,
+      "lng": 109.2785,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Thousands of clay warriors."
+    },
+    {
+      "id": "wulingyuan",
+      "name": "Wulingyuan / Zhangjiajie",
+      "location": "China",
+      "lat": 29.35,
+      "lng": 110.4815,
+      "region": "asia",
+      "category": "view",
+      "notes": "Stone columns straight out of Avatar."
+    },
+    {
+      "id": "danxia",
+      "name": "Danxia landform",
+      "location": "Zhangye, China",
+      "lat": 38.9528,
+      "lng": 100.0617,
+      "region": "asia",
+      "category": "view",
+      "notes": "Striped red sandstone hills."
+    },
+    {
+      "id": "huanglong",
+      "name": "Huanglong",
+      "location": "Sichuan, China",
+      "lat": 32.7553,
+      "lng": 103.8237,
+      "region": "asia",
+      "category": "view",
+      "notes": "Terraced colored pools."
+    },
+    {
+      "id": "li-river-guilin",
+      "name": "Li River & Guilin",
+      "location": "China",
+      "lat": 25.2736,
+      "lng": 110.29,
+      "region": "asia",
+      "category": "view",
+      "notes": "Karst mountains and river caves."
+    },
+    {
+      "id": "stone-forest",
+      "name": "Stone Forest",
+      "location": "Yunnan, China",
+      "lat": 24.8167,
+      "lng": 103.3333,
+      "region": "asia",
+      "category": "view",
+      "notes": "Limestone pillars in a vast 'forest'."
+    },
+    {
+      "id": "lhasa",
+      "name": "Lhasa",
+      "location": "Tibet",
+      "lat": 29.652,
+      "lng": 91.1721,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Potala Palace; high-altitude capital."
+    },
+    {
+      "id": "mount-kailash",
+      "name": "Mount Kailash",
+      "location": "Tibet",
+      "lat": 31.0676,
+      "lng": 81.3119,
+      "region": "asia",
+      "category": "hike",
+      "notes": "Sacred mountain, kora pilgrimage."
+    },
+    {
+      "id": "ha-long-bay",
+      "name": "Ha Long Bay",
+      "location": "Vietnam",
+      "lat": 20.9101,
+      "lng": 107.1839,
+      "region": "asia",
+      "category": "view",
+      "notes": "Limestone karsts rising from the sea."
+    },
+    {
+      "id": "son-doong-cave",
+      "name": "Son Doong & Vietnamese caves",
+      "location": "Vietnam",
+      "lat": 17.45,
+      "lng": 106.2833,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "World's largest cave system."
+    },
+    {
+      "id": "ayutthaya",
+      "name": "Ayutthaya",
+      "location": "Thailand",
+      "lat": 14.3692,
+      "lng": 100.5876,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Ancient capital ruins."
+    },
+    {
+      "id": "angkor-wat",
+      "name": "Angkor Wat",
+      "location": "Cambodia",
+      "lat": 13.4125,
+      "lng": 103.867,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Largest religious monument on Earth."
+    },
+    {
+      "id": "borobudur",
+      "name": "Borobudur",
+      "location": "Indonesia",
+      "lat": -7.6079,
+      "lng": 110.2038,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Vast Buddhist temple complex."
+    },
+    {
+      "id": "papua-new-guinea",
+      "name": "Papua New Guinea",
+      "location": "PNG",
+      "lat": -9.4438,
+      "lng": 147.1803,
+      "region": "australia",
+      "category": "wishlist",
+      "notes": "Tribal cultures, jungle, reefs."
+    },
+    {
+      "id": "sahara",
+      "name": "Sahara",
+      "location": "North Africa",
+      "lat": 23.4162,
+      "lng": 25.6628,
+      "region": "other",
+      "category": "view",
+      "notes": "World's largest hot desert."
+    },
+    {
+      "id": "victoria-falls",
+      "name": "Victoria Falls",
+      "location": "Zimbabwe / Zambia",
+      "lat": -17.9243,
+      "lng": 25.8572,
+      "region": "other",
+      "category": "view",
+      "notes": "Mosi-oa-Tunya — the smoke that thunders."
+    },
+    {
+      "id": "cape-town",
+      "name": "Cape Town",
+      "location": "South Africa",
+      "lat": -33.9249,
+      "lng": 18.4241,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Table Mountain, Cape of Good Hope."
+    },
+    {
+      "id": "djenne-timbuktu",
+      "name": "Djenné & Timbuktu",
+      "location": "Mali",
+      "lat": 16.7666,
+      "lng": -3.0026,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Mud-brick mosques on the Niger."
+    },
+    {
+      "id": "kilimanjaro",
+      "name": "Kilimanjaro",
+      "location": "Tanzania",
+      "lat": -3.0674,
+      "lng": 37.3556,
+      "region": "other",
+      "category": "hike",
+      "notes": "Africa's highest summit."
+    },
+    {
+      "id": "kenya-safari",
+      "name": "Kenya — Maasai Mara",
+      "location": "Kenya",
+      "lat": -1.4061,
+      "lng": 35.0079,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Savannah safaris; the great migration."
+    },
+    {
+      "id": "namib-desert",
+      "name": "Namib Desert",
+      "location": "Namibia / Angola",
+      "lat": -24.7536,
+      "lng": 15.275,
+      "region": "other",
+      "category": "view",
+      "notes": "Sossusvlei red dunes meeting the Atlantic."
+    },
+    {
+      "id": "madagascar",
+      "name": "Madagascar",
+      "location": "Madagascar",
+      "lat": -18.7669,
+      "lng": 46.8691,
+      "region": "other",
+      "category": "view",
+      "notes": "Lemurs, baobabs, endemic wildlife."
+    },
+    {
+      "id": "uluru",
+      "name": "Uluru (Ayers Rock)",
+      "location": "Northern Territory, Australia",
+      "lat": -25.3444,
+      "lng": 131.0369,
+      "region": "australia",
+      "category": "view",
+      "notes": "Sacred red sandstone monolith."
+    },
+    {
+      "id": "surfers-paradise",
+      "name": "Surfers Paradise",
+      "location": "Gold Coast, QLD, Australia",
+      "lat": -28.0023,
+      "lng": 153.4145,
+      "region": "australia",
+      "category": "wishlist",
+      "notes": "Skyscrapers meet the surf."
+    },
+    {
+      "id": "great-barrier-reef",
+      "name": "Great Barrier Reef",
+      "location": "Queensland, Australia",
+      "lat": -16.7,
+      "lng": 145.7,
+      "region": "australia",
+      "category": "dive",
+      "notes": "World's largest coral reef."
+    },
+    {
+      "id": "fraser-island",
+      "name": "Fraser Island (K'gari)",
+      "location": "Queensland, Australia",
+      "lat": -25.2381,
+      "lng": 153.1422,
+      "region": "australia",
+      "category": "wishlist",
+      "notes": "Largest sand island on Earth."
+    },
+    {
+      "id": "great-ocean-road",
+      "name": "Great Ocean Road",
+      "location": "Victoria, Australia",
+      "lat": -38.6643,
+      "lng": 143.1042,
+      "region": "australia",
+      "category": "view",
+      "notes": "Coastal drive past the Twelve Apostles."
+    },
+    {
+      "id": "tasmania",
+      "name": "Tasmania",
+      "location": "Australia",
+      "lat": -42.8821,
+      "lng": 147.3272,
+      "region": "australia",
+      "category": "wishlist",
+      "notes": "Wilderness, MONA, southern coastline."
+    },
+    {
+      "id": "new-zealand",
+      "name": "New Zealand",
+      "location": "NZ — Queenstown",
+      "lat": -45.0312,
+      "lng": 168.6626,
+      "region": "australia",
+      "category": "view",
+      "notes": "Volcanic peaks, fjords, Lord of the Rings country."
+    },
+    {
+      "id": "hawaii",
+      "name": "Hawaii",
+      "location": "USA — Big Island",
+      "lat": 19.5429,
+      "lng": -155.6659,
+      "region": "americas",
+      "category": "view",
+      "notes": "Active volcanoes and tropical archipelago."
+    },
+    {
+      "id": "tahiti",
+      "name": "Tahiti",
+      "location": "French Polynesia",
+      "lat": -17.6509,
+      "lng": -149.426,
+      "region": "australia",
+      "category": "wishlist",
+      "notes": "Overwater bungalows; lagoon snorkelling."
+    },
+    {
+      "id": "north-pole",
+      "name": "North Pole",
+      "location": "Arctic",
+      "lat": 89.99,
+      "lng": 0,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Top of the world — icebreaker territory."
+    },
+    {
+      "id": "south-pole",
+      "name": "South Pole",
+      "location": "Antarctica",
+      "lat": -89.99,
+      "lng": 0,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Bottom of the world — Amundsen-Scott Station."
+    },
+    {
+      "id": "antarctic-coast",
+      "name": "Antarctic coast",
+      "location": "Antarctica",
+      "lat": -64,
+      "lng": -60,
+      "region": "other",
+      "category": "view",
+      "notes": "Penguins, glaciers, polar light."
+    },
+    {
+      "id": "larapinta-trail",
+      "name": "Larapinta Trail",
+      "location": "West MacDonnell Ranges, NT, Australia",
+      "lat": -23.7,
+      "lng": 133,
+      "region": "australia",
+      "category": "hike",
+      "notes": "World Expeditions classic — desert ridgelines, 6-day in-comfort or full pack."
+    },
+    {
+      "id": "overland-track",
+      "name": "Overland Track",
+      "location": "Cradle Mountain, Tasmania",
+      "lat": -41.6839,
+      "lng": 145.958,
+      "region": "australia",
+      "category": "hike",
+      "notes": "6-day alpine traverse to Lake St Clair."
+    },
+    {
+      "id": "snowies-alpine-walk",
+      "name": "Snowies Alpine Walk",
+      "location": "Kosciuszko NP, NSW",
+      "lat": -36.4559,
+      "lng": 148.2632,
+      "region": "australia",
+      "category": "hike",
+      "notes": "4-day high country traverse."
+    },
+    {
+      "id": "kakadu",
+      "name": "Kakadu",
+      "location": "Northern Territory, Australia",
+      "lat": -12.8377,
+      "lng": 132.414,
+      "region": "australia",
+      "category": "wishlist",
+      "notes": "Wetlands, rock art, crocs."
+    },
+    {
+      "id": "flinders-island-tas",
+      "name": "Flinders Island",
+      "location": "Bass Strait, Tasmania",
+      "lat": -40,
+      "lng": 148,
+      "region": "australia",
+      "category": "hike",
+      "notes": "Granite peaks and empty beaches."
+    },
+    {
+      "id": "ngaro-whitsundays",
+      "name": "Ngaro Track",
+      "location": "Whitsunday Islands, QLD",
+      "lat": -20.27,
+      "lng": 148.718,
+      "region": "australia",
+      "category": "hike",
+      "notes": "Island-hop walk through reef country."
+    },
+    {
+      "id": "warrumbungles",
+      "name": "Warrumbungle Summits",
+      "location": "NSW, Australia",
+      "lat": -31.2729,
+      "lng": 149.0264,
+      "region": "australia",
+      "category": "hike",
+      "notes": "Volcanic plug peaks and dark-sky park."
+    },
+    {
+      "id": "girraween",
+      "name": "Girraween National Park",
+      "location": "QLD, Australia",
+      "lat": -28.8345,
+      "lng": 151.954,
+      "region": "australia",
+      "category": "hike",
+      "notes": "Granite balancing rocks and wildflowers."
+    },
+    {
+      "id": "gondwana-rainforest",
+      "name": "Gondwana Rainforest",
+      "location": "NSW/QLD border",
+      "lat": -28.4,
+      "lng": 153.1,
+      "region": "australia",
+      "category": "hike",
+      "notes": "Ancient rainforest of the Border Ranges."
+    },
+    {
+      "id": "yuraygir-coast",
+      "name": "Yuraygir Coastal Walk",
+      "location": "Northern NSW",
+      "lat": -29.7,
+      "lng": 153.27,
+      "region": "australia",
+      "category": "hike",
+      "notes": "Empty surf beaches, headland to headland."
+    },
+    {
+      "id": "tour-mont-blanc",
+      "name": "Tour du Mont Blanc",
+      "location": "Chamonix, France/Italy/Swiss",
+      "lat": 45.8326,
+      "lng": 6.8652,
+      "region": "europe",
+      "category": "hike",
+      "notes": "11-day classic alpine circuit."
+    },
+    {
+      "id": "gr20-corsica",
+      "name": "GR20",
+      "location": "Corsica, France",
+      "lat": 42.15,
+      "lng": 9.05,
+      "region": "europe",
+      "category": "hike",
+      "notes": "Hardest long trail in Europe."
+    },
+    {
+      "id": "mt-kinabalu",
+      "name": "Mt Kinabalu",
+      "location": "Sabah, Borneo",
+      "lat": 6.0753,
+      "lng": 116.5586,
+      "region": "asia",
+      "category": "hike",
+      "notes": "Granite summit at sunrise."
+    },
+    {
+      "id": "k2-base-camp",
+      "name": "K2 Base Camp",
+      "location": "Karakoram, Pakistan",
+      "lat": 35.8825,
+      "lng": 76.5133,
+      "region": "asia",
+      "category": "hike",
+      "notes": "Concordia, the throne room of the mountain gods."
+    },
+    {
+      "id": "annapurna-circuit",
+      "name": "Annapurna Circuit",
+      "location": "Nepal",
+      "lat": 28.597,
+      "lng": 83.8203,
+      "region": "asia",
+      "category": "hike",
+      "notes": "Thorong La pass, teahouse trail."
+    },
+    {
+      "id": "drakensberg",
+      "name": "Drakensberg traverse",
+      "location": "South Africa / Lesotho",
+      "lat": -29,
+      "lng": 29.4,
+      "region": "other",
+      "category": "hike",
+      "notes": "High escarpment ridges and bushman art."
+    },
+    {
+      "id": "west-highland-way",
+      "name": "West Highland Way",
+      "location": "Scotland",
+      "lat": 56.45,
+      "lng": -4.7,
+      "region": "europe",
+      "category": "hike",
+      "notes": "Glasgow to Fort William, 96 miles."
+    },
+    {
+      "id": "john-muir-trail",
+      "name": "John Muir Trail",
+      "location": "Sierra Nevada, California",
+      "lat": 37.7459,
+      "lng": -119.5331,
+      "region": "americas",
+      "category": "hike",
+      "notes": "Yosemite to Whitney, 211 miles of granite."
+    },
+    {
+      "id": "lycian-way",
+      "name": "Lycian Way",
+      "location": "Turkey",
+      "lat": 36.6,
+      "lng": 30.6,
+      "region": "other",
+      "category": "hike",
+      "notes": "Coastal ruins-to-ruins trek."
+    },
+    {
+      "id": "pacific-crest-trail",
+      "name": "Pacific Crest Trail",
+      "location": "Mexico → Canada",
+      "lat": 39,
+      "lng": -120,
+      "region": "americas",
+      "category": "hike",
+      "notes": "2,650 miles. The big one."
+    },
+    {
+      "id": "camino-santiago",
+      "name": "Camino de Santiago",
+      "location": "Santiago de Compostela, Spain",
+      "lat": 42.8806,
+      "lng": -8.545,
+      "region": "europe",
+      "category": "hike",
+      "notes": "Pilgrim trail across northern Spain."
+    },
+    {
+      "id": "shikoku-88",
+      "name": "Shikoku 88 Temples",
+      "location": "Shikoku, Japan",
+      "lat": 33.8416,
+      "lng": 134.4583,
+      "region": "asia",
+      "category": "hike",
+      "notes": "1,200km Buddhist pilgrim circuit."
+    },
+    {
+      "id": "aconcagua",
+      "name": "Aconcagua",
+      "location": "Argentina",
+      "lat": -32.6532,
+      "lng": -70.0109,
+      "region": "americas",
+      "category": "hike",
+      "notes": "Highest peak outside the Himalaya."
+    },
+    {
+      "id": "elbrus",
+      "name": "Mt Elbrus",
+      "location": "Caucasus, Russia",
+      "lat": 43.3499,
+      "lng": 42.4453,
+      "region": "europe",
+      "category": "hike",
+      "notes": "Europe's highest summit."
+    },
+    {
+      "id": "raja-ampat",
+      "name": "Raja Ampat",
+      "location": "West Papua, Indonesia",
+      "lat": -0.534,
+      "lng": 130.526,
+      "region": "asia",
+      "category": "dive",
+      "notes": "Most biodiverse reefs on Earth."
+    },
+    {
+      "id": "sipadan",
+      "name": "Sipadan",
+      "location": "Sabah, Malaysia",
+      "lat": 4.114,
+      "lng": 118.628,
+      "region": "asia",
+      "category": "dive",
+      "notes": "Cousteau's favourite — turtles and barracuda tornadoes."
+    },
+    {
+      "id": "silfra-fissure",
+      "name": "Silfra fissure",
+      "location": "Þingvellir, Iceland",
+      "lat": 64.2558,
+      "lng": -21.1206,
+      "region": "europe",
+      "category": "dive",
+      "notes": "Snorkel between two tectonic plates."
+    },
+    {
+      "id": "atacama",
+      "name": "Atacama Desert",
+      "location": "Chile",
+      "lat": -23.8,
+      "lng": -68,
+      "region": "americas",
+      "category": "view",
+      "notes": "Driest desert; Mars-like dunes and stargazing."
+    },
+    {
+      "id": "wadi-rum",
+      "name": "Wadi Rum",
+      "location": "Jordan",
+      "lat": 29.55,
+      "lng": 35.4167,
+      "region": "other",
+      "category": "view",
+      "notes": "Bedouin camps, red sandstone cathedrals."
+    },
+    {
+      "id": "gobi",
+      "name": "Gobi Desert",
+      "location": "Mongolia / China",
+      "lat": 43.5,
+      "lng": 103.5,
+      "region": "asia",
+      "category": "view",
+      "notes": "Flaming Cliffs, dinosaur fossils, Bactrian camels."
+    },
+    {
+      "id": "empty-quarter",
+      "name": "Rub' al Khali (Empty Quarter)",
+      "location": "Saudi Arabia / Oman",
+      "lat": 19.5,
+      "lng": 50,
+      "region": "other",
+      "category": "view",
+      "notes": "World's largest sand sea."
+    },
+    {
+      "id": "svalbard",
+      "name": "Svalbard",
+      "location": "Norway",
+      "lat": 78.2232,
+      "lng": 15.6267,
+      "region": "europe",
+      "category": "view",
+      "notes": "Polar bears at 78° north."
+    },
+    {
+      "id": "northwest-passage",
+      "name": "Northwest Passage",
+      "location": "Canadian Arctic",
+      "lat": 74,
+      "lng": -100,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Ice-class ship through the Arctic archipelago."
+    },
+    {
+      "id": "trans-siberian",
+      "name": "Trans-Siberian Railway",
+      "location": "Vladivostok terminus, Russia",
+      "lat": 43.1198,
+      "lng": 131.8869,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Moscow → Vladivostok, 9,289 km."
+    },
+    {
+      "id": "rocky-mountaineer",
+      "name": "Rocky Mountaineer",
+      "location": "Banff, Canada",
+      "lat": 51.4968,
+      "lng": -115.9281,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Glass-domed train through the Canadian Rockies."
+    },
+    {
+      "id": "glacier-express",
+      "name": "Glacier Express",
+      "location": "Zermatt → St Moritz, Swiss",
+      "lat": 46.0207,
+      "lng": 7.7491,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "The slowest express train in the world."
+    },
+    {
+      "id": "the-ghan",
+      "name": "The Ghan",
+      "location": "Adelaide → Darwin",
+      "lat": -23.698,
+      "lng": 133.8807,
+      "region": "australia",
+      "category": "wishlist",
+      "notes": "Cross the red centre by rail."
+    },
+    {
+      "id": "lima-ceviche",
+      "name": "Lima — ceviche capital",
+      "location": "Peru",
+      "lat": -12.0464,
+      "lng": -77.0428,
+      "region": "americas",
+      "category": "food",
+      "notes": "Central, Maido, and the world's best fish market lunches."
+    },
+    {
+      "id": "san-sebastian",
+      "name": "San Sebastián pintxos",
+      "location": "Basque Country, Spain",
+      "lat": 43.3183,
+      "lng": -1.9812,
+      "region": "europe",
+      "category": "food",
+      "notes": "More Michelin stars per capita than anywhere."
+    },
+    {
+      "id": "bologna",
+      "name": "Bologna",
+      "location": "Emilia-Romagna, Italy",
+      "lat": 44.4949,
+      "lng": 11.3426,
+      "region": "europe",
+      "category": "food",
+      "notes": "Tagliatelle al ragù where it was invented."
+    },
+    {
+      "id": "istanbul-food",
+      "name": "Istanbul",
+      "location": "Turkey",
+      "lat": 41.0082,
+      "lng": 28.9784,
+      "region": "other",
+      "category": "food",
+      "notes": "Bazaars, kebab, balık ekmek by the Bosphorus."
+    },
+    {
+      "id": "penang",
+      "name": "Penang hawker",
+      "location": "Georgetown, Malaysia",
+      "lat": 5.4141,
+      "lng": 100.3288,
+      "region": "asia",
+      "category": "food",
+      "notes": "Char kway teow, laksa, the best street food in SE Asia."
+    },
+    {
+      "id": "tikal",
+      "name": "Tikal",
+      "location": "Petén, Guatemala",
+      "lat": 17.222,
+      "lng": -89.6237,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "Mayan temples emerging through jungle canopy."
+    },
+    {
+      "id": "persepolis",
+      "name": "Persepolis",
+      "location": "Iran",
+      "lat": 29.9354,
+      "lng": 52.8916,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Ceremonial capital of the Achaemenids."
+    },
+    {
+      "id": "leptis-magna",
+      "name": "Leptis Magna",
+      "location": "Libya",
+      "lat": 32.6378,
+      "lng": 14.29,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Best-preserved Roman city in the Mediterranean."
+    },
+    {
+      "id": "hampi",
+      "name": "Hampi",
+      "location": "Karnataka, India",
+      "lat": 15.335,
+      "lng": 76.46,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Vijayanagara ruins among boulder fields."
+    },
+    {
+      "id": "ephesus",
+      "name": "Ephesus",
+      "location": "Turkey",
+      "lat": 37.9398,
+      "lng": 27.3414,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Library of Celsus and the great theatre."
+    },
+    {
+      "id": "serengeti",
+      "name": "Serengeti — Great Migration",
+      "location": "Tanzania",
+      "lat": -2.3333,
+      "lng": 34.8333,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "Wildebeest river crossings; Jul–Sep."
+    },
+    {
+      "id": "pantanal",
+      "name": "Pantanal",
+      "location": "Brazil",
+      "lat": -16.5,
+      "lng": -56.5,
+      "region": "americas",
+      "category": "wishlist",
+      "notes": "World's largest wetland; jaguars in the dry season."
+    },
+    {
+      "id": "sepilok-orangutans",
+      "name": "Sepilok orangutans",
+      "location": "Sabah, Borneo",
+      "lat": 5.8744,
+      "lng": 117.9461,
+      "region": "asia",
+      "category": "wishlist",
+      "notes": "Rehabilitation centre and lowland rainforest."
+    },
+    {
+      "id": "drake-passage",
+      "name": "Drake Passage",
+      "location": "Southern Ocean",
+      "lat": -58.5,
+      "lng": -65,
+      "region": "other",
+      "category": "wishlist",
+      "notes": "The roughest crossing on Earth — gateway to Antarctica."
+    },
+    {
+      "id": "mykonos",
+      "name": "Mykonos / Greek isles",
+      "location": "Cyclades, Greece",
+      "lat": 37.4467,
+      "lng": 25.3289,
+      "region": "europe",
+      "category": "wishlist",
+      "notes": "Sail the Aegean — Mykonos, Paros, Milos."
+    },
+    {
+      "id": "bora-bora",
+      "name": "Bora Bora",
+      "location": "French Polynesia",
+      "lat": -16.5004,
+      "lng": -151.7415,
+      "region": "australia",
+      "category": "wishlist",
+      "notes": "Lagoon, motus, overwater bungalows."
+    },
+    {
+      "id": "rio-carnival",
+      "name": "Rio Carnival",
+      "location": "Rio de Janeiro, Brazil",
+      "lat": -22.9519,
+      "lng": -43.2105,
+      "region": "americas",
+      "category": "event",
+      "notes": "Sambadrome, blocos, Feb/Mar.",
+      "months": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "holi-mathura",
+      "name": "Holi",
+      "location": "Mathura/Vrindavan, India",
+      "lat": 27.4924,
+      "lng": 77.6737,
+      "region": "asia",
+      "category": "event",
+      "notes": "Festival of colours; March.",
+      "months": [
+        3
+      ]
+    },
+    {
+      "id": "songkran-bangkok",
+      "name": "Songkran",
+      "location": "Bangkok / Chiang Mai",
+      "lat": 13.7563,
+      "lng": 100.5018,
+      "region": "asia",
+      "category": "event",
+      "notes": "Thai New Year water fight; mid-April.",
+      "months": [
+        4
+      ]
+    },
+    {
+      "id": "semana-santa-seville",
+      "name": "Semana Santa",
+      "location": "Seville, Spain",
+      "lat": 37.3891,
+      "lng": -5.9845,
+      "region": "europe",
+      "category": "event",
+      "notes": "Holy Week processions; March/April.",
+      "months": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "kyoto-cherry-blossom",
+      "name": "Cherry blossom (sakura)",
+      "location": "Kyoto, Japan",
+      "lat": 35.0116,
+      "lng": 135.7681,
+      "region": "asia",
+      "category": "event",
+      "notes": "Hanami; late March / early April.",
+      "months": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "naadam",
+      "name": "Naadam Festival",
+      "location": "Ulaanbaatar, Mongolia",
+      "lat": 47.9184,
+      "lng": 106.9177,
+      "region": "asia",
+      "category": "event",
+      "notes": "Wrestling, archery, horse racing; July.",
+      "months": [
+        7
+      ]
+    },
+    {
+      "id": "pamplona-san-fermin",
+      "name": "Running of the Bulls (San Fermín)",
+      "location": "Pamplona, Spain",
+      "lat": 42.8125,
+      "lng": -1.6458,
+      "region": "europe",
+      "category": "event",
+      "notes": "July 6–14.",
+      "months": [
+        7
+      ]
+    },
+    {
+      "id": "la-tomatina",
+      "name": "La Tomatina",
+      "location": "Buñol, Spain",
+      "lat": 39.6044,
+      "lng": -0.3186,
+      "region": "europe",
+      "category": "event",
+      "notes": "World's biggest tomato fight; last Wed of August.",
+      "months": [
+        8
+      ]
+    },
+    {
+      "id": "burning-man",
+      "name": "Burning Man",
+      "location": "Black Rock Desert, Nevada",
+      "lat": 40.7864,
+      "lng": -119.2065,
+      "region": "americas",
+      "category": "event",
+      "notes": "Late Aug–early Sep.",
+      "months": [
+        8,
+        9
+      ]
+    },
+    {
+      "id": "albuquerque-balloon",
+      "name": "Albuquerque Balloon Fiesta",
+      "location": "New Mexico, USA",
+      "lat": 35.1977,
+      "lng": -106.5995,
+      "region": "americas",
+      "category": "event",
+      "notes": "Mass ascension dawns; early October.",
+      "months": [
+        10
+      ]
+    },
+    {
+      "id": "oktoberfest",
+      "name": "Oktoberfest",
+      "location": "Munich, Germany",
+      "lat": 48.1351,
+      "lng": 11.582,
+      "region": "europe",
+      "category": "event",
+      "notes": "Sept–Oct; Theresienwiese.",
+      "months": [
+        9,
+        10
+      ]
+    },
+    {
+      "id": "dia-de-muertos-oaxaca",
+      "name": "Día de los Muertos",
+      "location": "Oaxaca, Mexico",
+      "lat": 17.0732,
+      "lng": -96.7266,
+      "region": "americas",
+      "category": "event",
+      "notes": "Oct 31 – Nov 2.",
+      "months": [
+        10,
+        11
+      ]
+    },
+    {
+      "id": "diwali-varanasi",
+      "name": "Diwali",
+      "location": "Varanasi, India",
+      "lat": 25.3176,
+      "lng": 82.9739,
+      "region": "asia",
+      "category": "event",
+      "notes": "Festival of lights on the Ganges ghats; Oct/Nov.",
+      "months": [
+        10,
+        11
+      ]
+    },
+    {
+      "id": "mecca-eid",
+      "name": "Mecca — Hajj / Eid",
+      "location": "Saudi Arabia",
+      "lat": 21.4225,
+      "lng": 39.8262,
+      "region": "other",
+      "category": "event",
+      "notes": "Pilgrimage city (Muslims only inside the holy precinct)."
+    },
+    {
+      "id": "edinburgh-fringe",
+      "name": "Edinburgh Fringe",
+      "location": "Scotland",
+      "lat": 55.9533,
+      "lng": -3.1883,
+      "region": "europe",
+      "category": "event",
+      "notes": "World's largest arts festival; August.",
+      "months": [
+        8
+      ]
+    },
+    {
+      "id": "glastonbury",
+      "name": "Glastonbury Festival",
+      "location": "Somerset, UK",
+      "lat": 51.15,
+      "lng": -2.5833,
+      "region": "europe",
+      "category": "event",
+      "notes": "Pyramid Stage; late June.",
+      "months": [
+        6
+      ]
+    },
+    {
+      "id": "coachella",
+      "name": "Coachella",
+      "location": "Indio, California",
+      "lat": 33.6803,
+      "lng": -116.2378,
+      "region": "americas",
+      "category": "event",
+      "notes": "Two weekends in April.",
+      "months": [
+        4
+      ]
+    },
+    {
+      "id": "mardi-gras-nola",
+      "name": "Mardi Gras",
+      "location": "New Orleans, USA",
+      "lat": 29.9511,
+      "lng": -90.0715,
+      "region": "americas",
+      "category": "event",
+      "notes": "Fat Tuesday parades; Feb/Mar.",
+      "months": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "venice-carnevale",
+      "name": "Carnevale di Venezia",
+      "location": "Venice, Italy",
+      "lat": 45.4408,
+      "lng": 12.3155,
+      "region": "europe",
+      "category": "event",
+      "notes": "Masked balls; Feb.",
+      "months": [
+        2
+      ]
+    },
+    {
+      "id": "inti-raymi",
+      "name": "Inti Raymi",
+      "location": "Cusco, Peru",
+      "lat": -13.532,
+      "lng": -71.9675,
+      "region": "americas",
+      "category": "event",
+      "notes": "Inca winter solstice festival; June 24.",
+      "months": [
+        6
+      ]
+    },
+    {
+      "id": "timkat-lalibela",
+      "name": "Timkat",
+      "location": "Lalibela, Ethiopia",
+      "lat": 12.0319,
+      "lng": 39.0473,
+      "region": "other",
+      "category": "event",
+      "notes": "Ethiopian Epiphany; January.",
+      "months": [
+        1
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "collection": "projects",
+  "canonicalUrl": "https://jevangoldsmith.com/api/v1/projects/openclaw-agents.json",
+  "item": {
+    "id": "openclaw-agents",
+    "slug": "openclaw-agents",
+    "title": "Openclaw Agents",
+    "status": "active",
+    "category": "ai",
+    "shortDescription": "Building AI agents that automate complex workflows and tasks.",
+    "description": "Exploring the frontier of autonomous systems and practical AI applications through workflow automation agents.",
+    "whatItIs": "A set of experiments with AI agents that can help run practical workflows.",
+    "whyIMadeIt": "I want to understand where agents are genuinely useful and where they just add complexity.",
+    "whatILearned": "Agents need tight scopes, visible feedback, and clear handoff points to stay useful.",
+    "nextStep": "Document the best agent workflows and turn repeatable patterns into examples.",
+    "documentaryLead": "This is where I test which agent workflows survive contact with real work. The interesting part is not that an agent can act. It is whether the loop stays visible, bounded, and useful.",
+    "currentQuestion": "Where do agents save judgment work, and where do they just create a more confident mess?",
+    "proofArtifacts": [
+      {
+        "label": "Useful pattern",
+        "value": "Agents work better when the task has a clear done state, visible logs, and a human review point."
+      },
+      {
+        "label": "Anti-pattern",
+        "value": "Long autonomous loops with vague goals create impressive motion and weak accountability."
+      }
+    ],
+    "buildLog": [
+      {
+        "date": "2026-04-23",
+        "title": "Documenting the handoff points",
+        "note": "The best workflows are the ones where the agent knows when to stop and show its work."
+      }
+    ],
+    "image": "images/generated/remote/713f2899c8de0d-800.jpg",
+    "imageAlt": "Abstract AI interface",
+    "technologies": [
+      "AI",
+      "Agents",
+      "Automation"
+    ],
+    "topics": [
+      "ai",
+      "automation",
+      "building"
+    ],
+    "tags": [
+      "agents",
+      "automation",
+      "workflow"
+    ],
+    "audience": [
+      "builders",
+      "operators"
+    ],
+    "links": [],
+    "relatedContent": [],
+    "collection": "projects",
+    "canonicalUrl": "https://jevangoldsmith.com/projects.html#openclaw-agents",
+    "shareable": true,
+    "summary": "Building AI agents that automate complex workflows and tasks."
+  }
+}

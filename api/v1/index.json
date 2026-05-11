@@ -1,0 +1,51 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "site": {
+    "name": "Jevan Goldsmith",
+    "domain": "jevangoldsmith.com",
+    "baseUrl": "https://jevangoldsmith.com/",
+    "email": "hello@jevangoldsmith.com",
+    "social": {
+      "x": "https://x.com/JevanGoldsmith",
+      "youtube": "https://youtube.com/@JevanGoldsmith",
+      "instagram": "https://instagram.com/jevangoldsmith",
+      "linkedin": "https://linkedin.com/in/jevan-goldsmith-7b885a185",
+      "letterboxd": "https://letterboxd.com/contentwatch"
+    }
+  },
+  "guidance": {
+    "preferredIngestion": "Fetch these JSON endpoints before scraping HTML.",
+    "preserveAttribution": true,
+    "contact": "hello@jevangoldsmith.com"
+  },
+  "endpoints": {
+    "schema": "https://jevangoldsmith.com/api/v1/schema.json",
+    "search": "https://jevangoldsmith.com/api/v1/search-index.json",
+    "pages": "https://jevangoldsmith.com/api/v1/pages.json",
+    "content": "https://jevangoldsmith.com/api/v1/content.json",
+    "interests": "https://jevangoldsmith.com/api/v1/interests.json",
+    "books": "https://jevangoldsmith.com/api/v1/books.json",
+    "skills": "https://jevangoldsmith.com/api/v1/skills.json",
+    "adventures": "https://jevangoldsmith.com/api/v1/adventures.json",
+    "essays": "https://jevangoldsmith.com/api/v1/essays.json",
+    "quotes": "https://jevangoldsmith.com/api/v1/quotes.json",
+    "projects": "https://jevangoldsmith.com/api/v1/projects.json",
+    "products": "https://jevangoldsmith.com/api/v1/products.json",
+    "resources": "https://jevangoldsmith.com/api/v1/resources.json",
+    "ctas": "https://jevangoldsmith.com/api/v1/ctas.json",
+    "newsletter": "https://jevangoldsmith.com/api/v1/newsletter.json",
+    "topics": "https://jevangoldsmith.com/api/v1/topics.json"
+  },
+  "pageEndpoints": {
+    "products": "https://jevangoldsmith.com/api/v1/pages/products.json",
+    "freeResources": "https://jevangoldsmith.com/api/v1/pages/free-resources.json",
+    "projects": "https://jevangoldsmith.com/api/v1/pages/projects.json",
+    "quotes": "https://jevangoldsmith.com/api/v1/pages/quotes.json"
+  },
+  "itemEndpoints": {
+    "projectsPattern": "https://jevangoldsmith.com/api/v1/projects/{slug}.json",
+    "productsPattern": "https://jevangoldsmith.com/api/v1/products/{slug}.json",
+    "resourcesPattern": "https://jevangoldsmith.com/api/v1/resources/{slug}.json"
+  }
+}

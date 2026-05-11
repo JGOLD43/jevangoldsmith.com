@@ -1,0 +1,1 @@
+function r(){"serviceWorker"in navigator&&(location.protocol!=="https:"&&location.hostname!=="localhost"&&location.hostname!=="127.0.0.1"||navigator.serviceWorker.register("/sw.js",{scope:"/"}).catch(o=>{console.warn("SW registration failed",o)}))}export{r as registerServiceWorker};

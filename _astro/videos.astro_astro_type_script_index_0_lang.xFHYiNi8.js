@@ -1,0 +1,10 @@
+import{o as v,b as h,e as i}from"./collection-shared.wUOtwcxO.js";const x="JevanGoldsmith";async function T(){const e=document.getElementById("loading"),t=document.getElementById("error"),n=document.getElementById("videos-container");if(!(!e||!t||!n))try{const o=`https://www.youtube.com/feeds/videos.xml?channel_id=${x}`,y=`https://api.allorigins.win/raw?url=${encodeURIComponent(o)}`,c=await fetch(y);if(!c.ok)throw new Error("Failed to fetch YouTube feed");const w=await c.text(),a=new DOMParser().parseFromString(w,"text/xml");if(a.querySelector("parsererror"))throw new Error("Error parsing YouTube feed");const l=Array.from(a.querySelectorAll("entry")).slice(0,12);if(l.length===0)throw new Error("No videos found in feed");const f=l.map(d=>{const r=(u,m=null)=>{const p=m?d.getElementsByTagNameNS(m,u)[0]:d.querySelector(u);return p&&p.textContent||""},s=r("videoId","http://www.youtube.com/xml/schemas/2015"),g=r("title"),E=r("published"),b=r("description","http://search.yahoo.com/mrss/");return{id:s,title:g,description:b,thumbnail:`https://i.ytimg.com/vi/${s}/hqdefault.jpg`,url:`https://www.youtube.com/watch?v=${s}`,date:new Date(E).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}});e.style.display="none",n.style.display="grid",$(f)}catch(o){console.error("Error fetching YouTube data:",o),e.style.display="none",t.style.display="block"}}function $(e){const t=document.getElementById("videos-container");t&&(t.innerHTML="",e.forEach(n=>{const o=I(n);t.appendChild(o)}))}function I(e){const t=document.createElement("div");return t.className="video-card",t.onclick=()=>window.open(e.url,"_blank"),t.innerHTML=`
+        <img src="${h(e.thumbnail)}" alt="${h(e.title)}" class="video-thumbnail" loading="lazy" decoding="async">
+        <div class="video-info">
+            <h3 class="video-title">${i(e.title)}</h3>
+            ${e.description?`<p class="video-description">${i(e.description)}</p>`:""}
+            <div class="video-meta">
+                <span>${i(e.date)}</span>
+            </div>
+        </div>
+    `,t}v(T,"youtube init");

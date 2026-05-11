@@ -1,0 +1,12 @@
+{
+  "_comment": "Hand-edited ISO-3 country codes. Build runs scripts/slim-countries.js to filter the world map to these codes.",
+  "iso": [
+    "AUS",
+    "CAN",
+    "CHE",
+    "JPN",
+    "THA",
+    "USA",
+    "VNM"
+  ]
+}

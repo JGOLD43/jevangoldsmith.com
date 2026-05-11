@@ -1,0 +1,86 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "collection": "ctas",
+  "canonicalUrl": "https://jevangoldsmith.com/api/v1/ctas.json",
+  "items": [
+    {
+      "id": "free-resources",
+      "label": "Useful Resources",
+      "href": "free-resources.html",
+      "intent": "lead",
+      "priority": 2,
+      "description": "Move interested visitors from browsing into useful downloadable or waitlisted resources.",
+      "collection": "ctas",
+      "canonicalUrl": "https://jevangoldsmith.com/free-resources.html",
+      "shareable": true,
+      "tags": [],
+      "summary": "Move interested visitors from browsing into useful downloadable or waitlisted resources."
+    },
+    {
+      "id": "newsletter",
+      "label": "Get Field Notes",
+      "href": "field-notes.html",
+      "intent": "retention",
+      "priority": 1,
+      "description": "Give curious readers a recurring thread back into the archive.",
+      "collection": "ctas",
+      "canonicalUrl": "https://jevangoldsmith.com/field-notes.html",
+      "shareable": true,
+      "tags": [],
+      "summary": "Give curious readers a recurring thread back into the archive."
+    },
+    {
+      "id": "best-essays",
+      "label": "Read Essays",
+      "href": "essays.html",
+      "intent": "authority",
+      "priority": 4,
+      "description": "Route high-curiosity visitors toward longer-form trust-building writing.",
+      "collection": "ctas",
+      "canonicalUrl": "https://jevangoldsmith.com/essays.html",
+      "shareable": true,
+      "tags": [],
+      "summary": "Route high-curiosity visitors toward longer-form trust-building writing."
+    },
+    {
+      "id": "product-recommendations",
+      "label": "Open The Shelf",
+      "href": "products.html",
+      "intent": "trust",
+      "priority": 6,
+      "description": "Send curious readers into the object archive of tools that earned a place.",
+      "collection": "ctas",
+      "canonicalUrl": "https://jevangoldsmith.com/products.html",
+      "shareable": true,
+      "tags": [],
+      "summary": "Send curious readers into the object archive of tools that earned a place."
+    },
+    {
+      "id": "search",
+      "label": "Search the Site",
+      "href": "search.html",
+      "intent": "discovery",
+      "priority": 7,
+      "description": "Let specific-intent visitors find the right page or collection item quickly.",
+      "collection": "ctas",
+      "canonicalUrl": "https://jevangoldsmith.com/search.html",
+      "shareable": true,
+      "tags": [],
+      "summary": "Let specific-intent visitors find the right page or collection item quickly."
+    },
+    {
+      "id": "contact",
+      "label": "Contact Jevan",
+      "href": "contact.html",
+      "intent": "contact",
+      "priority": 8,
+      "description": "Give high-intent visitors a direct path to reach out.",
+      "collection": "ctas",
+      "canonicalUrl": "https://jevangoldsmith.com/contact.html",
+      "shareable": true,
+      "tags": [],
+      "summary": "Give high-intent visitors a direct path to reach out."
+    }
+  ]
+}

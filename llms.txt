@@ -1,0 +1,104 @@
+# Jevan Goldsmith
+
+Jevan Goldsmith is a personal website, writing archive, reading library, skill map, adventure log, product/resource surface, and contact point.
+
+## Agent API
+
+- API index: https://jevangoldsmith.com/api/v1/index.json
+- API schema: https://jevangoldsmith.com/api/v1/schema.json
+- Search index: https://jevangoldsmith.com/api/v1/search-index.json
+- Pages: https://jevangoldsmith.com/api/v1/pages.json
+- Content: https://jevangoldsmith.com/api/v1/content.json
+- Interests: https://jevangoldsmith.com/api/v1/interests.json
+- Books: https://jevangoldsmith.com/api/v1/books.json
+- Skills: https://jevangoldsmith.com/api/v1/skills.json
+- Adventures: https://jevangoldsmith.com/api/v1/adventures.json
+- Essays: https://jevangoldsmith.com/api/v1/essays.json
+- Quotes: https://jevangoldsmith.com/api/v1/quotes.json
+- Products and resources: https://jevangoldsmith.com/api/v1/products.json
+- Projects: https://jevangoldsmith.com/api/v1/projects.json
+- Product page data: https://jevangoldsmith.com/api/v1/pages/products.json
+- Free resources page data: https://jevangoldsmith.com/api/v1/pages/free-resources.json
+- Project page data: https://jevangoldsmith.com/api/v1/pages/projects.json
+- Quote page data: https://jevangoldsmith.com/api/v1/pages/quotes.json
+
+Use the JSON API for ingestion before scraping HTML. HTML pages remain canonical for humans.
+
+## Navigation
+
+- [About Jevan Goldsmith](https://jevangoldsmith.com/about.html): A short introduction to Jevan Goldsmith, the archive he is building, and the themes behind his work.
+- [Austin Adventure: Live Music, BBQ & City Notes](https://jevangoldsmith.com/adventure-austin-adventure.html): Notes and photos from Jevan Goldsmith's Austin trip through music, food, neighborhoods, and local energy.
+- [Ayr Adventure: Sugar Cane, Sunsets & North Queensland](https://jevangoldsmith.com/adventure-ayr-adventure.html): Notes and photos from Jevan Goldsmith's Ayr trip through North Queensland landscapes, coast, and slower rhythms.
+- [Japan Adventure: Temples, Food & Cherry Blossoms](https://jevangoldsmith.com/adventure-japan-adventure.html): Notes and photos from Jevan Goldsmith's Japan trip through temples, cities, food, and seasonal detail.
+- [Sydney Adventure: Harbour Walks, Food & City Notes](https://jevangoldsmith.com/adventure-sydney-adventure.html): Notes and photos from Jevan Goldsmith's Sydney trip through harbour views, neighborhoods, seafood, and coastal walks.
+- [Uluru Adventure: Red Centre Travel Notes](https://jevangoldsmith.com/adventure-uluru-adventure.html): Notes and photos from Jevan Goldsmith's Uluru trip through the Red Centre, desert landscapes, and travel lessons.
+- [Vietnam Adventure: Motorbikes, Mountains & Travel Notes](https://jevangoldsmith.com/adventure-vietnam-adventure.html): Notes and photos from Jevan Goldsmith's Vietnam trip through mountain roads, food, cities, and travel surprises.
+- [Adventures, Travel Notes & Places Worth Remembering](https://jevangoldsmith.com/adventures.html): Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored.
+- [Books I Recommend &amp; Notes From My Reading System](https://jevangoldsmith.com/books.html): A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems.
+- [Challenges, Constraints & Personal Experiments](https://jevangoldsmith.com/challenges.html): A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.
+- [Changed My Mind: Belief Updates & Public Learning Log](https://jevangoldsmith.com/changed-my-mind.html): A public record of ideas Jevan Goldsmith has updated, softened, reversed, or stopped believing.
+- [Contact Jevan Goldsmith](https://jevangoldsmith.com/contact.html): Contact Jevan Goldsmith about projects, ideas, useful resources, Field Notes, or collaboration.
+- [Cool Shit: Objects, Ideas & Useful Finds](https://jevangoldsmith.com/cool-shit.html): A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith's attention.
+- [Essays on Thinking, Business, Culture &amp; Personal Systems](https://jevangoldsmith.com/essays.html): Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems.
+- [Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments](https://jevangoldsmith.com/field-notes.html): One useful idea, object, book, question, or experiment each week from Jevan Goldsmith's living archive.
+- [Useful Resources for Thinking, Building & Learning](https://jevangoldsmith.com/free-resources.html): Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work.
+- [Health, Performance &amp; Energy Systems](https://jevangoldsmith.com/health.html): Health and performance notes from Jevan Goldsmith on energy, recovery, habits, training, and better work.
+- [Important or Not: Decision Notes &amp; Priority Filters](https://jevangoldsmith.com/important-or-not.html): A decision-making page about separating what matters from noise, urgency, and attractive distractions.
+- [Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech](https://jevangoldsmith.com/): Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas.
+- [Lesson Logger: Capture Lessons Before They Vanish](https://jevangoldsmith.com/lesson-logger.html): A simple lesson-logging page for turning mistakes, wins, and observations into reusable judgment.
+- [Living Manifesto: Principles, Standards & Long-Horizon Bets](https://jevangoldsmith.com/living-manifesto.html): Jevan Goldsmith's living manifesto: principles, standards, and long-horizon bets for time, work, relationships, and better decisions.
+- [Meet Jevan Goldsmith](https://jevangoldsmith.com/meet.html): A quick way to meet Jevan Goldsmith, scan contact details, and start a useful conversation.
+- [How I Choose What to Watch: A Film Philosophy](https://jevangoldsmith.com/movie-philosophy.html): How Jevan Goldsmith picks films, what he looks for in great cinema, and why movies are a fast way to live a life that is not your own.
+- [Movie Reviews, Watchlist &amp; Taste Notes](https://jevangoldsmith.com/movies.html): A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste.
+- [North Star: Principles, Direction &amp; Useful Ambition](https://jevangoldsmith.com/north-star.html): A page about Jevan Goldsmith's north-star principles, long-term direction, and standards for useful ambition.
+- [Notes on Personal Systems, Learning &amp; Better Thinking](https://jevangoldsmith.com/notes.html): A working notebook of Jevan Goldsmith's ideas on personal systems, learning, decisions, and useful experiments.
+- [How I Approach People: A Relationship Philosophy](https://jevangoldsmith.com/people-philosophy.html): How Jevan Goldsmith thinks about friendships, partnerships, and the relationships that compound over a lifetime versus the ones that quietly drain you.
+- [People of History](https://jevangoldsmith.com/people.html): A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.
+- [Andrew Huberman - People](https://jevangoldsmith.com/people/andrew-huberman.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Andrew Wilkinson - People](https://jevangoldsmith.com/people/andrew-wilkinson.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Anne Lamott - People](https://jevangoldsmith.com/people/anne-lamott.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Atul Gawande - People](https://jevangoldsmith.com/people/atul-gawande.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Baltasar Gracián - People](https://jevangoldsmith.com/people/baltasar-gracian.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Cal Newport - People](https://jevangoldsmith.com/people/cal-newport.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Charlie Munger - People](https://jevangoldsmith.com/people/charlie-munger.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Christopher Nolan - People](https://jevangoldsmith.com/people/christopher-nolan.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [David Goggins - People](https://jevangoldsmith.com/people/david-goggins.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [David Ogilvy - People](https://jevangoldsmith.com/people/david-ogilvy.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Eckhart Tolle - People](https://jevangoldsmith.com/people/eckhart-tolle.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Elon Musk - People](https://jevangoldsmith.com/people/elon-musk.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Eric Ries - People](https://jevangoldsmith.com/people/eric-ries.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [James Clear - People](https://jevangoldsmith.com/people/james-clear.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [John D. Rockefeller - People](https://jevangoldsmith.com/people/john-d-rockefeller.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Keith J. Cunningham - People](https://jevangoldsmith.com/people/keith-j-cunningham.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Lex Fridman - People](https://jevangoldsmith.com/people/lex-fridman.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Morgan Housel - People](https://jevangoldsmith.com/people/morgan-housel.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Naval Ravikant - People](https://jevangoldsmith.com/people/naval-ravikant.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Peter Thiel - People](https://jevangoldsmith.com/people/peter-thiel.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Ray Dalio - People](https://jevangoldsmith.com/people/ray-dalio.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Richard Feynman - People](https://jevangoldsmith.com/people/richard-feynman.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Rick Rubin - People](https://jevangoldsmith.com/people/rick-rubin.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Rob Fitzpatrick - People](https://jevangoldsmith.com/people/rob-fitzpatrick.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Robert Cialdini - People](https://jevangoldsmith.com/people/robert-cialdini.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Ryan Holiday - People](https://jevangoldsmith.com/people/ryan-holiday.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Shane Parrish - People](https://jevangoldsmith.com/people/shane-parrish.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Sherlock Holmes - People](https://jevangoldsmith.com/people/sherlock-holmes.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Victor O. Schwab - People](https://jevangoldsmith.com/people/victor-o-schwab.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Warren Buffett - People](https://jevangoldsmith.com/people/warren-buffett.html): A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.
+- [Podcasts, Conversations &amp; Audio Notes](https://jevangoldsmith.com/podcasts.html): A podcast archive of conversations, shows, and audio ideas Jevan Goldsmith returns to.
+- [Problems: A Running Log of What I'm Working On](https://jevangoldsmith.com/problems.html): A running log of problems Jevan Goldsmith is thinking about, working on, or watching from a distance.
+- [The Shelf: Tools, Objects & Gear That Earned Their Place](https://jevangoldsmith.com/products.html): A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced.
+- [Projects Jevan Goldsmith Is Building & Exploring](https://jevangoldsmith.com/projects.html): A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems.
+- [How I Read: A Practical Reading Philosophy](https://jevangoldsmith.com/reading-philosophy.html): Notes on reading for judgment, taste, decision-making, and a better personal operating system.
+- [Search Jevan Goldsmith's Archive](https://jevangoldsmith.com/search.html): Search Jevan Goldsmith's archive of Field Notes, essays, books, resources, projects, skills, tools, and ideas.
+- [Speeches, Talks & Remarks by Jevan Goldsmith](https://jevangoldsmith.com/speeches.html): A running archive of speeches, talks, and remarks by Jevan Goldsmith, written for delivery and kept as a record of what was said and why.
+- [Takes: Priority Filters & Belief Change Log](https://jevangoldsmith.com/takes.html): Where Jevan Goldsmith files his takes: priority filters and a public log of beliefs he has changed.
+- [AI-Assisted Work: Notes, Tools & Practical Systems](https://jevangoldsmith.com/topics/ai-assisted-work.html): A topic hub for AI-assisted work: how Jevan Goldsmith uses AI for research, writing, coding, systems, and better work without outsourcing taste.
+- [Better Thinking: Field Notes, Essays, Books & Tools](https://jevangoldsmith.com/topics/better-thinking.html): A topic hub for better thinking: first principles, decision-making, mental models, reflection, books, essays, resources, and Field Notes.
+- [Books & Reading: Recommendations, Philosophy & Notes](https://jevangoldsmith.com/topics/books-reading.html): A topic hub for books and reading: recommendations, reading philosophy, book notes, useful ideas, and Field Notes from Jevan Goldsmith.
+- [Business & Building: Projects, Strategy & Useful Experiments](https://jevangoldsmith.com/topics/business-building.html): A topic hub for business and building: projects, strategy, finance, experiments, essays, skills, and field notes from Jevan Goldsmith.
+- [Health & Performance: Systems for Energy and Better Work](https://jevangoldsmith.com/topics/health-performance.html): A topic hub for health and performance notes, systems, habits, energy, recovery, and tools that support better work.
+- [Personal Systems: Weekly Reviews, Notes & Operating Loops](https://jevangoldsmith.com/topics/personal-systems.html): A topic hub for personal systems: weekly reviews, planning, reflection, notes, energy, decisions, and practical operating loops.
+- [Real Estate Development Notes: Finance, Sites & Learning](https://jevangoldsmith.com/topics/real-estate-development.html): A topic hub for real estate development notes, feasibility, finance, site selection, project learning, and related resources.
+- [Tools & Objects That Earned Their Place](https://jevangoldsmith.com/topics/tools-objects.html): A topic hub for tools, objects, gear, and digital systems Jevan Goldsmith actually uses, including The Shelf and related Field Notes.
+- [Videos, Channels & Useful Visual Learning](https://jevangoldsmith.com/videos.html): A video archive of talks, channels, clips, and visual lessons Jevan Goldsmith found useful.
+- [Weekly Review Template for Reflection, Planning & Better Decisions](https://jevangoldsmith.com/weekly-review-template.html): A simple weekly review template for reviewing lessons, decisions, energy, priorities, and next actions.

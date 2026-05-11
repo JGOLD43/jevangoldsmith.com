@@ -1,0 +1,84 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "collection": "projects",
+  "canonicalUrl": "https://jevangoldsmith.com/api/v1/projects/personal-website.json",
+  "item": {
+    "id": "personal-website",
+    "slug": "personal-website",
+    "title": "Personal Website",
+    "status": "active",
+    "category": "software",
+    "shortDescription": "This website you're on. A digital home for my thoughts, projects, and adventures.",
+    "description": "A static personal website evolving into a structured content, product, and agent-readable platform.",
+    "whatItIs": "A personal archive for essays, projects, books, tools, adventures, and useful notes.",
+    "whyIMadeIt": "I wanted a durable home for the things I am learning and collecting instead of scattering them across social platforms.",
+    "whatILearned": "Clear information architecture matters more than adding another page.",
+    "nextStep": "Tighten the first-visitor path, keep improving project proof, and replace placeholder visuals with owned artifacts.",
+    "documentaryLead": "This is the live container for the whole archive. The project is less about having a website and more about learning how to make a personal operating system legible to other people.",
+    "currentQuestion": "How do I make the first five minutes feel like a guided tour instead of a pile of interesting rooms?",
+    "proofArtifacts": [
+      {
+        "label": "Shipped",
+        "value": "Navigation, search, Field Notes, books, essays, projects, products, adventures, skills, and agent-readable API surfaces."
+      },
+      {
+        "label": "Tension",
+        "value": "The archive has more depth than the homepage currently explains."
+      }
+    ],
+    "buildLog": [
+      {
+        "date": "2026-04-23",
+        "title": "Reframed Projects as a build documentary",
+        "note": "Moved project pages away from static portfolio cards and toward current questions, evidence, and dated progress notes."
+      },
+      {
+        "date": "2026-04-22",
+        "title": "Structured the site as a living archive",
+        "note": "Generated pages, metadata, sitemaps, and API outputs so the site can scale without every new thought becoming a hand-edited page."
+      }
+    ],
+    "image": "images/generated/remote/db938b17ac74e4-800.jpg",
+    "imageAlt": "Personal Website",
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "topics": [
+      "building",
+      "personal-platform"
+    ],
+    "tags": [
+      "website",
+      "static-site",
+      "agent-api"
+    ],
+    "audience": [
+      "readers",
+      "agents"
+    ],
+    "links": [
+      {
+        "label": "View Live",
+        "url": "index.html",
+        "icon": "external"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/JGOLD43/jevangoldsmith.com",
+        "icon": "github"
+      }
+    ],
+    "relatedContent": [
+      "index.html",
+      "search.html",
+      "products.html"
+    ],
+    "collection": "projects",
+    "canonicalUrl": "https://jevangoldsmith.com/projects.html#personal-website",
+    "shareable": true,
+    "summary": "This website you're on. A digital home for my thoughts, projects, and adventures."
+  }
+}
