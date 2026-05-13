@@ -303,11 +303,9 @@ body.shelf-experience {
     border: 1px solid #f3f3f1;
 }
 
-.shelf-object:focus {
-    outline: none;
-}
-
+.shelf-object:focus,
 .shelf-object:focus-visible {
+    box-shadow: none;
     outline: none;
 }
 
@@ -341,7 +339,7 @@ body.shelf-experience {
 @media (max-width: 760px) {
     .shelf-page {
         background-size: 50vw 100%, 100% 260px;
-        padding: 108px 12px 34px;
+        padding: 24px 12px 34px;
     }
 
     .shelf-filter {
@@ -354,16 +352,18 @@ body.shelf-experience {
     }
 
     .shelf-grid {
+        align-content: start;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        row-gap: 38px;
+        min-height: 0;
+        row-gap: 24px;
     }
 
     .shelf-object {
-        min-height: 205px;
+        min-height: 0;
     }
 
     .shelf-object-stage {
-        height: 130px;
+        height: 120px;
     }
 
     .shelf-object-detail {
@@ -390,6 +390,46 @@ body.shelf-experience {
 
     .shelf-object-detail-verdict {
         font-size: 0.86rem;
+    }
+
+    /* Mobile inline expand (replaces CSS-transform zoom) */
+    .shelf-item.is-expanded {
+        grid-column: 1 / -1;
+    }
+
+    .shelf-item.is-expanded .shelf-object-stage {
+        height: 180px;
+    }
+
+    .shelf-item.is-expanded .shelf-object-detail {
+        display: grid;
+        height: auto;
+        left: auto;
+        margin-top: 0.75rem;
+        opacity: 1;
+        pointer-events: auto;
+        position: static;
+        text-align: center;
+        transform: none;
+        width: 100%;
+    }
+
+    .shelf-item.is-expanded .shelf-object-detail-brand,
+    .shelf-item.is-expanded .shelf-object-detail-verdict,
+    .shelf-item.is-expanded .shelf-object-detail-line {
+        text-align: center;
+    }
+
+    .shelf-item.is-expanded .shelf-object-detail-brand {
+        font-size: 0.62rem;
+    }
+
+    .shelf-item.is-expanded .shelf-object-detail-verdict {
+        font-size: 1rem;
+    }
+
+    .shelf-item.is-expanded .shelf-object-detail-link {
+        justify-self: center;
     }
 }
 
