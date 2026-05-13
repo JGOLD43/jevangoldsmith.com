@@ -97,6 +97,40 @@ function resolveActionButton(buttonOrEvent: Cfg, selector: string): HTMLElement 
     return null;
 }
 
+// Mobile-only tab switch between the sidebar (list) and the grid (cards).
+// Registered globally on module import so it fires even on collection pages
+// whose runtime instance never calls `init()` (books, movies, ...). The
+// layout gets `mobile-list-view`; CSS does the rest.
+function switchCollectionViewFromDom(view: string) {
+    const layout = document.querySelector('main.collection-layout') as HTMLElement | null;
+    if (!layout) return;
+    const isList = view === 'list';
+    layout.classList.toggle('mobile-list-view', isList);
+    layout.querySelectorAll('.collection-mobile-toggle [data-view]').forEach((btn) => {
+        const el = btn as HTMLElement;
+        const active = el.dataset.view === view;
+        el.classList.toggle('active', active);
+        el.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+}
+
+registerActions({ switchCollectionView: switchCollectionViewFromDom });
+
+// Mobile UX: when the user taps a row inside a sidebar category panel
+// (book / movie / essay / podcast link), the matching grid card needs to
+// become visible before the page-specific scroll handler runs. Intercept
+// in capture phase, flip the layout back to the grid view, then let the
+// existing scroll-to-card handlers fire on bubble.
+document.addEventListener('click', (event) => {
+    const target = event.target as Element | null;
+    if (!target?.closest) return;
+    const link = target.closest('.book-link, .movie-link, .essay-link, .podcast-link');
+    if (!link) return;
+    const layout = document.querySelector('main.collection-layout.mobile-list-view') as HTMLElement | null;
+    if (!layout) return;
+    switchCollectionViewFromDom('grid');
+}, true);
+
 export function createCollectionRuntime(config: CollectionRuntimeConfig) {
     const cfg = config as Cfg;
     const state = {
@@ -263,6 +297,8 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
         });
     }
 
+    const switchCollectionView = switchCollectionViewFromDom;
+
     function restoreSidebar() {
         if (!cfg.storageKey) return false;
         return restoreCollapsedState({
@@ -319,8 +355,11 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
     }
 
     function registerRuntimeActions() {
-        if (!cfg.actions) return;
-        const actions: Record<string, unknown> = {};
+        const actions: Record<string, unknown> = { switchCollectionView };
+        if (!cfg.actions) {
+            registerActions(actions);
+            return;
+        }
         if (cfg.actions.clearSearch) actions[cfg.actions.clearSearch] = clearSearch;
         if (cfg.actions.filter) actions[cfg.actions.filter] = filter;
         if (cfg.actions.search) actions[cfg.actions.search] = search;

@@ -77,6 +77,9 @@ export interface CollectionConfig {
     counterLabelId?: string;
     counterLabel: string;
     bodyHtml: string;
+    /** Label for the second tab in the mobile list/grid toggle. Defaults
+     * to `main.title`. Keep short — surfaces on phones only. */
+    mobileGridLabel?: string;
   };
   afterMainHtml?: string;
 }
@@ -196,7 +199,20 @@ export function renderCollectionMain(config: CollectionConfig): string {
     ? `<div class="${escapeAttr(config.main.counterGroupClass)}">${counterInnerHtml}</div>`
     : counterInnerHtml;
 
+  const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
+  const mobileToggleHtml = `<div class="collection-mobile-toggle" role="tablist" aria-label="Mobile view toggle">
+            <button type="button" class="mobile-view-btn" data-view="list" data-action="switchCollectionView" data-action-args="list" role="tab" aria-selected="false">
+                <svg class="ico-stroke" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
+                List
+            </button>
+            <button type="button" class="mobile-view-btn active" data-view="grid" data-action="switchCollectionView" data-action-args="grid" role="tab" aria-selected="true">
+                <svg class="ico-stroke" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
+                ${escapeHtml(mobileGridLabel)}
+            </button>
+        </div>`;
+
   return `<main class="${escapeAttr(config.layout.className)}" id="${escapeAttr(config.layout.id)}">
+        ${mobileToggleHtml}
         <aside class="${escapeAttr(config.sidebar.className)}" id="${escapeAttr(config.sidebar.id)}">
             ${renderSidebarHeader(config.sidebar.collapseAction)}
             ${renderListDropdown(config.sidebar)}

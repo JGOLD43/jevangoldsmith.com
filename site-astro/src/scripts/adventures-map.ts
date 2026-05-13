@@ -9,7 +9,7 @@ import {
     schedulePopularRoutes, setRouteRerender
 } from './adventures-map-data';
 import { loadLeaflet, loadMarkerCluster } from './adventures-map-vendor';
-import {adventureYear,BASEMAPS, FAST_BASEMAP_LAND,HORIZONTAL_WRAP_BOUND, matchesAdventureFilters,
+import {adventureYear,BASEMAPS, HORIZONTAL_WRAP_BOUND, matchesAdventureFilters,
     matchesRegionFilter, 
     ROUTE_TYPE_COLORS, 
     saveFilters, 
@@ -55,35 +55,45 @@ function refreshMapDatasets() {
     buildMapControlStack();
 }
 
+// Permanent low-zoom overview of the SAME basemap, pinned beneath the
+// main tile pane. With maxNativeZoom:3 only 64 tiles cover the whole
+// world — they load once at init, stay cached, and Leaflet scales them
+// up to fill any pan/zoom gap with a blurry-but-correctly-colored version
+// of the imagery the user is viewing. Replaces the old polygon
+// fastBasemap, which was the wrong color (navy) over land and caused
+// the visible "rectangle pop-in" flicker against satellite tiles.
 function addFastBaseMap(map: AnyObj) {
     const L = getL();
     if (!L || !map || map._fastBaseMapAdded) return;
 
     map.createPane('fastBasemap');
-    map.getPane('fastBasemap').style.zIndex = 180;
-    map.getPane('overlayPane').style.zIndex = 400;
+    map.getPane('fastBasemap').style.zIndex = '180';
+    map.getPane('overlayPane').style.zIndex = '400';
 
-    FAST_BASEMAP_LAND.forEach((shape: AnyObj) => {
-        L.polygon(shape, {
-            pane: 'fastBasemap',
-            interactive: false,
-            stroke: true,
-            color: 'rgba(255,255,255,0.52)',
-            weight: 1,
-            fillColor: '#24394d',
-            fillOpacity: 0.92
-        }).addTo(map);
-    });
-
-    L.polyline([[0, -180], [0, 180]], {
-        pane: 'fastBasemap',
-        interactive: false,
-        color: 'rgba(255,255,255,0.18)',
-        weight: 1,
-        dashArray: '4 8'
-    }).addTo(map);
-
+    rebuildOverviewLayer(map);
     map._fastBaseMapAdded = true;
+}
+
+function rebuildOverviewLayer(map: AnyObj) {
+    const L = getL();
+    if (!L || !map) return;
+    if (map._overviewTileLayer) {
+        map.removeLayer(map._overviewTileLayer);
+        map._overviewTileLayer = null;
+    }
+    const def = BASEMAPS[state.mapFilters.basemap || 'satellite'] || BASEMAPS.satellite;
+    const opts: AnyObj = {
+        pane: 'fastBasemap',
+        maxNativeZoom: 3,
+        maxZoom: 19,
+        minZoom: 0,
+        detectRetina: false,
+        crossOrigin: true,
+        keepBuffer: 100,
+        noWrap: false
+    };
+    if (def.subdomains) opts.subdomains = def.subdomains;
+    map._overviewTileLayer = L.tileLayer(def.tile, opts).addTo(map);
 }
 
 function addSatelliteTiles(map: AnyObj) {
@@ -120,6 +130,10 @@ function setBasemap(map: AnyObj, name: string) {
     }
 
     if (map === state.worldMap) state.basemapTileLayer = overlayLayer ? [layer, overlayLayer] : layer;
+
+    // Keep the low-zoom overview in sync with the active basemap so gaps
+    // are always filled with the SAME imagery the user expects, just blurry.
+    if (map === state.worldMap && map._fastBaseMapAdded) rebuildOverviewLayer(map);
 }
 
 async function ensureWorldMap(adventures = state.allAdventures) {
