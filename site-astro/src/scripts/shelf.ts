@@ -39,6 +39,28 @@ function initFilters(zoom: { release: () => void } | null | undefined) {
   });
 }
 
+function initMobileExpand(grid: Element) {
+  grid.addEventListener('click', function (event) {
+    const trigger = (event.target as Element | null)?.closest?.('[data-shelf-item]');
+    if (!trigger) return;
+    event.preventDefault();
+    const item = trigger.closest('.shelf-item');
+    if (!item) return;
+    const wasExpanded = item.classList.contains('is-expanded');
+    grid.querySelectorAll('.shelf-item.is-expanded').forEach(function (el) {
+      el.classList.remove('is-expanded');
+    });
+    if (!wasExpanded) item.classList.add('is-expanded');
+  });
+  document.addEventListener('click', function (event) {
+    if (!(event.target as Element | null)?.closest?.('.shelf-item')) {
+      grid.querySelectorAll('.shelf-item.is-expanded').forEach(function (el) {
+        el.classList.remove('is-expanded');
+      });
+    }
+  });
+}
+
 function initShelf() {
   const grid = document.querySelector('.shelf-grid');
   if (!grid) return;
@@ -46,6 +68,12 @@ function initShelf() {
   document.querySelectorAll('.shelf-item').forEach(function (el) {
     el.classList.add('js-zoom-item');
   });
+
+  if (window.innerWidth <= 760) {
+    initMobileExpand(grid);
+    initFilters(null);
+    return;
+  }
 
   const zoom = initGridZoom({
     grid: grid as HTMLElement,
