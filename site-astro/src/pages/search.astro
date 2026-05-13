@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Search Jevan Goldsmith&#39;s Archive"
+  description="Search Jevan Goldsmith's archive of Field Notes, essays, books, resources, projects, skills, tools, and ideas."
+  canonical="https://jevangoldsmith.com/search.html"
+  pageType="WebPage"
+>
+  <main class="search-page">
+    <section class="search-hero">
+      <div class="container">
+        <p class="section-eyebrow">DISCOVER</p>
+        <h1>Search Jevan Goldsmith</h1>
+        <div class="site-search-shell">
+          <svg class="site-search-icon ico-stroke" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-search"/></svg>
+          <input id="site-search-input" class="site-search-input" type="search" placeholder="Search books, essays, skills, adventures..." autocomplete="off" autofocus />
+        </div>
+        <div class="site-search-filters" id="site-search-filters" aria-label="Search filters" />
+      </div>
+    </section>
+
+    <section class="search-results-section">
+      <div class="container">
+        <div class="search-results-header">
+          <span id="site-search-count">Loading...</span>
+          <a href="/api/v1/search-index.json" class="search-api-link">JSON</a>
+        </div>
+        <div class="search-results" id="site-search-results" />
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  /* Phase 2 slice 2.1 (Tier 1+2 plan): reserve vertical space for the
+     search results so the empty-on-first-paint container doesn't grow
+     from height 0 → 261-card height when JS hydrates. Eliminates the
+     CLS=0.46 regression on /search.html. */
+  #site-search-results {
+    min-height: 80vh;
+  }
+  #site-search-filters:empty {
+    min-height: 2.5rem;
+  }
+</style>
+
+<script>
+  // (slice 16) + Phase 7 (slice 5): search + sanitize as native.
+  import '../scripts/search-astro.ts';
+</script>

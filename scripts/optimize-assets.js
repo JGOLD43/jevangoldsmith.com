@@ -21,7 +21,10 @@ const contentWidths = [320, 480, 720, 960, 1200];
 const peopleWidths = [200, 400, 800];
 const productWidths = [240, 400, 640, 800];
 const remoteWidths = [320, 480, 800, 1200];
-const coverWidths = [160, 240, 360, 480];
+// 160w was historically generated for thumbnails but no rendered HTML
+// references it (zero matches across all 81 dist pages). 240w covers the
+// smallest displayed size; dropped 160 to skip the wasted variants.
+const coverWidths = [240, 360, 480];
 const videoWidths = [176, 352, 528];
 
 function ensureDir(dir) {
@@ -51,16 +54,59 @@ function isFresh(output, input) {
   return fs.existsSync(output) && fs.statSync(output).mtimeMs >= fs.statSync(input).mtimeMs;
 }
 
-async function generateRasterSet({ input, outDir, basename, widths, jpeg = false }) {
+function removeIfExists(file) {
+  if (fs.existsSync(file)) fs.rmSync(file, { force: true });
+}
+
+function writeFileIfChanged(file, contents) {
+  if (fs.existsSync(file) && fs.readFileSync(file, 'utf8') === contents) return false;
+  fs.writeFileSync(file, contents);
+  return true;
+}
+
+function pruneUnusedGeneratedWebp() {
+  if (!fs.existsSync(generatedDir)) return;
+  const stack = [generatedDir];
+  while (stack.length) {
+    const dir = stack.pop();
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(full);
+        continue;
+      }
+      if (!entry.isFile() || !entry.name.endsWith('.webp')) continue;
+      const rel = path.relative(generatedDir, full).split(path.sep).join('/');
+      if (rel.startsWith('logo/')) continue;
+      fs.rmSync(full, { force: true });
+    }
+  }
+}
+
+// Conservative instant-load asset strategy: AVIF first, JPG/PNG fallback.
+// WebP is generated only for the logo because the nav video poster still
+// references logo-nav-176.webp. Everything else is stale deploy weight.
+async function generateRasterSet({ input, outDir, basename, widths, jpeg = false, webp = false }) {
+  try {
+    await sharp(input).metadata();
+  } catch (err) {
+    console.warn(`optimize-assets: skipping ${input} (not a valid image: ${err.message})`);
+    return;
+  }
   for (const width of widths) {
     await image(input, path.join(outDir, `${basename}-${width}.avif`), width, 'avif', {
       quality: jpeg ? 72 : 82,
       effort: 6
     });
-    await image(input, path.join(outDir, `${basename}-${width}.webp`), width, 'webp', {
-      quality: jpeg ? 82 : 92,
-      effort: 5
-    });
+    const webpOutput = path.join(outDir, `${basename}-${width}.webp`);
+    if (webp) {
+      await image(input, webpOutput, width, 'webp', {
+        quality: jpeg ? 82 : 92,
+        effort: 5
+      });
+    } else {
+      removeIfExists(webpOutput);
+    }
     await image(input, path.join(outDir, `${basename}-${width}.${jpeg ? 'jpg' : 'png'}`), width, jpeg ? 'jpeg' : 'png', {
       quality: 88,
       compressionLevel: 9,
@@ -97,7 +143,16 @@ function collectRemoteMediaUrls() {
     if (fs.existsSync(fullPath)) collectUrls(JSON.parse(fs.readFileSync(fullPath, 'utf8')), urls);
   }
 
-  for (const dir of [root, path.join(root, '_src', 'pages')]) {
+  for (const dir of [path.join(root, 'site-astro', 'src')]) {
+    for (const file of walkFiles(dir, /\.(astro|ts|js|html)$/i)) {
+      const text = fs.readFileSync(file, 'utf8');
+      for (const match of text.matchAll(/https:\/\/images\.unsplash\.com\/[^"'\s)<>]+/gi)) {
+        urls.add(match[0].replace(/&amp;/g, '&'));
+      }
+    }
+  }
+
+  for (const dir of [root, path.join(root, '_src', 'pages'), path.join(root, 'site-astro', 'src', 'legacy', 'pages')]) {
     if (!fs.existsSync(dir)) continue;
     for (const file of fs.readdirSync(dir).filter((entry) => entry.endsWith('.html'))) {
       const html = fs.readFileSync(path.join(dir, file), 'utf8');
@@ -117,6 +172,17 @@ function collectRemoteMediaUrls() {
   }
 
   return Array.from(urls).sort();
+}
+
+function walkFiles(dir, pattern) {
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...walkFiles(full, pattern));
+    else if (entry.isFile() && pattern.test(entry.name)) out.push(full);
+  }
+  return out;
 }
 
 async function download(url, target) {
@@ -165,11 +231,10 @@ async function generateRemoteAssetSet() {
     for (const width of widths) {
       const basename = `${id}-${width}`;
       await image(source, path.join(remoteGeneratedDir, `${basename}.avif`), width, 'avif', { quality: isCover ? 66 : 72, effort: 6 });
-      await image(source, path.join(remoteGeneratedDir, `${basename}.webp`), width, 'webp', { quality: isCover ? 78 : 82, effort: 5 });
+      removeIfExists(path.join(remoteGeneratedDir, `${basename}.webp`));
       await image(source, path.join(remoteGeneratedDir, `${basename}.jpg`), width, 'jpeg', { quality: isCover ? 80 : 84, progressive: true, mozjpeg: true });
       entry.formats[width] = {
         avif: `images/generated/remote/${basename}.avif`,
-        webp: `images/generated/remote/${basename}.webp`,
         jpg: `images/generated/remote/${basename}.jpg`
       };
     }
@@ -178,7 +243,8 @@ async function generateRemoteAssetSet() {
   }
 
   const manifestPath = path.join(root, 'data', 'remote-assets.generated.json');
-  fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  const changed = writeFileIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  if (!changed) console.log('optimize-assets: remote asset manifest unchanged');
 }
 
 function runFfmpeg(args) {
@@ -239,7 +305,10 @@ async function main() {
     input: logo,
     outDir: generatedPath('logo'),
     basename: 'logo-nav',
-    widths: logoWidths
+    widths: logoWidths,
+    // Keep WebP for the nav logo — it's the <video poster> for the
+    // animated logo and the only WebP variant referenced in shipped HTML.
+    webp: true
   });
 
   if (fs.existsSync(profile)) {
@@ -292,6 +361,7 @@ async function main() {
 
   await generateRemoteAssetSet();
   generateVideoSet();
+  pruneUnusedGeneratedWebp();
   console.log('Optimized responsive image and video assets.');
 }
 

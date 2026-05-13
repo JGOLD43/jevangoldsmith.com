@@ -1,0 +1,182 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import CollectionPage from '../components/CollectionPage.astro';
+import type { Book } from '../content.config';
+import { bookCoverUrl, renderBookCardHtml } from '../lib/book-card';
+import { CATEGORY_MAP } from '../lib/book-categories';
+import { BOOK_SECTIONS, renderRatingFilterSection, renderSliderFilterSection, tasteListOptions } from '../lib/collection-sections';
+import { escapeAttr } from '../lib/html-escape';
+import booksRuntimeData from '../../../data/books.generated.json';
+
+// Books data is fetched at runtime from /data/books.generated.json.
+// books.ts adopts SSR'd cards in place and only re-renders for filter changes.
+
+const canonical = 'https://jevangoldsmith.com/books.html';
+
+// SSR every book card. Eager-load the first 6 covers (above-fold on mobile + desktop).
+const books = await getCollection('books') as CollectionEntry<'books'>[];
+const bookCardsHtml = books
+  .map((b, i) => renderBookCardHtml(b.data, i < 6))
+  .join('');
+
+const booksByCategoryKey: Record<string, Book[]> = {};
+for (const entry of books) {
+  const data = entry.data;
+  const key = CATEGORY_MAP[data.category];
+  if (!key) continue;
+  (booksByCategoryKey[key] ||= []).push(data);
+}
+
+// Sidebar lists hydrate at runtime from the books.generated.json fetch.
+// SSR ships only the per-section counts so the badges paint correctly.
+const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section) => {
+  if (!section.panelId) return { ...section, count: String(books.length) };
+  const key = section.panelId.replace(/^category-/, '');
+  const list = booksByCategoryKey[key] || [];
+  return { ...section, count: String(list.length) };
+});
+
+// Carousel: most recent 20 books — books.ts clones nodes at runtime
+// to satisfy the seamless-scroll CSS animation.
+const recentBooks = books.slice(-20).reverse().map((b) => b.data);
+const carouselTrackInner = recentBooks
+  .map((book) => {
+    const url = bookCoverUrl(book, 'medium');
+    // Skip books with no resolvable cover; empty src would fetch the page URL.
+    if (!url) return '';
+    return `<img class="carousel-book" src="${escapeAttr(url)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
+  })
+  .join('');
+
+const sidebarFiltersHtml = renderRatingFilterSection({ clearAction: 'clear-star-filter' })
+    + '\n\n' + renderSliderFilterSection({ label: 'Filter by Times Read', icon: '📖', id: 'timesread' });
+
+const headerCarouselHtml = `<div class="recent-books-carousel">
+    <span class="carousel-label">Recently Added</span>
+    <div class="carousel-track" id="carousel-track" style="animation-duration:${recentBooks.length * 3}s">${carouselTrackInner}</div>
+</div>`;
+
+const headerViewToggleHtml = `<div class="view-toggle main-view-toggle">
+    <button class="view-toggle-btn active" id="list-view-btn-main" data-action="set-view-mode" data-mode="list" title="List view">
+        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
+    </button>
+    <button class="view-toggle-btn" id="grid-view-btn-main" data-action="set-view-mode" data-mode="grid" title="Grid view">
+        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
+    </button>
+</div>`;
+
+const populatedMainBody = `<div id="books-container" class="books-grid">${bookCardsHtml}</div>
+<div class="category-grid-view" id="category-grid-view" style="display: none;">
+    <header class="main-header grid-view-header">
+        <div class="header-content">
+            <h1>Bookshelf</h1>
+            <div class="philosophy-link-wrapper">
+                <a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a>
+                <span class="read-first-note">← read this first</span>
+            </div>
+        </div>
+        <div class="view-toggle grid-view-toggle">
+            <button class="view-toggle-btn" id="list-view-btn-grid" data-action="set-view-mode" data-mode="list" title="List view">
+                <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
+            </button>
+            <button class="view-toggle-btn active" id="grid-view-btn-grid" data-action="set-view-mode" data-mode="grid" title="Grid view">
+                <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
+            </button>
+        </div>
+    </header>
+    <div class="category-grid" id="category-grid"></div>
+</div>`;
+
+const afterMainHtml = `<section class="seo-related-section" data-seo-related>
+    <p class="seo-related-eyebrow">Related thread</p>
+    <h2>Keep exploring this idea</h2>
+    <p class="seo-related-intro">A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next.</p>
+    <div class="seo-related-grid">
+        <a class="seo-related-card" href="reading-philosophy.html"><span>How I Read: A Practical Reading Philosophy</span><p>Notes on reading for judgment, taste, decision-making, and a better personal operating system.</p></a>
+        <a class="seo-related-card" href="field-notes.html"><span>Field Notes Newsletter | Useful Ideas, Books, Tools &amp; Experiments</span><p>One useful idea, object, book, question, or experiment each week from Jevan Goldsmith&#39;s living archive.</p></a>
+        <a class="seo-related-card" href="index.html"><span>Jevan Goldsmith - Finance, Real Estate Development, Writing &amp; Tech</span><p>Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas.</p></a>
+        <a class="seo-related-card" href="free-resources.html"><span>Useful Resources for Thinking, Building &amp; Learning</span><p>Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work.</p></a>
+    </div>
+</section>
+
+<div id="book-modal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" data-action="close-book-modal">&times;</span>
+        <div class="modal-body">
+            <div class="modal-header">
+                <img id="modal-book-cover" src="" alt="" class="modal-cover" decoding="async">
+                <div class="modal-info">
+                    <h2 id="modal-book-title"></h2>
+                    <p id="modal-book-author" class="modal-author"></p>
+                    <div id="modal-book-rating" class="modal-rating"></div>
+                </div>
+            </div>
+            <div class="modal-review">
+                <h3>My Review</h3>
+                <p id="modal-book-review" class="review-text"></p>
+            </div>
+        </div>
+    </div>
+</div>`;
+
+const config = ({
+  layout: { id: 'books-layout', className: 'books-layout collection-layout sidebar-collapsed' },
+  sidebar: {
+    id: 'books-sidebar',
+    className: 'books-sidebar collection-sidebar collection-sidebar--taste collapsed',
+    collapseAction: 'toggle-sidebar',
+    listAction: 'toggle-list-dropdown',
+    currentListName: 'Books',
+    listOptions: tasteListOptions('books'),
+    search: {
+      inputId: 'book-search',
+      inputClass: 'book-search-input collection-search-input',
+      placeholder: 'Search books...',
+      clearButtonId: 'search-clear-btn',
+      clearAction: 'clear-search',
+      wrapperClass: 'search-input-wrapper search-bubble'
+    },
+    extraHtml: sidebarFiltersHtml,
+    footerText: 'Books with a badge have my full review',
+    sections: SIDEBAR_SECTIONS
+  },
+  main: {
+    className: 'books-main collection-main',
+    titleTag: 'h2',
+    title: 'Bookshelf',
+    subtitleHtml: '<div class="philosophy-link-wrapper"><a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a><span class="read-first-note">← read this first</span></div>',
+    headerExtraHtml: headerCarouselHtml,
+    counterExtraHtml: headerViewToggleHtml,
+    counterGroupClass: 'header-right',
+    counterId: 'book-count',
+    counterLabelId: 'counter-label',
+    counterLabel: 'Total Books Read',
+    bodyHtml: populatedMainBody
+  },
+  afterMainHtml: afterMainHtml
+});
+---
+<CollectionPage
+  config={config}
+  title="Books I Recommend &amp; Notes From My Reading System"
+  description="A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
+  canonical={canonical}
+>
+</CollectionPage>
+
+<script is:inline id="jg-books-data" type="application/json" set:html={JSON.stringify(booksRuntimeData)}></script>
+
+<style is:inline>
+  /* content-visibility skips offscreen book cards' layout/paint until they
+     scroll into view. contain-intrinsic-size reserves the slot so the
+     scroll position stays stable. Mirrors the people page treatment. */
+  .book-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 220px 360px;
+  }
+</style>
+
+<script>
+  import '../scripts/books.ts';
+</script>

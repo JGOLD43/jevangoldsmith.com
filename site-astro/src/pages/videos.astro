@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Videos, Channels &amp; Useful Visual Learning | Jevan Goldsmith"
+  description="A video archive of talks, channels, clips, and visual lessons Jevan Goldsmith found useful."
+  canonical="https://jevangoldsmith.com/videos.html"
+  pageType="CollectionPage"
+>
+<header class="page-header">
+        <div class="container">
+            <h1>Videos</h1>
+            <p>My latest videos from YouTube</p>
+        </div>
+    </header>
+    <main class="container">
+        <div id="loading" class="loading">
+            <p>Loading recent videos from YouTube...</p>
+        </div>
+
+        <div id="error" class="error-message" style="display: none;">
+            <p>Unable to load videos from YouTube. Please try again later.</p>
+        </div>
+
+        <div id="videos-container" class="videos-grid" style="display: none;">
+            <!-- Videos will be loaded here dynamically -->
+        </div>
+
+        <div class="channel-link">
+            <a href="https://youtube.com/@JevanGoldsmith" target="_blank" rel="noopener noreferrer">
+                <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-youtube"/></svg>
+                Visit My YouTube Channel
+            </a>
+        </div>
+</main>
+</Base>
+
+<script>
+  // native Astro module replaces /js/youtube.js.
+  import '../scripts/youtube.ts';
+</script>

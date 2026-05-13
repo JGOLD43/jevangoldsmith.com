@@ -18,22 +18,11 @@ const ENV_LOCAL = path.join(ROOT, '.env.local');
 const TMDB_BASE = 'https://api.themoviedb.org/3';
 const RATE_LIMIT_MS = 30; // ~33 req/sec, well under TMDB's 50/sec cap
 
-function loadEnvLocal() {
-    if (!fs.existsSync(ENV_LOCAL)) return;
-    const content = fs.readFileSync(ENV_LOCAL, 'utf8');
-    for (const line of content.split('\n')) {
-        const trimmed = line.trim();
-        if (!trimmed || trimmed.startsWith('#')) continue;
-        const eq = trimmed.indexOf('=');
-        if (eq === -1) continue;
-        const key = trimmed.slice(0, eq).trim();
-        let val = trimmed.slice(eq + 1).trim();
-        if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-            val = val.slice(1, -1);
-        }
-        if (!process.env[key]) process.env[key] = val;
-    }
-}
+// Use dotenv to load .env.local. Scripts previously parsed it themselves
+// (~25 LOC each duplicated four times); dotenv handles quoted values,
+// comments, and escapes correctly out of the box.
+require('dotenv').config({ path: path.resolve(__dirname, '../.env.local') });
+function loadEnvLocal() { /* no-op: dotenv.config() above already loaded vars */ }
 
 function parseArgs(argv) {
     const args = { force: false, only: null };

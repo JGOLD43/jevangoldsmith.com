@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Contact Jevan Goldsmith"
+  description="Contact Jevan Goldsmith about projects, ideas, useful resources, Field Notes, or collaboration."
+  canonical="https://jevangoldsmith.com/contact.html"
+  pageType="ContactPage"
+>
+<main class="container">
+<header class="page-header">
+  <h1>Contact</h1>
+  <p>Send a note, ask a question, or just say hi.</p>
+</header>
+<div class="content-section">
+<form class="contact-form" action="mailto:hello@jevangoldsmith.com" method="get" enctype="text/plain">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" required>
+    </div>
+    <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+    </div>
+    <button type="submit">Send Message</button>
+</form>
+<div style="margin-top: 3rem; text-align: center;">
+    <h3>Or reach out directly:</h3>
+    <div class="social-links" style="margin-top: 2rem;">
+        <a href="https://x.com/JevanGoldsmith" target="_blank" aria-label="X (Twitter)">
+            <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-x"/></svg>
+        </a>
+        <a href="https://letterboxd.com/contentwatch" target="_blank" aria-label="Letterboxd">
+            <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-letterboxd"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/jevan-goldsmith-7b885a185" target="_blank" aria-label="LinkedIn">
+            <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-linkedin"/></svg>
+        </a>
+    </div>
+    <p style="margin-top: 2rem; color: var(--text-light);">
+        <em>The form opens your email client so you can send the message directly.</em>
+    </p>
+</div>
+</div>
+</main>
+</Base>

@@ -1,8 +1,0 @@
-{
-  "legacyRootPageSources": [],
-  "dataRenderedRoutes": [],
-  "dataRenderedPatterns": [
-    "^adventure-[a-z0-9-]+\\.html$",
-    "^topics/[a-z0-9-]+\\.html$"
-  ]
-}

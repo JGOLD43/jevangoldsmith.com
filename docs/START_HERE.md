@@ -14,8 +14,8 @@ active server-side API surface.
 
 The source model is now steady-state:
 
-- `_src/pages/` owns authored template-driven public page source
-- `_src/partials/` owns shared nav/footer chrome
+- `site-astro/src/pages/` owns authored template-driven public page source
+- `site-astro/src/partials/` owns shared nav/footer chrome
 - `css/src/` owns source CSS layers
 - `data/` owns static content and site/deploy configuration
 - `scripts/` owns build, validation, and sync tools
@@ -23,17 +23,9 @@ The source model is now steady-state:
 
 ## Read In This Order
 
-1. [How We Build](HOW_WE_BUILD.md)
-2. [Source Of Truth](SOURCE_OF_TRUTH.md)
-3. [Architecture](../ARCHITECTURE.md)
-4. [Design System](DESIGN_SYSTEM.md)
-5. [Information Architecture](INFORMATION_ARCHITECTURE.md)
-6. [Content Model](CONTENT_MODEL.md)
-7. [Component Registry](COMPONENT_REGISTRY.md)
-8. [Interaction Contracts](INTERACTION_CONTRACTS.md)
-9. [Performance Budgets](PERFORMANCE_BUDGETS.md)
-10. [Release Runbook](RELEASE_RUNBOOK.md)
-11. [Static Agent API](STATIC_AGENT_API.md)
+1. [Architecture](../ARCHITECTURE.md)
+2. [Release Runbook](RELEASE_RUNBOOK.md)
+3. [Document Index](DOC_INDEX.md)
 
 ## Default Local Loop
 

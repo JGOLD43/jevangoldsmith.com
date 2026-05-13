@@ -1,0 +1,123 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import moviesRuntimeData from '../../public/data/movies.json';
+import CollectionPage from '../components/CollectionPage.astro';
+import { MOVIE_SECTIONS, renderRatingFilterSection, renderSliderFilterSection, tasteListOptions } from '../lib/collection-sections';
+import { renderMovieCardHtml } from '../lib/movie-card';
+
+const canonical = 'https://jevangoldsmith.com/movies.html';
+
+// server-render every movie card. data/movies.json is
+// kept fresh by `npm run movies:sync` (Letterboxd RSS sync). letterboxd.js
+// detects the populated grid and skips the initial wipe, so SSR'd cards
+// stay on screen until the runtime fetch completes (if it runs at all).
+
+const movies = (await getCollection('movies') as CollectionEntry<'movies'>[]).map((m) => m.data);
+const movieCardsHtml = movies.map((m) => renderMovieCardHtml(m)).join('');
+
+// runtime payload (filter/star/genre state) inlined so letterboxd.ts can
+// avoid the post-FCP fetch round-trip.
+const moviesRuntimeJson = JSON.stringify(moviesRuntimeData);
+
+const sidebarFiltersHtml = renderRatingFilterSection({ clearAction: 'clearAllFilters', preventDefaultOnClear: true })
+    + '\n\n' + renderSliderFilterSection({ label: 'Filter by Times Watched', icon: '🎬', id: 'timeswatched' });
+
+const populatedMainBody = `<div id="error" class="error-message" style="display: none;">
+    <p>Unable to load movies from Letterboxd. Please check the username in the code or try again later.</p>
+</div>
+<section id="movie-stats-panel" class="movie-stats-panel" aria-label="Watch stats" style="min-height: 80vh;">
+    <div class="stats-header">
+        <h2>Watch stats</h2>
+        <button type="button" class="stats-toggle" aria-expanded="true" aria-controls="movie-stats-panel" aria-label="Hide stats">
+            <svg class="stats-toggle-icon ico-stroke" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><use href="/sprite.svg#icon-chevronDown"/></svg>
+        </button>
+    </div>
+    <div class="stats-body"></div>
+</section>
+<div id="movies-container" class="movies-grid">${movieCardsHtml}</div>`;
+
+const movieModal = `<div id="movie-modal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" data-action="closeMovieModal">&times;</span>
+        <div class="modal-body">
+            <div class="modal-header">
+                <img id="modal-movie-poster" src="" alt="" class="modal-cover" decoding="async">
+                <div class="modal-info">
+                    <h2 id="modal-movie-title"></h2>
+                    <p id="modal-movie-year" class="modal-author"></p>
+                    <div id="modal-movie-rating" class="modal-rating"></div>
+                    <p id="modal-movie-date" style="color: var(--text-light); margin-top: 0.5rem;"></p>
+                </div>
+            </div>
+            <div class="modal-review">
+                <h3>My Review</h3>
+                <p id="modal-movie-review" class="review-text"></p>
+                <a id="modal-letterboxd-link" href="" target="_blank" rel="noopener noreferrer" style="display: inline-block; margin-top: 1rem; color: var(--secondary-color); font-weight: 500;">View on Letterboxd →</a>
+            </div>
+        </div>
+    </div>
+</div>`;
+
+const config = ({
+  layout: { id: 'movies-layout', className: 'movies-layout collection-layout sidebar-collapsed' },
+  sidebar: {
+    id: 'movies-sidebar',
+    className: 'movies-sidebar collection-sidebar collection-sidebar--taste collapsed',
+    collapseAction: 'toggleSidebar',
+    listAction: 'toggleListDropdown',
+    currentListName: 'Movies',
+    listOptions: tasteListOptions('movies'),
+    search: {
+      inputId: 'movie-search',
+      inputClass: 'movie-search-input collection-search-input',
+      placeholder: 'Search movies...',
+      clearButtonId: 'movie-search-clear-btn',
+      clearAction: 'clearMovieSearch',
+      searchAction: 'searchMovies',
+      searchUsesValue: true,
+      searchEvent: 'input',
+      wrapperClass: 'search-input-wrapper search-bubble'
+    },
+    extraHtml: sidebarFiltersHtml,
+    loadingMessage: 'Loading...',
+    sectionsWrapperId: 'sidebar-content',
+    footerText: 'Movies with a badge have my full review',
+    footerId: 'sidebar-footer',
+    footerHidden: true,
+    sections: MOVIE_SECTIONS
+  },
+  main: {
+    className: 'movies-main collection-main',
+    title: 'My Movie Reviews',
+    mobileGridLabel: 'Movies',
+    subtitleHtml: '<div class="philosophy-link-wrapper"><a href="movie-philosophy.html" class="header-subtitle-link">My Movie Philosophy</a><span class="read-first-note">← read this first</span></div>',
+    counterId: 'movie-count',
+    counterLabel: 'Movies Watched',
+    bodyHtml: populatedMainBody
+  },
+  afterMainHtml: movieModal
+});
+---
+<CollectionPage
+  config={config}
+  title="Movie Reviews, Watchlist &amp; Taste Notes"
+  description="A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste."
+  canonical={canonical}
+/>
+
+<style is:inline>
+  /* Same content-visibility trick as /people: skip layout/paint for
+     off-screen movie cards, reserve their slot to keep scroll stable. */
+  .movie-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 220px 360px;
+  }
+</style>
+
+<script is:inline type="application/json" id="jg-movies-data" set:html={moviesRuntimeJson} />
+
+<script>
+  // letterboxd transitively imports movie-stats; load order is implicit.
+  import '../scripts/letterboxd.ts';
+</script>

@@ -1,0 +1,44 @@
+---
+// Per-page "Keep exploring this idea" section. Loads contextual links from
+// src/lib/seo-related.json (pre-extracted from the legacy snapshot, one entry
+// per page slug). Falls back to hiding the section if no entry exists.
+
+import data from '../lib/seo-related.json';
+
+interface Props {
+  /** Page slug (without .html). E.g. "index", "about", "books". */
+  slug: string;
+  /** Override the eyebrow / heading copy if needed. */
+  eyebrow?: string;
+  heading?: string;
+  intro?: string;
+}
+
+const {
+  slug,
+  eyebrow = 'Related thread',
+  heading = 'Keep exploring this idea',
+  intro = "A few adjacent notes and pages that connect this topic to the wider archive. These links are chosen from shared topics and intent, so each page leads toward a more specific skill, resource, essay, or collection instead of sending you back through generic navigation. Follow the thread that best matches what you are trying to learn next."
+} = Astro.props;
+
+const rawCards: Array<{ href: string; title: string; desc: string }> =
+  (data as Record<string, Array<{ href: string; title: string; desc: string }>>)[slug] ?? [];
+
+// Match the legacy partial: relative URLs ("essays.html"), not absolute ("/essays.html").
+const cards = rawCards.map((c) => ({ ...c, href: c.href.replace(/^\//, '') }));
+---
+{cards.length > 0 && (
+  <section class="seo-related-section" data-seo-related>
+    <p class="seo-related-eyebrow">{eyebrow}</p>
+    <h2>{heading}</h2>
+    <p class="seo-related-intro">{intro}</p>
+    <div class="seo-related-grid">
+      {cards.map((c) => (
+        <a class="seo-related-card" href={c.href}>
+          <span set:html={c.title} />
+          <p set:html={c.desc} />
+        </a>
+      ))}
+    </div>
+  </section>
+)}

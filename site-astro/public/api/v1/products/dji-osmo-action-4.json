@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-04-30T07:59:10.648Z",
+  "collection": "products",
+  "canonicalUrl": "https://jevangoldsmith.com/api/v1/products/dji-osmo-action-4.json",
+  "item": {
+    "id": "dji-osmo-action-4",
+    "slug": "dji-osmo-action-4",
+    "title": "Osmo Action 4",
+    "brand": "DJI",
+    "type": "recommendation",
+    "category": "tech",
+    "status": "available",
+    "price": "",
+    "shortDescription": "Rugged, waterproof action camera with excellent stabilization. Captures adventures without turning the moment into a production.",
+    "description": "An action camera recommendation for travel, adventures, and POV capture.",
+    "rating": 4.7,
+    "badge": "Capture Kit",
+    "usage": "Travel and adventure kit",
+    "icon": "camera",
+    "image": "images/generated/products/dji-osmo-action-4-640.png",
+    "ctaLabel": "View Recommendation",
+    "checkoutUrl": "",
+    "verdict": "The pocket camera that makes the best shots actually happen.",
+    "whyItStayed": "Rugged, waterproof, and stabilized enough that the footage looks intentional instead of accidental.",
+    "howIUseIt": "Adventures, travel, POV clips, and the handheld moments where a phone is not the right tool.",
+    "replaced": "Shaky phone footage and shots I kept meaning to get but never did.",
+    "audience": [
+      "creators",
+      "travellers"
+    ],
+    "topics": [
+      "tools-objects",
+      "adventure"
+    ],
+    "tags": [
+      "camera",
+      "video",
+      "travel"
+    ],
+    "relatedContent": [
+      "adventures.html",
+      "videos.html"
+    ],
+    "collection": "products",
+    "canonicalUrl": "https://jevangoldsmith.com/products.html#dji-osmo-action-4",
+    "shareable": true,
+    "summary": "Rugged, waterproof action camera with excellent stabilization. Captures adventures without turning the moment into a production."
+  }
+}

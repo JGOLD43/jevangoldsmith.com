@@ -1,0 +1,49 @@
+---
+// Shared collection-page wrapper. Two modes:
+//   kind="collection" (default) — books, movies, people, podcasts, essays.
+//                                  Renders config via renderCollectionMain.
+//   kind="task"                 — challenges, projects. Renders items + a
+//                                  per-item renderCard via renderTaskListMain.
+
+import Base from '../layouts/Base.astro';
+import type { TaskListConfig } from '../lib/collection-sections';
+import { renderTaskListMain } from '../lib/collection-sections';
+import type { CollectionConfig } from '../lib/collection-shell';
+import { renderCollectionMain } from '../lib/collection-shell';
+
+interface CommonProps {
+  title: string;
+  description: string;
+  canonical: string;
+  pageType?: 'CollectionPage' | 'WebPage' | 'AboutPage' | 'ContactPage';
+}
+
+type CollectionProps = CommonProps & {
+  kind?: 'collection';
+  config: CollectionConfig;
+};
+
+type TaskProps = CommonProps & {
+  kind: 'task';
+  config: TaskListConfig;
+  items: any[];
+  renderCard: (item: any) => string;
+};
+
+type Props = CollectionProps | TaskProps;
+
+const props = Astro.props as Props;
+const { title, description, canonical, pageType = 'CollectionPage' } = props;
+const main = props.kind === 'task'
+  ? renderTaskListMain(props.items, props.config, props.renderCard)
+  : renderCollectionMain(props.config);
+---
+<Base
+  title={title}
+  description={description}
+  canonical={canonical}
+  pageType={pageType}
+>
+  <slot name="head" slot="head" />
+  <Fragment set:html={main} />
+</Base>

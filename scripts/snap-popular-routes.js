@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const FILE = path.join(__dirname, '..', 'data', 'popular-routes.json');
+const FILE = path.join(__dirname, '..', 'data', 'sources', 'popular-routes.json');
 const PROFILE_BY_TYPE = {
   drive: 'driving',
   bike: 'cycling'

@@ -1,0 +1,20 @@
+name: content-validate
+
+on:
+  pull_request:
+    paths:
+      - 'data/**'
+      - 'scripts/validate-content.js'
+      - '.github/workflows/content-validate.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run content:validate

@@ -1,0 +1,202 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import raw from '../../../data/products.json';
+import Base from '../layouts/Base.astro';
+
+// Resolve product image to its optimized generated raster (mirrors
+// scripts/legacy-build/build/cards.js generatedProductImageAsset).
+// Astro runs the build from site-astro/, so the repo root is one level up.
+const ROOT = path.resolve(process.cwd(), '..');
+function productImageAsset(slug?: string, fallbackImage?: string) {
+  if (!slug) return null;
+  const widths = [240, 400, 640, 800];
+  for (const ext of ['jpg', 'png'] as const) {
+    const candidate = `images/generated/products/${slug}-640.${ext}`;
+    if (!fs.existsSync(path.join(ROOT, candidate))) continue;
+    const srcset = widths
+      .filter((w) => fs.existsSync(path.join(ROOT, `images/generated/products/${slug}-${w}.${ext}`)))
+      .map((w) => `images/generated/products/${slug}-${w}.${ext} ${w}w`)
+      .join(', ');
+    return { src: candidate, srcset, sizes: '(max-width: 768px) 78vw, 320px', width: 800, height: 800 };
+  }
+  if (fallbackImage && fs.existsSync(path.join(ROOT, fallbackImage))) {
+    return { src: fallbackImage, srcset: '', sizes: '', width: 800, height: 800 };
+  }
+  return null;
+}
+
+interface Product {
+  id: string;
+  slug?: string;
+  title: string;
+  brand?: string;
+  type?: string;
+  category?: string;
+  status?: string;
+  price?: string | number;
+  shortDescription?: string;
+  description?: string;
+  rating?: number;
+  badge?: string;
+  image?: string;
+  ctaLabel?: string;
+  checkoutUrl?: string;
+  verdict?: string;
+  whyItStayed?: string;
+  howIUseIt?: string;
+  replaced?: string;
+  usage?: string;
+  icon?: string;
+  relatedContent?: string[];
+}
+
+interface Category {
+  id: string;
+  title: string;
+  icon?: string;
+}
+
+type ProductsData = {
+  products?: Product[];
+  productCategories?: Category[];
+};
+
+const productsData = raw as ProductsData;
+const products = productsData.products ?? [];
+const categories = productsData.productCategories ?? [];
+---
+<Base
+  title="The Shelf: Tools, Objects &amp; Gear That Earned Their Place | Jevan Goldsmith"
+  description="A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced."
+  canonical="https://jevangoldsmith.com/products.html"
+  pageType="CollectionPage"
+>
+  <main class="shelf-page">
+    <h1 class="sr-only">The Shelf: Tools, Objects &amp; Gear That Earned Their Place</h1>
+
+    <div class="shelf-filter" data-shelf-filter aria-label="Shelf filters">
+      <button type="button" class="active" data-shelf-category="all">All</button>
+      {categories.map((c) => (
+        <button type="button" data-shelf-category={c.id}>{c.title}</button>
+      ))}
+    </div>
+
+    <section class="shelf-grid" aria-label="Objects on the shelf">
+      {products.map((p, i) => {
+        const asset = productImageAsset(p.slug ?? p.id, p.image);
+        return (
+        <article
+          class="shelf-item"
+          id={p.id}
+          data-shelf-card
+          data-category={(p.category ?? '').toLowerCase()}
+          style={`--shelf-index: ${i}`}
+        >
+          <button
+            class="shelf-object"
+            type="button"
+            data-shelf-item
+            data-id={p.id}
+            data-title={p.title}
+            data-brand={p.brand ?? ''}
+            data-category={p.category ?? ''}
+            data-verdict={p.verdict ?? p.shortDescription ?? ''}
+            data-why={p.whyItStayed ?? ''}
+            data-how={p.howIUseIt ?? ''}
+            data-replaced={p.replaced ?? ''}
+            data-usage={p.usage ?? ''}
+            data-icon={p.icon ?? ''}
+            data-image={asset?.src ?? p.image ?? ''}
+            data-related={(p.relatedContent ?? []).join('|')}
+            data-link={p.checkoutUrl ?? ''}
+          >
+            <span class="shelf-object-stage has-photo" aria-hidden="true">
+              <span class="shelf-object-mark">
+                {asset && (
+                  <picture>
+                    <source type="image/avif" srcset={asset.srcset.replace(/\.png\b/g, '.avif')} sizes={asset.sizes} />
+                    <img
+                      class="shelf-object-photo"
+                      src={asset.src}
+                      srcset={asset.srcset}
+                      sizes={asset.sizes}
+                      alt={p.title}
+                      width={asset.width}
+                      height={asset.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
+                )}
+                {!p.image && p.icon && <span class="shelf-object-icon">{p.icon}</span>}
+              </span>
+            </span>
+            {p.badge && <span class="shelf-badge">{p.badge}</span>}
+            <span class="shelf-object-name">{p.title}</span>
+            {(p.verdict || p.shortDescription) && (
+              <span class="shelf-object-verdict">{p.verdict ?? p.shortDescription}</span>
+            )}
+          </button>
+
+          <div class="shelf-object-detail" aria-hidden="true">
+            {p.brand && <p class="shelf-object-detail-brand">{p.brand}</p>}
+            {(p.verdict || p.shortDescription) && (
+              <p class="shelf-object-detail-verdict">{p.verdict ?? p.shortDescription}</p>
+            )}
+            {p.whyItStayed && (
+              <p class="shelf-object-detail-line"><strong>Why it stayed:</strong> {p.whyItStayed}</p>
+            )}
+            {p.howIUseIt && (
+              <p class="shelf-object-detail-line"><strong>How I use it:</strong> {p.howIUseIt}</p>
+            )}
+            {p.replaced && (
+              <p class="shelf-object-detail-line"><strong>Replaced:</strong> {p.replaced}</p>
+            )}
+            {p.usage && (
+              <p class="shelf-object-detail-line">{p.usage}</p>
+            )}
+            {p.checkoutUrl && (
+              <a
+                href={p.checkoutUrl}
+                class="shelf-object-detail-link"
+                target="_blank"
+                rel="noopener"
+              >
+                {p.ctaLabel ?? 'View'}
+              </a>
+            )}
+          </div>
+        </article>
+        );
+      })}
+    </section>
+
+    <p class="shelf-disclosure">
+      Some links may earn a small commission at no cost to you. Only items I actually use end up on the shelf.
+    </p>
+  </main>
+</Base>
+
+<script>
+  // Simple filter wiring: click a .shelf-filter button → toggle .active and
+  // hide .shelf-item articles whose data-category doesn't match.
+  const filterRow = document.querySelector('[data-shelf-filter]');
+  const items = document.querySelectorAll<HTMLElement>('.shelf-item');
+  filterRow?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement)?.closest('button[data-shelf-category]') as HTMLElement | null;
+    if (!btn) return;
+    const cat = (btn.dataset.shelfCategory ?? 'all').toLowerCase();
+    filterRow.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    items.forEach((it) => {
+      const ic = (it.dataset.category ?? '').toLowerCase();
+      it.style.display = cat === 'all' || ic === cat ? '' : 'none';
+    });
+  });
+</script>
+
+<script>
+  // grid-zoom infra as native module.
+  import '../scripts/grid-zoom.ts';
+</script>

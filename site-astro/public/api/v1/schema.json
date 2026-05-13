@@ -1,0 +1,123 @@
+{
+  "version": "1.0",
+  "description": "Static, no-server JSON API for Jevan Goldsmith website ingestion.",
+  "costModel": "Static Firebase Hosting assets. No Cloud Functions or Firestore reads.",
+  "entrypoint": "https://jevangoldsmith.com/api/v1/index.json",
+  "endpoints": {
+    "schema": "https://jevangoldsmith.com/api/v1/schema.json",
+    "search": "https://jevangoldsmith.com/api/v1/search-index.json",
+    "pages": "https://jevangoldsmith.com/api/v1/pages.json",
+    "content": "https://jevangoldsmith.com/api/v1/content.json",
+    "interests": "https://jevangoldsmith.com/api/v1/interests.json",
+    "books": "https://jevangoldsmith.com/api/v1/books.json",
+    "skills": "https://jevangoldsmith.com/api/v1/skills.json",
+    "adventures": "https://jevangoldsmith.com/api/v1/adventures.json",
+    "essays": "https://jevangoldsmith.com/api/v1/essays.json",
+    "quotes": "https://jevangoldsmith.com/api/v1/quotes.json",
+    "projects": "https://jevangoldsmith.com/api/v1/projects.json",
+    "products": "https://jevangoldsmith.com/api/v1/products.json",
+    "resources": "https://jevangoldsmith.com/api/v1/resources.json",
+    "ctas": "https://jevangoldsmith.com/api/v1/ctas.json",
+    "newsletter": "https://jevangoldsmith.com/api/v1/newsletter.json",
+    "topics": "https://jevangoldsmith.com/api/v1/topics.json"
+  },
+  "commonItemFields": {
+    "collection": "Collection name.",
+    "canonicalUrl": "Canonical human-facing URL for citation or navigation.",
+    "shareable": "Whether this item is intended for public sharing.",
+    "tags": "Topic tags for discovery.",
+    "summary": "Short ingestible summary."
+  },
+  "searchIndexFields": {
+    "type": "Record type: page or collection name.",
+    "id": "Stable source identifier when available.",
+    "title": "Display title or primary text.",
+    "summary": "Short searchable summary.",
+    "section": "Navigation section or collection name.",
+    "url": "Canonical URL to fetch or cite.",
+    "tags": "Topic tags for discovery."
+  },
+  "collections": {
+    "books": [
+      "title",
+      "author",
+      "isbn",
+      "category",
+      "rating",
+      "canonicalUrl"
+    ],
+    "skills": [
+      "id",
+      "title",
+      "category",
+      "proficiency",
+      "activity",
+      "relatedSkills",
+      "canonicalUrl"
+    ],
+    "adventures": [
+      "id",
+      "title",
+      "location",
+      "region",
+      "startDate",
+      "endDate",
+      "gallery",
+      "canonicalUrl"
+    ],
+    "essays": [
+      "id",
+      "title",
+      "author",
+      "date",
+      "category",
+      "content",
+      "canonicalUrl"
+    ],
+    "quotes": [
+      "text",
+      "author",
+      "category",
+      "canonicalUrl"
+    ],
+    "projects": [
+      "id",
+      "slug",
+      "title",
+      "status",
+      "category",
+      "technologies",
+      "links",
+      "canonicalUrl"
+    ],
+    "products": [
+      "id",
+      "slug",
+      "title",
+      "type",
+      "status",
+      "price",
+      "checkoutUrl",
+      "canonicalUrl"
+    ],
+    "resources": [
+      "id",
+      "slug",
+      "title",
+      "type",
+      "resourceType",
+      "status",
+      "price",
+      "downloadUrl",
+      "canonicalUrl"
+    ],
+    "ctas": [
+      "id",
+      "label",
+      "href",
+      "intent",
+      "priority",
+      "canonicalUrl"
+    ]
+  }
+}

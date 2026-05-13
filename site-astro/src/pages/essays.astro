@@ -1,0 +1,60 @@
+---
+import essaysData from '../../public/data/essays.json';
+import CollectionPage from '../components/CollectionPage.astro';
+import { ESSAY_LIST_OPTIONS, ESSAY_SECTIONS } from '../lib/collection-sections';
+
+const canonical = 'https://jevangoldsmith.com/essays.html';
+const essaysJson = JSON.stringify(essaysData);
+
+// after-main.html (field-notes inline CTA + seo-related) is added by the
+// post-build normalizer + Base layout, so we leave it out here.
+const config = ({
+  layout: { id: 'essays-layout', className: 'essays-layout collection-layout' },
+  sidebar: {
+    id: 'essays-sidebar',
+    className: 'essays-sidebar collection-sidebar',
+    collapseAction: 'toggleEssaysSidebar',
+    listAction: 'toggleListDropdown',
+    currentListName: 'Essays',
+    listOptions: ESSAY_LIST_OPTIONS,
+    search: {
+      inputId: 'essay-search',
+      inputClass: 'book-search-input collection-search-input',
+      placeholder: 'Search essays...',
+      clearButtonId: 'search-clear-btn',
+      clearAction: 'clearEssaySearch',
+      searchAction: 'searchEssays',
+      searchUsesValue: true,
+      searchEvent: 'input',
+      wrapperClass: 'search-input-wrapper search-bubble'
+    },
+    sections: ESSAY_SECTIONS
+  },
+  main: {
+    className: 'essays-main collection-main',
+    title: 'Essays',
+    subtitleText: 'Thoughts on philosophy, management, and modern life',
+    counterId: 'essay-count',
+    counterLabel: 'Essays Published',
+    bodyHtml: `<div id="essays-container" class="content-section"></div>
+    <section class="field-notes-inline-cta" data-field-notes-inline>
+        <p class="archive-kicker">Field Notes</p>
+        <h2>Want more notes like this?</h2>
+        <p>Field Notes is where I send useful ideas before they become polished essays: books, objects, questions, and experiments worth keeping.</p>
+        <a href="field-notes.html" class="btn-primary">Get Field Notes</a>
+    </section>`
+  }
+});
+---
+<CollectionPage
+  config={config}
+  title="Essays on Thinking, Business, Culture &amp; Personal Systems"
+  description="Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
+  canonical={canonical}
+/>
+
+<script is:inline type="application/json" id="jg-essays-data" set:html={essaysJson} />
+
+<script>
+  import '../scripts/essays.ts';
+</script>

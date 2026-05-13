@@ -1,0 +1,183 @@
+---
+import { getCollection } from 'astro:content';
+import remoteAssets from '../../../../data/remote-assets.generated.json';
+import Base from '../../layouts/Base.astro';
+import { personSchema } from '../../lib/seo';
+
+export async function getStaticPaths() {
+  const profiles = await getCollection('peopleProfiles');
+  return profiles.map((entry: any) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: any };
+const p = entry.data;
+const canonical = `https://jevangoldsmith.com/people/${entry.id}.html`;
+const books = await getCollection('books');
+const titles = new Set(p.bookTitles || []);
+const relatedBooks = books.filter((b: any) => titles.has(b.data.title));
+const heroImage = p.image || `/images/generated/people/${entry.id}-400.jpg`;
+const heroSrcset = p.srcset || [
+  `/images/generated/people/${entry.id}-200.jpg 200w`,
+  `/images/generated/people/${entry.id}-400.jpg 400w`,
+  `/images/generated/people/${entry.id}-800.jpg 800w`
+].join(', ');
+
+// Localize OpenLibrary covers at SSR. assets:optimize indexes ISBN
+// covers under the -L URL only (240/360/480 widths generated). Resolve
+// -M lookups back to the -L manifest key. Falls through to the remote
+// URL if no local asset exists, matching books.astro behavior.
+type RemoteEntry = { source: string; widths: number[]; formats: Record<string, { avif?: string; jpg?: string }> };
+const REMOTE = remoteAssets as Record<string, RemoteEntry>;
+function localizeCover(url: string): string {
+  const lookupKey = url.replace(/-M\.jpg(\?.*)?$/, '-L.jpg');
+  const ent = REMOTE[lookupKey] || REMOTE[url];
+  if (!ent) return url;
+  const jpg = ent.formats['240']?.jpg || ent.formats['360']?.jpg;
+  return jpg ? `/${jpg}` : url;
+}
+const fmtCover = (b: typeof books[number]) => {
+  const isbn = String(b.data.isbn || '').replace(/[^0-9X]/gi, '');
+  if (!isbn) return '';
+  return localizeCover(`https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`);
+};
+
+const heroImageAbs = heroImage.startsWith('http')
+  ? heroImage
+  : `https://jevangoldsmith.com${heroImage.startsWith('/') ? heroImage : `/${heroImage}`}`;
+
+const subject = personSchema({
+  canonical,
+  name: p.name,
+  jobTitle: p.title ?? null,
+  description: p.thesis ?? p.bio ?? null,
+  image: heroImageAbs
+});
+---
+<Base
+  title={`${p.name} - People - Jevan Goldsmith`}
+  description={p.bio ?? `${p.name} profile, timeline, books, notes, and resources.`}
+  canonical={canonical}
+  bodyClass="nav-compact"
+  pageType="ProfilePage"
+  ogImage={heroImageAbs}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://jevangoldsmith.com/' },
+    { name: 'People', url: 'https://jevangoldsmith.com/people.html' },
+    { name: p.name, url: canonical }
+  ]}
+  extraSchema={[subject]}
+>
+  <main class="person-profile-page">
+    <section class="person-profile-hero">
+      <a href="/people.html" class="person-profile-back">Back to People</a>
+      <div class="person-profile-hero-grid">
+        <div class="person-profile-image-wrap">
+          <picture>
+            <source type="image/avif" srcset={heroSrcset.replace(/\.jpg\b/g, '.avif')} sizes="(max-width: 768px) 90vw, 360px" />
+            <img
+              src={heroImage.startsWith('/') || heroImage.startsWith('http') ? heroImage : `/${heroImage}`}
+              srcset={heroSrcset}
+              sizes="(max-width: 768px) 90vw, 360px"
+              alt={p.name}
+              width="400"
+              height="400"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </picture>
+        </div>
+        <div class="person-profile-intro">
+          <p class="person-profile-kicker">{p.title || 'Person'}</p>
+          <h1>{p.name}</h1>
+          {p.bio && <p class="person-profile-bio">{p.bio}</p>}
+          {p.thesis && <p class="person-profile-thesis">{p.thesis}</p>}
+        </div>
+      </div>
+    </section>
+
+    <section class="person-profile-section">
+      <div class="person-profile-section-header">
+        <p class="person-profile-kicker">Timeline</p>
+        <h2>Life Events</h2>
+      </div>
+      {p.timeline && p.timeline.length > 0 ? (
+        <ol class="person-timeline">
+          {p.timeline.map((event: any) => (
+            <li class="person-timeline-item">
+              <time>{event.year ?? ''}</time>
+              <div>
+                <h3>{event.title ?? ''}</h3>
+                {event.note && <p>{event.note}</p>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="person-profile-empty">Timeline notes will live here as I turn reading notes into dated life events.</p>
+      )}
+    </section>
+
+    <section class="person-profile-section">
+      <div class="person-profile-section-header">
+        <p class="person-profile-kicker">Reading</p>
+        <h2>Books And Notes</h2>
+      </div>
+      <p class="person-profile-note-policy">These notes are designed as commentary: short personal takeaways, applications, questions, and links back to the reading list, not copied chapters or long excerpts.</p>
+      {relatedBooks.length > 0 ? (
+        <div class="person-profile-books">
+          {relatedBooks.map((b: any) => {
+            const cover = fmtCover(b);
+            const href = `/books.html?book=${encodeURIComponent(b.data.title)}`;
+            return (
+              <a class="person-profile-book-card" href={href}>
+                {cover ? (
+                  <img src={cover} alt={`${b.data.title} cover`} loading="lazy" decoding="async" />
+                ) : (
+                  <span class="person-profile-book-cover-fallback" aria-hidden="true"></span>
+                )}
+                <span>
+                  <strong>{b.data.title}</strong>
+                  <small>{b.data.author}{b.data.year ? ` · ${b.data.year}` : ''}</small>
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <p class="person-profile-empty">No linked books yet.</p>
+      )}
+    </section>
+
+    <section class="person-profile-section">
+      <div class="person-profile-section-header">
+        <p class="person-profile-kicker">Media</p>
+        <h2>Videos, Essays, And Primary Sources</h2>
+      </div>
+      {p.resources && p.resources.length > 0 ? (
+        <div class="person-resource-list">
+          {p.resources.map((r: any) => (
+            <a class="person-resource-card" href={r.url ?? '#'} target="_blank" rel="noopener noreferrer">
+              <span>{r.type ?? 'Resource'}</span>
+              <strong>{r.title ?? ''}</strong>
+              {r.note && <p>{r.note}</p>}
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="person-profile-empty">This is where I will add the best videos, talks, letters, interviews, essays, and primary sources for {p.name}.</p>
+      )}
+    </section>
+
+    <section class="person-profile-section person-profile-notes">
+      <div class="person-profile-section-header">
+        <p class="person-profile-kicker">My Notes</p>
+        <h2>What I Am Taking From This Person</h2>
+      </div>
+      <div class="person-note-prompts">
+        <p><strong>Useful ideas:</strong> Add takeaways in my own words.</p>
+        <p><strong>Open questions:</strong> Add what I still need to understand.</p>
+        <p><strong>Applications:</strong> Add decisions, habits, or business systems this person changes.</p>
+      </div>
+    </section>
+  </main>
+</Base>

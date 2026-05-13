@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const topics = await getCollection('topics');
+  return topics.map((entry: any) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: any };
+const t = entry.data;
+const label = (t.label as string | null) ?? entry.id;
+const description = (t.description as string | null) ?? '';
+---
+<Base
+  title={`${label} | Jevan Goldsmith`}
+  description={description}
+  canonical={`https://jevangoldsmith.com/topics/${entry.id}.html`}
+>
+  <main class="resources-content topic-hub-page">
+    <section class="resources-intro topic-hub-hero">
+      <p class="resources-eyebrow">Topic Hub</p>
+      <h1 class="resources-title">{label}</h1>
+      {description && <p class="resources-subtitle">{description}</p>}
+      <div class="collection-cta-row">
+        <a href="/field-notes.html" class="btn-primary">Get Field Notes</a>
+        <a href="/free-resources.html" class="btn-secondary">Useful Resources</a>
+      </div>
+    </section>
+  </main>
+</Base>

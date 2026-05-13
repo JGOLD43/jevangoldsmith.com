@@ -1,0 +1,597 @@
+import { bookCoverUrl } from '../lib/book-card';
+import { CATEGORY_MAP, CATEGORY_NAME_BY_KEY } from '../lib/book-categories';
+import { debounce } from '../lib/debounce';
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
+import './action-dispatcher';
+import { applyCardVisibility, bindStarRatingDrag, installEscapeCloser, installImageErrorHandler } from './collection-helpers';
+import { createCollectionRuntime } from './collection-runtime';
+import {
+    closeDropdownOnOutsideClick,
+    highlightAndScroll,
+    toggleClearButton
+} from './collection-ui';
+import { fetchJson, readInlineJson } from './data-fetch';
+import { onDomReady } from './dom-ready';
+import { init as initGridZoom } from './grid-zoom';
+
+// --- state ---
+const state = {
+    activeCategory: 'all',
+    books: [] as AnyObj[],
+    reReadsFilter: 'all' as string,
+    searchQuery: '',
+    sidebarCollapsed: true,
+    starFilter: 'all' as string,
+    viewMode: 'list'
+};
+
+// --- filters ---
+function filterBooks(books: AnyObj[]): AnyObj[] {
+    const query = state.searchQuery.toLowerCase();
+    return books.filter((book) => {
+        const isUnread = book.read === false;
+        const ratingValue = Number(book.rating || 0);
+        if (query) {
+            const matchesQuery = [book.title, book.author, book.category || '']
+                .some((value) => String(value).toLowerCase().includes(query));
+            if (!matchesQuery) return false;
+        }
+        if (state.starFilter !== 'all') {
+            if (isUnread || ratingValue <= 0) return false;
+            if (ratingValue < Number(state.starFilter)) return false;
+        }
+        if (state.reReadsFilter !== 'all') {
+            if (isUnread) return false;
+            if (Number(book.reReads || 0) < Number(state.reReadsFilter)) return false;
+        }
+        return true;
+    });
+}
+
+function getBooksForCategory(books: AnyObj[], categoryKey: string) {
+    if (categoryKey === 'all') return books;
+    const categoryName = CATEGORY_NAME_BY_KEY[categoryKey];
+    if (!categoryName) return [];
+    return books.filter((book) => book.category === categoryName);
+}
+
+function groupBooksByCategory(books: AnyObj[]): Record<string, AnyObj[]> {
+    const groups: Record<string, AnyObj[]> = Object.fromEntries(
+        Object.values(CATEGORY_MAP).map((key) => [key, []])
+    );
+    books.forEach((book) => {
+        const categoryKey = CATEGORY_MAP[book.category];
+        if (categoryKey && groups[categoryKey]) groups[categoryKey].push(book);
+    });
+    return groups;
+}
+
+// --- modal ---
+function openBookModal(book: AnyObj) {
+    if (!book?.review) return false;
+    const modal = document.getElementById('book-modal');
+    const modalTitle = document.getElementById('modal-book-title');
+    const modalAuthor = document.getElementById('modal-book-author');
+    const modalCover = document.getElementById('modal-book-cover') as HTMLImageElement | null;
+    const modalRating = document.getElementById('modal-book-rating');
+    const modalReview = document.getElementById('modal-book-review');
+    if (!modal || !modalTitle || !modalAuthor || !modalCover || !modalRating || !modalReview) return false;
+    const isUnread = book.read === false;
+    const stars = isUnread ? '' : '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
+    const coverUrl = getCoverUrl(book);
+    modalTitle.textContent = book.title;
+    modalAuthor.textContent = `by ${book.author}${book.year ? ` (${book.year})` : ''}`;
+    modalCover.src = coverUrl;
+    modalCover.alt = book.title;
+    modalCover.onerror = () => { modalCover.hidden = true; };
+    modalCover.onload = () => { modalCover.hidden = false; };
+    modalRating.textContent = isUnread ? 'To Read' : stars;
+    modalReview.textContent = book.review;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    return true;
+}
+
+function closeBookModal() {
+    const modal = document.getElementById('book-modal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// --- view ---
+const categoryDisplayNames: Record<string, string> = {
+    'Advertising and Copywriting': 'Advertising',
+    'Astral Projection': 'Astral projection',
+    'Autobiographies': 'Autobiographies',
+    'Big Ideas': 'Big Ideas',
+    'Copywriting': 'Copywriting',
+    'The Great Books': 'The Great Books',
+    'Lee Kuan Yew': 'Lee Kuan Yew',
+    'Learning': 'Learning',
+    'Mental Endurance': 'Mental Endurance',
+    'Out of the Box Thinking': 'Out Of The Box Thinking',
+    'Patience and Clear Thinking': 'Patience & Clear Thinking',
+    'Persuasion': 'Persuasion',
+    'Psychology Books': 'Psychology',
+    'Science': 'Science',
+    'Storytelling': 'Storytelling',
+    'Strategy and War': 'Strategy',
+    'Who Am I?': 'Who Am I?'
+};
+
+function renderBooks(books: AnyObj[]) {
+    const container = document.getElementById('books-container');
+    const visible = new Set<string>(books.map((b) => b.isbn || b.title));
+    applyCardVisibility(
+        container,
+        visible,
+        ':scope > *',
+        (card) => [card.dataset.isbn || '', card.dataset.title || '']
+    );
+}
+
+function renderSidebar(categories: Record<string, AnyObj[]>) {
+    const ssrCategoryKeys = Object.keys(categories);
+    const ssrAlreadyRendered = ssrCategoryKeys.some((key) => {
+        const c = document.getElementById(`category-${key}`);
+        return c && c.children.length > 0;
+    });
+    if (ssrAlreadyRendered) return;
+
+    const countAll = document.getElementById('count-all');
+    if (countAll) {
+        const total = (Object.values(categories) as AnyObj[][]).reduce((sum: number, books) => sum + books.length, 0);
+        countAll.textContent = String(total);
+    }
+    Object.keys(categories).forEach((categoryKey) => {
+        const books = categories[categoryKey];
+        const countElement = document.getElementById(`count-${categoryKey}`);
+        const section = countElement?.closest('.sidebar-section') as HTMLElement | null;
+        const container = document.getElementById(`category-${categoryKey}`);
+        if (countElement) countElement.textContent = String(books.length);
+        if (section) section.style.display = books.length === 0 ? 'none' : 'block';
+        if (container) {
+            container.innerHTML = books.map((book: AnyObj) => `
+                <a href="#" class="book-link" data-action="book-link" data-book-title="${escapeAttr(book.title)}">
+                    <div>${escapeHtml(book.title)}</div>
+                    <div class="book-link-author">${escapeHtml(book.author)}</div>
+                </a>
+            `).join('');
+        }
+    });
+}
+
+function renderCarousel(books: AnyObj[]) {
+    const track = document.getElementById('carousel-track');
+    if (!track) return;
+    if (track.children.length > 0) {
+        const originals = Array.from(track.children);
+        if (originals.length >= 40 || track.dataset.cloned === 'true') return;
+        const frag = document.createDocumentFragment();
+        for (const node of originals) frag.appendChild(node.cloneNode(true));
+        track.appendChild(frag);
+        track.dataset.cloned = 'true';
+        return;
+    }
+    const recentBooks = books.slice(-20).reverse();
+    const carouselBooks = [...recentBooks, ...recentBooks];
+    track.style.animationDuration = `${recentBooks.length * 3}s`;
+    track.innerHTML = carouselBooks.map((book: AnyObj) => {
+        const coverUrl = getCoverUrl(book, 'medium');
+        return `<img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" loading="lazy" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
+    }).join('');
+    track.dataset.cloned = 'true';
+}
+
+function scrollToBookByIsbn(isbn: string) {
+    const bookCard = document.querySelector(`[data-isbn="${isbn}"]`) as HTMLElement | null;
+    if (!bookCard) return;
+    highlightAndScroll(bookCard, {
+        duration: 1000,
+        shadow: '0 8px 24px rgba(0,0,0,0.2)'
+    });
+}
+
+function scrollToBookByTitle(bookTitle: string, event?: Event) {
+    const bookCards = Array.from(document.querySelectorAll('.book-card')) as HTMLElement[];
+    const targetCard = bookCards.find((card) => {
+        const titleElement = card.querySelector('.book-title');
+        return titleElement?.textContent === bookTitle;
+    });
+    if (!targetCard) return;
+    highlightAndScroll(targetCard, {
+        activeElement: (event?.target as Element | undefined)?.closest('.book-link') ?? null,
+        activeSelector: '.book-link'
+    });
+}
+
+function updateBookCount(count: number, categoryName?: string) {
+    const countElement = document.getElementById('book-count');
+    const labelElement = document.getElementById('counter-label');
+    if (countElement) countElement.textContent = String(count);
+    if (labelElement) {
+        labelElement.textContent = categoryName && categoryName !== 'all' ? 'Books' : 'Total Books';
+    }
+}
+
+function updateReReadsFilterDisplay(value: string | number) {
+    const slider = document.getElementById('timesread-slider') as HTMLInputElement | null;
+    const text = document.getElementById('filter-timesread-text');
+    const normalizedValue = value === 'all' ? 0 : Number(value);
+    if (slider) slider.value = String(normalizedValue);
+    if (text) {
+        text.textContent = normalizedValue > 0
+            ? (normalizedValue >= 10 ? '10' : String(normalizedValue))
+            : '';
+    }
+}
+
+function updateStarFilterDisplay(value: string | number) {
+    const stars = document.querySelectorAll('.filter-star');
+    const text = document.getElementById('filter-rating-text');
+    const valNum = value === 'all' ? Number.NaN : Number(value);
+    stars.forEach((star) => {
+        const starNumber = Number.parseInt(star.getAttribute('data-star') || '0', 10);
+        star.classList.remove('full', 'half');
+        if (value === 'all') return;
+        if (starNumber <= Math.floor(valNum)) star.classList.add('full');
+        else if (starNumber === Math.ceil(valNum) && valNum % 1 === 0.5) star.classList.add('half');
+    });
+    if (text) text.textContent = value === 'all' ? '' : `${value}+`;
+}
+
+function getBooksByCategory(): Record<string, AnyObj[]> {
+    const categories: Record<string, AnyObj[]> = {};
+    state.books.forEach((book: AnyObj) => {
+        const category = book.category || 'Uncategorized';
+        if (!categories[category]) categories[category] = [];
+        categories[category].push(book);
+    });
+    return categories;
+}
+
+function renderCategoryGrid() {
+    const container = document.getElementById('category-grid');
+    if (!container) return;
+    const booksByCategory = getBooksByCategory();
+    const sortedCategories = (Object.entries(booksByCategory) as [string, AnyObj[]][]).sort((a, b) => b[1].length - a[1].length);
+    container.innerHTML = sortedCategories.map(([category, books]) => {
+        const previewBooks = books.slice(0, 8);
+        const displayName = categoryDisplayNames[category] || category;
+        const bookCovers = previewBooks.map((book: AnyObj) => {
+            const coverUrl = getCoverUrl(book, 'medium');
+            return `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" loading="lazy" decoding="async" data-remove-on-error="true">`;
+        }).join('');
+        const emptySlots = Array(Math.max(0, 8 - previewBooks.length))
+            .fill('<div class="empty-slot"></div>')
+            .join('');
+        return `
+            <div class="category-card" data-action="open-category-modal" data-category="${escapeAttr(category)}">
+                <div class="category-card-books">
+                    ${bookCovers}${emptySlots}
+                </div>
+                <div class="category-card-info">
+                    <span class="category-card-name">${escapeHtml(displayName)}</span>
+                    <span class="category-card-count">${books.length}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function setViewMode(mode: string) {
+    state.viewMode = mode || 'list';
+    const ids = ['list-view-btn', 'list-view-btn-grid', 'list-view-btn-main'];
+    const grids = ['grid-view-btn', 'grid-view-btn-grid', 'grid-view-btn-main'];
+    ids.forEach((id) => document.getElementById(id)?.classList.toggle('active', mode === 'list'));
+    grids.forEach((id) => document.getElementById(id)?.classList.toggle('active', mode === 'grid'));
+    const booksMain = document.querySelector('.books-main') as HTMLElement | null;
+    const categoryGridView = document.getElementById('category-grid-view');
+    const sidebar = document.getElementById('books-sidebar');
+    const booksLayout = document.getElementById('books-layout');
+
+    if (mode === 'grid') {
+        if (booksMain) booksMain.style.display = 'none';
+        if (categoryGridView) categoryGridView.style.display = 'block';
+        if (sidebar) sidebar.style.display = 'none';
+        if (booksLayout) {
+            booksLayout.classList.add('grid-view-active');
+            booksLayout.classList.remove('sidebar-collapsed');
+        }
+        renderCategoryGrid();
+        return;
+    }
+    if (booksMain) booksMain.style.display = 'block';
+    if (categoryGridView) categoryGridView.style.display = 'none';
+    if (sidebar) sidebar.style.display = 'block';
+    if (booksLayout) booksLayout.classList.remove('grid-view-active');
+    if (sidebar?.classList.contains('collapsed')) booksLayout?.classList.add('sidebar-collapsed');
+}
+
+function openCategoryModal(category: string) {
+    const books = getBooksByCategory()[category] || [];
+    const displayName = categoryDisplayNames[category] || category;
+    let modal = document.getElementById('category-expanded-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'category-expanded-modal';
+        modal.className = 'category-expanded';
+        document.body.appendChild(modal);
+    }
+    modal.innerHTML = `
+        <div class="category-modal-backdrop" data-action="close-category-modal"></div>
+        <div class="category-modal-content">
+            <div class="category-expanded-header">
+                <h2 class="category-expanded-title">${escapeHtml(displayName)}</h2>
+                <button class="category-expanded-close" data-action="close-category-modal">&times;</button>
+            </div>
+            <div class="category-expanded-books">
+                ${books.map((book: AnyObj) => {
+                    const coverUrl = getCoverUrl(book);
+                    return `
+                        <div class="category-expanded-book" data-action="open-book-from-grid" data-isbn="${escapeAttr(book.isbn)}">
+                            <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-remove-on-error="true">
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        </div>
+    `;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCategoryModal() {
+    const modal = document.getElementById('category-expanded-modal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function openBookFromGrid(isbn: string) {
+    const book = state.books.find((entry: AnyObj) => entry.isbn === isbn);
+    if (!book) return;
+    closeCategoryModal();
+    openBookModal(book);
+}
+
+// --- runtime ---
+let booksRuntime: AnyObj = null;
+
+async function loadBooksData() {
+    if (state.books.length > 0) return state.books;
+    // books.astro emits the full runtime payload as inline JSON so first-
+    // paint avoids a network round-trip. Fetch path retained as a fallback
+    // for builds that ever skip the inline emit.
+    const inline = readInlineJson<AnyObj[]>('jg-books-data');
+    if (Array.isArray(inline) && inline.length > 0) {
+        state.books = inline;
+        return inline;
+    }
+    const data = await fetchJson('/data/books.generated.json');
+    if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('books: runtime data missing or empty');
+    }
+    state.books = data;
+    return data;
+}
+
+function getCoverUrl(bookOrIsbn: AnyObj, size: 'medium' | 'large' = 'large'): string | null {
+    if (!bookOrIsbn) return null;
+    if (typeof bookOrIsbn === 'object') {
+        if (size === 'medium' && bookOrIsbn.coverImageMedium) return bookOrIsbn.coverImageMedium;
+        if (bookOrIsbn.coverImage) return bookOrIsbn.coverImage;
+        return bookCoverUrl(bookOrIsbn, size) || null;
+    }
+    const cleanIsbn = String(bookOrIsbn).replace(/[^0-9X]/gi, '');
+    return cleanIsbn ? `https://covers.openlibrary.org/b/isbn/${cleanIsbn}-${size === 'medium' ? 'M' : 'L'}.jpg` : null;
+}
+
+function flashCategoryArrow(button: HTMLElement | null, isExpanding: boolean) {
+    if (!button) return;
+    const existingArrow = button.querySelector('.arrow-flash');
+    if (existingArrow) existingArrow.remove();
+    const arrow = document.createElement('span');
+    arrow.className = 'arrow-flash';
+    arrow.textContent = isExpanding ? '▲' : '▼';
+    button.appendChild(arrow);
+    window.setTimeout(() => arrow.remove(), 500);
+}
+
+function renderFromState() { booksRuntime?.render(); }
+
+function buildCollectionController() {
+    booksRuntime = createCollectionRuntime({
+        getState: () => ({ ...state }),
+        getFilteredItems: () => filterBooks(state.books),
+        getVisibleItems: (filteredBooks: AnyObj[], s: AnyObj) => getBooksForCategory(filteredBooks, s.activeCategory),
+        groupItems: (filteredBooks: AnyObj[]) => groupBooksByCategory(filteredBooks),
+        renderSidebar,
+        renderVisibleItems: renderBooks,
+        updateCount: (visibleBooks: AnyObj[], s: AnyObj) => updateBookCount(visibleBooks.length, s.activeCategory),
+        updateControls: (s: AnyObj) => {
+            updateStarFilterDisplay(s.starFilter);
+            updateReReadsFilterDisplay(s.reReadsFilter);
+            toggleClearButton('search-clear-btn', Boolean(s.searchQuery));
+        },
+        group: {
+            allButtonSelector: '.sidebar-category[data-category="all"]',
+            buttonSelector: '.sidebar-category',
+            panelForValue: (category: string) => category === 'all' ? null : document.getElementById(`category-${category}`),
+            panelSelector: '.category-books'
+        },
+        searchClearButtonId: 'search-clear-btn',
+        searchInputId: 'book-search',
+        storageKey: 'books-sidebar-collapsed',
+        layoutId: 'books-layout',
+        sidebarId: 'books-sidebar',
+        defaultCollapsed: true
+    });
+}
+
+// Apply a state mutation, reset to "all" category, and re-render. Every
+// filter-change action funnels through here so the four-step incantation
+// (mutate, reset category, reset grouping, render) lives in one place.
+function applyFilter(mutate: () => void) {
+    mutate();
+    state.activeCategory = 'all';
+    booksRuntime?.resetGrouping();
+    renderFromState();
+}
+
+function searchBooks(query: string) {
+    applyFilter(() => { state.searchQuery = String(query || '').trim(); });
+}
+
+function clearSearch() {
+    booksRuntime?.clearSearchInput();
+    applyFilter(() => { state.searchQuery = ''; });
+}
+
+function setStarFilter(rating: string | number) {
+    applyFilter(() => { state.starFilter = String(rating); });
+}
+
+function clearStarFilter() {
+    applyFilter(() => { state.starFilter = 'all'; });
+}
+
+function setReReadsFilter(count: string | number) {
+    applyFilter(() => {
+        state.reReadsFilter = (count === 0 || count === '0') ? 'all' : String(count);
+    });
+}
+
+function toggleBookCategory(category: string, button: HTMLElement) {
+    booksRuntime?.toggleGroup({
+        value: category,
+        button,
+        onCollapse: () => { state.activeCategory = 'all'; },
+        onExpand: () => {
+            flashCategoryArrow(button, true);
+            state.activeCategory = category;
+        }
+    });
+}
+
+function toggleSidebar() {
+    state.sidebarCollapsed = Boolean(booksRuntime?.toggleSidebar());
+}
+
+function restoreSidebarState() {
+    state.sidebarCollapsed = Boolean(booksRuntime?.restoreSidebar());
+}
+
+function scrollToLinkedBook() {
+    const linkedBookTitle = new URLSearchParams(window.location.search).get('book');
+    if (linkedBookTitle) scrollToBookByTitle(linkedBookTitle);
+}
+
+// --- events ---
+function bindBooksEvents() {
+    installImageErrorHandler();
+    installEscapeCloser(closeBookModal);
+    installEscapeCloser(closeCategoryModal);
+
+    document.addEventListener('click', (event: Event) => {
+        const target = event.target as Element | null;
+        if (!target) return;
+        const modal = document.getElementById('book-modal');
+        if (event.target === modal) { closeBookModal(); return; }
+        if (target.closest?.('[data-action="close-book-modal"]')) { closeBookModal(); return; }
+        if (target.closest?.('[data-action="toggle-sidebar"]')) { toggleSidebar(); return; }
+        if (target.closest?.('[data-action="toggle-list-dropdown"]')) { booksRuntime?.toggleListDropdown(); return; }
+        if (target.closest?.('[data-action="clear-search"]')) { clearSearch(); return; }
+        if (target.closest?.('[data-action="clear-star-filter"]')) {
+            event.preventDefault();
+            clearStarFilter();
+            return;
+        }
+        const categoryButton = target.closest?.('.sidebar-category[data-category]') as HTMLElement | null;
+        if (categoryButton) {
+            toggleBookCategory(categoryButton.dataset.category || 'all', categoryButton);
+            return;
+        }
+        const viewToggle = target.closest?.('[data-action="set-view-mode"]') as HTMLElement | null;
+        if (viewToggle) { setViewMode(viewToggle.dataset.mode || 'list'); return; }
+        const bookLink = target.closest?.('[data-action="book-link"]') as HTMLElement | null;
+        if (bookLink) {
+            event.preventDefault();
+            scrollToBookByTitle(bookLink.dataset.bookTitle || '', event);
+            return;
+        }
+        const carouselBook = target.closest?.('[data-action="carousel-book"]') as HTMLElement | null;
+        if (carouselBook) { scrollToBookByIsbn(carouselBook.dataset.isbn || ''); return; }
+        const categoryModal = target.closest?.('[data-action="open-category-modal"]') as HTMLElement | null;
+        if (categoryModal) { openCategoryModal(categoryModal.dataset.category || ''); return; }
+        if (target.closest?.('[data-action="close-category-modal"]')) { closeCategoryModal(); return; }
+        const openFromGrid = target.closest?.('[data-action="open-book-from-grid"]') as HTMLElement | null;
+        if (openFromGrid) openBookFromGrid(openFromGrid.dataset.isbn || '');
+    });
+
+    document.addEventListener('click', (event) => {
+        closeDropdownOnOutsideClick('list-dropdown', event);
+    });
+
+    const searchInput = document.getElementById('book-search') as HTMLInputElement | null;
+    if (searchInput) {
+        const debouncedSearch = debounce((value: string) => searchBooks(value), 120);
+        searchInput.addEventListener('input', () => debouncedSearch(searchInput.value));
+    }
+
+    const slider = document.getElementById('timesread-slider');
+    if (slider) {
+        slider.addEventListener('input', (event: Event) => {
+            const count = Number.parseInt((event.target as HTMLInputElement).value, 10);
+            setReReadsFilter(count);
+        });
+    }
+
+    bindStarRatingDrag(
+        document.getElementById('star-filter-container'),
+        setStarFilter,
+        { halfStars: true }
+    );
+}
+
+function initBooksZoom() {
+    const booksGrid = document.getElementById('books-container');
+    if (!booksGrid) return;
+    booksGrid.classList.add('js-zoom-grid');
+    initGridZoom({
+        anchorSelector: '.book-cover',
+        eventName: 'book_open',
+        fillH: 0.48,
+        fillW: 0.56,
+        grid: booksGrid,
+        itemSelector: '.book-card',
+        maxScale: 3.4,
+        triggerSelector: '.book-card'
+    });
+}
+
+function showBooksUnavailable() {
+    const container = document.getElementById('books-container');
+    if (container) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 3rem;">Books are unavailable right now.</p>';
+    }
+}
+
+async function initBooksPage() {
+    try {
+        buildCollectionController();
+        restoreSidebarState();
+        await loadBooksData();
+        bindBooksEvents();
+        renderCarousel(state.books);
+        renderFromState();
+        initBooksZoom();
+        scrollToLinkedBook();
+    } catch (error) {
+        console.error(error);
+        showBooksUnavailable();
+    }
+}
+
+onDomReady(initBooksPage, 'books init');

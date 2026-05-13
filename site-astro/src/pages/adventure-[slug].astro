@@ -1,0 +1,221 @@
+---
+import { getCollection } from 'astro:content';
+import remoteAssets from '../../../data/remote-assets.generated.json';
+import Base from '../layouts/Base.astro';
+import { tripSchema } from '../lib/seo';
+
+interface RemoteAssetEntry {
+  widths?: number[];
+  formats?: Record<string, Record<string, string>>;
+}
+
+function remoteAssetFor(url: string | undefined, preferredWidth = 800, format = 'jpg'): string {
+  if (!url || !/^https?:\/\//i.test(url)) return url ?? '';
+  const map = remoteAssets as Record<string, RemoteAssetEntry>;
+  const entry = map[url.replace(/&amp;/g, '&')];
+  if (!entry) return url;
+  const widths = (entry.widths ?? Object.keys(entry.formats ?? {}).map(Number)).sort((a, b) => a - b);
+  const width = widths.find((w) => w >= preferredWidth) ?? widths[widths.length - 1];
+  return entry.formats?.[String(width)]?.[format] ?? entry.formats?.[String(width)]?.jpg ?? url;
+}
+
+function remoteAssetSrcset(url: string | undefined, format = 'jpg'): string {
+  if (!url || !/^https?:\/\//i.test(url)) return '';
+  const map = remoteAssets as Record<string, RemoteAssetEntry>;
+  const entry = map[url.replace(/&amp;/g, '&')];
+  if (!entry) return '';
+  const widths = (entry.widths ?? Object.keys(entry.formats ?? {}).map(Number)).sort((a, b) => a - b);
+  return widths
+    .map((w) => entry.formats?.[String(w)]?.[format] ? `${entry.formats[String(w)][format]} ${w}w` : '')
+    .filter(Boolean)
+    .join(', ');
+}
+
+export async function getStaticPaths() {
+  const adventures = await getCollection('adventures');
+  return adventures.map((entry: any) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: any };
+const a = entry.data;
+const canonical = `https://jevangoldsmith.com/adventure-${entry.id}.html`;
+
+function fmtRange(start?: string | null, end?: string | null): string {
+  if (!start && !end) return '';
+  if (start && end) {
+    const s = new Date(start);
+    const e = new Date(end);
+    if (!Number.isNaN(s.getTime()) && !Number.isNaN(e.getTime())) {
+      const opts: Intl.DateTimeFormatOptions = { month: 'short', year: 'numeric' };
+      return s.toLocaleDateString('en-US', opts) === e.toLocaleDateString('en-US', opts)
+        ? s.toLocaleDateString('en-US', opts)
+        : `${s.toLocaleDateString('en-US', opts)} - ${e.toLocaleDateString('en-US', opts)}`;
+    }
+    return `${start} - ${end}`;
+  }
+  return start ?? end ?? '';
+}
+
+const trip = tripSchema({
+  canonical,
+  name: a.title,
+  description: a.shortDescription ?? undefined,
+  startDate: a.startDate ?? null,
+  endDate: a.endDate ?? null,
+  itinerary: a.highlights?.map((h: string) => ({ name: h })) ?? null,
+  image: a.heroImage ? `https://jevangoldsmith.com/${remoteAssetFor(a.heroImage, 1200)}` : undefined
+});
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://jevangoldsmith.com/' },
+  { name: 'Adventures', url: 'https://jevangoldsmith.com/adventures.html' },
+  { name: a.title, url: canonical }
+];
+
+const heroLocal = remoteAssetFor(a.heroImage ?? undefined, 800);
+const gallery = (a.gallery ?? []) as Array<{ src?: string; caption?: string; lat?: number; lng?: number }>;
+const detailData = JSON.stringify({
+  id: entry.id,
+  mapCenter: a.mapCenter ?? null,
+  mapZoom: a.mapZoom ?? null,
+  gallery: gallery.map((g) => ({
+    src: remoteAssetFor(g.src ?? '', 1200),
+    caption: g.caption ?? '',
+    lat: g.lat ?? null,
+    lng: g.lng ?? null
+  }))
+});
+---
+<Base
+  title={`${a.title} - Jevan Goldsmith`}
+  description={a.shortDescription ?? `${a.title} adventure log.`}
+  canonical={canonical}
+  pageType="Article"
+  breadcrumbs={breadcrumbs}
+  ogImage={a.heroImage ? `https://jevangoldsmith.com/${remoteAssetFor(a.heroImage, 1200)}` : undefined}
+  extraSchema={[trip]}
+>
+  <main class="adventure-detail-page">
+    <div class="adventure-hero">
+      {heroLocal && (
+        <picture>
+          <source type="image/avif" srcset={remoteAssetSrcset(a.heroImage ?? undefined, 'avif')} sizes="(max-width: 768px) 92vw, 640px" />
+          <img
+            src={heroLocal}
+            alt={a.title}
+            width="1200"
+            height="800"
+            decoding="async"
+            fetchpriority="high"
+            srcset={remoteAssetSrcset(a.heroImage ?? undefined)}
+            sizes="(max-width: 768px) 92vw, 640px"
+            loading="lazy"
+          />
+        </picture>
+      )}
+      <div class="adventure-hero-overlay">
+        {a.location && <div class="adventure-hero-location">{a.location}</div>}
+        <h1 class="adventure-hero-title">{a.title}</h1>
+        {a.subtitle && <p class="adventure-hero-subtitle">{a.subtitle}</p>}
+      </div>
+    </div>
+
+    <div class="adventure-content">
+      <a href="adventures.html" class="adventure-back-link">
+        <svg class="ico-stroke" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-arrowLeft"/></svg>
+        Back to Adventures
+      </a>
+
+      <div class="adventure-meta-bar">
+        <div class="adventure-meta-item">
+          <svg class="ico-stroke" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-calendar"/></svg>
+          <span>{fmtRange(a.startDate, a.endDate)}</span>
+        </div>
+        {a.duration && (
+          <div class="adventure-meta-item">
+            <svg class="ico-stroke" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-clock"/></svg>
+            <span>{a.duration}</span>
+          </div>
+        )}
+        {a.location && (
+          <div class="adventure-meta-item">
+            <svg class="ico-stroke" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-pin"/></svg>
+            <span>{a.location}</span>
+          </div>
+        )}
+      </div>
+
+      {a.content && <div class="adventure-story" set:html={a.content} />}
+
+      {a.highlights && a.highlights.length > 0 && (
+        <div class="adventure-highlights-section">
+          <h3>Trip Highlights</h3>
+          <div class="adventure-highlights-list">
+            {a.highlights.map((h: string) => <span class="adventure-highlight-tag">{h}</span>)}
+          </div>
+        </div>
+      )}
+
+      {a.mapCenter && (
+        <div class="adventure-map-section">
+          <h3>Photo Locations</h3>
+          <div class="adventure-map-container" id="adventure-map"></div>
+        </div>
+      )}
+
+      {gallery.length > 0 && (
+        <div class="adventure-gallery-section">
+          <h3>Photo Gallery</h3>
+          <div class="adventure-gallery-grid">
+            {gallery.map((g, i) => {
+              const local = remoteAssetFor(g.src ?? '', 800);
+              const srcset = remoteAssetSrcset(g.src);
+              const avifSrcset = remoteAssetSrcset(g.src, 'avif');
+              return (
+                <div class="adventure-gallery-item" data-action="open-lightbox" data-index={i}>
+                  <picture>
+                    <source type="image/avif" srcset={avifSrcset} sizes="(max-width: 768px) 92vw, 640px" />
+                    <img
+                      src={local}
+                      alt={g.caption ?? ''}
+                      width="800"
+                      height="533"
+                      loading="lazy"
+                      decoding="async"
+                      srcset={srcset}
+                      sizes="(max-width: 768px) 92vw, 640px"
+                    />
+                  </picture>
+                  {g.caption && <div class="adventure-gallery-caption">{g.caption}</div>}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+
+  <div id="lightbox" class="lightbox">
+    <span class="lightbox-close" data-action="closeLightbox">&times;</span>
+    <span class="lightbox-prev" data-action="prevImage">&#10094;</span>
+    <img id="lightbox-image" src="" alt="" decoding="async">
+    <span class="lightbox-next" data-action="nextImage">&#10095;</span>
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+
+  <script is:inline type="application/json" id="adventure-detail-data" set:html={detailData}></script>
+
+  {/* Leaflet was previously eagerly loaded on every adventure-detail
+      page (147KB JS + 15KB CSS) just to render a small Photo Locations
+      map. Now adventure-detail.ts lazily injects Leaflet via an
+      IntersectionObserver only when the map element scrolls into view
+      — pages that never reach the map skip the cost entirely. */}
+</Base>
+
+<script>
+  // adventure-detail imports action-dispatcher transitively. Loaded
+  // after Leaflet (above) so window.L is available.
+  import '../scripts/adventure-detail.ts';
+</script>

@@ -1,0 +1,161 @@
+{
+  "essay": {
+    "all": { "label": "All Essays", "tooltip": "All Essays", "countId": "count-all", "iconKey": "file" },
+    "categories": [
+      ["Philosophy", "philosophy", "question"],
+      ["Management", "management", "bars"],
+      ["Technology", "technology", "monitor"],
+      ["Personal", "personal", "user"],
+      ["Finance", "finance", "dollar"],
+      ["Writing", "writing", "edit"]
+    ]
+  },
+  "podcast": [
+    ["All Podcasts", "count-all-podcasts", "10", "🎧", "all"],
+    ["Business & Investing", "count-business", "3", "💼", "business"],
+    ["Science & Ideas", "count-ideas", "2", "🧠", "ideas"],
+    ["Personal Development", "count-development", "2", "⚡", "development"],
+    ["Must-Listen Episodes", "count-episodes", "3", "★", "episodes"]
+  ],
+  "movie": {
+    "all": { "label": "All Movies", "tooltip": "All Movies", "countId": "count-all-movies", "icon": "🎬" },
+    "categories": [
+      ["Action", "Action", "💥"],
+      ["Comedy", "Comedy", "😂"],
+      ["Drama", "Drama", "🎭"],
+      ["Horror", "Horror", "👻"],
+      ["Sci-Fi", "Sci-Fi", "🚀"],
+      ["Romance", "Romance", "💕"],
+      ["Thriller", "Thriller", "😱"],
+      ["Documentary", "Documentary", "📹"]
+    ]
+  },
+  "book": {
+    "all": { "label": "All Books", "tooltip": "All Books", "countId": "count-all", "iconKey": "book" },
+    "categories": [
+      ["Advertising and Copywriting", "advertising", "megaphone", "Advertising"],
+      ["Autobiographies", "autobiographies", "user", "Autobiographies"],
+      ["Big Ideas", "bigideas", "lightbulb", "Big Ideas"],
+      ["The Great Books", "greatbooks", "openBook", "The Great Books"],
+      ["Out of the Box Thinking", "outofthebox", "grid", "Out of the Box"],
+      ["Patience and Clear Thinking", "patience", "clock", "Patience"],
+      ["Mental Endurance", "mentalendurance", "heart", "Mental Endurance"],
+      ["Learning", "learning", "graduation", "Learning"],
+      ["Persuasion", "persuasion", "target", "Persuasion"],
+      ["Psychology Books", "psychology", "brain", "Psychology"],
+      ["Science", "science", "flask", "Science"],
+      ["Storytelling", "storytelling", "edit", "Storytelling"],
+      ["Strategy and War", "strategy", "bolt", "Strategy"],
+      ["Who Am I?", "whoami", "question", "Who Am I?"]
+    ]
+  },
+  "people": {
+    "all": { "label": "All People", "iconKey": "users", "countId": "count-people-all", "count": "0" },
+    "categories": [
+      ["Business & Investing", "business", "dollar"],
+      ["Writers & Thinkers", "writers", "edit"],
+      ["Science & Technology", "science", "globe"],
+      ["Creators & Artists", "creators", "star"]
+    ]
+  },
+  "tasteList": [
+    ["books.html", "Books", "books"],
+    ["movies.html", "Movies", "movies"],
+    ["podcasts.html", "Podcasts", "podcasts"],
+    ["products.html", "Products", "products"],
+    ["people.html", "People of History", "people"]
+  ],
+  "taskMeta": {
+    "project": {
+      "categories": {
+        "software":     { "label": "Software",     "emoji": "💻", "placeholder": "placeholder-software" },
+        "research":     { "label": "Research",     "emoji": "📚", "placeholder": "placeholder-research" },
+        "ai":           { "label": "AI",           "emoji": "🤖", "placeholder": "placeholder-ai" },
+        "writing":      { "label": "Writing",      "emoji": "✍️", "placeholder": "placeholder-writing" },
+        "real-estate":  { "label": "Real Estate",  "emoji": "🏠", "placeholder": "placeholder-real-estate" },
+        "finance":      { "label": "Finance",      "emoji": "💰", "placeholder": "placeholder-finance" }
+      },
+      "statuses": {
+        "active":    { "label": "Active",    "emoji": "⚡" },
+        "completed": { "label": "Completed", "emoji": "✅" },
+        "planned":   { "label": "Planned",   "emoji": "📋" }
+      }
+    },
+    "challenge": {
+      "categories": {
+        "learning":  { "label": "Learning",  "emoji": "📚", "placeholder": "placeholder-learning" },
+        "fitness":   { "label": "Fitness",   "emoji": "💪", "placeholder": "placeholder-fitness" },
+        "creative":  { "label": "Creative",  "emoji": "✍️", "placeholder": "placeholder-creative" },
+        "financial": { "label": "Financial", "emoji": "💰", "placeholder": "placeholder-financial" }
+      },
+      "statuses": {
+        "active":    { "label": "Active",    "emoji": "⚡" },
+        "upcoming":  { "label": "Upcoming",  "emoji": "📋" },
+        "completed": { "label": "Completed", "emoji": "✅" }
+      }
+    }
+  },
+  "taskConfig": {
+    "projects": {
+      "defaultStatus": "planned",
+      "statusOrder": ["active", "completed", "planned"],
+      "categoryFallbackEmoji": "🛠️",
+      "filterAction": "filterProjects",
+      "listOptions": [
+        { "href": "projects.html", "label": "Projects", "active": true },
+        { "href": "challenges.html", "label": "Challenges" },
+        { "href": "free-resources.html", "label": "Resources" },
+        { "href": "lesson-logger.html", "label": "Lesson Logger" }
+      ],
+      "listCurrentName": "Projects",
+      "toggleSidebarAction": "toggleProjectSidebar",
+      "toggleListDropdownAction": "toggleProjectListDropdown",
+      "layoutId": "projects-layout",
+      "sidebarId": "projects-sidebar",
+      "searchInputId": "project-search",
+      "searchPlaceholder": "Search projects...",
+      "searchAction": "searchProjects",
+      "searchClearButtonId": "project-search-clear-btn",
+      "searchClearAction": "clearProjectSearch",
+      "allLabel": "All Projects",
+      "allCountId": "count-all-projects",
+      "sidebarFooter": "Things I am building, exploring, and planning",
+      "headerTitle": "Projects",
+      "headerSubtitle": "Things I am building, exploring, and learning in public.",
+      "counterId": "project-count",
+      "counterLabel": "Projects",
+      "gridId": "projects-container"
+    },
+    "challenges": {
+      "defaultStatus": "upcoming",
+      "statusOrder": ["active", "upcoming", "completed"],
+      "categoryOrder": ["learning", "fitness", "creative", "financial"],
+      "categoryFallbackEmoji": "🎯",
+      "filterAction": "filterChallenges",
+      "listOptions": [
+        { "href": "projects.html", "label": "Projects" },
+        { "href": "challenges.html", "label": "Challenges", "active": true },
+        { "href": "free-resources.html", "label": "Resources" },
+        { "href": "lesson-logger.html", "label": "Lesson Logger" }
+      ],
+      "listCurrentName": "Challenges",
+      "toggleSidebarAction": "toggleChallengeSidebar",
+      "toggleListDropdownAction": "toggleChallengeListDropdown",
+      "layoutId": "challenges-layout",
+      "sidebarId": "challenges-sidebar",
+      "searchInputId": "challenge-search",
+      "searchPlaceholder": "Search challenges...",
+      "searchAction": "searchChallenges",
+      "searchClearButtonId": "challenge-search-clear-btn",
+      "searchClearAction": "clearChallengeSearch",
+      "allLabel": "All Challenges",
+      "allCountId": "count-all-challenges",
+      "sidebarFooter": "Personal challenges, constraints, and experiments",
+      "headerTitle": "Challenges",
+      "headerSubtitle": "Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.",
+      "counterId": "challenge-count",
+      "counterLabel": "Challenges",
+      "gridId": "challenges-container"
+    }
+  }
+}

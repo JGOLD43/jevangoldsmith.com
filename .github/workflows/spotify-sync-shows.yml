@@ -27,7 +27,7 @@ jobs:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
-        run: node scripts/spotify-sync-shows.js
+        run: node scripts/sync/spotify-sync-shows.js
       - name: Commit if changed
         run: |
           if git diff --quiet -- data/podcast-shows.json; then

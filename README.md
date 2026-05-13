@@ -1,44 +1,43 @@
 # Jevan Goldsmith Website
 
 Static personal website for `jevangoldsmith.com`, hosted on Firebase Hosting.
-The public experience is now organized as a living archive, with Field Notes as
-the recurring audience thread.
+The public experience is organized as a living archive, with Field Notes as the
+recurring audience thread.
 
-The public runtime is framework-free: generated HTML, CSS, JavaScript, JSON,
-images, and vendor assets are served from `dist/`. The source remains a
-transitioning static-site system with root HTML pages, shared partials, source
-CSS layers, content data, and build/check scripts.
+As of the Astro migration (May 2026), the build is **Astro 6 + per-page legacy
+CSS purge**. `npm run build` invokes Astro under the hood and writes generated
+HTML / CSS / JS to `dist/`, which Firebase Hosting serves.
 
 ## Start Here
 
 Read [docs/START_HERE.md](docs/START_HERE.md) first. It links to the active
-engineering, product, design, content, and release docs.
+engineering and release docs. Historical plans live under `docs/archive/`.
 
 ## Structure
 
 ```text
 .
-├── *.html                  # Public page source/output during migration
-├── _src/layouts/           # Shared HTML layouts for migrated pages
-├── _src/pages/             # Migrated page source
-├── _src/partials/          # Shared source nav/footer chrome
+├── site-astro/             # Astro project (current build target)
+│   ├── src/
+│   │   ├── layouts/        # Base.astro
+│   │   ├── components/     # Nav, Footer, Card components, JsonLd, AdventureMap
+│   │   ├── pages/          # Astro pages → dist/<route>.html
+│   │   └── content.config.ts  # Zod schemas for ../data/*.json
+│   ├── public/             # Static passthrough (CSS, images symlinked, fonts symlinked)
+│   └── astro.config.mjs    # Site URL, output → ../dist/, integrations
+├── data/                   # Source-of-truth JSON for every collection
+├── images/                 # Source + generated images (symlinked into site-astro/public/)
+├── fonts/                  # Self-hosted Chivo (symlinked into site-astro/public/)
+├── scripts/
+│   ├── sync/               # External sync helpers
+│   └── *.js                # Enrichment + sync scripts (Letterboxd, Spotify, TMDB)
 ├── admin/                  # Admin source, excluded from public Hosting deploys
-├── css/src/                # CSS source layers
-├── css/style.css           # Generated shared CSS bundle; do not hand-edit
-├── css/page-*.css          # Generated per-page CSS bundles; do not hand-edit
-├── data/                   # Static content plus site/deploy config
 ├── dist/                   # Generated Firebase Hosting output; ignored
-├── docs/                   # Canonical project/product/design docs
-├── images/                 # Static images and media
-├── js/                     # Browser JavaScript
-├── scripts/                # Build, validation, and sync scripts
-├── vendor/                 # Self-hosted third-party runtime assets
 ├── firebase.json           # Firebase Hosting and Firestore config
 └── firestore.rules         # Firestore access rules
 ```
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the current architecture and
-recommended evolution path.
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the current architecture.
 
 ## Common Commands
 
@@ -53,6 +52,15 @@ Run all local checks:
 ```bash
 npm run check
 ```
+
+Capture every parity baseline (SEO, content, visual, perf) — used to lock
+current behavior during the in-progress Astro migration:
+
+```bash
+npm run check:parity:capture
+```
+
+Historical migration notes live under `docs/archive/`.
 
 Verify live Firebase output (without requiring custom domain cutover):
 
@@ -81,13 +89,9 @@ breakdown, rating histogram, and most-rewatched.
 
 ## Generated Files Policy
 
-The canonical generated-file policy lives in
-[docs/SOURCE_OF_TRUTH.md](docs/SOURCE_OF_TRUTH.md). In short: author source in
-`_src/`, `css/src/`, `data/*.json` except generated indexes, root legacy HTML
-while still source, `js/`, `scripts/`, `docs/`, `tests/`, and `vendor/`.
-Generated bundles, indexes, deploy output, and test artifacts stay ignored.
-Route ownership is tracked in `data/source-ownership.json`; structure cleanup
-is enforced by `npm run check:source` and `npm run check:structure`.
+In short: author source in `site-astro/src/`, `data/*.json`, `scripts/`,
+`docs/`, and `vendor/`. Generated bundles, indexes, deploy output, and test
+artifacts stay ignored.
 
 ## Deployment
 
@@ -108,21 +112,16 @@ Relevant files:
 
 ## Content Model
 
-The site currently uses a hybrid content model:
+The site currently uses an Astro content model:
 
-- many pages are still hand-authored root HTML files
-- migrated pages live in `_src/pages/`
-- root route ownership is classified in `data/source-ownership.json`
-- shared nav/footer source lives in `_src/partials/`
+- pages live in `site-astro/src/pages/`
+- shared nav/footer source lives in `site-astro/src/components/`
 - collections live in `data/*.json` where migrated
 - primary commercial actions live in `data/ctas.json`
 - Field Notes configuration lives in `data/newsletter.json`
 - topic taxonomy starts in `data/topics.json`
-- books live in `data/books.json` and are rendered by `js/books.js`
+- books live in `data/books.json` and are rendered by Astro
 - admin tools are present, but not all content types persist through a backend
-
-The next major structural improvement is to continue migrating root HTML pages
-into `_src/pages/`, then generate the same public HTML output through templates.
 
 ## Static Agent API
 
@@ -135,13 +134,12 @@ with canonical URLs for citation and future commerce/resource surfaces. Agents
 can use `/api/v1/search-index.json` as the cheapest discovery map before
 fetching larger content payloads.
 
-See [docs/STATIC_AGENT_API.md](docs/STATIC_AGENT_API.md).
+Historical static-agent API notes live under `docs/archive/`.
 
 ## Analytics
 
 Analytics events are privacy-friendly and configured through
-`data/site.config.json`. See [docs/ANALYTICS.md](docs/ANALYTICS.md) for what is
-tracked, what is intentionally not tracked, and how to debug local events.
+`data/site.config.json`.
 
 ## Security Notes
 

@@ -1,0 +1,80 @@
+---
+import raw from '../../../data/products.json';
+import Base from '../layouts/Base.astro';
+import { renderResourceCard } from '../lib/free-resources-render';
+
+interface Resource {
+  id: string;
+  slug?: string;
+  title: string;
+  category?: string;
+  type?: string;
+  shortDescription?: string;
+  description?: string;
+  ctaLabel?: string;
+  downloadUrl?: string;
+  checkoutUrl?: string;
+}
+
+interface ResourceCategory {
+  id: string;
+  title: string;
+  icon?: string;
+}
+
+const resources: Resource[] = (raw as { resources?: Resource[] }).resources ?? [];
+const resourceCategories: ResourceCategory[] = (raw as { resourceCategories?: ResourceCategory[] }).resourceCategories ?? [];
+
+const cards = resources.map((r) => renderResourceCard(r, resourceCategories)).join('\n            ');
+---
+<Base
+  title="Useful Resources for Thinking, Building &amp; Learning"
+  description="Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work."
+  canonical="https://jevangoldsmith.com/free-resources.html"
+  pageType="CollectionPage"
+>
+  <main class="resources-content">
+    <section class="resources-intro">
+      <p class="resources-eyebrow">Useful Resources</p>
+      <h1 class="resources-title">Practical artifacts from the archive.</h1>
+      <p class="resources-subtitle">Templates, guides, and tools I use or am shaping into something useful. Start with the weekly review.</p>
+      <div class="collection-cta-row">
+        <a href="free-resources.html" class="btn-primary">Useful Resources</a>
+        <a href="field-notes.html" class="btn-secondary">Get Field Notes</a>
+        <a href="contact.html" class="btn-secondary">Contact Jevan</a>
+      </div>
+    </section>
+
+    <div class="resources-grid">
+      <Fragment set:html={cards} />
+    </div>
+
+    <section class="resources-section">
+      <p class="section-eyebrow">Philosophy</p>
+      <h2 class="section-title">Why Free?</h2>
+      <p class="section-text">I create these resources because organizing my own thinking makes the thinking better. If they help others along the way, that is the whole point. No fake scarcity, no hard sell, just useful tools available to anyone who wants them.</p>
+    </section>
+
+    <section class="resources-section">
+      <p class="section-eyebrow">Suggestions</p>
+      <h2 class="section-title">Request a Resource</h2>
+      <div class="request-card">
+        <div class="request-icon"><svg class="ico-stroke ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-message"/></svg></div>
+        <div class="request-content">
+          <h4>Have an idea?</h4>
+          <p>If there's a template, guide, or tool you'd find useful, let me know. I'm always looking for ways to create practical resources.</p>
+          <a href="contact.html" class="request-link">
+            Send a suggestion
+            <svg class="ico-stroke ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-arrow"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<script>
+  // (slice 13) + Phase 7 (slice 5): shelf + grid-zoom as native modules.
+  import '../scripts/grid-zoom.ts';
+  import '../scripts/shelf.ts';
+</script>

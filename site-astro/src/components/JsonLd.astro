@@ -1,0 +1,51 @@
+---
+import { currentPageFromUrl } from '../lib/chrome';
+// Renders a single <script type="application/ld+json"> with the site-wide
+// Person + WebSite graph plus a per-page BreadcrumbList + page node + any
+// per-page entity schemas (Article, Book, Movie, ItemList, etc).
+import {
+  type BreadcrumbStep,
+  breadcrumbList,
+  type ExtraSchema,
+  type PageType, 
+  pageEnrichment,
+  pageNode,
+  personSchemaFor,
+  WEBSITE_SCHEMA
+} from '../lib/seo';
+
+interface Props {
+  canonical: string;
+  title: string;
+  description: string;
+  pageType?: PageType;
+  image?: string;
+  breadcrumbs?: BreadcrumbStep[];
+  /** Additional schema.org @graph nodes (Article, Book, Movie, ItemList, ...). */
+  extraSchema?: ExtraSchema[];
+}
+
+const {
+  canonical,
+  title,
+  description,
+  pageType = 'WebPage',
+  image,
+  breadcrumbs = [{ name: 'Home', url: 'https://jevangoldsmith.com/' }, { name: title, url: canonical }],
+  extraSchema = []
+} = Astro.props;
+
+const file = currentPageFromUrl(Astro.url.pathname);
+const enrichment = pageEnrichment(file);
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    personSchemaFor(file),
+    WEBSITE_SCHEMA,
+    breadcrumbList(canonical, breadcrumbs),
+    pageNode({ type: pageType, canonical, title, description, image, enrichment }),
+    ...extraSchema
+  ]
+};
+---
+<script is:inline type="application/ld+json" set:html={JSON.stringify(graph)} />

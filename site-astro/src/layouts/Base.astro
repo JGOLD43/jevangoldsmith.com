@@ -1,0 +1,341 @@
+---
+import JsonLd from '../components/JsonLd.astro';
+import SeoRelated from '../components/SeoRelated.astro';
+import pages from '../../../data/pages.json';
+import quotes from '../../public/data/quotes.json';
+import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
+import { type BreadcrumbStep, DEFAULT_OG_IMAGE, type ExtraSchema, type PageType, SITE_NAME } from '../lib/seo';
+
+// Site-wide navbar — inlined here (was components/Nav.astro). Active marker:
+//   - leaf nav-link active when current page matches its href (adventure-*
+//     subpages roll up to adventures.html)
+//   - section dropdown-trigger active when section ID matches (Explore, Taste)
+const _navFile = currentPageFromUrl(Astro.url.pathname);
+const _activeHref = _navFile.startsWith('adventure-') ? 'adventures.html' : _navFile;
+const _sectionByFile: Record<string, string> = {};
+for (const p of (pages as Array<{ path?: string; section?: string }>) ?? []) {
+  if (p.path) _sectionByFile[p.path] = p.section ?? '';
+}
+const _activeSection = _sectionByFile[_navFile] ?? '';
+const _triggerByLabel: Record<string, string> = { Explore: 'explore', Taste: 'taste' };
+const _isTriggerActive = (label: string) => _triggerByLabel[label] === _activeSection;
+const _tickerQuotes = (quotes as { tickerQuotes?: string[] }).tickerQuotes ?? [];
+const _ticker = _tickerQuotes.length >= 5
+  ? (() => {
+      const shuffled = [..._tickerQuotes].sort(() => Math.random() - 0.5).slice(0, 5);
+      shuffled.push(shuffled[0]);
+      return shuffled;
+    })()
+  : _tickerQuotes;
+
+// FCP path: inline theme guard (~120B sync, prevents dark-mode FOUC) →
+// chrome.css (~38KB render-blocking, priority high) → per-page slice
+// (inline if <4KB, external otherwise).
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogType?: string;
+  ogImage?: string;
+  bodyClass?: string;
+  /** Pages like /meet replace the global navbar with their own header. */
+  noChrome?: boolean;
+  /** schema.org page type for JSON-LD. Defaults to "WebPage". */
+  pageType?: PageType;
+  /** Breadcrumb trail. Defaults to Home → current page. */
+  breadcrumbs?: BreadcrumbStep[];
+  /** Robots meta content. Defaults to public indexing. */
+  robots?: string;
+  /** Skip JSON-LD (e.g. for /data-smoke or other non-public pages). */
+  noJsonLd?: boolean;
+  /** Per-page schema.org @graph nodes. Currently used by adventure-[slug]. */
+  extraSchema?: ExtraSchema[];
+}
+
+const _currentPage = currentPageFromUrl(Astro.url.pathname);
+const {
+  title,
+  description = '',
+  canonical = '',
+  ogType = 'website',
+  ogImage = DEFAULT_OG_IMAGE,
+  bodyClass = bodyClassFor(_currentPage),
+  noChrome = false,
+  pageType = 'WebPage',
+  breadcrumbs,
+  robots = 'index, follow, max-image-preview:large',
+  noJsonLd = false,
+  extraSchema,
+} = Astro.props as Props;
+
+const siteName = SITE_NAME;
+
+// Derive the page slug from the current URL so SeoRelated.astro can look up
+// the matching legacy related-cards entry without each page passing a prop.
+const rawPath = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
+const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split('/').pop()!;
+
+// per-page preconnect hints for cross-origin image hosts. One
+// DNS+TLS round-trip up front beats paying it on every <img> request.
+const preconnectOrigins: string[] = [];
+if (seoSlug === 'movies') preconnectOrigins.push('https://a.ltrbxd.com');
+if (seoSlug === 'videos') preconnectOrigins.push('https://i.ytimg.com');
+// Note: /adventures used to preconnect to images.unsplash.com, but the
+// build pipeline now self-hosts every Unsplash hero (assets:optimize +
+// html-normalize rewrite to /images/generated/remote/...). The browser
+// no longer crosses the third-party origin, so the hint was wasted.
+
+// Cheap dns-prefetch on entry pages (index, search) so the user is
+// already DNS-warm if they navigate into a collection page that uses
+// these hosts. Doesn't open a TLS connection like preconnect — just
+// resolves the name, ~10-30ms saved on the next nav.
+const dnsPrefetchOrigins: string[] = [];
+if (seoSlug === 'index' || seoSlug === 'search') {
+  // unsplash + openlibrary are self-hosted post-build, so no DNS to prime.
+  dnsPrefetchOrigins.push(
+    'https://a.ltrbxd.com',
+    'https://i.ytimg.com'
+  );
+}
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {/* FOUC guard: set data-theme synchronously before first paint so the
+        page renders in the user's resolved theme. The full theme module
+        (toggle button, system-pref listener) still runs at end of body —
+        this only fixes the initial paint. ~120 bytes minified. */}
+    <script is:inline>
+      (() => {
+        try {
+          const t = localStorage.getItem('jg-theme')
+            || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (_) { /* private mode / SSR can't read storage */ }
+      })();
+    </script>
+    <meta name="theme-color" content="#F5F3ED" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
+    <title>{title}</title>
+    <link rel="stylesheet" href="/css/legacy-style.css" fetchpriority="high" />
+    {/* Preload the single variable Chivo font (one file, weights 100-900)
+        so the FOUT swap fires before first paint. Replaces the 4 prior
+        static-weight files (60KB total) with a single ~33KB variable
+        file — net first-visit font bytes ~−27KB. */}
+    <link rel="preload" href="/fonts/chivo/chivo-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
+    {preconnectOrigins.map((origin) => (
+      <link rel="preconnect" href={origin} crossorigin />
+    ))}
+    {dnsPrefetchOrigins.map((origin) => (
+      <link rel="dns-prefetch" href={origin} />
+    ))}
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    {description && <meta name="description" content={description} />}
+    <meta name="robots" content={robots} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="alternate" type="application/rss+xml" href="/rss.xml" title={`${SITE_NAME} — RSS Feed`} />
+    <link rel="alternate" type="application/json" href="/api/v1/index.json" title="Agent API index" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="Agent instructions" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImage} />
+    <slot name="head" />
+    {/* View Transitions (ClientRouter) was tried but Astro's swap-
+        merge replaces page-bound <script> modules without re-firing
+        their init logic. Per-page click handlers (people modal, books
+        modal, etc) detach after the first transition. Speculation
+        Rules in nav-prefetch.ts already prerender same-origin links on
+        hover, which gives near-instant navigation without intercepting
+        the page lifecycle, so we rely on that instead. */}
+  </head>
+  <body class={bodyClass}>
+    {!noChrome && (
+      <nav class="navbar">
+        <div class="container">
+          <div class="navbar-left">
+            <a href="index.html" class="logo">
+              <picture class="logo-static">
+                <source type="image/avif" srcset="images/generated/logo/logo-nav-88.avif 1x, images/generated/logo/logo-nav-176.avif 2x, images/generated/logo/logo-nav-264.avif 3x, images/generated/logo/logo-nav-352.avif 4x" />
+                <img src="images/generated/logo/logo-nav-176.png" srcset="images/generated/logo/logo-nav-88.png 1x, images/generated/logo/logo-nav-176.png 2x, images/generated/logo/logo-nav-264.png 3x, images/generated/logo/logo-nav-352.png 4x" alt="J.GOLDSMITH" class="logo-image" width="88" height="80" decoding="async" />
+              </picture>
+              <video class="logo-image logo-video" poster="images/generated/logo/logo-nav-176.png" muted playsinline loop preload="none" data-webm-1x="images/generated/video/logo-animated-176.webm" data-webm-2x="images/generated/video/logo-animated-352.webm" data-webm-3x="images/generated/video/logo-animated-528.webm" data-mp4-1x="images/generated/video/logo-animated-176.mp4" data-mp4-2x="images/generated/video/logo-animated-352.mp4" data-mp4-3x="images/generated/video/logo-animated-528.mp4"></video>
+            </a>
+            <div class="wisdom-ticker">
+              <div class="wisdom-ticker-track">
+                {_ticker.map((phrase) => <a href="quotes.html" class="wisdom-item">{phrase}</a>)}
+              </div>
+            </div>
+          </div>
+          <ul class="nav-links">
+            <li><a href="index.html" class:list={['index.html' === _activeHref ? 'active' : '']}>Home</a></li>
+            <li class="nav-dropdown">
+              <a href="#" class:list={['dropdown-trigger', _isTriggerActive('Explore') ? 'active' : '']}>Explore</a>
+              <div class="dropdown-menu dropdown-menu-wide">
+                <div class="dropdown-wide-header">A Collection of Thoughts</div>
+                <div class="dropdown-columns">
+                  <div class="dropdown-column">
+                    <a href="field-notes.html" class:list={['field-notes.html' === _activeHref ? 'active' : '']}>Field Notes</a>
+                    <a href="essays.html" class:list={['essays.html' === _activeHref ? 'active' : '']}>Essays</a>
+                    <a href="takes.html" class:list={['takes.html' === _activeHref ? 'active' : '']}>Takes</a>
+                    <a href="problems.html" class:list={['problems.html' === _activeHref ? 'active' : '']}>Problems</a>
+                  </div>
+                  <div class="dropdown-column">
+                    <a href="living-manifesto.html" class:list={['living-manifesto.html' === _activeHref ? 'active' : '']}>Living Manifesto</a>
+                    <a href="speeches.html" class:list={['speeches.html' === _activeHref ? 'active' : '']}>Speeches</a>
+                    <a href="about.html" class:list={['about.html' === _activeHref ? 'active' : '']}>Website Purpose</a>
+                    <a href="health.html" class:list={['health.html' === _activeHref ? 'active' : '']}>Health</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="nav-dropdown">
+              <a href="#" class="dropdown-trigger">Content</a>
+              <div class="dropdown-menu dropdown-menu-icons">
+                <a href="https://youtube.com/@JevanGoldsmith" target="_blank" class="dropdown-icon-link" title="YouTube">
+                  <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-youtube" /></svg>
+                </a>
+                <a href="https://instagram.com/jevangoldsmith" target="_blank" class="dropdown-icon-link" title="Instagram">
+                  <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-instagram" /></svg>
+                </a>
+                <a href="https://x.com/JevanGoldsmith" target="_blank" class="dropdown-icon-link" title="X">
+                  <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-x" /></svg>
+                </a>
+                <a href="https://linkedin.com/in/jevan-goldsmith-7b885a185" target="_blank" class="dropdown-icon-link" title="LinkedIn">
+                  <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-linkedin" /></svg>
+                </a>
+                <a href="mailto:hello@jevangoldsmith.com?subject=Newsletter" class="dropdown-icon-link" title="Newsletter">
+                  <svg class="ico-stroke ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-mail" /></svg>
+                </a>
+              </div>
+            </li>
+            <li class="nav-dropdown">
+              <a href="#" class:list={['dropdown-trigger', _isTriggerActive('Taste') ? 'active' : '']}>Taste</a>
+              <div class="dropdown-menu dropdown-menu-wide">
+                <div class="dropdown-wide-header">Things I Interact With</div>
+                <div class="dropdown-columns">
+                  <div class="dropdown-column">
+                    <a href="books.html" class:list={['books.html' === _activeHref ? 'active' : '']}>Reading</a>
+                    <a href="movies.html" class:list={['movies.html' === _activeHref ? 'active' : '']}>Movies</a>
+                    <a href="podcasts.html" class:list={['podcasts.html' === _activeHref ? 'active' : '']}>Podcasts</a>
+                  </div>
+                  <div class="dropdown-column">
+                    <a href="products.html" class:list={['products.html' === _activeHref ? 'active' : '']}>The Shelf</a>
+                    <a href="cool-shit.html" class:list={['cool-shit.html' === _activeHref ? 'active' : '']}>Cool Shit</a>
+                    <a href="people.html" class:list={['people.html' === _activeHref ? 'active' : '']}>People of History</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li><a href="adventures.html" class:list={['adventures.html' === _activeHref ? 'active' : '']}>Adventures</a></li>
+            <li class="nav-dropdown">
+              <a href="#" class="dropdown-trigger">Ventures</a>
+              <div class="dropdown-menu dropdown-menu-wide">
+                <div class="dropdown-wide-header">Things I think up, build and learn</div>
+                <div class="dropdown-columns">
+                  <div class="dropdown-column">
+                    <a href="projects.html" class:list={['projects.html' === _activeHref ? 'active' : '']}>Projects</a>
+                    <a href="challenges.html" class:list={['challenges.html' === _activeHref ? 'active' : '']}>Challenges</a>
+                  </div>
+                  <div class="dropdown-column">
+                    <a href="free-resources.html" class:list={['free-resources.html' === _activeHref ? 'active' : '']}>Resources</a>
+                    <a href="lesson-logger.html" class:list={['lesson-logger.html' === _activeHref ? 'active' : '']}>Lesson Logger</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <div class="navbar-right">
+            <button class="theme-toggle" aria-label="Toggle theme">
+              <svg class="theme-toggle-icon icon-sun ico-stroke" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-sun" /></svg>
+              <svg class="theme-toggle-icon icon-moon ico-stroke" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-moon" /></svg>
+            </button>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+              <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </button>
+            <div class="navbar-contact">
+              <a href="meet.html" class="navbar-contact-btn">
+                <span>Follow</span>
+                <svg class="ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-send" /></svg>
+              </a>
+              <div class="navbar-contact-dropdown">
+                <div class="contact-dropdown-qr">
+                  <img src="images/qr-contact.svg" alt="Scan to contact" width="120" height="120" loading="lazy" decoding="async" />
+                  <p>Scan to connect</p>
+                </div>
+                <div class="contact-dropdown-links">
+                  <a href="contact.html">
+                    <svg class="ico-stroke ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-mail" /></svg>
+                    Contact Page
+                  </a>
+                  <a href="mailto:hello@jevangoldsmith.com">
+                    <svg class="ico-stroke ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-envelope" /></svg>
+                    Email Me
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    )}
+    <slot />
+    {!noChrome && <SeoRelated slug={seoSlug} />}
+    {!noChrome && (
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-content">
+            <div>
+              <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+              <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
+            </div>
+            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="field-notes.html">Field Notes</a></li>
+              <li><a href="products.html">The Shelf</a></li>
+              <li><a href="free-resources.html">Resources</a></li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    )}
+    <slot name="scripts" />
+    <script>
+      import '../scripts/theme.ts';
+      // Speculation Rules + hover-prefetch fallback. Externalized from
+      // Base.astro so the inline-script CSP hash list stays small and
+      // the saveData branch can read navigator.connection at runtime
+      // without re-shipping the whole rules payload per page.
+      import '../scripts/nav-prefetch.ts';
+    </script>
+    {/* JSON-LD at end of <body>: ~4KB structured-data block was previously
+        in <head> where it stalled the parser before reaching <body>.
+        Crawlers (Google, Bing, ClaudeBot, etc.) read JSON-LD anywhere in
+        the document. Saves ~30-50ms FCP under CPU throttle, no behavior
+        change for SEO. */}
+    {!noJsonLd && canonical && (
+      <JsonLd
+        canonical={canonical}
+        title={title}
+        description={description}
+        pageType={pageType}
+        image={ogImage}
+        breadcrumbs={breadcrumbs}
+        extraSchema={extraSchema}
+      />
+    )}
+  </body>
+</html>
