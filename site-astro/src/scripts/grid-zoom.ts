@@ -1,6 +1,6 @@
-type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string };
+type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; centerOffsetCssX?: number };
 type State = { grid: HTMLElement; activeItem: HTMLElement | null; itemSelector: string; triggerSelector: string; opts: Opts };
-type GridZoomConfig = { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; eventName?: string };
+type GridZoomConfig = { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; eventName?: string; centerOffsetCssX?: number };
 
 const instances: State[] = [];
 
@@ -28,7 +28,8 @@ function apply(grid: HTMLElement, item: HTMLElement, opts: Opts) {
   const gridCyViewport = gridRect.top + gridCy;
   const originX = gridCx;
   const originY = gridCy;
-  const tx = vw / 2 - (gridCxViewport + targetScale * (itemCxViewport - gridCxViewport));
+  const centerShiftVisualX = (opts?.centerOffsetCssX ?? 0) * targetScale;
+  const tx = vw / 2 - centerShiftVisualX - (gridCxViewport + targetScale * (itemCxViewport - gridCxViewport));
   const ty = vh / 2 - (gridCyViewport + targetScale * (itemCyViewport - gridCyViewport));
   grid.style.setProperty('--origin-x', originX + 'px');
   grid.style.setProperty('--origin-y', originY + 'px');
@@ -63,7 +64,8 @@ export function init(config: GridZoomConfig) {
     maxScale: config.maxScale,
     fillW: config.fillW,
     fillH: config.fillH,
-    anchorSelector: config.anchorSelector
+    anchorSelector: config.anchorSelector,
+    centerOffsetCssX: config.centerOffsetCssX
   };
 
   const state: State = { grid, activeItem: null, itemSelector, triggerSelector, opts };
