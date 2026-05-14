@@ -308,7 +308,12 @@ function populateSidebar(adventures: AnyObj[]) {
     });
 }
 
-function toggleFilter(region: string, buttonEl: HTMLElement) {
+function toggleFilter(buttonEl: HTMLElement) {
+    // Region lives on data-region, not data-action-args (the markup ships
+    // with empty args). Pull it from the button so we only have one source
+    // of truth.
+    const region = buttonEl?.dataset?.region || '';
+    if (!region) return;
     if (state.activeFilters.has(region)) {
         state.activeFilters.delete(region);
         buttonEl.classList.remove('active');

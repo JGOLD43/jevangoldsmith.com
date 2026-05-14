@@ -35,3 +35,79 @@
 .collection-layout.mobile-list-view>.essays-main,
 .collection-layout.mobile-list-view>.people-main{display:none}
 }
+
+/* ---- Session mobile additions (Claude) ---- */
+.collection-mobile-toggle{display:none}
+@media (max-width:768px){
+.collection-mobile-toggle{display:flex;background:var(--background);border-top:1px solid var(--border-color);gap:0;padding:0;position:fixed;left:0;right:0;bottom:0;z-index:1000;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 8px rgba(0,0,0,0.08)}
+.collection-mobile-toggle .mobile-view-btn{color:var(--text-light);cursor:pointer;background:0 0;border:none;border-top:3px solid transparent;flex:1;justify-content:center;align-items:center;gap:.5rem;padding:1rem;font-family:inherit;font-size:.9rem;font-weight:600;transition:color .2s,border-color .2s;display:flex}
+.collection-mobile-toggle .mobile-view-btn:hover{color:var(--text-color)}
+.collection-mobile-toggle .mobile-view-btn.active{color:var(--text-color);border-top-color:var(--text-color)}
+.collection-mobile-toggle .mobile-view-btn svg{flex-shrink:0}
+.collection-layout{display:block!important;grid-template-columns:none!important;padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))!important}
+.collection-layout>.collection-sidebar{display:none}
+.collection-layout>.collection-main,.collection-layout>.books-main,.collection-layout>.movies-main,.collection-layout>.podcasts-main,.collection-layout>.essays-main,.collection-layout>.people-main{display:block}
+.collection-layout.mobile-list-view>.collection-sidebar{display:block;width:100%!important;min-width:0!important;max-width:none;height:auto;max-height:none;position:relative;top:0;border-right:0;padding:1rem 0!important;overflow:visible}
+.collection-layout.mobile-list-view>.collection-sidebar .sidebar-header{display:none}
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .sidebar-list-selector,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .sidebar-search,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .sidebar-filter-section,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .sidebar-browse-label,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .sidebar-footer,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .category-name,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .category-count,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .expand-icon{display:flex!important}
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .category-name{display:inline-block!important}
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .sidebar-category{justify-content:flex-start;gap:.75rem;padding:.65rem 1.5rem;min-height:44px}
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .category-books,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .category-movies,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .category-essays,
+.collection-layout.mobile-list-view>.collection-sidebar.collapsed .genre-movies{display:block!important}
+.collection-layout.mobile-list-view>.collection-main,
+.collection-layout.mobile-list-view>.books-main,
+.collection-layout.mobile-list-view>.movies-main,
+.collection-layout.mobile-list-view>.podcasts-main,
+.collection-layout.mobile-list-view>.essays-main,
+.collection-layout.mobile-list-view>.people-main{display:none}
+}
+@media (max-width:768px){
+.collection-header{flex-wrap:wrap;align-items:flex-start;gap:.75rem}
+.collection-header .header-content{flex:1 1 0%!important;min-width:0}
+.collection-header > .header-right,
+.collection-header > .movie-counter-group,
+.collection-header > .collection-header-counter{flex:0 0 auto;flex-direction:column;align-items:flex-end;gap:.4rem;margin:0;text-align:right;display:flex}
+.collection-header .header-right .view-toggle{margin:0;justify-content:flex-end}
+.collection-header .recent-books-carousel{flex:0 0 100%;order:3;margin:0;width:100%}
+.collection-header .collection-counter-number,
+.collection-header .counter-number{font-size:2.6rem;line-height:1;letter-spacing:-.02em}
+.collection-header .collection-counter-label,
+.collection-header .counter-label{font-size:.85rem}
+.collection-header .header-right .view-toggle-btn{width:36px;height:36px;padding:.4rem}
+.collection-header .header-right .view-toggle-btn svg{width:20px;height:20px}
+.collection-header .header-counter,
+.collection-header .collection-header-counter{text-align:right;padding:0}
+.collection-header .philosophy-link-wrapper{flex-direction:column;align-items:flex-start;gap:.25rem}
+.collection-header .stats-toggle{align-self:flex-end}
+.main-header{flex-wrap:wrap;align-items:flex-start;gap:.75rem}
+.main-header .header-content{flex:1 1 0%!important;min-width:0}
+.main-header .header-counter{flex:0 0 auto;flex-direction:column;align-items:flex-end;gap:.4rem;text-align:right;padding:0}
+.main-header .counter-number{font-size:2.6rem;line-height:1;letter-spacing:-.02em}
+.main-header .counter-label{font-size:.85rem}
+}
+@media (max-width:768px){
+.books-grid,.movies-grid,
+.collection-layout.sidebar-collapsed .books-grid,
+.collection-layout.sidebar-collapsed .movies-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:.75rem!important}
+.movie-card,.book-card,.podcast-card{padding:.65rem;font-size:.85rem}
+.movie-card .movie-title,.book-card .book-title{font-size:.95rem;line-height:1.2}
+.movie-card .movie-meta,.book-card .book-meta,.book-card .book-author{font-size:.78rem}
+.book-card .book-cover-wrapper{aspect-ratio:2/3;width:100%;min-height:0;max-height:none;padding:0;margin-bottom:.6rem;background:transparent!important;border-radius:0;overflow:visible}
+.book-card .book-cover{width:100%;height:100%;max-width:none;max-height:none;object-fit:contain}
+.movie-card .movie-poster-wrapper,.podcast-card .movie-poster-wrapper{aspect-ratio:2/3;width:100%;min-height:0;max-height:none;padding:.4rem;margin-bottom:.6rem;background:#1f1f1f;border-radius:4px;overflow:hidden}
+.movie-card .movie-poster,.podcast-card .movie-poster{width:100%;height:100%;max-width:none;max-height:none;object-fit:contain}
+.book-card .book-rating-unread{display:none}
+.book-card{background:transparent!important;border-color:transparent!important;box-shadow:none!important;transition:background-color .2s,border-color .2s}
+.book-card:hover,.book-card:focus-within,.book-card:active{background:var(--background-alt)!important;border-color:var(--border-color)!important}
+body{padding-top:67px}
+body.nav-compact{padding-top:58px}
+}
