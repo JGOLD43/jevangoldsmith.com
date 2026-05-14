@@ -22,6 +22,13 @@ export function applyCardVisibility(
 
 
 
+// If the image lives in a carousel slot wrapper (e.g. <a class="carousel-book-link">),
+// remove the whole slot — otherwise the empty link leaves a phantom gap.
+function removeCarouselSlot(img: HTMLImageElement) {
+    const slot = img.closest('.carousel-book-link');
+    (slot ?? img).remove();
+}
+
 let imageErrorInstalled = false;
 export function installImageErrorHandler() {
     if (imageErrorInstalled) return;
@@ -34,7 +41,7 @@ export function installImageErrorHandler() {
             target.parentElement?.classList.add('book-cover-missing');
             return;
         }
-        if (target.dataset.removeOnError === 'true') target.remove();
+        if (target.dataset.removeOnError === 'true') removeCarouselSlot(target);
     }, true);
     // OpenLibrary serves a 1×1 transparent PNG when no cover exists, which
     // loads "successfully" so the error handler above never fires. Treat
@@ -43,7 +50,7 @@ export function installImageErrorHandler() {
         const target = event.target;
         if (!(target instanceof HTMLImageElement)) return;
         if (target.dataset.removeOnError !== 'true') return;
-        if (target.naturalWidth > 0 && target.naturalWidth < 10) target.remove();
+        if (target.naturalWidth > 0 && target.naturalWidth < 10) removeCarouselSlot(target);
     }, true);
 }
 
