@@ -296,10 +296,18 @@ function runFfmpeg(args) {
   const inputIndex = args.indexOf('-i');
   const input = inputIndex >= 0 ? args[inputIndex + 1] : null;
   if (input && isFresh(output, input)) return;
+  // Pre-existing variants are committed in-tree; if a usable output is
+  // already on disk and ffmpeg isn't available (CI runners often lack it),
+  // skip re-encoding rather than failing the build.
+  if (fs.existsSync(output) && fs.statSync(output).size > 1024) return;
   const result = spawnSync('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'error', ...args], {
     cwd: root,
     stdio: 'inherit'
   });
+  if (result.error && (result.error.code === 'ENOENT' || /ffmpeg/.test(String(result.error.message)))) {
+    console.warn(`ffmpeg not available; keeping existing ${output}`);
+    return;
+  }
   if (result.status !== 0) {
     throw new Error(`ffmpeg failed with status ${result.status}`);
   }
