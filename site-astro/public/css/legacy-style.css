@@ -111,3 +111,56 @@
 body{padding-top:67px}
 body.nav-compact{padding-top:58px}
 }
+
+/* Detail sub-page styles (book/project/etc). Sub-page templates use a
+   .detail-* class family that lacked any rules — pages rendered bare.
+   These styles centre content, set typography, and theme the hero +
+   section blocks consistent with the site's design tokens. */
+.detail-page{max-width:880px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+.detail-back{color:var(--secondary-color);font-weight:600;display:inline-block;margin-bottom:1.5rem;font-size:.95rem}
+.detail-back:hover{color:var(--accent-color)}
+.detail-hero{display:flex;flex-wrap:wrap;gap:1.75rem;margin-bottom:2.5rem;align-items:flex-start}
+.detail-hero-cover,.detail-hero-image{flex:0 0 220px;max-width:220px;border-radius:8px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.detail-hero-cover img,.detail-hero-image img{width:100%;height:auto;display:block}
+.detail-hero-body{flex:1 1 320px;min-width:0}
+.detail-kicker{color:var(--text-light);font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+.detail-title{font-family:Chivo,serif;font-size:clamp(1.85rem,3.2vw,2.6rem);font-weight:700;line-height:1.15;color:var(--primary-color);margin:0 0 .85rem}
+.detail-meta-line,.detail-author{color:var(--text-light);font-size:.95rem;margin-bottom:.85rem}
+.detail-lead{font-size:1.1rem;line-height:1.55;color:var(--text-color);margin:0 0 1rem}
+.detail-status-badge,.detail-year-pill,.detail-category-pill,.detail-tag,.detail-link-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.25rem .65rem;border-radius:999px;font-size:.78rem;font-weight:600;line-height:1;background:var(--background-alt);color:var(--text-color);border:1px solid var(--border-color);margin-right:.4rem;margin-bottom:.4rem}
+.detail-status-badge.status-active{background:#22c55e;color:#fff;border-color:transparent}
+.detail-status-badge.status-planned{background:#8b5cf6;color:#fff;border-color:transparent}
+.detail-status-badge.status-paused{background:#f59e0b;color:#fff;border-color:transparent}
+.detail-status-badge.status-shipped{background:#3b82f6;color:#fff;border-color:transparent}
+.detail-tag--tech{background:#e0f2fe;color:#075985;border-color:transparent}
+.detail-tag--topic{background:#fef3c7;color:#92400e;border-color:transparent}
+[data-theme=dark] .detail-tag--tech{background:#0c4a6e;color:#bae6fd}
+[data-theme=dark] .detail-tag--topic{background:#78350f;color:#fde68a}
+.detail-link-pill:hover{background:var(--secondary-color);color:#fff;border-color:transparent}
+.detail-link-row{margin:1rem 0 .25rem;display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+.detail-section{margin:2.5rem 0 0;padding-top:2rem;border-top:1px solid var(--border-color)}
+.detail-section:first-of-type{border-top:0;padding-top:0}
+.detail-h2{font-family:Chivo,serif;font-size:1.55rem;font-weight:700;color:var(--primary-color);margin:0 0 1rem}
+.detail-notes-body,.detail-commentary-body{font-size:1.05rem;line-height:1.7;color:var(--text-color)}
+.detail-notes-body p,.detail-commentary-body p{margin:0 0 1em}
+.detail-notes-empty{color:var(--text-light);font-style:italic;font-size:.95rem}
+.detail-meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:1rem 0}
+.detail-meta-grid dt{font-size:.78rem;color:var(--text-light);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.25rem}
+.detail-meta-grid dd{font-size:1rem;color:var(--text-color);margin:0}
+.detail-proof-list{list-style:none;padding:0;margin:.5rem 0;display:grid;gap:.6rem}
+.detail-proof-list li{display:flex;gap:.65rem;font-size:.95rem;padding:.5rem .75rem;background:var(--background-alt);border-radius:6px}
+.detail-proof-label{flex:0 0 130px;color:var(--text-light);font-weight:600;font-size:.85rem}
+.detail-proof-value{flex:1;color:var(--text-color)}
+.detail-pullquote{font-family:Chivo,serif;font-style:italic;font-size:1.2rem;line-height:1.45;color:var(--primary-color);border-left:3px solid var(--secondary-color);padding:.4rem 0 .4rem 1rem;margin:1.25rem 0}
+.commentary-list{list-style:none;padding:0;margin:0;display:grid;gap:1.2rem}
+.commentary-item{background:var(--background-alt);border-radius:8px;padding:1rem 1.15rem;border:1px solid var(--border-color)}
+.commentary-title{font-weight:700;color:var(--primary-color);font-size:1.05rem;margin:0 0 .25rem}
+.commentary-date{color:var(--text-light);font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.55rem}
+.commentary-body{font-size:.98rem;line-height:1.6;color:var(--text-color)}
+@media (max-width:640px){
+  .detail-hero{gap:1.25rem}
+  .detail-hero-cover,.detail-hero-image{flex:0 0 140px;max-width:140px}
+  .detail-page{padding:1.5rem 1rem 3rem}
+  .detail-proof-list li{flex-direction:column;gap:.25rem}
+  .detail-proof-label{flex:none}
+}
