@@ -12,16 +12,17 @@ function productImageAsset(slug?: string, fallbackImage?: string) {
   if (!slug) return null;
   const widths = [240, 400, 640, 800];
   for (const ext of ['jpg', 'png'] as const) {
-    const candidate = `images/generated/products/${slug}-640.${ext}`;
-    if (!fs.existsSync(path.join(ROOT, candidate))) continue;
+    const rel = `images/generated/products/${slug}-640.${ext}`;
+    if (!fs.existsSync(path.join(ROOT, rel))) continue;
     const srcset = widths
       .filter((w) => fs.existsSync(path.join(ROOT, `images/generated/products/${slug}-${w}.${ext}`)))
-      .map((w) => `images/generated/products/${slug}-${w}.${ext} ${w}w`)
+      .map((w) => `/images/generated/products/${slug}-${w}.${ext} ${w}w`)
       .join(', ');
-    return { src: candidate, srcset, sizes: '(max-width: 768px) 78vw, 320px', width: 800, height: 800 };
+    return { src: `/${rel}`, srcset, sizes: '(max-width: 768px) 78vw, 320px', width: 800, height: 800 };
   }
   if (fallbackImage && fs.existsSync(path.join(ROOT, fallbackImage))) {
-    return { src: fallbackImage, srcset: '', sizes: '', width: 800, height: 800 };
+    const absSrc = fallbackImage.startsWith('/') ? fallbackImage : `/${fallbackImage}`;
+    return { src: absSrc, srcset: '', sizes: '', width: 800, height: 800 };
   }
   return null;
 }
