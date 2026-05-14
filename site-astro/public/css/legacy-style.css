@@ -180,3 +180,14 @@ body.nav-compact{padding-top:58px}
 [data-theme=dark] .movies-sidebar .sidebar-category:hover:not(.active) .category-icon svg{color:#fff;stroke:#fff}
 [data-theme=dark] .books-sidebar .category-icon svg,
 [data-theme=dark] .movies-sidebar .category-icon svg{stroke:#ccc;color:#ccc}
+
+/* Dark-mode scrollbar fix. Taste sidebar var defaulted to a light gray
+   (#d1d5db) that read as a tan strip against the dark sidebar bg. */
+[data-theme=dark] .books-sidebar.collection-sidebar--taste,
+[data-theme=dark] .movies-sidebar.collection-sidebar--taste{--collection-sidebar-scrollbar:#444}
+[data-theme=dark] .books-sidebar::-webkit-scrollbar-thumb,
+[data-theme=dark] .movies-sidebar::-webkit-scrollbar-thumb,
+[data-theme=dark] .collection-sidebar::-webkit-scrollbar-thumb{background:#444}
+[data-theme=dark] .books-sidebar::-webkit-scrollbar-thumb:hover,
+[data-theme=dark] .movies-sidebar::-webkit-scrollbar-thumb:hover,
+[data-theme=dark] .collection-sidebar::-webkit-scrollbar-thumb:hover{background:#666}

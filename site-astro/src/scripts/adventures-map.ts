@@ -62,38 +62,17 @@ function refreshMapDatasets() {
 // of the imagery the user is viewing. Replaces the old polygon
 // fastBasemap, which was the wrong color (navy) over land and caused
 // the visible "rectangle pop-in" flicker against satellite tiles.
-function addFastBaseMap(map: AnyObj) {
-    const L = getL();
-    if (!L || !map || map._fastBaseMapAdded) return;
-
-    map.createPane('fastBasemap');
-    map.getPane('fastBasemap').style.zIndex = '180';
-    map.getPane('overlayPane').style.zIndex = '400';
-
-    rebuildOverviewLayer(map);
-    map._fastBaseMapAdded = true;
+// fastBasemap previously held a low-zoom tile overview to mask gaps
+// during pan/zoom, but its z=3 tiles get scaled up at higher zooms and
+// the tile boundaries show through the main pane as visible gridlines.
+// Disabled entirely — the brief container bg flash on cold load is the
+// lesser evil.
+function addFastBaseMap(_map: AnyObj) {
+    return;
 }
 
-function rebuildOverviewLayer(map: AnyObj) {
-    const L = getL();
-    if (!L || !map) return;
-    if (map._overviewTileLayer) {
-        map.removeLayer(map._overviewTileLayer);
-        map._overviewTileLayer = null;
-    }
-    const def = BASEMAPS[state.mapFilters.basemap || 'satellite'] || BASEMAPS.satellite;
-    const opts: AnyObj = {
-        pane: 'fastBasemap',
-        maxNativeZoom: 3,
-        maxZoom: 19,
-        minZoom: 0,
-        detectRetina: false,
-        crossOrigin: true,
-        keepBuffer: 100,
-        noWrap: false
-    };
-    if (def.subdomains) opts.subdomains = def.subdomains;
-    map._overviewTileLayer = L.tileLayer(def.tile, opts).addTo(map);
+function rebuildOverviewLayer(_map: AnyObj) {
+    return;
 }
 
 function addSatelliteTiles(map: AnyObj) {
