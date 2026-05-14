@@ -54,6 +54,14 @@ css/style.css
 data/pages.json
 data/generated-manifest.json
 data/*.generated.json
+# Allow snapshots of data files needed at build time by astro check
+# (which reads content.config.ts before our build pipeline can regenerate them)
+!data/books.generated.json
+!data/people.merged.generated.json
+!data/countries.slim.generated.json
+!data/photos.generated.json
+!data/routes.generated.json
+!data/remote-assets.generated.json
 images/generated/
 images/source/remote/
 sitemap.xml
