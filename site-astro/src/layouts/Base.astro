@@ -41,6 +41,8 @@ interface Props {
   bodyClass?: string;
   /** Pages like /meet replace the global navbar with their own header. */
   noChrome?: boolean;
+  /** Hide the site footer (used by full-bleed pages like /adventures). */
+  noFooter?: boolean;
   /** schema.org page type for JSON-LD. Defaults to "WebPage". */
   pageType?: PageType;
   /** Breadcrumb trail. Defaults to Home → current page. */
@@ -62,6 +64,7 @@ const {
   ogImage = DEFAULT_OG_IMAGE,
   bodyClass = bodyClassFor(_currentPage),
   noChrome = false,
+  noFooter = false,
   pageType = 'WebPage',
   breadcrumbs,
   robots = 'index, follow, max-image-preview:large',
@@ -293,8 +296,8 @@ if (seoSlug === 'index' || seoSlug === 'search') {
       </nav>
     )}
     <slot />
-    {!noChrome && <SeoRelated slug={seoSlug} />}
-    {!noChrome && (
+    {!noChrome && !noFooter && <SeoRelated slug={seoSlug} />}
+    {!noChrome && !noFooter && (
       <footer class="footer">
         <div class="container">
           <div class="footer-content">
