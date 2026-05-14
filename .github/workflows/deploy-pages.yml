@@ -33,10 +33,13 @@ jobs:
       - name: Generate merged data files
         run: npm run people:merge || true
 
-      # Full build. assets:optimize is now a near no-op because the
-      # generated image variants are committed in-tree (images/generated/);
-      # only brand-new remote covers will actually fetch.
-      - run: npm run build
+      # Use build:fast — skips snap:routes + assets:optimize. The optimize
+      # step requires ffmpeg + network reach to Openlibrary, neither of
+      # which is reliable on CI. Pre-optimized image variants are already
+      # committed in images/generated/, so the dist output has everything
+      # it needs. When you add new source images locally, run
+      # `npm run assets:optimize` and commit the new variants.
+      - run: npm run build:fast
 
       - name: Add Pages-required files to dist
         run: |
