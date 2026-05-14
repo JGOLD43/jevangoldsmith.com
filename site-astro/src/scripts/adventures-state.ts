@@ -72,7 +72,12 @@ export const ROUTE_TYPE_COLORS: Record<string, string> = {
 export const BASEMAPS: Record<string, AnyObj> = {
   streets: { label: 'Streets', tile: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19, subdomains: 'abc' },
   satellite: { label: 'Satellite', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
-  hybrid: { label: 'Satellite + Labels', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19, overlay: 'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}' },
+  // hybrid used to add an ArcGIS World_Boundaries_and_Places overlay,
+  // but those reference tiles bake a graticule into their PNG/JPG so users
+  // see gridlines through oceans/continents. Same imagery as 'satellite'
+  // now — kept under both labels so localStorage values from old visits
+  // still resolve.
+  hybrid: { label: 'Satellite + Labels', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
   terrain: { label: 'Terrain', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
   dark: { label: 'Dark', tile: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', maxZoom: 19, subdomains: 'abcd' },
   light: { label: 'Light', tile: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', maxZoom: 19, subdomains: 'abcd' }
@@ -87,7 +92,10 @@ export const DEFAULT_FILTERS = {
   region: 'all',
   layers: { adventures: false, routes: false, photos: false, pois: false, countries: false },
   poiCategories: {},
-  basemap: 'hybrid',
+  // 'hybrid' adds the ArcGIS World_Boundaries_and_Places overlay, whose
+  // tiles include a faint graticule that reads as gridlines through
+  // oceans and land. 'satellite' is the same imagery without the overlay.
+  basemap: 'satellite',
   routeSet: 'all'
 };
 
