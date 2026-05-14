@@ -30,6 +30,9 @@ jobs:
 
       - run: npm ci --prefix site-astro
 
+      - name: Generate merged data files
+        run: npm run people:merge || true
+
       - run: npm run build
 
       - name: Add Pages-required files to dist
