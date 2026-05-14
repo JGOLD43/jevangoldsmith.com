@@ -33,11 +33,10 @@ jobs:
       - name: Generate merged data files
         run: npm run people:merge || true
 
-      # Use --fast: skips snap:routes + assets:optimize. The optimize step
-      # downloads ~hundreds of remote covers from Openlibrary serially and
-      # routinely exceeds the 30-min job timeout on CI. Generated manifests
-      # are committed snapshots so build still has everything astro needs.
-      - run: npm run build:fast
+      # Full build. assets:optimize is now a near no-op because the
+      # generated image variants are committed in-tree (images/generated/);
+      # only brand-new remote covers will actually fetch.
+      - run: npm run build
 
       - name: Add Pages-required files to dist
         run: |
