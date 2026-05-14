@@ -188,22 +188,38 @@ function walkFiles(dir, pattern) {
 async function download(url, target) {
   if (fs.existsSync(target) && fs.statSync(target).size > 1024) return;
   ensureDir(path.dirname(target));
-  const response = await fetch(url, {
-    headers: {
-      'User-Agent': 'JevanGoldsmithWebsiteAssetOptimizer/1.0'
+  // Retry once on transient network errors (ECONNRESET, ETIMEDOUT, etc.)
+  // before giving up. CI runners hit Openlibrary's flaky TLS occasionally
+  // and the whole build shouldn't die over a single dropped connection.
+  let response;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      response = await fetch(url, {
+        headers: { 'User-Agent': 'JevanGoldsmithWebsiteAssetOptimizer/1.0' }
+      });
+      break;
+    } catch (err) {
+      console.warn(`Network error for ${url} (attempt ${attempt + 1}): ${err.message || err}`);
+      if (attempt === 1) return false;
+      await new Promise((r) => setTimeout(r, 1000));
     }
-  });
-  if (!response.ok) {
-    console.warn(`Skipping remote asset (${response.status}): ${url}`);
+  }
+  if (!response || !response.ok) {
+    console.warn(`Skipping remote asset (${response ? response.status : 'no-response'}): ${url}`);
     return false;
   }
-  const buffer = Buffer.from(await response.arrayBuffer());
-  if (buffer.length < 1024) {
-    console.warn(`Skipping tiny remote asset: ${url}`);
+  try {
+    const buffer = Buffer.from(await response.arrayBuffer());
+    if (buffer.length < 1024) {
+      console.warn(`Skipping tiny remote asset: ${url}`);
+      return false;
+    }
+    fs.writeFileSync(target, buffer);
+    return true;
+  } catch (err) {
+    console.warn(`Read error for ${url}: ${err.message || err}`);
     return false;
   }
-  fs.writeFileSync(target, buffer);
-  return true;
 }
 
 async function generateRemoteAssetSet() {
