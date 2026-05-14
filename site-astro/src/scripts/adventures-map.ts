@@ -305,9 +305,17 @@ function initWorldMap(adventures: AnyObj[]) {
     addSatelliteTiles(state.worldMap);
     attachPrefetchAdjacentTiles(state.worldMap);
 
-    // Keep the fastBasemap pane visible permanently — it sits below the
-    // tile pane and fills any pan/zoom gap with continents on dark-ocean
-    // fill, replacing the black-flash that exposed the bare container.
+    // Hide the fastBasemap pane once the main tile layer has covered the
+    // viewport. The low-zoom overview is useful while the high-res tiles
+    // load, but once they're in place the overview shows tile boundaries
+    // as visible gridlines (z=3 tiles scaled up to z=10+ exposes seams).
+    const initialLayer = Array.isArray(state.basemapTileLayer)
+        ? state.basemapTileLayer[0]
+        : state.basemapTileLayer;
+    initialLayer?.once?.('load', () => {
+        const pane = state.worldMap.getPane('fastBasemap');
+        if (pane) pane.style.display = 'none';
+    });
 
     const worldCopyOffsets = [-360, 0, 360];
     adventures.forEach((adventure: AnyObj) => {
