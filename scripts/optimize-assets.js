@@ -235,6 +235,34 @@ async function generateRemoteAssetSet() {
     const isCover = /covers\.openlibrary\.org/i.test(url);
     const widths = isCover ? coverWidths : remoteWidths;
     const source = path.join(sourceRemoteDir, `${id}.source`);
+
+    // Fast-path: if every generated variant already exists for this URL,
+    // skip the network fetch entirely. The pre-optimized images are
+    // committed in-tree (images/generated/remote/), so CI doesn't need to
+    // reach out to Openlibrary on every build. Only new URLs trigger I/O.
+    const allVariantsPresent = widths.every((w) => {
+      const basename = `${id}-${w}`;
+      return fs.existsSync(path.join(remoteGeneratedDir, `${basename}.avif`)) &&
+             fs.existsSync(path.join(remoteGeneratedDir, `${basename}.jpg`));
+    });
+
+    if (allVariantsPresent) {
+      const entry = {
+        source: `images/source/remote/${id}.source`,
+        widths,
+        formats: {}
+      };
+      for (const width of widths) {
+        const basename = `${id}-${width}`;
+        entry.formats[width] = {
+          avif: `images/generated/remote/${basename}.avif`,
+          jpg: `images/generated/remote/${basename}.jpg`
+        };
+      }
+      manifest[url] = entry;
+      continue;
+    }
+
     const downloaded = await download(url, source);
     if (!downloaded && (!fs.existsSync(source) || fs.statSync(source).size < 1024)) continue;
 
