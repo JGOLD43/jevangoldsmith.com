@@ -28,7 +28,7 @@ jobs:
 
       - run: npm ci
 
-      - run: node scripts/build-site.js
+      - run: npm run build
 
       - name: Add Pages-required files to dist
         run: |
