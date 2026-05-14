@@ -51,7 +51,6 @@ site-astro/public/sprite.svg
 
 # Generated root artifacts from npm run build
 css/style.css
-data/pages.json
 data/generated-manifest.json
 data/*.generated.json
 # Allow snapshots of data files needed at build time by astro check

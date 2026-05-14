@@ -1,0 +1,3314 @@
+[
+  {
+    "path": "about.html",
+    "url": "/about.html",
+    "title": "About Jevan Goldsmith",
+    "description": "A short introduction to Jevan Goldsmith, the archive he is building, and the themes behind his work.",
+    "intent": "about",
+    "topics": [
+      "personal-systems",
+      "better-thinking"
+    ],
+    "index": true,
+    "schemaType": "AboutPage",
+    "primaryKeyword": "about",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Better Thinking",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "People trying to understand Jevan Goldsmith and his operating context",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "explore",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "contact",
+    "secondaryCtas": [
+      "newsletter"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "adventure-austin-adventure.html",
+    "url": "/adventure-austin-adventure.html",
+    "title": "Austin Adventure: Live Music, BBQ & City Notes",
+    "description": "Notes and photos from Jevan Goldsmith's Austin trip through music, food, neighborhoods, and local energy.",
+    "intent": "austin-adventure",
+    "topics": [
+      "adventure"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "austin adventure",
+    "secondaryKeywords": [
+      "Adventure",
+      "Adventures",
+      "Ayr Adventure: Sugar Cane, Sunsets & North Queensland",
+      "Japan Adventure: Temples, Food & Cherry Blossoms",
+      "Sydney Adventure: Harbour Walks, Food & City Notes"
+    ],
+    "audience": "Readers interested in travel notes, places, and lived experiments",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "adventures.html",
+      "adventure-ayr-adventure.html",
+      "adventure-japan-adventure.html",
+      "adventure-sydney-adventure.html",
+      "adventure-uluru-adventure.html",
+      "adventure-vietnam-adventure.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "adventures",
+    "generatedFrom": "data/adventures.json",
+    "journeyStage": "trust",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "adventure-ayr-adventure.html",
+    "url": "/adventure-ayr-adventure.html",
+    "title": "Ayr Adventure: Sugar Cane, Sunsets & North Queensland",
+    "description": "Notes and photos from Jevan Goldsmith's Ayr trip through North Queensland landscapes, coast, and slower rhythms.",
+    "intent": "ayr-adventure",
+    "topics": [
+      "adventure"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "ayr adventure",
+    "secondaryKeywords": [
+      "Adventure",
+      "Adventures",
+      "Austin Adventure: Live Music, BBQ & City Notes",
+      "Japan Adventure: Temples, Food & Cherry Blossoms",
+      "Sydney Adventure: Harbour Walks, Food & City Notes"
+    ],
+    "audience": "Readers interested in travel notes, places, and lived experiments",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "adventures.html",
+      "adventure-austin-adventure.html",
+      "adventure-japan-adventure.html",
+      "adventure-sydney-adventure.html",
+      "adventure-uluru-adventure.html",
+      "adventure-vietnam-adventure.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "adventures",
+    "generatedFrom": "data/adventures.json",
+    "journeyStage": "trust",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "adventure-japan-adventure.html",
+    "url": "/adventure-japan-adventure.html",
+    "title": "Japan Adventure: Temples, Food & Cherry Blossoms",
+    "description": "Notes and photos from Jevan Goldsmith's Japan trip through temples, cities, food, and seasonal detail.",
+    "intent": "japan-adventure",
+    "topics": [
+      "adventure"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "japan adventure",
+    "secondaryKeywords": [
+      "Adventure",
+      "Adventures",
+      "Austin Adventure: Live Music, BBQ & City Notes",
+      "Ayr Adventure: Sugar Cane, Sunsets & North Queensland",
+      "Sydney Adventure: Harbour Walks, Food & City Notes"
+    ],
+    "audience": "Readers interested in travel notes, places, and lived experiments",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "adventures.html",
+      "adventure-austin-adventure.html",
+      "adventure-ayr-adventure.html",
+      "adventure-sydney-adventure.html",
+      "adventure-uluru-adventure.html",
+      "adventure-vietnam-adventure.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "adventures",
+    "generatedFrom": "data/adventures.json",
+    "journeyStage": "trust",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "adventure-sample-adventure.html",
+    "url": "/adventure-sample-adventure.html",
+    "title": "Sample Adventure",
+    "description": "A noindex sample adventure page used to validate the travel story layout, gallery, map, metadata, and responsive presentation.",
+    "intent": "sample",
+    "topics": [
+      "adventure"
+    ],
+    "index": false,
+    "schemaType": "WebPage",
+    "primaryKeyword": "sample",
+    "secondaryKeywords": [
+      "Adventure",
+      "Adventures",
+      "Austin Adventure: Live Music, BBQ & City Notes",
+      "Ayr Adventure: Sugar Cane, Sunsets & North Queensland",
+      "Japan Adventure: Temples, Food & Cherry Blossoms"
+    ],
+    "audience": "Readers interested in travel notes, places, and lived experiments",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "adventures.html",
+      "adventure-austin-adventure.html",
+      "adventure-ayr-adventure.html",
+      "adventure-japan-adventure.html",
+      "adventure-sydney-adventure.html",
+      "adventure-uluru-adventure.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "adventures",
+    "generatedFrom": "data/adventures.json",
+    "journeyStage": "trust",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "adventure-sydney-adventure.html",
+    "url": "/adventure-sydney-adventure.html",
+    "title": "Sydney Adventure: Harbour Walks, Food & City Notes",
+    "description": "Notes and photos from Jevan Goldsmith's Sydney trip through harbour views, neighborhoods, seafood, and coastal walks.",
+    "intent": "sydney-adventure",
+    "topics": [
+      "adventure"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "sydney adventure",
+    "secondaryKeywords": [
+      "Adventure",
+      "Adventures",
+      "Austin Adventure: Live Music, BBQ & City Notes",
+      "Ayr Adventure: Sugar Cane, Sunsets & North Queensland",
+      "Japan Adventure: Temples, Food & Cherry Blossoms"
+    ],
+    "audience": "Readers interested in travel notes, places, and lived experiments",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "adventures.html",
+      "adventure-austin-adventure.html",
+      "adventure-ayr-adventure.html",
+      "adventure-japan-adventure.html",
+      "adventure-uluru-adventure.html",
+      "adventure-vietnam-adventure.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "adventures",
+    "generatedFrom": "data/adventures.json",
+    "journeyStage": "trust",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "adventure-uluru-adventure.html",
+    "url": "/adventure-uluru-adventure.html",
+    "title": "Uluru Adventure: Red Centre Travel Notes",
+    "description": "Notes and photos from Jevan Goldsmith's Uluru trip through the Red Centre, desert landscapes, and travel lessons.",
+    "intent": "uluru-adventure",
+    "topics": [
+      "adventure"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "uluru adventure",
+    "secondaryKeywords": [
+      "Adventure",
+      "Adventures",
+      "Austin Adventure: Live Music, BBQ & City Notes",
+      "Ayr Adventure: Sugar Cane, Sunsets & North Queensland",
+      "Japan Adventure: Temples, Food & Cherry Blossoms"
+    ],
+    "audience": "Readers interested in travel notes, places, and lived experiments",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "adventures.html",
+      "adventure-austin-adventure.html",
+      "adventure-ayr-adventure.html",
+      "adventure-japan-adventure.html",
+      "adventure-sydney-adventure.html",
+      "adventure-vietnam-adventure.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "adventures",
+    "generatedFrom": "data/adventures.json",
+    "journeyStage": "trust",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "adventure-vietnam-adventure.html",
+    "url": "/adventure-vietnam-adventure.html",
+    "title": "Vietnam Adventure: Motorbikes, Mountains & Travel Notes",
+    "description": "Notes and photos from Jevan Goldsmith's Vietnam trip through mountain roads, food, cities, and travel surprises.",
+    "intent": "vietnam-adventure",
+    "topics": [
+      "adventure"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "vietnam adventure",
+    "secondaryKeywords": [
+      "Adventure",
+      "Adventures",
+      "Austin Adventure: Live Music, BBQ & City Notes",
+      "Ayr Adventure: Sugar Cane, Sunsets & North Queensland",
+      "Japan Adventure: Temples, Food & Cherry Blossoms"
+    ],
+    "audience": "Readers interested in travel notes, places, and lived experiments",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "adventures.html",
+      "adventure-austin-adventure.html",
+      "adventure-ayr-adventure.html",
+      "adventure-japan-adventure.html",
+      "adventure-sydney-adventure.html",
+      "adventure-uluru-adventure.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "adventures",
+    "generatedFrom": "data/adventures.json",
+    "journeyStage": "trust",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "adventures.html",
+    "url": "/adventures.html",
+    "title": "Adventures, Travel Notes & Places Worth Remembering",
+    "description": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored.",
+    "intent": "adventures",
+    "topics": [
+      "adventure",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "adventures",
+    "secondaryKeywords": [
+      "Adventure",
+      "Personal Systems",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "Readers interested in travel notes, places, and lived experiments",
+    "searchIntent": "explore",
+    "contentDepth": "utility",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "products.html",
+      "free-resources.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "adventures",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "books.html",
+    "url": "/books.html",
+    "title": "Books I Recommend &amp; Notes From My Reading System",
+    "description": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems.",
+    "intent": "books-reading",
+    "topics": [
+      "books-reading",
+      "better-thinking",
+      "taste"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "books reading",
+    "secondaryKeywords": [
+      "Books & Reading",
+      "Better Thinking",
+      "Taste",
+      "How I Read: A Practical Reading Philosophy",
+      "Useful Resources for Thinking, Building & Learning",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "reading-philosophy.html",
+      "free-resources.html",
+      "field-notes.html",
+      "index.html",
+      "people.html",
+      "podcasts.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "challenges.html",
+    "url": "/challenges.html",
+    "title": "Challenges, Constraints & Personal Experiments",
+    "description": "A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.",
+    "intent": "challenges",
+    "topics": [
+      "better-thinking",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "challenges",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Personal Systems",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "Builders and operators looking for practical judgment",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "experience",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "authority",
+    "primaryCta": "search",
+    "secondaryCtas": [
+      "free-resources",
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "changed-my-mind.html",
+    "url": "/changed-my-mind.html",
+    "title": "Changed My Mind: Belief Updates & Public Learning Log",
+    "description": "A public record of ideas Jevan Goldsmith has updated, softened, reversed, or stopped believing.",
+    "intent": "changed-my-mind",
+    "topics": [
+      "better-thinking",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "changed my mind",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Personal Systems",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "Builders and operators looking for practical judgment",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "experience",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "authority",
+    "primaryCta": "search",
+    "secondaryCtas": [
+      "free-resources",
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "contact.html",
+    "url": "/contact.html",
+    "title": "Contact Jevan Goldsmith",
+    "description": "Contact Jevan Goldsmith about projects, ideas, useful resources, Field Notes, or collaboration.",
+    "intent": "contact",
+    "topics": [
+      "business-building"
+    ],
+    "index": true,
+    "schemaType": "ContactPage",
+    "primaryKeyword": "contact",
+    "secondaryKeywords": [
+      "Business & Building",
+      "Essays",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Projects Jevan Goldsmith Is Building & Exploring",
+      "Useful Resources for Thinking, Building & Learning"
+    ],
+    "audience": "People who want to contact or collaborate with Jevan Goldsmith",
+    "searchIntent": "contact",
+    "contentDepth": "utility",
+    "relatedPages": [
+      "essays.html",
+      "index.html",
+      "projects.html",
+      "free-resources.html",
+      "meet.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "contact",
+    "primaryCta": "contact",
+    "secondaryCtas": [
+      "newsletter"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "cool-shit.html",
+    "url": "/cool-shit.html",
+    "title": "Cool Shit: Objects, Ideas & Useful Finds",
+    "description": "A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith's attention.",
+    "intent": "taste-archive",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "taste archive",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Movies",
+      "Books",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "products.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html",
+      "projects.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "essays.html",
+    "url": "/essays.html",
+    "title": "Essays on Thinking, Business, Culture &amp; Personal Systems",
+    "description": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems.",
+    "intent": "essays",
+    "topics": [
+      "better-thinking",
+      "business-building",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "essays",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Business & Building",
+      "Personal Systems",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Useful Resources for Thinking, Building & Learning",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy"
+    ],
+    "audience": "Builders and operators looking for practical judgment",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "index.html",
+      "free-resources.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "weekly-review-template.html",
+      "challenges.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "experience",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "authority",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "newsletter",
+      "search"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "field-notes.html",
+    "url": "/field-notes.html",
+    "title": "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+    "description": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith's living archive.",
+    "intent": "newsletter",
+    "topics": [
+      "better-thinking",
+      "books-reading",
+      "tools-objects",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "newsletter",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Books & Reading",
+      "Tools & Objects",
+      "Personal Systems",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "How I Read: A Practical Reading Philosophy",
+      "Useful Resources for Thinking, Building & Learning",
+      "Essays"
+    ],
+    "audience": "Builders and operators looking for practical judgment",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "index.html",
+      "reading-philosophy.html",
+      "free-resources.html",
+      "essays.html",
+      "books.html",
+      "products.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "experience",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "lead",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "best-essays",
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "free-resources.html",
+    "url": "/free-resources.html",
+    "title": "Useful Resources for Thinking, Building & Learning",
+    "description": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work.",
+    "intent": "useful-resources",
+    "topics": [
+      "personal-systems",
+      "better-thinking",
+      "books-reading",
+      "business-building"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "useful resources",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Better Thinking",
+      "Books & Reading",
+      "Business & Building",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "How I Read: A Practical Reading Philosophy",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "index.html",
+      "reading-philosophy.html",
+      "essays.html",
+      "field-notes.html",
+      "books.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "lead",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "newsletter",
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "health.html",
+    "url": "/health.html",
+    "title": "Health, Performance &amp; Energy Systems",
+    "description": "Health and performance notes from Jevan Goldsmith on energy, recovery, habits, training, and better work.",
+    "intent": "health-performance",
+    "topics": [
+      "health-performance",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "health performance",
+    "secondaryKeywords": [
+      "Health & Performance",
+      "Personal Systems",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "People trying to understand Jevan Goldsmith and his operating context",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "products.html",
+      "free-resources.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "explore",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "contact",
+    "secondaryCtas": [
+      "newsletter"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "important-or-not.html",
+    "url": "/important-or-not.html",
+    "title": "Important or Not: Decision Notes &amp; Priority Filters",
+    "description": "A decision-making page about separating what matters from noise, urgency, and attractive distractions.",
+    "intent": "priority-filter",
+    "topics": [
+      "better-thinking",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "priority filter",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Personal Systems",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "Builders and operators looking for practical judgment",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "experience",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "authority",
+    "primaryCta": "search",
+    "secondaryCtas": [
+      "free-resources",
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "index.html",
+    "url": "/",
+    "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+    "description": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas.",
+    "intent": "personal-home",
+    "topics": [
+      "real-estate-development",
+      "business-building",
+      "better-thinking",
+      "books-reading",
+      "ai-assisted-work",
+      "personal-systems",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "Jevan Goldsmith",
+    "secondaryKeywords": [
+      "Real Estate Development",
+      "Business & Building",
+      "Better Thinking",
+      "Books & Reading",
+      "AI-Assisted Work",
+      "Personal Systems",
+      "Tools & Objects",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Readers, builders, collaborators, and curious visitors",
+    "searchIntent": "navigate",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "field-notes.html",
+      "free-resources.html",
+      "essays.html",
+      "reading-philosophy.html",
+      "projects.html",
+      "products.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "home",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "free-resources",
+      "best-essays"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "lesson-logger.html",
+    "url": "/lesson-logger.html",
+    "title": "Lesson Logger: Capture Lessons Before They Vanish",
+    "description": "A simple lesson-logging page for turning mistakes, wins, and observations into reusable judgment.",
+    "intent": "lesson-logger",
+    "topics": [
+      "personal-systems",
+      "better-thinking"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "lesson logger",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Better Thinking",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "Builders and operators looking for practical judgment",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "experience",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "authority",
+    "primaryCta": "search",
+    "secondaryCtas": [
+      "free-resources",
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "living-manifesto.html",
+    "url": "/living-manifesto.html",
+    "title": "Living Manifesto: Principles, Standards & Long-Horizon Bets",
+    "description": "Jevan Goldsmith's living manifesto: principles, standards, and long-horizon bets for time, work, relationships, and better decisions.",
+    "intent": "manifesto",
+    "topics": [
+      "personal-systems",
+      "better-thinking"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "manifesto",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Better Thinking",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "People trying to understand Jevan Goldsmith and his operating context",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "explore",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "contact",
+    "secondaryCtas": [
+      "newsletter"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "meet.html",
+    "url": "/meet.html",
+    "title": "Meet Jevan Goldsmith",
+    "description": "A quick way to meet Jevan Goldsmith, scan contact details, and start a useful conversation.",
+    "intent": "meet",
+    "topics": [
+      "business-building"
+    ],
+    "index": true,
+    "schemaType": "ContactPage",
+    "primaryKeyword": "meet",
+    "secondaryKeywords": [
+      "Business & Building",
+      "Essays",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Projects Jevan Goldsmith Is Building & Exploring",
+      "Useful Resources for Thinking, Building & Learning"
+    ],
+    "audience": "People who want to contact or collaborate with Jevan Goldsmith",
+    "searchIntent": "contact",
+    "contentDepth": "utility",
+    "relatedPages": [
+      "essays.html",
+      "index.html",
+      "projects.html",
+      "free-resources.html",
+      "contact.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "contact",
+    "primaryCta": "contact",
+    "secondaryCtas": [
+      "newsletter"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "movie-philosophy.html",
+    "url": "/movie-philosophy.html",
+    "title": "How I Choose What to Watch: A Film Philosophy",
+    "description": "How Jevan Goldsmith picks films, what he looks for in great cinema, and why movies are a fast way to live a life that is not your own.",
+    "intent": "philosophy",
+    "topics": [
+      "taste",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "philosophy",
+    "secondaryKeywords": [
+      "Taste",
+      "Personal Systems",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Weekly Review Template for Reflection, Planning & Better Decisions",
+      "Books",
+      "Essays"
+    ],
+    "audience": "Readers looking for useful ideas and practical systems",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "weekly-review-template.html",
+      "books.html",
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "search"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "movies.html",
+    "url": "/movies.html",
+    "title": "Movie Reviews, Watchlist &amp; Taste Notes",
+    "description": "A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste.",
+    "intent": "movies",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "movies",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Books",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "books.html",
+      "field-notes.html",
+      "index.html",
+      "projects.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "north-star.html",
+    "url": "/north-star.html",
+    "title": "North Star: Principles, Direction &amp; Useful Ambition",
+    "description": "A page about Jevan Goldsmith's north-star principles, long-term direction, and standards for useful ambition.",
+    "intent": "north-star",
+    "topics": [
+      "personal-systems",
+      "better-thinking"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "north star",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Better Thinking",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "People trying to understand Jevan Goldsmith and his operating context",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "explore",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "contact",
+    "secondaryCtas": [
+      "newsletter"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "notes.html",
+    "url": "/notes.html",
+    "title": "Notes on Personal Systems, Learning &amp; Better Thinking",
+    "description": "A working notebook of Jevan Goldsmith's ideas on personal systems, learning, decisions, and useful experiments.",
+    "intent": "notes",
+    "topics": [
+      "personal-systems",
+      "better-thinking"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "notes",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Better Thinking",
+      "Weekly Review Template for Reflection, Planning & Better Decisions",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy"
+    ],
+    "audience": "Readers looking for useful ideas and practical systems",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "weekly-review-template.html",
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "search"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "now.html",
+    "url": "/now.html",
+    "title": "Now — What Jevan Goldsmith is up to",
+    "description": "A snapshot of what I'm working on, reading, and thinking about right now. Updated occasionally.",
+    "intent": "now",
+    "topics": [
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "AboutPage",
+    "primaryKeyword": "now",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Friends, colleagues, and readers curious about current focus",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "about.html",
+      "contact.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-05-12",
+    "section": "explore",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people-philosophy.html",
+    "url": "/people-philosophy.html",
+    "title": "How I Approach People: A Relationship Philosophy",
+    "description": "How Jevan Goldsmith thinks about friendships, partnerships, and the relationships that compound over a lifetime versus the ones that quietly drain you.",
+    "intent": "philosophy",
+    "topics": [
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "philosophy",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Weekly Review Template for Reflection, Planning & Better Decisions",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy"
+    ],
+    "audience": "Readers looking for useful ideas and practical systems",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "weekly-review-template.html",
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "products.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "search"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people.html",
+    "url": "/people.html",
+    "title": "People of History",
+    "description": "A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
+    "intent": "people of history",
+    "topics": [
+      "taste",
+      "better-thinking"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "people of history",
+    "secondaryKeywords": [
+      "Taste",
+      "Better Thinking",
+      "Books",
+      "How I Read: A Practical Reading Philosophy",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Useful Resources for Thinking, Building & Learning"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "books.html",
+      "reading-philosophy.html",
+      "products.html",
+      "free-resources.html",
+      "essays.html",
+      "field-notes.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/andrew-huberman.html",
+    "url": "/people/andrew-huberman.html",
+    "title": "Andrew Huberman - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/andrew huberman",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/andrew-wilkinson.html",
+    "url": "/people/andrew-wilkinson.html",
+    "title": "Andrew Wilkinson - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/andrew wilkinson",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/anne-lamott.html",
+    "url": "/people/anne-lamott.html",
+    "title": "Anne Lamott - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/anne lamott",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/atul-gawande.html",
+    "url": "/people/atul-gawande.html",
+    "title": "Atul Gawande - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/atul gawande",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/baltasar-gracian.html",
+    "url": "/people/baltasar-gracian.html",
+    "title": "Baltasar Gracián - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/baltasar gracian",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/cal-newport.html",
+    "url": "/people/cal-newport.html",
+    "title": "Cal Newport - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/cal newport",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/charlie-munger.html",
+    "url": "/people/charlie-munger.html",
+    "title": "Charlie Munger - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/charlie munger",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/christopher-nolan.html",
+    "url": "/people/christopher-nolan.html",
+    "title": "Christopher Nolan - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/christopher nolan",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/david-goggins.html",
+    "url": "/people/david-goggins.html",
+    "title": "David Goggins - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/david goggins",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/david-ogilvy.html",
+    "url": "/people/david-ogilvy.html",
+    "title": "David Ogilvy - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/david ogilvy",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/eckhart-tolle.html",
+    "url": "/people/eckhart-tolle.html",
+    "title": "Eckhart Tolle - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/eckhart tolle",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/elon-musk.html",
+    "url": "/people/elon-musk.html",
+    "title": "Elon Musk - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/elon musk",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/eric-ries.html",
+    "url": "/people/eric-ries.html",
+    "title": "Eric Ries - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/eric ries",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/james-clear.html",
+    "url": "/people/james-clear.html",
+    "title": "James Clear - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/james clear",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/john-d-rockefeller.html",
+    "url": "/people/john-d-rockefeller.html",
+    "title": "John D. Rockefeller - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/john d rockefeller",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/keith-j-cunningham.html",
+    "url": "/people/keith-j-cunningham.html",
+    "title": "Keith J. Cunningham - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/keith j cunningham",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/lex-fridman.html",
+    "url": "/people/lex-fridman.html",
+    "title": "Lex Fridman - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/lex fridman",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/morgan-housel.html",
+    "url": "/people/morgan-housel.html",
+    "title": "Morgan Housel - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/morgan housel",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/naval-ravikant.html",
+    "url": "/people/naval-ravikant.html",
+    "title": "Naval Ravikant - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/naval ravikant",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/peter-thiel.html",
+    "url": "/people/peter-thiel.html",
+    "title": "Peter Thiel - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/peter thiel",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/ray-dalio.html",
+    "url": "/people/ray-dalio.html",
+    "title": "Ray Dalio - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/ray dalio",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/richard-feynman.html",
+    "url": "/people/richard-feynman.html",
+    "title": "Richard Feynman - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/richard feynman",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/rick-rubin.html",
+    "url": "/people/rick-rubin.html",
+    "title": "Rick Rubin - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/rick rubin",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/rob-fitzpatrick.html",
+    "url": "/people/rob-fitzpatrick.html",
+    "title": "Rob Fitzpatrick - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/rob fitzpatrick",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/robert-cialdini.html",
+    "url": "/people/robert-cialdini.html",
+    "title": "Robert Cialdini - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/robert cialdini",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/ryan-holiday.html",
+    "url": "/people/ryan-holiday.html",
+    "title": "Ryan Holiday - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/ryan holiday",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/shane-parrish.html",
+    "url": "/people/shane-parrish.html",
+    "title": "Shane Parrish - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/shane parrish",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/sherlock-holmes.html",
+    "url": "/people/sherlock-holmes.html",
+    "title": "Sherlock Holmes - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/sherlock holmes",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/victor-o-schwab.html",
+    "url": "/people/victor-o-schwab.html",
+    "title": "Victor O. Schwab - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/victor o schwab",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "people/warren-buffett.html",
+    "url": "/people/warren-buffett.html",
+    "title": "Warren Buffett - People",
+    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "intent": "taste",
+    "topics": [
+      "taste",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "people/warren buffett",
+    "secondaryKeywords": [
+      "Taste",
+      "Tools & Objects",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Cool Shit",
+      "Movies",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "understand",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "products.html",
+      "cool-shit.html",
+      "movies.html",
+      "books.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "data/people.profiles.json",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "podcasts.html",
+    "url": "/podcasts.html",
+    "title": "Podcasts, Conversations &amp; Audio Notes",
+    "description": "A podcast archive of conversations, shows, and audio ideas Jevan Goldsmith returns to.",
+    "intent": "podcasts",
+    "topics": [
+      "taste",
+      "books-reading"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "podcasts",
+    "secondaryKeywords": [
+      "Taste",
+      "Books & Reading",
+      "Books",
+      "How I Read: A Practical Reading Philosophy",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Useful Resources for Thinking, Building & Learning"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "books.html",
+      "reading-philosophy.html",
+      "products.html",
+      "free-resources.html",
+      "field-notes.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "problems.html",
+    "url": "/problems.html",
+    "title": "Problems: A Running Log of What I'm Working On",
+    "description": "A running log of problems Jevan Goldsmith is thinking about, working on, or watching from a distance.",
+    "intent": "problems-hub",
+    "topics": [
+      "better-thinking",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "problems hub",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Personal Systems",
+      "Weekly Review Template for Reflection, Planning & Better Decisions",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy"
+    ],
+    "audience": "Readers looking for useful ideas and practical systems",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "weekly-review-template.html",
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "search"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "products.html",
+    "url": "/products.html",
+    "title": "The Shelf: Tools, Objects & Gear That Earned Their Place",
+    "description": "A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced.",
+    "intent": "tools-objects",
+    "topics": [
+      "tools-objects",
+      "ai-assisted-work",
+      "personal-systems",
+      "taste"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "tools objects",
+    "secondaryKeywords": [
+      "Tools & Objects",
+      "AI-Assisted Work",
+      "Personal Systems",
+      "Taste",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Projects Jevan Goldsmith Is Building & Exploring",
+      "Cool Shit"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "index.html",
+      "field-notes.html",
+      "projects.html",
+      "cool-shit.html",
+      "movies.html",
+      "movie-philosophy.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "product-recommendations",
+    "secondaryCtas": [
+      "newsletter",
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "projects.html",
+    "url": "/projects.html",
+    "title": "Projects Jevan Goldsmith Is Building & Exploring",
+    "description": "A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems.",
+    "intent": "projects",
+    "topics": [
+      "business-building",
+      "ai-assisted-work",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "projects",
+    "secondaryKeywords": [
+      "Business & Building",
+      "AI-Assisted Work",
+      "Tools & Objects",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Builders and operators looking for practical judgment",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "index.html",
+      "products.html",
+      "essays.html",
+      "field-notes.html",
+      "free-resources.html",
+      "contact.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "experience",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "authority",
+    "primaryCta": "search",
+    "secondaryCtas": [
+      "free-resources",
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "quotes.html",
+    "url": "/quotes.html",
+    "title": "Quotes That Shaped My Thinking",
+    "description": "A collection of quotes and durable ideas that shaped how Jevan Goldsmith thinks about life, business, growth, and decisions.",
+    "intent": "quotes",
+    "topics": [
+      "better-thinking",
+      "taste"
+    ],
+    "index": false,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "quotes",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Taste",
+      "Books",
+      "People",
+      "How I Read: A Practical Reading Philosophy",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "books.html",
+      "people.html",
+      "reading-philosophy.html",
+      "products.html",
+      "free-resources.html",
+      "essays.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "reading-philosophy.html",
+    "url": "/reading-philosophy.html",
+    "title": "How I Read: A Practical Reading Philosophy",
+    "description": "Notes on reading for judgment, taste, decision-making, and a better personal operating system.",
+    "intent": "reading-philosophy",
+    "topics": [
+      "books-reading",
+      "better-thinking",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "reading philosophy",
+    "secondaryKeywords": [
+      "Books & Reading",
+      "Better Thinking",
+      "Personal Systems",
+      "Useful Resources for Thinking, Building & Learning",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Books"
+    ],
+    "audience": "Readers looking for taste, recommendations, books, tools, and objects",
+    "searchIntent": "learn",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "free-resources.html",
+      "field-notes.html",
+      "index.html",
+      "books.html",
+      "essays.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "taste",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "free-resources",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "search.html",
+    "url": "/search.html",
+    "title": "Search Jevan Goldsmith's Archive",
+    "description": "Search Jevan Goldsmith's archive of Field Notes, essays, books, resources, projects, skills, tools, and ideas.",
+    "intent": "site-search",
+    "topics": [
+      "better-thinking"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "site search",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Weekly Review Template for Reflection, Planning & Better Decisions",
+      "Books",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Readers looking for useful ideas and practical systems",
+    "searchIntent": "search",
+    "contentDepth": "utility",
+    "relatedPages": [
+      "weekly-review-template.html",
+      "books.html",
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "search"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "speeches.html",
+    "url": "/speeches.html",
+    "title": "Speeches, Talks & Remarks by Jevan Goldsmith",
+    "description": "A running archive of speeches, talks, and remarks by Jevan Goldsmith, written for delivery and kept as a record of what was said and why.",
+    "intent": "speeches",
+    "topics": [
+      "better-thinking",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "speeches",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Personal Systems",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "People trying to understand Jevan Goldsmith and his operating context",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "explore",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "trust",
+    "primaryCta": "contact",
+    "secondaryCtas": [
+      "newsletter"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "takes.html",
+    "url": "/takes.html",
+    "title": "Takes: Priority Filters & Belief Change Log",
+    "description": "Where Jevan Goldsmith files his takes: priority filters and a public log of beliefs he has changed.",
+    "intent": "takes-hub",
+    "topics": [
+      "better-thinking",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "takes hub",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Personal Systems",
+      "Weekly Review Template for Reflection, Planning & Better Decisions",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy"
+    ],
+    "audience": "Readers looking for useful ideas and practical systems",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "weekly-review-template.html",
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "search"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "topics/ai-assisted-work.html",
+    "url": "/topics/ai-assisted-work.html",
+    "title": "AI-Assisted Work: Notes, Tools & Practical Systems",
+    "description": "A topic hub for AI-assisted work: how Jevan Goldsmith uses AI for research, writing, coding, systems, and better work without outsourcing taste.",
+    "intent": "topic-ai-assisted-work",
+    "topics": [
+      "ai-assisted-work"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "ai-assisted work",
+    "secondaryKeywords": [
+      "AI-Assisted Work",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Projects Jevan Goldsmith Is Building & Exploring",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place",
+      "Books"
+    ],
+    "audience": "Readers exploring a focused topic trail",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "index.html",
+      "projects.html",
+      "products.html",
+      "books.html",
+      "essays.html",
+      "field-notes.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "topics",
+    "generatedFrom": "data/topics.json",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "topics/better-thinking.html",
+    "url": "/topics/better-thinking.html",
+    "title": "Better Thinking: Field Notes, Essays, Books & Tools",
+    "description": "A topic hub for better thinking: first principles, decision-making, mental models, reflection, books, essays, resources, and Field Notes.",
+    "intent": "topic-better-thinking",
+    "topics": [
+      "better-thinking"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "better thinking",
+    "secondaryKeywords": [
+      "Better Thinking",
+      "Books",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy"
+    ],
+    "audience": "Readers exploring a focused topic trail",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "books.html",
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "topics",
+    "generatedFrom": "data/topics.json",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "topics/books-reading.html",
+    "url": "/topics/books-reading.html",
+    "title": "Books & Reading: Recommendations, Philosophy & Notes",
+    "description": "A topic hub for books and reading: recommendations, reading philosophy, book notes, useful ideas, and Field Notes from Jevan Goldsmith.",
+    "intent": "topic-books-reading",
+    "topics": [
+      "books-reading"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "books & reading",
+    "secondaryKeywords": [
+      "Books & Reading",
+      "Books",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "Readers exploring a focused topic trail",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "books.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "podcasts.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "topics",
+    "generatedFrom": "data/topics.json",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "topics/business-building.html",
+    "url": "/topics/business-building.html",
+    "title": "Business & Building: Projects, Strategy & Useful Experiments",
+    "description": "A topic hub for business and building: projects, strategy, finance, experiments, essays, skills, and field notes from Jevan Goldsmith.",
+    "intent": "topic-business-building",
+    "topics": [
+      "business-building"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "business & building",
+    "secondaryKeywords": [
+      "Business & Building",
+      "Essays",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Projects Jevan Goldsmith Is Building & Exploring",
+      "Useful Resources for Thinking, Building & Learning"
+    ],
+    "audience": "Readers exploring a focused topic trail",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "essays.html",
+      "index.html",
+      "projects.html",
+      "free-resources.html",
+      "contact.html",
+      "meet.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "topics",
+    "generatedFrom": "data/topics.json",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "topics/health-performance.html",
+    "url": "/topics/health-performance.html",
+    "title": "Health & Performance: Systems for Energy and Better Work",
+    "description": "A topic hub for health and performance notes, systems, habits, energy, recovery, and tools that support better work.",
+    "intent": "topic-health-performance",
+    "topics": [
+      "health-performance"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "health & performance",
+    "secondaryKeywords": [
+      "Health & Performance",
+      "Health",
+      "Books",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Readers exploring a focused topic trail",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "health.html",
+      "books.html",
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "topics",
+    "generatedFrom": "data/topics.json",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "topics/personal-systems.html",
+    "url": "/topics/personal-systems.html",
+    "title": "Personal Systems: Weekly Reviews, Notes & Operating Loops",
+    "description": "A topic hub for personal systems: weekly reviews, planning, reflection, notes, energy, decisions, and practical operating loops.",
+    "intent": "topic-personal-systems",
+    "topics": [
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "personal systems",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "Readers exploring a focused topic trail",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "products.html",
+      "free-resources.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "topics",
+    "generatedFrom": "data/topics.json",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "topics/real-estate-development.html",
+    "url": "/topics/real-estate-development.html",
+    "title": "Real Estate Development Notes: Finance, Sites & Learning",
+    "description": "A topic hub for real estate development notes, feasibility, finance, site selection, project learning, and related resources.",
+    "intent": "topic-real-estate-development",
+    "topics": [
+      "real-estate-development"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "real estate development",
+    "secondaryKeywords": [
+      "Real Estate Development",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Books",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+    ],
+    "audience": "Readers exploring a focused topic trail",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "index.html",
+      "books.html",
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "projects.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "topics",
+    "generatedFrom": "data/topics.json",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "topics/tools-objects.html",
+    "url": "/topics/tools-objects.html",
+    "title": "Tools & Objects That Earned Their Place",
+    "description": "A topic hub for tools, objects, gear, and digital systems Jevan Goldsmith actually uses, including The Shelf and related Field Notes.",
+    "intent": "topic-tools-objects",
+    "topics": [
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "tools & objects",
+    "secondaryKeywords": [
+      "Tools & Objects",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Projects Jevan Goldsmith Is Building & Exploring",
+      "The Shelf: Tools, Objects & Gear That Earned Their Place"
+    ],
+    "audience": "Readers exploring a focused topic trail",
+    "searchIntent": "explore",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "field-notes.html",
+      "index.html",
+      "projects.html",
+      "products.html",
+      "cool-shit.html",
+      "movies.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "topics",
+    "generatedFrom": "data/topics.json",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "free-resources"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "videos.html",
+    "url": "/videos.html",
+    "title": "Videos, Channels & Useful Visual Learning",
+    "description": "A video archive of talks, channels, clips, and visual lessons Jevan Goldsmith found useful.",
+    "intent": "videos",
+    "topics": [
+      "books-reading",
+      "tools-objects"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "videos",
+    "secondaryKeywords": [
+      "Books & Reading",
+      "Tools & Objects",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+      "Books",
+      "How I Read: A Practical Reading Philosophy"
+    ],
+    "audience": "Readers looking for useful ideas and practical systems",
+    "searchIntent": "explore",
+    "contentDepth": "archive",
+    "relatedPages": [
+      "field-notes.html",
+      "index.html",
+      "books.html",
+      "reading-philosophy.html",
+      "projects.html",
+      "products.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "search"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "weekly-review-template.html",
+    "url": "/weekly-review-template.html",
+    "title": "Weekly Review Template for Reflection, Planning & Better Decisions",
+    "description": "A simple weekly review template for reviewing lessons, decisions, energy, priorities, and next actions.",
+    "intent": "weekly-review-template",
+    "topics": [
+      "personal-systems",
+      "better-thinking"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "weekly review template",
+    "secondaryKeywords": [
+      "Personal Systems",
+      "Better Thinking",
+      "Essays",
+      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "How I Read: A Practical Reading Philosophy",
+      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
+    ],
+    "audience": "Readers looking for useful ideas and practical systems",
+    "searchIntent": "learn",
+    "contentDepth": "pillar",
+    "relatedPages": [
+      "essays.html",
+      "field-notes.html",
+      "reading-philosophy.html",
+      "index.html",
+      "free-resources.html",
+      "notes.html"
+    ],
+    "lastReviewed": "2026-04-22",
+    "section": "page",
+    "generatedFrom": "_src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "search"
+    ],
+    "ctaOptional": false
+  }
+]
