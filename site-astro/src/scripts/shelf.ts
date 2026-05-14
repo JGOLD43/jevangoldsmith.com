@@ -79,7 +79,8 @@ function initShelf() {
     grid: grid as HTMLElement,
     itemSelector: '.shelf-item',
     triggerSelector: '[data-shelf-item]',
-    eventName: 'shelf_object_open'
+    eventName: 'shelf_object_open',
+    centerOffsetCssX: 139
   }) as { release: () => void } | null;
 
   initFilters(zoom);
