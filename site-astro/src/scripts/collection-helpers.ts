@@ -34,7 +34,7 @@ export function installImageErrorHandler() {
             target.parentElement?.classList.add('book-cover-missing');
             return;
         }
-        if (target.dataset.removeOnError === 'true') target.remove();
+        if (target.dataset.removeOnError === 'true') removeCarouselSlot(target);
     }, true);
     // OpenLibrary serves a 1×1 transparent PNG when no cover exists, which
     // loads "successfully" so the error handler above never fires. Treat
@@ -43,7 +43,7 @@ export function installImageErrorHandler() {
         const target = event.target;
         if (!(target instanceof HTMLImageElement)) return;
         if (target.dataset.removeOnError !== 'true') return;
-        if (target.naturalWidth > 0 && target.naturalWidth < 10) target.remove();
+        if (target.naturalWidth > 0 && target.naturalWidth < 10) removeCarouselSlot(target);
     }, true);
 }
 
