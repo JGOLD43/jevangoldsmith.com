@@ -61,7 +61,10 @@ data/*.generated.json
 !data/photos.generated.json
 !data/routes.generated.json
 !data/remote-assets.generated.json
-images/generated/
+# images/generated/ used to be ignored, but CI can't reliably regenerate
+# them inside the 30-min job timeout, so we ship pre-optimized variants
+# in-tree. Regenerate locally via `npm run assets:optimize` when adding
+# new source images; commit the resulting variants.
 images/source/remote/
 sitemap.xml
 llms.txt
