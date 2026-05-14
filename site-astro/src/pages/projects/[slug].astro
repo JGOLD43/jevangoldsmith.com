@@ -1,0 +1,148 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { renderCommentary, renderNotes } from '../../lib/notes-render';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  const visible = projects.filter((entry: any) =>
+    entry.data.status !== 'draft' && entry.data.visibility !== 'private'
+  );
+  return visible.map((entry: any) => ({
+    params: { slug: entry.data.slug || entry.id },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props as { entry: any };
+const p = entry.data;
+const slug = p.slug || entry.id;
+const canonical = `https://jevangoldsmith.com/projects/${slug}.html`;
+
+const status = String(p.status || 'planned').toLowerCase();
+const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+const category = p.category ? String(p.category) : '';
+
+const notesHtml = renderNotes(p.notes);
+const commentaryHtml = renderCommentary(p.commentary);
+const buildLog = Array.isArray(p.buildLog) ? p.buildLog : [];
+const proofArtifacts = Array.isArray(p.proofArtifacts) ? p.proofArtifacts : [];
+const links = Array.isArray(p.links) ? p.links : [];
+const technologies = Array.isArray(p.technologies) ? p.technologies : [];
+const topics = Array.isArray(p.topics) ? p.topics : [];
+const tags = Array.isArray(p.tags) ? p.tags : [];
+
+const heroImage = p.image || '';
+const heroAlt = p.imageAlt || p.title;
+---
+<Base
+  title={`${p.title} - Projects - Jevan Goldsmith`}
+  description={p.shortDescription || p.description || `${p.title} project notes and build log.`}
+  canonical={canonical}
+  bodyClass="nav-compact"
+  pageType="Article"
+  ogImage={heroImage && heroImage.startsWith('http') ? heroImage : undefined}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://jevangoldsmith.com/' },
+    { name: 'Projects', url: 'https://jevangoldsmith.com/projects.html' },
+    { name: p.title, url: canonical }
+  ]}
+>
+  <main class="detail-page detail-page--project">
+    <a href="/projects.html" class="detail-back">← Back to Projects</a>
+
+    <header class="detail-hero detail-hero--task">
+      {heroImage && (
+        <div class="detail-hero-image">
+          <img src={heroImage} alt={heroAlt} loading="eager" decoding="async" width="600" height="400" />
+        </div>
+      )}
+      <div class="detail-hero-body">
+        <p class="detail-kicker">
+          <span class={`detail-status-badge status-${status}`}>{statusLabel}</span>
+          {category && <span class="detail-category-pill">{category}</span>}
+        </p>
+        <h1 class="detail-title">{p.title}</h1>
+        {p.shortDescription && <p class="detail-lead">{p.shortDescription}</p>}
+        {links.length > 0 && (
+          <div class="detail-link-row">
+            {links.map((l: any) => (
+              <a class="detail-link-pill" href={l.url} target={l.url?.startsWith('http') ? '_blank' : undefined} rel={l.url?.startsWith('http') ? 'noopener noreferrer' : undefined}>
+                {l.label}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    {(p.whatItIs || p.whyIMadeIt || p.whatILearned || p.nextStep || p.documentaryLead) && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Overview</h2>
+        {p.documentaryLead && <p class="detail-pullquote">{p.documentaryLead}</p>}
+        <dl class="detail-meta-grid">
+          {p.whatItIs && (<><dt>What it is</dt><dd>{p.whatItIs}</dd></>)}
+          {p.whyIMadeIt && (<><dt>Why I made it</dt><dd>{p.whyIMadeIt}</dd></>)}
+          {p.whatILearned && (<><dt>What I learned</dt><dd>{p.whatILearned}</dd></>)}
+          {p.nextStep && (<><dt>Next step</dt><dd>{p.nextStep}</dd></>)}
+          {p.currentQuestion && (<><dt>Current question</dt><dd>{p.currentQuestion}</dd></>)}
+        </dl>
+      </section>
+    )}
+
+    {proofArtifacts.length > 0 && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Proof &amp; Tension</h2>
+        <ul class="detail-proof-list">
+          {proofArtifacts.map((a: any) => (
+            <li>
+              <span class="detail-proof-label">{a.label}</span>
+              <span class="detail-proof-value">{a.value}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="detail-section detail-section--notes">
+      <h2 class="detail-h2">My Notes</h2>
+      {notesHtml ? (
+        <div class="detail-notes-body" set:html={notesHtml} />
+      ) : (
+        <p class="detail-notes-empty">
+          No notes yet. Add a <code>notes</code> string to this project in
+          <code>data/projects.json</code> and they'll show up here.
+        </p>
+      )}
+    </section>
+
+    {(buildLog.length > 0 || commentaryHtml) && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Build Log</h2>
+        {commentaryHtml && <div set:html={commentaryHtml} />}
+        {buildLog.length > 0 && (
+          <ol class="commentary-list">
+            {buildLog.map((b: any) => (
+              <li class="commentary-item">
+                {b.date && <time class="commentary-date">{b.date}</time>}
+                {b.title && <h4 class="commentary-title">{b.title}</h4>}
+                {b.note && <div class="commentary-body"><p>{b.note}</p></div>}
+              </li>
+            ))}
+          </ol>
+        )}
+      </section>
+    )}
+
+    {(technologies.length + topics.length + tags.length) > 0 && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Stack &amp; Tags</h2>
+        <div class="detail-tag-row">
+          {technologies.map((t: string) => <span class="detail-tag detail-tag--tech">{t}</span>)}
+          {topics.map((t: string) => <span class="detail-tag detail-tag--topic">{t}</span>)}
+          {tags.map((t: string) => <span class="detail-tag">#{t}</span>)}
+        </div>
+      </section>
+    )}
+  </main>
+</Base>

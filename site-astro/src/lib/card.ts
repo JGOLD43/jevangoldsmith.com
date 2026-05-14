@@ -18,22 +18,24 @@ export function dataAttrString(attrs: DataAttrs): string {
 }
 
 export interface CardFrameSpec {
-  tag?: 'div' | 'article';
+  tag?: 'div' | 'article' | 'a';
   classes: string[];
   data?: DataAttrs;
   role?: string;
   tabindex?: number;
   style?: string;
+  href?: string;
   body: string;
 }
 
-export function cardFrame({ tag = 'div', classes, data, role, tabindex, style, body }: CardFrameSpec): string {
+export function cardFrame({ tag = 'div', classes, data, role, tabindex, style, href, body }: CardFrameSpec): string {
   const cls = classes.filter(Boolean).join(' ');
   const dataStr = data ? dataAttrString(data) : '';
   const roleStr = role ? ` role="${escapeAttr(role)}"` : '';
   const tabStr = tabindex != null ? ` tabindex="${tabindex}"` : '';
   const styleStr = style ? ` style="${escapeAttr(style)}"` : '';
-  return `<${tag} class="${cls}"${dataStr}${roleStr}${tabStr}${styleStr}>${body}</${tag}>`;
+  const hrefStr = href ? ` href="${escapeAttr(href)}"` : '';
+  return `<${tag} class="${cls}"${hrefStr}${dataStr}${roleStr}${tabStr}${styleStr}>${body}</${tag}>`;
 }
 
 // Top badge convention: book/movie/podcast all have an optional "times" badge

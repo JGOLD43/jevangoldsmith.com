@@ -10,7 +10,7 @@ const canonical = 'https://jevangoldsmith.com/podcasts.html';
 // pre-render curated podcast cards.
 const podcasts = await getCollection('podcasts') as CollectionEntry<'podcasts'>[];
 const podcastCardsHtml = podcasts
-  .map((p, i) => renderPodcastCardHtml(p.data, i))
+  .map((p, i) => renderPodcastCardHtml({ ...p.data, id: p.id }, i))
   .join('');
 
 const config = ({

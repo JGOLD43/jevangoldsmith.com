@@ -1,8 +1,41 @@
 ---
 import coolShitData from '../../public/data/cool-shit.json';
 import Base from '../layouts/Base.astro';
+import { dayLabel, monthKey } from '../lib/dates';
+import { sanitizeUrl as sanitizeUrlServer } from '../lib/url-server';
 
 const coolShitJson = JSON.stringify(coolShitData);
+
+// SSR the feed, tag rail, and hero stats so the page reaches its final
+// layout in a single paint. The previous JS-render-after-hydrate path
+// ballooned CLS to 0.476 — the feed appearing pushed every section
+// below it down. Now the feed is in place at first paint; cool-shit.ts
+// only handles filter clicks (it detects already-populated DOM and
+// skips re-rendering).
+const items = [...coolShitData.items].sort((a, b) => b.date.localeCompare(a.date));
+const cats = coolShitData.categories;
+const catLookup = Object.fromEntries(cats.map((c) => [c.id, c]));
+const usedCatIds = new Set(items.map((it) => it.category));
+const orderedCats = cats.filter((c) => usedCatIds.has(c.id));
+const byCat: Record<string, number> = {};
+for (const it of items) byCat[it.category] = (byCat[it.category] || 0) + 1;
+
+function relativeUpdated(iso: string | undefined): string {
+  if (!iso) return '—';
+  const now = new Date();
+  const then = new Date(`${iso}T12:00:00`);
+  const days = Math.max(0, Math.round((now.getTime() - then.getTime()) / 86400000));
+  if (days === 0) return 'Today';
+  if (days === 1) return '1d ago';
+  if (days < 30) return `${days}d ago`;
+  const months = Math.round(days / 30);
+  if (months < 12) return `${months}mo ago`;
+  return `${Math.round(days / 365)}y ago`;
+}
+
+const heroCount = items.length;
+const heroCats = usedCatIds.size || cats.length;
+const heroUpdated = relativeUpdated(items[0]?.date);
 ---
 <Base
   title="Cool Shit: Objects, Ideas &amp; Useful Finds | Jevan Goldsmith"
@@ -23,16 +56,59 @@ const coolShitJson = JSON.stringify(coolShitData);
                     <section class="cool-col-feed" aria-label="Feed">
                         <div class="feed-head">
                             <span class="feed-eyebrow">Field Archive · Cool Shit</span>
-                            <span class="feed-count" id="feed-count"></span>
+                            <span class="feed-count" id="feed-count">{items.length} items</span>
                         </div>
-                        <div class="feed" id="feed"></div>
+                        <div class="feed" id="feed">
+                          {items.map((item) => {
+                            const cat = catLookup[item.category] || { label: item.category, emoji: '' };
+                            return (
+                              <article
+                                class={`feed-item type-${item.type}`}
+                                id={`item-${item.id}`}
+                                data-id={item.id}
+                                data-month={monthKey(item.date)}
+                                data-category={item.category}
+                              >
+                                {item.image && (
+                                  <img
+                                    class="feed-item-image"
+                                    src={item.image}
+                                    alt={item.title}
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
+                                )}
+                                <div class="feed-item-body">
+                                  <div class="feed-item-meta">
+                                    <span class="feed-item-tag">{cat.label}</span>
+                                    <span class="feed-item-date">{dayLabel(item.date)}</span>
+                                    <span class="feed-item-source">{item.source || ''}</span>
+                                  </div>
+                                  <h3 class="feed-item-title">{item.title}</h3>
+                                  <p>{item.body}</p>
+                                  {item.url && (
+                                    <a class="feed-item-link" href={sanitizeUrlServer(item.url)} target="_blank" rel="noopener">Visit {item.source} →</a>
+                                  )}
+                                </div>
+                              </article>
+                            );
+                          })}
+                        </div>
                         <div class="cool-empty" id="feed-empty" hidden>Nothing in this category yet.</div>
                     </section>
                     <aside class="cool-col-rail" aria-label="Filter by category">
                         <div class="cool-rail-head"><span>Filter</span></div>
-                        <nav class="cool-tag-rail" id="tag-rail"></nav>
+                        <nav class="cool-tag-rail" id="tag-rail">
+                          <button type="button" class="cool-tag-pill active" data-cat="all">All <span class="count">{items.length}</span></button>
+                          {orderedCats.map((c) => (
+                            <button type="button" class="cool-tag-pill" data-cat={c.id}>
+                              <span aria-hidden="true">{c.emoji || ''}</span>{c.label}
+                              <span class="count">{byCat[c.id]}</span>
+                            </button>
+                          ))}
+                        </nav>
                         <div class="cool-rail-stats">
-                            <span id="hero-count">—</span> finds · <span id="hero-cats">—</span> cats · last <span id="hero-updated">—</span>
+                            <span id="hero-count">{heroCount}</span> finds · <span id="hero-cats">{heroCats}</span> cats · last <span id="hero-updated">{heroUpdated}</span>
                         </div>
                     </aside>
                 </div>

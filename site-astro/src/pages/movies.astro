@@ -26,13 +26,7 @@ const sidebarFiltersHtml = renderRatingFilterSection({ clearAction: 'clearAllFil
 const populatedMainBody = `<div id="error" class="error-message" style="display: none;">
     <p>Unable to load movies from Letterboxd. Please check the username in the code or try again later.</p>
 </div>
-<section id="movie-stats-panel" class="movie-stats-panel" aria-label="Watch stats" style="min-height: 80vh;">
-    <div class="stats-header">
-        <h2>Watch stats</h2>
-        <button type="button" class="stats-toggle" aria-expanded="true" aria-controls="movie-stats-panel" aria-label="Hide stats">
-            <svg class="stats-toggle-icon ico-stroke" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><use href="/sprite.svg#icon-chevronDown"/></svg>
-        </button>
-    </div>
+<section id="movie-stats-panel" class="movie-stats-panel collapsed" aria-label="Watch stats" hidden>
     <div class="stats-body"></div>
 </section>
 <div id="movies-container" class="movies-grid">${movieCardsHtml}</div>`;
@@ -94,6 +88,8 @@ const config = ({
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="movie-philosophy.html" class="header-subtitle-link">My Movie Philosophy</a><span class="read-first-note">← read this first</span></div>',
     counterId: 'movie-count',
     counterLabel: 'Movies Watched',
+    counterExtraHtml: '<button type="button" class="stats-toggle" aria-expanded="false" aria-controls="movie-stats-panel" aria-label="Show watch stats">Stats <span aria-hidden="true">▾</span></button>',
+    counterGroupClass: 'movie-counter-group',
     bodyHtml: populatedMainBody
   },
   afterMainHtml: movieModal
@@ -112,6 +108,12 @@ const config = ({
   .movie-card {
     content-visibility: auto;
     contain-intrinsic-size: 220px 360px;
+  }
+  .movie-counter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
   }
 </style>
 

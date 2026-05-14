@@ -377,10 +377,11 @@ function initMoviesZoom() {
     if (!moviesGrid) return;
     moviesGrid.classList.add('js-zoom-grid');
     initGridZoom({
+        anchorSelector: '.movie-poster',
         eventName: 'movie_open',
         grid: moviesGrid,
-        itemSelector: '.movie-card.has-review',
-        triggerSelector: '.movie-card.has-review'
+        itemSelector: '.movie-card',
+        triggerSelector: '.movie-card'
     });
 }
 

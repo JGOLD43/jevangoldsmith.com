@@ -2,6 +2,7 @@ import { bookCoverUrl } from '../lib/book-card';
 import { CATEGORY_MAP, CATEGORY_NAME_BY_KEY } from '../lib/book-categories';
 import { debounce } from '../lib/debounce';
 import { escapeAttr, escapeHtml } from '../lib/html-escape';
+import { slugify } from '../lib/slug';
 import './action-dispatcher';
 import { applyCardVisibility, bindStarRatingDrag, installEscapeCloser, installImageErrorHandler } from './collection-helpers';
 import { createCollectionRuntime } from './collection-runtime';
@@ -179,18 +180,11 @@ function renderCarousel(books: AnyObj[]) {
     track.style.animationDuration = `${recentBooks.length * 3}s`;
     track.innerHTML = carouselBooks.map((book: AnyObj) => {
         const coverUrl = getCoverUrl(book, 'medium');
-        return `<img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" loading="lazy" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
+        const slug = book.isbn || slugify(`${book.title}-${book.author}`);
+        const href = slug ? `/books/${slug}.html` : '#';
+        return `<a class="carousel-book-link" href="${escapeAttr(href)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}"><img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" loading="lazy" decoding="async" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true"></a>`;
     }).join('');
     track.dataset.cloned = 'true';
-}
-
-function scrollToBookByIsbn(isbn: string) {
-    const bookCard = document.querySelector(`[data-isbn="${isbn}"]`) as HTMLElement | null;
-    if (!bookCard) return;
-    highlightAndScroll(bookCard, {
-        duration: 1000,
-        shadow: '0 8px 24px rgba(0,0,0,0.2)'
-    });
 }
 
 function scrollToBookByTitle(bookTitle: string, event?: Event) {
@@ -209,9 +203,15 @@ function scrollToBookByTitle(bookTitle: string, event?: Event) {
 function updateBookCount(count: number, categoryName?: string) {
     const countElement = document.getElementById('book-count');
     const labelElement = document.getElementById('counter-label');
+    const titleElement = document.getElementById('collection-title');
     if (countElement) countElement.textContent = String(count);
     if (labelElement) {
         labelElement.textContent = categoryName && categoryName !== 'all' ? 'Books' : 'Total Books';
+    }
+    if (titleElement) {
+        const fullName = categoryName && categoryName !== 'all' ? CATEGORY_NAME_BY_KEY[categoryName] : '';
+        const display = fullName ? (categoryDisplayNames[fullName] ?? fullName) : '';
+        titleElement.textContent = display || titleElement.dataset.defaultTitle || titleElement.textContent || '';
     }
 }
 
@@ -521,8 +521,6 @@ function bindBooksEvents() {
             scrollToBookByTitle(bookLink.dataset.bookTitle || '', event);
             return;
         }
-        const carouselBook = target.closest?.('[data-action="carousel-book"]') as HTMLElement | null;
-        if (carouselBook) { scrollToBookByIsbn(carouselBook.dataset.isbn || ''); return; }
         const categoryModal = target.closest?.('[data-action="open-category-modal"]') as HTMLElement | null;
         if (categoryModal) { openCategoryModal(categoryModal.dataset.category || ''); return; }
         if (target.closest?.('[data-action="close-category-modal"]')) { closeCategoryModal(); return; }

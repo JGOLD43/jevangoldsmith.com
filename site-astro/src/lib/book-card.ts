@@ -6,6 +6,7 @@ import remoteAssets from '../../../data/remote-assets.generated.json';
 import { cardFrame, topBadge } from './card';
 import { escapeAttr, escapeHtml } from './html-escape';
 import { lcpAttrs } from './lcp-attrs';
+import { slugify } from './slug';
 
 // Card renderers accept a Partial<Book> shape — all fields optional so legacy
 // records with missing fields still render gracefully.
@@ -97,12 +98,16 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
   // missing an ISBN (read at books.ts:158).
   const body = `${badgeHtml}<div class="book-cover-wrapper">${coverImg}<div class="js-zoom-detail" aria-hidden="true"><p class="zoom-detail-kicker">${escapeHtml(author)}${yearStr ? ` · ${escapeHtml(yearStr)}` : ''}</p><p class="zoom-detail-title">${escapeHtml(title)}</p>${zoomLead}${detailLine}</div></div><div class="book-info"><div class="book-title-row"><h3 class="book-title">${escapeHtml(title)}</h3>${yearSpan}</div><p class="book-author">by ${escapeHtml(author)}</p>${ratingBlock}${reviewBlock}</div>`;
 
-  const classes = ['book-card', 'js-zoom-item'];
+  const classes = ['book-card', 'card-link'];
   if (isUnread) classes.push('is-unread');
   if (review) classes.push('has-review');
+  const slug = isbn || slugify(`${title}-${author}`);
+  const href = slug ? `/books/${slug}.html` : '#';
   return cardFrame({
+    tag: 'a',
+    href,
     classes,
     data: { isbn, ...(isbn ? {} : { title }) },
-    role: 'button', tabindex: 0, body
+    body
   });
 }

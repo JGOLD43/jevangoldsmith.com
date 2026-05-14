@@ -314,35 +314,32 @@ const PANEL_ID = 'movie-stats-panel';
         ].join('');
     }
 
+    function setOpen(open: boolean) {
+        const panel = document.getElementById(PANEL_ID);
+        if (!panel) return;
+        const btn = document.querySelector<HTMLButtonElement>('.stats-toggle');
+        panel.classList.toggle('collapsed', !open);
+        panel.hidden = !open;
+        if (btn) {
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.setAttribute('aria-label', open ? 'Hide watch stats' : 'Show watch stats');
+        }
+    }
+
     function toggle() {
         const panel = document.getElementById(PANEL_ID);
         if (!panel) return;
-        const body = panel.querySelector('.stats-body') as HTMLElement | null;
-        const btn = panel.querySelector('.stats-toggle');
-        const collapsed = panel.classList.toggle('collapsed');
-        if (body) body.style.display = collapsed ? 'none' : '';
-        if (btn) {
-            btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-            btn.setAttribute('aria-label', collapsed ? 'Show stats' : 'Hide stats');
-        }
-        tryWrite('movie-stats-collapsed', collapsed ? '1' : '0');
+        const open = panel.hasAttribute('hidden');
+        setOpen(open);
+        tryWrite('movie-stats-collapsed', open ? '0' : '1');
     }
 
     function init() {
-        const panel = document.getElementById(PANEL_ID);
-        if (!panel) return;
-        const btn = panel.querySelector('.stats-toggle');
+        if (!document.getElementById(PANEL_ID)) return;
+        const btn = document.querySelector<HTMLButtonElement>('.stats-toggle');
         if (btn) btn.addEventListener('click', toggle);
-        const collapsed = tryReadString('movie-stats-collapsed') === '1';
-        if (collapsed) {
-            panel.classList.add('collapsed');
-            const body = panel.querySelector('.stats-body') as HTMLElement | null;
-            if (body) body.style.display = 'none';
-            if (btn) {
-                btn.setAttribute('aria-expanded', 'false');
-                btn.setAttribute('aria-label', 'Show stats');
-            }
-        }
+        // default collapsed; only auto-open if user explicitly opened it before
+        setOpen(tryReadString('movie-stats-collapsed') === '0');
     }
 
     onDomReady(init, 'movie-stats init');

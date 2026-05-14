@@ -44,7 +44,20 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
   description="Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored."
   canonical={canonical}
   pageType="CollectionPage"
+  noFooter
 >
+  {/* Map fast-path: kick off Leaflet JS/CSS + ESRI TLS handshake during
+      HTML parse. The z=2 tile grid is warmed AFTER window.load via
+      requestIdleCallback in adventures.ts — keeps the critical path
+      free of 32 cross-origin image fetches that would compete with LCP. */}
+  <Fragment slot="head">
+    <link rel="preload" as="script" href="/vendor/leaflet/leaflet.js" />
+    <link rel="preload" as="style" href="/vendor/leaflet/leaflet.css" />
+    <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin />
+    {adventures[0]?.data.heroImage && (
+      <link rel="preload" as="image" fetchpriority="high" href={remoteAssetFor(adventures[0].data.heroImage, 240)} />
+    )}
+  </Fragment>
   <main>
     {/* Phase H: SSR with `sidebar-collapsed` matching the JS default
         (localStorage 'adventures-sidebar-collapsed' is unset on first
@@ -89,17 +102,18 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
         </div>
 
         <div class="adventures-compact-list" id="adventures-container">
-          {adventures.map((a: any) => (
+          {adventures.map((a: any, i: number) => (
             <div class="adventure-compact-card" id={`card-${a.id}`} data-adventure-id={a.id}>
               {a.data.heroImage && (
                 <img
-                  src={remoteAssetFor(a.data.heroImage, 800)}
+                  src={remoteAssetFor(a.data.heroImage, 240)}
                   alt={a.data.title}
                   class="adventure-compact-image"
                   width="80"
                   height="80"
                   loading="eager"
                   decoding="async"
+                  fetchpriority={i === 0 ? 'high' : undefined}
                 />
               )}
               <div class="adventure-compact-info">

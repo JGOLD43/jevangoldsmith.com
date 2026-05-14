@@ -7,6 +7,7 @@ import { bookCoverUrl, renderBookCardHtml } from '../lib/book-card';
 import { CATEGORY_MAP } from '../lib/book-categories';
 import { BOOK_SECTIONS, renderRatingFilterSection, renderSliderFilterSection, tasteListOptions } from '../lib/collection-sections';
 import { escapeAttr } from '../lib/html-escape';
+import { slugify } from '../lib/slug';
 import booksRuntimeData from '../../../data/books.generated.json';
 
 // Books data is fetched at runtime from /data/books.generated.json.
@@ -28,6 +29,11 @@ for (const entry of books) {
   (booksByCategoryKey[key] ||= []).push(data);
 }
 
+// LCP candidate: the first book card's cover image. Preload it during
+// HTML parse so the LCP paint isn't waiting on the cover-grid img to be
+// discovered by the parser further down the document.
+const lcpCoverUrl = books[0] ? bookCoverUrl(books[0].data) : '';
+
 // Sidebar lists hydrate at runtime from the books.generated.json fetch.
 // SSR ships only the per-section counts so the badges paint correctly.
 const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section) => {
@@ -37,15 +43,22 @@ const SIDEBAR_SECTIONS = BOOK_SECTIONS.map((section) => {
   return { ...section, count: String(list.length) };
 });
 
-// Carousel: most recent 20 books — books.ts clones nodes at runtime
-// to satisfy the seamless-scroll CSS animation.
-const recentBooks = books.slice(-20).reverse().map((b) => b.data);
-const carouselTrackInner = recentBooks
+// Carousel: most recent 20 books that have a resolvable cover, SSR'd
+// twice so the seamless-scroll loop is complete on first paint. (books.ts
+// used to clone the 20 nodes to 40 at runtime, but that doubled the
+// track's width post-paint and contributed to CLS. The runtime detects
+// ≥40 children and skips the clone.)
+const recentBooks = books
+  .filter((b) => bookCoverUrl(b.data, 'medium'))
+  .slice(-20)
+  .reverse()
+  .map((b) => b.data);
+const carouselTrackInner = [...recentBooks, ...recentBooks]
   .map((book) => {
     const url = bookCoverUrl(book, 'medium');
-    // Skip books with no resolvable cover; empty src would fetch the page URL.
-    if (!url) return '';
-    return `<img class="carousel-book" src="${escapeAttr(url)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-action="carousel-book" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true">`;
+    const slug = book.isbn || slugify(`${book.title}-${book.author}`);
+    const href = slug ? `/books/${slug}.html` : '#';
+    return `<a class="carousel-book-link" href="${escapeAttr(href)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}"><img class="carousel-book" src="${escapeAttr(url)}" alt="${escapeAttr(book.title)}" decoding="async" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true"></a>`;
   })
   .join('');
 
@@ -163,6 +176,11 @@ const config = ({
   description="A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems."
   canonical={canonical}
 >
+  {lcpCoverUrl && (
+    <Fragment slot="head">
+      <link rel="preload" as="image" fetchpriority="high" href={lcpCoverUrl} />
+    </Fragment>
+  )}
 </CollectionPage>
 
 <script is:inline id="jg-books-data" type="application/json" set:html={JSON.stringify(booksRuntimeData)}></script>

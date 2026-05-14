@@ -46,7 +46,21 @@
       "description": "Industry veterans break down the biggest stories in technology, economics, and politics.",
       "category": "business",
       "image": "images/podcasts/all-in.jpg",
-      "searchText": "All-In Podcast Chamath Jason Sacks Friedberg technology economics politics venture capital"
+      "searchText": "All-In Podcast Chamath Jason Sacks Friedberg technology economics politics venture capital",
+      "link": "https://www.allinpodcast.co/",
+      "notes": "Best for understanding how four very different operators argue with each other in real time. I listen for the disagreement, not the conclusions.\n\nThe macro/policy episodes age unevenly. Company breakdowns and founder interviews hold up much better.",
+      "takeaways": [
+        "Watch how each host frames the same story differently — that's the actual product.",
+        "Skip the cold-open banter; signal density picks up around the 10-minute mark.",
+        "Treat predictions as positioning, not forecasts."
+      ],
+      "episodes": [
+        {
+          "title": "All-In Summit founder interviews",
+          "url": "https://www.youtube.com/@AllInPodcastClips",
+          "note": "Live interviews are tighter than the regular weekly episodes."
+        }
+      ]
     },
     {
       "id": "acquired",
