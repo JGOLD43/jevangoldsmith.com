@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Open field notebook with handwritten lines and a pen">
+  <rect width="600" height="400" fill="#f5f3ed"/>
+
+  <g>
+    <rect x="60" y="50" width="480" height="300" rx="6" fill="#fbfaf3" stroke="#d6d2c0" stroke-width="2"/>
+    <line x1="300" y1="50" x2="300" y2="350" stroke="#d6d2c0" stroke-width="2"/>
+    <g stroke="#e1ddc8" stroke-width="1">
+      <line x1="84" y1="100" x2="276" y2="100"/>
+      <line x1="84" y1="124" x2="276" y2="124"/>
+      <line x1="84" y1="148" x2="276" y2="148"/>
+      <line x1="84" y1="172" x2="276" y2="172"/>
+      <line x1="84" y1="196" x2="276" y2="196"/>
+      <line x1="84" y1="220" x2="276" y2="220"/>
+      <line x1="84" y1="244" x2="276" y2="244"/>
+      <line x1="84" y1="268" x2="276" y2="268"/>
+      <line x1="84" y1="292" x2="276" y2="292"/>
+      <line x1="324" y1="100" x2="516" y2="100"/>
+      <line x1="324" y1="124" x2="516" y2="124"/>
+      <line x1="324" y1="148" x2="516" y2="148"/>
+      <line x1="324" y1="172" x2="516" y2="172"/>
+      <line x1="324" y1="196" x2="516" y2="196"/>
+      <line x1="324" y1="220" x2="516" y2="220"/>
+      <line x1="324" y1="244" x2="516" y2="244"/>
+      <line x1="324" y1="268" x2="516" y2="268"/>
+      <line x1="324" y1="292" x2="516" y2="292"/>
+    </g>
+  </g>
+
+  <text x="84" y="86" font-family="Chivo,system-ui,sans-serif" font-size="14" font-weight="700" fill="#2c3e50">FIELD NOTES · vol. 01</text>
+
+  <g stroke="#2c3e50" stroke-width="2.2" fill="none" stroke-linecap="round">
+    <path d="M84 118 q12 -6 30 0 t40 -2 t60 0 t40 -1"/>
+    <path d="M84 142 q22 -8 60 0 t90 -2 t40 -1"/>
+    <path d="M84 166 q14 -7 28 0 t36 0 t44 -2 t60 0"/>
+    <path d="M84 190 q22 -7 60 0 t80 -1 t44 -2"/>
+
+    <path d="M84 238 q10 -6 24 0 t40 -1 t36 0 t30 -1"/>
+    <path d="M84 262 q14 -6 28 0 t40 -2 t60 0"/>
+    <path d="M84 286 q18 -7 50 0 t70 -1 t40 -2"/>
+  </g>
+
+  <g>
+    <rect x="84" y="208" width="60" height="20" rx="10" fill="#f5c542"/>
+    <text x="114" y="222" text-anchor="middle" font-family="Chivo,system-ui,sans-serif" font-size="11" font-weight="700" fill="#2c3e50">IDEA</text>
+  </g>
+
+  <g font-family="Chivo,system-ui,sans-serif" font-size="13" fill="#2c3e50">
+    <text x="324" y="92" font-weight="700">This week →</text>
+    <g font-size="12">
+      <circle cx="332" cy="120" r="3" fill="#c9a86c"/>
+      <text x="344" y="124">one book worth keeping</text>
+      <circle cx="332" cy="146" r="3" fill="#c9a86c"/>
+      <text x="344" y="150">one tool that earned its place</text>
+      <circle cx="332" cy="172" r="3" fill="#c9a86c"/>
+      <text x="344" y="176">one question I am sitting with</text>
+      <circle cx="332" cy="198" r="3" fill="#c9a86c"/>
+      <text x="344" y="202">one experiment in progress</text>
+    </g>
+    <g font-size="12" opacity="0.85">
+      <text x="324" y="248">— short enough to send</text>
+      <text x="324" y="270">— useful enough to keep</text>
+    </g>
+  </g>
+
+  <g transform="translate(440,300) rotate(-22)">
+    <rect x="0" y="0" width="120" height="14" rx="3" fill="#c9a86c"/>
+    <polygon points="120,0 140,7 120,14" fill="#2c3e50"/>
+    <rect x="0" y="0" width="20" height="14" rx="2" fill="#2c3e50"/>
+  </g>
+</svg>

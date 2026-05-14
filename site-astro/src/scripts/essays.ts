@@ -103,15 +103,28 @@ function updateActiveSidebarLink(essayId: string) {
     });
 }
 
+let hasAdoptedSsrEssay = false;
 function renderCurrentEssay(filteredEssays: AnyObj[], currentIndex: number) {
     const container = document.getElementById('essays-container');
     if (!container) return;
-    container.innerHTML = '';
     if (!filteredEssays.length) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 3rem;">No essays published yet.</p>';
         return;
     }
     const essay = filteredEssays[currentIndex];
+    // SSR adoption: on first render, if the DOM already shows the
+    // intended essay (Astro pre-rendered it), skip the wipe+rebuild.
+    // Eliminates the CLS jump caused by JS replacing markup that's
+    // already in place.
+    if (!hasAdoptedSsrEssay) {
+        hasAdoptedSsrEssay = true;
+        const existing = container.querySelector('article.article-full') as HTMLElement | null;
+        if (existing && existing.id === essay.id) {
+            updateActiveSidebarLink(essay.id);
+            return;
+        }
+    }
+    container.innerHTML = '';
     container.appendChild(createEssayArticle(essay));
     container.appendChild(createEssayNav(filteredEssays, currentIndex));
     updateActiveSidebarLink(essay.id);
@@ -297,12 +310,55 @@ function restoreSidebarState() {
 
 function toggleListDropdown() { essaysRuntime?.toggleListDropdown(); }
 
+const ESSAY_VIEW_STORAGE_KEY = 'essays-view-mode';
+
+function applyEssayView(mode: 'reader' | 'cards') {
+    const reader = document.getElementById('essays-container');
+    const cards = document.getElementById('essays-cards');
+    const main = document.querySelector('.essays-main') as HTMLElement | null;
+    if (!reader || !cards) return;
+    const next = mode === 'cards' ? 'cards' : 'reader';
+    reader.hidden = next !== 'reader';
+    cards.hidden = next !== 'cards';
+    if (main) main.setAttribute('data-view', next);
+    document.querySelectorAll<HTMLButtonElement>('.essays-view-btn').forEach((btn) => {
+        const isActive = btn.dataset.view === next;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', String(isActive));
+    });
+    try { localStorage.setItem(ESSAY_VIEW_STORAGE_KEY, next); } catch (err) { /* ignore */ }
+}
+
+function setEssayView(mode: string) {
+    applyEssayView(mode === 'cards' ? 'cards' : 'reader');
+}
+
+function restoreEssayView() {
+    let stored: string | null = null;
+    try { stored = localStorage.getItem(ESSAY_VIEW_STORAGE_KEY); } catch (err) { /* ignore */ }
+    applyEssayView(stored === 'cards' ? 'cards' : 'reader');
+}
+
+function openEssayFromCard(essayId: string, event?: Event) {
+    event?.preventDefault();
+    applyEssayView('reader');
+    const fullIndex = findEssayIndex(state.essays, essayId);
+    if (fullIndex < 0) return;
+    state.activeCategory = 'all';
+    state.currentIndex = fullIndex;
+    essaysRuntime?.resetGrouping();
+    renderFromState();
+    scrollEssaysToTop();
+}
+
 registerActions({
     clearEssaySearch,
     nextEssay,
+    openEssayFromCard,
     prevEssay,
     scrollToEssay,
     searchEssays,
+    setEssayView,
     toggleCategory,
     toggleEssaysSidebar,
     toggleListDropdown
@@ -311,6 +367,7 @@ registerActions({
 function initEssaysPage() {
     buildCollectionController();
     restoreSidebarState();
+    restoreEssayView();
     document.addEventListener('click', (event) => {
         essaysRuntime?.closeDropdownOnOutsideClick(event);
     });

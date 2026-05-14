@@ -1,0 +1,102 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { bookCoverUrl } from '../../lib/book-card';
+import { renderCommentary, renderNotes } from '../../lib/notes-render';
+
+export async function getStaticPaths() {
+  const books = await getCollection('books');
+  return books.map((entry: any) => ({
+    params: { slug: entry.id },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props as { entry: any };
+const b = entry.data;
+const canonical = `https://jevangoldsmith.com/books/${entry.id}.html`;
+
+const cover = bookCoverUrl(b, 'large');
+const ratingValue = Number(b.rating ?? 0);
+const reReads = Number(b.reReads ?? 0);
+const isUnread = b.read === false;
+const hasRating = !isUnread && ratingValue > 0;
+const stars = hasRating ? '★'.repeat(ratingValue) + '☆'.repeat(5 - ratingValue) : '';
+const timesRead = reReads + 1;
+
+const notesHtml = renderNotes(b.notes);
+const commentaryHtml = renderCommentary(b.commentary);
+---
+<Base
+  title={`${b.title} by ${b.author} - Books - Jevan Goldsmith`}
+  description={b.review || b.shortDescription || `Notes on ${b.title} by ${b.author}.`}
+  canonical={canonical}
+  bodyClass="nav-compact"
+  pageType="Article"
+  ogImage={cover && cover.startsWith('http') ? cover : undefined}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://jevangoldsmith.com/' },
+    { name: 'Books', url: 'https://jevangoldsmith.com/books.html' },
+    { name: b.title, url: canonical }
+  ]}
+>
+  {cover && (
+    <Fragment slot="head">
+      <link rel="preload" as="image" fetchpriority="high" href={cover} />
+    </Fragment>
+  )}
+  <main class="detail-page detail-page--book">
+    <a href="/books.html" class="detail-back">← Back to Books</a>
+
+    <header class="detail-hero detail-hero--book">
+      {cover && (
+        <div class="detail-hero-cover">
+          <img src={cover} alt={`${b.title} cover`} loading="eager" decoding="async" fetchpriority="high" width="240" height="360" />
+        </div>
+      )}
+      <div class="detail-hero-body">
+        <p class="detail-kicker">
+          {isUnread && <span class="detail-status-badge status-planned">To Read</span>}
+          {b.category && <span class="detail-category-pill">{b.category}</span>}
+          {b.year && <span class="detail-year-pill">{b.year}</span>}
+        </p>
+        <h1 class="detail-title">{b.title}</h1>
+        <p class="detail-meta-line">by {b.author}</p>
+        {hasRating && (
+          <p class="detail-rating">
+            <span class="detail-rating-stars">{stars}</span>
+            <span class="detail-rating-num">{ratingValue}/5</span>
+          </p>
+        )}
+        {timesRead > 1 && <p class="detail-meta-line">Read {timesRead}× total</p>}
+        {b.shortDescription && <p class="detail-lead">{b.shortDescription}</p>}
+      </div>
+    </header>
+
+    {b.review && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Quick Review</h2>
+        <p class="detail-pullquote">{b.review}</p>
+      </section>
+    )}
+
+    <section class="detail-section detail-section--notes">
+      <h2 class="detail-h2">My Notes</h2>
+      {notesHtml ? (
+        <div class="detail-notes-body" set:html={notesHtml} />
+      ) : (
+        <p class="detail-notes-empty">
+          Quotes that stuck, ideas to apply, what I'd push back on. Add a <code>notes</code> field to this book in
+          <code>data/books.json</code>.
+        </p>
+      )}
+    </section>
+
+    {commentaryHtml && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Re-Read Log</h2>
+        <div set:html={commentaryHtml} />
+      </section>
+    )}
+  </main>
+</Base>

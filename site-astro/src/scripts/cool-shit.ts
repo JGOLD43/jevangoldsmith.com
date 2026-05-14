@@ -16,6 +16,12 @@ const els = {
 
 function renderFeed(items: AnyObj[], cats: AnyObj[]) {
     if (!els.feed) return;
+    // SSR path: feed is already populated by the .astro template.
+    // Only re-render if the feed is empty (legacy/dev fallback).
+    if (els.feed.children.length > 0) {
+        if (els.feedCount) els.feedCount.textContent = `${items.length} items`;
+        return;
+    }
     const catLookup: Record<string, AnyObj> = Object.fromEntries(cats.map((c) => [c.id, c]));
     els.feed.innerHTML = items.map((item) => {
         const cat = catLookup[item.category] || { label: item.category, emoji: '' };
@@ -45,17 +51,20 @@ function renderFeed(items: AnyObj[], cats: AnyObj[]) {
 
 function renderTagRail(items: AnyObj[], cats: AnyObj[]) {
     if (!els.tagRail) return;
-    const byCat = new Map<string, number>();
-    for (const it of items) byCat.set(it.category, (byCat.get(it.category) || 0) + 1);
-    const ordered = cats.filter((c: AnyObj) => byCat.has(c.id));
-    const allPill = `<button type="button" class="cool-tag-pill active" data-cat="all">All <span class="count">${items.length}</span></button>`;
-    const catPills = ordered.map((c: AnyObj) => `
-      <button type="button" class="cool-tag-pill" data-cat="${escapeHtml(c.id)}">
-        <span aria-hidden="true">${escapeHtml(c.emoji || '')}</span>${escapeHtml(c.label)}
-        <span class="count">${byCat.get(c.id)}</span>
-      </button>`).join('');
-    els.tagRail.innerHTML = allPill + catPills;
-
+    // SSR path: tag rail is already populated by the .astro template.
+    // Only re-render if the rail is empty (legacy/dev fallback).
+    if (els.tagRail.children.length === 0) {
+        const byCat = new Map<string, number>();
+        for (const it of items) byCat.set(it.category, (byCat.get(it.category) || 0) + 1);
+        const ordered = cats.filter((c: AnyObj) => byCat.has(c.id));
+        const allPill = `<button type="button" class="cool-tag-pill active" data-cat="all">All <span class="count">${items.length}</span></button>`;
+        const catPills = ordered.map((c: AnyObj) => `
+          <button type="button" class="cool-tag-pill" data-cat="${escapeHtml(c.id)}">
+            <span aria-hidden="true">${escapeHtml(c.emoji || '')}</span>${escapeHtml(c.label)}
+            <span class="count">${byCat.get(c.id)}</span>
+          </button>`).join('');
+        els.tagRail.innerHTML = allPill + catPills;
+    }
     els.tagRail.addEventListener('click', (e) => {
         const pill = (e.target as Element | null)?.closest?.('.cool-tag-pill') as HTMLElement | null;
         if (!pill) return;

@@ -297,6 +297,9 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
         });
     }
 
+    // Mobile-only tab switch between sidebar (list) and grid (cards). Thin
+    // wrapper that delegates to the standalone helper so the action also
+    // works on pages that never call `runtime.init()` (e.g. books).
     const switchCollectionView = switchCollectionViewFromDom;
 
     function restoreSidebar() {

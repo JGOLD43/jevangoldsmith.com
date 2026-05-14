@@ -37,12 +37,20 @@
           "note": "Generated pages, metadata, sitemaps, and API outputs so the site can scale without every new thought becoming a hand-edited page."
         }
       ],
-      "image": "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&h=400&fit=crop",
-      "imageAlt": "Personal Website",
+      "image": "/images/projects/personal-website.svg",
+      "imageAlt": "Mock of the personal website with navigation and project cards",
       "technologies": ["HTML", "CSS", "JavaScript"],
       "topics": ["building", "personal-platform"],
       "tags": ["website", "static-site", "agent-api"],
       "audience": ["readers", "agents"],
+      "notes": "This is the unscripted thinking layer for the project. Half the value of the site comes from the constraint of needing to write down what's on each page in a way that survives a stranger's first read.\n\nOpen question I keep returning to: how much of the homepage should be static \"this is who I am\" vs. live \"this is what I'm thinking about right now\"? Right now it leans static because that's easier to ship.",
+      "commentary": [
+        {
+          "date": "2026-05-09",
+          "title": "Detail pages live",
+          "body": "Projects, movies, and podcasts now each have their own page with a notes section. Cards on the listing pages link straight in instead of opening a zoom modal."
+        }
+      ],
       "links": [
         {
           "label": "View Live",
@@ -88,8 +96,8 @@
           "note": "The next useful version is one excellent profile, not a database of half-finished people."
         }
       ],
-      "image": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop",
-      "imageAlt": "Books in a library",
+      "image": "/images/projects/people-of-history.svg",
+      "imageAlt": "Knowledge graph linking historical figures, books, and ideas",
       "technologies": ["Research", "Education", "Web Platform"],
       "topics": ["learning", "history", "research"],
       "tags": ["research", "education", "knowledge-graph"],
@@ -128,8 +136,8 @@
           "note": "The best workflows are the ones where the agent knows when to stop and show its work."
         }
       ],
-      "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop",
-      "imageAlt": "Abstract AI interface",
+      "image": "/images/projects/openclaw-agents.svg",
+      "imageAlt": "Agent workflow diagram with plan, act, observe, check, human review loop",
       "technologies": ["AI", "Agents", "Automation"],
       "topics": ["ai", "automation", "building"],
       "tags": ["agents", "automation", "workflow"],
@@ -168,8 +176,8 @@
           "note": "The tool can draft, inspect, and verify. It still needs a person deciding what is worth making."
         }
       ],
-      "image": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&h=400&fit=crop",
-      "imageAlt": "Code on a laptop",
+      "image": "/images/projects/development-ai.svg",
+      "imageAlt": "Code editor showing a ship() function with an AI suggested patch",
       "technologies": ["AI", "Development", "Automation"],
       "topics": ["ai", "software", "building"],
       "tags": ["development", "automation", "coding"],
@@ -208,8 +216,8 @@
           "note": "The next version needs a sample issue before it needs a cadence."
         }
       ],
-      "image": "https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?w=600&h=400&fit=crop",
-      "imageAlt": "Newspaper pages",
+      "image": "/images/projects/field-notes.svg",
+      "imageAlt": "Open field notebook page with handwritten lines and a pen",
       "technologies": ["Writing", "Email"],
       "topics": ["writing", "learning", "business", "field-notes"],
       "tags": ["newsletter", "writing", "email"],

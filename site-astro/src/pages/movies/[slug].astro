@@ -1,0 +1,129 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { renderCommentary, renderNotes } from '../../lib/notes-render';
+import { slugify } from '../../lib/slug';
+
+export async function getStaticPaths() {
+  const movies = await getCollection('movies');
+  const used = new Set<string>();
+  return movies.map((entry: any) => {
+    let slug = slugify(entry.data.title || '') || String(entry.id);
+    if (used.has(slug)) slug = `${slug}-${entry.id}`;
+    used.add(slug);
+    return { params: { slug }, props: { entry } };
+  });
+}
+
+const { entry } = Astro.props as { entry: any };
+const m = entry.data;
+const slug = slugify(m.title || '') || String(entry.id);
+const canonical = `https://jevangoldsmith.com/movies/${slug}.html`;
+
+const notesHtml = renderNotes(m.notes);
+const commentaryHtml = renderCommentary(m.commentary);
+
+const tmdbGenres = Array.isArray(m.tmdbGenres) ? m.tmdbGenres : [];
+const runtime = Number(m.runtime) || 0;
+const runtimeStr = runtime ? `${Math.floor(runtime / 60)}h ${runtime % 60}m` : '';
+const timesWatched = Number(m.timesWatched) || 0;
+
+const backdrop = m.backdrop || '';
+const poster = m.poster || '';
+---
+<Base
+  title={`${m.title}${m.year ? ` (${m.year})` : ''} - Movies - Jevan Goldsmith`}
+  description={m.review || m.overview || `Notes and review for ${m.title}.`}
+  canonical={canonical}
+  bodyClass="nav-compact"
+  pageType="Article"
+  ogImage={poster && poster.startsWith('http') ? poster : undefined}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://jevangoldsmith.com/' },
+    { name: 'Movies', url: 'https://jevangoldsmith.com/movies.html' },
+    { name: m.title, url: canonical }
+  ]}
+>
+  {poster && (
+    <Fragment slot="head">
+      <link rel="preload" as="image" fetchpriority="high" href={poster} />
+    </Fragment>
+  )}
+  <main class="detail-page detail-page--movie">
+    {backdrop && (
+      <div class="detail-backdrop" style={`background-image: url(${backdrop})`}></div>
+    )}
+
+    <a href="/movies.html" class="detail-back">← Back to Movies</a>
+
+    <header class="detail-hero detail-hero--movie">
+      {poster && (
+        <div class="detail-hero-poster">
+          <img src={poster} alt={`${m.title} poster`} loading="eager" decoding="async" fetchpriority="high" width="300" height="450" />
+        </div>
+      )}
+      <div class="detail-hero-body">
+        <p class="detail-kicker">
+          {m.genre && <span class="detail-category-pill">{m.genre}</span>}
+          {m.year && <span class="detail-year-pill">{m.year}</span>}
+          {runtimeStr && <span class="detail-runtime-pill">{runtimeStr}</span>}
+        </p>
+        <h1 class="detail-title">{m.title}</h1>
+        {m.rating && (
+          <p class="detail-rating">
+            <span class="detail-rating-stars">{m.rating}</span>
+            {m.starCount && <span class="detail-rating-num">{m.starCount}/5</span>}
+          </p>
+        )}
+        {m.date && <p class="detail-meta-line">Watched {m.date}{timesWatched > 1 ? ` · ${timesWatched}× total` : ''}</p>}
+        {m.link && (
+          <div class="detail-link-row">
+            <a class="detail-link-pill" href={m.link} target="_blank" rel="noopener noreferrer">View on Letterboxd ↗</a>
+          </div>
+        )}
+      </div>
+    </header>
+
+    {m.overview && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Synopsis</h2>
+        <p class="detail-prose">{m.overview}</p>
+      </section>
+    )}
+
+    {m.review && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Quick Review</h2>
+        <p class="detail-pullquote">{m.review}</p>
+      </section>
+    )}
+
+    <section class="detail-section detail-section--notes">
+      <h2 class="detail-h2">My Notes</h2>
+      {notesHtml ? (
+        <div class="detail-notes-body" set:html={notesHtml} />
+      ) : (
+        <p class="detail-notes-empty">
+          What worked, what didn't, themes, scenes that stuck. Add a <code>notes</code> field to this movie in
+          <code>data/movies.json</code>.
+        </p>
+      )}
+    </section>
+
+    {commentaryHtml && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Re-Watch Log</h2>
+        <div set:html={commentaryHtml} />
+      </section>
+    )}
+
+    {tmdbGenres.length > 0 && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Tags</h2>
+        <div class="detail-tag-row">
+          {tmdbGenres.map((g: string) => <span class="detail-tag">{g}</span>)}
+        </div>
+      </section>
+    )}
+  </main>
+</Base>

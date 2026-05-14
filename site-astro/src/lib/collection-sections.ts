@@ -121,6 +121,7 @@ interface TaskRecord {
   shortDescription?: string; description?: string;
   status?: string; category?: string; visibility?: string;
   tags?: string[];
+  image?: string; imageAlt?: string;
 }
 export interface Project extends TaskRecord {
   technologies?: string[]; topics?: string[];
@@ -142,6 +143,7 @@ interface TaskCardOpts {
   trailingHtml?: string;
   iconOverride?: string;
   categoryLineSuffix?: string;  // challenge appends timeframe
+  hrefBuilder?: (record: TaskRecord) => string | null;
 }
 
 function renderTaskCard(record: TaskRecord, opts: TaskCardOpts): string {
@@ -159,10 +161,16 @@ function renderTaskCard(record: TaskRecord, opts: TaskCardOpts): string {
   const dataCategory = [status, category].filter(Boolean).join(' ');
   const icon = opts.iconOverride || meta.emoji;
   const categoryLine = opts.categoryLineSuffix ? [meta.label, opts.categoryLineSuffix].filter(Boolean).join(' · ') : meta.label;
+  const href = opts.hrefBuilder ? opts.hrefBuilder(record) : null;
+  const tag = href ? 'a' : 'div';
+  const hrefAttr = href ? ` href="${escapeAttr(href)}"` : '';
+  const wrapperClasses = `movie-card ${opts.cardClass} ${href ? 'card-link' : 'js-zoom-item'}`;
 
-  return `<div class="movie-card ${opts.cardClass} js-zoom-item" data-status="${escapeAttr(status)}" data-category="${escapeAttr(dataCategory)}" data-search="${escapeAttr(searchTerms)}" id="${escapeAttr(record.slug || record.id)}">
+  return `<${tag} class="${wrapperClasses}"${hrefAttr} data-status="${escapeAttr(status)}" data-category="${escapeAttr(dataCategory)}" data-search="${escapeAttr(searchTerms)}" id="${escapeAttr(record.slug || record.id)}">
                     <div class="movie-poster-wrapper">
-                        <div class="podcast-cover-placeholder ${meta.placeholder ?? ''}">${icon}</div>
+                        ${record.image
+                          ? `<img class="project-cover" src="${escapeAttr(record.image)}" alt="${escapeAttr(record.imageAlt || record.title)}" loading="lazy" decoding="async" width="600" height="400">`
+                          : `<div class="podcast-cover-placeholder ${meta.placeholder ?? ''}">${icon}</div>`}
                     </div>
                     <div class="movie-info">
                         <div class="times-read-badge movie-watch-badge status-${escapeAttr(status)}">${escapeHtml(statusEntry.label)}</div>
@@ -172,7 +180,7 @@ function renderTaskCard(record: TaskRecord, opts: TaskCardOpts): string {
                         <div class="podcast-category-badge">${escapeHtml(categoryLine)}</div>
                         <p class="movie-description">${escapeHtml(description)}</p>${opts.trailingHtml || ''}
                     </div>
-                </div>`;
+                </${tag}>`;
 }
 
 export function renderProjectCard(project: Project): string {
@@ -183,7 +191,11 @@ export function renderProjectCard(project: Project): string {
     statusMap: PROJECT_STATUS_META,
     fallbackEmoji: '🛠️',
     fallbackPlaceholder: 'placeholder-software',
-    searchExtras: [...(project.technologies || []), ...(project.topics || [])]
+    searchExtras: [...(project.technologies || []), ...(project.topics || [])],
+    hrefBuilder: (record) => {
+      const slug = record.slug || record.id;
+      return slug ? `/projects/${slug}.html` : null;
+    }
   });
 }
 
@@ -307,7 +319,7 @@ export function renderTaskListMain<T extends Project | Challenge>(
             ${renderSearch({
               search: {
                 inputId: cfg.searchInputId,
-                inputClass: 'movie-search-input',
+                inputClass: 'movie-search-input collection-search-input',
                 placeholder: cfg.searchPlaceholder,
                 clearButtonId: cfg.searchClearButtonId,
                 clearAction: cfg.searchClearAction,

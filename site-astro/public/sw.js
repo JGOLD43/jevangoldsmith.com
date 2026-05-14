@@ -94,12 +94,24 @@ async function cacheFirst(request, cacheName) {
   return response;
 }
 
+function isArcgisTile(url) {
+  // ESRI satellite + label tiles served by the adventures map. Tile URLs
+  // are immutable per (z,y,x) so cache-first is safe; the second visit
+  // (and panning back over already-seen tiles) becomes instant — no
+  // HTTP, even for cross-origin assets.
+  return url.hostname === 'server.arcgisonline.com'
+    && url.pathname.includes('/MapServer/tile/');
+}
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
-  // Only handle same-origin.
-  if (url.origin !== self.location.origin) return;
+  // Cross-origin: only intercept ESRI map tiles, cache-first.
+  if (url.origin !== self.location.origin) {
+    if (isArcgisTile(url)) event.respondWith(cacheFirst(request, ASSET_CACHE));
+    return;
+  }
 
   if (isHtml(request)) {
     event.respondWith(staleWhileRevalidate(request, HTML_CACHE));

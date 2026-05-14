@@ -147,7 +147,7 @@ export function renderSearch(sidebar: CollectionConfig['sidebar']): string {
 
   return `<div class="sidebar-search">
                 <div class="${escapeAttr(wrapperClass)}">
-                    <svg class="search-icon ico-stroke" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-search"/></svg>
+                    <svg class="search-icon ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-search"/></svg>
                     <input type="text"${inputAttrs}>
                     <button${clearAttrs}>
                         <svg class="ico-stroke ico-14" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-close"/></svg>
@@ -226,7 +226,7 @@ export function renderCollectionMain(config: CollectionConfig): string {
         <div class="${escapeAttr(config.main.className)}">
             <header class="main-header collection-header">
                 <div class="header-content">
-                    <${config.main.titleTag ?? 'h1'}>${escapeHtml(config.main.title)}</${config.main.titleTag ?? 'h1'}>
+                    <${config.main.titleTag ?? 'h1'} id="collection-title" data-default-title="${escapeAttr(config.main.title)}">${escapeHtml(config.main.title)}</${config.main.titleTag ?? 'h1'}>
                     ${subtitleHtml}
                 </div>
                 ${config.main.headerExtraHtml ?? ''}

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Read data/sources/countries.geo.json, filter to ONLY visited countries
-// (data/countries-visited.generated.json), round every coordinate to 4
+// (data/countries-visited.json), round every coordinate to 4
 // decimals (~11m precision), write to data/countries.slim.generated.json.
 //
 // Why filter: the runtime country layer filters to visitedIso anyway,
@@ -12,7 +12,7 @@ const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SRC = path.join(ROOT, 'data/sources/countries.geo.json');
-const VISITED = path.join(ROOT, 'data/countries-visited.generated.json');
+const VISITED = path.join(ROOT, 'data/countries-visited.json');
 const OUT = path.join(ROOT, 'data/countries.slim.generated.json');
 
 const round = (n) => Math.round(n * 10000) / 10000;

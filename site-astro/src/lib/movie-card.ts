@@ -5,6 +5,7 @@ import type { Movie as MovieRecord } from '../content.config';
 import { cardFrame, topBadge } from './card';
 import { formatRuntime } from './dates';
 import { escapeAttr, escapeHtml } from './html-escape';
+import { slugify } from './slug';
 
 type Movie = Partial<MovieRecord>;
 
@@ -32,16 +33,15 @@ export function renderMovieCardHtml(movie: Movie): string {
   const genreIcon = (genre && GENRE_ICONS[genre]) || '🎬';
   const runtimeStr = runtime ? formatRuntime(runtime) : '';
 
-  const detailHtml = hasReview
-    ? `<div class="js-zoom-detail" aria-hidden="true">
+  const reviewLine = review ? `<p class="zoom-detail-line"><span>Review —</span> ${escapeHtml(review)}</p>` : '';
+  const detailHtml = `<div class="js-zoom-detail" aria-hidden="true">
             <p class="zoom-detail-kicker">${escapeHtml(genre || 'Film')}${year ? ' · ' + escapeHtml(year) : ''}</p>
             <p class="zoom-detail-title">${escapeHtml(title)}</p>
             ${rating ? `<p class="zoom-detail-lead">${escapeHtml(rating)}</p>` : ''}
-            <p class="zoom-detail-line"><span>Review —</span> ${escapeHtml(review)}</p>
+            ${reviewLine}
             ${date ? `<p class="zoom-detail-line"><span>Watched —</span> ${escapeHtml(date)}</p>` : ''}
             ${link && link !== '#' ? `<a class="zoom-detail-link" href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer">Letterboxd</a>` : ''}
-        </div>`
-    : '';
+        </div>`;
 
   const body = `
         ${topBadge(timesWatched > 1 ? `${timesWatched}x Watched` : null, 'movie-watch-badge')}
@@ -62,12 +62,15 @@ export function renderMovieCardHtml(movie: Movie): string {
         ${detailHtml}
     `;
 
-  const classes = ['movie-card', 'js-zoom-item'];
+  const classes = ['movie-card', 'card-link'];
   if (hasReview) classes.push('has-review');
+  const slug = slugify(title);
+  const href = slug ? `/movies/${slug}.html` : '#';
   return cardFrame({
+    tag: 'a',
     classes,
     data: { 'movie-title': title },
-    style: hasReview ? 'cursor: pointer;' : undefined,
+    href,
     body
   });
 }

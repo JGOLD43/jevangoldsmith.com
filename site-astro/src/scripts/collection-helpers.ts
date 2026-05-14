@@ -36,6 +36,15 @@ export function installImageErrorHandler() {
         }
         if (target.dataset.removeOnError === 'true') target.remove();
     }, true);
+    // OpenLibrary serves a 1×1 transparent PNG when no cover exists, which
+    // loads "successfully" so the error handler above never fires. Treat
+    // tiny images as missing for elements opted into removeOnError.
+    document.addEventListener('load', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLImageElement)) return;
+        if (target.dataset.removeOnError !== 'true') return;
+        if (target.naturalWidth > 0 && target.naturalWidth < 10) target.remove();
+    }, true);
 }
 
 // Drag-to-rate over .filter-star elements inside `container`.

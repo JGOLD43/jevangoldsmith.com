@@ -67,6 +67,12 @@ function jsonArrayLoader(file: string, opts: {
   };
 }
 
+const commentarySchema = z.array(z.object({
+  date: nstr(),
+  title: nstr(),
+  body: nstr()
+})).nullable().optional();
+
 const bookSchema = z.looseObject({
   id: z.string(),
   title: z.string(),
@@ -79,7 +85,9 @@ const bookSchema = z.looseObject({
   coverImage: nstr(),
   shortDescription: nstr(),
   review: nstr(),
-  read: nbool()
+  read: nbool(),
+  notes: nstr(),
+  commentary: commentarySchema
 });
 export type Book = z.infer<typeof bookSchema>;
 
@@ -98,7 +106,10 @@ const movieSchema = z.looseObject({
   runtime: nnum(),
   tmdbGenres: z.array(z.string()).nullable().optional(),
   overview: nstr(),
-  backdrop: nstr()
+  backdrop: nstr(),
+  review: nstr(),
+  notes: nstr(),
+  commentary: commentarySchema
 });
 export type Movie = z.infer<typeof movieSchema>;
 
@@ -134,7 +145,16 @@ const podcastSchema = z.looseObject({
   category: nstr(),
   badge: nstr(),
   image: nstr(),
-  searchText: nstr()
+  searchText: nstr(),
+  link: nstr(),
+  notes: nstr(),
+  takeaways: z.array(z.string()).nullable().optional(),
+  episodes: z.array(z.object({
+    title: nstr(),
+    url: nstr(),
+    note: nstr()
+  })).nullable().optional(),
+  commentary: commentarySchema
 });
 export type Podcast = z.infer<typeof podcastSchema>;
 

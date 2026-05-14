@@ -179,24 +179,5 @@ const categories = productsData.productCategories ?? [];
 </Base>
 
 <script>
-  // Simple filter wiring: click a .shelf-filter button → toggle .active and
-  // hide .shelf-item articles whose data-category doesn't match.
-  const filterRow = document.querySelector('[data-shelf-filter]');
-  const items = document.querySelectorAll<HTMLElement>('.shelf-item');
-  filterRow?.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement)?.closest('button[data-shelf-category]') as HTMLElement | null;
-    if (!btn) return;
-    const cat = (btn.dataset.shelfCategory ?? 'all').toLowerCase();
-    filterRow.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
-    btn.classList.add('active');
-    items.forEach((it) => {
-      const ic = (it.dataset.category ?? '').toLowerCase();
-      it.style.display = cat === 'all' || ic === cat ? '' : 'none';
-    });
-  });
-</script>
-
-<script>
-  // grid-zoom infra as native module.
-  import '../scripts/grid-zoom.ts';
+  import '../scripts/shelf.ts';
 </script>

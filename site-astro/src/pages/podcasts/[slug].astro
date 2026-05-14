@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { renderCommentary, renderNotes } from '../../lib/notes-render';
+
+export async function getStaticPaths() {
+  const podcasts = await getCollection('podcasts');
+  return podcasts.map((entry: any) => ({
+    params: { slug: entry.id },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props as { entry: any };
+const p = entry.data;
+const canonical = `https://jevangoldsmith.com/podcasts/${entry.id}.html`;
+
+const notesHtml = renderNotes(p.notes);
+const commentaryHtml = renderCommentary(p.commentary);
+const takeaways = Array.isArray(p.takeaways) ? p.takeaways : [];
+const episodes = Array.isArray(p.episodes) ? p.episodes : [];
+
+let imageSrc = String(p.image || '');
+if (imageSrc && !imageSrc.startsWith('http') && !imageSrc.startsWith('/')) {
+  imageSrc = `/${imageSrc}`;
+}
+---
+<Base
+  title={`${p.title} - Podcasts - Jevan Goldsmith`}
+  description={p.description || `Notes on ${p.title}.`}
+  canonical={canonical}
+  bodyClass="nav-compact"
+  pageType="Article"
+  ogImage={imageSrc && imageSrc.startsWith('http') ? imageSrc : undefined}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://jevangoldsmith.com/' },
+    { name: 'Podcasts', url: 'https://jevangoldsmith.com/podcasts.html' },
+    { name: p.title, url: canonical }
+  ]}
+>
+  <main class="detail-page detail-page--podcast">
+    <a href="/podcasts.html" class="detail-back">← Back to Podcasts</a>
+
+    <header class="detail-hero detail-hero--podcast">
+      {imageSrc && (
+        <div class="detail-hero-cover">
+          <img src={imageSrc} alt={p.host || p.title} loading="eager" decoding="async" width="240" height="240" />
+        </div>
+      )}
+      <div class="detail-hero-body">
+        <p class="detail-kicker">
+          {p.badge && <span class="detail-status-badge status-active">{p.badge}</span>}
+          {p.category && <span class="detail-category-pill">{p.category}</span>}
+        </p>
+        <h1 class="detail-title">{p.title}</h1>
+        {p.host && <p class="detail-meta-line">Host: {p.host}</p>}
+        {p.description && <p class="detail-lead">{p.description}</p>}
+        {p.link && (
+          <div class="detail-link-row">
+            <a class="detail-link-pill" href={p.link} target="_blank" rel="noopener noreferrer">Open ↗</a>
+          </div>
+        )}
+      </div>
+    </header>
+
+    {takeaways.length > 0 && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Key Takeaways</h2>
+        <ul class="detail-bullet-list">
+          {takeaways.map((t: string) => <li>{t}</li>)}
+        </ul>
+      </section>
+    )}
+
+    <section class="detail-section detail-section--notes">
+      <h2 class="detail-h2">My Notes</h2>
+      {notesHtml ? (
+        <div class="detail-notes-body" set:html={notesHtml} />
+      ) : (
+        <p class="detail-notes-empty">
+          Why this show / episode matters, what I take from it, who else should hear it. Add a <code>notes</code>
+          field to this podcast in <code>data/podcasts.json</code>.
+        </p>
+      )}
+    </section>
+
+    {episodes.length > 0 && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Favorite Episodes</h2>
+        <ul class="detail-episode-list">
+          {episodes.map((e: any) => (
+            <li class="detail-episode-item">
+              {e.url ? (
+                <a href={e.url} target="_blank" rel="noopener noreferrer">{e.title}</a>
+              ) : (
+                <strong>{e.title}</strong>
+              )}
+              {e.note && <p>{e.note}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {commentaryHtml && (
+      <section class="detail-section">
+        <h2 class="detail-h2">Listen Log</h2>
+        <div set:html={commentaryHtml} />
+      </section>
+    )}
+  </main>
+</Base>

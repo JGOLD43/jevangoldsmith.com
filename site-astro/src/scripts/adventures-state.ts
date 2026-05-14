@@ -51,7 +51,7 @@ export const ROUTES_DATA_URL = 'data/routes.generated.json';
 export const POPULAR_ROUTES_INDEX_URL = 'data/popular-routes.index.json';
 export const PHOTOS_DATA_URL = 'data/photos.generated.json';
 export const COUNTRIES_GEO_URL = 'data/countries.slim.generated.json';
-export const COUNTRIES_VISITED_URL = 'data/countries-visited.generated.json';
+export const COUNTRIES_VISITED_URL = 'data/countries-visited.json';
 export const FILTERS_STORAGE_KEY = 'adventures-map-filters-v1';
 export const WEB_MERCATOR_MAX_LAT = 85.05112878;
 export const HORIZONTAL_WRAP_BOUND = 1000000;
@@ -87,7 +87,7 @@ export const DEFAULT_FILTERS = {
   region: 'all',
   layers: { adventures: false, routes: false, photos: false, pois: false, countries: false },
   poiCategories: {},
-  basemap: 'satellite',
+  basemap: 'hybrid',
   routeSet: 'all'
 };
 

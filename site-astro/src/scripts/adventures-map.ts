@@ -100,6 +100,88 @@ function addSatelliteTiles(map: AnyObj) {
     setBasemap(map, state.mapFilters.basemap || 'satellite');
 }
 
+// After the map settles, prefetch tiles around adjacent zoom levels so
+// the user's next zoom is a synchronous browser-cache hit — no fade, no
+// blur-to-sharp swap. Two directions, two strategies:
+//
+// • Zoom-IN target (z+1): centered 6×6 ring (36 tiles). The viewport at
+//   z+1 needs 4× the tiles, so full-bounds would blast bandwidth.
+//   Centered is fine because the zoom-in lands on/near the center.
+// • Zoom-OUT target (z-1): full current viewport projected to z-1 with
+//   1-tile buffer. Viewport pixel size is constant, so this tile count
+//   matches the current zoom's count — but it actually covers the edges
+//   the user will see at z-1, not just a center patch.
+const PREFETCH_RING_HALF = 3;
+const PREFETCH_VIEWPORT_TILE_CAP = 80;
+function fetchTile(def: AnyObj, zoom: number, y: number, x: number) {
+    const url = def.tile
+        .replace('{z}', String(zoom))
+        .replace('{y}', String(y))
+        .replace('{x}', String(x))
+        .replace('{s}', def.subdomains?.[0] || 'a');
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = url;
+}
+function prefetchCenteredRing(map: AnyObj, def: AnyObj, zoom: number) {
+    if (zoom < 0 || zoom > (def.maxZoom || 19)) return;
+    const c = map.project(map.getCenter(), zoom).divideBy(256).floor();
+    const tilesPerSide = 1 << zoom;
+    for (let dy = -PREFETCH_RING_HALF; dy < PREFETCH_RING_HALF; dy++) {
+        for (let dx = -PREFETCH_RING_HALF; dx < PREFETCH_RING_HALF; dx++) {
+            const y = c.y + dy;
+            if (y < 0 || y >= tilesPerSide) continue;
+            const x = ((c.x + dx) % tilesPerSide + tilesPerSide) % tilesPerSide;
+            fetchTile(def, zoom, y, x);
+        }
+    }
+}
+function prefetchViewport(map: AnyObj, def: AnyObj, zoom: number) {
+    if (zoom < 0 || zoom > (def.maxZoom || 19)) return;
+    const sz = map.getSize();
+    const c = map.project(map.getCenter(), zoom);
+    const buffer = 256; // 1-tile padding for edges
+    const nw = c.subtract([sz.x / 2 + buffer, sz.y / 2 + buffer]).divideBy(256).floor();
+    const se = c.add([sz.x / 2 + buffer, sz.y / 2 + buffer]).divideBy(256).floor();
+    const tilesPerSide = 1 << zoom;
+    if ((se.x - nw.x + 1) * (se.y - nw.y + 1) > PREFETCH_VIEWPORT_TILE_CAP) return;
+    for (let y = nw.y; y <= se.y; y++) {
+        if (y < 0 || y >= tilesPerSide) continue;
+        for (let x = nw.x; x <= se.x; x++) {
+            const wrappedX = ((x % tilesPerSide) + tilesPerSide) % tilesPerSide;
+            fetchTile(def, zoom, y, wrappedX);
+        }
+    }
+}
+function attachPrefetchAdjacentTiles(map: AnyObj) {
+    // Two staggered timers so the most time-critical prefetch (z+1, the
+    // user's next likely gesture) fires fast, while the heavier zoom-out
+    // prefetches wait until the user has actually paused — keeps the
+    // ~28 zoom-out tile requests out of the way during rapid zoom-ins.
+    let inTimer: number | null = null;
+    let outTimer: number | null = null;
+    const runIn = () => {
+        inTimer = null;
+        const def = BASEMAPS[state.mapFilters.basemap || 'satellite'];
+        if (!def) return;
+        prefetchCenteredRing(map, def, Math.floor(map.getZoom()) + 1);
+    };
+    const runOut = () => {
+        outTimer = null;
+        const def = BASEMAPS[state.mapFilters.basemap || 'satellite'];
+        if (!def) return;
+        const z = Math.floor(map.getZoom());
+        prefetchViewport(map, def, z - 1);
+        prefetchViewport(map, def, z - 2);
+    };
+    map.on('moveend zoomend', () => {
+        if (inTimer !== null) window.clearTimeout(inTimer);
+        if (outTimer !== null) window.clearTimeout(outTimer);
+        inTimer = window.setTimeout(runIn, 50);
+        outTimer = window.setTimeout(runOut, 350);
+    });
+}
+
 function setBasemap(map: AnyObj, name: string) {
     const L = getL();
     if (!L || !map) return;
@@ -116,7 +198,14 @@ function setBasemap(map: AnyObj, name: string) {
         noWrap: false,
         detectRetina: false,
         updateWhenIdle: false,
-        updateWhenZooming: true,
+        // Skip mid-zoom tile loads — the browser smoothly scales existing
+        // tiles during the animation and Leaflet swaps in fresh ones at
+        // zoomend. Smoother visual, fewer HTTP requests.
+        updateWhenZooming: false,
+        // 6 rings of off-viewport tiles cached (~1536px margin each side).
+        // Wide enough to absorb a fast mousepad fling without the leading
+        // edge outrunning Leaflet's tile load and exposing the page-bg
+        // fallback color.
         keepBuffer: 6,
         crossOrigin: true
     };
@@ -189,17 +278,36 @@ function initWorldMap(adventures: AnyObj[]) {
         maxBoundsViscosity: 1.0,
         zoomSnap: 0.25,
         zoomDelta: 1,
-        wheelDebounceTime: 20,
-        wheelPxPerZoomLevel: 50,
+        // Wheel-zoom speed tuned for "fast but not jaggy" — the
+        // zoomAnimationThreshold below catches over-fast bursts by
+        // jump-cutting, so we can keep these responsive.
+        wheelDebounceTime: 30,
+        wheelPxPerZoomLevel: 60,
         inertia: true,
         inertiaDeceleration: 2500,
-        fadeAnimation: true,
+        // No fade — Leaflet's parent-tile retention (kept-parent stays
+        // visible scaled up during a zoom-in until child tiles load) is
+        // what masks the rectangle pop-in. fadeAnimation:true was making
+        // the zoom feel sluggish without helping the underlying issue.
+        fadeAnimation: false,
         zoomAnimation: true,
+        // Fast zoom-out across >2 levels jump-cuts instead of running a
+        // long scale animation — eliminates the jaggy multi-level case.
+        zoomAnimationThreshold: 2,
+        // Markers animate with the tile pane during zoom. With only ~14
+        // markers the per-frame transform cost is negligible, and turning
+        // this off would cause the visible-flicker pattern (Leaflet adds
+        // leaflet-zoom-hide → visibility:hidden during the animation).
         markerZoomAnimation: true
     }).setView([25, 40], 3);
 
     addFastBaseMap(state.worldMap);
     addSatelliteTiles(state.worldMap);
+    attachPrefetchAdjacentTiles(state.worldMap);
+
+    // Keep the fastBasemap pane visible permanently — it sits below the
+    // tile pane and fills any pan/zoom gap with continents on dark-ocean
+    // fill, replacing the black-flash that exposed the bare container.
 
     const worldCopyOffsets = [-360, 0, 360];
     adventures.forEach((adventure: AnyObj) => {
@@ -216,8 +324,13 @@ function initWorldMap(adventures: AnyObj[]) {
             </div>
         `;
 
-        worldCopyOffsets.forEach((offset: number, index: number) => {
-            const marker = createMapMarker({
+        // Three copies per adventure (-360°, 0°, +360°) so markers stay
+        // visible when the user pans across the date line. Store ALL
+        // copies so applyAdventureMarkerFilter can toggle the full set —
+        // storing only the center copy left the wrap copies stuck on
+        // the world-copy strips when the Adventures layer was off.
+        state.adventureMarkers[adventure.id] = worldCopyOffsets.map((offset: number) =>
+            createMapMarker({
                 lat: adventure.mapCenter.lat,
                 lng: adventure.mapCenter.lng + offset,
                 iconClass: 'adventure-marker-icon',
@@ -229,9 +342,8 @@ function initWorldMap(adventures: AnyObj[]) {
                 onClick: () => { const sa = (window as any).selectAdventure as ((id: string) => void) | undefined; sa?.(adventure.id); },
                 riseOnHover: true,
                 layer: state.worldMap
-            });
-            if (index === 1) state.adventureMarkers[adventure.id] = marker;
-        });
+            })
+        );
     });
 
     applyAdventureMarkerFilter();
@@ -347,14 +459,17 @@ function applyAllFilters() {
 
 function applyAdventureMarkerFilter() {
     if (!state.worldMap) return;
-    Object.entries(state.adventureMarkers).forEach(([id, marker]: [string, AnyObj]) => {
+    Object.entries(state.adventureMarkers).forEach(([id, markers]: [string, AnyObj]) => {
         const adventure = state.allAdventures.find((item: AnyObj) => item.id === id);
         const visible = state.mapFilters.layers.adventures && adventure && matchesAdventureFilters(adventure);
-        if (visible) {
-            if (!state.worldMap.hasLayer(marker)) state.worldMap.addLayer(marker);
-            return;
-        }
-        if (state.worldMap.hasLayer(marker)) state.worldMap.removeLayer(marker);
+        const list = Array.isArray(markers) ? markers : [markers];
+        list.forEach((marker: AnyObj) => {
+            if (visible) {
+                if (!state.worldMap.hasLayer(marker)) state.worldMap.addLayer(marker);
+            } else if (state.worldMap.hasLayer(marker)) {
+                state.worldMap.removeLayer(marker);
+            }
+        });
     });
 }
 
@@ -526,20 +641,19 @@ function buildMapControlStack() {
     if (!state.worldMap) return;
     const mapEl = document.getElementById('world-map');
     if (!mapEl || mapEl.querySelector('.map-controls-stack')) return;
+    const L = getL();
 
     const years = [...new Set(state.allAdventures.map(adventureYear).filter(Boolean))].sort((left: number, right: number) => right - left);
     const regions = [...new Set(state.allAdventures.map((adventure: AnyObj) => adventure.region).filter(Boolean))].sort();
 
     const wrapper = document.createElement('div');
     wrapper.className = 'map-controls-stack';
-    // Controls panel is open by default so the filter UI is immediately
-    // discoverable. Combined with DEFAULT_FILTERS (every layer off on
-    // first visit) the user lands on a clean map and sees exactly which
-    // toggles populate it. Click the gear to collapse if they want more
-    // map real-estate.
+    // Controls panel collapses by default — user opens the gear when they
+    // want to filter. Combined with DEFAULT_FILTERS (every layer off on
+    // first visit) the user lands on a clean map with no chrome.
     wrapper.innerHTML = `
-        <button type="button" class="map-controls-toggle" data-action="toggle-controls" aria-expanded="true" aria-label="Toggle map controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
-        <div class="map-controls-body">
+        <button type="button" class="map-controls-toggle" data-action="toggle-controls" aria-expanded="false" aria-label="Toggle map controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
+        <div class="map-controls-body" hidden>
             <div class="map-controls-group">
                 <label class="map-controls-label">Layers</label>
                 ${renderLayerToggles()}
@@ -579,6 +693,8 @@ function buildMapControlStack() {
         </div>
     `;
     mapEl.appendChild(wrapper);
+    L.DomEvent.disableClickPropagation(wrapper);
+    L.DomEvent.disableScrollPropagation(wrapper);
 
     wrapper.addEventListener('click', (event: Event) => {
         const trigger = (event.target as Element | null)?.closest?.('[data-action]') as HTMLElement | null;

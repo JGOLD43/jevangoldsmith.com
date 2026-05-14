@@ -60,17 +60,14 @@ for (const rel of [
   if (exists(rel)) fail(`Production-only dist should not include ${rel}`);
 }
 
-// Phase 5 (slice 12): adventures + its map runtime are Vite-emitted chunks.
-// The adventures page-script chunk is named after the .astro file; the
-// dynamically-imported map module gets its own `adventures-map.HASH.js`.
+// Phase 5 (slice 12): adventures + its map runtime are Vite-emitted as
+// a single chunk. (Previously the map module was split via dynamic
+// import; the static import in adventures.ts inlines it for one less
+// network round-trip on the only page that uses it.)
 const adventuresChunk = findOne('_astro', /^_astro\/adventures\.astro_astro_type_script[^/]+\.js$/);
-const adventuresMapChunk = findOne('_astro', /^_astro\/adventures-map\.[A-Za-z0-9_-]+\.js$/);
 
 if (!adventuresChunk) fail('Missing Vite-emitted adventures page-script chunk under dist/_astro/');
-else assertMax(adventuresChunk, 80 * KB);
-
-if (!adventuresMapChunk) fail('Missing Vite-emitted adventures-map chunk under dist/_astro/');
-else assertMax(adventuresMapChunk, 40 * KB);
+else assertMax(adventuresChunk, 120 * KB);
 
 const chromeCss = findOne('css', /^css\/chrome\.[a-f0-9]+\.css$/);
 if (!chromeCss) fail('Missing hashed chrome CSS');
