@@ -168,11 +168,15 @@ function renderCarousel(books: AnyObj[]) {
     if (!track) return;
     if (track.children.length > 0) {
         const originals = Array.from(track.children);
-        if (originals.length >= 40 || track.dataset.cloned === 'true') return;
+        if (originals.length >= 40 || track.dataset.cloned === 'true') {
+            attachCarouselDrag(track);
+            return;
+        }
         const frag = document.createDocumentFragment();
         for (const node of originals) frag.appendChild(node.cloneNode(true));
         track.appendChild(frag);
         track.dataset.cloned = 'true';
+        attachCarouselDrag(track);
         return;
     }
     const recentBooks = books.slice(-20).reverse();
@@ -185,6 +189,97 @@ function renderCarousel(books: AnyObj[]) {
         return `<a class="carousel-book-link" href="${escapeAttr(href)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}"><img class="carousel-book" src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" loading="lazy" decoding="async" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true"></a>`;
     }).join('');
     track.dataset.cloned = 'true';
+    attachCarouselDrag(track);
+}
+
+// Click-and-drag (mouse + touch) on the recent-books carousel.
+// While dragging we pause the CSS auto-scroll animation and translate the
+// track via inline transform. On release we resume the animation, using a
+// negative animation-delay so the loop picks up at the user's offset.
+function attachCarouselDrag(track: HTMLElement) {
+    if (track.dataset.dragInstalled === 'true') return;
+    track.dataset.dragInstalled = 'true';
+
+    let pointerId: number | null = null;
+    let startX = 0;
+    let startOffset = 0; // px translateX at drag start
+    const DRAG_THRESHOLD = 4;
+    let armed = false; // crossed threshold → real drag (not a click)
+
+    function currentTranslateX(): number {
+        // Prefer inline transform; otherwise read computed (animation in progress).
+        const inline = track.style.transform;
+        if (inline) {
+            const m = /translate(?:X|3d)?\(\s*(-?\d+(?:\.\d+)?)/.exec(inline);
+            if (m) return parseFloat(m[1]);
+        }
+        const matrix = new DOMMatrixReadOnly(getComputedStyle(track).transform);
+        return matrix.m41 || 0;
+    }
+
+    function resumeAt(offsetPx: number) {
+        // The animation runs 0 → -50% (half track width). Use negative delay
+        // to start the next iteration at the dragged offset.
+        const halfWidth = track.scrollWidth / 2;
+        if (halfWidth <= 0) return;
+        const progress = Math.min(1, Math.max(0, -offsetPx / halfWidth));
+        const duration = parseFloat(getComputedStyle(track).animationDuration) || 20;
+        track.style.transform = '';
+        track.style.animationDelay = `-${progress * duration}s`;
+    }
+
+    function onPointerDown(event: PointerEvent) {
+        if (event.button !== undefined && event.button !== 0) return;
+        pointerId = event.pointerId;
+        startX = event.clientX;
+        startOffset = currentTranslateX();
+        armed = false;
+        // Freeze at current position immediately.
+        track.style.transform = `translateX(${startOffset}px)`;
+        track.style.animationPlayState = 'paused';
+        track.setPointerCapture(event.pointerId);
+    }
+
+    function onPointerMove(event: PointerEvent) {
+        if (pointerId === null || event.pointerId !== pointerId) return;
+        const dx = event.clientX - startX;
+        if (!armed) {
+            if (Math.abs(dx) < DRAG_THRESHOLD) return;
+            armed = true;
+            track.classList.add('is-dragging');
+        }
+        let next = startOffset + dx;
+        // Constrain to one loop's worth so we don't drift off the cloned set.
+        const halfWidth = track.scrollWidth / 2;
+        if (halfWidth > 0) {
+            // Allow free drag but normalize into [-halfWidth, 0] for resume.
+            while (next > 0) next -= halfWidth;
+            while (next < -halfWidth) next += halfWidth;
+        }
+        track.style.transform = `translateX(${next}px)`;
+    }
+
+    function onPointerUp(event: PointerEvent) {
+        if (pointerId === null || event.pointerId !== pointerId) return;
+        const wasDragging = armed;
+        pointerId = null;
+        armed = false;
+        track.classList.remove('is-dragging');
+        if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId);
+        const finalOffset = currentTranslateX();
+        resumeAt(finalOffset);
+        track.style.animationPlayState = '';
+        // Swallow the click that fires after a real drag so we don't follow the link.
+        if (wasDragging) {
+            const swallow = (ev: Event) => { ev.preventDefault(); ev.stopPropagation(); };
+            track.addEventListener('click', swallow, { capture: true, once: true });
+        }
+    }
+
+    track.addEventListener('pointerdown', onPointerDown);
+    track.addEventListener('pointermove', onPointerMove);
+    track.addEventListener('pointerup', onPointerUp);
+    track.addEventListener('pointercancel', onPointerUp);
 }
 
 function scrollToBookByTitle(bookTitle: string, event?: Event) {

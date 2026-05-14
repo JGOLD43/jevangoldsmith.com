@@ -22,6 +22,13 @@ export function applyCardVisibility(
 
 
 
+// If the image lives in a carousel slot wrapper (e.g. <a class="carousel-book-link">),
+// remove the whole slot — otherwise the empty link leaves a phantom gap.
+function removeCarouselSlot(img: HTMLImageElement) {
+    const slot = img.closest('.carousel-book-link');
+    (slot ?? img).remove();
+}
+
 let imageErrorInstalled = false;
 export function installImageErrorHandler() {
     if (imageErrorInstalled) return;
