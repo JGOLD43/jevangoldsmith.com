@@ -438,6 +438,14 @@ function bindAdventureActions() {
             return;
         }
 
+        if (action === 'closeInlineStory') {
+            const section = document.getElementById('adventure-story-inline');
+            if (section) section.hidden = true;
+            const list = document.getElementById('adventures-container') || document.querySelector('.adventures-sidebar');
+            list?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
+
         if (action === 'loadWorldMap') {
             ensureWorldMap();
         }
