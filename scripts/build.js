@@ -49,9 +49,17 @@ async function main() {
     }
   }
 
+  // search:sync regenerates search-index.json from the source content
+  // collections (books, movies, adventures, people, …). Runs BEFORE the
+  // strict audit so the audit is a sanity check on the sync output, not
+  // a content-drift detector that breaks the deploy every time someone
+  // adds content without manually re-running the sync. (Previously the
+  // index was hand-maintained, which silently rotted whenever content
+  // was added in a sibling worktree / auto-batch.)
   const sequential = fast
     ? [
         ['content:validate', 'node', ['scripts/validate-content.js']],
+        ['search:sync', 'node', ['scripts/sync-search-index.js', '--write']],
         ['search:audit:strict', 'node', ['scripts/audit-search-index.js', '--strict']],
         ['routes:split', 'node', ['scripts/split-popular-routes.js']],
         ['people:merge', 'node', ['scripts/merge-people.js']],
@@ -60,6 +68,7 @@ async function main() {
       ]
     : [
         ['content:validate', 'node', ['scripts/validate-content.js']],
+        ['search:sync', 'node', ['scripts/sync-search-index.js', '--write']],
         ['search:audit:strict', 'node', ['scripts/audit-search-index.js', '--strict']],
         ['snap:routes', 'node', ['scripts/snap-popular-routes.js']],
         ['routes:split', 'node', ['scripts/split-popular-routes.js']],
