@@ -53,25 +53,34 @@ function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, 
     return marker;
 }
 
-// Open the bound popup on hover; close on mouseleave but with a small
-// grace period so the user can move the pointer onto the popup itself
-// to click buttons/links inside it.
+// Default marker behavior:
+//   - hover the marker → popup opens (transient preview)
+//   - cursor leaves marker → popup closes (cursor cannot travel onto popup)
+//   - click the marker → popup is "pinned" open until the user clicks
+//     somewhere outside the marker/popup
+// Pinned state survives subsequent mouseouts. A click anywhere outside
+// closes it and clears the pin. Used by all default markers; the Now
+// marker has its own setup in adventures.ts because it needs the
+// "cursor can travel onto the popup" behaviour for the CTA button.
 export function attachHoverPopup(marker: AnyObj) {
-    let closeTimer: number | null = null;
-    const cancelClose = () => { if (closeTimer !== null) { clearTimeout(closeTimer); closeTimer = null; } };
-    const scheduleClose = () => {
-        cancelClose();
-        closeTimer = window.setTimeout(() => marker.closePopup(), 220);
-    };
-    marker.on('mouseover', () => { cancelClose(); marker.openPopup(); });
-    marker.on('mouseout', scheduleClose);
-    marker.on('popupopen', (event: AnyObj) => {
-        const el: HTMLElement | undefined = event.popup?.getElement?.();
-        if (!el) return;
-        el.addEventListener('mouseenter', cancelClose);
-        el.addEventListener('mouseleave', scheduleClose);
+    let pinned = false;
+    const onMouseOver = () => { if (!pinned) marker.openPopup(); };
+    const onMouseOut = () => { if (!pinned) marker.closePopup(); };
+    marker.on('mouseover', onMouseOver);
+    marker.on('mouseout', onMouseOut);
+    marker.on('click', () => {
+        pinned = true;
+        marker.openPopup();
     });
-    marker.on('popupclose', cancelClose);
+    const onDocClick = (event: Event) => {
+        if (!pinned) return;
+        const target = event.target as Element | null;
+        if (target?.closest('.leaflet-popup') || target?.closest('.leaflet-marker-icon')) return;
+        pinned = false;
+        marker.closePopup();
+    };
+    document.addEventListener('click', onDocClick);
+    marker.on('popupclose', () => { pinned = false; });
 }
 
 function refreshMapDatasets() {
