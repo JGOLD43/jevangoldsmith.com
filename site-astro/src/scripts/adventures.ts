@@ -511,11 +511,15 @@ function placeNowMarkerAndFocus() {
             interactive: false
         });
         circle.addTo(state.worldMap);
-        // ?focus=now → fly there and frame the whole 25km circle.
+        // ?focus=now → fly close so the 25km circle fills the screen.
+        // Default load (no param) → regional zoom centered on the Now pin so
+        // the user immediately sees where I am in the world.
         const params = new URLSearchParams(window.location.search);
         if (params.get('focus') === 'now') {
             state.worldMap.fitBounds(circle.getBounds(), { padding: [40, 40], animate: true });
             setTimeout(() => marker.openPopup(), 600);
+        } else {
+            state.worldMap.setView([now.lat, now.lng], 4, { animate: false });
         }
     });
 }
