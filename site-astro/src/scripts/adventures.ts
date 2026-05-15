@@ -130,7 +130,18 @@ function selectAdventure(id: string) {
 
     state.selectedAdventureId = id;
     highlightAdventureOnMap(adventure);
-    showAdventureDetail(adventure);
+    // On mobile, skip the preview overlay — render the full inline story
+    // immediately and scroll the user there. Desktop keeps the side-panel
+    // preview because there's room for both panel + story side by side.
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+        renderInlineStory(adventure);
+        requestAnimationFrame(() => {
+            document.getElementById('adventure-story-inline')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    } else {
+        showAdventureDetail(adventure);
+    }
 }
 
 function showAdventureDetail(adventure: AnyObj) {
