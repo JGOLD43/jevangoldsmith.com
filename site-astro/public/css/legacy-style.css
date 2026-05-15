@@ -244,3 +244,14 @@ body.nav-compact{padding-top:58px}
 [data-theme=dark] .book-card:hover .book-cover-wrapper,
 [data-theme=dark] .book-card:focus-within .book-cover-wrapper{background:transparent!important}
 [data-theme=dark] .book-card:hover{box-shadow:0 4px 18px #0006!important}
+
+/* Strip the iOS/Android blue tap-highlight flash on shelf cards
+   (products grid, books/movies tiles, adventure compact cards).
+   The cards already have their own visual press/hover affordance,
+   so the default semi-transparent rectangle is just visual noise. */
+.shelf-item,
+.shelf-item *,
+.book-card,
+.movie-card,
+.adventure-compact-card,
+.adv-carousel-card{-webkit-tap-highlight-color:transparent}
