@@ -497,17 +497,17 @@ function placeNowMarkerAndFocus() {
             riseOnHover: true,
             zIndexOffset: 9999
         });
-        const popup = `<div style="font-family:Chivo,sans-serif;text-align:center"><div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#c9a86c;font-weight:700">Now</div><div style="font-weight:600;margin:.15rem 0">${now.place}</div>${now.date ? `<div style="font-size:.78rem;color:#888">${now.date}</div>` : ''}</div>`;
+        const popup = `<div style="font-family:Chivo,sans-serif;text-align:center"><div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#ffd700;font-weight:700">Now</div><div style="font-weight:600;margin:.15rem 0">${now.place}</div>${now.date ? `<div style="font-size:.78rem;color:#888">${now.date}</div>` : ''}</div>`;
         marker.bindPopup(popup);
         marker.addTo(state.worldMap);
         // 25km radius circle around the Now location.
         const circle = L.circle([now.lat, now.lng], {
             radius: 25000,
-            color: '#c9a86c',
+            color: '#ffd700',
             weight: 2,
-            opacity: 0.85,
-            fillColor: '#c9a86c',
-            fillOpacity: 0.12,
+            opacity: 0.95,
+            fillColor: '#ffd700',
+            fillOpacity: 0.14,
             interactive: false
         });
         circle.addTo(state.worldMap);
