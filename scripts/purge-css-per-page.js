@@ -98,7 +98,18 @@ const ALWAYS_KEEP_PATTERNS = [
   /^aside$/,
   /^:focus-visible$/,
   /^::-moz/,
-  /^::-webkit/
+  /^::-webkit/,
+  // Runtime-only DOM injected by JS (purger doesn't see these in HTML).
+  // Adventures map controls panel built by buildMapControlStack().
+  /\.map-controls-/,
+  // Now-location marker + popup CTA injected when the map loads.
+  /\.now-marker/,
+  /\.now-popup-btn/,
+  // Leaflet popup/control internals — Leaflet inserts these classes
+  // at runtime and we style the popup contents through them.
+  /\.leaflet-popup/,
+  /\.leaflet-control/,
+  /\.leaflet-tooltip/
 ];
 
 // Walk top-level rules and at-rules.
