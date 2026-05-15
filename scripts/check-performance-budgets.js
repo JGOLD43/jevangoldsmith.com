@@ -71,7 +71,10 @@ else assertMax(adventuresChunk, 120 * KB);
 
 const chromeCss = findOne('css', /^css\/chrome\.[a-f0-9]+\.css$/);
 if (!chromeCss) fail('Missing hashed chrome CSS');
-else assertMax(chromeCss, 45 * KB);
+// Bumped from 45KB → 50KB after the May 2026 dark-mode/mobile passes
+// (people detail, projects/challenges cards, movie stats, shelf zoom,
+// /now → trips map, sidebar fixes). Real-world chrome.css is 47.6KB.
+else assertMax(chromeCss, 50 * KB);
 // Index now carries inline payload for tiny chunks (paddle, sail, ski,
 // hike — each well under 5KB). Budget allows for that plus headroom.
 assertMax('data/popular-routes.index.json', 12 * KB);
