@@ -71,13 +71,13 @@ else assertMax(adventuresChunk, 120 * KB);
 
 const chromeCss = findOne('css', /^css\/chrome\.[a-f0-9]+\.css$/);
 if (!chromeCss) fail('Missing hashed chrome CSS');
-// Bumped from 45KB → 55KB through the May 2026 dark-mode/mobile passes
+// Bumped from 45KB → 60KB through the May 2026 dark-mode/mobile passes
 // (people detail, projects/challenges cards, movie stats, shelf zoom,
-// /now → trips map, sidebar fixes) and the purge-safelist for runtime
-// classes (map-controls-*, now-marker-*, leaflet-popup-*) which kept
-// JS-injected styling alive on production. Real-world chrome.css is
-// ~50.3KB; leaving ~5KB headroom.
-else assertMax(chromeCss, 55 * KB);
+// /now → trips map, sidebar fixes, map-controls + leaflet zoom dark
+// mode) and the purge-safelist for runtime classes (map-controls-*,
+// now-marker-*, leaflet-popup-*) which kept JS-injected styling alive
+// on production. Real-world chrome.css is ~55.6KB; leaving ~4KB headroom.
+else assertMax(chromeCss, 60 * KB);
 // Index now carries inline payload for tiny chunks (paddle, sail, ski,
 // hike — each well under 5KB). Budget allows for that plus headroom.
 assertMax('data/popular-routes.index.json', 12 * KB);
