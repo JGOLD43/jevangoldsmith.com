@@ -153,12 +153,20 @@ function renderSidebar(categories: Record<string, AnyObj[]>) {
         if (countElement) countElement.textContent = String(books.length);
         if (section) section.style.display = books.length === 0 ? 'none' : 'block';
         if (container) {
-            container.innerHTML = books.map((book: AnyObj) => `
+            container.innerHTML = books.map((book: AnyObj) => {
+                const cover = getCoverUrl(book, 'medium');
+                const coverImg = cover
+                    ? `<img class="book-link-cover" src="${escapeAttr(cover)}" alt="" loading="lazy" decoding="async" data-remove-on-error="true">`
+                    : '<span class="book-link-cover book-link-cover-fallback" aria-hidden="true"></span>';
+                return `
                 <a href="#" class="book-link" data-action="book-link" data-book-title="${escapeAttr(book.title)}">
-                    <div>${escapeHtml(book.title)}</div>
-                    <div class="book-link-author">${escapeHtml(book.author)}</div>
-                </a>
-            `).join('');
+                    ${coverImg}
+                    <span class="book-link-meta">
+                        <span class="book-link-title">${escapeHtml(book.title)}</span>
+                        <span class="book-link-author">${escapeHtml(book.author)}</span>
+                    </span>
+                </a>`;
+            }).join('');
         }
     });
 }
