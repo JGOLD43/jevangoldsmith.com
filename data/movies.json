@@ -1,5 +1,60 @@
 [
   {
+    "title": "Joker",
+    "date": "May 10, 2026",
+    "link": "https://letterboxd.com/contentwatch/film/joker-2019/",
+    "rating": "★★★½",
+    "starCount": 3.5,
+    "year": "2019",
+    "poster": "https://a.ltrbxd.com/resized/film-poster/4/0/6/7/7/5/406775-joker-0-600-0-900-crop.jpg?v=e4ea7f98cc",
+    "genre": "Uncategorized",
+    "timesWatched": 1
+  },
+  {
+    "title": "Project Hail Mary",
+    "date": "May 8, 2026",
+    "link": "https://letterboxd.com/contentwatch/film/project-hail-mary/",
+    "rating": "★★★★★",
+    "starCount": 5,
+    "year": "2026",
+    "poster": "https://a.ltrbxd.com/resized/film-poster/6/1/1/2/8/8/611288-project-hail-mary-0-600-0-900-crop.jpg?v=ac31b6ec03",
+    "genre": "Uncategorized",
+    "timesWatched": 1
+  },
+  {
+    "title": "The Dark Knight Rises",
+    "date": "May 8, 2026",
+    "link": "https://letterboxd.com/contentwatch/film/the-dark-knight-rises/",
+    "rating": "★★½",
+    "starCount": 2.5,
+    "year": "2012",
+    "poster": "https://a.ltrbxd.com/resized/film-poster/1/6/5/5/0/16550-the-dark-knight-rises-0-600-0-900-crop.jpg?v=a7db2d4314",
+    "genre": "Uncategorized",
+    "timesWatched": 1
+  },
+  {
+    "title": "The Dark Knight",
+    "date": "May 8, 2026",
+    "link": "https://letterboxd.com/contentwatch/film/the-dark-knight/",
+    "rating": "★★★★½",
+    "starCount": 4.5,
+    "year": "2008",
+    "poster": "https://a.ltrbxd.com/resized/sm/upload/78/y5/zg/ej/oefdD26aey8GPdx7Rm45PNncJdU-0-600-0-900-crop.jpg?v=2d0ce4be25",
+    "genre": "Uncategorized",
+    "timesWatched": 1
+  },
+  {
+    "title": "Paris, Texas",
+    "date": "April 26, 2026",
+    "link": "https://letterboxd.com/contentwatch/film/paris-texas/",
+    "rating": "★★★★",
+    "starCount": 4,
+    "year": "1984",
+    "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/4/6/9/51469-paris-texas-0-600-0-900-crop.jpg?v=c8f2743612",
+    "genre": "Uncategorized",
+    "timesWatched": 1
+  },
+  {
     "title": "What Dreams May Come",
     "date": "November 22, 2025",
     "link": "https://letterboxd.com/contentwatch/film/what-dreams-may-come/",
@@ -98,6 +153,17 @@
     ],
     "overview": "Holly Golightly is an eccentric New York City playgirl determined to marry a Brazilian millionaire. But when young writer Paul Varjak moves into her apartment building, her past threatens to get in their way.",
     "backdrop": "https://image.tmdb.org/t/p/w1280/jXZ2tyJl44yKvh22I6ooQwU5rFM.jpg"
+  },
+  {
+    "title": "Breakfast at Tiffany&#039;s",
+    "date": "October 9, 2025",
+    "link": "https://letterboxd.com/contentwatch/film/breakfast-at-tiffanys/",
+    "rating": "★★★★",
+    "starCount": 4,
+    "year": "1961",
+    "poster": "https://a.ltrbxd.com/resized/sm/upload/ay/kc/2m/81/c95lbDwL5WT8PV9DZsdSvRtXKNA-0-600-0-900-crop.jpg?v=e8848c7700",
+    "genre": "Uncategorized",
+    "timesWatched": 1
   },
   {
     "title": "The Place Beyond the Pines",
