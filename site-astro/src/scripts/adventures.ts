@@ -500,9 +500,9 @@ function placeNowMarkerAndFocus() {
         const popup = `<div style="font-family:Chivo,sans-serif;text-align:center"><div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#c9a86c;font-weight:700">Now</div><div style="font-weight:600;margin:.15rem 0">${now.place}</div>${now.date ? `<div style="font-size:.78rem;color:#888">${now.date}</div>` : ''}</div>`;
         marker.bindPopup(popup);
         marker.addTo(state.worldMap);
-        // 50km radius circle around the Now location.
+        // 25km radius circle around the Now location.
         const circle = L.circle([now.lat, now.lng], {
-            radius: 50000,
+            radius: 25000,
             color: '#c9a86c',
             weight: 2,
             opacity: 0.85,
@@ -511,7 +511,7 @@ function placeNowMarkerAndFocus() {
             interactive: false
         });
         circle.addTo(state.worldMap);
-        // ?focus=now → fly there and frame the whole 50km circle.
+        // ?focus=now → fly there and frame the whole 25km circle.
         const params = new URLSearchParams(window.location.search);
         if (params.get('focus') === 'now') {
             state.worldMap.fitBounds(circle.getBounds(), { padding: [40, 40], animate: true });
