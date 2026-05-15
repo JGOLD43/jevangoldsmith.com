@@ -100,16 +100,20 @@ const ALWAYS_KEEP_PATTERNS = [
   /^::-moz/,
   /^::-webkit/,
   // Runtime-only DOM injected by JS (purger doesn't see these in HTML).
-  // Adventures map controls panel built by buildMapControlStack().
+  // Adventures map: controls panel + every marker type (adventure pins,
+  // POI pins, photo bubbles, custom Now pin, popup CTA). All injected
+  // by adventures-map.ts via L.divIcon / L.popup, none in SSR HTML.
   /\.map-controls-/,
-  // Now-location marker + popup CTA injected when the map loads.
+  /\.adv-marker-/,
+  /\.adventure-marker-/,
+  /\.place-marker-/,
+  /\.photo-marker/,
+  /\.photo-popup/,
   /\.now-marker/,
   /\.now-popup-btn/,
-  // Leaflet popup/control internals — Leaflet inserts these classes
-  // at runtime and we style the popup contents through them.
-  /\.leaflet-popup/,
-  /\.leaflet-control/,
-  /\.leaflet-tooltip/
+  // Leaflet's own runtime classes — popup container/content, layer
+  // controls, tooltips, marker clusters, attribution.
+  /\.leaflet-/
 ];
 
 // Walk top-level rules and at-rules.
