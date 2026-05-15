@@ -145,28 +145,31 @@ const categories = productsData.productCategories ?? [];
             {(p.verdict || p.shortDescription) && (
               <p class="shelf-object-detail-verdict">{p.verdict ?? p.shortDescription}</p>
             )}
-            {p.whyItStayed && (
-              <p class="shelf-object-detail-line"><strong>Why it stayed:</strong> {p.whyItStayed}</p>
-            )}
-            {p.howIUseIt && (
-              <p class="shelf-object-detail-line"><strong>How I use it:</strong> {p.howIUseIt}</p>
-            )}
-            {p.replaced && (
-              <p class="shelf-object-detail-line"><strong>Replaced:</strong> {p.replaced}</p>
-            )}
-            {p.usage && (
-              <p class="shelf-object-detail-line">{p.usage}</p>
-            )}
-            {p.checkoutUrl && (
-              <a
-                href={p.checkoutUrl}
-                class="shelf-object-detail-link"
-                target="_blank"
-                rel="noopener"
-              >
-                {p.ctaLabel ?? 'View'}
-              </a>
-            )}
+            <button type="button" class="shelf-object-detail-more" data-shelf-detail-more aria-expanded="false">See further description</button>
+            <div class="shelf-object-detail-extra">
+              {p.whyItStayed && (
+                <p class="shelf-object-detail-line"><strong>Why it stayed:</strong> {p.whyItStayed}</p>
+              )}
+              {p.howIUseIt && (
+                <p class="shelf-object-detail-line"><strong>How I use it:</strong> {p.howIUseIt}</p>
+              )}
+              {p.replaced && (
+                <p class="shelf-object-detail-line"><strong>Replaced:</strong> {p.replaced}</p>
+              )}
+              {p.usage && (
+                <p class="shelf-object-detail-line">{p.usage}</p>
+              )}
+              {p.checkoutUrl && (
+                <a
+                  href={p.checkoutUrl}
+                  class="shelf-object-detail-link"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {p.ctaLabel ?? 'View'}
+                </a>
+              )}
+            </div>
           </div>
         </article>
         );

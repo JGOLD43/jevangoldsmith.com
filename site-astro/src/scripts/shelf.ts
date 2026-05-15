@@ -39,6 +39,29 @@ function initFilters(zoom: { release: () => void } | null | undefined) {
   });
 }
 
+function initShelfDetailMoreToggle() {
+  // Mobile-only "See further description" toggle. The button is rendered for
+  // every product but CSS hides it (and shows the content unconditionally) on
+  // desktop, so this handler is harmless above 760px.
+  document.addEventListener('click', function (event) {
+    const btn = (event.target as Element | null)?.closest?.('[data-shelf-detail-more]') as HTMLButtonElement | null;
+    if (!btn) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const card = btn.closest('.shelf-item');
+    const expanded = card?.classList.toggle('shelf-details-open') ?? false;
+    btn.setAttribute('aria-expanded', String(expanded));
+    btn.textContent = expanded ? 'Hide description' : 'See further description';
+    if (expanded) {
+      // Wait for the panel to mount, then bring the bottom into view.
+      requestAnimationFrame(() => {
+        const extra = card?.querySelector('.shelf-object-detail-extra');
+        extra?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      });
+    }
+  });
+}
+
 function initShelf() {
   const grid = document.querySelector('.shelf-grid');
   if (!grid) return;
@@ -46,6 +69,7 @@ function initShelf() {
   document.querySelectorAll('.shelf-item').forEach(function (el) {
     el.classList.add('js-zoom-item');
   });
+  initShelfDetailMoreToggle();
 
   // On mobile the detail panel renders BELOW the image (CSS handles layout),
   // so no horizontal centerOffset is needed and the image should take less
