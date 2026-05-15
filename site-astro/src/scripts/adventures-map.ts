@@ -696,6 +696,18 @@ function buildMapControlStack() {
         trigger.setAttribute('aria-expanded', String(!open));
     });
 
+    // Click outside the panel → close it. disableClickPropagation above
+    // stops in-panel clicks from reaching this listener, so the panel
+    // only collapses when the click genuinely lands elsewhere.
+    document.addEventListener('click', (event: Event) => {
+        const body = wrapper.querySelector('.map-controls-body');
+        if (!body || body.hasAttribute('hidden')) return;
+        if (wrapper.contains(event.target as Node)) return;
+        body.setAttribute('hidden', '');
+        const trigger = wrapper.querySelector('.map-controls-toggle');
+        trigger?.setAttribute('aria-expanded', 'false');
+    });
+
     wrapper.addEventListener('change', (event: Event) => {
         const target = event.target as HTMLInputElement & HTMLSelectElement;
         if (!target) return;
