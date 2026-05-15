@@ -57,6 +57,16 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
     {adventures[0]?.data.heroImage && (
       <link rel="preload" as="image" fetchpriority="high" href={remoteAssetFor(adventures[0].data.heroImage, 240)} />
     )}
+    {/* Strip the SSR'd .map-view class on desktop before first paint so the
+        side-by-side list/map layout renders without flicker. Mobile keeps
+        it → lands directly on the map. */}
+    <script is:inline>
+      (function () {
+        if (window.matchMedia('(min-width: 769px)').matches) {
+          document.documentElement.classList.add('adv-desktop');
+        }
+      })();
+    </script>
   </Fragment>
   <main>
     {/* Phase H: SSR with `sidebar-collapsed` matching the JS default
@@ -64,8 +74,11 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
         visit → JS would add this class anyway). Without it, the filters
         bar renders visible for ~50ms before JS hides it, causing a
         ~120px layout shift that drove CLS to 0.20+. */}
+    {/* SSR with .map-view active so mobile lands directly on the map with
+        no flash of list-then-map. A tiny inline script below strips it on
+        desktop before paint so the side-by-side layout is preserved. */}
     <div
-      class="adventures-page-split sidebar-collapsed"
+      class="adventures-page-split sidebar-collapsed map-view"
       data-now-lat="-19.5765"
       data-now-lng="147.4035"
       data-now-place="Ayr, QLD"

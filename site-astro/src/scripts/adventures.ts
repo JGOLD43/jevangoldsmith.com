@@ -549,20 +549,32 @@ function placeNowMarkerAndFocus() {
 function initAdventuresPage() {
     loadFilters();
     bindAdventureActions();
-    // On mobile, default to the map view — the list is always one tap away
-    // via the bottom toggle but the map is the more visual entry point.
-    // Wait for loadAdventures so the map has data to render.
+    // Mobile lands on the map (SSR pre-applies .map-view to avoid flicker);
+    // desktop strips it before paint via the inline script in adventures.astro
+    // setting html.adv-desktop. JS just synchronizes button state and ensures
+    // the world map mounts so the Now marker has something to attach to.
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     const focusNow = new URLSearchParams(window.location.search).get('focus') === 'now';
-    if (isMobile || focusNow) {
+    if (isMobile) {
+        // Sync the bottom toggle's "active" state to match the SSR class.
+        const split = document.querySelector('.adventures-page-split');
+        if (split?.classList.contains('map-view')) {
+            document.querySelectorAll('.mobile-view-btn').forEach((btn) => {
+                btn.classList.toggle('active', (btn as HTMLElement).dataset.view === 'map');
+            });
+        }
         loadAdventures().then(() => {
-            if (isMobile) switchMobileView('map');
-            else ensureWorldMap();
+            ensureWorldMap();
             placeNowMarkerAndFocus();
         });
+    } else if (focusNow) {
+        loadAdventures().then(() => { ensureWorldMap(); placeNowMarkerAndFocus(); });
     } else {
+        // Desktop strips the SSR'd .map-view (mobile-only hint); restore the
+        // split layout state so JS sees clean classes.
+        const split = document.querySelector('.adventures-page-split');
+        split?.classList.remove('map-view');
         loadAdventures();
-        // Drop the Now pin once the user lazily loads the map.
         setTimeout(placeNowMarkerAndFocus, 1500);
     }
 
