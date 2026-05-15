@@ -462,7 +462,15 @@ async function loadAdventures() {
 function initAdventuresPage() {
     loadFilters();
     bindAdventureActions();
-    loadAdventures();
+    // On mobile, default to the map view — the list is always one tap away
+    // via the bottom toggle but the map is the more visual entry point.
+    // Wait for loadAdventures so the map has data to render.
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+        loadAdventures().then(() => switchMobileView('map'));
+    } else {
+        loadAdventures();
+    }
 
     const key = 'adventures-sidebar-collapsed';
     const split = document.querySelector('.adventures-page-split');
