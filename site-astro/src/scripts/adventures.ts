@@ -482,6 +482,37 @@ async function loadAdventures() {
     updateAdventureCount(state.allAdventures.length);
 }
 
+// Horizontal trip carousel along the bottom of the map. Each card is the
+// adventure hero + place + year; tap one to fly the world map to it.
+function renderMapCarousel(adventures: AnyObj[]) {
+    const carousel = document.getElementById('adventures-map-carousel');
+    if (!carousel) return;
+    if (adventures.length === 0) {
+        carousel.hidden = true;
+        return;
+    }
+    carousel.hidden = false;
+    carousel.innerHTML = adventures.map((adventure: AnyObj) => {
+        const year = adventure.startDate ? String(adventure.startDate).slice(0, 4) : '';
+        const place = adventure.location || '';
+        const img = adventure.heroImage
+            ? `<img class="adv-carousel-img" src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" loading="lazy" decoding="async">`
+            : '<span class="adv-carousel-img adv-carousel-img-fallback" aria-hidden="true"></span>';
+        return `<button type="button" class="adv-carousel-card" data-adventure-id="${escapeAttr(adventure.id)}">
+            ${img}
+            <span class="adv-carousel-meta">
+                <span class="adv-carousel-place">${escapeHtml(place)}</span>
+                ${year ? `<span class="adv-carousel-year">${escapeHtml(year)}</span>` : ''}
+            </span>
+        </button>`;
+    }).join('');
+    carousel.addEventListener('click', (event: Event) => {
+        const card = (event.target as Element | null)?.closest?.('[data-adventure-id]') as HTMLElement | null;
+        if (!card) return;
+        selectAdventure(card.dataset.adventureId || '');
+    }, { once: false });
+}
+
 function readNowLocation() {
     const split = document.querySelector('.adventures-page-split');
     if (!split) return null;
