@@ -497,7 +497,7 @@ function placeNowMarkerAndFocus() {
             riseOnHover: true,
             zIndexOffset: 9999
         });
-        const popup = `<div style="font-family:Chivo,sans-serif;text-align:center"><div style="font-weight:600;margin:.15rem 0">${now.place}</div>${now.date ? `<div style="font-size:.78rem;color:#888;margin-bottom:.5rem">${now.date}</div>` : ''}<a href="/now.html" class="now-popup-btn">Now</a></div>`;
+        const popup = `<div style="font-family:Chivo,sans-serif;text-align:center"><div style="font-weight:600;margin:.15rem 0">${now.place}</div>${now.date ? `<div style="font-size:.78rem;color:#888;margin-bottom:.5rem">${now.date}</div>` : ''}<a href="/now.html" class="now-popup-btn">Now update</a></div>`;
         marker.bindPopup(popup);
         marker.addTo(state.worldMap);
         // 25km radius circle around the Now location.
