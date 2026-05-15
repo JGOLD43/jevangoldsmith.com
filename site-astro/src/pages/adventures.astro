@@ -151,8 +151,15 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
 
         {/* Horizontal trip carousel along the bottom of the map (mobile + tablet).
             Populated by adventures.ts after the data loads; tap an item to fly
-            the map to that trip. */}
-        <div class="adventures-map-carousel" id="adventures-map-carousel" aria-label="Trips" hidden></div>
+            the map to that trip. The wrap has a drag handle so the user can
+            swipe / tap to hide the strip and free up map space. */}
+        <div class="adventures-map-carousel-wrap" id="adventures-map-carousel-wrap" hidden>
+          <button type="button" class="adv-carousel-handle" id="adv-carousel-handle" aria-label="Hide trips" aria-controls="adventures-map-carousel" aria-expanded="true">
+            <span class="adv-carousel-handle-bar" aria-hidden="true"></span>
+            <span class="adv-carousel-handle-label">Trips</span>
+          </button>
+          <div class="adventures-map-carousel" id="adventures-map-carousel" aria-label="Trips"></div>
+        </div>
 
         <div class="adventure-detail-overlay" id="adventure-detail-overlay">
           <button class="detail-close-btn" data-action="closeAdventureDetail">&times;</button>
