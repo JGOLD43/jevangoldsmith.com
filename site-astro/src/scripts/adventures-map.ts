@@ -33,28 +33,45 @@ declare global {
     function selectAdventure(id: string): void;
 }
 
-function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, popupAnchor, popupHtml, tooltipHtml, onClick, riseOnHover = false, layer }: AnyObj) {
+function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, popupAnchor, popupHtml, onClick, riseOnHover = false, layer }: AnyObj) {
     const L = getL();
     const iconOpts: AnyObj = { className: iconClass, html: iconHtml, iconSize };
     if (iconAnchor) iconOpts.iconAnchor = iconAnchor;
     if (popupAnchor) iconOpts.popupAnchor = popupAnchor;
     const marker = L.marker([lat, lng], { icon: L.divIcon(iconOpts), riseOnHover });
-    if (popupHtml) marker.bindPopup(popupHtml);
-    // Hover tooltip — defaults to the popup HTML so the user can identify
-    // any pin without having to click. sticky:false so it doesn't follow
-    // the cursor; direction:top centers it above the icon.
-    const tipHtml = tooltipHtml ?? popupHtml;
-    if (tipHtml) {
-        marker.bindTooltip(tipHtml, {
-            direction: 'top',
-            offset: [0, -8],
-            opacity: 0.97,
-            className: 'map-marker-tooltip'
+    if (popupHtml) {
+        marker.bindPopup(popupHtml, {
+            closeButton: false,
+            autoClose: false,
+            closeOnClick: false,
+            className: 'map-marker-popup'
         });
+        attachHoverPopup(marker);
     }
     if (onClick) marker.on('click', onClick);
     if (layer) marker.addTo(layer);
     return marker;
+}
+
+// Open the bound popup on hover; close on mouseleave but with a small
+// grace period so the user can move the pointer onto the popup itself
+// to click buttons/links inside it.
+export function attachHoverPopup(marker: AnyObj) {
+    let closeTimer: number | null = null;
+    const cancelClose = () => { if (closeTimer !== null) { clearTimeout(closeTimer); closeTimer = null; } };
+    const scheduleClose = () => {
+        cancelClose();
+        closeTimer = window.setTimeout(() => marker.closePopup(), 220);
+    };
+    marker.on('mouseover', () => { cancelClose(); marker.openPopup(); });
+    marker.on('mouseout', scheduleClose);
+    marker.on('popupopen', (event: AnyObj) => {
+        const el: HTMLElement | undefined = event.popup?.getElement?.();
+        if (!el) return;
+        el.addEventListener('mouseenter', cancelClose);
+        el.addEventListener('mouseleave', scheduleClose);
+    });
+    marker.on('popupclose', cancelClose);
 }
 
 function refreshMapDatasets() {

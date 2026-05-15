@@ -520,14 +520,25 @@ function placeNowMarkerAndFocus() {
             zIndexOffset: 9999
         });
         const popup = `<div class="now-popup-card"><div class="now-popup-place">${now.place}</div>${now.date ? `<div class="now-popup-date">${now.date}</div>` : ''}<a href="/now.html" class="now-popup-btn">Now update</a></div>`;
-        marker.bindPopup(popup);
-        // Hover tooltip mirrors the popup so the user sees the same card
-        // (with the "Now update" CTA) without having to tap the pin.
-        marker.bindTooltip(popup, {
-            direction: 'top',
-            offset: [0, -10],
-            opacity: 0.97,
-            className: 'map-marker-tooltip map-marker-tooltip-now'
+        marker.bindPopup(popup, {
+            closeButton: false,
+            autoClose: false,
+            closeOnClick: false,
+            className: 'map-marker-popup map-marker-popup-now'
+        });
+        // Hover opens the popup; pointer can travel onto the popup itself
+        // (e.g. to click the Now update button) without it closing thanks
+        // to a small mouseleave grace period.
+        let closeTimer: number | null = null;
+        const cancel = () => { if (closeTimer !== null) { clearTimeout(closeTimer); closeTimer = null; } };
+        const schedule = () => { cancel(); closeTimer = window.setTimeout(() => marker.closePopup(), 220); };
+        marker.on('mouseover', () => { cancel(); marker.openPopup(); });
+        marker.on('mouseout', schedule);
+        marker.on('popupopen', (event: AnyObj) => {
+            const el = event.popup?.getElement?.();
+            if (!el) return;
+            el.addEventListener('mouseenter', cancel);
+            el.addEventListener('mouseleave', schedule);
         });
         marker.addTo(state.worldMap);
         // 25km radius circle around the Now location.
