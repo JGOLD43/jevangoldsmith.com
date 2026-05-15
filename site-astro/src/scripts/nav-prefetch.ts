@@ -26,6 +26,8 @@
         // never become a click. Prefetch only warms the HTTP cache.
         const rules = {
             prerender: [{
+                // Light pages — prerender on hover/moderate intent so a hover
+                // navigation is effectively instant.
                 where: {
                     and: [
                         { href_matches: '/*.html' },
@@ -37,11 +39,18 @@
                     ]
                 },
                 eagerness
+            }, {
+                // Adventures is heavy (Leaflet) but the user opens it often
+                // enough that the previous-page flash is the bigger UX cost.
+                // Prerender it conservatively — fires on touchstart/mousedown
+                // so we don't pay the cost on stray hovers but still beat the
+                // browser to the punch on a real tap.
+                where: { href_matches: '/adventures.html' },
+                eagerness: 'conservative'
             }],
             prefetch: [{
                 where: {
                     or: [
-                        { href_matches: '/adventures.html' },
                         { href_matches: '/search.html' },
                         { href_matches: '/adventure-*.html' }
                     ]
