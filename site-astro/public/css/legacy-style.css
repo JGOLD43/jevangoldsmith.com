@@ -87,7 +87,7 @@
 .collection-header .header-counter,
 .collection-header .collection-header-counter{text-align:right;padding:0}
 .collection-header .philosophy-link-wrapper{flex-direction:column;align-items:flex-start;gap:.25rem}
-.collection-header .stats-toggle{align-self:flex-end}
+.collection-header .stats-toggle{align-self:flex-end}[data-theme=dark] .movie-stats-panel{background-color:var(--card-bg);border-color:var(--border-color)}[data-theme=dark] .stats-headline-card,[data-theme=dark] .stats-extreme-card{background-color:var(--background-alt)}[data-theme=dark] .stats-headline-value,[data-theme=dark] .stats-section-title,[data-theme=dark] .stats-extreme-name{color:var(--text-color)}[data-theme=dark] .stats-bar-track{background-color:#333}@media (max-width:600px){.movie-stats-panel{padding:.85rem 1rem;margin:0 0 1rem}.stats-headline-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;margin-bottom:.85rem}.stats-headline-card{padding:.55rem .7rem}.stats-headline-value{font-size:1.25rem}.stats-headline-label{font-size:.66rem;letter-spacing:.03em}.stats-extremes{grid-template-columns:1fr;gap:.55rem;margin-bottom:.85rem}.stats-extreme-card{padding:.55rem .7rem}.stats-extreme-poster{width:32px;height:48px}.stats-section{margin-bottom:.85rem}.stats-bar-row{grid-template-columns:72px 1fr 56px;gap:.55rem;margin-bottom:.3rem}.stats-bar-label,.stats-bar-value{font-size:.78rem}}
 .main-header{flex-wrap:wrap;align-items:flex-start;gap:.75rem}
 .main-header .header-content{flex:1 1 0%!important;min-width:0}
 .main-header .header-counter{flex:0 0 auto;flex-direction:column;align-items:flex-end;gap:.4rem;text-align:right;padding:0}
