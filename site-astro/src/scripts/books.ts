@@ -158,8 +158,10 @@ function renderSidebar(categories: Record<string, AnyObj[]>) {
                 const coverImg = cover
                     ? `<img class="book-link-cover" src="${escapeAttr(cover)}" alt="" loading="lazy" decoding="async" data-remove-on-error="true">`
                     : '<span class="book-link-cover book-link-cover-fallback" aria-hidden="true"></span>';
+                const slug = book.isbn || slugify(`${book.title}-${book.author}`);
+                const href = slug ? `/books/${slug}.html` : '#';
                 return `
-                <a href="#" class="book-link" data-action="book-link" data-book-title="${escapeAttr(book.title)}">
+                <a href="${escapeAttr(href)}" class="book-link" data-book-title="${escapeAttr(book.title)}">
                     ${coverImg}
                     <span class="book-link-meta">
                         <span class="book-link-title">${escapeHtml(book.title)}</span>
