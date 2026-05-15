@@ -33,13 +33,25 @@ declare global {
     function selectAdventure(id: string): void;
 }
 
-function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, popupAnchor, popupHtml, onClick, riseOnHover = false, layer }: AnyObj) {
+function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, popupAnchor, popupHtml, tooltipHtml, onClick, riseOnHover = false, layer }: AnyObj) {
     const L = getL();
     const iconOpts: AnyObj = { className: iconClass, html: iconHtml, iconSize };
     if (iconAnchor) iconOpts.iconAnchor = iconAnchor;
     if (popupAnchor) iconOpts.popupAnchor = popupAnchor;
     const marker = L.marker([lat, lng], { icon: L.divIcon(iconOpts), riseOnHover });
     if (popupHtml) marker.bindPopup(popupHtml);
+    // Hover tooltip — defaults to the popup HTML so the user can identify
+    // any pin without having to click. sticky:false so it doesn't follow
+    // the cursor; direction:top centers it above the icon.
+    const tipHtml = tooltipHtml ?? popupHtml;
+    if (tipHtml) {
+        marker.bindTooltip(tipHtml, {
+            direction: 'top',
+            offset: [0, -8],
+            opacity: 0.97,
+            className: 'map-marker-tooltip'
+        });
+    }
     if (onClick) marker.on('click', onClick);
     if (layer) marker.addTo(layer);
     return marker;
