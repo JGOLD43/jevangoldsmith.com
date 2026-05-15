@@ -39,28 +39,6 @@ function initFilters(zoom: { release: () => void } | null | undefined) {
   });
 }
 
-function initMobileExpand(grid: Element) {
-  grid.addEventListener('click', function (event) {
-    const trigger = (event.target as Element | null)?.closest?.('[data-shelf-item]');
-    if (!trigger) return;
-    event.preventDefault();
-    const item = trigger.closest('.shelf-item');
-    if (!item) return;
-    const wasExpanded = item.classList.contains('is-expanded');
-    grid.querySelectorAll('.shelf-item.is-expanded').forEach(function (el) {
-      el.classList.remove('is-expanded');
-    });
-    if (!wasExpanded) item.classList.add('is-expanded');
-  });
-  document.addEventListener('click', function (event) {
-    if (!(event.target as Element | null)?.closest?.('.shelf-item')) {
-      grid.querySelectorAll('.shelf-item.is-expanded').forEach(function (el) {
-        el.classList.remove('is-expanded');
-      });
-    }
-  });
-}
-
 function initShelf() {
   const grid = document.querySelector('.shelf-grid');
   if (!grid) return;
@@ -69,18 +47,19 @@ function initShelf() {
     el.classList.add('js-zoom-item');
   });
 
-  if (window.innerWidth <= 760) {
-    initMobileExpand(grid);
-    initFilters(null);
-    return;
-  }
-
+  // On mobile the detail panel renders BELOW the image (CSS handles layout),
+  // so no horizontal centerOffset is needed and the image should take less
+  // vertical room to leave space for the text.
+  const isMobile = window.innerWidth <= 760;
   const zoom = initGridZoom({
     grid: grid as HTMLElement,
     itemSelector: '.shelf-item',
     triggerSelector: '[data-shelf-item]',
     eventName: 'shelf_object_open',
-    centerOffsetCssX: 139
+    centerOffsetCssX: isMobile ? 0 : 139,
+    fillW: isMobile ? 0.7 : undefined,
+    fillH: isMobile ? 0.32 : undefined,
+    maxScale: isMobile ? 3.2 : undefined
   }) as { release: () => void } | null;
 
   initFilters(zoom);
