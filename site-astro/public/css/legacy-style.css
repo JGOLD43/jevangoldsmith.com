@@ -214,3 +214,18 @@ body.nav-compact{padding-top:58px}
 [data-theme=dark] .leaflet-control-zoom-in:hover,
 [data-theme=dark] .leaflet-control-zoom-out:hover{background:#2a2a2a;color:#fff}
 [data-theme=dark] .leaflet-bar a.leaflet-disabled{background:#1a1a1a;color:#555}
+
+/* Kill the browser focus rectangle that Chrome/Android draws around
+   focusable Leaflet SVG paths (visited-country fills, etc). It renders
+   as a giant axis-aligned box around the path's bounding rect on tap.
+   Leaflet's own hover styling provides the affordance. */
+.leaflet-container path:focus,
+.leaflet-container path:focus-visible,
+.leaflet-container path.leaflet-interactive:focus,
+.leaflet-container svg:focus{outline:none}
+
+/* Mobile: lift the trip carousel above the fixed List/Map toggle bar
+   so the bottom cards aren't clipped. Toggle is ~56px + safe-area. */
+@media (width<=768px){
+  .adventures-map-carousel-wrap{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+}
