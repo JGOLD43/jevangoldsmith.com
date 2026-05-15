@@ -229,3 +229,18 @@ body.nav-compact{padding-top:58px}
 @media (width<=768px){
   .adventures-map-carousel-wrap{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
 }
+
+/* Books grid: keep card + cover wrapper fully transparent in dark mode
+   even on hover / focus / active. Previously :focus-within filled the
+   card with --background-alt (#1e1e1e), producing visible grey "filler"
+   bands around portrait covers (letterbox of object-fit:contain) and
+   below the cover before the metadata. Hover affordance now comes from
+   a soft outer glow rather than a fill. */
+[data-theme=dark] .book-card,
+[data-theme=dark] .book-card:hover,
+[data-theme=dark] .book-card:focus-within,
+[data-theme=dark] .book-card:active{background:transparent!important;border-color:transparent!important}
+[data-theme=dark] .book-card .book-cover-wrapper,
+[data-theme=dark] .book-card:hover .book-cover-wrapper,
+[data-theme=dark] .book-card:focus-within .book-cover-wrapper{background:transparent!important}
+[data-theme=dark] .book-card:hover{box-shadow:0 4px 18px #0006!important}
