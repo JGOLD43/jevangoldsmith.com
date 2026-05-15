@@ -477,6 +477,7 @@ async function loadAdventures() {
 
     renderAdventures(state.allAdventures);
     populateSidebar(state.allAdventures);
+    renderMapCarousel(state.allAdventures);
     setupWorldMapLazyLoad(state.allAdventures);
     updateAdventureCount(state.allAdventures.length);
 }

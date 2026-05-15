@@ -149,6 +149,11 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
       <div class="adventures-map-panel">
         <div class="adventures-main-map" id="world-map" aria-label="Interactive adventures map"></div>
 
+        {/* Horizontal trip carousel along the bottom of the map (mobile + tablet).
+            Populated by adventures.ts after the data loads; tap an item to fly
+            the map to that trip. */}
+        <div class="adventures-map-carousel" id="adventures-map-carousel" aria-label="Trips" hidden></div>
+
         <div class="adventure-detail-overlay" id="adventure-detail-overlay">
           <button class="detail-close-btn" data-action="closeAdventureDetail">&times;</button>
           <div class="adventure-detail-content" id="adventure-detail-content">
