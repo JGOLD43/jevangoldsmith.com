@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updatedAt": "2026-05-04T05:54:12.685Z",
+  "updatedAt": "2026-05-15T07:12:47.734Z",
   "guidance": "Static search/discovery index. Fetch candidate URLs from this file, then fetch canonical collection endpoints or HTML for detail.",
   "records": [
     {
@@ -4072,6 +4072,78 @@
         "Drama"
       ],
       "searchText": "the place beyond the pines a motorcycle stunt rider considers committing a crime in order to provide for his wife and child, an act that puts him on a collision course with a cop-turned-politician. drama drama crime drama movies"
+    },
+    {
+      "type": "movies",
+      "id": "joker",
+      "title": "Joker",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#joker",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "joker uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "project-hail-mary",
+      "title": "Project Hail Mary",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#project-hail-mary",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "project hail mary uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "the-dark-knight-rises",
+      "title": "The Dark Knight Rises",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#the-dark-knight-rises",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "the dark knight rises uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "the-dark-knight",
+      "title": "The Dark Knight",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#the-dark-knight",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "the dark knight uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "paris-texas",
+      "title": "Paris, Texas",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#paris-texas",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "paris, texas uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "breakfast-at-tiffany039s",
+      "title": "Breakfast at Tiffany&#039;s",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#breakfast-at-tiffany039s",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "breakfast at tiffany&#039;s uncategorized uncategorized movies"
     }
   ]
 }
