@@ -48,11 +48,18 @@ function bookLabel(book) {
 function attachBook(person, book) {
   if (!person.books) person.books = [];
   const label = bookLabel(book);
+  // Link directly to the book's detail page (/books/{slug}.html). Same
+  // slug logic books.astro uses: prefer ISBN, otherwise slugify
+  // title-author. Generated detail pages live under /books/.
+  const isbn = String(book.isbn || '').replace(/[^0-9X]/gi, '');
+  const slug = isbn || (book.slug || `${book.title || ''}-${book.author || ''}`)
+    .toString().toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g, '')
+    .trim().replace(/[-\s]+/g, '-');
   if (!person.books.some((entry) => entry.title === book.title)) {
     person.books.push({
       author: book.author || '',
       coverImage: book.coverImageMedium || book.coverImage || '',
-      href: `books.html?book=${encodeURIComponent(book.title)}`,
+      href: slug ? `/books/${slug}.html` : '#',
       label,
       title: book.title
     });

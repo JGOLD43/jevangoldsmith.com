@@ -127,7 +127,11 @@ const subject = personSchema({
         <div class="person-profile-books">
           {relatedBooks.map((b: any) => {
             const cover = fmtCover(b);
-            const href = `/books.html?book=${encodeURIComponent(b.data.title)}`;
+            // Link straight to the book's detail page. Books are slugged by
+            // their ISBN when present, otherwise by collection id (which is
+            // already the slug astro derives from the file path).
+            const bookSlug = String(b.data.isbn || '').replace(/[^0-9X]/gi, '') || b.id;
+            const href = `/books/${bookSlug}.html`;
             return (
               <a class="person-profile-book-card" href={href}>
                 {cover ? (
