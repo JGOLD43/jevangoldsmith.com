@@ -42,11 +42,16 @@ const sections = [
     <p class="now-eyebrow">Now</p>
     <h1 class="now-title">What I'm doing now</h1>
     <p class="now-subtitle">A snapshot of where my attention is. Inspired by <a href="https://nownownow.com/about" rel="noopener" target="_blank">Derek Sivers' /now page idea</a>.</p>
-    <p class="now-updated">
-      <span>Last updated</span>
-      <strong>{lastUpdated}</strong>
-      <span>from {lastUpdatedLocation}</span>
-    </p>
+    <div class="now-updated">
+      <div class="now-updated-row">
+        <span class="now-updated-label">Last updated</span>
+        <strong class="now-updated-date">{lastUpdated}</strong>
+      </div>
+      <a class="now-updated-place" href={mapLink} title={`See ${lastUpdatedLocation} on the map`}>
+        <svg class="now-updated-pin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s-7-7.58-7-13a7 7 0 1 1 14 0c0 5.42-7 13-7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        <span>{lastUpdatedLocation}</span>
+      </a>
+    </div>
   </header>
 
   <div class="now-sections">
@@ -96,17 +101,38 @@ const sections = [
   }
   .now-updated {
     display: inline-flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    align-items: baseline;
-    font-size: 0.85rem;
-    color: var(--text-light);
-    padding: 0.5rem 0.9rem;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.65rem 0.95rem;
     background: var(--background-alt);
     border: 1px solid var(--border-color);
-    border-radius: 999px;
+    border-radius: 14px;
+    min-width: 0;
   }
-  .now-updated strong { color: var(--primary-color); font-weight: 600; }
+  .now-updated-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  .now-updated-label { letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.72rem; }
+  .now-updated-date { color: var(--primary-color); font-weight: 600; font-size: 0.95rem; }
+  .now-updated-place {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--secondary-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.45rem;
+    transition: color 0.2s;
+  }
+  .now-updated-place:hover { color: var(--accent-color); }
+  .now-updated-place:hover .now-updated-pin { transform: translateY(-1px); }
+  .now-updated-pin { transition: transform 0.2s; flex: 0 0 14px; }
 
   .now-sections { display: grid; gap: 2.5rem; }
   .now-section {

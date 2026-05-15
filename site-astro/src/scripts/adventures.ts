@@ -459,6 +459,56 @@ async function loadAdventures() {
     updateAdventureCount(state.allAdventures.length);
 }
 
+function readNowLocation() {
+    const split = document.querySelector('.adventures-page-split');
+    if (!split) return null;
+    const lat = parseFloat((split as HTMLElement).dataset.nowLat || '');
+    const lng = parseFloat((split as HTMLElement).dataset.nowLng || '');
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    return {
+        lat,
+        lng,
+        place: (split as HTMLElement).dataset.nowPlace || '',
+        date: (split as HTMLElement).dataset.nowDate || ''
+    };
+}
+
+function placeNowMarkerAndFocus() {
+    // Wait for the worldMap + Leaflet to be ready, then drop a pulsing pin
+    // for the latest /now location. If the user arrived with ?focus=now,
+    // pan/zoom to ~50km radius (zoom 8).
+    const now = readNowLocation();
+    if (!now) return;
+    const wait = (resolve: () => void) => {
+        if ((window as AnyObj).L && state.worldMap) resolve();
+        else setTimeout(() => wait(resolve), 80);
+    };
+    wait(() => {
+        const L = (window as AnyObj).L;
+        const html = '<span class="now-marker-pulse"></span><span class="now-marker-dot"></span>';
+        const marker = L.marker([now.lat, now.lng], {
+            icon: L.divIcon({
+                className: 'now-marker',
+                html,
+                iconSize: [22, 22],
+                iconAnchor: [11, 11],
+                popupAnchor: [0, -10]
+            }),
+            riseOnHover: true,
+            zIndexOffset: 9999
+        });
+        const popup = `<div style="font-family:Chivo,sans-serif;text-align:center"><div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#c9a86c;font-weight:700">Now</div><div style="font-weight:600;margin:.15rem 0">${now.place}</div>${now.date ? `<div style="font-size:.78rem;color:#888">${now.date}</div>` : ''}</div>`;
+        marker.bindPopup(popup);
+        marker.addTo(state.worldMap);
+        // ?focus=now → fly there at ~50km radius (zoom 8 ≈ that scale)
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('focus') === 'now') {
+            state.worldMap.setView([now.lat, now.lng], 8, { animate: true });
+            setTimeout(() => marker.openPopup(), 600);
+        }
+    });
+}
+
 function initAdventuresPage() {
     loadFilters();
     bindAdventureActions();
@@ -466,10 +516,17 @@ function initAdventuresPage() {
     // via the bottom toggle but the map is the more visual entry point.
     // Wait for loadAdventures so the map has data to render.
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (isMobile) {
-        loadAdventures().then(() => switchMobileView('map'));
+    const focusNow = new URLSearchParams(window.location.search).get('focus') === 'now';
+    if (isMobile || focusNow) {
+        loadAdventures().then(() => {
+            if (isMobile) switchMobileView('map');
+            else ensureWorldMap();
+            placeNowMarkerAndFocus();
+        });
     } else {
         loadAdventures();
+        // Drop the Now pin once the user lazily loads the map.
+        setTimeout(placeNowMarkerAndFocus, 1500);
     }
 
     const key = 'adventures-sidebar-collapsed';
