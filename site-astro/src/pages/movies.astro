@@ -20,8 +20,11 @@ const movieCardsHtml = movies.map((m) => renderMovieCardHtml(m)).join('');
 // "Recently Added" carousel — most recent 20 movies with a poster,
 // SSR'd twice so the seamless-scroll loop is complete on first paint.
 // Reuses the .recent-books-carousel / .carousel-* styles from books.
-const recentMovies = [...movies]
-  .filter((m) => m.poster)
+// Sources from moviesRuntimeData (full Letterboxd sync) rather than the
+// content collection so newly-synced films appear immediately, even
+// before they round-trip through schema validation.
+const recentMovies = ((moviesRuntimeData as { title?: string; date?: string; poster?: string; link?: string; year?: string }[]) || [])
+  .filter((m) => m && m.poster)
   .sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime())
   .slice(0, 20);
 const movieCarouselInner = [...recentMovies, ...recentMovies]
