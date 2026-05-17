@@ -15,10 +15,56 @@ function initCarousel() {
     const dots = Array.from(document.querySelectorAll<HTMLElement>('[data-carousel-slide]'));
     const cards = Array.from(document.querySelectorAll<HTMLElement>('.feature-card'));
     if (!track || cards.length === 0) return;
-    // Mobile uses native horizontal touch-scroll on .carousel-container
-    // instead of JS-driven translateX. Skip the JS carousel entirely so
-    // it doesn't fight the user's swipe.
-    if (window.matchMedia('(max-width: 768px)').matches) return;
+
+    // Mobile path: JS-driven swipe scroll on the carousel container.
+    // The cards are <a> elements; native touch-scroll on anchors is
+    // unreliable across mobile browsers (link-tap can swallow drag).
+    // Drive scrollLeft from touchmove directly.
+    if (window.matchMedia('(max-width: 768px)').matches) {
+        const container = track.parentElement as HTMLElement | null;
+        if (!container) return;
+        let startX = 0;
+        let startScrollLeft = 0;
+        let dragging = false;
+        let lastTouchTime = 0;
+        container.addEventListener('touchstart', (event) => {
+            const t = event.touches[0];
+            if (!t) return;
+            startX = t.clientX;
+            startScrollLeft = container.scrollLeft;
+            dragging = true;
+            lastTouchTime = performance.now();
+        }, { passive: true });
+        container.addEventListener('touchmove', (event) => {
+            if (!dragging) return;
+            const t = event.touches[0];
+            if (!t) return;
+            const dx = t.clientX - startX;
+            container.scrollLeft = startScrollLeft - dx;
+            lastTouchTime = performance.now();
+        }, { passive: true });
+        const endDrag = () => {
+            if (!dragging) return;
+            dragging = false;
+            // Snap to nearest card after the drag settles.
+            const cardWidth = cards[0].offsetWidth + 24;
+            const idx = Math.round(container.scrollLeft / cardWidth);
+            container.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
+        };
+        container.addEventListener('touchend', endDrag, { passive: true });
+        container.addEventListener('touchcancel', endDrag, { passive: true });
+        // Suppress the link click if user dragged > 8px during the touch.
+        cards.forEach((card) => {
+            let downX = 0;
+            card.addEventListener('touchstart', (event) => { downX = event.touches[0]?.clientX ?? 0; }, { passive: true });
+            card.addEventListener('click', (event) => {
+                if (Math.abs(((event as MouseEvent).clientX) - downX) > 8 && performance.now() - lastTouchTime < 400) {
+                    event.preventDefault();
+                }
+            });
+        });
+        return;
+    }
 
     let currentSlide = 0;
     const gap = 24;
