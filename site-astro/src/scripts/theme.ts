@@ -28,13 +28,16 @@ function updateToggleButton(theme: string) {
 
 // Briefly show a confirmation toast on a toggle button by stamping
 // data-toast with the message and adding .show-toast for 1500ms.
+// Also adds .suppress-hover-tip for slightly longer so the hover
+// tooltip doesn't pile on top of the toast (or pop up immediately
+// after it fades) while the user's cursor is still over the button.
 function flashToast(el: Element | null, message: string) {
     if (!el) return;
-    (el as HTMLElement).setAttribute('data-toast', message);
-    (el as HTMLElement).classList.add('show-toast');
-    window.setTimeout(() => {
-        (el as HTMLElement).classList.remove('show-toast');
-    }, 1500);
+    const node = el as HTMLElement;
+    node.setAttribute('data-toast', message);
+    node.classList.add('show-toast', 'suppress-hover-tip');
+    window.setTimeout(() => node.classList.remove('show-toast'), 1500);
+    window.setTimeout(() => node.classList.remove('suppress-hover-tip'), 2500);
 }
 
 function toggleTheme() {
