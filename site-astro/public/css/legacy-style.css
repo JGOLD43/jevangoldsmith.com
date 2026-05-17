@@ -324,10 +324,7 @@ body.nav-compact{padding-top:58px}
 .read-first-note::before{content:"\2190  ";display:inline}
 @media (max-width:600px){.read-first-note::before{content:"\2191  "}}
 
-/* Mobile header-size parity: books renders <h1> inside .grid-view-header
-   (no specific class → bare mobile rule h1{font-size:2rem} wins),
-   while movies/people render through .collection-header which keeps
-   the clamp() at its 2.5rem floor. Pull movies/people down to match. */
+/* Mobile header-size parity: books renders its h1 inside .grid-view-header so the bare mobile h1 rule wins (2rem), while movies/people render through .collection-header which keeps the clamp at its 2.5rem floor. Pull movies/people down to match. */
 @media (max-width:600px){.collection-header .header-content h1,.collection-header .header-content .bookshelf-view-title{font-size:2rem;line-height:1.15}}
 
 /* People-of-history detail modal: edge contrast + tappable close.
