@@ -472,3 +472,17 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
   .feature-card img{pointer-events:none;-webkit-user-drag:none}
   .carousel-controls{display:none}
 }
+
+/* Stack the work + personal welcome variants in the same grid cell so
+   the taller (personal paragraph) defines the height and socials sit
+   at the SAME absolute Y position in both modes. Inactive variant is
+   visibility:hidden so it still reserves space. */
+.hero-headline,.hero-welcome{display:grid}
+.hero-headline > span,.hero-welcome > span{grid-area:1/1;align-self:start}
+[data-mode="work"] .hero-headline .mode-personal,
+[data-mode="work"] .hero-welcome .mode-personal,
+[data-mode="personal"] .hero-headline .mode-work,
+[data-mode="personal"] .hero-welcome .mode-work{visibility:hidden;display:block}
+.hero-work-now{font-size:1.05rem;line-height:1.5;color:var(--text-light)}
+.hero-now-link{color:var(--secondary-color);text-decoration:underline;text-underline-offset:3px;font-weight:600}
+.hero-now-link:hover{color:var(--accent-color)}
