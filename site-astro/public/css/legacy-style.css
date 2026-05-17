@@ -478,6 +478,7 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    at the SAME absolute Y position in both modes. Inactive variant is
    visibility:hidden so it still reserves space. */
 .hero-headline,.hero-welcome{display:grid}
+.hero-headline{margin-bottom:.75rem}
 .hero-headline > span,.hero-welcome > span{grid-area:1/1;align-self:start}
 [data-mode="work"] .hero-headline .mode-personal,
 [data-mode="work"] .hero-welcome .mode-personal,
