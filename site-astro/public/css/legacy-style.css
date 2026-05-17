@@ -409,7 +409,7 @@ body.nav-compact{padding-top:58px}
   .hero-container .profile-container{order:0;max-width:none;width:100%;margin:0}
   .hero-container .hero-picture,
   .hero-container .hero-image{width:100%;max-width:none;display:block;height:auto}
-  .hero-container .hero-left{order:1;align-self:center;max-width:100%}
+  .hero-container .hero-left{order:1;align-self:stretch;max-width:100%;text-align:left}
   .hero-container .hero-social-links{order:2;margin-top:-1.25rem}
   .hero-container .hero-welcome{margin-bottom:0}
 }
