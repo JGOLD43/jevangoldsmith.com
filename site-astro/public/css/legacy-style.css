@@ -486,3 +486,12 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
 .hero-work-now{font-size:1.05rem;line-height:1.5;color:var(--text-light)}
 .hero-now-link{color:var(--secondary-color);text-decoration:underline;text-underline-offset:3px;font-weight:600}
 .hero-now-link:hover{color:var(--accent-color)}
+
+/* Hover tooltip for the work/personal + light/dark toggles. Reveals
+   after a 1s hover delay so it doesn't pop on quick mouse fly-bys. */
+.work-mode-toggle,.theme-toggle{position:relative}
+.work-mode-toggle::after,.theme-toggle::after{content:attr(data-tooltip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:.35rem .6rem;border-radius:6px;font-size:.72rem;font-weight:500;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:10010}
+.work-mode-toggle[data-mode="work"]::after{content:attr(data-tooltip-work)}
+.work-mode-toggle[data-mode="explore"]::after{content:attr(data-tooltip-explore)}
+.work-mode-toggle:hover::after,.theme-toggle:hover::after{opacity:1;transition-delay:1s}
+[data-theme=dark] .work-mode-toggle::after,[data-theme=dark] .theme-toggle::after{background:#fff;color:#111}
