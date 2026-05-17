@@ -329,3 +329,14 @@ body.nav-compact{padding-top:58px}
    while movies/people render through .collection-header which keeps
    the clamp() at its 2.5rem floor. Pull movies/people down to match. */
 @media (max-width:600px){.collection-header .header-content h1,.collection-header .header-content .bookshelf-view-title{font-size:2rem;line-height:1.15}}
+
+/* People-of-history detail modal: edge contrast + tappable close.
+   The default border (#333 on #1e1e1e) was invisible on mobile dark
+   mode so the panel had no perceptible edge against the body. Brighter
+   rim + outer ring fixes that. Close button bumps to 44px (Apple HIG
+   touch-target floor) on mobile so it actually reads as tappable. */
+[data-theme=dark] .person-detail-panel{border-color:#ffffff26;box-shadow:0 24px 80px #000a,0 0 0 1px #ffffff14}
+@media (max-width:600px){
+  .person-detail-close{width:44px;height:44px;font-size:1.2rem;top:.6rem;right:.6rem;background:#000;color:#fff;border-color:#ffffff66;box-shadow:0 2px 8px #0008}
+  .person-detail-panel{padding-top:3.75rem}
+}
