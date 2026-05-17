@@ -174,12 +174,11 @@ function initMobileNav() {
             // would otherwise follow the NEW mode and render the wrong
             // copy on the OLD side of the wipe line.
             const oldMode = current();
-            // Use visibility (not display) so the inactive variant still occupies its grid cell — preserves layout height across modes.
             clone.querySelectorAll('.mode-work').forEach((el) => {
-                (el as HTMLElement).style.visibility = oldMode === 'work' ? '' : 'hidden';
+                (el as HTMLElement).style.display = oldMode === 'work' ? '' : 'none';
             });
             clone.querySelectorAll('.mode-personal').forEach((el) => {
-                (el as HTMLElement).style.visibility = oldMode === 'personal' ? '' : 'hidden';
+                (el as HTMLElement).style.display = oldMode === 'personal' ? '' : 'none';
             });
             // Preserve the live body's computed padding/margin so the
             // cloned content lines up exactly with what the user was
