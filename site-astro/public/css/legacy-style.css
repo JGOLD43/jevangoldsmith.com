@@ -451,4 +451,4 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
 [data-mode="work"] .hero-welcome .mode-personal,
 [data-mode="personal"] .hero-headline .mode-work,
 [data-mode="personal"] .hero-welcome .mode-work{display:none}
-.hero-welcome-work{font-size:clamp(2rem,5vw,2.6rem);font-weight:700;color:var(--text-light);line-height:1.15;font-family:Chivo,sans-serif}
+.hero-welcome-work{color:var(--text-light);display:block;margin:0}
