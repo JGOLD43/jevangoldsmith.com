@@ -168,6 +168,20 @@ function initMobileNav() {
             const clone = document.body.cloneNode(true) as HTMLElement;
             // Strip scripts/links from the clone so it doesn't re-run logic.
             clone.querySelectorAll('script, link[rel="stylesheet"]').forEach((el) => el.remove());
+            // Lock the clone's mode-conditional content to the OLD mode
+            // visibility — the CSS rules for these classes are scoped to
+            // <html>[data-mode], and once we flip <html> below the clone
+            // would otherwise follow the NEW mode and render the wrong
+            // copy on the OLD side of the wipe line.
+            const oldMode = current();
+            // Hero headline + welcome stack variants in grid cells
+            // (visibility:hidden inactive) so socials sit at same y.
+            clone.querySelectorAll('.hero-headline .mode-work, .hero-welcome .mode-work').forEach((el) => {
+                (el as HTMLElement).style.visibility = oldMode === 'work' ? '' : 'hidden';
+            });
+            clone.querySelectorAll('.hero-headline .mode-personal, .hero-welcome .mode-personal').forEach((el) => {
+                (el as HTMLElement).style.visibility = oldMode === 'personal' ? '' : 'hidden';
+            });
             // Preserve the live body's computed padding/margin so the
             // cloned content lines up exactly with what the user was
             // seeing. (Body has padding-top equal to nav height; if we
