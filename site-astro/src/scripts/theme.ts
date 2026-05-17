@@ -168,6 +168,18 @@ function initMobileNav() {
             const clone = document.body.cloneNode(true) as HTMLElement;
             // Strip scripts/links from the clone so it doesn't re-run logic.
             clone.querySelectorAll('script, link[rel="stylesheet"]').forEach((el) => el.remove());
+            // Lock the clone's mode-conditional content to the OLD mode
+            // visibility — the CSS rules for these classes are scoped to
+            // <html>[data-mode], and once we flip <html> below the clone
+            // would otherwise follow the NEW mode and render the wrong
+            // copy on the OLD side of the wipe line.
+            const oldMode = current();
+            clone.querySelectorAll('.mode-work').forEach((el) => {
+                (el as HTMLElement).style.display = oldMode === 'work' ? '' : 'none';
+            });
+            clone.querySelectorAll('.mode-personal').forEach((el) => {
+                (el as HTMLElement).style.display = oldMode === 'personal' ? '' : 'none';
+            });
             // Preserve the live body's computed padding/margin so the
             // cloned content lines up exactly with what the user was
             // seeing. (Body has padding-top equal to nav height; if we
