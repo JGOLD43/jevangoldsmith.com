@@ -110,6 +110,19 @@ function initMobileNav() {
         });
     });
 
+    // Tap on empty space inside the open mobile nav (below the last
+    // item) closes the menu. Only fires when the click target IS the
+    // .nav-links container itself — clicks on actual links / dropdown
+    // triggers bubble through and are handled by the listeners above.
+    navLinks.addEventListener('click', (event) => {
+        if (window.innerWidth > 968) return;
+        if (event.target !== navLinks) return;
+        mobileMenuToggle.classList.remove('active');
+        navLinks.classList.remove('mobile-open');
+        document.body.style.overflow = '';
+        dropdowns.forEach(d => d.classList.remove('mobile-dropdown-open'));
+    });
+
     window.addEventListener('resize', () => {
         if (window.innerWidth > 968) {
             mobileMenuToggle.classList.remove('active');
