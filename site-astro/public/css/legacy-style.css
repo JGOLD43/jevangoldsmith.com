@@ -359,7 +359,19 @@ body.nav-compact{padding-top:58px}
    view-transition-name on grid <img> and hero <img>; @view-transition
    opts the whole site into auto cross-doc transitions. */
 @view-transition{navigation:auto}
-::view-transition-image-pair(*){animation-duration:.5s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+::view-transition-image-pair(*),::view-transition-group(*){animation-duration:.55s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+/* Old page fades out fast; new page fades + slides up so text settles
+   under the morphing cover instead of snapping in. All animations
+   complete at the same instant for one coherent motion. */
+::view-transition-old(root){animation:vt-fade-out .2s ease-in both}
+::view-transition-new(root){animation:vt-fade-in .55s cubic-bezier(.22,1,.36,1) both,vt-slide-up .55s cubic-bezier(.22,1,.36,1) both}
+@keyframes vt-fade-out{to{opacity:0}}
+@keyframes vt-fade-in{from{opacity:0}}
+@keyframes vt-slide-up{from{transform:translateY(14px)}}
+/* Pin the morphed cover above the new page during the transition so it
+   reads as ONE element scaling rather than two layers crossfading. */
+::view-transition-group(book-cover-),
+::view-transition-group(movie-poster-){z-index:10}
 
 /* Detail-hero redesign: cover sits LARGE and CENTERED at the top, so
    the VT morph from a small grid card lands on the natural "hero" of
