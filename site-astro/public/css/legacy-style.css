@@ -459,4 +459,5 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    `display:none` (collapses) — keeps layout below the hero perfectly
    stable when toggling modes, no jumpy wipe. */
 .hero-headline,.hero-welcome{display:grid}
+.hero-headline{margin-bottom:2rem}
 .hero-headline > span,.hero-welcome > span{grid-area:1/1}
