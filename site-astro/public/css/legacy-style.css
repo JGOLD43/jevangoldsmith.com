@@ -353,3 +353,11 @@ body.nav-compact{padding-top:58px}
    shadow on press; the existing :hover transition handles the easing. */
 .carousel-book-link:active .carousel-book,
 .carousel-book-link.is-launching .carousel-book{transform:scale(1.18);box-shadow:0 6px 18px #0006;transition:transform .22s ease-out,box-shadow .22s ease-out}
+
+/* Enable native browser Cross-Document View Transitions so book / movie
+   covers smoothly morph from the collection grid into the detail-page
+   hero. Each cover image carries an inline view-transition-name (set in
+   book-card.ts / movie-card.ts and the [slug].astro detail pages) so
+   the browser pairs them up automatically. Chrome 126+ / opt-in. */
+@view-transition{navigation:auto}
+::view-transition-image-pair(*){animation-duration:.45s;animation-timing-function:cubic-bezier(.22,1,.36,1)}

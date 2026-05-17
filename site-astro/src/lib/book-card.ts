@@ -85,8 +85,14 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
   else if (!hasRating) ratingBlock = '<div class="book-rating book-rating-unrated">Read</div>';
   else ratingBlock = `<div class="book-rating"><span class="rating-number">${ratingValue}</span> ${stars}</div>`;
 
+  // view-transition-name on the cover image lets the browser morph it
+  // smoothly into /books/{slug}.html's hero cover via the native
+  // Cross-Document View Transitions API (Chrome 126+ / opt-in via the
+  // @view-transition declaration in legacy-style.css).
+  const vtSlug = isbn || slugify(`${title}-${author}`);
+  const vtStyle = vtSlug ? ` style="view-transition-name: book-cover-${vtSlug}"` : '';
   const coverImg = coverUrl
-    ? `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(title)}" class="book-cover" width="150" height="230" ${lcpAttrs(eager ? 0 : 1, 1)} decoding="async" data-book-cover-fallback="true">`
+    ? `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(title)}" class="book-cover" width="150" height="230" ${lcpAttrs(eager ? 0 : 1, 1)} decoding="async" data-book-cover-fallback="true"${vtStyle}>`
     : '';
   const yearSpan = yearStr ? `<span class="book-year">${escapeHtml(yearStr)}</span>` : '';
   const reviewBlock = review ? `<p class="book-description">${escapeHtml(shortDescription)}</p>` : '';
