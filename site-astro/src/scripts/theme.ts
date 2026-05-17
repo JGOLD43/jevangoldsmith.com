@@ -26,10 +26,22 @@ function updateToggleButton(theme: string) {
     }
 }
 
+// Briefly show a confirmation toast on a toggle button by stamping
+// data-toast with the message and adding .show-toast for 1500ms.
+function flashToast(el: Element | null, message: string) {
+    if (!el) return;
+    (el as HTMLElement).setAttribute('data-toast', message);
+    (el as HTMLElement).classList.add('show-toast');
+    window.setTimeout(() => {
+        (el as HTMLElement).classList.remove('show-toast');
+    }, 1500);
+}
+
 function toggleTheme() {
     const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     setTheme(next);
+    flashToast(document.querySelector('.theme-toggle'), `Switched to ${next} mode`);
 }
 
 function initTheme() {
@@ -203,6 +215,7 @@ function initMobileNav() {
             // tick so the wrap is guaranteed to be on screen first.
             requestAnimationFrame(() => {
                 applyMode(next);
+                flashToast(workToggle, `Switched to ${next} mode`);
 
                 // Thin black line that travels with the clip edge —
                 // visual marker of where OLD ends and NEW begins.
