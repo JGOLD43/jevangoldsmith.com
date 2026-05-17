@@ -413,3 +413,18 @@ body.nav-compact{padding-top:58px}
   .hero-container .hero-social-links{order:2;margin-top:-1.25rem}
   .hero-container .hero-welcome{margin-bottom:0}
 }
+
+/* Work/Explore mode toggle — sits next to the theme toggle. Inherits
+   the same circle-button styling as .theme-toggle. Clicking flips
+   between the "digger" stick figure (work) and the "explorer" stick
+   figure with backpack + hand at brow. */
+.work-mode-toggle{cursor:pointer;color:var(--nav-text);background:0 0;border:none;border-radius:50%;justify-content:center;align-items:center;padding:.5rem;transition:all .2s;display:flex;position:relative;width:36px;height:36px;-webkit-tap-highlight-color:transparent}
+.work-mode-toggle:hover{color:var(--text-color);background:var(--background-alt)}
+[data-theme=dark] .work-mode-toggle:hover{background:#333}
+.work-mode-icon{width:20px;height:20px;position:absolute;inset:auto;top:50%;left:50%;transform:translate(-50%,-50%) scale(.7) rotate(-10deg);opacity:0;transition:opacity .25s,transform .35s cubic-bezier(.22,1,.36,1)}
+.work-mode-toggle[data-mode="work"] .icon-digger,
+.work-mode-toggle[data-mode="explore"] .icon-explorer{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+body.nav-compact .navbar .work-mode-toggle{padding:.35rem;width:32px;height:32px}
+body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
+@media (max-width:968px){.work-mode-toggle{order:2}.theme-toggle{order:3}.mobile-menu-toggle{order:4}}
+@media (max-width:600px){.work-mode-toggle{padding:.4rem;width:32px;height:32px}.work-mode-icon{width:18px;height:18px}}
