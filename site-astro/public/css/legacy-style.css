@@ -404,7 +404,8 @@ body.nav-compact{padding-top:58px}
    fills the column to match the text width; gap between text and
    social icons is halved via a negative margin on the social row. */
 @media (max-width:768px){
-  .hero-container{display:flex;flex-direction:column;align-items:stretch;gap:2rem}
+  .hero{width:100%}
+  .hero-container{display:flex;flex-direction:column;align-items:stretch;gap:2rem;width:100%}
   .hero-container .hero-right{display:contents}
   .hero-container .profile-container{order:0;max-width:none;width:100%;margin:0}
   .hero-container .hero-picture,
