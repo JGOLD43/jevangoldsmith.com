@@ -459,3 +459,14 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    `display:none` (collapses) — keeps layout below the hero perfectly
    stable when toggling modes, no jumpy wipe. */
 /* (removed grid-stack: each mode now uses its natural layout height) */
+
+/* Mobile: enable native touch-swipe scroll on the featured carousel.
+   Desktop keeps the JS-driven translateX (prev/next arrows); on phones
+   we let the browser scroll horizontally + snap to each card. */
+@media (max-width:768px){
+  .carousel-container{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 1rem;scroll-padding-left:1rem}
+  .carousel-container::-webkit-scrollbar{display:none}
+  .feature-carousel-track{transform:none!important;transition:none}
+  .feature-card{scroll-snap-align:start}
+  .carousel-controls{display:none}
+}
