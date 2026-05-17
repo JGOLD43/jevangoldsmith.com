@@ -157,32 +157,43 @@ function initMobileNav() {
             wrap.appendChild(clone);
             document.body.appendChild(wrap);
 
-            // Flip the real site underneath the snapshot.
-            applyMode(next);
+            // Force a synchronous layout + paint of the wrap before
+            // we change anything underneath. Without this, the browser
+            // can batch the wrap's first paint with applyMode's
+            // repaint, briefly showing the live page in its NEW state
+            // *before* the wrap covers it — that's the "jump" the
+            // user was seeing.
+            wrap.getBoundingClientRect();
 
-            // Thin black line that travels with the clip edge — visual
-            // marker of where OLD ends and NEW begins.
-            const line = document.createElement('div');
-            line.setAttribute('aria-hidden', 'true');
-            line.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:2px;background:#000;z-index:10000;pointer-events:none;transform:translateX(-2px);box-shadow:0 0 12px #0008';
-            document.body.appendChild(line);
+            // Schedule the mode swap + animations on the next paint
+            // tick so the wrap is guaranteed to be on screen first.
+            requestAnimationFrame(() => {
+                applyMode(next);
 
-            const duration = 700;
-            const easing = 'cubic-bezier(.65,0,.35,1)';
+                // Thin black line that travels with the clip edge —
+                // visual marker of where OLD ends and NEW begins.
+                const line = document.createElement('div');
+                line.setAttribute('aria-hidden', 'true');
+                line.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:2px;background:#000;z-index:10000;pointer-events:none;transform:translateX(-2px);box-shadow:0 0 12px #0008';
+                document.body.appendChild(line);
 
-            // Wipe the snapshot away from left → right. clip-path
-            // `inset(0 0 0 X)` clips from the left edge: as X grows
-            // from 0 to 100%, the snapshot shrinks to a 0-width strip
-            // on the right, revealing the new state beneath.
-            const wipe = wrap.animate(
-                { clipPath: ['inset(0 0 0 0)', 'inset(0 0 0 100%)'] },
-                { duration, easing, fill: 'forwards' }
-            );
-            line.animate(
-                { transform: ['translateX(-2px)', `translateX(${window.innerWidth}px)`] },
-                { duration, easing, fill: 'forwards' }
-            );
-            wipe.onfinish = () => { wrap.remove(); line.remove(); };
+                const duration = 700;
+                const easing = 'cubic-bezier(.65,0,.35,1)';
+
+                // Wipe the snapshot away from left → right. clip-path
+                // `inset(0 0 0 X)` clips from the left edge: as X grows
+                // from 0 to 100%, the snapshot shrinks to a 0-width strip
+                // on the right, revealing the new state beneath.
+                const wipe = wrap.animate(
+                    { clipPath: ['inset(0 0 0 0)', 'inset(0 0 0 100%)'] },
+                    { duration, easing, fill: 'forwards' }
+                );
+                line.animate(
+                    { transform: ['translateX(-2px)', `translateX(${window.innerWidth}px)`] },
+                    { duration, easing, fill: 'forwards' }
+                );
+                wipe.onfinish = () => { wrap.remove(); line.remove(); };
+            });
         });
     }
 
