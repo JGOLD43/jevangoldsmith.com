@@ -349,7 +349,8 @@ body.nav-compact{padding-top:58px}
    inside the panel's safe area so it never gets clipped by the
    viewport edge / browser chrome. */
 @media (max-width:600px){
-  .person-detail-panel{position:fixed;inset:1rem;top:1rem;left:1rem;right:1rem;bottom:1rem;width:auto;max-width:none;max-height:none;border-radius:14px;border:1px solid #ffffff33;transform:none;padding:3.75rem 1rem 1rem}
+  /* Pin panel below the 70px fixed nav so the close button isn't hidden behind it. */
+  .person-detail-panel{position:fixed;inset:calc(70px + .75rem) 1rem 1rem 1rem;width:auto;max-width:none;max-height:none;border-radius:14px;border:1px solid #ffffff33;transform:none;padding:3.75rem 1rem 1rem}
   [data-theme=dark] .person-detail-panel{box-shadow:0 24px 60px #000c,0 0 0 1px #ffffff1f}
   .person-detail-close{top:.85rem;right:.85rem}
 }
