@@ -15,6 +15,10 @@ function initCarousel() {
     const dots = Array.from(document.querySelectorAll<HTMLElement>('[data-carousel-slide]'));
     const cards = Array.from(document.querySelectorAll<HTMLElement>('.feature-card'));
     if (!track || cards.length === 0) return;
+    // Mobile uses native horizontal touch-scroll on .carousel-container
+    // instead of JS-driven translateX. Skip the JS carousel entirely so
+    // it doesn't fight the user's swipe.
+    if (window.matchMedia('(max-width: 768px)').matches) return;
 
     let currentSlide = 0;
     const gap = 24;

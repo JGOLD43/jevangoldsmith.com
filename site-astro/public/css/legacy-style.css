@@ -464,9 +464,10 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    Desktop keeps the JS-driven translateX (prev/next arrows); on phones
    we let the browser scroll horizontally + snap to each card. */
 @media (max-width:768px){
-  .carousel-container{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 1rem;scroll-padding-left:1rem}
+  .carousel-container{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 1rem;scroll-padding-left:1rem;touch-action:pan-x;-webkit-user-select:none;user-select:none}
   .carousel-container::-webkit-scrollbar{display:none}
-  .feature-carousel-track{transform:none!important;transition:none}
-  .feature-card{scroll-snap-align:start}
+  .feature-carousel-track{transform:none!important;transition:none;touch-action:pan-x}
+  .feature-card{scroll-snap-align:start;touch-action:pan-x;-webkit-touch-callout:none}
+  .feature-card img{pointer-events:none;-webkit-user-drag:none}
   .carousel-controls{display:none}
 }
