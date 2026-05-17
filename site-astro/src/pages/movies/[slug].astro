@@ -59,7 +59,7 @@ const poster = m.poster || '';
     <header class="detail-hero detail-hero--movie">
       {poster && (
         <div class="detail-hero-poster">
-          <img src={poster} alt={`${m.title} poster`} loading="eager" decoding="async" fetchpriority="high" width="300" height="450" />
+          <img src={poster} alt={`${m.title} poster`} loading="eager" decoding="async" fetchpriority="high" width="300" height="450" style={`view-transition-name: movie-poster-${slug}`} />
         </div>
       )}
       <div class="detail-hero-body">
