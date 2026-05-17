@@ -400,11 +400,16 @@ body.nav-compact{padding-top:58px}
 /* Mobile homepage: image first / on top, text + social icons below.
    `display:contents` on .hero-right unwraps it so .profile-container
    and .hero-social-links become direct flex children of .hero-container
-   — then `order` slots them around .hero-left individually. */
+   — then `order` slots them around .hero-left individually. The image
+   fills the column to match the text width; gap between text and
+   social icons is halved via a negative margin on the social row. */
 @media (max-width:768px){
-  .hero-container{display:flex;flex-direction:column;align-items:center}
+  .hero-container{display:flex;flex-direction:column;align-items:stretch;gap:2rem}
   .hero-container .hero-right{display:contents}
-  .hero-container .profile-container{order:0}
-  .hero-container .hero-left{order:1}
-  .hero-container .hero-social-links{order:2}
+  .hero-container .profile-container{order:0;max-width:none;width:100%;margin:0}
+  .hero-container .hero-picture,
+  .hero-container .hero-image{width:100%;max-width:none;display:block;height:auto}
+  .hero-container .hero-left{order:1;align-self:center;max-width:100%}
+  .hero-container .hero-social-links{order:2;margin-top:-1.25rem}
+  .hero-container .hero-welcome{margin-bottom:0}
 }
