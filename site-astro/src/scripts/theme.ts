@@ -174,11 +174,11 @@ function initMobileNav() {
             // would otherwise follow the NEW mode and render the wrong
             // copy on the OLD side of the wipe line.
             const oldMode = current();
-            clone.querySelectorAll('.mode-work').forEach((el) => {
-                (el as HTMLElement).style.display = oldMode === 'work' ? '' : 'none';
+            clone.querySelectorAll('.hero-headline .mode-work, .hero-welcome .mode-work').forEach((el) => {
+                (el as HTMLElement).style.visibility = oldMode === 'work' ? '' : 'hidden';
             });
-            clone.querySelectorAll('.mode-personal').forEach((el) => {
-                (el as HTMLElement).style.display = oldMode === 'personal' ? '' : 'none';
+            clone.querySelectorAll('.hero-headline .mode-personal, .hero-welcome .mode-personal').forEach((el) => {
+                (el as HTMLElement).style.visibility = oldMode === 'personal' ? '' : 'hidden';
             });
             // Preserve the live body's computed padding/margin so the
             // cloned content lines up exactly with what the user was
