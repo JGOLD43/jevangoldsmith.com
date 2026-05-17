@@ -44,8 +44,7 @@ export function renderMovieCardHtml(movie: Movie): string {
             ${link && link !== '#' ? `<a class="zoom-detail-link" href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer">Letterboxd</a>` : ''}
         </div>`;
 
-  // view-transition-name → /movies/{slug}.html's hero poster for the
-  // native Cross-Document VT morph.
+  // view-transition-name → /movies/{slug}.html's hero poster.
   const vtSlug = slugify(title);
   const vtStyle = vtSlug ? ` style="view-transition-name: movie-poster-${vtSlug}"` : '';
   const body = `

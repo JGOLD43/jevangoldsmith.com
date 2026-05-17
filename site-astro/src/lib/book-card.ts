@@ -85,10 +85,8 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
   else if (!hasRating) ratingBlock = '<div class="book-rating book-rating-unrated">Read</div>';
   else ratingBlock = `<div class="book-rating"><span class="rating-number">${ratingValue}</span> ${stars}</div>`;
 
-  // view-transition-name on the cover image lets the browser morph it
-  // smoothly into /books/{slug}.html's hero cover via the native
-  // Cross-Document View Transitions API (Chrome 126+ / opt-in via the
-  // @view-transition declaration in legacy-style.css).
+  // view-transition-name pairs this cover with /books/{slug}.html's
+  // hero so the browser morphs them during cross-doc navigation.
   const vtSlug = isbn || slugify(`${title}-${author}`);
   const vtStyle = vtSlug ? ` style="view-transition-name: book-cover-${vtSlug}"` : '';
   const coverImg = coverUrl

@@ -110,6 +110,37 @@ function initMobileNav() {
         });
     });
 
+    // Work / Explore mode toggle in the navbar. Flips between the
+    // "digger" stick figure and the "explorer with backpack" via a
+    // data-mode attribute; CSS handles the icon swap + animation.
+    const workToggle = document.querySelector('.work-mode-toggle');
+    if (workToggle) {
+        const stored = (() => { try { return localStorage.getItem('jg-work-mode'); } catch { return null; } })();
+        if (stored === 'explore') {
+            workToggle.setAttribute('data-mode', 'explore');
+            workToggle.setAttribute('aria-pressed', 'true');
+        }
+        workToggle.addEventListener('click', () => {
+            const next = workToggle.getAttribute('data-mode') === 'work' ? 'explore' : 'work';
+            workToggle.setAttribute('data-mode', next);
+            workToggle.setAttribute('aria-pressed', next === 'explore' ? 'true' : 'false');
+            try { localStorage.setItem('jg-work-mode', next); } catch {}
+        });
+    }
+
+    // Tap on empty space inside the open mobile nav (below the last
+    // item) closes the menu. Only fires when the click target IS the
+    // .nav-links container itself — clicks on actual links / dropdown
+    // triggers bubble through and are handled by the listeners above.
+    navLinks.addEventListener('click', (event) => {
+        if (window.innerWidth > 968) return;
+        if (event.target !== navLinks) return;
+        mobileMenuToggle.classList.remove('active');
+        navLinks.classList.remove('mobile-open');
+        document.body.style.overflow = '';
+        dropdowns.forEach(d => d.classList.remove('mobile-dropdown-open'));
+    });
+
     window.addEventListener('resize', () => {
         if (window.innerWidth > 968) {
             mobileMenuToggle.classList.remove('active');
