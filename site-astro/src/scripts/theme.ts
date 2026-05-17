@@ -125,7 +125,7 @@ function initMobileNav() {
         const current = (): 'work' | 'personal' =>
             (document.documentElement.getAttribute('data-mode') as 'work' | 'personal') || 'work';
 
-        workToggle.addEventListener('click', async () => {
+        workToggle.addEventListener('click', () => {
             const next: 'work' | 'personal' = current() === 'work' ? 'personal' : 'work';
             const rect = workToggle.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
@@ -134,23 +134,44 @@ function initMobileNav() {
                 Math.max(cx, window.innerWidth - cx),
                 Math.max(cy, window.innerHeight - cy)
             );
-            const start = `circle(0 at ${cx}px ${cy}px)`;
-            const end = `circle(${endRadius}px at ${cx}px ${cy}px)`;
 
-            // No View Transitions support → just apply, no wipe.
-            const doc = document as Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
-            if (!doc.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                applyMode(next);
-                return;
-            }
-            const t = doc.startViewTransition(() => applyMode(next));
-            try {
-                await t.ready;
-                document.documentElement.animate(
-                    { clipPath: [start, end] },
-                    { duration: 600, easing: 'cubic-bezier(.22,1,.36,1)', pseudoElement: '::view-transition-new(root)' }
-                );
-            } catch { /* transition aborted */ }
+            // Manual circular-wipe overlay (independent of the View
+            // Transitions API so it runs in every browser AND under
+            // prefers-reduced-motion, since the user explicitly invoked
+            // it by tapping the toggle). The overlay's color is the
+            // destination mode's accent — we read it from a probe
+            // element so the wipe uses the actual CSS-resolved value.
+            const probe = document.createElement('div');
+            probe.style.cssText = 'position:absolute;visibility:hidden';
+            probe.setAttribute('data-mode', next);
+            document.body.appendChild(probe);
+            const accent = getComputedStyle(probe).getPropertyValue('--secondary-color').trim()
+                || (next === 'personal' ? '#d77a5e' : '#c9a86c');
+            probe.remove();
+
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `position:fixed;inset:0;z-index:9999;background:${accent};pointer-events:none;clip-path:circle(0 at ${cx}px ${cy}px)`;
+            document.body.appendChild(overlay);
+
+            const anim = overlay.animate(
+                {
+                    clipPath: [
+                        `circle(0 at ${cx}px ${cy}px)`,
+                        `circle(${endRadius}px at ${cx}px ${cy}px)`
+                    ]
+                },
+                { duration: 650, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' }
+            );
+
+            // Swap mode at the apex of the wipe so the new accent
+            // appears "under" the receding overlay.
+            window.setTimeout(() => applyMode(next), 350);
+            anim.onfinish = () => {
+                overlay.animate(
+                    { opacity: [1, 0] },
+                    { duration: 220, easing: 'ease-out', fill: 'forwards' }
+                ).onfinish = () => overlay.remove();
+            };
         });
     }
 
