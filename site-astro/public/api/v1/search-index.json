@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updatedAt": "2026-05-15T07:12:47.734Z",
+  "updatedAt": "2026-05-17T04:42:56.295Z",
   "guidance": "Static search/discovery index. Fetch candidate URLs from this file, then fetch canonical collection endpoints or HTML for detail.",
   "records": [
     {
