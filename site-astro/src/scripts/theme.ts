@@ -94,6 +94,138 @@ function initLogoVideoLazy() {
 }
 
 // Mobile nav handlers attach only on viewports that match the breakpoint.
+
+// Work / Personal mode toggle — wipe transition. Runs on every
+// viewport (was previously buried inside initMobileNav which exited
+// early on desktop).
+function initWorkModeToggle() {
+const workToggle = document.querySelector('.work-mode-toggle') as HTMLElement | null;
+if (workToggle) {
+    const applyMode = (mode: 'work' | 'personal') => {
+        document.documentElement.setAttribute('data-mode', mode);
+        workToggle.setAttribute('data-mode', mode === 'work' ? 'work' : 'explore');
+        workToggle.setAttribute('aria-pressed', mode === 'personal' ? 'true' : 'false');
+        try { localStorage.setItem('jg-work-mode', mode); } catch {}
+    };
+    const current = (): 'work' | 'personal' =>
+        (document.documentElement.getAttribute('data-mode') as 'work' | 'personal') || 'work';
+
+    attachHoverTip(workToggle);
+    workToggle.addEventListener('click', (event) => {
+        event.preventDefault();
+        (workToggle as HTMLElement).blur();
+        const next: 'work' | 'personal' = current() === 'work' ? 'personal' : 'work';
+
+        // Lock the page in place for the duration of the wipe so
+        // nothing under the overlay can shift. Restore after the
+        // animation finishes.
+        const sy = window.scrollY;
+        const sx = window.scrollX;
+        const prevBodyStyle = document.body.style.cssText;
+        const prevHtmlOverflow = document.documentElement.style.overflow;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${sy}px`;
+        document.body.style.left = `-${sx}px`;
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.documentElement.style.overflow = 'hidden';
+
+        // wodniack.dev-style wipe: snapshot the current viewport
+        // by cloning <body> into a fixed overlay, freeze the OLD
+        // CSS variables on it, then apply the new mode underneath
+        // and wipe the snapshot away with clip-path. The wipe's
+        // moving edge is the "line sweeping across the screen" —
+        // OLD state visible on one side, NEW state revealed on
+        // the other as the line passes.
+        const wrap = document.createElement('div');
+        wrap.setAttribute('aria-hidden', 'true');
+        // transform makes wrap a containing block for its
+        // descendants' position:fixed, so cloned <nav> etc. get
+        // clipped by the wipe instead of escaping to the viewport
+        // and visibly snapping back to their normal slot.
+        wrap.style.cssText = `position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden;background:var(--background);transform:translateZ(0);isolation:isolate`;
+        // Freeze old CSS variables on the wrap so the cloned DOM
+        // renders with the OLD theme even after we flip <html>.
+        const cs = getComputedStyle(document.documentElement);
+        ['--secondary-color', '--accent-color', '--background', '--background-alt', '--text-color', '--text-light', '--card-bg', '--border-color', '--primary-color', '--navbar-bg', '--dropdown-bg'].forEach((v) => {
+            const value = cs.getPropertyValue(v);
+            if (value) wrap.style.setProperty(v, value);
+        });
+        const clone = document.body.cloneNode(true) as HTMLElement;
+        // Strip scripts/links from the clone so it doesn't re-run logic.
+        clone.querySelectorAll('script, link[rel="stylesheet"]').forEach((el) => el.remove());
+        // Lock the clone's mode-conditional content to the OLD mode
+        // visibility — the CSS rules for these classes are scoped to
+        // <html>[data-mode], and once we flip <html> below the clone
+        // would otherwise follow the NEW mode and render the wrong
+        // copy on the OLD side of the wipe line.
+        const oldMode = current();
+        // Hero headline + welcome stack variants in grid cells
+        // (visibility:hidden inactive) so socials sit at same y.
+        clone.querySelectorAll('.hero-headline .mode-work, .hero-welcome .mode-work').forEach((el) => {
+            (el as HTMLElement).style.visibility = oldMode === 'work' ? '' : 'hidden';
+        });
+        clone.querySelectorAll('.hero-headline .mode-personal, .hero-welcome .mode-personal').forEach((el) => {
+            (el as HTMLElement).style.visibility = oldMode === 'personal' ? '' : 'hidden';
+        });
+        // Preserve the live body's computed padding/margin so the
+        // cloned content lines up exactly with what the user was
+        // seeing. (Body has padding-top equal to nav height; if we
+        // zero it the clone shifts up by ~67px → visible "jump".)
+        const bs = getComputedStyle(document.body);
+        clone.style.cssText = `position:absolute;top:${-sy}px;left:0;width:100vw;margin:${bs.margin};padding:${bs.padding}`;
+        wrap.appendChild(clone);
+        document.body.appendChild(wrap);
+
+        // Force a synchronous layout + paint of the wrap before
+        // we change anything underneath. Without this, the browser
+        // can batch the wrap's first paint with applyMode's
+        // repaint, briefly showing the live page in its NEW state
+        // *before* the wrap covers it — that's the "jump" the
+        // user was seeing.
+        wrap.getBoundingClientRect();
+
+        // Schedule the mode swap + animations on the next paint
+        // tick so the wrap is guaranteed to be on screen first.
+        requestAnimationFrame(() => {
+            applyMode(next);
+            flashToast(workToggle, `Switched to ${next} mode`);
+
+            // Thin black line that travels with the clip edge —
+            // visual marker of where OLD ends and NEW begins.
+            const line = document.createElement('div');
+            line.setAttribute('aria-hidden', 'true');
+            line.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:2px;background:#000;z-index:10000;pointer-events:none;transform:translateX(-2px);box-shadow:0 0 12px #0008';
+            document.body.appendChild(line);
+
+            const duration = 700;
+            const easing = 'cubic-bezier(.65,0,.35,1)';
+
+            // Wipe the snapshot away from left → right. clip-path
+            // `inset(0 0 0 X)` clips from the left edge: as X grows
+            // from 0 to 100%, the snapshot shrinks to a 0-width strip
+            // on the right, revealing the new state beneath.
+            const wipe = wrap.animate(
+                { clipPath: ['inset(0 0 0 0)', 'inset(0 0 0 100%)'] },
+                { duration, easing, fill: 'forwards' }
+            );
+            line.animate(
+                { transform: ['translateX(-2px)', `translateX(${window.innerWidth}px)`] },
+                { duration, easing, fill: 'forwards' }
+            );
+            wipe.onfinish = () => {
+                wrap.remove();
+                line.remove();
+                // Unlock page scroll without triggering a visible jump.
+                document.body.style.cssText = prevBodyStyle;
+                document.documentElement.style.overflow = prevHtmlOverflow;
+                window.scrollTo(sx, sy);
+            };
+        });
+    });
+}
+}
+
 function initMobileNav() {
     const MOBILE_MQ = '(max-width: 968px)';
     const mql = window.matchMedia(MOBILE_MQ);
@@ -153,131 +285,10 @@ function initMobileNav() {
     // flips via [data-mode] on the button. The whole site re-skins via
     // [data-mode] on <html>. Click triggers a circular wipe transition
     // (like wodniack.dev's theme toggle) expanding from the button.
-    const workToggle = document.querySelector('.work-mode-toggle') as HTMLElement | null;
-    if (workToggle) {
-        const applyMode = (mode: 'work' | 'personal') => {
-            document.documentElement.setAttribute('data-mode', mode);
-            workToggle.setAttribute('data-mode', mode === 'work' ? 'work' : 'explore');
-            workToggle.setAttribute('aria-pressed', mode === 'personal' ? 'true' : 'false');
-            try { localStorage.setItem('jg-work-mode', mode); } catch {}
-        };
-        const current = (): 'work' | 'personal' =>
-            (document.documentElement.getAttribute('data-mode') as 'work' | 'personal') || 'work';
 
-        attachHoverTip(workToggle);
-        workToggle.addEventListener('click', (event) => {
-            event.preventDefault();
-            (workToggle as HTMLElement).blur();
-            const next: 'work' | 'personal' = current() === 'work' ? 'personal' : 'work';
+    // Work/personal toggle is bound by initWorkModeToggle (called
+    // from bootChrome so it runs on desktop too).
 
-            // Lock the page in place for the duration of the wipe so
-            // nothing under the overlay can shift. Restore after the
-            // animation finishes.
-            const sy = window.scrollY;
-            const sx = window.scrollX;
-            const prevBodyStyle = document.body.style.cssText;
-            const prevHtmlOverflow = document.documentElement.style.overflow;
-            document.body.style.position = 'fixed';
-            document.body.style.top = `-${sy}px`;
-            document.body.style.left = `-${sx}px`;
-            document.body.style.right = '0';
-            document.body.style.width = '100%';
-            document.documentElement.style.overflow = 'hidden';
-
-            // wodniack.dev-style wipe: snapshot the current viewport
-            // by cloning <body> into a fixed overlay, freeze the OLD
-            // CSS variables on it, then apply the new mode underneath
-            // and wipe the snapshot away with clip-path. The wipe's
-            // moving edge is the "line sweeping across the screen" —
-            // OLD state visible on one side, NEW state revealed on
-            // the other as the line passes.
-            const wrap = document.createElement('div');
-            wrap.setAttribute('aria-hidden', 'true');
-            // transform makes wrap a containing block for its
-            // descendants' position:fixed, so cloned <nav> etc. get
-            // clipped by the wipe instead of escaping to the viewport
-            // and visibly snapping back to their normal slot.
-            wrap.style.cssText = `position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden;background:var(--background);transform:translateZ(0);isolation:isolate`;
-            // Freeze old CSS variables on the wrap so the cloned DOM
-            // renders with the OLD theme even after we flip <html>.
-            const cs = getComputedStyle(document.documentElement);
-            ['--secondary-color', '--accent-color', '--background', '--background-alt', '--text-color', '--text-light', '--card-bg', '--border-color', '--primary-color', '--navbar-bg', '--dropdown-bg'].forEach((v) => {
-                const value = cs.getPropertyValue(v);
-                if (value) wrap.style.setProperty(v, value);
-            });
-            const clone = document.body.cloneNode(true) as HTMLElement;
-            // Strip scripts/links from the clone so it doesn't re-run logic.
-            clone.querySelectorAll('script, link[rel="stylesheet"]').forEach((el) => el.remove());
-            // Lock the clone's mode-conditional content to the OLD mode
-            // visibility — the CSS rules for these classes are scoped to
-            // <html>[data-mode], and once we flip <html> below the clone
-            // would otherwise follow the NEW mode and render the wrong
-            // copy on the OLD side of the wipe line.
-            const oldMode = current();
-            // Hero headline + welcome stack variants in grid cells
-            // (visibility:hidden inactive) so socials sit at same y.
-            clone.querySelectorAll('.hero-headline .mode-work, .hero-welcome .mode-work').forEach((el) => {
-                (el as HTMLElement).style.visibility = oldMode === 'work' ? '' : 'hidden';
-            });
-            clone.querySelectorAll('.hero-headline .mode-personal, .hero-welcome .mode-personal').forEach((el) => {
-                (el as HTMLElement).style.visibility = oldMode === 'personal' ? '' : 'hidden';
-            });
-            // Preserve the live body's computed padding/margin so the
-            // cloned content lines up exactly with what the user was
-            // seeing. (Body has padding-top equal to nav height; if we
-            // zero it the clone shifts up by ~67px → visible "jump".)
-            const bs = getComputedStyle(document.body);
-            clone.style.cssText = `position:absolute;top:${-sy}px;left:0;width:100vw;margin:${bs.margin};padding:${bs.padding}`;
-            wrap.appendChild(clone);
-            document.body.appendChild(wrap);
-
-            // Force a synchronous layout + paint of the wrap before
-            // we change anything underneath. Without this, the browser
-            // can batch the wrap's first paint with applyMode's
-            // repaint, briefly showing the live page in its NEW state
-            // *before* the wrap covers it — that's the "jump" the
-            // user was seeing.
-            wrap.getBoundingClientRect();
-
-            // Schedule the mode swap + animations on the next paint
-            // tick so the wrap is guaranteed to be on screen first.
-            requestAnimationFrame(() => {
-                applyMode(next);
-                flashToast(workToggle, `Switched to ${next} mode`);
-
-                // Thin black line that travels with the clip edge —
-                // visual marker of where OLD ends and NEW begins.
-                const line = document.createElement('div');
-                line.setAttribute('aria-hidden', 'true');
-                line.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:2px;background:#000;z-index:10000;pointer-events:none;transform:translateX(-2px);box-shadow:0 0 12px #0008';
-                document.body.appendChild(line);
-
-                const duration = 700;
-                const easing = 'cubic-bezier(.65,0,.35,1)';
-
-                // Wipe the snapshot away from left → right. clip-path
-                // `inset(0 0 0 X)` clips from the left edge: as X grows
-                // from 0 to 100%, the snapshot shrinks to a 0-width strip
-                // on the right, revealing the new state beneath.
-                const wipe = wrap.animate(
-                    { clipPath: ['inset(0 0 0 0)', 'inset(0 0 0 100%)'] },
-                    { duration, easing, fill: 'forwards' }
-                );
-                line.animate(
-                    { transform: ['translateX(-2px)', `translateX(${window.innerWidth}px)`] },
-                    { duration, easing, fill: 'forwards' }
-                );
-                wipe.onfinish = () => {
-                    wrap.remove();
-                    line.remove();
-                    // Unlock page scroll without triggering a visible jump.
-                    document.body.style.cssText = prevBodyStyle;
-                    document.documentElement.style.overflow = prevHtmlOverflow;
-                    window.scrollTo(sx, sy);
-                };
-            });
-        });
-    }
 
     // Tap on empty space inside the open mobile nav (below the last
     // item) closes the menu. Only fires when the click target IS the
@@ -357,6 +368,7 @@ async function initDeferredChrome() {
 
 function bootChrome() {
     initTheme();
+    initWorkModeToggle();
     initMobileNav();
     initNavHeight();
     runWhenIdle(initDeferredChrome);
