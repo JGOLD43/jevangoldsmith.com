@@ -117,6 +117,8 @@ if (seoSlug === 'index' || seoSlug === 'search') {
           const t = localStorage.getItem('jg-theme')
             || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
           document.documentElement.setAttribute('data-theme', t);
+          const m = localStorage.getItem('jg-work-mode');
+          document.documentElement.setAttribute('data-mode', m === 'personal' ? 'personal' : 'work');
         } catch (_) { /* private mode / SSR can't read storage */ }
       })();
     </script>
