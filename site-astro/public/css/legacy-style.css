@@ -397,9 +397,14 @@ body.nav-compact{padding-top:58px}
   .detail-page--movie .detail-hero{gap:1rem;margin-bottom:1.5rem}
 }
 
-/* Mobile homepage: image first / on top, text below. */
+/* Mobile homepage: image first / on top, text + social icons below.
+   `display:contents` on .hero-right unwraps it so .profile-container
+   and .hero-social-links become direct flex children of .hero-container
+   — then `order` slots them around .hero-left individually. */
 @media (max-width:768px){
-  .hero-container{display:flex;flex-direction:column}
-  .hero-container .hero-right{order:0}
+  .hero-container{display:flex;flex-direction:column;align-items:center}
+  .hero-container .hero-right{display:contents}
+  .hero-container .profile-container{order:0}
   .hero-container .hero-left{order:1}
+  .hero-container .hero-social-links{order:2}
 }
