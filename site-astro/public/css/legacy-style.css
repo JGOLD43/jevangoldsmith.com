@@ -451,5 +451,12 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
 [data-mode="work"] .hero-headline .mode-personal,
 [data-mode="work"] .hero-welcome .mode-personal,
 [data-mode="personal"] .hero-headline .mode-work,
-[data-mode="personal"] .hero-welcome .mode-work{display:none}
+[data-mode="personal"] .hero-welcome .mode-work{visibility:hidden}
 .hero-welcome-work{color:var(--text-light);display:block;margin:0}
+/* Stack the work + personal copy variants in the same grid cell so
+   the taller variant always sets the row height. The inactive variant
+   becomes `visibility:hidden` (still takes space) instead of
+   `display:none` (collapses) — keeps layout below the hero perfectly
+   stable when toggling modes, no jumpy wipe. */
+.hero-headline,.hero-welcome{display:grid}
+.hero-headline > span,.hero-welcome > span{grid-area:1/1}
