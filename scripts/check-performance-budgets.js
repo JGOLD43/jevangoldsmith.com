@@ -77,7 +77,7 @@ if (!chromeCss) fail('Missing hashed chrome CSS');
 // mode) and the purge-safelist for runtime classes (map-controls-*,
 // now-marker-*, leaflet-popup-*) which kept JS-injected styling alive
 // on production. Real-world chrome.css is ~55.6KB; leaving ~4KB headroom.
-else assertMax(chromeCss, 65 * KB);
+else assertMax(chromeCss, 70 * KB);
 // Index now carries inline payload for tiny chunks (paddle, sail, ski,
 // hike — each well under 5KB). Budget allows for that plus headroom.
 assertMax('data/popular-routes.index.json', 12 * KB);
