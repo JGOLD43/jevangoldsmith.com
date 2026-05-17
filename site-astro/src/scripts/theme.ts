@@ -26,18 +26,39 @@ function updateToggleButton(theme: string) {
     }
 }
 
+// Hover-tooltip driver: JS-controlled so a click cancels any pending
+// reveal AND any visible tip. Tooltip only appears after the cursor
+// has been over the element for a continuous 1000ms.
+const hoverTimers = new WeakMap<HTMLElement, number>();
+function attachHoverTip(el: HTMLElement | null) {
+    if (!el) return;
+    const cancel = () => {
+        const t = hoverTimers.get(el);
+        if (t) { clearTimeout(t); hoverTimers.delete(el); }
+        el.classList.remove('show-hover-tip');
+    };
+    el.addEventListener('mouseenter', () => {
+        if (el.classList.contains('show-toast')) return;
+        const t = window.setTimeout(() => {
+            if (!el.classList.contains('show-toast')) {
+                el.classList.add('show-hover-tip');
+            }
+        }, 1000);
+        hoverTimers.set(el, t);
+    });
+    el.addEventListener('mouseleave', cancel);
+    el.addEventListener('click', cancel);
+}
+
 // Briefly show a confirmation toast on a toggle button by stamping
 // data-toast with the message and adding .show-toast for 1500ms.
-// Also adds .suppress-hover-tip for slightly longer so the hover
-// tooltip doesn't pile on top of the toast (or pop up immediately
-// after it fades) while the user's cursor is still over the button.
 function flashToast(el: Element | null, message: string) {
     if (!el) return;
     const node = el as HTMLElement;
     node.setAttribute('data-toast', message);
-    node.classList.add('show-toast', 'suppress-hover-tip');
+    node.classList.remove('show-hover-tip');
+    node.classList.add('show-toast');
     window.setTimeout(() => node.classList.remove('show-toast'), 1500);
-    window.setTimeout(() => node.classList.remove('suppress-hover-tip'), 2500);
 }
 
 function toggleTheme() {
@@ -52,6 +73,7 @@ function initTheme() {
     setTheme(theme);
     const toggleBtn = document.querySelector('.theme-toggle');
     if (toggleBtn) toggleBtn.addEventListener('click', toggleTheme);
+    attachHoverTip(toggleBtn as HTMLElement | null);
 }
 
 // logo-video.ts is loaded on first hover/touch of .logo so the Base bundle stays slim.
@@ -140,6 +162,7 @@ function initMobileNav() {
         const current = (): 'work' | 'personal' =>
             (document.documentElement.getAttribute('data-mode') as 'work' | 'personal') || 'work';
 
+        attachHoverTip(workToggle);
         workToggle.addEventListener('click', (event) => {
             event.preventDefault();
             (workToggle as HTMLElement).blur();
