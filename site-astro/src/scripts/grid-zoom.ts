@@ -88,23 +88,16 @@ export function init(config: GridZoomConfig) {
 
   grid.addEventListener('click', function (event: Event) {
     const target = event.target as Element | null;
+    // Nested link inside the card (e.g. "View full review", Letterboxd
+    // sub-link) — let it navigate; don't zoom.
+    if (target?.closest('a[href]:not([href="#"])')) return;
     const trigger = target?.closest(triggerSelector);
     if (!trigger) return;
-    const link = target?.closest('a') as HTMLAnchorElement | null;
-    // Nested link inside the card (e.g. a "Letterboxd" sub-link) — let it
-    // navigate; don't run the zoom.
-    if (link && link !== trigger && link.getAttribute('href') && link.getAttribute('href') !== '#') return;
     const item = (trigger.closest(itemSelector) || trigger) as HTMLElement;
     if (!item) return;
     event.preventDefault();
     event.stopPropagation();
     openItem(item);
-    // Trigger itself is an anchor (books/movies card-link) — run the zoom
-    // animation as a shared-element transition, then follow the href.
-    if (link && link === trigger && link.getAttribute('href') && link.getAttribute('href') !== '#') {
-      const href = link.href;
-      setTimeout(function () { window.location.href = href; }, 320);
-    }
   });
 
   grid.addEventListener('keydown', function (event: Event) {

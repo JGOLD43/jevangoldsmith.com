@@ -662,6 +662,7 @@ function initBooksZoom() {
     const booksGrid = document.getElementById('books-container');
     if (!booksGrid) return;
     booksGrid.classList.add('js-zoom-grid');
+    booksGrid.querySelectorAll('.book-card').forEach((el) => el.classList.add('js-zoom-item'));
     initGridZoom({
         anchorSelector: '.book-cover',
         eventName: 'book_open',

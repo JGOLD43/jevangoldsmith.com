@@ -96,17 +96,22 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
 
   // data-isbn is the canonical key; data-title fallback for the 7 books
   // missing an ISBN (read at books.ts:158).
-  const body = `${badgeHtml}<div class="book-cover-wrapper">${coverImg}<div class="js-zoom-detail" aria-hidden="true"><p class="zoom-detail-kicker">${escapeHtml(author)}${yearStr ? ` · ${escapeHtml(yearStr)}` : ''}</p><p class="zoom-detail-title">${escapeHtml(title)}</p>${zoomLead}${detailLine}</div></div><div class="book-info"><div class="book-title-row"><h3 class="book-title">${escapeHtml(title)}</h3>${yearSpan}</div><p class="book-author">by ${escapeHtml(author)}</p>${ratingBlock}${reviewBlock}</div>`;
+  const slug = isbn || slugify(`${title}-${author}`);
+  const detailHref = slug ? `/books/${slug}.html` : '';
+  const detailLink = detailHref ? `<a class="zoom-detail-link" href="${escapeAttr(detailHref)}">View full review →</a>` : '';
+  const body = `${badgeHtml}<div class="book-cover-wrapper">${coverImg}<div class="js-zoom-detail" aria-hidden="true"><p class="zoom-detail-kicker">${escapeHtml(author)}${yearStr ? ` · ${escapeHtml(yearStr)}` : ''}</p><p class="zoom-detail-title">${escapeHtml(title)}</p>${zoomLead}${detailLine}${detailLink}</div></div><div class="book-info"><div class="book-title-row"><h3 class="book-title">${escapeHtml(title)}</h3>${yearSpan}</div><p class="book-author">by ${escapeHtml(author)}</p>${ratingBlock}${reviewBlock}</div>`;
 
   const classes = ['book-card', 'card-link'];
   if (isUnread) classes.push('is-unread');
   if (review) classes.push('has-review');
-  const slug = isbn || slugify(`${title}-${author}`);
-  const href = slug ? `/books/${slug}.html` : '#';
+  // Card is a div + role="button" (shelf-style zoom in place); the deep
+  // link to /books/{slug}.html stays reachable from sidebar, search index,
+  // and the "View full review" link inside the zoomed detail.
   return cardFrame({
-    tag: 'a',
-    href,
+    tag: 'div',
     classes,
+    role: 'button',
+    tabindex: 0,
     data: { isbn, ...(isbn ? {} : { title }) },
     body
   });

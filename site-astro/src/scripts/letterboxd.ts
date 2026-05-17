@@ -376,6 +376,7 @@ function initMoviesZoom() {
     const moviesGrid = document.getElementById('movies-container');
     if (!moviesGrid) return;
     moviesGrid.classList.add('js-zoom-grid');
+    moviesGrid.querySelectorAll('.movie-card').forEach((el) => el.classList.add('js-zoom-item'));
     initGridZoom({
         anchorSelector: '.movie-poster',
         eventName: 'movie_open',
