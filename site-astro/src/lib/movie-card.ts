@@ -44,10 +44,13 @@ export function renderMovieCardHtml(movie: Movie): string {
             ${link && link !== '#' ? `<a class="zoom-detail-link" href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer">Letterboxd</a>` : ''}
         </div>`;
 
+  // view-transition-name → /movies/{slug}.html's hero poster.
+  const vtSlug = slugify(title);
+  const vtStyle = vtSlug ? ` style="view-transition-name: movie-poster-${vtSlug}"` : '';
   const body = `
         ${topBadge(timesWatched > 1 ? `${timesWatched}x Watched` : null, 'movie-watch-badge')}
         <div class="movie-poster-wrapper">
-            ${poster ? `<img src="${escapeAttr(poster)}" alt="${escapeAttr(title)}" class="movie-poster" width="150" height="230" loading="lazy" decoding="async">` : `<div class="movie-poster-placeholder">${escapeHtml(title)}</div>`}
+            ${poster ? `<img src="${escapeAttr(poster)}" alt="${escapeAttr(title)}" class="movie-poster" width="150" height="230" loading="lazy" decoding="async"${vtStyle}>` : `<div class="movie-poster-placeholder">${escapeHtml(title)}</div>`}
         </div>
         <div class="movie-info">
             <div class="movie-title-row">

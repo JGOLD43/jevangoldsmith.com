@@ -353,3 +353,34 @@ body.nav-compact{padding-top:58px}
    shadow on press; the existing :hover transition handles the easing. */
 .carousel-book-link:active .carousel-book,
 .carousel-book-link.is-launching .carousel-book{transform:scale(1.18);box-shadow:0 6px 18px #0006;transition:transform .22s ease-out,box-shadow .22s ease-out}
+
+/* Cross-Document View Transitions: morph book / movie covers from the
+   collection grid into the detail page hero. Matching
+   view-transition-name on grid <img> and hero <img>; @view-transition
+   opts the whole site into auto cross-doc transitions. */
+@view-transition{navigation:auto}
+::view-transition-image-pair(*){animation-duration:.5s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+
+/* Detail-hero redesign: cover sits LARGE and CENTERED at the top, so
+   the VT morph from a small grid card lands on the natural "hero" of
+   the page — the navigation feels like a single continuous zoom. The
+   metadata + body text flow below the cover in a stacked column. */
+.detail-page--book .detail-hero,
+.detail-page--movie .detail-hero{flex-direction:column;align-items:center;text-align:center;gap:1.25rem;margin-bottom:2rem}
+.detail-page--book .detail-hero-cover,
+.detail-page--movie .detail-hero-poster{flex:none;max-width:none;width:min(60vw,260px);border-radius:8px;overflow:hidden;box-shadow:0 18px 50px #0007;margin:0 auto}
+.detail-page--book .detail-hero-cover img,
+.detail-page--movie .detail-hero-poster img{width:100%;height:auto;display:block;aspect-ratio:2/3;object-fit:cover}
+.detail-page--book .detail-hero-body,
+.detail-page--movie .detail-hero-body{flex:none;width:100%;max-width:560px;text-align:center}
+.detail-page--book .detail-kicker,
+.detail-page--movie .detail-kicker{justify-content:center;display:flex;flex-wrap:wrap;gap:.4rem}
+.detail-page--book .detail-back,
+.detail-page--movie .detail-back{display:inline-block;margin-bottom:1rem}
+
+@media (max-width:600px){
+  .detail-page--book .detail-hero-cover,
+  .detail-page--movie .detail-hero-poster{width:min(70vw,240px)}
+  .detail-page--book .detail-hero,
+  .detail-page--movie .detail-hero{gap:1rem;margin-bottom:1.5rem}
+}
