@@ -5,6 +5,7 @@ import moviesRuntimeData from '../../public/data/movies.json';
 import CollectionPage from '../components/CollectionPage.astro';
 import { MOVIE_SECTIONS, renderRatingFilterSection, renderSliderFilterSection, tasteListOptions } from '../lib/collection-sections';
 import { renderMovieCardHtml } from '../lib/movie-card';
+import { escapeAttr } from '../lib/html-escape';
 
 const canonical = 'https://jevangoldsmith.com/movies.html';
 
@@ -15,6 +16,23 @@ const canonical = 'https://jevangoldsmith.com/movies.html';
 
 const movies = (await getCollection('movies') as CollectionEntry<'movies'>[]).map((m) => m.data);
 const movieCardsHtml = movies.map((m) => renderMovieCardHtml(m)).join('');
+
+// "Recently Added" carousel — most recent 20 movies with a poster,
+// SSR'd twice so the seamless-scroll loop is complete on first paint.
+// Reuses the .recent-books-carousel / .carousel-* styles from books.
+const recentMovies = [...movies]
+  .filter((m) => m.poster)
+  .sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime())
+  .slice(0, 20);
+const movieCarouselInner = [...recentMovies, ...recentMovies]
+  .map((m) => `<a class="carousel-book-link" href="${escapeAttr(m.link || '#')}" target="_blank" rel="noopener noreferrer" title="${escapeAttr(`${m.title} (${m.year || ''})`)}"><img class="carousel-book" src="${escapeAttr(m.poster as string)}" alt="${escapeAttr(m.title)}" decoding="async" loading="lazy" data-remove-on-error="true"></a>`)
+  .join('');
+const headerCarouselHtml = recentMovies.length
+  ? `<div class="recent-books-carousel">
+    <span class="carousel-label">Recently Added</span>
+    <div class="carousel-track" id="carousel-track" style="animation-duration:${recentMovies.length * 3}s">${movieCarouselInner}</div>
+</div>`
+  : '';
 
 // runtime payload (filter/star/genre state) inlined so letterboxd.ts can
 // avoid the post-FCP fetch round-trip.
@@ -86,6 +104,7 @@ const config = ({
     title: 'My Movie Reviews',
     mobileGridLabel: 'Movies',
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="movie-philosophy.html" class="header-subtitle-link">My Movie Philosophy</a><span class="read-first-note">read this first</span></div>',
+    headerExtraHtml: headerCarouselHtml,
     counterId: 'movie-count',
     counterLabel: 'Movies Watched',
     counterExtraHtml: '<button type="button" class="stats-toggle" aria-expanded="false" aria-controls="movie-stats-panel" aria-label="Show watch stats">Stats <span aria-hidden="true">▾</span></button>',
