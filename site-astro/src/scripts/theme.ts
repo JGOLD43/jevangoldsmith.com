@@ -138,7 +138,11 @@ function initMobileNav() {
             const sy = window.scrollY;
             const wrap = document.createElement('div');
             wrap.setAttribute('aria-hidden', 'true');
-            wrap.style.cssText = `position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden;background:var(--background)`;
+            // transform makes wrap a containing block for its
+            // descendants' position:fixed, so cloned <nav> etc. get
+            // clipped by the wipe instead of escaping to the viewport
+            // and visibly snapping back to their normal slot.
+            wrap.style.cssText = `position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden;background:var(--background);transform:translateZ(0);isolation:isolate`;
             // Freeze old CSS variables on the wrap so the cloned DOM
             // renders with the OLD theme even after we flip <html>.
             const cs = getComputedStyle(document.documentElement);
