@@ -477,14 +477,8 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    the taller (personal paragraph) defines the height and socials sit
    at the SAME absolute Y position in both modes. Inactive variant is
    visibility:hidden so it still reserves space. */
-/* Grid-stack: hero-welcome reserves the taller mode's height so
-   socials sit at identical Y. Work-mode content centers in the cell
-   so the unavoidable empty space splits evenly above + below rather
-   than dumping all of it before the socials. */
 .hero-headline,.hero-welcome{display:grid}
-.hero-headline{margin-bottom:.4rem}
-.hero-headline > span{grid-area:1/1;align-self:start}
-.hero-welcome > span{grid-area:1/1;align-self:center}
+.hero-headline > span,.hero-welcome > span{grid-area:1/1;align-self:start}
 [data-mode="work"] .hero-headline .mode-personal,
 [data-mode="work"] .hero-welcome .mode-personal,
 [data-mode="personal"] .hero-headline .mode-work,
@@ -492,3 +486,16 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
 .hero-work-now{font-size:1.05rem;line-height:1.5;color:var(--text-light)}
 .hero-now-link{color:var(--secondary-color);text-decoration:underline;text-underline-offset:3px;font-weight:600}
 .hero-now-link:hover{color:var(--accent-color)}
+
+/* Hover tooltip for the work/personal + light/dark toggles. Reveals
+   after a 1s hover delay so it doesn't pop on quick mouse fly-bys. */
+.work-mode-toggle,.theme-toggle{position:relative}
+.work-mode-toggle::after,.theme-toggle::after{content:attr(data-tooltip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:.35rem .6rem;border-radius:6px;font-size:.72rem;font-weight:500;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:10010}
+.work-mode-toggle[data-mode="work"]::after{content:attr(data-tooltip-work)}
+.work-mode-toggle[data-mode="explore"]::after{content:attr(data-tooltip-explore)}
+.work-mode-toggle:hover::after,.theme-toggle:hover::after{opacity:1;transition-delay:1s}
+/* Click confirmation toast: data-toast carries the message, .show-toast
+   reveals it instantly (no hover delay) and JS removes the class after
+   1500ms so it auto-hides. */
+.work-mode-toggle.show-toast::after,.theme-toggle.show-toast::after{content:attr(data-toast);opacity:1;transition-delay:0s}
+[data-theme=dark] .work-mode-toggle::after,[data-theme=dark] .theme-toggle::after{background:#fff;color:#111}
