@@ -477,9 +477,14 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    the taller (personal paragraph) defines the height and socials sit
    at the SAME absolute Y position in both modes. Inactive variant is
    visibility:hidden so it still reserves space. */
+/* Grid-stack: hero-welcome reserves the taller mode's height so
+   socials sit at identical Y. Work-mode content centers in the cell
+   so the unavoidable empty space splits evenly above + below rather
+   than dumping all of it before the socials. */
 .hero-headline,.hero-welcome{display:grid}
-.hero-headline{margin-bottom:.75rem}
-.hero-headline > span,.hero-welcome > span{grid-area:1/1;align-self:start}
+.hero-headline{margin-bottom:.4rem}
+.hero-headline > span{grid-area:1/1;align-self:start}
+.hero-welcome > span{grid-area:1/1;align-self:center}
 [data-mode="work"] .hero-headline .mode-personal,
 [data-mode="work"] .hero-welcome .mode-personal,
 [data-mode="personal"] .hero-headline .mode-work,
