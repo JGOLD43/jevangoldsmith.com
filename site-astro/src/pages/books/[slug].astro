@@ -51,7 +51,7 @@ const commentaryHtml = renderCommentary(b.commentary);
     <header class="detail-hero detail-hero--book">
       {cover && (
         <div class="detail-hero-cover">
-          <img src={cover} alt={`${b.title} cover`} loading="eager" decoding="async" fetchpriority="high" width="240" height="360" />
+          <img src={cover} alt={`${b.title} cover`} loading="eager" decoding="async" fetchpriority="high" width="240" height="360" style={`view-transition-name: book-cover-${entry.id}`} />
         </div>
       )}
       <div class="detail-hero-body">
