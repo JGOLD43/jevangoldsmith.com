@@ -428,3 +428,19 @@ body.nav-compact .navbar .work-mode-toggle{padding:.35rem;width:32px;height:32px
 body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
 @media (max-width:968px){.work-mode-toggle{order:2}.theme-toggle{order:3}.mobile-menu-toggle{order:4}}
 @media (max-width:600px){.work-mode-toggle{padding:.4rem;width:32px;height:32px}.work-mode-icon{width:18px;height:18px}}
+
+/* Personal mode — flips the site's gold accent to a warmer terracotta
+   so the visual change between work and personal is immediately
+   obvious. CSS variables cascade through every nav-link / button /
+   card that uses var(--secondary-color) or var(--accent-color). */
+[data-mode="personal"]{--secondary-color:#d77a5e;--accent-color:#c25a3c}
+[data-theme=dark][data-mode="personal"]{--secondary-color:#e89379;--accent-color:#e87a5c}
+
+/* Circular-wipe transition for the work/personal toggle. The JS
+   click handler animates clip-path on ::view-transition-new(root)
+   from a 0-radius circle at the button to a full-screen circle so
+   the new state appears to "ink in" from the click point. Disable
+   the default crossfade on old/new so only the clip animation runs. */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:0}
+::view-transition-new(root){z-index:1}

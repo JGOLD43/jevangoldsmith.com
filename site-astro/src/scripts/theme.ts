@@ -110,21 +110,47 @@ function initMobileNav() {
         });
     });
 
-    // Work / Explore mode toggle in the navbar. Flips between the
-    // "digger" stick figure and the "explorer with backpack" via a
-    // data-mode attribute; CSS handles the icon swap + animation.
-    const workToggle = document.querySelector('.work-mode-toggle');
+    // Work / Personal mode toggle. The button's icon (digger / explorer)
+    // flips via [data-mode] on the button. The whole site re-skins via
+    // [data-mode] on <html>. Click triggers a circular wipe transition
+    // (like wodniack.dev's theme toggle) expanding from the button.
+    const workToggle = document.querySelector('.work-mode-toggle') as HTMLElement | null;
     if (workToggle) {
-        const stored = (() => { try { return localStorage.getItem('jg-work-mode'); } catch { return null; } })();
-        if (stored === 'explore') {
-            workToggle.setAttribute('data-mode', 'explore');
-            workToggle.setAttribute('aria-pressed', 'true');
-        }
-        workToggle.addEventListener('click', () => {
-            const next = workToggle.getAttribute('data-mode') === 'work' ? 'explore' : 'work';
-            workToggle.setAttribute('data-mode', next);
-            workToggle.setAttribute('aria-pressed', next === 'explore' ? 'true' : 'false');
-            try { localStorage.setItem('jg-work-mode', next); } catch {}
+        const applyMode = (mode: 'work' | 'personal') => {
+            document.documentElement.setAttribute('data-mode', mode);
+            workToggle.setAttribute('data-mode', mode === 'work' ? 'work' : 'explore');
+            workToggle.setAttribute('aria-pressed', mode === 'personal' ? 'true' : 'false');
+            try { localStorage.setItem('jg-work-mode', mode); } catch {}
+        };
+        const current = (): 'work' | 'personal' =>
+            (document.documentElement.getAttribute('data-mode') as 'work' | 'personal') || 'work';
+
+        workToggle.addEventListener('click', async () => {
+            const next: 'work' | 'personal' = current() === 'work' ? 'personal' : 'work';
+            const rect = workToggle.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const endRadius = Math.hypot(
+                Math.max(cx, window.innerWidth - cx),
+                Math.max(cy, window.innerHeight - cy)
+            );
+            const start = `circle(0 at ${cx}px ${cy}px)`;
+            const end = `circle(${endRadius}px at ${cx}px ${cy}px)`;
+
+            // No View Transitions support → just apply, no wipe.
+            const doc = document as Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
+            if (!doc.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                applyMode(next);
+                return;
+            }
+            const t = doc.startViewTransition(() => applyMode(next));
+            try {
+                await t.ready;
+                document.documentElement.animate(
+                    { clipPath: [start, end] },
+                    { duration: 600, easing: 'cubic-bezier(.22,1,.36,1)', pseudoElement: '::view-transition-new(root)' }
+                );
+            } catch { /* transition aborted */ }
         });
     }
 
