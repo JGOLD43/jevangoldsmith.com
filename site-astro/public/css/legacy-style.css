@@ -396,3 +396,22 @@ body.nav-compact{padding-top:58px}
   .detail-page--book .detail-hero,
   .detail-page--movie .detail-hero{gap:1rem;margin-bottom:1.5rem}
 }
+
+
+/* Pin the back link to the top corner so it doesn't push the hero down
+   and the cover sits at a fixed vertical position — VT morph endpoint
+   matches the rendered hero exactly, no post-animation snap. Also give
+   the title / metadata their own VT names so they fade+slide in as part
+   of the morph rather than popping in after. */
+.detail-page--book,
+.detail-page--movie{padding-top:1rem;position:relative}
+.detail-page--book .detail-back,
+.detail-page--movie .detail-back{position:absolute;top:.5rem;left:1rem;margin:0;font-size:.85rem;z-index:2}
+.detail-page--book .detail-hero,
+.detail-page--movie .detail-hero{padding-top:1.25rem}
+.detail-page--book .detail-title,
+.detail-page--movie .detail-title{view-transition-name:detail-title}
+.detail-page--book .detail-hero-body,
+.detail-page--movie .detail-hero-body{view-transition-name:detail-meta}
+::view-transition-old(detail-title),::view-transition-old(detail-meta){animation:vt-fade-out .2s ease-in both}
+::view-transition-new(detail-title),::view-transition-new(detail-meta){animation:vt-fade-in .55s cubic-bezier(.22,1,.36,1) .12s both,vt-slide-up .55s cubic-bezier(.22,1,.36,1) .12s both}
