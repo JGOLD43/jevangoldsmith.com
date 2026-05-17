@@ -168,7 +168,12 @@ function initMobileNav() {
             const clone = document.body.cloneNode(true) as HTMLElement;
             // Strip scripts/links from the clone so it doesn't re-run logic.
             clone.querySelectorAll('script, link[rel="stylesheet"]').forEach((el) => el.remove());
-            clone.style.cssText = `position:absolute;top:${-sy}px;left:0;width:100vw;margin:0;padding:0`;
+            // Preserve the live body's computed padding/margin so the
+            // cloned content lines up exactly with what the user was
+            // seeing. (Body has padding-top equal to nav height; if we
+            // zero it the clone shifts up by ~67px → visible "jump".)
+            const bs = getComputedStyle(document.body);
+            clone.style.cssText = `position:absolute;top:${-sy}px;left:0;width:100vw;margin:${bs.margin};padding:${bs.padding}`;
             wrap.appendChild(clone);
             document.body.appendChild(wrap);
 
