@@ -117,6 +117,8 @@ if (seoSlug === 'index' || seoSlug === 'search') {
           const t = localStorage.getItem('jg-theme')
             || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
           document.documentElement.setAttribute('data-theme', t);
+          const m = localStorage.getItem('jg-work-mode');
+          document.documentElement.setAttribute('data-mode', m === 'personal' ? 'personal' : 'work');
         } catch (_) { /* private mode / SSR can't read storage */ }
       })();
     </script>
@@ -261,14 +263,21 @@ if (seoSlug === 'index' || seoSlug === 'search') {
           <div class="navbar-right">
             <button class="work-mode-toggle" data-mode="work" aria-label="Toggle work / explore mode" aria-pressed="false">
               <svg class="work-mode-icon icon-digger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="6.5" cy="5" r="1.8"/>
-                <path d="M6.5 6.8 L8.5 12"/>
-                <path d="M8.5 12 L7 18"/>
-                <path d="M8.5 12 L11.5 18"/>
-                <path d="M8.5 11 L13 13"/>
-                <path d="M13 13 L20 19"/>
-                <path d="M19.4 18.4 L21.2 20.2 L19.6 21.8 L17.8 20"/>
-                <path d="M3 22 L21 22"/>
+                <!-- head, body, arms — figure leaning forward -->
+                <circle cx="5.5" cy="4.5" r="1.8"/>
+                <path d="M5.5 6.3 L7 12"/>
+                <path d="M7 12 L5 17.5"/>
+                <path d="M7 12 L10 17.5"/>
+                <path d="M6 8 L12 10"/>
+                <path d="M7 12 L13 13.5"/>
+                <!-- shovel handle (long diagonal) -->
+                <path d="M11.5 9 L19 16"/>
+                <!-- shovel blade (chunky trapezoidal scoop) -->
+                <path d="M17.5 14.5 L22 19 L19.5 21.5 L15 17 Z" fill="currentColor" fill-opacity=".18"/>
+                <!-- dirt mound being dug -->
+                <path d="M10 21 Q13.5 18 17 21"/>
+                <!-- ground line -->
+                <path d="M2 22 L22 22"/>
               </svg>
               <svg class="work-mode-icon icon-explorer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="11" cy="5" r="1.8"/>
