@@ -498,4 +498,8 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    reveals it instantly (no hover delay) and JS removes the class after
    1500ms so it auto-hides. */
 .work-mode-toggle.show-toast::after,.theme-toggle.show-toast::after{content:attr(data-toast);opacity:1;transition-delay:0s}
+/* Suppress hover tooltip for a beat after a click so the toast and
+   the hover tip don't stack / overlap. */
+.work-mode-toggle.suppress-hover-tip:not(.show-toast):hover::after,
+.theme-toggle.suppress-hover-tip:not(.show-toast):hover::after{opacity:0!important;transition-delay:0s!important}
 [data-theme=dark] .work-mode-toggle::after,[data-theme=dark] .theme-toggle::after{background:#fff;color:#111}
