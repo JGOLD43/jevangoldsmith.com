@@ -7,6 +7,7 @@ import { formatRuntime } from './dates';
 import { escapeAttr, escapeHtml } from './html-escape';
 import { slugify } from './slug';
 
+
 type Movie = Partial<MovieRecord>;
 
 const GENRE_ICONS: Record<string, string> = {
@@ -66,11 +67,13 @@ export function renderMovieCardHtml(movie: Movie): string {
   if (hasReview) classes.push('has-review');
   const slug = slugify(title);
   const href = slug ? `/movies/${slug}.html` : '#';
+  // Anchor card so middle-click / ctrl-click works. grid-zoom runs the
+  // shelf-style zoom on the cover first, then follows the href.
   return cardFrame({
     tag: 'a',
+    href,
     classes,
     data: { 'movie-title': title },
-    href,
     body
   });
 }

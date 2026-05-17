@@ -103,6 +103,9 @@ export function renderBookCardHtml(book: BookData, eager = false): string {
   if (review) classes.push('has-review');
   const slug = isbn || slugify(`${title}-${author}`);
   const href = slug ? `/books/${slug}.html` : '#';
+  // Anchor card so middle-click / ctrl-click still works. The click
+  // handler in grid-zoom runs the shelf-style zoom animation, then
+  // navigates to /books/{slug}.html once it completes.
   return cardFrame({
     tag: 'a',
     href,

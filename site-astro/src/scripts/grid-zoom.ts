@@ -91,19 +91,20 @@ export function init(config: GridZoomConfig) {
     const trigger = target?.closest(triggerSelector);
     if (!trigger) return;
     const link = target?.closest('a') as HTMLAnchorElement | null;
-    // Nested link inside the card (e.g. a "Letterboxd" sub-link) — let it
-    // navigate; don't run the zoom.
+    // Nested link inside the card (sub-link, "Letterboxd", etc.) — let
+    // it navigate; don't zoom.
     if (link && link !== trigger && link.getAttribute('href') && link.getAttribute('href') !== '#') return;
     const item = (trigger.closest(itemSelector) || trigger) as HTMLElement;
     if (!item) return;
     event.preventDefault();
     event.stopPropagation();
     openItem(item);
-    // Trigger itself is an anchor (books/movies card-link) — run the zoom
-    // animation as a shared-element transition, then follow the href.
+    // Trigger itself is an anchor (book / movie card-link) — play the
+    // full shelf-style zoom animation, then follow the href. 520ms
+    // matches the `--duration` in the .js-zoom-grid CSS transition.
     if (link && link === trigger && link.getAttribute('href') && link.getAttribute('href') !== '#') {
       const href = link.href;
-      setTimeout(function () { window.location.href = href; }, 320);
+      setTimeout(function () { window.location.href = href; }, 520);
     }
   });
 
