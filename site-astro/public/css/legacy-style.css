@@ -490,7 +490,11 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
 /* Hover tooltip for the work/personal + light/dark toggles. Reveals
    after a 1s hover delay so it doesn't pop on quick mouse fly-bys. */
 .work-mode-toggle,.theme-toggle{position:relative}
-.work-mode-toggle::after,.theme-toggle::after{content:attr(data-tooltip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:.35rem .6rem;border-radius:6px;font-size:.72rem;font-weight:500;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:10010}
+.work-mode-toggle::after,.theme-toggle::after{content:attr(data-tooltip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:.35rem .6rem;border-radius:6px;font-size:.72rem;font-weight:500;white-space:nowrap;pointer-events:none;opacity:0;z-index:10010}
+/* No fade when leaving — fading reveals the underlying hover label
+   for 150ms, looking like a second tooltip flash. Instant hide. */
+.work-mode-toggle:not(.show-hover-tip):not(.show-toast)::after,
+.theme-toggle:not(.show-hover-tip):not(.show-toast)::after{transition:none}
 .work-mode-toggle[data-mode="work"]::after{content:attr(data-tooltip-work)}
 .work-mode-toggle[data-mode="explore"]::after{content:attr(data-tooltip-explore)}
 /* Hover tooltip is JS-driven (.show-hover-tip class) so a click can
