@@ -340,3 +340,16 @@ body.nav-compact{padding-top:58px}
   .person-detail-close{width:44px;height:44px;font-size:1.2rem;top:.6rem;right:.6rem;background:#000;color:#fff;border-color:#ffffff66;box-shadow:0 2px 8px #0008}
   .person-detail-panel{padding-top:3.75rem}
 }
+
+
+/* Stronger mobile contrast for the person-detail modal — the previous
+   pass kept the panel flush against the viewport with square corners,
+   so the edge was still invisible. Lock the panel to a clearly inset
+   rounded box, brighten the rim, and pull the close button fully
+   inside the panel's safe area so it never gets clipped by the
+   viewport edge / browser chrome. */
+@media (max-width:600px){
+  .person-detail-panel{position:fixed;inset:1rem;top:1rem;left:1rem;right:1rem;bottom:1rem;width:auto;max-width:none;max-height:none;border-radius:14px;border:1px solid #ffffff33;transform:none;padding:3.75rem 1rem 1rem}
+  [data-theme=dark] .person-detail-panel{box-shadow:0 24px 60px #000c,0 0 0 1px #ffffff1f}
+  .person-detail-close{top:.85rem;right:.85rem}
+}
