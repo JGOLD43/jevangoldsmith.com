@@ -337,3 +337,13 @@ body.nav-compact{padding-top:58px}
   .person-detail-close{width:44px;height:44px;font-size:1.2rem;top:.6rem;right:.6rem;background:#000;color:#fff;border-color:#ffffff66;box-shadow:0 2px 8px #0008}
   .person-detail-panel{padding-top:3.75rem}
 }
+
+/* Projects + Challenges header parity with books/movies/people on mobile:
+   shrink h1 from 2.5rem to 2rem and pull subtitle font-size to match
+   the collection-header treatment. */
+@media (max-width:600px){
+  #projects-layout .main-header .header-content h1,
+  #challenges-layout .main-header .header-content h1{font-size:2rem;line-height:1.15}
+  #projects-layout .main-header .header-content p,
+  #challenges-layout .main-header .header-content p{font-size:.95rem;line-height:1.4}
+}
