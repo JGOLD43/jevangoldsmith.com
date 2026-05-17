@@ -127,51 +127,43 @@ function initMobileNav() {
 
         workToggle.addEventListener('click', () => {
             const next: 'work' | 'personal' = current() === 'work' ? 'personal' : 'work';
-            const rect = workToggle.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-            const endRadius = Math.hypot(
-                Math.max(cx, window.innerWidth - cx),
-                Math.max(cy, window.innerHeight - cy)
-            );
 
-            // Manual circular-wipe overlay (independent of the View
-            // Transitions API so it runs in every browser AND under
-            // prefers-reduced-motion, since the user explicitly invoked
-            // it by tapping the toggle). The overlay's color is the
-            // destination mode's accent — we read it from a probe
-            // element so the wipe uses the actual CSS-resolved value.
-            const probe = document.createElement('div');
-            probe.style.cssText = 'position:absolute;visibility:hidden';
-            probe.setAttribute('data-mode', next);
-            document.body.appendChild(probe);
-            const accent = getComputedStyle(probe).getPropertyValue('--secondary-color').trim()
-                || (next === 'personal' ? '#d77a5e' : '#c9a86c');
-            probe.remove();
+            // wodniack.dev-style wipe: snapshot the current viewport
+            // by cloning <body> into a fixed overlay, freeze the OLD
+            // CSS variables on it, then apply the new mode underneath
+            // and wipe the snapshot away with clip-path. The wipe's
+            // moving edge is the "line sweeping across the screen" —
+            // OLD state visible on one side, NEW state revealed on
+            // the other as the line passes.
+            const sy = window.scrollY;
+            const wrap = document.createElement('div');
+            wrap.setAttribute('aria-hidden', 'true');
+            wrap.style.cssText = `position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden;background:var(--background)`;
+            // Freeze old CSS variables on the wrap so the cloned DOM
+            // renders with the OLD theme even after we flip <html>.
+            const cs = getComputedStyle(document.documentElement);
+            ['--secondary-color', '--accent-color', '--background', '--background-alt', '--text-color', '--text-light', '--card-bg', '--border-color', '--primary-color', '--navbar-bg', '--dropdown-bg'].forEach((v) => {
+                const value = cs.getPropertyValue(v);
+                if (value) wrap.style.setProperty(v, value);
+            });
+            const clone = document.body.cloneNode(true) as HTMLElement;
+            // Strip scripts/links from the clone so it doesn't re-run logic.
+            clone.querySelectorAll('script, link[rel="stylesheet"]').forEach((el) => el.remove());
+            clone.style.cssText = `position:absolute;top:${-sy}px;left:0;width:100vw;margin:0;padding:0`;
+            wrap.appendChild(clone);
+            document.body.appendChild(wrap);
 
-            const overlay = document.createElement('div');
-            overlay.style.cssText = `position:fixed;inset:0;z-index:9999;background:${accent};pointer-events:none;clip-path:circle(0 at ${cx}px ${cy}px)`;
-            document.body.appendChild(overlay);
+            // Flip the real site underneath the snapshot.
+            applyMode(next);
 
-            const anim = overlay.animate(
-                {
-                    clipPath: [
-                        `circle(0 at ${cx}px ${cy}px)`,
-                        `circle(${endRadius}px at ${cx}px ${cy}px)`
-                    ]
-                },
-                { duration: 650, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' }
-            );
-
-            // Swap mode at the apex of the wipe so the new accent
-            // appears "under" the receding overlay.
-            window.setTimeout(() => applyMode(next), 350);
-            anim.onfinish = () => {
-                overlay.animate(
-                    { opacity: [1, 0] },
-                    { duration: 220, easing: 'ease-out', fill: 'forwards' }
-                ).onfinish = () => overlay.remove();
-            };
+            // Wipe the snapshot away from left → right. clip-path
+            // `inset(0 0 0 X)` clips from the left edge: as X grows
+            // from 0 to 100%, the snapshot shrinks to a 0-width strip
+            // on the right, revealing the new state beneath.
+            wrap.animate(
+                { clipPath: ['inset(0 0 0 0)', 'inset(0 0 0 100%)'] },
+                { duration: 700, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'forwards' }
+            ).onfinish = () => wrap.remove();
         });
     }
 
