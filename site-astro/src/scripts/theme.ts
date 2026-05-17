@@ -65,7 +65,9 @@ function toggleTheme() {
     const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     setTheme(next);
-    flashToast(document.querySelector('.theme-toggle'), `Switched to ${next} mode`);
+    const btn = document.querySelector('.theme-toggle') as HTMLElement | null;
+    flashToast(btn, `Switched to ${next} mode`);
+    btn?.blur();
 }
 
 function initTheme() {
