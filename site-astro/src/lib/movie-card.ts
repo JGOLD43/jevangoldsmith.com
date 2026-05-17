@@ -5,7 +5,7 @@ import type { Movie as MovieRecord } from '../content.config';
 import { cardFrame, topBadge } from './card';
 import { formatRuntime } from './dates';
 import { escapeAttr, escapeHtml } from './html-escape';
-import { slugify } from './slug';
+
 
 type Movie = Partial<MovieRecord>;
 
@@ -64,13 +64,15 @@ export function renderMovieCardHtml(movie: Movie): string {
 
   const classes = ['movie-card', 'card-link'];
   if (hasReview) classes.push('has-review');
-  const slug = slugify(title);
-  const href = slug ? `/movies/${slug}.html` : '#';
+  // Card is a div + role="button" — shelf-style zoom in place. The
+  // detail page remains reachable via Letterboxd link in zoom-detail
+  // and direct URLs.
   return cardFrame({
-    tag: 'a',
+    tag: 'div',
     classes,
+    role: 'button',
+    tabindex: 0,
     data: { 'movie-title': title },
-    href,
     body
   });
 }
