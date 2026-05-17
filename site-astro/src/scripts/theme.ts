@@ -125,8 +125,24 @@ function initMobileNav() {
         const current = (): 'work' | 'personal' =>
             (document.documentElement.getAttribute('data-mode') as 'work' | 'personal') || 'work';
 
-        workToggle.addEventListener('click', () => {
+        workToggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            (workToggle as HTMLElement).blur();
             const next: 'work' | 'personal' = current() === 'work' ? 'personal' : 'work';
+
+            // Lock the page in place for the duration of the wipe so
+            // nothing under the overlay can shift. Restore after the
+            // animation finishes.
+            const sy = window.scrollY;
+            const sx = window.scrollX;
+            const prevBodyStyle = document.body.style.cssText;
+            const prevHtmlOverflow = document.documentElement.style.overflow;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${sy}px`;
+            document.body.style.left = `-${sx}px`;
+            document.body.style.right = '0';
+            document.body.style.width = '100%';
+            document.documentElement.style.overflow = 'hidden';
 
             // wodniack.dev-style wipe: snapshot the current viewport
             // by cloning <body> into a fixed overlay, freeze the OLD
@@ -135,7 +151,6 @@ function initMobileNav() {
             // moving edge is the "line sweeping across the screen" —
             // OLD state visible on one side, NEW state revealed on
             // the other as the line passes.
-            const sy = window.scrollY;
             const wrap = document.createElement('div');
             wrap.setAttribute('aria-hidden', 'true');
             // transform makes wrap a containing block for its
@@ -153,7 +168,12 @@ function initMobileNav() {
             const clone = document.body.cloneNode(true) as HTMLElement;
             // Strip scripts/links from the clone so it doesn't re-run logic.
             clone.querySelectorAll('script, link[rel="stylesheet"]').forEach((el) => el.remove());
-            clone.style.cssText = `position:absolute;top:${-sy}px;left:0;width:100vw;margin:0;padding:0`;
+            // Preserve the live body's computed padding/margin so the
+            // cloned content lines up exactly with what the user was
+            // seeing. (Body has padding-top equal to nav height; if we
+            // zero it the clone shifts up by ~67px → visible "jump".)
+            const bs = getComputedStyle(document.body);
+            clone.style.cssText = `position:absolute;top:${-sy}px;left:0;width:100vw;margin:${bs.margin};padding:${bs.padding}`;
             wrap.appendChild(clone);
             document.body.appendChild(wrap);
 
@@ -192,7 +212,14 @@ function initMobileNav() {
                     { transform: ['translateX(-2px)', `translateX(${window.innerWidth}px)`] },
                     { duration, easing, fill: 'forwards' }
                 );
-                wipe.onfinish = () => { wrap.remove(); line.remove(); };
+                wipe.onfinish = () => {
+                    wrap.remove();
+                    line.remove();
+                    // Unlock page scroll without triggering a visible jump.
+                    document.body.style.cssText = prevBodyStyle;
+                    document.documentElement.style.overflow = prevHtmlOverflow;
+                    window.scrollTo(sx, sy);
+                };
             });
         });
     }

@@ -444,3 +444,11 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){z-index:0}
 ::view-transition-new(root){z-index:1}
+
+/* Mode-conditional copy on the homepage hero: work mode shows the
+   professional headline, personal mode keeps the casual intro. */
+[data-mode="work"] .hero-headline .mode-personal,
+[data-mode="work"] .hero-welcome .mode-personal,
+[data-mode="personal"] .hero-headline .mode-work,
+[data-mode="personal"] .hero-welcome .mode-work{display:none}
+.hero-welcome-work{color:var(--text-light);display:block;margin:0}
