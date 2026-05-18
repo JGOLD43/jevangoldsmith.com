@@ -547,12 +547,6 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    Switch to contain so the whole portrait is always visible — the
    container background fills any letterbox space. */
 .person-image,.person-card-image{object-fit:contain;object-position:center top;background:var(--background-alt,#e8e4dc)}
-/* People detail modal: pin the X close button to the viewport so it
-   stays visible no matter how the panel scrolls. position:absolute
-   was getting clipped when the panel content scrolled down (X scrolled
-   up out of view) and on narrow viewports where the panel top edge
-   sat near the navbar. position:fixed + z-index above the panel
-   guarantees it is always tappable. */
 /* People detail modal close button: pin to the viewport, but sit
    BELOW the navbar (the navbar uses backdrop-filter which creates a
    stacking context above the modal regardless of z-index, so we
