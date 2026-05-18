@@ -480,6 +480,42 @@ function applyAllFilters() {
     renderRouteLayer();
     renderPhotoLayer();
     renderCountryLayer();
+    applyNowLayerVisibility();
+    applyAdventuresCarouselVisibility();
+}
+
+// Show/hide the Now pin + 25km circle. adventures.ts stashes the
+// L.marker and L.circle on state.nowMarker / state.nowCircle when it
+// creates them; this just adds/removes from the active map.
+function applyNowLayerVisibility() {
+    const visible = state.mapFilters.layers.now !== false;
+    const map = state.worldMap;
+    if (!map) return;
+    const marker = state.nowMarker;
+    const circle = state.nowCircle;
+    if (marker) {
+        if (visible) { if (!map.hasLayer(marker)) marker.addTo(map); }
+        else if (map.hasLayer(marker)) map.removeLayer(marker);
+    }
+    if (circle) {
+        if (visible) { if (!map.hasLayer(circle)) circle.addTo(map); }
+        else if (map.hasLayer(circle)) map.removeLayer(circle);
+    }
+}
+
+// Hide the bottom trip carousel when the Adventures layer is unticked.
+// The cards are an Adventures-layer surface, so they should follow the
+// layer toggle.
+function applyAdventuresCarouselVisibility() {
+    const wrap = document.getElementById('adventures-map-carousel-wrap') as HTMLElement | null;
+    if (!wrap) return;
+    const adventuresOn = state.mapFilters.layers.adventures === true;
+    // Only flip `hidden` if the wrap was populated (children exist) —
+    // renderMapCarousel sets hidden=true when there are zero adventures
+    // and we don't want to override that.
+    const populated = (wrap.querySelector('#adventures-map-carousel')?.children.length ?? 0) > 0;
+    if (!populated && adventuresOn) return;
+    wrap.hidden = !adventuresOn;
 }
 
 function applyAdventureMarkerFilter() {
@@ -790,6 +826,7 @@ function buildMapControlStack() {
 
 function renderLayerToggles() {
     const layers = [
+        ['now', 'Now'],
         ['adventures', 'Adventures'],
         ['routes', 'Routes'],
         ['photos', 'Photos'],
@@ -826,4 +863,4 @@ setRouteRerender(() => renderRouteLayer());
 
 // adventures.ts dynamically imports this module; ensureWorldMap is the
 // only public surface it consumes via the import promise.
-export { ensureWorldMap };
+export { ensureWorldMap, applyNowLayerVisibility, applyAdventuresCarouselVisibility };

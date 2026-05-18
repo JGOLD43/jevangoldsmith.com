@@ -90,7 +90,10 @@ export const BASEMAPS: Record<string, AnyObj> = {
 export const DEFAULT_FILTERS = {
   year: 'all',
   region: 'all',
-  layers: { adventures: false, routes: false, photos: false, pois: false, countries: false },
+  // `now` defaults ON because the yellow Now pin is the default
+  // centerpiece of the map view — users opening the map should see
+  // "where Jevan is now" without flipping anything.
+  layers: { adventures: false, routes: false, photos: false, pois: false, countries: false, now: true },
   poiCategories: {},
   // 'hybrid' adds the ArcGIS World_Boundaries_and_Places overlay, whose
   // tiles include a faint graticule that reads as gridlines through
