@@ -545,7 +545,10 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    padding pushing its visible icon further from the edge than the
    logo's visible edge on the other side. Pull both back to match. */
 @media (max-width: 768px){
-  .hero-container{padding-left:1rem;padding-right:1rem}
+  /* Higher specificity (.hero ancestor) so we beat the per-page
+     index.css rule .hero-container{padding:0 1.5rem} at
+     @media (width<=968px), which is loaded after chrome.css. */
+  .hero .hero-container{padding-left:1rem;padding-right:1rem}
   .navbar .mobile-menu-toggle{margin-right:-8px}
 }
 /* Field Notes / newsletter CTA — left-align the eyebrow, title,
