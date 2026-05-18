@@ -554,6 +554,11 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    sat near the navbar. position:fixed + z-index above the panel
    guarantees it is always tappable. */
 .person-detail-modal.open .person-detail-close{position:fixed;top:max(.75rem,env(safe-area-inset-top,0));right:max(.75rem,env(safe-area-inset-right,0));z-index:10010}
+/* The sticky navbar uses backdrop-filter which creates a stacking
+   context that sits above the modal regardless of z-index. Hide the
+   navbar entirely while the people-detail modal is open so the panel
+   (and pinned X close button) reach all the way to the viewport top. */
+body.person-detail-open .navbar{display:none}
 .map-controls-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:.75rem;row-gap:.1rem}
 .map-controls-grid .map-controls-check{padding:.18rem 0;min-width:0}
 .map-controls-grid .map-controls-check span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
