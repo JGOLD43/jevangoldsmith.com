@@ -541,6 +541,11 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    display:none at matching specificity so toggling the Adventures
    layer actually hides the strip. */
 .adventures-map-carousel-wrap[hidden]{display:none}
+/* People cards (and matching modal hero) are 1:1 squares with object-fit:
+   cover. Default object-position center-center crops the top of head off
+   portrait headshots — the most common photo type in this collection.
+   Anchor to top so the face stays in frame across every card. */
+.person-image,.person-card-image{object-position:center top}
 .map-controls-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:.75rem;row-gap:.1rem}
 .map-controls-grid .map-controls-check{padding:.18rem 0;min-width:0}
 .map-controls-grid .map-controls-check span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
