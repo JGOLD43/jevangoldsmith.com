@@ -538,6 +538,16 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    mode's 1-line headline + 3-line welcome = 4 lines. Result:
    socials sit at the same Y across both modes. */
 [data-mode="work"] .hero-welcome .mode-personal{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* Mobile header symmetry: align the hero image and the hamburger
+   button to the same viewport edge distance as the logo (1rem from
+   each side). Hero container was 1.5rem padding which left the
+   image inset further than the logo; hamburger had 8px inner
+   padding pushing its visible icon further from the edge than the
+   logo's visible edge on the other side. Pull both back to match. */
+@media (max-width: 768px){
+  .hero-container{padding-left:1rem;padding-right:1rem}
+  .navbar .mobile-menu-toggle{margin-right:-8px}
+}
 /* Field Notes / newsletter CTA — left-align the eyebrow, title,
    description and form so the section reads as a left-flush block
    instead of a centered hero. */
