@@ -557,6 +557,11 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    grow-from-left for hover (still drawn for the .active state). */
 .navbar .nav-links > li > a,
 .navbar .nav-links > li > .dropdown-trigger{padding-left:.95rem}
+/* Underline (::after, from chrome.css) is positioned at left:0 of
+   the link, which after padding-left:.95rem sticks out beyond the
+   text. Push it in to start at the text edge. */
+.navbar .nav-links > li > a::after,
+.navbar .nav-links > li > .dropdown-trigger::after{left:.95rem !important}
 .navbar .nav-links > li > a::before,
 .navbar .nav-links > li > .dropdown-trigger::before{content:"\25B6";position:absolute;left:0;top:50%;transform:translate(-6px,-50%);font-size:.62em;line-height:1;opacity:0;color:currentColor;transition:opacity .18s ease,transform .22s cubic-bezier(.65,0,.35,1)}
 @media (hover:hover){
