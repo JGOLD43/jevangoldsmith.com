@@ -551,30 +551,19 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
   .hero .hero-container{padding-left:1rem;padding-right:1rem}
   .navbar .mobile-menu-toggle{margin-right:-8px}
 }
-/* wodniack.dev-style nav hover: small left-pointing triangle slides
-   in from the left of the nav text on hover. Layout doesn't shift
-   because the marker is position:absolute. Replaces the underline
-   grow-from-left for hover (still drawn for the .active state). */
+/* Nav hover indicator: small down-pointing triangle drops in from
+   above the text on hover (was previously a right-arrow from the
+   left). Layout doesn't shift because the marker is absolute. */
 .navbar .nav-links > li > a,
-.navbar .nav-links > li > .dropdown-trigger{padding-left:.95rem}
-/* Underline (::after, from chrome.css) is positioned at left:0 of
-   the link, which after padding-left:.95rem sticks out beyond the
-   text. Push it in to start at the text edge. */
-.navbar .nav-links > li > a::after,
-.navbar .nav-links > li > .dropdown-trigger::after{left:.95rem !important}
-/* Active-state underline width should match the text, not the link
-   box (which includes the .95rem chevron-slot padding). Without
-   this, the underline overhangs to the right of the text. */
-.navbar .nav-links > li > a.active::after,
-.navbar .nav-links > li > .dropdown-trigger.active::after{width:calc(100% - .95rem) !important}
+.navbar .nav-links > li > .dropdown-trigger{position:relative}
 .navbar .nav-links > li > a::before,
-.navbar .nav-links > li > .dropdown-trigger::before{content:"\25B6";position:absolute;left:0;top:50%;transform:translate(-6px,-50%);font-size:.62em;line-height:1;opacity:0;color:currentColor;transition:opacity .18s ease,transform .22s cubic-bezier(.65,0,.35,1)}
+.navbar .nav-links > li > .dropdown-trigger::before{content:"\25BC";position:absolute;left:50%;bottom:100%;transform:translate(-50%,4px);font-size:.62em;line-height:1;opacity:0;color:currentColor;pointer-events:none;transition:opacity .18s ease,transform .22s cubic-bezier(.65,0,.35,1)}
 @media (hover:hover){
   .navbar .nav-links > li > a:hover::before,
-  .navbar .nav-links > li > .dropdown-trigger:hover::before{opacity:1;transform:translate(0,-50%)}
-  /* Drop the underline-grow on hover now that we have the chevron
-     indicator. Keep it for the .active state so the current page
-     still reads at a glance. */
+  .navbar .nav-links > li > .dropdown-trigger:hover::before{opacity:1;transform:translate(-50%,-2px)}
+  /* Drop the underline-grow on hover now that the chevron is the
+     hover indicator. Keep it for the .active state so the current
+     page still reads at a glance. */
   .navbar .nav-links > li > a:hover::after,
   .navbar .nav-links > li > .dropdown-trigger:hover::after{width:0}
 }
