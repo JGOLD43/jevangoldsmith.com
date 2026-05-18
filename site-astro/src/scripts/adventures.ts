@@ -492,7 +492,9 @@ function renderMapCarousel(adventures: AnyObj[]) {
         wrap.hidden = true;
         return;
     }
-    wrap.hidden = false;
+    // The trip carousel is a surface of the Adventures layer — only
+    // show it when the LAYERS panel "Adventures" checkbox is ticked.
+    wrap.hidden = state.mapFilters?.layers?.adventures !== true;
     carousel.innerHTML = adventures.map((adventure: AnyObj) => {
         const year = adventure.startDate ? String(adventure.startDate).slice(0, 4) : '';
         const place = adventure.location || '';
@@ -605,7 +607,6 @@ function placeNowMarkerAndFocus() {
             el.addEventListener('mouseenter', cancel);
             el.addEventListener('mouseleave', schedule);
         });
-        marker.addTo(state.worldMap);
         // 25km radius circle around the Now location.
         const circle = L.circle([now.lat, now.lng], {
             radius: 25000,
@@ -616,7 +617,17 @@ function placeNowMarkerAndFocus() {
             fillOpacity: 0.14,
             interactive: false
         });
-        circle.addTo(state.worldMap);
+        // Stash on state so the LAYERS panel "Now" checkbox can
+        // add/remove these from the map without recreating them.
+        state.nowMarker = marker;
+        state.nowCircle = circle;
+        // Honour the current Now-layer toggle on first paint. Default
+        // is ON (see DEFAULT_FILTERS in adventures-state.ts), but a
+        // returning visitor's stored layers may have it off.
+        if (state.mapFilters?.layers?.now !== false) {
+            marker.addTo(state.worldMap);
+            circle.addTo(state.worldMap);
+        }
         // ?focus=now → fly close so the 25km circle fills the screen.
         // Default load (no param) → regional zoom centered on the Now pin so
         // the user immediately sees where I am in the world.
