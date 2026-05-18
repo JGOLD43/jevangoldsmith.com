@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Astro static site for jevangoldsmith.com",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "node ../scripts/generate-icon-sprite.js --public-out=public/sprite.svg && astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
