@@ -551,6 +551,23 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
   .hero .hero-container{padding-left:1rem;padding-right:1rem}
   .navbar .mobile-menu-toggle{margin-right:-8px}
 }
+/* wodniack.dev-style nav hover: small left-pointing triangle slides
+   in from the left of the nav text on hover. Layout doesn't shift
+   because the marker is position:absolute. Replaces the underline
+   grow-from-left for hover (still drawn for the .active state). */
+.navbar .nav-links > li > a,
+.navbar .nav-links > li > .dropdown-trigger{padding-left:.95rem}
+.navbar .nav-links > li > a::before,
+.navbar .nav-links > li > .dropdown-trigger::before{content:"\25B6";position:absolute;left:0;top:50%;transform:translate(-6px,-50%);font-size:.62em;line-height:1;opacity:0;color:currentColor;transition:opacity .18s ease,transform .22s cubic-bezier(.65,0,.35,1)}
+@media (hover:hover){
+  .navbar .nav-links > li > a:hover::before,
+  .navbar .nav-links > li > .dropdown-trigger:hover::before{opacity:1;transform:translate(0,-50%)}
+  /* Drop the underline-grow on hover now that we have the chevron
+     indicator. Keep it for the .active state so the current page
+     still reads at a glance. */
+  .navbar .nav-links > li > a:hover::after,
+  .navbar .nav-links > li > .dropdown-trigger:hover::after{width:0}
+}
 /* Field Notes / newsletter CTA — left-align the eyebrow, title,
    description and form so the section reads as a left-flush block
    instead of a centered hero. */
