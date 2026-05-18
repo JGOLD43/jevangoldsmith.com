@@ -529,8 +529,15 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    "Hi I'm Jevan." Truly hide the work span in personal mode so the
    headline collapses to its single-line natural height and the
    welcome paragraph sits directly underneath. */
-[data-mode="personal"] .hero-headline .mode-work,
-[data-mode="work"] .hero-welcome .mode-personal{display:none}
+/* Personal mode: collapse the hidden work-mode headline so the
+   "Hi I'm Jevan." line sits flush above the welcome paragraph. */
+[data-mode="personal"] .hero-headline .mode-work{display:none}
+/* Work mode: clamp the personal-text welcome ghost to 2 lines so
+   the welcome cell stays exactly 2 lines tall in work mode. That
+   plus the 2-line work headline = 4 lines total, matching personal
+   mode's 1-line headline + 3-line welcome = 4 lines. Result:
+   socials sit at the same Y across both modes. */
+[data-mode="work"] .hero-welcome .mode-personal{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 /* Field Notes / newsletter CTA — left-align the eyebrow, title,
    description and form so the section reads as a left-flush block
    instead of a centered hero. */
