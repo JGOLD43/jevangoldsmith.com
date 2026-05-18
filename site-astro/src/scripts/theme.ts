@@ -116,19 +116,13 @@ if (workToggle) {
         (workToggle as HTMLElement).blur();
         const next: 'work' | 'personal' = current() === 'work' ? 'personal' : 'work';
 
-        // Lock the page in place for the duration of the wipe so
-        // nothing under the overlay can shift. Restore after the
-        // animation finishes.
+        // Snapshot the current scroll so the cloned <body> can be
+        // offset to where the user actually was on the page. We do
+        // NOT lock body scroll any more — the user wants to keep
+        // scrolling while the wipe plays. The wrap is position:fixed
+        // covering the viewport, so the live page can scroll freely
+        // underneath without being visible until the wipe completes.
         const sy = window.scrollY;
-        const sx = window.scrollX;
-        const prevBodyStyle = document.body.style.cssText;
-        const prevHtmlOverflow = document.documentElement.style.overflow;
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${sy}px`;
-        document.body.style.left = `-${sx}px`;
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.documentElement.style.overflow = 'hidden';
 
         // wodniack.dev-style wipe: snapshot the current viewport
         // by cloning <body> into a fixed overlay, freeze the OLD
@@ -195,7 +189,7 @@ if (workToggle) {
             // visual marker of where OLD ends and NEW begins.
             const line = document.createElement('div');
             line.setAttribute('aria-hidden', 'true');
-            line.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:2px;background:#000;z-index:10000;pointer-events:none;transform:translateX(-2px);box-shadow:0 0 12px #0008';
+            line.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:6px;background:#000;z-index:10000;pointer-events:none;transform:translateX(-6px);box-shadow:0 0 12px #0008';
             document.body.appendChild(line);
 
             const duration = 700;
@@ -210,16 +204,12 @@ if (workToggle) {
                 { duration, easing, fill: 'forwards' }
             );
             line.animate(
-                { transform: ['translateX(-2px)', `translateX(${window.innerWidth}px)`] },
+                { transform: ['translateX(-6px)', `translateX(${window.innerWidth}px)`] },
                 { duration, easing, fill: 'forwards' }
             );
             wipe.onfinish = () => {
                 wrap.remove();
                 line.remove();
-                // Unlock page scroll without triggering a visible jump.
-                document.body.style.cssText = prevBodyStyle;
-                document.documentElement.style.overflow = prevHtmlOverflow;
-                window.scrollTo(sx, sy);
             };
         });
     });
