@@ -522,3 +522,25 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    (CSS spec requires @import before any other rules); the font-family
    override is kept here. */
 .hero-headline,.hero-welcome,.hero-welcome-work,.hero-work-now{font-family:'Inter',-apple-system,BlinkMacSystemFont,Chivo,sans-serif;letter-spacing:-.01em}
+/* Map filter checkbox grid — Layers + POI categories laid out in two
+   columns so the controls panel takes half the vertical space. */
+/* Personal-mode headline grid was sized by the (hidden but
+   visibility-only) work-mode content, leaving an empty 2nd line below
+   "Hi I'm Jevan." Truly hide the work span in personal mode so the
+   headline collapses to its single-line natural height and the
+   welcome paragraph sits directly underneath. */
+[data-mode="personal"] .hero-headline .mode-work,
+[data-mode="work"] .hero-welcome .mode-personal{display:none}
+/* Field Notes / newsletter CTA — left-align the eyebrow, title,
+   description and form so the section reads as a left-flush block
+   instead of a centered hero. */
+.newsletter-cta-container{text-align:left}
+.newsletter-cta-content{align-items:flex-start}
+/* Trip carousel wrap has display:flex set via a class rule, which
+   overrides the user-agent rule for the hidden attribute. Re-assert
+   display:none at matching specificity so toggling the Adventures
+   layer actually hides the strip. */
+.adventures-map-carousel-wrap[hidden]{display:none}
+.map-controls-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:.75rem;row-gap:.1rem}
+.map-controls-grid .map-controls-check{padding:.18rem 0;min-width:0}
+.map-controls-grid .map-controls-check span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
