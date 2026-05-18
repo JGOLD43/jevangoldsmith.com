@@ -213,6 +213,41 @@ function renderInlineStory(adventure: AnyObj) {
 
     section.hidden = false;
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    armScrollUpToDismiss(section);
+}
+
+// Scroll-up-to-dismiss: while the inline story is open, watch the hero
+// image. When the user has scrolled the page up far enough that >2/3 of
+// the hero is above the viewport top, auto-close the story and snap
+// back to the map. Mirrors the "swipe to dismiss" feel users expect on
+// long-scroll detail pages.
+function armScrollUpToDismiss(section: HTMLElement) {
+    const hero = section.querySelector('.adventure-story-hero') as HTMLElement | null;
+    if (!hero) return;
+    // Ignore the smooth-scroll the open animation just triggered —
+    // the listener should only react to user-driven scrolling.
+    let armed = false;
+    const arm = () => { armed = true; window.removeEventListener('scroll', arm); };
+    setTimeout(() => window.addEventListener('scroll', arm, { passive: true, once: true }), 600);
+
+    const onScroll = () => {
+        if (!armed || section.hidden) return;
+        const rect = hero.getBoundingClientRect();
+        // hero scrolled UP by > 2/3 of its height when its top edge sits
+        // at or above -(2/3 * height) relative to the viewport.
+        if (rect.top < -(rect.height * 2 / 3)) {
+            window.removeEventListener('scroll', onScroll);
+            closeAdventureDetail();
+            document.getElementById('world-map')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // Store remover on the section so closeAdventureDetail can unbind
+    // if the user closes via the X button.
+    (section as AnyObj)._dismissCleanup = () => {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('scroll', arm);
+    };
 }
 
 function closeAdventureDetail() {
@@ -221,8 +256,17 @@ function closeAdventureDetail() {
 
     const inlineStory = document.getElementById('adventure-story-inline');
     const inlineInner = document.getElementById('adventure-story-inner');
-    if (inlineStory) inlineStory.hidden = true;
+    if (inlineStory) {
+        const cleanup = (inlineStory as AnyObj)._dismissCleanup;
+        if (typeof cleanup === 'function') { cleanup(); delete (inlineStory as AnyObj)._dismissCleanup; }
+        inlineStory.hidden = true;
+    }
     if (inlineInner) inlineInner.innerHTML = '';
+    // Belt-and-suspenders: the close button is position:fixed so even
+    // when its parent section is display:none some browsers retain a
+    // stale paint of it during the smooth-scroll-back animation.
+    // Explicitly remove any stray instance from the document.
+    document.querySelectorAll('.adventure-story-close').forEach((el) => el.remove());
 
     document.querySelectorAll('.adventure-compact-card').forEach((card) => {
         card.classList.remove('active');

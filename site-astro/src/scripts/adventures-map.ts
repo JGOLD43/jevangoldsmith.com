@@ -717,11 +717,11 @@ function buildMapControlStack() {
         <div class="map-controls-body" hidden>
             <div class="map-controls-group">
                 <label class="map-controls-label">Layers</label>
-                ${renderLayerToggles()}
+                <div class="map-controls-grid">${renderLayerToggles()}</div>
             </div>
             <div class="map-controls-group">
                 <label class="map-controls-label">POI categories</label>
-                ${renderPoiToggles()}
+                <div class="map-controls-grid">${renderPoiToggles()}</div>
             </div>
             <div class="map-controls-group">
                 <label class="map-controls-label" for="map-filter-routeset">Route set</label>
