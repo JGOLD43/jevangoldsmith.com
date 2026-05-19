@@ -194,38 +194,6 @@ const config = ({
     contain-intrinsic-size: 220px 360px;
   }
 
-  /* "Lift + nav" click feedback — mirrors The Shelf's focus moment.
-     Clicked cover scales up in place, siblings fade hard; the lift
-     transform is applied to the <img> itself (the element that carries
-     view-transition-name) so the browser's cross-document view-
-     transition (see @view-transition in legacy-style.css) snapshots
-     the cover AT its lifted size and morphs straight into the detail
-     hero — one continuous motion, no second-stage hop. */
-  /* The <img> itself has class "book-cover" AND the view-transition-name. */
-  .book-card .book-cover {
-    transition: transform .32s cubic-bezier(.22, 1, .36, 1),
-                box-shadow .32s cubic-bezier(.22, 1, .36, 1);
-    will-change: transform;
-  }
-  .book-card.is-launching {
-    z-index: 3;
-    position: relative;
-  }
-  .book-card.is-launching .book-cover {
-    transform: scale(1.32) translateY(-4px);
-    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.55);
-  }
-  .books-grid.is-launching-grid .book-card:not(.is-launching) {
-    opacity: 0.18;
-    transition: opacity .32s cubic-bezier(.22, 1, .36, 1);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .book-card .book-cover,
-    .books-grid.is-launching-grid .book-card:not(.is-launching) {
-      transition: none;
-    }
-    .book-card.is-launching .book-cover { transform: none; }
-  }
 </style>
 
 <script>
