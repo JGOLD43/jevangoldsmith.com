@@ -837,6 +837,17 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 document.head.appendChild(tagged);
             });
             newMain.classList.add('is-spa-arrival');
+            // Belt-and-suspenders: hide the new hero img via inline
+            // style too. Class-based opacity rules can flash for one
+            // paint frame during JS-driven insertion in some browsers;
+            // inline style applies immediately on parse.
+            const newHeroImg = newMain.querySelector('.detail-hero-cover img') as HTMLImageElement | null;
+            if (newHeroImg) {
+                newHeroImg.style.opacity = '0';
+                // Stop the image from briefly rendering at its natural
+                // raw size before CSS sizes it.
+                newHeroImg.style.visibility = 'hidden';
+            }
             oldMain.parentNode.replaceChild(newMain, oldMain);
             // The detail page doesn't render a sidebar — hide the
             // listing sidebar so the new main can center under its
@@ -862,6 +873,14 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             // hero img and remove the clone. Both sit at the same
             // pixel-exact position so the swap is invisible.
             const handoff = () => {
+                // Reveal the real hero (clear the inline hides we set
+                // at injection time) and remove the clone in the same
+                // tick — both occupy identical pixel-exact rects so the
+                // swap is invisible.
+                if (newHeroImg) {
+                    newHeroImg.style.visibility = '';
+                    newHeroImg.style.opacity = '';
+                }
                 newMain.classList.add('is-spa-cover-revealed');
                 clone.remove();
                 cover.style.visibility = '';
