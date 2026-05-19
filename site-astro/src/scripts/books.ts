@@ -696,14 +696,49 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
         return;
     }
 
-    // Estimate detail-hero cover geometry from the books detail page
-    // (`detail-hero-cover img` has `width: min(60vw, 260px)` and
-    // sits centered just below the back-link, ≈140px from the top).
-    const vw = window.innerWidth;
-    const destWidth = Math.min(vw * 0.6, 260);
-    const destHeight = destWidth * (sourceRect.height / sourceRect.width);
-    const destLeft = (vw - destWidth) / 2;
-    const destTop = Math.max(110, Math.min(180, vw < 640 ? 130 : 150));
+    // The grid card uses `object-fit: contain`, so the actual rendered
+    // image inside the cover element is letterboxed if the natural
+    // aspect doesn't match the box aspect. Compute the IMAGE's true
+    // rendered rect (not the box rect) so the flight clone reads as
+    // exactly the image the user saw — no aspect-ratio mismatch at the
+    // start or end of the animation.
+    const naturalW = cover.naturalWidth || sourceRect.width;
+    const naturalH = cover.naturalHeight || sourceRect.height;
+    const naturalAspect = naturalW / naturalH;
+    const boxAspect = sourceRect.width / sourceRect.height;
+    let srcRenderW: number, srcRenderH: number, srcRenderLeft: number, srcRenderTop: number;
+    if (naturalAspect > boxAspect) {
+        // Image wider than box → fits width, letterbox top/bottom.
+        srcRenderW = sourceRect.width;
+        srcRenderH = srcRenderW / naturalAspect;
+        srcRenderLeft = sourceRect.left;
+        srcRenderTop = sourceRect.top + (sourceRect.height - srcRenderH) / 2;
+    } else {
+        // Image taller than box → fits height, letterbox sides.
+        srcRenderH = sourceRect.height;
+        srcRenderW = srcRenderH * naturalAspect;
+        srcRenderTop = sourceRect.top;
+        srcRenderLeft = sourceRect.left + (sourceRect.width - srcRenderW) / 2;
+    }
+
+    // Detail-hero cover on the books detail page is the showcase target.
+    // CSS uses `vw` units which include the scrollbar, so width computes
+    // off window.innerWidth. Positioning, though, is relative to the
+    // visible content area (excludes scrollbar).
+    // The hero renders at natural aspect (height auto), so destHeight is
+    // computed from naturalAspect — guarantees the clone end frame has
+    // the same aspect/size as the hero.
+    const cssVw = window.innerWidth;
+    const contentVw = document.documentElement.clientWidth;
+    const destWidth = cssVw <= 640
+        ? Math.min(cssVw * 0.78, 320)
+        : Math.min(cssVw * 0.72, 340);
+    const destHeight = destWidth / naturalAspect;
+    const destLeft = (contentVw - destWidth) / 2;
+    // Empirically measured against the rendered detail-hero on the same
+    // viewport. The detail page renders the "Back to Books" link + hero
+    // margin under the navbar at this y.
+    const destTop = cssVw <= 640 ? 123 : 165;
 
     const clone = cover.cloneNode() as HTMLImageElement;
     clone.removeAttribute('id');
@@ -712,16 +747,23 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     // morph it during the navigation that follows.
     clone.style.viewTransitionName = 'none';
     clone.style.position = 'fixed';
-    clone.style.left = sourceRect.left + 'px';
-    clone.style.top = sourceRect.top + 'px';
-    clone.style.width = sourceRect.width + 'px';
-    clone.style.height = sourceRect.height + 'px';
+    clone.style.left = srcRenderLeft + 'px';
+    clone.style.top = srcRenderTop + 'px';
+    clone.style.width = srcRenderW + 'px';
+    clone.style.height = srcRenderH + 'px';
+    // Override object-fit on the clone so the image fills the box
+    // exactly — no letterbox inside the clone itself, since we sized
+    // the clone box to match the image's rendered aspect.
+    clone.style.objectFit = 'fill';
     clone.style.margin = '0';
     clone.style.zIndex = '99999';
     clone.style.transformOrigin = '0 0';
     clone.style.pointerEvents = 'none';
     clone.style.borderRadius = getComputedStyle(cover).borderRadius;
     clone.style.boxShadow = '0 8px 22px rgba(0, 0, 0, 0.35)';
+    // No background — the clone's aspect now matches the natural image
+    // so there's nothing to letterbox.
+    clone.style.background = 'transparent';
 
     // Hide the original so we don't render it twice during the flight.
     cover.style.visibility = 'hidden';
@@ -732,9 +774,9 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     document.body.appendChild(clone);
     document.body.classList.add('is-book-launching');
 
-    const scale = destWidth / sourceRect.width;
-    const tx = destLeft - sourceRect.left;
-    const ty = destTop - sourceRect.top;
+    const scale = destWidth / srcRenderW;
+    const tx = destLeft - srcRenderLeft;
+    const ty = destTop - srcRenderTop;
 
     const animation = clone.animate(
         [
@@ -754,7 +796,13 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
         }
     );
 
-    const navigate = () => { window.location.href = href; };
+    const navigate = () => {
+        // Hand off to the detail page: it will fade its content in
+        // around the already-visible hero cover, so the navigation
+        // reads as a continuous crossfade instead of a hard swap.
+        try { sessionStorage.setItem('book-flight-arrival', '1'); } catch (err) { /* ignore */ }
+        window.location.href = href;
+    };
     animation.onfinish = navigate;
     // Safety net in case onfinish doesn't fire (e.g. interrupted by
     // visibility change). Fire navigation slightly after the duration.

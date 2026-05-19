@@ -194,22 +194,20 @@ const config = ({
     contain-intrinsic-size: 220px 360px;
   }
 
-  /* While a book cover is flying to the detail page, dim the rest of
-     the bookshelf UI so the moving cover reads as the focal object.
-     The flight clone has z-index: 99999, so it floats above everything. */
-  body.is-book-launching .navbar,
-  body.is-book-launching .bookshelf-header,
-  body.is-book-launching .bookshelf-sidebar,
-  body.is-book-launching .books-grid {
-    opacity: 0.18;
-    transition: opacity .42s cubic-bezier(.22, 1, .36, 1);
+  /* While a book cover is flying to the detail page, fade out the page
+     content (main + sidebar) — but NOT the navbar, which renders the
+     same on both pages. Fading the navbar would flicker between two
+     identical navbars. The flight clone is appended to <body> with
+     z-index 99999, so it stays visible above the fade. */
+  body.is-book-launching .books-main,
+  body.is-book-launching .books-sidebar {
+    opacity: 0;
+    transition: opacity .5s cubic-bezier(.22, 1, .36, 1);
     pointer-events: none;
   }
   @media (prefers-reduced-motion: reduce) {
-    body.is-book-launching .navbar,
-    body.is-book-launching .bookshelf-header,
-    body.is-book-launching .bookshelf-sidebar,
-    body.is-book-launching .books-grid {
+    body.is-book-launching .books-main,
+    body.is-book-launching .books-sidebar {
       transition: none;
     }
   }

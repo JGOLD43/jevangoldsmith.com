@@ -40,11 +40,78 @@ const commentaryHtml = renderCommentary(b.commentary);
     { name: b.title, url: canonical }
   ]}
 >
-  {cover && (
-    <Fragment slot="head">
-      <link rel="preload" as="image" fetchpriority="high" href={cover} />
-    </Fragment>
-  )}
+  <Fragment slot="head">
+    {cover && <link rel="preload" as="image" fetchpriority="high" href={cover} />}
+    {/* Detects the flight-arrival flag set by the books grid before
+        navigation. Runs synchronously before first paint so the page
+        starts hidden and the dark backdrop persists from books → here,
+        making the navigation read as a continuous crossfade rather
+        than a hard page swap. */}
+    <script is:inline set:html={`(function(){try{var f=sessionStorage.getItem('book-flight-arrival');if(!f)return;sessionStorage.removeItem('book-flight-arrival');document.documentElement.classList.add('is-flight-arrival');}catch(e){}})();`} />
+    <style is:inline set:html={`
+      /* Showcase hero — large, centered cover at the top, content
+         below. Matches the visual weight of The Shelf's zoomed product
+         so the book-card flight has a dramatic destination to land at. */
+      .detail-page--book .detail-hero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+        flex-wrap: nowrap;
+      }
+      .detail-page--book .detail-hero-cover {
+        flex: none;
+        max-width: none;
+        width: min(72vw, 340px);
+        height: auto;
+        margin: 0 auto;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+        background: #1a1a1a;
+      }
+      /* Match the grid card's framing exactly so the flying clone and
+         the hero render the same image with the same crop/letterbox.
+         Grid uses object-fit: contain with letterboxed sides; force the
+         hero to do the same so the final frame of the flight matches
+         the hero pixel-for-pixel. */
+      .detail-page--book .detail-hero-cover img {
+        width: 100%;
+        height: auto;
+        display: block;
+        aspect-ratio: auto !important;
+        object-fit: contain !important;
+        background: #1a1a1a;
+      }
+      .detail-page--book .detail-hero-body {
+        flex: none;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      @media (max-width: 640px) {
+        .detail-page--book .detail-hero-cover {
+          width: min(78vw, 320px);
+        }
+      }
+
+      /* On flight arrival, hide only the page content (main + footer)
+         and the back link — the navbar matches the one on /books so it
+         stays put (no fade flicker). The hero cover stays at opacity 1
+         so the flying clone reads as continuous with it. */
+      html.is-flight-arrival body > main,
+      html.is-flight-arrival body > footer { opacity: 0; }
+      html.is-flight-arrival body > main .detail-hero-cover,
+      html.is-flight-arrival body > main .detail-hero-cover * { opacity: 1; }
+      html.is-flight-arrival.is-flight-revealed body > main,
+      html.is-flight-arrival.is-flight-revealed body > footer {
+        opacity: 1;
+        transition: opacity .5s cubic-bezier(.22, 1, .36, 1);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html.is-flight-arrival body > main,
+        html.is-flight-arrival body > footer { opacity: 1; }
+      }
+    `} />
+  </Fragment>
   <main class="detail-page detail-page--book">
     <a href="/books.html" class="detail-back">← Back to Books</a>
 
@@ -99,4 +166,6 @@ const commentaryHtml = renderCommentary(b.commentary);
       </section>
     )}
   </main>
+
+  <script is:inline set:html={`(function(){if(!document.documentElement.classList.contains('is-flight-arrival'))return;requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.add('is-flight-revealed');setTimeout(function(){document.documentElement.classList.remove('is-flight-arrival','is-flight-revealed');},700);});});})();`} />
 </Base>
