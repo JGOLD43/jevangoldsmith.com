@@ -26,6 +26,11 @@
       "id": "health",
       "title": "Health & Fitness",
       "icon": "heart"
+    },
+    {
+      "id": "style",
+      "title": "Style & Apparel",
+      "icon": "bag"
     }
   ],
   "resourceCategories": [
@@ -168,6 +173,42 @@
         "adventures.html",
         "videos.html"
       ]
+    },
+    {
+      "id": "rm-williams-craftsman-boots",
+      "slug": "rm-williams-craftsman-boots",
+      "title": "Craftsman Boots",
+      "brand": "R.M. Williams",
+      "type": "recommendation",
+      "category": "style",
+      "status": "available",
+      "price": "",
+      "shortDescription": "Hand-made leather Chelsea boots built to be resoled and recrafted instead of replaced.",
+      "description": "A leather Chelsea boot recommendation for everyday wear that improves with age.",
+      "rating": 5,
+      "badge": "Workhorse",
+      "usage": "Daily wear",
+      "icon": "bag",
+      "image": "images/products/rm-williams-craftsman-boots.png",
+      "ctaLabel": "View Recommendation",
+      "checkoutUrl": "",
+      "verdict": "The boots that get better the more they're worn.",
+      "whyItStayed": "Built to be repaired instead of replaced — the leather softens, the shape holds, and they keep going.",
+      "howIUseIt": "Default footwear for everything that isn't running or hiking — work, travel, and just walking out the door.",
+      "replaced": "Boots that fell apart faster than they broke in.",
+      "audience": [
+        "builders",
+        "travellers"
+      ],
+      "topics": [
+        "tools-objects"
+      ],
+      "tags": [
+        "footwear",
+        "leather",
+        "everyday"
+      ],
+      "relatedContent": []
     }
   ],
   "resources": [
