@@ -243,11 +243,26 @@ const config = ({
     outline: none;
   }
 
+  /* On mobile, widen the essays page to go edge-to-edge with the
+     navbar chrome (logo on the left, hamburger on the right). The
+     .essays-main wrapper's default 2rem padding was indenting the
+     content well inside the logo edge — drop it to 1rem and zero
+     out the per-card / per-row paddings so everything aligns. */
+  @media (max-width: 768px) {
+    .essays-main { padding: 1rem; }
+    .essays-cards { padding: 0.5rem 0 3rem; max-width: none; }
+    .essay-section-title { padding: 0; }
+    .essay-row-link { padding-left: 0; padding-right: 0; }
+    .essay-row-link:hover,
+    .essay-row-link:focus-visible {
+      /* Background hover would otherwise extend past the text edge
+         and look untidy against the now-edge-to-edge layout. */
+      background: transparent;
+    }
+  }
   @media (max-width: 640px) {
-    .essays-cards { padding: 1rem 0.25rem 3rem; }
     .essay-section { margin-bottom: 2.25rem; }
-    .essay-section-title { font-size: 0.92rem; padding: 0 0.5rem; }
-    .essay-row-link { padding: 0.7rem 0.75rem; }
+    .essay-section-title { font-size: 0.92rem; }
     .essay-row-title { font-size: 1rem; }
     .essay-row-subtitle { font-size: 0.93rem; }
   }
