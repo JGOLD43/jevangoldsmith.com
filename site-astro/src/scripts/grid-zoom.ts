@@ -94,12 +94,19 @@ export function init(config: GridZoomConfig) {
     // Nested link inside the card (sub-link, "Letterboxd", etc.) — let
     // it navigate; don't zoom.
     if (link && link !== trigger && link.getAttribute('href') && link.getAttribute('href') !== '#') return;
-    // The card itself is a link AND the caller opted into "no zoom" — let
-    // the browser handle the navigation natively so any cross-document
-    // view-transition (see @view-transition rules) can morph the cover
-    // directly from its grid position to the detail-page hero in one
-    // motion, instead of zooming to center first and snapping after.
+    // The card itself is a link AND the caller opted into "lift + nav" —
+    // play a brief shelf-style focus moment (target lifts slightly, other
+    // items fade) in place, then navigate so the cross-document view-
+    // transition (see @view-transition rules) morphs the lifted cover
+    // straight into the detail-page hero. No zoom-to-center mid-stop.
     if (config.bypassZoomForLinks && link && link === trigger && link.getAttribute('href') && link.getAttribute('href') !== '#') {
+      event.preventDefault();
+      event.stopPropagation();
+      const href = link.href;
+      const targetItem = (trigger.closest(itemSelector) || trigger) as HTMLElement;
+      if (targetItem) targetItem.classList.add('is-launching');
+      grid.classList.add('is-launching-grid');
+      setTimeout(function () { window.location.href = href; }, 220);
       return;
     }
     const item = (trigger.closest(itemSelector) || trigger) as HTMLElement;

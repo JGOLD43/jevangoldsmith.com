@@ -193,6 +193,35 @@ const config = ({
     content-visibility: auto;
     contain-intrinsic-size: 220px 360px;
   }
+
+  /* "Lift + nav" click feedback — mirrors The Shelf's focus moment.
+     Clicked cover gets a small lift while sibling cards fade, then
+     the cross-document view-transition (see @view-transition rule in
+     legacy-style.css) morphs the lifted cover into the detail hero. */
+  .book-card .book-cover {
+    transition: transform .22s cubic-bezier(.22, 1, .36, 1),
+                box-shadow .22s cubic-bezier(.22, 1, .36, 1);
+    will-change: transform;
+  }
+  .book-card.is-launching {
+    z-index: 3;
+    position: relative;
+  }
+  .book-card.is-launching .book-cover {
+    transform: scale(1.06);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+  }
+  .books-grid.is-launching-grid .book-card:not(.is-launching) {
+    opacity: 0.32;
+    transition: opacity .28s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .book-card .book-cover,
+    .books-grid.is-launching-grid .book-card:not(.is-launching) {
+      transition: none;
+    }
+    .book-card.is-launching .book-cover { transform: none; }
+  }
 </style>
 
 <script>
