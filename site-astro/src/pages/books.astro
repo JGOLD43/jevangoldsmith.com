@@ -194,15 +194,18 @@ const config = ({
     contain-intrinsic-size: 220px 360px;
   }
 
-  /* While a book cover is flying to the detail page, dim the rest of
-     the bookshelf UI so the moving cover reads as the focal object.
+  /* While a book cover is flying to the detail page, fade the rest of
+     the bookshelf UI all the way out so the navigation hands off to a
+     plain dark backdrop. The detail page then fades its own content in
+     around the already-positioned hero (see books/[slug].astro), giving
+     a continuous crossfade instead of a hard page swap.
      The flight clone has z-index: 99999, so it floats above everything. */
   body.is-book-launching .navbar,
   body.is-book-launching .bookshelf-header,
   body.is-book-launching .bookshelf-sidebar,
   body.is-book-launching .books-grid {
-    opacity: 0.18;
-    transition: opacity .42s cubic-bezier(.22, 1, .36, 1);
+    opacity: 0;
+    transition: opacity .5s cubic-bezier(.22, 1, .36, 1);
     pointer-events: none;
   }
   @media (prefers-reduced-motion: reduce) {

@@ -754,7 +754,13 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
         }
     );
 
-    const navigate = () => { window.location.href = href; };
+    const navigate = () => {
+        // Hand off to the detail page: it will fade its content in
+        // around the already-visible hero cover, so the navigation
+        // reads as a continuous crossfade instead of a hard swap.
+        try { sessionStorage.setItem('book-flight-arrival', '1'); } catch (err) { /* ignore */ }
+        window.location.href = href;
+    };
     animation.onfinish = navigate;
     // Safety net in case onfinish doesn't fire (e.g. interrupted by
     // visibility change). Fire navigation slightly after the duration.

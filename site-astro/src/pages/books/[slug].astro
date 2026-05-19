@@ -40,11 +40,27 @@ const commentaryHtml = renderCommentary(b.commentary);
     { name: b.title, url: canonical }
   ]}
 >
-  {cover && (
-    <Fragment slot="head">
-      <link rel="preload" as="image" fetchpriority="high" href={cover} />
-    </Fragment>
-  )}
+  <Fragment slot="head">
+    {cover && <link rel="preload" as="image" fetchpriority="high" href={cover} />}
+    {/* Detects the flight-arrival flag set by the books grid before
+        navigation. Runs synchronously before first paint so the page
+        starts hidden and the dark backdrop persists from books → here,
+        making the navigation read as a continuous crossfade rather
+        than a hard page swap. */}
+    <script is:inline set:html={`(function(){try{var f=sessionStorage.getItem('book-flight-arrival');if(!f)return;sessionStorage.removeItem('book-flight-arrival');document.documentElement.classList.add('is-flight-arrival');}catch(e){}})();`} />
+    <style is:inline set:html={`
+      html.is-flight-arrival body > * { opacity: 0; }
+      html.is-flight-arrival body .detail-hero-cover,
+      html.is-flight-arrival body .detail-hero-cover * { opacity: 1; }
+      html.is-flight-arrival.is-flight-revealed body > * {
+        opacity: 1;
+        transition: opacity .5s cubic-bezier(.22, 1, .36, 1);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html.is-flight-arrival body > * { opacity: 1; }
+      }
+    `} />
+  </Fragment>
   <main class="detail-page detail-page--book">
     <a href="/books.html" class="detail-back">← Back to Books</a>
 
@@ -99,4 +115,6 @@ const commentaryHtml = renderCommentary(b.commentary);
       </section>
     )}
   </main>
+
+  <script is:inline set:html={`(function(){if(!document.documentElement.classList.contains('is-flight-arrival'))return;requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.add('is-flight-revealed');setTimeout(function(){document.documentElement.classList.remove('is-flight-arrival','is-flight-revealed');},700);});});})();`} />
 </Base>
