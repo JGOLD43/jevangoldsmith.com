@@ -310,8 +310,6 @@ function restoreSidebarState() {
 
 function toggleListDropdown() { essaysRuntime?.toggleListDropdown(); }
 
-const ESSAY_VIEW_STORAGE_KEY = 'essays-view-mode';
-
 function applyEssayView(mode: 'reader' | 'cards') {
     const reader = document.getElementById('essays-container');
     const cards = document.getElementById('essays-cards');
@@ -326,7 +324,6 @@ function applyEssayView(mode: 'reader' | 'cards') {
         btn.classList.toggle('active', isActive);
         btn.setAttribute('aria-selected', String(isActive));
     });
-    try { localStorage.setItem(ESSAY_VIEW_STORAGE_KEY, next); } catch (err) { /* ignore */ }
 }
 
 function setEssayView(mode: string) {
@@ -334,9 +331,10 @@ function setEssayView(mode: string) {
 }
 
 function restoreEssayView() {
-    let stored: string | null = null;
-    try { stored = localStorage.getItem(ESSAY_VIEW_STORAGE_KEY); } catch (err) { /* ignore */ }
-    applyEssayView(stored === 'cards' ? 'cards' : 'reader');
+    // List is always the default landing view; clicking a row opens the
+    // reader, and the back link returns to the list. View state is not
+    // persisted, so refreshing the page always brings the index back.
+    applyEssayView('cards');
 }
 
 function openEssayFromCard(essayId: string, event?: Event) {
