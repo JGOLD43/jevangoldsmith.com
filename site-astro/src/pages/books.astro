@@ -195,12 +195,16 @@ const config = ({
   }
 
   /* "Lift + nav" click feedback — mirrors The Shelf's focus moment.
-     Clicked cover gets a small lift while sibling cards fade, then
-     the cross-document view-transition (see @view-transition rule in
-     legacy-style.css) morphs the lifted cover into the detail hero. */
+     Clicked cover scales up in place, siblings fade hard; the lift
+     transform is applied to the <img> itself (the element that carries
+     view-transition-name) so the browser's cross-document view-
+     transition (see @view-transition in legacy-style.css) snapshots
+     the cover AT its lifted size and morphs straight into the detail
+     hero — one continuous motion, no second-stage hop. */
+  /* The <img> itself has class "book-cover" AND the view-transition-name. */
   .book-card .book-cover {
-    transition: transform .22s cubic-bezier(.22, 1, .36, 1),
-                box-shadow .22s cubic-bezier(.22, 1, .36, 1);
+    transition: transform .32s cubic-bezier(.22, 1, .36, 1),
+                box-shadow .32s cubic-bezier(.22, 1, .36, 1);
     will-change: transform;
   }
   .book-card.is-launching {
@@ -208,12 +212,12 @@ const config = ({
     position: relative;
   }
   .book-card.is-launching .book-cover {
-    transform: scale(1.06);
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+    transform: scale(1.32) translateY(-4px);
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.55);
   }
   .books-grid.is-launching-grid .book-card:not(.is-launching) {
-    opacity: 0.32;
-    transition: opacity .28s ease;
+    opacity: 0.18;
+    transition: opacity .32s cubic-bezier(.22, 1, .36, 1);
   }
   @media (prefers-reduced-motion: reduce) {
     .book-card .book-cover,

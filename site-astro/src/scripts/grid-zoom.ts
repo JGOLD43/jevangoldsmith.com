@@ -106,7 +106,7 @@ export function init(config: GridZoomConfig) {
       const targetItem = (trigger.closest(itemSelector) || trigger) as HTMLElement;
       if (targetItem) targetItem.classList.add('is-launching');
       grid.classList.add('is-launching-grid');
-      setTimeout(function () { window.location.href = href; }, 220);
+      setTimeout(function () { window.location.href = href; }, 320);
       return;
     }
     const item = (trigger.closest(itemSelector) || trigger) as HTMLElement;
