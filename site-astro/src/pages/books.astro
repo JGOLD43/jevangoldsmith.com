@@ -193,6 +193,26 @@ const config = ({
     content-visibility: auto;
     contain-intrinsic-size: 220px 360px;
   }
+
+  /* While a book cover is flying to the detail page, dim the rest of
+     the bookshelf UI so the moving cover reads as the focal object.
+     The flight clone has z-index: 99999, so it floats above everything. */
+  body.is-book-launching .navbar,
+  body.is-book-launching .bookshelf-header,
+  body.is-book-launching .bookshelf-sidebar,
+  body.is-book-launching .books-grid {
+    opacity: 0.18;
+    transition: opacity .42s cubic-bezier(.22, 1, .36, 1);
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body.is-book-launching .navbar,
+    body.is-book-launching .bookshelf-header,
+    body.is-book-launching .bookshelf-sidebar,
+    body.is-book-launching .books-grid {
+      transition: none;
+    }
+  }
 </style>
 
 <script>

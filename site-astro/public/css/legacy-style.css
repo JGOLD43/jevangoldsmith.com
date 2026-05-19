@@ -448,7 +448,6 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    from a 0-radius circle at the button to a full-screen circle so
    the new state appears to "ink in" from the click point. Disable
    the default crossfade on old/new so only the clip animation runs. */
-::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){z-index:0}
 ::view-transition-new(root){z-index:1}
 

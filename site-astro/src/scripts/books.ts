@@ -663,16 +663,102 @@ function initBooksZoom() {
     if (!booksGrid) return;
     booksGrid.classList.add('js-zoom-grid');
     booksGrid.querySelectorAll('.book-card').forEach((el) => el.classList.add('js-zoom-item'));
-    initGridZoom({
-        anchorSelector: '.book-cover',
-        eventName: 'book_open',
-        fillH: 0.48,
-        fillW: 0.56,
-        grid: booksGrid,
-        itemSelector: '.book-card',
-        maxScale: 3.4,
-        triggerSelector: '.book-card'
+    // Cross-doc view-transitions exist (see @view-transition in
+    // legacy-style.css) but in practice they don't always fire visibly
+    // across cross-origin caches / Astro's MPA flow, so the cover read
+    // as a "flash to position" instead of moving. To make the motion
+    // deterministic we run a FLIP animation ourselves: clone the cover,
+    // fly it from grid → detail hero, then navigate.
+    initBookCoverFlight(booksGrid as HTMLElement);
+}
+
+function initBookCoverFlight(grid: HTMLElement) {
+    grid.addEventListener('click', (event) => {
+        if (event.defaultPrevented) return;
+        const targetEl = event.target as Element | null;
+        if (!targetEl) return;
+        const card = targetEl.closest('a.book-card') as HTMLAnchorElement | null;
+        if (!card) return;
+        const href = card.getAttribute('href');
+        if (!href || href === '#') return;
+        const cover = card.querySelector('.book-cover') as HTMLImageElement | null;
+        if (!cover) return;
+        event.preventDefault();
+        event.stopPropagation();
+        flyCoverToDetail(cover, href);
     });
+}
+
+function flyCoverToDetail(cover: HTMLImageElement, href: string) {
+    const sourceRect = cover.getBoundingClientRect();
+    if (!sourceRect.width || !sourceRect.height) {
+        window.location.href = href;
+        return;
+    }
+
+    // Estimate detail-hero cover geometry from the books detail page
+    // (`detail-hero-cover img` has `width: min(60vw, 260px)` and
+    // sits centered just below the back-link, ≈140px from the top).
+    const vw = window.innerWidth;
+    const destWidth = Math.min(vw * 0.6, 260);
+    const destHeight = destWidth * (sourceRect.height / sourceRect.width);
+    const destLeft = (vw - destWidth) / 2;
+    const destTop = Math.max(110, Math.min(180, vw < 640 ? 130 : 150));
+
+    const clone = cover.cloneNode() as HTMLImageElement;
+    clone.removeAttribute('id');
+    clone.removeAttribute('loading');
+    // Strip the view-transition-name so the browser won't try to also
+    // morph it during the navigation that follows.
+    clone.style.viewTransitionName = 'none';
+    clone.style.position = 'fixed';
+    clone.style.left = sourceRect.left + 'px';
+    clone.style.top = sourceRect.top + 'px';
+    clone.style.width = sourceRect.width + 'px';
+    clone.style.height = sourceRect.height + 'px';
+    clone.style.margin = '0';
+    clone.style.zIndex = '99999';
+    clone.style.transformOrigin = '0 0';
+    clone.style.pointerEvents = 'none';
+    clone.style.borderRadius = getComputedStyle(cover).borderRadius;
+    clone.style.boxShadow = '0 8px 22px rgba(0, 0, 0, 0.35)';
+
+    // Hide the original so we don't render it twice during the flight.
+    cover.style.visibility = 'hidden';
+    // Also strip view-transition-name from the original so the cross-doc
+    // view-transition doesn't try to morph the hidden element during nav.
+    (cover.style as CSSStyleDeclaration).viewTransitionName = 'none';
+
+    document.body.appendChild(clone);
+    document.body.classList.add('is-book-launching');
+
+    const scale = destWidth / sourceRect.width;
+    const tx = destLeft - sourceRect.left;
+    const ty = destTop - sourceRect.top;
+
+    const animation = clone.animate(
+        [
+            {
+                transform: 'translate(0px, 0px) scale(1)',
+                boxShadow: '0 8px 22px rgba(0, 0, 0, 0.35)'
+            },
+            {
+                transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
+                boxShadow: '0 28px 60px rgba(0, 0, 0, 0.55)'
+            }
+        ],
+        {
+            duration: 540,
+            easing: 'cubic-bezier(.22, 1, .36, 1)',
+            fill: 'forwards'
+        }
+    );
+
+    const navigate = () => { window.location.href = href; };
+    animation.onfinish = navigate;
+    // Safety net in case onfinish doesn't fire (e.g. interrupted by
+    // visibility change). Fire navigation slightly after the duration.
+    setTimeout(navigate, 600);
 }
 
 function showBooksUnavailable() {
