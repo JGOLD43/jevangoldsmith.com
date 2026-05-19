@@ -7,6 +7,21 @@ import Base from '../layouts/Base.astro';
   canonical="https://jevangoldsmith.com/reading-philosophy.html"
   bodyClass="nav-compact"
 >
+  <style slot="head" is:inline set:html={`
+    /* Match the navbar's container padding so the page-header and main
+       content go edge-to-edge with the logo and the hamburger. */
+    .page-header .container,
+    main.container {
+      max-width: none;
+      padding: 0 1rem;
+    }
+    @media (min-width: 769px) {
+      .page-header .container,
+      main.container {
+        padding: 0 3rem;
+      }
+    }
+  `} />
   <header class="page-header">
     <div class="container">
       <h1>How I Read</h1>
