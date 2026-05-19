@@ -194,13 +194,13 @@ const config = ({
     contain-intrinsic-size: 220px 360px;
   }
 
-  /* While a book cover is flying to the detail page, fade the rest of
-     the bookshelf UI all the way out so the navigation hands off to a
-     plain dark backdrop. The detail page then fades its own content in
-     around the already-positioned hero (see books/[slug].astro), giving
-     a continuous crossfade instead of a hard page swap.
+  /* While a book cover is flying to the detail page, fade out only the
+     CONTENT (bookshelf header, sidebar, grid). The navbar stays put
+     because the detail page renders the same navbar — fading it out
+     and back in would look like a snap. The detail page (see
+     books/[slug].astro) then fades its content in around the already-
+     positioned hero for a continuous crossfade.
      The flight clone has z-index: 99999, so it floats above everything. */
-  body.is-book-launching .navbar,
   body.is-book-launching .bookshelf-header,
   body.is-book-launching .bookshelf-sidebar,
   body.is-book-launching .books-grid {
@@ -209,7 +209,6 @@ const config = ({
     pointer-events: none;
   }
   @media (prefers-reduced-motion: reduce) {
-    body.is-book-launching .navbar,
     body.is-book-launching .bookshelf-header,
     body.is-book-launching .bookshelf-sidebar,
     body.is-book-launching .books-grid {
