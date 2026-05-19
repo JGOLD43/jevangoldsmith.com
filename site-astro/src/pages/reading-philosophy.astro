@@ -15,6 +15,14 @@ import Base from '../layouts/Base.astro';
       max-width: none;
       padding: 0 1rem;
     }
+    /* The article wrapper has its own max-width + 2rem horizontal
+       padding (from legacy CSS). Drop both so the section content
+       inherits the main.container's edge-to-edge inset. */
+    .reading-philosophy-content {
+      max-width: none;
+      padding-left: 0;
+      padding-right: 0;
+    }
     @media (min-width: 769px) {
       .page-header .container,
       main.container {
