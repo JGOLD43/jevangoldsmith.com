@@ -831,6 +831,12 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             document.querySelectorAll<HTMLElement>('.books-sidebar')
                 .forEach((el) => { el.style.display = 'none'; });
             document.title = doc.title;
+            // Reset scroll so the new detail-hero ends up at viewport
+            // top (matching the clone's flight destination). The clone
+            // is position:fixed and stays put across the scroll, and the
+            // new main's content is still at opacity 0 (is-spa-arrival),
+            // so the scroll is visually invisible.
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
             try { history.pushState({ bookFlight: true }, '', href); } catch (err) { /* ignore */ }
             // Force a frame, then add the reveal class so the new main's
             // content transitions from 0 → 1 in parallel with the flight.
