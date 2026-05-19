@@ -104,7 +104,7 @@ const commentaryHtml = renderCommentary(b.commentary);
       html.is-flight-arrival.is-flight-revealed body > main,
       html.is-flight-arrival.is-flight-revealed body > footer {
         opacity: 1;
-        transition: opacity .5s cubic-bezier(.22, 1, .36, 1);
+        transition: opacity .28s cubic-bezier(.22, 1, .36, 1);
       }
       @media (prefers-reduced-motion: reduce) {
         html.is-flight-arrival body > main,
@@ -167,5 +167,5 @@ const commentaryHtml = renderCommentary(b.commentary);
     )}
   </main>
 
-  <script is:inline set:html={`(function(){if(!document.documentElement.classList.contains('is-flight-arrival'))return;requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.add('is-flight-revealed');setTimeout(function(){document.documentElement.classList.remove('is-flight-arrival','is-flight-revealed');},700);});});})();`} />
+  <script is:inline set:html={`(function(){if(!document.documentElement.classList.contains('is-flight-arrival'))return;requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.add('is-flight-revealed');setTimeout(function(){document.documentElement.classList.remove('is-flight-arrival','is-flight-revealed');},420);});});})();`} />
 </Base>

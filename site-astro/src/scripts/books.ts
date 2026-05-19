@@ -790,7 +790,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             }
         ],
         {
-            duration: 540,
+            duration: 320,
             easing: 'cubic-bezier(.22, 1, .36, 1)',
             fill: 'forwards'
         }
@@ -806,7 +806,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     animation.onfinish = navigate;
     // Safety net in case onfinish doesn't fire (e.g. interrupted by
     // visibility change). Fire navigation slightly after the duration.
-    setTimeout(navigate, 600);
+    setTimeout(navigate, 380);
 }
 
 function showBooksUnavailable() {
