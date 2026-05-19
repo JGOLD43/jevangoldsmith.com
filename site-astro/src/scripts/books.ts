@@ -696,14 +696,16 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
         return;
     }
 
-    // Estimate detail-hero cover geometry from the books detail page
-    // (`detail-hero-cover img` has `width: min(60vw, 260px)` and
-    // sits centered just below the back-link, ≈140px from the top).
+    // Detail-hero cover on the books detail page is the showcase target:
+    // `width: min(72vw, 340px)` on >640px, `min(78vw, 320px)` below,
+    // centered, sitting just below the back link.
     const vw = window.innerWidth;
-    const destWidth = Math.min(vw * 0.6, 260);
+    const destWidth = vw <= 640
+        ? Math.min(vw * 0.78, 320)
+        : Math.min(vw * 0.72, 340);
     const destHeight = destWidth * (sourceRect.height / sourceRect.width);
     const destLeft = (vw - destWidth) / 2;
-    const destTop = Math.max(110, Math.min(180, vw < 640 ? 130 : 150));
+    const destTop = vw <= 640 ? 130 : 165;
 
     const clone = cover.cloneNode() as HTMLImageElement;
     clone.removeAttribute('id');
