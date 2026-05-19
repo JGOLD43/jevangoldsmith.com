@@ -262,7 +262,10 @@ const config = ({
   main.detail-page--book.is-spa-arrival.is-spa-cover-revealed .detail-hero-cover,
   main.detail-page--book.is-spa-arrival.is-spa-cover-revealed .detail-hero-cover * {
     opacity: 1;
-    transition: opacity .14s linear;
+    /* No transition — the clone is removed in the same frame the hero
+       is revealed. A non-zero duration here creates a momentary fade
+       between clone-removed and hero-fully-opaque that reads as a flash. */
+    transition: none;
   }
   @media (prefers-reduced-motion: reduce) {
     main.detail-page--book.is-spa-arrival > *,
