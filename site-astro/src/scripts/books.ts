@@ -671,7 +671,12 @@ function initBooksZoom() {
         grid: booksGrid,
         itemSelector: '.book-card',
         maxScale: 3.4,
-        triggerSelector: '.book-card'
+        triggerSelector: '.book-card',
+        // Skip the zoom-to-center animation on click; let the cross-document
+        // view-transition (matching `view-transition-name` on grid + detail
+        // covers) morph the cover from its grid position straight into the
+        // detail-page hero in one continuous motion.
+        bypassZoomForLinks: true
     });
 }
 

@@ -1,6 +1,6 @@
 type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; centerOffsetCssX?: number };
 type State = { grid: HTMLElement; activeItem: HTMLElement | null; itemSelector: string; triggerSelector: string; opts: Opts };
-type GridZoomConfig = { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; eventName?: string; centerOffsetCssX?: number };
+type GridZoomConfig = { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; eventName?: string; centerOffsetCssX?: number; bypassZoomForLinks?: boolean };
 
 const instances: State[] = [];
 
@@ -94,6 +94,14 @@ export function init(config: GridZoomConfig) {
     // Nested link inside the card (sub-link, "Letterboxd", etc.) — let
     // it navigate; don't zoom.
     if (link && link !== trigger && link.getAttribute('href') && link.getAttribute('href') !== '#') return;
+    // The card itself is a link AND the caller opted into "no zoom" — let
+    // the browser handle the navigation natively so any cross-document
+    // view-transition (see @view-transition rules) can morph the cover
+    // directly from its grid position to the detail-page hero in one
+    // motion, instead of zooming to center first and snapping after.
+    if (config.bypassZoomForLinks && link && link === trigger && link.getAttribute('href') && link.getAttribute('href') !== '#') {
+      return;
+    }
     const item = (trigger.closest(itemSelector) || trigger) as HTMLElement;
     if (!item) return;
     event.preventDefault();
