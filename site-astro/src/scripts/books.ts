@@ -696,16 +696,22 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
         return;
     }
 
-    // Detail-hero cover on the books detail page is the showcase target:
-    // `width: min(72vw, 340px)` on >640px, `min(78vw, 320px)` below,
-    // centered, sitting just below the back link.
-    const vw = window.innerWidth;
-    const destWidth = vw <= 640
-        ? Math.min(vw * 0.78, 320)
-        : Math.min(vw * 0.72, 340);
+    // Detail-hero cover on the books detail page is the showcase target.
+    // CSS uses `vw` units which include the scrollbar, so width computes
+    // off window.innerWidth. Positioning, though, is relative to the
+    // visible content area (excludes scrollbar), so use clientWidth for
+    // the horizontal center.
+    const cssVw = window.innerWidth;
+    const contentVw = document.documentElement.clientWidth;
+    const destWidth = cssVw <= 640
+        ? Math.min(cssVw * 0.78, 320)
+        : Math.min(cssVw * 0.72, 340);
     const destHeight = destWidth * (sourceRect.height / sourceRect.width);
-    const destLeft = (vw - destWidth) / 2;
-    const destTop = vw <= 640 ? 130 : 165;
+    const destLeft = (contentVw - destWidth) / 2;
+    // Empirically measured against the rendered detail-hero on the same
+    // viewport. The detail page renders the "Back to Books" link + hero
+    // margin under the navbar at this y.
+    const destTop = cssVw <= 640 ? 123 : 165;
 
     const clone = cover.cloneNode() as HTMLImageElement;
     clone.removeAttribute('id');
