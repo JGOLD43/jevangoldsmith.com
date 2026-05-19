@@ -823,6 +823,19 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 return;
             }
             spaTookOver = true;
+            // Carry the detail page's <head> inline styles into the
+            // current page so the SPA-injected main has access to
+            // every style rule the standalone /books/{slug} page does
+            // (showcase hero, etc.). Idempotent — drop any previous
+            // SPA-injected blocks before adding the fresh ones so repeat
+            // clicks don't pile up duplicates.
+            document.querySelectorAll<HTMLStyleElement>('style[data-spa-detail-css="1"]')
+                .forEach((existing) => existing.remove());
+            doc.querySelectorAll('head style').forEach((style) => {
+                const tagged = style.cloneNode(true) as HTMLStyleElement;
+                tagged.setAttribute('data-spa-detail-css', '1');
+                document.head.appendChild(tagged);
+            });
             newMain.classList.add('is-spa-arrival');
             oldMain.parentNode.replaceChild(newMain, oldMain);
             // The detail page doesn't render a sidebar — hide the
