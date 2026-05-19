@@ -67,11 +67,20 @@ const commentaryHtml = renderCommentary(b.commentary);
         height: auto;
         margin: 0 auto;
         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+        background: #1a1a1a;
       }
+      /* Match the grid card's framing exactly so the flying clone and
+         the hero render the same image with the same crop/letterbox.
+         Grid uses object-fit: contain with letterboxed sides; force the
+         hero to do the same so the final frame of the flight matches
+         the hero pixel-for-pixel. */
       .detail-page--book .detail-hero-cover img {
         width: 100%;
         height: auto;
         display: block;
+        aspect-ratio: auto !important;
+        object-fit: contain !important;
+        background: #1a1a1a;
       }
       .detail-page--book .detail-hero-body {
         flex: none;
