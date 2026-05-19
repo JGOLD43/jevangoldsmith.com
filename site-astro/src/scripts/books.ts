@@ -796,17 +796,94 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
         }
     );
 
-    const navigate = () => {
+    const hardNav = () => {
         // Hand off to the detail page: it will fade its content in
-        // around the already-visible hero cover, so the navigation
-        // reads as a continuous crossfade instead of a hard swap.
+        // around the already-visible hero cover.
         try { sessionStorage.setItem('book-flight-arrival', '1'); } catch (err) { /* ignore */ }
         window.location.href = href;
     };
-    animation.onfinish = navigate;
-    // Safety net in case onfinish doesn't fire (e.g. interrupted by
-    // visibility change). Fire navigation slightly after the duration.
-    setTimeout(navigate, 380);
+
+    // SPA-style transition: fetch the detail page in parallel with the
+    // flight, swap in its <main> as soon as it arrives, and start its
+    // content fade-in WHILE the clone is still flying. The clone is the
+    // visible "cover" through the whole motion; when it lands at the
+    // hero position the hero takes over (also at opacity 1). This gives
+    // a single continuous animation where the cover is moving AND the
+    // surrounding page content is appearing in parallel.
+    let spaTookOver = false;
+    fetch(href, { credentials: 'same-origin' })
+        .then((res) => res.ok ? res.text() : Promise.reject(new Error(String(res.status))))
+        .then((html) => {
+            if (spaTookOver) return;
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const newMain = doc.querySelector('main.detail-page--book') as HTMLElement | null;
+            const oldMain = document.querySelector('main') as HTMLElement | null;
+            if (!newMain || !oldMain || !oldMain.parentNode) {
+                hardNav();
+                return;
+            }
+            spaTookOver = true;
+            newMain.classList.add('is-spa-arrival');
+            oldMain.parentNode.replaceChild(newMain, oldMain);
+            // The detail page doesn't render a sidebar — hide the
+            // listing sidebar so the new main can center under its
+            // already-faded backdrop.
+            document.querySelectorAll<HTMLElement>('.books-sidebar')
+                .forEach((el) => { el.style.display = 'none'; });
+            document.title = doc.title;
+            try { history.pushState({ bookFlight: true }, '', href); } catch (err) { /* ignore */ }
+            // Force a frame, then add the reveal class so the new main's
+            // content transitions from 0 → 1 in parallel with the flight.
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    newMain.classList.add('is-spa-revealed');
+                });
+            });
+            // When the clone finishes flying, hand the cover over to the
+            // hero img and remove the clone. Both sit at the same
+            // pixel-exact position so the swap is invisible.
+            const handoff = () => {
+                newMain.classList.add('is-spa-cover-revealed');
+                clone.remove();
+                cover.style.visibility = '';
+                (cover.style as CSSStyleDeclaration).viewTransitionName = '';
+                document.body.classList.remove('is-book-launching');
+                // Restore sidebar style after cleanup in case the user
+                // hits Back — we'll re-render on popstate.
+                setTimeout(() => {
+                    newMain.classList.remove('is-spa-arrival', 'is-spa-revealed', 'is-spa-cover-revealed');
+                }, 240);
+            };
+            animation.finished
+                .then(handoff)
+                .catch(handoff);
+        })
+        .catch(() => {
+            // Fallback: hard navigation if anything went wrong. Wait for
+            // the flight to finish first so the user still sees the motion.
+            animation.finished.then(hardNav).catch(hardNav);
+            setTimeout(hardNav, 380);
+        });
+
+    // If for any reason the SPA path didn't kick in by the time the
+    // flight is well past done, fall through to hard nav so the user
+    // isn't stranded on a half-faded books page.
+    setTimeout(() => { if (!spaTookOver) hardNav(); }, 900);
+}
+
+// Back/forward inside an SPA-swapped book detail page — fall back to a
+// full reload so the listing page reinitializes cleanly.
+if (typeof window !== 'undefined') {
+    window.addEventListener('popstate', (event) => {
+        const state = (event.state || {}) as Record<string, unknown>;
+        if (state.bookFlight) window.location.reload();
+        // If location is now /books and we have an SPA-injected detail
+        // main, the user is going "back" from the SPA swap — reload.
+        if (location.pathname.endsWith('/books') || location.pathname.endsWith('/books.html')) {
+            const onDetailMain = document.querySelector('main.detail-page--book');
+            if (onDetailMain) window.location.reload();
+        }
+    });
 }
 
 function showBooksUnavailable() {

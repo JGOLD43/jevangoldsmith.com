@@ -205,6 +205,32 @@ const config = ({
     transition: opacity .32s cubic-bezier(.22, 1, .36, 1);
     pointer-events: none;
   }
+
+  /* SPA-injected detail main: hide content from initial paint, then
+     fade in around the still-flying cover clone (and the eventual
+     hero hand-off). All children of the new main, plus the hero
+     internals, start at opacity 0. Reveal class fades them in. */
+  main.detail-page--book.is-spa-arrival > * {
+    opacity: 0;
+  }
+  main.detail-page--book.is-spa-arrival .detail-hero-cover,
+  main.detail-page--book.is-spa-arrival .detail-hero-cover * {
+    opacity: 0;
+  }
+  main.detail-page--book.is-spa-arrival.is-spa-revealed > * {
+    opacity: 1;
+    transition: opacity .28s cubic-bezier(.22, 1, .36, 1);
+  }
+  main.detail-page--book.is-spa-arrival.is-spa-cover-revealed .detail-hero-cover,
+  main.detail-page--book.is-spa-arrival.is-spa-cover-revealed .detail-hero-cover * {
+    opacity: 1;
+    transition: opacity .14s linear;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    main.detail-page--book.is-spa-arrival > *,
+    main.detail-page--book.is-spa-arrival .detail-hero-cover,
+    main.detail-page--book.is-spa-arrival .detail-hero-cover * { opacity: 1; }
+  }
   @media (prefers-reduced-motion: reduce) {
     body.is-book-launching .books-main,
     body.is-book-launching .books-sidebar {
