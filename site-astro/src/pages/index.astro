@@ -62,11 +62,6 @@ const counts: Record<string, number> = {
                         <img src="/images/generated/profile/profile-720.jpg" srcset="/images/generated/profile/profile-360.jpg 360w, /images/generated/profile/profile-520.jpg 520w, /images/generated/profile/profile-720.jpg 720w, /images/generated/profile/profile-960.jpg 960w" sizes="(max-width: 768px) 82vw, 42vw" alt="Jevan Goldsmith" class="hero-image" width="713" height="778" decoding="async" fetchpriority="high">
                     </picture>
 
-                    <!-- Quick Snapshot Toggle Button -->
-                    <button class="snapshot-toggle" data-snapshot-toggle aria-label="Toggle profile snapshot">
-                        PROFILE
-                    </button>
-
                     <!-- Animated Snapshot Card (Hidden by default) -->
                     <div class="snapshot-card" id="snapshot-card">
                         <div class="snapshot-header">
@@ -112,11 +107,18 @@ const counts: Record<string, number> = {
                             </div>
                             <div class="snapshot-row">
                                 <div class="snapshot-label">Stats</div>
-                                <div class="snapshot-value">Age 24 • Height 183cm • <img src="/images/flags/au.png" alt="Australian Flag" class="snapshot-flag" width="80" height="40" loading="lazy" decoding="async"></div>
+                                <div class="snapshot-value">Height 183cm • <img src="/images/flags/au.png" alt="Australian Flag" class="snapshot-flag" width="80" height="40" loading="lazy" decoding="async"></div>
                             </div>
                             <a href="about.html" class="snapshot-bio-link">Read Full Bio</a>
                         </div>
                     </div>
+
+                    <!-- Quick Snapshot Toggle Button — placed AFTER the
+                         snapshot card in DOM so it paints on top in 2D
+                         stacking order regardless of 3D context tricks. -->
+                    <button class="snapshot-toggle" data-snapshot-toggle aria-label="Toggle profile snapshot">
+                        PROFILE
+                    </button>
                 </div>
                 <div class="hero-social-links">
                     <a href="https://x.com/JevanGoldsmith" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
@@ -297,6 +299,85 @@ const counts: Record<string, number> = {
   @media (max-width: 480px) {
     .newsletter-cta-form--inline { padding-left: 14px; }
     .newsletter-cta-form--inline .newsletter-cta-button { padding: 0.55rem 1rem; font-size: 0.85rem; }
+  }
+
+  /* Mobile only: PROFILE tap slides the snapshot up from the bottom of
+     the profile picture, covering it with a frosted-glass panel. */
+  @media (max-width: 768px) {
+    .profile-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    /* Slide-up snapshot panel. Transform is driven by inline style from
+       JS (the legacy stylesheet has a handful of !important transforms
+       on .snapshot-card variants that win against any CSS-cascade
+       attempt to override them on this page). The CSS here owns
+       everything except the transform. */
+    .profile-container .snapshot-card {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: none;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.45);
+      background: rgba(20, 20, 20, 0.55) !important;
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      /* No CSS transition — animation is driven by the Web Animations
+         API in home.ts (bypasses cascade fights with legacy rules). */
+    }
+    .profile-container.is-flipped .snapshot-card { pointer-events: auto; }
+    /* Header inside the glass panel — no separate solid bar, just a
+       hairline divider so the whole panel reads as one piece of glass. */
+    .profile-container .snapshot-header {
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18) !important;
+      color: #fff !important;
+      justify-content: flex-start !important;
+      gap: 0.55rem !important;
+    }
+    .profile-container .snapshot-header .snapshot-camera-icon {
+      order: 0;
+      margin-right: auto;
+    }
+    .profile-container .snapshot-header .snapshot-eyebrow,
+    .profile-container .snapshot-header h4 { color: #fff !important; }
+    .profile-container .snapshot-content { color: #fff; }
+    .profile-container .snapshot-label { color: rgba(255, 255, 255, 0.65) !important; }
+    .profile-container .snapshot-value { color: #fff !important; }
+    .profile-container .snapshot-row { border-bottom-color: rgba(255, 255, 255, 0.12) !important; }
+    .profile-container .snapshot-bio-link {
+      color: #fff !important;
+      border-top-color: rgba(255, 255, 255, 0.18) !important;
+    }
+    /* PROFILE button stays anchored in the bottom-right of the card.
+       Always on top of both photo and the sliding snapshot. */
+    .profile-container .snapshot-toggle {
+      position: absolute !important;
+      bottom: 12px !important;
+      right: 12px !important;
+      top: auto !important;
+      left: auto !important;
+      z-index: 100 !important;
+      background: #ffffff !important;
+      color: #1a1a1a !important;
+      border: 1px solid rgba(0,0,0,0.1) !important;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5) !important;
+    }
+    /* Hide the snapshot's internal "X" close button on mobile — the
+       PROFILE button below it is the single source of truth. */
+    .profile-container .snapshot-card .snapshot-close { display: none !important; }
   }
 
   /* Essays section — refined layout */
