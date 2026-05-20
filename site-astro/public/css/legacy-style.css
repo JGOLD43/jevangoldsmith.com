@@ -446,8 +446,8 @@ body.nav-compact .navbar .work-mode-icon{width:18px;height:18px}
    so the visual change between work and personal is immediately
    obvious. CSS variables cascade through every nav-link / button /
    card that uses var(--secondary-color) or var(--accent-color). */
-[data-mode="personal"]{--secondary-color:#d77a5e;--accent-color:#c25a3c}
-[data-theme=dark][data-mode="personal"]{--secondary-color:#e89379;--accent-color:#e87a5c}
+/* Personal-mode color overrides removed — keep the brand tan/accent
+   consistent across both modes so the palette doesn't shift on toggle. */
 
 /* Circular-wipe transition for the work/personal toggle. The JS
    click handler animates clip-path on ::view-transition-new(root)
