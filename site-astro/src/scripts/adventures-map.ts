@@ -572,6 +572,25 @@ function applyAdventureMarkerFilter() {
     });
 }
 
+// Map ISO 3166-1 alpha-3 codes (in the countries geo dataset) to alpha-2
+// so we can render flag emoji via regional indicator symbols. Limited to
+// the currently-visited set; extend as more countries get visited.
+const ISO3_TO_ISO2: Record<string, string> = {
+    AUS: 'AU', CAN: 'CA', CHE: 'CH', JPN: 'JP', THA: 'TH', USA: 'US', VNM: 'VN'
+};
+
+function isoToFlagEmoji(iso?: string): string {
+    if (!iso) return '';
+    const code2 = iso.length === 2 ? iso.toUpperCase() : ISO3_TO_ISO2[iso.toUpperCase()];
+    if (!code2 || code2.length !== 2) return '';
+    const A = 'A'.charCodeAt(0);
+    const base = 0x1F1E6;
+    return String.fromCodePoint(
+        base + code2.charCodeAt(0) - A,
+        base + code2.charCodeAt(1) - A
+    );
+}
+
 function renderCountryLayer() {
     const L = getL();
     if (!state.worldMap || !L) return;
@@ -602,7 +621,9 @@ function renderCountryLayer() {
             className: 'country-fill-visited'
         }),
         onEachFeature: (feature: AnyObj, layer: AnyObj) => {
-            layer.bindTooltip(feature.properties.name || feature.properties.iso, { sticky: true });
+            const name = feature.properties.name || feature.properties.iso;
+            const flag = isoToFlagEmoji(feature.properties.iso);
+            layer.bindTooltip(flag ? `${flag} ${name}` : name, { sticky: true });
         }
     }).addTo(state.worldMap);
 }
