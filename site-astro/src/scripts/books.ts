@@ -391,6 +391,14 @@ function setViewMode(mode: string) {
     const grids = ['grid-view-btn', 'grid-view-btn-grid', 'grid-view-btn-main'];
     ids.forEach((id) => document.getElementById(id)?.classList.toggle('active', mode === 'list'));
     grids.forEach((id) => document.getElementById(id)?.classList.toggle('active', mode === 'grid'));
+    // Keep the single-button view toggles in sync with current mode so
+    // their visible icon + accessible label reflect the next-target view.
+    const nextLabel = mode === 'list' ? 'Switch to grid view' : 'Switch to list view';
+    document.querySelectorAll<HTMLButtonElement>('.view-toggle-single').forEach((btn) => {
+        btn.dataset.currentMode = mode;
+        btn.setAttribute('aria-label', nextLabel);
+        btn.setAttribute('title', nextLabel);
+    });
     const booksMain = document.querySelector('.books-main') as HTMLElement | null;
     const categoryGridView = document.getElementById('category-grid-view');
     const sidebar = document.getElementById('books-sidebar');
@@ -620,6 +628,11 @@ function bindBooksEvents() {
         }
         const viewToggle = target.closest?.('[data-action="set-view-mode"]') as HTMLElement | null;
         if (viewToggle) { setViewMode(viewToggle.dataset.mode || 'list'); return; }
+        const viewToggleSingle = target.closest?.('[data-action="toggle-view-mode"]') as HTMLElement | null;
+        if (viewToggleSingle) {
+            setViewMode(state.viewMode === 'list' ? 'grid' : 'list');
+            return;
+        }
         const bookLink = target.closest?.('[data-action="book-link"]') as HTMLElement | null;
         if (bookLink) {
             event.preventDefault();
