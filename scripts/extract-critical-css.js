@@ -105,6 +105,15 @@ const CRITICAL_PATTERNS = [
   // CLS hit on every collection page (lighthouse measures 0.5+).
   /^\.collection-layout(?![\w-])/,
   /\.sidebar-collapsed(?![\w-])/,
+  // Long-form / topic-hub / resources pages use main.resources-content
+  // for max-width centering. The base rule (max-width:1100px;margin:0
+  // auto;padding:3rem 1.5rem 5rem) lives in async chrome.css, so first
+  // paint shows main at full viewport width. When chrome.css applies,
+  // main shrinks + recenters and content shifts inward. Inlining the
+  // rule eliminates a 0.3–0.6 CLS hit on /free-resources, /topics/*,
+  // /problems, /takes, /weekly-review-template, etc.
+  /^\.resources-content(?![\w-])/,
+  /^\.topic-hub-page(?![\w-])/,
   // Icon size primitives (referenced by sprite <use> wrappers everywhere)
   /^\.ico-(stroke|fill|12|14|18|24)/
 ];
