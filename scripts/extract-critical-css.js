@@ -97,6 +97,14 @@ const CRITICAL_PATTERNS = [
   /^\.hidden(?![\w-])/,
   /^\[hidden\]/,
   /^\[aria-hidden="true"\]/,
+  // Collection-page above-the-fold layout. Without these, the sidebar
+  // renders at the BASE 280px width (from per-page books.css that loads
+  // sync) until async chrome.css arrives with the .sidebar-collapsed
+  // override (48px). That triggers a ~232px horizontal shift on
+  // .books-main / .movies-main / .essays-main / etc. — the dominant
+  // CLS hit on every collection page (lighthouse measures 0.5+).
+  /^\.collection-layout(?![\w-])/,
+  /\.sidebar-collapsed(?![\w-])/,
   // Icon size primitives (referenced by sprite <use> wrappers everywhere)
   /^\.ico-(stroke|fill|12|14|18|24)/
 ];

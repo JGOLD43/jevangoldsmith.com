@@ -70,14 +70,10 @@ const headerCarouselHtml = `<div class="recent-books-carousel">
     <div class="carousel-track" id="carousel-track" style="animation-duration:${recentBooks.length * 3}s">${carouselTrackInner}</div>
 </div>`;
 
-const headerViewToggleHtml = `<div class="view-toggle main-view-toggle">
-    <button class="view-toggle-btn active" id="list-view-btn-main" data-action="set-view-mode" data-mode="list" title="List view">
-        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
-    </button>
-    <button class="view-toggle-btn" id="grid-view-btn-main" data-action="set-view-mode" data-mode="grid" title="Grid view">
-        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
-    </button>
-</div>`;
+const headerViewToggleHtml = `<button class="view-toggle-single" id="view-toggle-main" data-action="toggle-view-mode" data-current-mode="list" aria-label="Switch to grid view" title="Switch to grid view">
+    <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
+    <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
+</button>`;
 
 const populatedMainBody = `<div id="books-container" class="books-grid">${bookCardsHtml}</div>
 <div class="category-grid-view" id="category-grid-view" style="display: none;">
@@ -89,14 +85,10 @@ const populatedMainBody = `<div id="books-container" class="books-grid">${bookCa
                 <span class="read-first-note">read this first</span>
             </div>
         </div>
-        <div class="view-toggle grid-view-toggle">
-            <button class="view-toggle-btn" id="list-view-btn-grid" data-action="set-view-mode" data-mode="list" title="List view">
-                <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
-            </button>
-            <button class="view-toggle-btn active" id="grid-view-btn-grid" data-action="set-view-mode" data-mode="grid" title="Grid view">
-                <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
-            </button>
-        </div>
+        <button class="view-toggle-single" id="view-toggle-grid" data-action="toggle-view-mode" data-current-mode="grid" aria-label="Switch to list view" title="Switch to list view">
+            <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
+            <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
+        </button>
     </header>
     <div class="category-grid" id="category-grid"></div>
 </div>`;
