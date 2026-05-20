@@ -118,7 +118,17 @@ const CRITICAL_PATTERNS = [
   /^\.ico-(stroke|fill|12|14|18|24)/
 ];
 
+// Strip CSS comments (/* ... */) so a preceding comment block doesn't
+// glue onto the next selector's text — without this, a rule like
+// `/* note */ .resources-content { ... }` has selector text starting
+// with the comment, so anchored patterns like /^\.resources-content/
+// never match and the rule silently falls out of critical CSS.
+function stripCssComments(css) {
+  return css.replace(/\/\*[\s\S]*?\*\//g, '');
+}
+
 function parseRules(css) {
+  css = stripCssComments(css);
   const rules = [];
   let pos = 0;
   const n = css.length;
