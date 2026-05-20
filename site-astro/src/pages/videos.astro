@@ -14,7 +14,14 @@ import Base from '../layouts/Base.astro';
         </div>
     </header>
     <main class="container">
-        <div id="loading" class="loading">
+        <!--
+          Reserve vertical space for the async-loaded video grid so the
+          footer below doesn't shift down when the YouTube fetch resolves.
+          Without min-height the initial #loading div is tiny, then
+          #videos-container fills with cards and the footer jumps —
+          measured as 0.26 CLS by Lighthouse.
+        -->
+        <div id="loading" class="loading" style="min-height: 80vh;">
             <p>Loading recent videos from YouTube...</p>
         </div>
 
@@ -22,7 +29,7 @@ import Base from '../layouts/Base.astro';
             <p>Unable to load videos from YouTube. Please try again later.</p>
         </div>
 
-        <div id="videos-container" class="videos-grid" style="display: none;">
+        <div id="videos-container" class="videos-grid" style="display: none; min-height: 80vh;">
             <!-- Videos will be loaded here dynamically -->
         </div>
 
