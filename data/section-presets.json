@@ -121,7 +121,7 @@
       "allCountId": "count-all-projects",
       "sidebarFooter": "Things I am building, exploring, and planning",
       "headerTitle": "Projects",
-      "headerSubtitle": "Things I am building, exploring, and learning in public.",
+      "headerSubtitle": "",
       "counterId": "project-count",
       "counterLabel": "Projects",
       "gridId": "projects-container"
