@@ -152,7 +152,7 @@
       "allCountId": "count-all-challenges",
       "sidebarFooter": "Personal challenges, constraints, and experiments",
       "headerTitle": "Challenges",
-      "headerSubtitle": "Personal challenges I'm taking on to grow, learn, and become better. Public accountability helps.",
+      "headerSubtitle": "",
       "counterId": "challenge-count",
       "counterLabel": "Challenges",
       "gridId": "challenges-container"

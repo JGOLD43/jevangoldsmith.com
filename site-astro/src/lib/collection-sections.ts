@@ -69,7 +69,7 @@ export const MOVIE_SECTIONS: SectionItem[] = [
 ];
 
 export const BOOK_SECTIONS: SectionItem[] = [
-  buildAll(presets.book.all, { 'data-category': 'all', class: 'active' }),
+  buildAll(presets.book.all, { 'data-category': 'all' }),
   ...presets.book.categories.map(([label, key, iconKey, tooltip]) => categorySection({
     label, key, iconKey, tooltip,
     attrs: { 'data-category': key },
@@ -222,7 +222,11 @@ export function renderChallengeCard(challenge: Challenge): string {
     searchExtras: [challenge.timeframe || '', ...(challenge.searchTerms || [])],
     categoryLineSuffix: challenge.timeframe || '',
     iconOverride: challenge.icon,
-    trailingHtml: `\n                        ${progressHtml}`
+    trailingHtml: `\n                        ${progressHtml}`,
+    hrefBuilder: (record) => {
+      const slug = record.slug || record.id;
+      return slug ? `/challenges/${slug}.html` : null;
+    }
   });
 }
 
@@ -350,8 +354,8 @@ export function renderTaskListMain<T extends Project | Challenge>(
         <div class="movies-main">
             <header class="main-header">
                 <div class="header-content">
-                    <h1>${escapeHtml(cfg.headerTitle)}</h1>
-                    <p>${escapeHtml(cfg.headerSubtitle)}</p>
+                    <h2 id="collection-title" data-default-title="${escapeAttr(cfg.headerTitle)}">${escapeHtml(cfg.headerTitle)}</h2>
+                    ${cfg.headerSubtitle ? `<p>${escapeHtml(cfg.headerSubtitle)}</p>` : ''}
                 </div>
                 <div class="header-counter">
                     <span class="counter-number" id="${escapeAttr(cfg.counterId)}">${total}</span>
