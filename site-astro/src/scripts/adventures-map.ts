@@ -250,11 +250,13 @@ function setBasemap(map: AnyObj, name: string) {
         noWrap: false,
         detectRetina: false,
         updateWhenIdle: false,
-        // Load tiles DURING the zoom animation too. The blurry low-zoom
-        // overview pane underneath hides the in-progress state, and the
-        // user sees sharp tiles arriving in mid-zoom rather than a single
-        // flash at the end.
-        updateWhenZooming: true,
+        // Wait until zoom settles before loading new tiles. Mid-zoom
+        // updates fire HTTP requests at intermediate levels that get
+        // abandoned as the zoom continues — which is what caused the
+        // "nothing loads for a second" gap during fast zooms. The
+        // blurry low-zoom overview pane underneath fills the gap
+        // until the final tiles arrive.
+        updateWhenZooming: false,
         // Throttle map view updates to ~60fps. Lower than the default 200ms
         // so tiles stream in faster during a long pan.
         updateInterval: 16,
@@ -332,13 +334,15 @@ function initWorldMap(adventures: AnyObj[]) {
         maxZoom: 18,
         maxBounds: verticalBounds,
         maxBoundsViscosity: 1.0,
+        // Fine-grained zoom snapping so each wheel tick / pinch increment
+        // is a small smooth step instead of jumping a full level.
         zoomSnap: 0.25,
-        zoomDelta: 1,
-        // Wheel-zoom speed tuned for "fast but not jaggy" — the
-        // zoomAnimationThreshold below catches over-fast bursts by
-        // jump-cutting, so we can keep these responsive.
-        wheelDebounceTime: 30,
-        wheelPxPerZoomLevel: 60,
+        zoomDelta: 0.5,
+        // Wheel-zoom: slower per-tick + longer debounce so rapid scrolls
+        // batch into a single smooth animation instead of skipping multiple
+        // levels (the "jumps too far + nothing loads" effect).
+        wheelDebounceTime: 80,
+        wheelPxPerZoomLevel: 140,
         inertia: true,
         inertiaDeceleration: 2500,
         // No fade — Leaflet's parent-tile retention (kept-parent stays
@@ -347,9 +351,11 @@ function initWorldMap(adventures: AnyObj[]) {
         // the zoom feel sluggish without helping the underlying issue.
         fadeAnimation: false,
         zoomAnimation: true,
-        // Fast zoom-out across >2 levels jump-cuts instead of running a
-        // long scale animation — eliminates the jaggy multi-level case.
-        zoomAnimationThreshold: 2,
+        // Allow long zoom animations to run smoothly — the previous
+        // threshold of 2 caused multi-level zooms to jump-cut, which is
+        // what felt like "skipping" and left a tile-loading gap. The
+        // blurry overview pane underneath fills any in-progress state.
+        zoomAnimationThreshold: 6,
         // Markers animate with the tile pane during zoom. With only ~14
         // markers the per-frame transform cost is negligible, and turning
         // this off would cause the visible-flicker pattern (Leaflet adds
