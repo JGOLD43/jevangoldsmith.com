@@ -2,10 +2,39 @@ function initSnapshot() {
     const card = document.getElementById('snapshot-card');
     const toggles = document.querySelectorAll('[data-snapshot-toggle]');
     if (!card || toggles.length === 0) return;
+    const container = card.closest('.profile-container') as HTMLElement | null;
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+
+    // On mobile: hide the snapshot below the photo with inline !important
+    // (which beats the legacy stylesheet rules that would otherwise pin
+    // the snapshot off-screen with their own transforms).
+    if (isMobile()) {
+        card.style.setProperty('transform', 'translateY(100%)', 'important');
+    }
 
     toggles.forEach((toggle) => {
         toggle.addEventListener('click', () => {
             card.classList.toggle('visible');
+            if (!container) return;
+            container.classList.toggle('is-flipped');
+            if (!isMobile()) return;
+            const open = container.classList.contains('is-flipped');
+            // Cancel any in-flight transition so the new transform takes
+            // effect cleanly (legacy stylesheet rules + our own !important
+            // would otherwise stall the transition at currentTime=0).
+            card.getAnimations().forEach((a) => a.cancel());
+            // Animate via the Web Animations API directly — this bypasses
+            // the CSS-cascade fight with legacy .snapshot-card rules.
+            const from = open ? 'translateY(100%)' : 'translateY(0%)';
+            const to = open ? 'translateY(0%)' : 'translateY(100%)';
+            const anim = card.animate(
+                [{ transform: from }, { transform: to }],
+                { duration: 550, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+            );
+            anim.onfinish = () => {
+                card.style.setProperty('transform', to, 'important');
+                anim.cancel();
+            };
         });
     });
 }
