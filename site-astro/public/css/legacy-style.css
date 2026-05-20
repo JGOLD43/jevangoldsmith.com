@@ -238,8 +238,8 @@ body.nav-compact{padding-top:58px}
    uses the brand gold in both. */
 .map-controls-check input[type=checkbox]{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:1.5px solid #555;border-radius:3px;background:transparent;cursor:pointer;display:inline-grid;place-content:center;flex-shrink:0;margin:0}
 [data-theme=dark] .map-controls-check input[type=checkbox]{border-color:#fff}
-.map-controls-check input[type=checkbox]:checked{background:#d4b87a;border-color:#d4b87a}
-.map-controls-check input[type=checkbox]:checked::before{content:"";width:10px;height:10px;background:#111;clip-path:polygon(14% 44%, 0% 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%)}
+.map-controls-check input[type=checkbox]:checked{background:gold;border-color:gold}
+.map-controls-check input[type=checkbox]:checked::before{content:"";width:12px;height:12px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23111' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='3.5,8.5 6.5,11.5 12.5,5'/></svg>");background-repeat:no-repeat;background-position:center;background-size:contain}
 .map-controls-check input[type=checkbox]:focus-visible{outline:2px solid #d4b87a;outline-offset:2px}
 [data-theme=dark] .map-controls-select{background:#1a1a1a;color:#eee;border-color:#ffffff26}
 [data-theme=dark] .map-controls-select:focus{border-color:#d4b87a;outline:none}
