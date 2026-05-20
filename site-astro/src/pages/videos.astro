@@ -13,15 +13,16 @@ import Base from '../layouts/Base.astro';
             <p>My latest videos from YouTube</p>
         </div>
     </header>
-    <main class="container">
+    <main class="container" style="min-height: 80vh;">
         <!--
-          Reserve vertical space for the async-loaded video grid so the
-          footer below doesn't shift down when the YouTube fetch resolves.
-          Without min-height the initial #loading div is tiny, then
-          #videos-container fills with cards and the footer jumps —
-          measured as 0.26 CLS by Lighthouse.
+          Reserve vertical space on <main> itself so the footer below
+          doesn't shift regardless of which child state is visible
+          (loading / error / videos-container). The previous attempt
+          set min-height on the children but the YouTube fetch can
+          end in any of three states, each with different intrinsic
+          height — the parent guarantees a stable layout floor.
         -->
-        <div id="loading" class="loading" style="min-height: 80vh;">
+        <div id="loading" class="loading">
             <p>Loading recent videos from YouTube...</p>
         </div>
 
@@ -29,7 +30,7 @@ import Base from '../layouts/Base.astro';
             <p>Unable to load videos from YouTube. Please try again later.</p>
         </div>
 
-        <div id="videos-container" class="videos-grid" style="display: none; min-height: 80vh;">
+        <div id="videos-container" class="videos-grid" style="display: none;">
             <!-- Videos will be loaded here dynamically -->
         </div>
 
