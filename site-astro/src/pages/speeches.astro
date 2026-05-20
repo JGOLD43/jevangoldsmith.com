@@ -7,6 +7,11 @@ import Base from '../layouts/Base.astro';
   canonical="https://jevangoldsmith.com/speeches.html"
   pageType="CollectionPage"
 >
+<style slot="head" is:inline set:html={`
+    .page-header .container, main.container { max-width: none; padding: 0 1rem; }
+    .reading-philosophy-content { max-width: none; padding-left: 0; padding-right: 0; }
+    @media (min-width: 769px) { .page-header .container, main.container { padding: 0 3rem; } }
+`} />
 <header class="page-header">
     <div class="container">
         <h1>Speeches</h1>

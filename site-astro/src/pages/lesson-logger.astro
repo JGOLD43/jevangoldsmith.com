@@ -1,112 +1,161 @@
 ---
 import Base from '../layouts/Base.astro';
+
+interface Lesson {
+  date: string;
+  year: string;
+  category: string;
+  categoryKey: string;
+  title: string;
+  body: string;
+  source?: { label: string; href: string };
+}
+
+const lessons: Lesson[] = [
+  {
+    date: 'February 2026', year: '2026',
+    category: 'Mindset', categoryKey: 'mindset',
+    title: 'The best time to start was yesterday. The second best time is now.',
+    body: 'Spent too long researching the "perfect" way to build this website before realizing I just needed to start. Perfectionism is procrastination in disguise. Ship it, then iterate.'
+  },
+  {
+    date: 'January 2026', year: '2026',
+    category: 'Finance', categoryKey: 'finance',
+    title: 'Your lifestyle should lag your income by at least two years',
+    body: 'After completing a no-spend month, realized how much lifestyle inflation had crept in. The gap between what you earn and what you spend is what creates freedom.',
+    source: { label: 'The Psychology of Money', href: '/books.html' }
+  },
+  {
+    date: 'January 2026', year: '2026',
+    category: 'Business', categoryKey: 'business',
+    title: 'Focus on inputs, not outputs',
+    body: "Can't control whether a project succeeds, but can control showing up every day and doing the work. Focusing on process over outcomes reduces anxiety and increases consistency."
+  },
+  {
+    date: 'December 2025', year: '2025',
+    category: 'Relationships', categoryKey: 'relationships',
+    title: 'Be the friend who reaches out first',
+    body: "Everyone is waiting for someone else to make the first move. The person who initiates builds the deepest relationships. Don't keep score on who texted last."
+  },
+  {
+    date: 'November 2025', year: '2025',
+    category: 'Life', categoryKey: 'life',
+    title: "Travel while you're young and healthy",
+    body: "You can always make more money, but you can't make more time or recapture youth. The experiences and perspectives gained from travel are irreplaceable.",
+    source: { label: 'Japan trip', href: '/adventures.html' }
+  },
+  {
+    date: 'October 2025', year: '2025',
+    category: 'Mindset', categoryKey: 'mindset',
+    title: "You don't rise to the level of your goals, you fall to the level of your systems",
+    body: 'Goals are for setting direction. Systems are for making progress. After failing to stick to vague resolutions, started building specific daily habits instead.',
+    source: { label: 'Atomic Habits', href: '/books.html' }
+  }
+];
+
+// Group by year — preserve order.
+const groupedByYear = new Map<string, Lesson[]>();
+for (const l of lessons) {
+  if (!groupedByYear.has(l.year)) groupedByYear.set(l.year, []);
+  groupedByYear.get(l.year)!.push(l);
+}
 ---
 <Base
   title="Lesson Logger: Capture Lessons Before They Vanish | Jevan Goldsmith"
   description="A simple lesson-logging page for turning mistakes, wins, and observations into reusable judgment."
   canonical="https://jevangoldsmith.com/lesson-logger.html"
 >
-<main class="experience-content">
-        <header class="experience-header">
-            <p class="experience-eyebrow">Learning in Public</p>
-            <h1 class="experience-title">Lesson Logger</h1>
-            <p class="experience-subtitle">Insights and lessons I've picked up along the way. Writing them down helps me remember and hopefully helps others too.</p>
-        </header>
+<style slot="head" is:inline set:html={`
+  .lesson-page { max-width: 760px; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+  @media (min-width: 769px) { .lesson-page { padding: 4rem 3rem 6rem; } }
+  .lesson-page-eyebrow { color: var(--secondary-color); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin: 0 0 0.5rem; }
+  .lesson-page-title { font-family: Chivo, Georgia, serif; font-size: 1.5rem; font-weight: 600; line-height: 1.2; margin: 0 0 0.5rem; color: var(--primary-color); }
+  @media (min-width: 769px) { .lesson-page-title { font-size: 2.4rem; } }
+  .lesson-page-sub { color: var(--text-light); font-size: 0.95rem; line-height: 1.55; margin: 0 0 2rem; max-width: 56ch; }
+  .lesson-year { font-family: Chivo, sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--secondary-color); letter-spacing: 0.12em; margin: 1.6rem 0 0.5rem; }
+  .lesson-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border-color); }
+  .lesson-row { border-bottom: 1px solid var(--border-color); }
+  .lesson-row > summary {
+    list-style: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.9rem 0.25rem;
+    transition: background 0.15s ease;
+  }
+  .lesson-row > summary::-webkit-details-marker { display: none; }
+  .lesson-row > summary:hover { background: rgba(255,255,255,0.025); }
+  [data-theme="light"] .lesson-row > summary:hover { background: rgba(0,0,0,0.025); }
+  .lesson-row[open] > summary { background: rgba(255,255,255,0.04); }
+  [data-theme="light"] .lesson-row[open] > summary { background: rgba(0,0,0,0.03); }
+  .lesson-row-title { font-family: Chivo, sans-serif; font-size: 0.98rem; font-weight: 600; color: var(--primary-color); line-height: 1.35; }
+  .lesson-row-meta { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-light); white-space: nowrap; font-weight: 600; }
+  .lesson-row-cat {
+    display: inline-block;
+    margin-right: 0.45rem;
+    padding: 0.08rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(212, 184, 122, 0.16);
+    color: var(--secondary-color);
+    vertical-align: middle;
+  }
+  .lesson-row-body {
+    padding: 0.25rem 0.25rem 1rem;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .lesson-row-body p { margin: 0 0 0.5rem; }
+  .lesson-row-source { font-size: 0.82rem; color: var(--text-light); margin-top: 0.4rem; }
+  .lesson-row-source a { color: var(--secondary-color); text-decoration: underline; text-underline-offset: 3px; }
+  .lesson-row-source a:hover { color: var(--accent-color); }
+  .lesson-chevron {
+    display: inline-block;
+    margin-left: 0.35rem;
+    color: var(--text-light);
+    transition: transform 0.2s ease;
+    font-size: 0.85rem;
+  }
+  .lesson-row[open] .lesson-chevron { transform: rotate(90deg); color: var(--secondary-color); }
+`} />
 
-        <div class="lessons-timeline">
-            <div class="year-divider">
-                <span class="year-divider-text">2026</span>
-                <div class="year-divider-line"></div>
-            </div>
+<main class="lesson-page">
+  <header>
+    <h1 class="lesson-page-title">Lesson Logger</h1>
+    <p class="lesson-page-sub">Lessons I have picked up along the way. Click a line to read it.</p>
+  </header>
 
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-check"/></svg>
-                </div>
-                <span class="lesson-date">February 2026</span>
-                <div class="lesson-card">
-                    <span class="lesson-category mindset">Mindset</span>
-                    <h3 class="lesson-title">The best time to start was yesterday. The second best time is now.</h3>
-                    <p class="lesson-content">Spent too long researching the "perfect" way to build this website before realizing I just needed to start. Perfectionism is procrastination in disguise. Ship it, then iterate.</p>
-                </div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-check"/></svg>
-                </div>
-                <span class="lesson-date">January 2026</span>
-                <div class="lesson-card">
-                    <span class="lesson-category finance">Finance</span>
-                    <h3 class="lesson-title">Your lifestyle should lag your income by at least two years</h3>
-                    <p class="lesson-content">After completing a no-spend month, realized how much lifestyle inflation had crept in. The gap between what you earn and what you spend is what creates freedom.</p>
-                    <div class="lesson-source">
-                        <svg class="ico-stroke ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-book"/></svg>
-                        <span>Learned from: <a href="/books.html">The Psychology of Money</a></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-check"/></svg>
-                </div>
-                <span class="lesson-date">January 2026</span>
-                <div class="lesson-card">
-                    <span class="lesson-category business">Business</span>
-                    <h3 class="lesson-title">Focus on inputs, not outputs</h3>
-                    <p class="lesson-content">Can't control whether a project succeeds, but can control showing up every day and doing the work. Focusing on process over outcomes reduces anxiety and increases consistency.</p>
-                </div>
-            </div>
-
-            <div class="year-divider">
-                <span class="year-divider-text">2025</span>
-                <div class="year-divider-line"></div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-check"/></svg>
-                </div>
-                <span class="lesson-date">December 2025</span>
-                <div class="lesson-card">
-                    <span class="lesson-category relationships">Relationships</span>
-                    <h3 class="lesson-title">Be the friend who reaches out first</h3>
-                    <p class="lesson-content">Everyone is waiting for someone else to make the first move. The person who initiates builds the deepest relationships. Don't keep score on who texted last.</p>
-                </div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-check"/></svg>
-                </div>
-                <span class="lesson-date">November 2025</span>
-                <div class="lesson-card">
-                    <span class="lesson-category life">Life</span>
-                    <h3 class="lesson-title">Travel while you're young and healthy</h3>
-                    <p class="lesson-content">You can always make more money, but you can't make more time or recapture youth. The experiences and perspectives gained from travel are irreplaceable.</p>
-                    <div class="lesson-source">
-                        <svg class="ico-stroke ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-pin"/></svg>
-                        <span>Learned from: <a href="/adventures.html">Japan trip</a></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lesson-item">
-                <div class="lesson-marker">
-                    <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-check"/></svg>
-                </div>
-                <span class="lesson-date">October 2025</span>
-                <div class="lesson-card">
-                    <span class="lesson-category mindset">Mindset</span>
-                    <h3 class="lesson-title">You don't rise to the level of your goals, you fall to the level of your systems</h3>
-                    <p class="lesson-content">Goals are for setting direction. Systems are for making progress. After failing to stick to vague resolutions, started building specific daily habits instead.</p>
-                    <div class="lesson-source">
-                        <svg class="ico-stroke ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-book"/></svg>
-                        <span>Learned from: <a href="/books.html">Atomic Habits</a></span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  {Array.from(groupedByYear.entries()).map(([year, items]) => (
+    <section>
+      <div class="lesson-year">{year}</div>
+      <ul class="lesson-list" role="list">
+        {items.map((l) => (
+          <li>
+            <details class="lesson-row">
+              <summary>
+                <span>
+                  <span class="lesson-row-cat">{l.category}</span>
+                  <span class="lesson-row-title">{l.title}</span>
+                </span>
+                <span class="lesson-row-meta">{l.date.replace(/\s\d{4}$/, '')} <span class="lesson-chevron">›</span></span>
+              </summary>
+              <div class="lesson-row-body">
+                <p>{l.body}</p>
+                {l.source && (
+                  <p class="lesson-row-source">From: <a href={l.source.href}>{l.source.label}</a></p>
+                )}
+              </div>
+            </details>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
 </main>
 </Base>

@@ -42,8 +42,10 @@ function createMapMarker({ lat, lng, iconClass, iconHtml, iconSize, iconAnchor, 
     if (popupHtml) {
         marker.bindPopup(popupHtml, {
             closeButton: false,
-            autoClose: false,
-            closeOnClick: false,
+            // Only one popup open at a time — opening another marker (or
+            // clicking the map) auto-closes the previous one.
+            autoClose: true,
+            closeOnClick: true,
             className: 'map-marker-popup'
         });
         attachHoverPopup(marker);
@@ -105,12 +107,45 @@ function refreshMapDatasets() {
 // the tile boundaries show through the main pane as visible gridlines.
 // Disabled entirely — the brief container bg flash on cold load is the
 // lesser evil.
-function addFastBaseMap(_map: AnyObj) {
-    return;
+// Low-zoom satellite overview pinned BENEATH the main tile pane. z=2 means
+// only 16 tiles cover the whole world — they load once on init, stay cached
+// forever, and Leaflet scales them up to fill any gap. A CSS blur filter
+// (applied to the .leaflet-overview-pane pane) hides the seams between
+// scaled-up tiles, so what the user sees during a fast pan/zoom is a
+// blurry but correctly-colored world map rather than a grey rectangle.
+function addFastBaseMap(map: AnyObj) {
+    const L = getL();
+    if (!L || !map) return;
+    let pane = map.getPane('overviewBasemap');
+    if (!pane) {
+        pane = map.createPane('overviewBasemap');
+        pane.style.zIndex = '180'; // below main tilePane (200), above mapPane (160)
+        pane.classList.add('leaflet-overview-pane');
+    }
+    const def = BASEMAPS[state.mapFilters.basemap || 'satellite'];
+    if (!def) return;
+    if (state.overviewTileLayer) {
+        map.removeLayer(state.overviewTileLayer);
+        state.overviewTileLayer = null;
+    }
+    state.overviewTileLayer = L.tileLayer(def.tile, {
+        maxZoom: 19,
+        maxNativeZoom: 2,
+        minNativeZoom: 0,
+        noWrap: false,
+        keepBuffer: 4,
+        updateWhenIdle: false,
+        updateWhenZooming: true,
+        crossOrigin: true,
+        pane: 'overviewBasemap'
+    }).addTo(map);
+    map._fastBaseMapAdded = true;
 }
 
-function rebuildOverviewLayer(_map: AnyObj) {
-    return;
+function rebuildOverviewLayer(map: AnyObj) {
+    if (!map) return;
+    map._fastBaseMapAdded = false;
+    addFastBaseMap(map);
 }
 
 function addSatelliteTiles(map: AnyObj) {
@@ -215,15 +250,19 @@ function setBasemap(map: AnyObj, name: string) {
         noWrap: false,
         detectRetina: false,
         updateWhenIdle: false,
-        // Skip mid-zoom tile loads — the browser smoothly scales existing
-        // tiles during the animation and Leaflet swaps in fresh ones at
-        // zoomend. Smoother visual, fewer HTTP requests.
-        updateWhenZooming: false,
-        // 6 rings of off-viewport tiles cached (~1536px margin each side).
+        // Load tiles DURING the zoom animation too. The blurry low-zoom
+        // overview pane underneath hides the in-progress state, and the
+        // user sees sharp tiles arriving in mid-zoom rather than a single
+        // flash at the end.
+        updateWhenZooming: true,
+        // Throttle map view updates to ~60fps. Lower than the default 200ms
+        // so tiles stream in faster during a long pan.
+        updateInterval: 16,
+        // 10 rings of off-viewport tiles cached (~2560px margin each side).
         // Wide enough to absorb a fast mousepad fling without the leading
         // edge outrunning Leaflet's tile load and exposing the page-bg
         // fallback color.
-        keepBuffer: 6,
+        keepBuffer: 10,
         crossOrigin: true
     };
 
@@ -322,17 +361,10 @@ function initWorldMap(adventures: AnyObj[]) {
     addSatelliteTiles(state.worldMap);
     attachPrefetchAdjacentTiles(state.worldMap);
 
-    // Hide the fastBasemap pane once the main tile layer has covered the
-    // viewport. The low-zoom overview is useful while the high-res tiles
-    // load, but once they're in place the overview shows tile boundaries
-    // as visible gridlines (z=3 tiles scaled up to z=10+ exposes seams).
-    const initialLayer = Array.isArray(state.basemapTileLayer)
-        ? state.basemapTileLayer[0]
-        : state.basemapTileLayer;
-    initialLayer?.once?.('load', () => {
-        const pane = state.worldMap.getPane('fastBasemap');
-        if (pane) pane.style.display = 'none';
-    });
+    // Keep the low-zoom overview pane visible at all times — the CSS
+    // blur filter on .leaflet-overview-pane masks the scaled-tile seams
+    // and the overview gives the main tile layer something to fade onto
+    // during pans/zooms instead of the container background.
 
     const worldCopyOffsets = [-360, 0, 360];
     adventures.forEach((adventure: AnyObj) => {
@@ -437,8 +469,8 @@ function renderPlaceMarkers() {
         const popupHtml = `
             <div style="min-width: 180px; padding: 0.5rem;">
                 <strong style="font-size: 0.95rem;">${escapeHtml(place.name)}</strong><br>
-                ${place.location ? `<span style="color: #666; font-size: 0.8rem;">${escapeHtml(place.location)}</span><br>` : ''}
-                ${place.notes ? `<p style="margin: 0.4rem 0 0; font-size: 0.85rem; color: #444;">${escapeHtml(place.notes)}</p>` : ''}
+                ${place.location ? `<span style="color: rgba(255,255,255,0.55); font-size: 0.8rem;">${escapeHtml(place.location)}</span><br>` : ''}
+                ${place.notes ? `<p style="margin: 0.4rem 0 0; font-size: 0.85rem; color: rgba(255,255,255,0.85);">${escapeHtml(place.notes)}</p>` : ''}
                 <span style="display:inline-block;margin-top:0.4rem;padding:0.15rem 0.5rem;background:${color};color:#fff;border-radius:3px;font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;">${escapeHtml(label)}</span>
             </div>
         `;
