@@ -2,21 +2,26 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base
-  title="Living Manifesto: Principles, Standards &amp; Long-Horizon Bets | Jevan Goldsmith"
-  description="Jevan Goldsmith's living manifesto: principles, standards, and long-horizon bets for time, work, relationships, and better decisions."
+  title="Living: Principles, Standards &amp; Long-Horizon Bets | Jevan Goldsmith"
+  description="Jevan Goldsmith's living principles, standards, and long-horizon bets for time, work, relationships, and better decisions."
   canonical="https://jevangoldsmith.com/living-manifesto.html"
 >
+<style slot="head" is:inline set:html={`
+    .page-header .container, main.container { max-width: none; padding: 0 1rem; }
+    .reading-philosophy-content { max-width: none; padding-left: 0; padding-right: 0; }
+    @media (min-width: 769px) { .page-header .container, main.container { padding: 0 3rem; } }
+`} />
 <header class="page-header">
     <div class="container">
-        <h1>Living Manifesto</h1>
+        <h1>Living</h1>
         <p>Principles, standards, and bets I am willing to live by — revised as I learn.</p>
     </div>
 </header>
 <main class="container">
 <article class="reading-philosophy-content">
 <section class="philosophy-section">
-    <h2>Why a Living Manifesto</h2>
-    <p>A manifesto is not a set of rules carved into stone. It is a working agreement between the person I am today and the person I am trying to become. Calling it "living" is intentional: the principles below get updated when life shows me a better answer, and frozen when I notice I am tempted to bend them in the moment.</p>
+    <h2>Why this is "Living"</h2>
+    <p>This is not a set of rules carved into stone. It is a working agreement between the person I am today and the person I am trying to become. Calling it "living" is intentional: the principles below get updated when life shows me a better answer, and frozen when I notice I am tempted to bend them in the moment.</p>
     <p>Without one, every decision becomes a fresh negotiation. With one, the hard choices are mostly made in advance and the day gets quieter. This is the operating system I return to when life pulls in too many directions.</p>
 </section>
 <section class="philosophy-section">

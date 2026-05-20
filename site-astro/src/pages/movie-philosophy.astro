@@ -6,6 +6,11 @@ import Base from '../layouts/Base.astro';
   description="How Jevan Goldsmith picks films, what he looks for in great cinema, and why movies are a fast way to live a life that is not your own."
   canonical="https://jevangoldsmith.com/movie-philosophy.html"
 >
+<style slot="head" is:inline set:html={`
+    .page-header .container, main.container { max-width: none; padding: 0 1rem; }
+    .reading-philosophy-content { max-width: none; padding-left: 0; padding-right: 0; }
+    @media (min-width: 769px) { .page-header .container, main.container { padding: 0 3rem; } }
+`} />
 ---
 layout: base
 title: My Movie Philosophy

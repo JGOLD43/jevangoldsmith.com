@@ -12,6 +12,20 @@ const lastUpdatedLat = -19.5765;
 const lastUpdatedLng = 147.4035;
 const mapLink = `/adventures.html?focus=now&lat=${lastUpdatedLat}&lng=${lastUpdatedLng}&place=${encodeURIComponent(lastUpdatedLocation)}`;
 
+// Build an Esri World Imagery satellite tile URL that contains the
+// "now" location. zoom 6 ≈ regional view — enough context to recognise
+// the place at a glance.
+const MAP_ZOOM = 6;
+const _xFrac = (lastUpdatedLng + 180) / 360 * Math.pow(2, MAP_ZOOM);
+const _yFrac = (1 - Math.log(Math.tan(lastUpdatedLat * Math.PI / 180) + 1 / Math.cos(lastUpdatedLat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, MAP_ZOOM);
+const tileX = Math.floor(_xFrac);
+const tileY = Math.floor(_yFrac);
+const mapThumbUrl = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${MAP_ZOOM}/${tileY}/${tileX}`;
+// Sub-tile pin offset (0..100%) so the marker lands on the actual lat/lng
+// instead of the tile's center.
+const pinLeftPct = ((_xFrac - tileX) * 100).toFixed(2);
+const pinTopPct = ((_yFrac - tileY) * 100).toFixed(2);
+
 const sections = [
   {
     title: 'Building this archive',
@@ -39,15 +53,16 @@ const sections = [
 >
 <main class="now-page">
   <header class="now-header">
-    <h1 class="now-title">What I'm doing now</h1>
-    <div class="now-updated">
-      <div class="now-updated-row">
+    <h2 class="now-title">Now</h2>
+    <div class="now-meta-row">
+      <div class="now-updated">
         <span class="now-updated-label">Last updated</span>
         <strong class="now-updated-date">{lastUpdated}</strong>
       </div>
-      <a class="now-updated-place" href={mapLink} title={`See ${lastUpdatedLocation} on the map`}>
-        <svg class="now-updated-pin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s-7-7.58-7-13a7 7 0 1 1 14 0c0 5.42-7 13-7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        <span>{lastUpdatedLocation}</span>
+      <a class="now-map-thumb" href={mapLink} title={`Open ${lastUpdatedLocation} on the trip map`} aria-label={`Open ${lastUpdatedLocation} on the trip map`}>
+        <img src={mapThumbUrl} alt={`Map showing current location: ${lastUpdatedLocation}`} loading="lazy" decoding="async" width="256" height="256" />
+        <span class="now-map-thumb-pin" style={`left: ${pinLeftPct}%; top: ${pinTopPct}%;`} aria-hidden="true"></span>
+        <span class="now-map-thumb-label">{lastUpdatedLocation}</span>
       </a>
     </div>
   </header>
@@ -81,14 +96,18 @@ const sections = [
     color: var(--secondary-color);
     margin: 0 0 0.75rem;
   }
-  .now-title {
+  h2.now-title {
     font-family: Chivo, Georgia, serif;
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    line-height: 1.15;
+    /* Match Bookshelf (h2): 1.5rem mobile, 3rem desktop. */
+    font-size: 1.5rem !important;
+    font-weight: 600;
+    line-height: 1.3;
     margin: 0 0 1rem;
     color: var(--primary-color);
-    letter-spacing: -.02em;
+    letter-spacing: 0;
+  }
+  @media (min-width: 769px) {
+    h2.now-title { font-size: 3rem !important; }
   }
   .now-subtitle {
     font-size: 1.05rem;
@@ -97,40 +116,71 @@ const sections = [
     margin: 0 0 1.5rem;
     max-width: 56ch;
   }
+  .now-meta-row {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
   .now-updated {
     display: inline-flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    padding: 0.65rem 0.95rem;
-    background: var(--background-alt);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0;
+    background: transparent;
+    border: 0;
     min-width: 0;
   }
-  .now-updated-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.45rem;
-    font-size: 0.85rem;
-    color: var(--text-light);
-  }
-  .now-updated-label { letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.72rem; }
-  .now-updated-date { color: var(--primary-color); font-weight: 600; font-size: 0.95rem; }
-  .now-updated-place {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: var(--secondary-color);
-    font-size: 0.85rem;
-    font-weight: 600;
+  .now-updated-label { letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.7rem; color: var(--text-light); font-weight: 600; }
+  .now-updated-date { color: var(--primary-color); font-weight: 600; font-size: 0.95rem; letter-spacing: 0; }
+  .now-map-thumb {
+    position: relative;
+    display: block;
+    width: 180px;
+    height: 110px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: var(--background-alt);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     text-decoration: none;
-    border-top: 1px solid var(--border-color);
-    padding-top: 0.45rem;
-    transition: color 0.2s;
+    flex: 0 0 auto;
   }
-  .now-updated-place:hover { color: var(--accent-color); }
-  .now-updated-place:hover .now-updated-pin { transform: translateY(-1px); }
-  .now-updated-pin { transition: transform 0.2s; flex: 0 0 14px; }
+  .now-map-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .now-map-thumb:hover {
+    transform: translateY(-2px);
+    border-color: var(--secondary-color);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  }
+  .now-map-thumb-pin {
+    position: absolute;
+    /* left/top set inline from the lat/lng sub-tile offset */
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.55), 0 0 0 7px rgba(212, 184, 122, 0.25);
+  }
+  .now-map-thumb-label {
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    right: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 480px) {
+    .now-map-thumb { width: 100%; height: 130px; }
+  }
 
   .now-sections { display: grid; gap: 2.5rem; }
   .now-section {

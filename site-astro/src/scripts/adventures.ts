@@ -633,8 +633,9 @@ function placeNowMarkerAndFocus() {
         const popup = `<div class="now-popup-card"><div class="now-popup-place">${now.place}</div>${now.date ? `<div class="now-popup-date">${now.date}</div>` : ''}<a href="/now.html" class="now-popup-btn">Now update</a></div>`;
         marker.bindPopup(popup, {
             closeButton: false,
-            autoClose: false,
-            closeOnClick: false,
+            // Only one popup open at a time across the whole map.
+            autoClose: true,
+            closeOnClick: true,
             className: 'map-marker-popup map-marker-popup-now'
         });
         // Hover opens the popup; pointer can travel onto the popup itself
