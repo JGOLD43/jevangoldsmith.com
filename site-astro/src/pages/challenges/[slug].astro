@@ -1,0 +1,93 @@
+---
+import raw from '../../../../data/challenges.json';
+import Base from '../../layouts/Base.astro';
+import type { Challenge } from '../../lib/collection-sections';
+
+export async function getStaticPaths() {
+  const all = (raw as { challenges?: Challenge[] }).challenges ?? [];
+  const visible = all.filter((c) => c.status !== 'draft' && c.visibility !== 'private');
+  return visible.map((c) => ({
+    params: { slug: c.slug || c.id },
+    props: { challenge: c }
+  }));
+}
+
+const { challenge } = Astro.props as { challenge: Challenge };
+const c = challenge;
+const slug = c.slug || c.id;
+const canonical = `https://jevangoldsmith.com/challenges/${slug}.html`;
+const status = String(c.status || 'upcoming').toLowerCase();
+const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+const progress = c.progress;
+const percent = Number(progress?.percent) || 0;
+---
+<Base
+  title={`${c.title} - Challenges - Jevan Goldsmith`}
+  description={c.shortDescription || `${c.title} challenge details and progress.`}
+  canonical={canonical}
+  bodyClass="nav-compact"
+  pageType="Article"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://jevangoldsmith.com/' },
+    { name: 'Challenges', url: 'https://jevangoldsmith.com/challenges.html' },
+    { name: c.title, url: canonical }
+  ]}
+>
+  <style slot="head" is:inline set:html={`
+    .page-header .container, main.container { max-width: none; padding: 0 1rem; }
+    @media (min-width: 769px) { .page-header .container, main.container { padding: 0 3rem; } }
+    .challenge-detail { max-width: 720px; margin: 0 auto; padding: 1rem 0 3rem; }
+    .challenge-back { display: inline-block; color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem; text-decoration: none; }
+    .challenge-back:hover { color: var(--secondary-color); }
+    .challenge-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .challenge-badge { display: inline-block; padding: 0.25rem 0.65rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    .challenge-badge--status { background: rgba(212, 184, 122, 0.18); color: var(--secondary-color); }
+    .challenge-badge--category { background: rgba(255,255,255,0.06); color: var(--text-light); }
+    .challenge-title { font-family: Chivo, sans-serif; font-size: clamp(1.8rem, 5vw, 2.4rem); font-weight: 600; line-height: 1.2; margin: 0 0 0.75rem; letter-spacing: -0.01em; }
+    .challenge-timeframe { color: var(--text-light); font-size: 0.95rem; margin: 0 0 1.5rem; }
+    .challenge-lede { font-size: 1.05rem; line-height: 1.6; color: var(--text-color); margin: 0 0 2rem; }
+    .challenge-progress-block { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+    .challenge-progress-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.85rem; }
+    .challenge-progress-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); }
+    .challenge-progress-value { font-family: Chivo, sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text-color); }
+    .challenge-progress-bar { height: 6px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; }
+    .challenge-progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary-color), var(--secondary-color)); border-radius: 999px; transition: width .35s ease; }
+    .challenge-section { margin: 2rem 0; }
+    .challenge-section h2 { font-family: Chivo, sans-serif; font-size: 1.1rem; font-weight: 600; letter-spacing: 0; margin: 0 0 0.85rem; color: var(--text-color); }
+    .challenge-section p { color: var(--text-light); font-size: 1rem; line-height: 1.6; margin: 0; }
+  `} />
+
+  <main class="container">
+    <article class="challenge-detail">
+      <a href="/challenges.html" class="challenge-back">&larr; Back to Challenges</a>
+
+      <div class="challenge-meta">
+        <span class={`challenge-badge challenge-badge--status status-${status}`}>{statusLabel}</span>
+        {c.category && <span class="challenge-badge challenge-badge--category">{c.category}</span>}
+      </div>
+
+      <h1 class="challenge-title">{c.title}</h1>
+      {c.timeframe && <p class="challenge-timeframe">{c.timeframe}</p>}
+      {c.shortDescription && <p class="challenge-lede">{c.shortDescription}</p>}
+
+      {progress && (
+        <div class="challenge-progress-block">
+          <div class="challenge-progress-header">
+            <span class="challenge-progress-label">{progress.label || 'Progress'}</span>
+            <span class="challenge-progress-value">{progress.value || ''}</span>
+          </div>
+          <div class="challenge-progress-bar">
+            <div class="challenge-progress-fill" style={`width: ${percent}%`}></div>
+          </div>
+        </div>
+      )}
+
+      {c.description && (
+        <section class="challenge-section">
+          <h2>About this challenge</h2>
+          <p>{c.description}</p>
+        </section>
+      )}
+    </article>
+  </main>
+</Base>

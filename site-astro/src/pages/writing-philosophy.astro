@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="How I Write: A Practical Writing Philosophy | Jevan Goldsmith"
+  description="Notes on writing for clarity, thinking, decision-making, and a better personal operating system."
+  canonical="https://jevangoldsmith.com/writing-philosophy.html"
+  bodyClass="nav-compact"
+>
+  <style slot="head" is:inline set:html={`
+    /* Match the navbar's container padding so the page-header and main
+       content go edge-to-edge with the logo and the hamburger. */
+    .page-header .container,
+    main.container {
+      max-width: none;
+      padding: 0 1rem;
+    }
+    .writing-philosophy-content {
+      max-width: none;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    @media (min-width: 769px) {
+      .page-header .container,
+      main.container {
+        padding: 0 3rem;
+      }
+    }
+  `} />
+  <header class="page-header">
+    <div class="container">
+      <h1>How I Write</h1>
+      <p>A practical writing philosophy for clearer thinking, better questions, and useful work.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="writing-philosophy-content">
+      <section class="philosophy-section">
+        <h2>Why I Write</h2>
+        <p>I write to think. Writing forces the half-formed idea into a sentence, and the sentence into something I can defend, share, or throw out. The page is the cheapest place to find out what I actually believe.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>What I Write About</h2>
+        <p>I write about what I am living through: building, reading, traveling, working with people, making decisions under uncertainty. The best essays start as a problem I am actually trying to solve.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>How I Write</h2>
+        <p>I draft fast and edit slow. The first pass is a brain dump — wrong sentences are still useful sentences. The second pass cuts everything that does not earn its place. The third pass reads it aloud.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>What I Look For</h2>
+        <p>I look for the line that surprises me, the example that lands, and the distinction that I had not seen written down before. If a paragraph could have been written by anyone, it gets cut.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>Where to Go Next</h2>
+        <p>Start with the essays, then follow the writing thread through Field Notes — that is where ideas get tested before they become polished work.</p>
+        <p><a href="essays.html">Read the essays</a></p>
+      </section>
+
+      <div class="back-to-books">
+        <a href="/essays.html" class="back-link">&larr; Back to Essays</a>
+      </div>
+    </article>
+
+    <section class="field-notes-inline-cta" data-field-notes-inline>
+      <p class="archive-kicker">Field Notes</p>
+      <h2>Want more notes like this?</h2>
+      <p>Field Notes is where I send useful ideas before they become polished essays: books, objects, questions, and experiments worth keeping.</p>
+      <a href="field-notes.html" class="btn-primary">Get Field Notes</a>
+    </section>
+  </main>
+</Base>

@@ -55,9 +55,10 @@ const orderedCategories = [
   ...Array.from(byCategory.keys()).filter((c) => !CATEGORY_ORDER.includes(c))
 ];
 
-const ssrCardsHtml = orderedCategories.map((cat) => {
+// Render all essays in a single "Writing" section — no per-category headings.
+const allRowsHtml = orderedCategories.flatMap((cat) => {
   const slug = categorySlugOf(cat);
-  const rows = (byCategory.get(cat) || []).map((essay) => {
+  return (byCategory.get(cat) || []).map((essay) => {
     const id = escapeAttr(essay.id as string);
     const title = escapeHtml(essay.title as string || '');
     const subtitle = escapeHtml(subtitleFor(essay));
@@ -67,14 +68,15 @@ const ssrCardsHtml = orderedCategories.map((cat) => {
                 <span class="essay-row-subtitle">${subtitle}</span>
             </a>
         </li>`;
-  }).join('\n        ');
-  return `<section class="essay-section" data-category="${escapeAttr(slug)}">
-        <h3 class="essay-section-title">${escapeHtml(cat)}</h3>
+  });
+}).join('\n        ');
+
+const ssrCardsHtml = `<section class="essay-section" data-category="writing">
+        <h3 class="essay-section-title">Writing</h3>
         <ul class="essay-list">
-        ${rows}
+        ${allRowsHtml}
         </ul>
     </section>`;
-}).join('\n    ');
 
 const ssrEssayHtml = firstEssay
   ? `<article class="article-full" id="${escapeAttr(firstEssay.id as string)}">
@@ -130,10 +132,20 @@ const config = ({
   },
   main: {
     className: 'essays-main collection-main',
+    titleTag: 'h2',
     title: 'Essays',
-    subtitleText: 'Thoughts on philosophy, management, and modern life',
+    subtitleHtml: '<div class="philosophy-link-wrapper"><a href="writing-philosophy.html" class="header-subtitle-link">My Writing Philosophy</a><span class="read-first-note">read this first</span></div>',
+    counterExtraHtml: `<div class="view-toggle main-view-toggle">
+    <button class="view-toggle-btn active" id="list-view-btn-main" data-action="set-view-mode" data-mode="list" title="List view">
+        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
+    </button>
+    <button class="view-toggle-btn" id="grid-view-btn-main" data-action="set-view-mode" data-mode="grid" title="Grid view">
+        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
+    </button>
+</div>`,
+    counterGroupClass: 'header-right',
     counterId: 'essay-count',
-    counterLabel: 'Essays Published',
+    counterLabel: 'Total Essays',
     headerExtraHtml: '',
     bodyHtml: `<button type="button" class="essay-back-to-list" data-action="setEssayView" data-action-args="cards" data-view="reader">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -272,5 +284,67 @@ const config = ({
   .essays-main[data-view="cards"] .essay-back-to-list,
   .essays-main[data-view="cards"] .field-notes-inline-cta {
     display: none;
+  }
+
+  /* Hide the mobile List/Grid view toggle on essays — only one view exists. */
+  .essays-layout > .collection-mobile-toggle { display: none !important; }
+
+  /* --- Dark-mode polish for the essays sidebar --- */
+  [data-theme="dark"] .essays-sidebar .sidebar-category {
+    border-left: 3px solid transparent;
+  }
+  [data-theme="dark"] .essays-sidebar .sidebar-category.active {
+    background: rgba(212, 184, 122, 0.12);
+    color: var(--secondary-color);
+    border-left-color: var(--secondary-color);
+    font-weight: 600;
+  }
+  [data-theme="dark"] .essays-sidebar .sidebar-category.active .category-name,
+  [data-theme="dark"] .essays-sidebar .sidebar-category.active .category-icon svg {
+    color: var(--secondary-color);
+    stroke: var(--secondary-color);
+  }
+  [data-theme="dark"] .essays-sidebar .sidebar-category.active .category-count {
+    background: rgba(212, 184, 122, 0.18);
+    color: var(--secondary-color);
+  }
+  [data-theme="dark"] .essays-sidebar .sidebar-category:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  [data-theme="dark"] .essays-sidebar .sidebar-category:hover:not(.active) .category-name,
+  [data-theme="dark"] .essays-sidebar .sidebar-category:hover:not(.active) .category-icon svg {
+    color: #fff;
+    stroke: #fff;
+  }
+
+  /* Nested essay list (expanded under a category) */
+  [data-theme="dark"] .essays-sidebar .category-essays {
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+    margin-left: 1.25rem;
+    padding: 4px 0;
+  }
+  [data-theme="dark"] .essays-sidebar .essay-link {
+    color: rgba(255, 255, 255, 0.72);
+    background: transparent;
+    border-left: 2px solid transparent;
+    padding: 0.5rem 0.85rem;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+  }
+  [data-theme="dark"] .essays-sidebar .essay-link .essay-link-date {
+    color: rgba(255, 255, 255, 0.42);
+  }
+  [data-theme="dark"] .essays-sidebar .essay-link:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+  }
+  [data-theme="dark"] .essays-sidebar .essay-link.active {
+    background: rgba(212, 184, 122, 0.10);
+    color: var(--secondary-color);
+    border-left-color: var(--secondary-color);
+    font-weight: 600;
+  }
+  [data-theme="dark"] .essays-sidebar .essay-link.active .essay-link-date {
+    color: rgba(212, 184, 122, 0.7);
   }
 </style>

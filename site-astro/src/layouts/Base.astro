@@ -43,6 +43,8 @@ interface Props {
   noChrome?: boolean;
   /** Hide the site footer (used by full-bleed pages like /adventures). */
   noFooter?: boolean;
+  /** Hide the SeoRelated "Keep exploring this idea" block at the bottom. */
+  noSeoRelated?: boolean;
   /** schema.org page type for JSON-LD. Defaults to "WebPage". */
   pageType?: PageType;
   /** Breadcrumb trail. Defaults to Home → current page. */
@@ -65,6 +67,7 @@ const {
   bodyClass = bodyClassFor(_currentPage),
   noChrome = false,
   noFooter = false,
+  noSeoRelated = false,
   pageType = 'WebPage',
   breadcrumbs,
   robots = 'index, follow, max-image-preview:large',
@@ -236,8 +239,8 @@ if (seoSlug === 'index' || seoSlug === 'search') {
                   </div>
                   <div class="dropdown-column">
                     <a href="/products.html" class:list={['products.html' === _activeHref ? 'active' : '']}>The Shelf</a>
-                    <a href="/cool-shit.html" class:list={['cool-shit.html' === _activeHref ? 'active' : '']}>Cool Shit</a>
-                    <a href="/people.html" class:list={['people.html' === _activeHref ? 'active' : '']}>People of History</a>
+                    <a href="/cool-shit.html" class:list={['cool-shit.html' === _activeHref ? 'active' : '']}>Interests</a>
+                    <a href="/people.html" class:list={['people.html' === _activeHref ? 'active' : '']}>People</a>
                   </div>
                 </div>
               </div>
@@ -263,16 +266,11 @@ if (seoSlug === 'index' || seoSlug === 'search') {
           <div class="navbar-right">
             <button class="work-mode-toggle" data-mode="work" aria-label="Toggle work / personal mode" aria-pressed="false" data-tooltip-work="Switch to personal mode" data-tooltip-explore="Switch to work mode">
               <svg class="work-mode-icon icon-digger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <!-- Formal waistcoat / vest: horizontal back-shoulder
-                     line across the top + V-neck collar + body with
-                     pointed bottom + 3 buttons down the right side -->
-                <path d="M6 3 L18 3"/>
-                <path d="M6 3 L4 7 L4 18 L8 22 L12 19 L16 22 L20 18 L20 7 L18 3"/>
-                <path d="M6 3 L12 9 L18 3"/>
-                <path d="M12 9 L12 19"/>
-                <circle cx="14" cy="12" r=".7" fill="currentColor" stroke="none"/>
-                <circle cx="14" cy="14.5" r=".7" fill="currentColor" stroke="none"/>
-                <circle cx="14" cy="17" r=".7" fill="currentColor" stroke="none"/>
+                <!-- Necktie: collar wings at top + knot + tapered body
+                     widening to a pointed tip -->
+                <path d="M8 3 L10.5 6 L13.5 6 L16 3"/>
+                <path d="M10.5 6 L9.5 9 L14.5 9 L13.5 6 Z"/>
+                <path d="M9.5 9 L8 17 L12 22 L16 17 L14.5 9"/>
               </svg>
               <svg class="work-mode-icon icon-explorer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <!-- Casual t-shirt (Lucide-style): simple body + sleeves -->
@@ -317,14 +315,13 @@ if (seoSlug === 'index' || seoSlug === 'search') {
       </nav>
     )}
     <slot />
-    {!noChrome && !noFooter && <SeoRelated slug={seoSlug} />}
+    {!noChrome && !noFooter && !noSeoRelated && <SeoRelated slug={seoSlug} />}
     {!noChrome && !noFooter && (
       <footer class="footer">
         <div class="container">
           <div class="footer-content">
             <div>
               <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
-              <p class="footer-note">Field Notes: useful ideas, objects, books, questions, and experiments from the archive.</p>
             </div>
             <ul class="footer-links">
               <li><a href="/index.html">Home</a></li>

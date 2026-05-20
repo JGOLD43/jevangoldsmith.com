@@ -183,6 +183,34 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
   </div>
 </Base>
 
+<style is:inline>
+  /* Trip list: no box by default; only reveal background/border on hover or
+     when the trip is the active selection. */
+  .adventure-compact-card {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .adventure-compact-card:hover {
+    background: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+  }
+  .adventure-compact-card.active {
+    background: rgba(201, 168, 108, 0.10) !important;
+    border-color: var(--secondary-color) !important;
+    box-shadow: 0 2px 12px rgba(201, 168, 108, 0.18) !important;
+  }
+  [data-theme="dark"] .adventure-compact-card:hover {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+  }
+  [data-theme="dark"] .adventure-compact-card.active {
+    background: rgba(212, 184, 122, 0.10) !important;
+    border-color: var(--secondary-color) !important;
+  }
+</style>
+
 <script>
   // adventures.ts imports action-dispatcher transitively; the map
   // module is dynamically imported on first map view.
