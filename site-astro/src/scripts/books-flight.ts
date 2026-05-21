@@ -228,7 +228,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 // hits Back — we'll re-render on popstate.
                 setTimeout(() => {
                     newMain.classList.remove('is-spa-arrival', 'is-spa-revealed', 'is-spa-cover-revealed');
-                }, 240);
+                }, TIMING.spaArrivalReveal);
             };
             animation.finished
                 .then(handoff)
@@ -238,13 +238,13 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             // Fallback: hard navigation if anything went wrong. Wait for
             // the flight to finish first so the user still sees the motion.
             animation.finished.then(hardNav).catch(hardNav);
-            setTimeout(hardNav, 380);
+            setTimeout(hardNav, TIMING.bookFlightFallback);
         });
 
     // If for any reason the SPA path didn't kick in by the time the
     // flight is well past done, fall through to hard nav so the user
     // isn't stranded on a half-faded books page.
-    setTimeout(() => { if (!spaTookOver) hardNav(); }, 900);
+    setTimeout(() => { if (!spaTookOver) hardNav(); }, TIMING.bookFlightWatchdog);
 }
 
 // Back/forward inside an SPA-swapped book detail page — fall back to a
