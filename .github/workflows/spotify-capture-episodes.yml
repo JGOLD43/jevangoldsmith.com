@@ -41,3 +41,11 @@ jobs:
           git add data/podcast-episodes.json
           git commit -m "chore: log podcast episode from Spotify"
           git push
+
+  notify-on-failure:
+    needs: capture
+    if: failure()
+    uses: ./.github/workflows/_cron-failure-issue.yml
+    with:
+      workflow_name: Spotify - Capture Podcast Episodes
+      run_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

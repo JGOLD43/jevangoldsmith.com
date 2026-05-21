@@ -39,3 +39,11 @@ jobs:
           git add data/podcast-shows.json
           git commit -m "chore: sync followed podcast shows from Spotify"
           git push
+
+  notify-on-failure:
+    needs: sync
+    if: failure()
+    uses: ./.github/workflows/_cron-failure-issue.yml
+    with:
+      workflow_name: Spotify - Sync Followed Shows
+      run_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
