@@ -183,6 +183,7 @@ function reportLCP() {
     addEventListener('pagehide', finalize, { once: true });
 }
 
+import { installOnce } from '../lib/install-once';
 import { type CLSEntry, computeCLS } from './cls-windowing';
 
 function reportCLS() {
