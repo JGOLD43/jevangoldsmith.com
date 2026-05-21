@@ -26,7 +26,7 @@ const HTML_FALLBACK = process.env.SMOKE_HTML_FALLBACK !== '0';
 const CHECKS = [
   {
     url: '/',
-    must: ['</footer>', 'href="books.html"', 'href="adventures.html"'],
+    must: ['</footer>', 'href="/books.html"', 'href="/adventures.html"'],
     mustNot: ['<<', '>>']
   },
   {
