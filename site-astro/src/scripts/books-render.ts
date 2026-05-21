@@ -4,6 +4,7 @@ import { highlightAndScroll } from './collection-ui';
 import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { slugify } from '../lib/slug';
 import { categoryDisplayNames, getCoverUrl, state } from './books-state';
+import { TIMING } from './timing';
 
 export function renderBooks(books: AnyObj[]) {
     const container = document.getElementById('books-container');
@@ -314,5 +315,5 @@ export function flashCategoryArrow(button: HTMLElement | null, isExpanding: bool
     arrow.className = 'arrow-flash';
     arrow.textContent = isExpanding ? '▲' : '▼';
     button.appendChild(arrow);
-    window.setTimeout(() => arrow.remove(), 500);
+    window.setTimeout(() => arrow.remove(), TIMING.arrowFlash);
 }
