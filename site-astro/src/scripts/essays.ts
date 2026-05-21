@@ -15,11 +15,13 @@ const ESSAY_CATEGORY_KEYS = ['philosophy', 'management', 'technology', 'personal
 
 let essaysRuntime: AnyObj = null;
 
+import type { Essay } from '../content.config';
+
 interface EssaysState {
     activeCategory: string;
     currentIndex: number;
-    essays: AnyObj[];
-    filteredEssays: AnyObj[];
+    essays: Essay[];
+    filteredEssays: Essay[];
     searchTerm: string;
     sidebarCollapsed: boolean;
 }

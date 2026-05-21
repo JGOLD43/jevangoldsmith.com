@@ -1,8 +1,9 @@
 import { bookCoverUrl } from '../lib/book-card';
+import type { Book } from '../content.config';
 
 export interface BooksState {
     activeCategory: string;
-    books: AnyObj[];
+    books: Book[];
     reReadsFilter: string;
     searchQuery: string;
     sidebarCollapsed: boolean;
