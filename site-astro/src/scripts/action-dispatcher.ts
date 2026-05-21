@@ -94,12 +94,9 @@ function runAction(event: Event, eventType: string) {
 
 // Idempotency guard: multiple module imports across page scripts still
 // land on a single set of document-level listeners.
-const installedKey = '__jgActionsInstalled';
-type GlobalWithFlag = typeof globalThis & Record<string, boolean | undefined>;
-const g = globalThis as GlobalWithFlag;
-if (!g[installedKey]) {
-    g[installedKey] = true;
+import { installOnce } from '../lib/install-once';
+installOnce('__jgActionsInstalled', () => {
     document.addEventListener('click', (event) => runAction(event, 'click'));
     document.addEventListener('input', (event) => runAction(event, 'input'));
     document.addEventListener('submit', (event) => runAction(event, 'submit'));
-}
+});

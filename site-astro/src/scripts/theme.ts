@@ -3,6 +3,7 @@
 
 import { tryReadString, tryWrite } from '../lib/storage';
 import { LOCAL_KEYS } from './storage-keys';
+import { TIMING } from './timing';
 
 const THEME_KEY = LOCAL_KEYS.theme;
 
@@ -59,7 +60,7 @@ function flashToast(el: Element | null, message: string) {
     node.setAttribute('data-toast', message);
     node.classList.remove('show-hover-tip');
     node.classList.add('show-toast');
-    window.setTimeout(() => node.classList.remove('show-toast'), 1500);
+    window.setTimeout(() => node.classList.remove('show-toast'), TIMING.themeApplySync);
 }
 
 function toggleTheme() {

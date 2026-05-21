@@ -114,7 +114,7 @@ export function init(config: GridZoomConfig) {
     // matches the `--duration` in the .js-zoom-grid CSS transition.
     if (link && link === trigger && link.getAttribute('href') && link.getAttribute('href') !== '#') {
       const href = link.href;
-      setTimeout(function () { window.location.href = href; }, 520);
+      setTimeout(function () { window.location.href = href; }, TIMING.gridZoomFlight);
     }
   });
 
