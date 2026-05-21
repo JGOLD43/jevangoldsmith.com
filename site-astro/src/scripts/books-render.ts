@@ -1,5 +1,6 @@
 import { CATEGORY_NAME_BY_KEY } from '../lib/book-categories';
-import { applyCardVisibility, highlightAndScroll } from './collection-helpers';
+import { applyCardVisibility } from './collection-helpers';
+import { highlightAndScroll } from './collection-ui';
 import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { slugify } from '../lib/slug';
 import { categoryDisplayNames, getCoverUrl, state } from './books-state';
