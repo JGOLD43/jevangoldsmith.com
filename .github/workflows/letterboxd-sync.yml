@@ -38,3 +38,11 @@ jobs:
           git add data/movies.json
           git commit -m "chore: sync Letterboxd RSS into data/movies.json"
           git push
+
+  notify-on-failure:
+    needs: sync
+    if: failure()
+    uses: ./.github/workflows/_cron-failure-issue.yml
+    with:
+      workflow_name: Letterboxd - Sync Movies
+      run_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
