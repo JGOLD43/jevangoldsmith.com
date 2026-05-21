@@ -128,6 +128,27 @@ a:hover {
   overflow: hidden;
 }
 
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 9999;
+  background: var(--background, #fff);
+  color: var(--text-color, #000);
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  border: 2px solid var(--secondary-color, #c9a86c);
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.skip-to-content:focus {
+  left: 1rem;
+  top: 1rem;
+  outline: 3px solid var(--secondary-color, #c9a86c);
+  outline-offset: 2px;
+}
+
 .side-nav {
   z-index: 1000;
   opacity: 0;

@@ -1,6 +1,10 @@
 import { escapeAttr, escapeHtml } from '../lib/html-escape';
+import { trapFocus } from '../lib/focus-trap';
 import { categoryDisplayNames, getCoverUrl, state } from './books-state';
 import { getBooksByCategory } from './books-render';
+
+let releaseBookModalFocus: (() => void) | null = null;
+let releaseCategoryModalFocus: (() => void) | null = null;
 
 export function openBookModal(book: AnyObj) {
     if (!book?.review) return false;
@@ -20,10 +24,21 @@ export function openBookModal(book: AnyObj) {
     modalCover.alt = book.title;
     modalCover.onerror = () => { modalCover.hidden = true; };
     modalCover.onload = () => { modalCover.hidden = false; };
-    modalRating.textContent = isUnread ? 'To Read' : stars;
+    // Visual stars stay aria-hidden; an sr-only sibling carries the
+    // human-readable rating so screen readers don't announce individual
+    // star glyphs.
+    modalRating.innerHTML = isUnread
+        ? '<span>To Read</span>'
+        : `<span aria-hidden="true">${stars}</span><span class="sr-only">${book.rating} out of 5 stars</span>`;
     modalReview.textContent = book.review;
+    // ARIA dialog semantics + focus trap. WCAG 2.4.3 + 4.1.2.
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'modal-book-title');
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    const trigger = document.activeElement as HTMLElement | null;
+    releaseBookModalFocus = trapFocus(modal, trigger);
     return true;
 }
 
@@ -32,6 +47,8 @@ export function closeBookModal() {
     if (!modal) return;
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
+    releaseBookModalFocus?.();
+    releaseBookModalFocus = null;
 }
 
 export function openCategoryModal(category: string) {

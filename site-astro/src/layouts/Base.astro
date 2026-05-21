@@ -315,7 +315,11 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         </div>
       </nav>
     )}
-    <slot />
+    {/* Skip-link target. Pages with their own <main> own the landmark;
+        this is just the anchor for focus jump after the skip link. */}
+    <div id="main" tabindex="-1">
+      <slot />
+    </div>
     {!noChrome && !noFooter && (
       <footer class="footer">
         <div class="container">
