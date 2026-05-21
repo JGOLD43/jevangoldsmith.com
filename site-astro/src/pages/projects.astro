@@ -17,8 +17,43 @@ const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility 
   canonical="https://jevangoldsmith.com/projects.html"
 />
 
+<style is:inline>
+  /* While a project card is flying to its detail page, fade out the
+     listing chrome (main + sidebar) while keeping the navbar steady.
+     The clone is appended to <body> at z-index 99999, above the fade. */
+  body.is-project-launching .movies-main,
+  body.is-project-launching .movies-sidebar {
+    opacity: 0;
+    transition: opacity .32s cubic-bezier(.22, 1, .36, 1);
+    pointer-events: none;
+  }
+
+  /* SPA-injected project detail main: hide content from initial paint,
+     then fade it in around the still-flying cover clone. */
+  main.detail-page--project.is-project-arrival > * { opacity: 0; }
+  main.detail-page--project.is-project-arrival .detail-hero-image,
+  main.detail-page--project.is-project-arrival .detail-hero-image * { opacity: 0; }
+  main.detail-page--project.is-project-arrival.is-project-revealed > * {
+    opacity: 1;
+    transition: opacity .28s cubic-bezier(.22, 1, .36, 1);
+  }
+  main.detail-page--project.is-project-arrival.is-project-cover-revealed .detail-hero-image,
+  main.detail-page--project.is-project-arrival.is-project-cover-revealed .detail-hero-image * {
+    opacity: 1;
+    transition: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    main.detail-page--project.is-project-arrival > *,
+    main.detail-page--project.is-project-arrival .detail-hero-image,
+    main.detail-page--project.is-project-arrival .detail-hero-image * { opacity: 1; }
+    body.is-project-launching .movies-main,
+    body.is-project-launching .movies-sidebar { transition: none; }
+  }
+</style>
+
 <script>
   import { createCollectionRuntime } from '../scripts/collection-runtime';
+  import { initCoverFlight } from '../scripts/cover-flight';
 
   const runtime: any = createCollectionRuntime({
     actions: {
@@ -36,12 +71,30 @@ const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility 
     searchClearButtonId: 'project-search-clear-btn',
     searchInputId: 'project-search',
     sidebarId: 'projects-sidebar',
-    storageKey: 'projects-sidebar-collapsed',
-    zoom: { eventName: 'project_open' }
+    storageKey: 'projects-sidebar-collapsed'
+    // No grid-zoom: the cover-flight handler below owns the click →
+    // open animation, and grid-zoom's preventDefault would short-circuit it.
   });
+
+  function wireFlight() {
+    const grid = document.getElementById('projects-container');
+    if (!grid) return;
+    initCoverFlight({
+      grid,
+      cardSelector: 'a.project-card',
+      coverSelector: 'img.project-cover',
+      detailMainSelector: 'main.detail-page--project',
+      detailHeroImgSelector: '.detail-hero-image img',
+      bodyLaunchClass: 'is-project-launching',
+      arrivalKey: 'project',
+      listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
+    });
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => runtime.init(), { once: true });
+    document.addEventListener('DOMContentLoaded', () => { runtime.init(); wireFlight(); }, { once: true });
   } else {
     runtime.init();
+    wireFlight();
   }
 </script>
