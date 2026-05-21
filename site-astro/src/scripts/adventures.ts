@@ -694,7 +694,7 @@ function initAdventuresPage() {
     // setting html.adv-desktop. JS just synchronizes button state and ensures
     // the world map mounts so the Now marker has something to attach to.
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const focusNow = new URLSearchParams(window.location.search).get('focus') === 'now';
+    const focusNow = new URLSearchParams(window.location.search).get(URL_PARAMS.focus) === 'now';
     if (isMobile) {
         // Sync the bottom toggle's "active" state to match the SSR class.
         const split = document.querySelector('.adventures-page-split');

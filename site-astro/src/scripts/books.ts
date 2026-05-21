@@ -8,6 +8,7 @@ import { fetchJson, readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { booksRuntime, setBooksRuntime, state } from './books-state';
 import { LOCAL_KEYS } from './storage-keys';
+import { URL_PARAMS } from './url-params';
 import {
     flashCategoryArrow,
     renderBooks,
@@ -172,7 +173,7 @@ function restoreSidebarState() {
 }
 
 function scrollToLinkedBook() {
-    const linkedBookTitle = new URLSearchParams(window.location.search).get('book');
+    const linkedBookTitle = new URLSearchParams(window.location.search).get(URL_PARAMS.book);
     if (linkedBookTitle) scrollToBookByTitle(linkedBookTitle);
 }
 
