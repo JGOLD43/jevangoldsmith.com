@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { z } from 'astro/zod';
+import { slugify } from './lib/slug';
 
 // Read the project-root data/*.json directly so legacy build and Astro stay
 // on a single source of truth. No copy, no sync, no drift.
@@ -12,15 +13,6 @@ const DATA_DIR = resolve(import.meta.dirname, '../../data');
 const nstr = () => z.string().nullable().optional();
 const nnum = () => z.number().nullable().optional();
 const nbool = () => z.boolean().nullable().optional();
-
-function slugify(s: string): string {
-  return s
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-}
 
 // Loader factory. Reads a JSON file, optionally unwraps a key (people.json
 // has shape { people: [...] }), assigns each item a stable id, and returns it.
