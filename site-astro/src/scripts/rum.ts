@@ -94,10 +94,15 @@ function flush() {
 function schedule() {
     if (queued) return;
     queued = true;
-    addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') flush();
+    // Install the lifecycle listeners exactly once even if many metrics
+    // schedule themselves over the page's lifetime. Without this guard,
+    // every metric record adds new visibilitychange + pagehide listeners.
+    installOnce('__jgRumLifecycle', () => {
+        addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') flush();
+        });
+        addEventListener('pagehide', flush);
     });
-    addEventListener('pagehide', flush);
 }
 
 function record(name: MetricName, value: number) {

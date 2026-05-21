@@ -57,6 +57,7 @@ const schema = movieSchema({
     { name: 'Movies', url: 'https://jevangoldsmith.com/movies.html' },
     { name: m.title, url: canonical }
   ]}
+  extraSchema={[schema]}
 >
   {poster && (
     <Fragment slot="head">

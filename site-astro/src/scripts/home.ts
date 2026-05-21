@@ -134,7 +134,11 @@ function initCarousel() {
     });
 
     window.addEventListener('resize', () => moveTo(currentSlide), { passive: true });
-    setInterval(() => moveTo(currentSlide >= maxSlide() ? 0 : currentSlide + 1), 5000);
+    // Stop the auto-advance interval when the page is hidden / unloaded so
+    // we don't keep mutating DOM that the user can no longer see. Without
+    // this, the interval fires for the lifetime of the document.
+    const intervalId = window.setInterval(() => moveTo(currentSlide >= maxSlide() ? 0 : currentSlide + 1), 5000);
+    window.addEventListener('pagehide', () => window.clearInterval(intervalId), { once: true });
 }
 
 function animateValue(element: Element, start: number, end: number, duration: number, suffix: string) {
