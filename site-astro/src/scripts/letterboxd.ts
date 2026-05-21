@@ -11,6 +11,7 @@ import { fetchJson, readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { init as initGridZoom } from './grid-zoom';
 import { LOCAL_KEYS } from './storage-keys';
+import { URL_PARAMS } from './url-params';
 
 // Movie stats panel lives below-the-fold; lazy-import on first controls update.
 let renderMovieStatsPromise: Promise<(movies: AnyObj[]) => void> | null = null;
@@ -309,7 +310,7 @@ function scrollToMovie(movieTitle: string, event?: Event) {
 
 function handleLinkedMovie() {
     if (linkedMovieHandled) return;
-    const linkedMovieTitle = new URLSearchParams(window.location.search).get('movie');
+    const linkedMovieTitle = new URLSearchParams(window.location.search).get(URL_PARAMS.movie);
     if (!linkedMovieTitle) return;
     linkedMovieHandled = true;
     window.requestAnimationFrame(() => scrollToMovie(linkedMovieTitle, undefined));
