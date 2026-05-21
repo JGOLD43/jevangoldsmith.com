@@ -5,12 +5,10 @@ function initSnapshot() {
     const container = card.closest('.profile-container') as HTMLElement | null;
     const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
 
-    // On mobile: hide the snapshot below the photo with inline !important
-    // (which beats the legacy stylesheet rules that would otherwise pin
-    // the snapshot off-screen with their own transforms).
-    if (isMobile()) {
-        card.style.setProperty('transform', 'translateY(100%)', 'important');
-    }
+    // On mobile the initial off-screen transform comes from CSS
+    // (.profile-container .snapshot-card in index.astro). We do NOT set
+    // an inline !important transform here — that would outrank the
+    // Web Animations API per CSS cascade, freezing the slide.
 
     toggles.forEach((toggle) => {
         toggle.addEventListener('click', () => {
@@ -19,17 +17,32 @@ function initSnapshot() {
             container.classList.toggle('is-flipped');
             if (!isMobile()) return;
             const open = container.classList.contains('is-flipped');
-            // Cancel any in-flight transition so the new transform takes
-            // effect cleanly (legacy stylesheet rules + our own !important
-            // would otherwise stall the transition at currentTime=0).
+            // Capture the current visual position before cancelling — so
+            // rapid taps mid-slide pick up from wherever the panel
+            // actually is, not from the endpoint.
+            const currentTransform = getComputedStyle(card).transform;
             card.getAnimations().forEach((a) => a.cancel());
-            // Animate via the Web Animations API directly — this bypasses
-            // the CSS-cascade fight with legacy .snapshot-card rules.
-            const from = open ? 'translateY(100%)' : 'translateY(0%)';
-            const to = open ? 'translateY(0%)' : 'translateY(100%)';
+            const restShadow = '0 -8px 28px rgba(0, 0, 0, 0.35)';
+            const liftShadow = '0 -18px 48px rgba(0, 0, 0, 0.55)';
+            const to = open ? 'translate3d(0, 0%, 0)' : 'translate3d(0, 100%, 0)';
+            const from = currentTransform === 'none'
+                ? (open ? 'translate3d(0, 100%, 0)' : 'translate3d(0, 0%, 0)')
+                : currentTransform;
+            // Single keyframe pair, slow steady ease-out — the card is
+            // visibly sliding the entire duration, no "snap to top then
+            // wobble" perception from overly-front-loaded easings.
             const anim = card.animate(
-                [{ transform: from }, { transform: to }],
-                { duration: 550, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+                [
+                    { transform: from, boxShadow: open ? restShadow : liftShadow, offset: 0 },
+                    { transform: to, boxShadow: open ? liftShadow : restShadow, offset: 1 },
+                ],
+                {
+                    duration: open ? 600 : 420,
+                    easing: open
+                        ? 'cubic-bezier(0.33, 0.0, 0.15, 1.0)'
+                        : 'cubic-bezier(0.55, 0.0, 0.75, 0.35)',
+                    fill: 'forwards',
+                },
             );
             anim.onfinish = () => {
                 card.style.setProperty('transform', to, 'important');
