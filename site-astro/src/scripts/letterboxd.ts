@@ -22,13 +22,22 @@ async function renderMovieStats(filteredMovies: AnyObj[]): Promise<void> {
 }
 
 // --- state ---
-const state = {
+interface MoviesState {
+    activeGenre: string;
+    movies: AnyObj[];
+    searchQuery: string;
+    sidebarCollapsed: boolean;
+    starFilter: string;
+    timesWatchedFilter: string;
+}
+
+const state: MoviesState = {
     activeGenre: 'all',
-    movies: [] as AnyObj[],
+    movies: [],
     searchQuery: '',
     sidebarCollapsed: true,
-    starFilter: 'all' as string,
-    timesWatchedFilter: 'all' as string
+    starFilter: 'all',
+    timesWatchedFilter: 'all'
 };
 let linkedMovieHandled = false;
 let moviesRuntime: AnyObj = null;
