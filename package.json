@@ -37,6 +37,7 @@
     "lint": "npx biome check scripts",
     "verify": "node scripts/verify.js",
     "check:live": "node scripts/check-live.js",
+    "assets:integrity": "node scripts/check-asset-integrity.js",
     "css:build-legacy": "node scripts/build-legacy-css.js",
     "enrich:movies": "node scripts/enrich-movies.js",
     "photos:sync": "node scripts/sync-photos.js"

@@ -31,7 +31,7 @@ jobs:
       - run: npm ci --prefix site-astro
 
       - name: Generate merged data files
-        run: npm run people:merge || true
+        run: npm run people:merge
 
       # Use build:fast — skips snap:routes + assets:optimize. The optimize
       # step requires ffmpeg + network reach to Openlibrary, neither of
