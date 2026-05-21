@@ -6,12 +6,6 @@ import { sanitizeUrl as sanitizeUrlServer } from '../lib/url-server';
 
 const coolShitJson = JSON.stringify(coolShitData);
 
-// SSR the feed, tag rail, and hero stats so the page reaches its final
-// layout in a single paint. The previous JS-render-after-hydrate path
-// ballooned CLS to 0.476 — the feed appearing pushed every section
-// below it down. Now the feed is in place at first paint; cool-shit.ts
-// only handles filter clicks (it detects already-populated DOM and
-// skips re-rendering).
 const items = [...coolShitData.items].sort((a, b) => b.date.localeCompare(a.date));
 const cats = coolShitData.categories;
 const catLookup = Object.fromEntries(cats.map((c) => [c.id, c]));
@@ -20,22 +14,18 @@ const orderedCats = cats.filter((c) => usedCatIds.has(c.id));
 const byCat: Record<string, number> = {};
 for (const it of items) byCat[it.category] = (byCat[it.category] || 0) + 1;
 
-function relativeUpdated(iso: string | undefined): string {
-  if (!iso) return '—';
-  const now = new Date();
-  const then = new Date(`${iso}T12:00:00`);
-  const days = Math.max(0, Math.round((now.getTime() - then.getTime()) / 86400000));
-  if (days === 0) return 'Today';
-  if (days === 1) return '1d ago';
-  if (days < 30) return `${days}d ago`;
-  const months = Math.round(days / 30);
-  if (months < 12) return `${months}mo ago`;
-  return `${Math.round(days / 365)}y ago`;
-}
+// Variant B (Are.na Wall) tile-size + tone assignment.
+// Deterministic per-index so layout is stable across renders.
+const IMG_SIZES = ['s-3x3', 's-2x2', 's-3x2', 's-2x3', 's-2x2', 's-2x2', 's-3x2'];
+const TEXT_SIZES = ['s-2x2', 's-2x3', 's-2x2', 's-3x2'];
+const TEXT_TONES = ['', 'sage', 'rose', 'dark', '', 'sage'];
 
-const heroCount = items.length;
-const heroCats = usedCatIds.size || cats.length;
-const heroUpdated = relativeUpdated(items[0]?.date);
+function tileFor(idx: number, hasImage: boolean) {
+  if (hasImage) {
+    return { size: IMG_SIZES[idx % IMG_SIZES.length], tone: '' };
+  }
+  return { size: TEXT_SIZES[idx % TEXT_SIZES.length], tone: TEXT_TONES[idx % TEXT_TONES.length] };
+}
 ---
 <Base
   title="Cool Shit: Objects, Ideas &amp; Useful Finds | Jevan Goldsmith"
@@ -43,83 +33,280 @@ const heroUpdated = relativeUpdated(items[0]?.date);
   canonical="https://jevangoldsmith.com/cool-shit.html"
   pageType="CollectionPage"
 >
-<main class="cool-page" data-active="feed">
-        <div class="cool-content">
-            <div class="container">
-                <header class="cool-page-header">
-                    <h1>Interests</h1>
-                </header>
+<main class="cool-page wall-mode" data-active="feed">
+  <header class="wall-topbar">
+    <div class="wall-brand">interests<span class="wall-count" id="feed-count">{items.length}</span></div>
+    <nav class="wall-rail" id="tag-rail" aria-label="Filter by category">
+      <button type="button" class="cool-tag-pill active" data-cat="all">all<span class="count">{items.length}</span></button>
+      {orderedCats.map((c) => (
+        <button type="button" class="cool-tag-pill" data-cat={c.id}>
+          {c.label.toLowerCase()}<span class="count">{byCat[c.id]}</span>
+        </button>
+      ))}
+    </nav>
+  </header>
 
-                <div class="cool-layout">
-                    <section class="cool-col-feed" aria-label="Feed">
-                        <div class="feed-head">
-                            <span class="feed-count" id="feed-count">{items.length} items</span>
-                        </div>
-                        <div class="feed" id="feed">
-                          {items.map((item) => {
-                            const cat = catLookup[item.category] || { label: item.category, emoji: '' };
-                            return (
-                              <article
-                                class={`feed-item type-${item.type}`}
-                                id={`item-${item.id}`}
-                                data-id={item.id}
-                                data-month={monthKey(item.date)}
-                                data-category={item.category}
-                              >
-                                {item.image && (
-                                  <img
-                                    class="feed-item-image"
-                                    src={item.image}
-                                    alt={item.title}
-                                    loading="lazy"
-                                    decoding="async"
-                                  />
-                                )}
-                                <div class="feed-item-body">
-                                  <div class="feed-item-meta">
-                                    <span class="feed-item-tag">{cat.label}</span>
-                                    <span class="feed-item-date">{dayLabel(item.date)}</span>
-                                    <span class="feed-item-source">{item.source || ''}</span>
-                                  </div>
-                                  <h3 class="feed-item-title">{item.title}</h3>
-                                  <p>{item.body}</p>
-                                  {item.url && (
-                                    <a class="feed-item-link" href={sanitizeUrlServer(item.url)} target="_blank" rel="noopener">Visit {item.source} →</a>
-                                  )}
-                                </div>
-                              </article>
-                            );
-                          })}
-                        </div>
-                        <div class="cool-empty" id="feed-empty" hidden>Nothing in this category yet.</div>
-                    </section>
-                    <aside class="cool-col-rail" aria-label="Filter by category">
-                        <div class="cool-rail-head"><span>Filter</span></div>
-                        <nav class="cool-tag-rail" id="tag-rail">
-                          <button type="button" class="cool-tag-pill active" data-cat="all">All <span class="count">{items.length}</span></button>
-                          {orderedCats.map((c) => (
-                            <button type="button" class="cool-tag-pill" data-cat={c.id}>
-                              <span aria-hidden="true">{c.emoji || ''}</span>{c.label}
-                              <span class="count">{byCat[c.id]}</span>
-                            </button>
-                          ))}
-                        </nav>
-                        <div class="cool-rail-stats">
-                            <span id="hero-count">{heroCount}</span> finds · <span id="hero-cats">{heroCats}</span> cats · last <span id="hero-updated">{heroUpdated}</span>
-                        </div>
-                    </aside>
-                </div>
-
+  <div class="wall-grid" id="feed">
+    {items.map((item, idx) => {
+      const cat = catLookup[item.category] || { label: item.category, emoji: '' };
+      const t = tileFor(idx, !!item.image);
+      const classes = ['feed-item', `wall-tile`, t.size, item.image ? 'wall-img' : `wall-text${t.tone ? ` ${t.tone}` : ''}`].join(' ');
+      return (
+        <article
+          class={classes}
+          id={`item-${item.id}`}
+          data-id={item.id}
+          data-month={monthKey(item.date)}
+          data-category={item.category}
+        >
+          {item.image && (
+            <img
+              class="feed-item-image"
+              src={item.image}
+              alt={item.title}
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+          {item.image ? (
+            <div class="wall-label">
+              <span class="feed-item-tag">{cat.label}</span>
+              <span class="feed-item-title">{item.title}</span>
+              <span class="feed-item-date">{dayLabel(item.date)}</span>
             </div>
-        </div>
+          ) : (
+            <div class="wall-text-body feed-item-body">
+              <h3 class="feed-item-title">{item.title}</h3>
+              <div class="feed-item-meta">
+                <span class="feed-item-tag">{cat.label}</span>
+                <span class="feed-item-date">{dayLabel(item.date)}</span>
+                <span class="feed-item-source">{item.source || ''}</span>
+              </div>
+              {item.url && (
+                <a class="feed-item-link" href={sanitizeUrlServer(item.url)} target="_blank" rel="noopener">visit {item.source} →</a>
+              )}
+            </div>
+          )}
+        </article>
+      );
+    })}
+  </div>
+
+  <div class="cool-empty wall-empty" id="feed-empty" hidden>Nothing in this category yet.</div>
 </main>
 
-{/* Timeline sidebar removed: the 260px sidebar column + per-month
-    render/scroll-spy logic was deadweight (~150 LOC + ~3KB JS, plus
-    layout cost). Override the legacy two-col grid so the remaining
-    feed fills the row. */}
 <style is:global>
-  .cool-page { grid-template-columns: 1fr; }
+  /* ============================================================
+     Variant B — "Are.na Wall" mode.
+     Scope everything under .wall-mode so legacy .cool-page rules
+     in legacy.src.css don't leak in.
+     ============================================================ */
+  .wall-mode {
+    --wall-bg: #f4f0e8;
+    --wall-ink: #1a1a1a;
+    --wall-muted: #7a7468;
+    --wall-line: #d9d3c4;
+    --wall-cream: #ece2c8;
+    --wall-sage: #c9d3bf;
+    --wall-rose: #e8c9c1;
+    --wall-charcoal: #2a2a26;
+
+    background: var(--wall-bg);
+    color: var(--wall-ink);
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+  }
+
+  .wall-mode .wall-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--wall-line);
+    position: sticky;
+    top: 0;
+    background: var(--wall-bg);
+    z-index: 20;
+    flex-wrap: wrap;
+  }
+  .wall-mode .wall-brand {
+    font-weight: 700;
+    letter-spacing: .05em;
+    font-size: 14px;
+  }
+  .wall-mode .wall-brand .wall-count {
+    color: var(--wall-muted);
+    margin-left: 8px;
+    font-weight: 400;
+  }
+  .wall-mode .wall-brand .wall-count::before { content: '/ '; }
+
+  .wall-mode .wall-rail {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .wall-mode .cool-tag-pill {
+    background: transparent;
+    border: none;
+    color: var(--wall-muted);
+    font-family: inherit;
+    font-size: 12px;
+    padding: 4px 8px;
+    cursor: pointer;
+    letter-spacing: .04em;
+    border-radius: 0;
+  }
+  .wall-mode .cool-tag-pill:hover { color: var(--wall-ink); }
+  .wall-mode .cool-tag-pill.active {
+    color: var(--wall-ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .wall-mode .cool-tag-pill .count {
+    margin-left: 4px;
+    color: var(--wall-muted);
+    font-size: 11px;
+    background: none;
+    padding: 0;
+  }
+  .wall-mode .cool-tag-pill.active .count { color: var(--wall-ink); opacity: .55; }
+
+  .wall-mode .wall-grid {
+    --cols: 12;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-auto-rows: 70px;
+    grid-auto-flow: dense;
+    gap: 8px;
+    padding: 24px 32px 96px;
+  }
+
+  .wall-mode .wall-tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+    background: #ddd;
+    outline: 1px solid transparent;
+    transition: outline-color .15s;
+    cursor: pointer;
+    margin: 0;
+  }
+  .wall-mode .wall-tile:hover { outline-color: var(--wall-ink); }
+
+  .wall-mode .wall-img .feed-item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .wall-mode .wall-img .wall-label {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 8px 10px;
+    background: linear-gradient(transparent, rgba(0,0,0,.6));
+    color: #f4f0e8;
+    font-size: 10px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity .2s;
+    pointer-events: none;
+  }
+  .wall-mode .wall-img:hover .wall-label { opacity: 1; }
+  .wall-mode .wall-img .wall-label .feed-item-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: -.01em;
+  }
+  .wall-mode .wall-img .wall-label .feed-item-date { opacity: .7; }
+
+  .wall-mode .wall-text {
+    background: var(--wall-cream);
+    color: var(--wall-ink);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+  }
+  .wall-mode .wall-text.sage { background: var(--wall-sage); }
+  .wall-mode .wall-text.rose { background: var(--wall-rose); }
+  .wall-mode .wall-text.dark { background: var(--wall-charcoal); color: #f4f0e8; }
+  .wall-mode .wall-text .wall-text-body { width: 100%; }
+  .wall-mode .wall-text .feed-item-title {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -.01em;
+    margin: 0 0 8px;
+    color: inherit;
+  }
+  .wall-mode .wall-text .feed-item-meta {
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--wall-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .wall-mode .wall-text.dark .feed-item-meta { color: #a8a298; }
+  .wall-mode .wall-text .feed-item-tag { color: inherit; background: none; padding: 0; }
+  .wall-mode .wall-text .feed-item-source::before { content: '· '; }
+  .wall-mode .wall-text .feed-item-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    color: inherit;
+    border-bottom: 1px solid currentColor;
+    text-decoration: none;
+    padding-bottom: 1px;
+  }
+
+  /* Tile sizes — column × row spans */
+  .wall-mode .s-2x1 { grid-column: span 2; grid-row: span 1; }
+  .wall-mode .s-2x2 { grid-column: span 2; grid-row: span 2; }
+  .wall-mode .s-2x3 { grid-column: span 2; grid-row: span 3; }
+  .wall-mode .s-3x2 { grid-column: span 3; grid-row: span 2; }
+  .wall-mode .s-3x3 { grid-column: span 3; grid-row: span 3; }
+  .wall-mode .s-4x2 { grid-column: span 4; grid-row: span 2; }
+
+  .wall-mode .wall-empty {
+    padding: 64px 32px;
+    text-align: center;
+    color: var(--wall-muted);
+  }
+
+  /* Hidden filter state — keep the dense grid from collapsing weirdly:
+     hidden items leave their slot empty; grid-auto-flow: dense reflows. */
+  .wall-mode .wall-tile[hidden] { display: none; }
+
+  /* Tablet */
+  @media (max-width: 1024px) {
+    .wall-mode .wall-grid { --cols: 8; padding: 20px 20px 80px; }
+  }
+  /* Mobile: collapse to 4 cols, normalize tile sizes so everything fits */
+  @media (max-width: 640px) {
+    .wall-mode .wall-grid { --cols: 4; padding: 16px 14px 64px; gap: 6px; grid-auto-rows: 60px; }
+    .wall-mode .s-2x1,
+    .wall-mode .s-2x2,
+    .wall-mode .s-2x3 { grid-column: span 2; grid-row: span 2; }
+    .wall-mode .s-3x2,
+    .wall-mode .s-3x3,
+    .wall-mode .s-4x2 { grid-column: span 4; grid-row: span 3; }
+    .wall-mode .wall-topbar { padding: 14px 16px; }
+    /* On touch devices the hover label never shows — pin it visible */
+    .wall-mode .wall-img .wall-label { opacity: 1; background: linear-gradient(transparent, rgba(0,0,0,.7)); }
+  }
 </style>
 
 <script is:inline type="application/json" id="jg-cool-shit-data" set:html={coolShitJson} />
