@@ -1,4 +1,6 @@
-@import "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap";
+/* Inter @import removed — render-blocking cross-origin fetch.
+   Fallback chain (system-ui → BlinkMacSystemFont → Segoe UI) covers body
+   text. Chivo (self-hosted, preloaded, variable) handles all headings. */
 
 @font-face {
   font-family: Chivo;
