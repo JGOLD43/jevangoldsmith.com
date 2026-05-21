@@ -100,9 +100,16 @@ function mergeBookPeople(people, books, movies, profiles) {
   const byName = new Map();
   people.forEach((person) => {
     const profile = profileForName(profiles, person.name);
+    // Derive image + srcset from filesystem slug pattern when source
+    // data doesn't supply them. Eliminates the manual srcset footgun:
+    // adding a new person now only requires dropping the source image
+    // and re-running optimize-assets — no JSON path bookkeeping.
+    const imageMeta = generatedImageForPerson(person.name);
     byName.set(person.name, {
       ...person,
       bio: profile?.bio || PERSON_BIOS[person.name] || person.lesson || '',
+      image: person.image || imageMeta.image,
+      srcset: person.srcset || imageMeta.srcset,
       movies: [],
       profileHref: profile ? `people/${profile.id}.html` : '',
       sourceType: sourceTypeFor(person),
