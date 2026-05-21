@@ -27,7 +27,7 @@ type TaskProps = CommonProps & {
   kind: 'task';
   config: TaskListConfig;
   items: any[];
-  renderCard: (item: any) => string;
+  renderCard: (item: any, eager?: boolean) => string;
 };
 
 type Props = CollectionProps | TaskProps;

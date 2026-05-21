@@ -227,7 +227,7 @@ export function renderChallengeCard(challenge: Challenge, eager = false): string
       const slug = record.slug || record.id;
       return slug ? `/challenges/${slug}.html` : null;
     }
-  });
+  }, eager);
 }
 
 export interface TaskListConfig {
@@ -262,7 +262,7 @@ export interface TaskListConfig {
 export function renderTaskListMain<T extends Project | Challenge>(
   items: T[],
   cfg: TaskListConfig,
-  renderCard: (item: T) => string
+  renderCard: (item: T, eager?: boolean) => string
 ): string {
   const total = items.length;
   const statusCounts: Record<string, number> = {};
@@ -364,7 +364,7 @@ export function renderTaskListMain<T extends Project | Challenge>(
             </header>
 
             <div id="${escapeAttr(cfg.gridId)}" class="movies-grid">
-                ${items.map(renderCard).join('\n                ')}
+                ${items.map((item, i) => renderCard(item, i === 0)).join('\n                ')}
             </div>
         </div>
     </main>`;
