@@ -24,6 +24,10 @@ async function renderMovieStats(filteredMovies: AnyObj[]): Promise<void> {
 }
 
 // --- state ---
+// MoviesState uses AnyObj because the runtime builds movies from a different
+// shape than the content-collection Movie type (runtime entries lack an `id`,
+// since they come from the Letterboxd RSS sync rather than the merged
+// collection). Typing this would require a separate RuntimeMovie interface.
 interface MoviesState {
     activeGenre: string;
     movies: AnyObj[];
