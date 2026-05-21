@@ -46,13 +46,28 @@ if (!cspHeader) {
   throw new Error('Missing catch-all Content-Security-Policy header in firebase.json');
 }
 
+// If RUM_ENDPOINT was set at build time, extract its origin and add it to
+// connect-src so the rum.ts beacon isn't blocked. Tree-shaken build (no
+// endpoint) → no change to CSP.
+const connectOrigins = ['https://api.allorigins.win', 'https://formsubmit.co', 'https://server.arcgisonline.com'];
+const rumEndpoint = process.env.RUM_ENDPOINT;
+if (rumEndpoint) {
+  try {
+    const u = new URL(rumEndpoint);
+    const origin = `${u.protocol}//${u.host}`;
+    if (!connectOrigins.includes(origin)) connectOrigins.push(origin);
+  } catch (err) {
+    console.warn(`[csp] RUM_ENDPOINT not a valid URL, skipping connect-src injection: ${err.message}`);
+  }
+}
+
 cspHeader.value = [
   "default-src 'self'",
   `script-src 'self' ${Array.from(scriptHashes).sort().join(' ')}`,
   `style-src 'self' ${Array.from(styleHashes).sort().join(' ')}`,
   "font-src 'self'",
   "img-src 'self' https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com data:",
-  "connect-src 'self' https://api.allorigins.win https://formsubmit.co https://server.arcgisonline.com",
+  `connect-src 'self' ${connectOrigins.join(' ')}`,
   "frame-src 'none'",
   "object-src 'none'",
   "base-uri 'self'",

@@ -39,7 +39,13 @@ jobs:
       # committed in images/generated/, so the dist output has everything
       # it needs. When you add new source images locally, run
       # `npm run assets:optimize` and commit the new variants.
+      #
+      # RUM_ENDPOINT: when set as a repository secret, rum.ts is bundled
+      # into the build and ships error+CWV beacons to it. Without the
+      # secret, the module is tree-shaken — bundle cost stays zero.
       - run: npm run build:fast
+        env:
+          RUM_ENDPOINT: ${{ secrets.RUM_ENDPOINT }}
 
       - name: Add Pages-required files to dist
         run: |
