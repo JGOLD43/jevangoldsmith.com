@@ -45,7 +45,10 @@ function initSnapshot() {
                 },
             );
             anim.onfinish = () => {
-                card.style.setProperty('transform', to, 'important');
+                // Persist final value via inline (non-important) so the
+                // animation can be cancelled cleanly without snapping
+                // back to the CSS rest state.
+                card.style.transform = to;
                 anim.cancel();
             };
         });

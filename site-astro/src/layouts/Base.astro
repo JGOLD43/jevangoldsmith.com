@@ -154,6 +154,89 @@ if (seoSlug === 'index' || seoSlug === 'search') {
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
     <slot name="head" />
+    <style is:inline>
+      /* Restructured site footer — overrides the legacy .footer rules
+         so the same chrome ships on every page. */
+      .site-footer { color: #fff; background: #0f0f0f; border-top: 1px solid rgba(255,255,255,0.08); padding: 3rem 0 1.5rem; }
+      [data-theme="dark"] .site-footer { background: #0a0a0a; border-top-color: #222; }
+      .site-footer .container { max-width: var(--site-max-width, 1200px); margin: 0 auto; padding: 0 1.25rem; }
+      .site-footer-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        gap: 2.5rem;
+        padding-bottom: 2.5rem;
+        margin-bottom: 1.75rem;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        text-align: left;
+      }
+      .site-footer-brand-link {
+        color: #fff;
+        font-family: Chivo, sans-serif;
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: 0.01em;
+        text-decoration: none;
+      }
+      .site-footer-brand-link:hover { color: var(--secondary-color); }
+      .site-footer-tagline {
+        color: rgba(255,255,255,0.55);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        margin: 0.5rem 0 1rem;
+        max-width: 22rem;
+      }
+      .site-footer-social { display: flex; gap: 0.9rem; align-items: center; }
+      .site-footer-social a {
+        color: rgba(255,255,255,0.7);
+        display: inline-flex;
+        transition: color 0.2s ease, transform 0.2s ease;
+      }
+      .site-footer-social a:hover { color: var(--secondary-color); transform: translateY(-2px); }
+      .site-footer-social svg { width: 20px; height: 20px; fill: currentColor; }
+      .site-footer-col-title {
+        color: #fff;
+        font-family: Chivo, sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin: 0 0 0.9rem;
+      }
+      .site-footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
+      .site-footer-col a {
+        color: rgba(255,255,255,0.6);
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+      .site-footer-col a:hover { color: var(--secondary-color); }
+      .site-footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1.25rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .site-footer-bottom p { color: rgba(255,255,255,0.4); margin: 0; font-size: 0.8rem; }
+      .site-footer-back {
+        color: rgba(255,255,255,0.55);
+        font-size: 0.8rem;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+      .site-footer-back:hover { color: var(--secondary-color); }
+      @media (max-width: 960px) {
+        .site-footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+        .site-footer-brand { grid-column: 1 / -1; }
+      }
+      @media (max-width: 600px) {
+        .site-footer-grid { gap: 1.75rem 1rem; }
+        .site-footer-col-title { font-size: 0.65rem; letter-spacing: 0.14em; }
+        .site-footer-col a { font-size: 0.85rem; }
+        .site-footer-bottom { flex-direction: column; text-align: center; gap: 0.5rem; }
+      }
+    </style>
     {/* View Transitions (ClientRouter) was tried but Astro's swap-
         merge replaces page-bound <script> modules without re-firing
         their init logic. Per-page click handlers (people modal, books
@@ -321,19 +404,57 @@ if (seoSlug === 'index' || seoSlug === 'search') {
       <slot />
     </div>
     {!noChrome && !noFooter && (
-      <footer class="footer">
-        <div class="container">
-          <div class="footer-content">
-            <div>
-              <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+      <footer class="footer site-footer">
+        <div class="container site-footer-grid">
+          <div class="site-footer-brand">
+            <a href="/index.html" class="site-footer-brand-link">Jevan Goldsmith</a>
+            <p class="site-footer-tagline">Building beautiful products. Writing about the journey.</p>
+            <div class="site-footer-social" aria-label="Social">
+              <a href="https://x.com/JevanGoldsmith" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                <svg class="ico-fill ico-20" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-x"/></svg>
+              </a>
+              <a href="https://youtube.com/@JevanGoldsmith" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                <svg class="ico-fill ico-20" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-youtube"/></svg>
+              </a>
+              <a href="https://linkedin.com/in/jevan-goldsmith-7b885a185" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <svg class="ico-fill ico-20" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-linkedin"/></svg>
+              </a>
+              <a href="https://letterboxd.com/contentwatch" target="_blank" rel="noopener noreferrer" aria-label="Letterboxd">
+                <svg class="ico-fill ico-20" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-letterboxd"/></svg>
+              </a>
             </div>
-            <ul class="footer-links">
+          </div>
+          <nav class="site-footer-col" aria-label="Explore">
+            <h3 class="site-footer-col-title">Explore</h3>
+            <ul>
               <li><a href="/index.html">Home</a></li>
+              <li><a href="/about.html">About</a></li>
+              <li><a href="/now.html">Now</a></li>
+              <li><a href="/search.html">Search</a></li>
+            </ul>
+          </nav>
+          <nav class="site-footer-col" aria-label="Read">
+            <h3 class="site-footer-col-title">Read</h3>
+            <ul>
               <li><a href="/field-notes.html">Field Notes</a></li>
+              <li><a href="/essays.html">Essays</a></li>
+              <li><a href="/adventures.html">Adventures</a></li>
+              <li><a href="/projects.html">Projects</a></li>
+            </ul>
+          </nav>
+          <nav class="site-footer-col" aria-label="More">
+            <h3 class="site-footer-col-title">More</h3>
+            <ul>
               <li><a href="/products.html">The Shelf</a></li>
               <li><a href="/free-resources.html">Resources</a></li>
+              <li><a href="/cool-shit.html">Cool Shit</a></li>
+              <li><a href="mailto:hello@jevangoldsmith.com">Contact</a></li>
             </ul>
-          </div>
+          </nav>
+        </div>
+        <div class="container site-footer-bottom">
+          <p>&copy; 2026 Jevan Goldsmith. All rights reserved.</p>
+          <a href="#top" class="site-footer-back">Back to top ↑</a>
         </div>
       </footer>
     )}
