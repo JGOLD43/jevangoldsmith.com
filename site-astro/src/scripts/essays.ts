@@ -14,11 +14,20 @@ const ESSAY_CATEGORY_KEYS = ['philosophy', 'management', 'technology', 'personal
 
 let essaysRuntime: AnyObj = null;
 
-const state = {
+interface EssaysState {
+    activeCategory: string;
+    currentIndex: number;
+    essays: AnyObj[];
+    filteredEssays: AnyObj[];
+    searchTerm: string;
+    sidebarCollapsed: boolean;
+}
+
+const state: EssaysState = {
     activeCategory: 'all',
     currentIndex: 0,
-    essays: [] as AnyObj[],
-    filteredEssays: [] as AnyObj[],
+    essays: [],
+    filteredEssays: [],
     searchTerm: '',
     sidebarCollapsed: false
 };

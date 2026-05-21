@@ -10,6 +10,7 @@ export type { CollectionRuntimeConfig } from './collection-runtime-types';
 // callbacks. The public Cfg is now narrowed.
 type Cfg = CollectionRuntimeConfig & Record<string, AnyObj>;
 
+import type { ActionFn } from './action-dispatcher';
 import { registerActions } from './action-dispatcher';
 import {
     activateOnly,
@@ -57,7 +58,7 @@ function switchCollectionViewFromDom(view: string) {
     });
 }
 
-registerActions({ switchCollectionView: switchCollectionViewFromDom });
+registerActions({ switchCollectionView: switchCollectionViewFromDom as ActionFn });
 
 // Mobile UX: when the user taps a row inside a sidebar category panel
 // (book / movie / essay / podcast link), the matching grid card needs to
@@ -315,16 +316,16 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
     }
 
     function registerRuntimeActions() {
-        const actions: Record<string, unknown> = { switchCollectionView };
+        const actions: Record<string, ActionFn> = { switchCollectionView: switchCollectionView as ActionFn };
         if (!cfg.actions) {
             registerActions(actions);
             return;
         }
-        if (cfg.actions.clearSearch) actions[cfg.actions.clearSearch] = clearSearch;
-        if (cfg.actions.filter) actions[cfg.actions.filter] = filter;
-        if (cfg.actions.search) actions[cfg.actions.search] = search;
-        if (cfg.actions.toggleDropdown) actions[cfg.actions.toggleDropdown] = toggleListDropdown;
-        if (cfg.actions.toggleSidebar) actions[cfg.actions.toggleSidebar] = toggleSidebar;
+        if (cfg.actions.clearSearch) actions[cfg.actions.clearSearch] = clearSearch as ActionFn;
+        if (cfg.actions.filter) actions[cfg.actions.filter] = filter as ActionFn;
+        if (cfg.actions.search) actions[cfg.actions.search] = search as ActionFn;
+        if (cfg.actions.toggleDropdown) actions[cfg.actions.toggleDropdown] = toggleListDropdown as ActionFn;
+        if (cfg.actions.toggleSidebar) actions[cfg.actions.toggleSidebar] = toggleSidebar as ActionFn;
         registerActions(actions);
     }
 
