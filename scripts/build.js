@@ -63,6 +63,7 @@ async function main() {
         ['search:audit:strict', 'node', ['scripts/audit-search-index.js', '--strict']],
         ['routes:split', 'node', ['scripts/split-popular-routes.js']],
         ['people:merge', 'node', ['scripts/merge-people.js']],
+        ['assets:integrity', 'node', ['scripts/check-asset-integrity.js']],
         ['slim:countries', 'node', ['scripts/slim-countries.js']],
         ...COMMON_TAIL
       ]
@@ -74,6 +75,7 @@ async function main() {
         ['routes:split', 'node', ['scripts/split-popular-routes.js']],
         ['assets:optimize', 'node', ['scripts/optimize-assets.js']],
         ['people:merge', 'node', ['scripts/merge-people.js']],
+        ['assets:integrity', 'node', ['scripts/check-asset-integrity.js']],
         ['slim:countries', 'node', ['scripts/slim-countries.js']],
         ...COMMON_TAIL
       ];
