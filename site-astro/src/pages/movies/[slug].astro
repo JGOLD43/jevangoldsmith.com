@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { renderCommentary, renderNotes } from '../../lib/notes-render';
+import { movieSchema } from '../../lib/seo';
 import { slugify } from '../../lib/slug';
 
 export async function getStaticPaths() {
@@ -30,6 +31,19 @@ const timesWatched = Number(m.timesWatched) || 0;
 
 const backdrop = m.backdrop || '';
 const poster = m.poster || '';
+const starCount = Number(m.starCount) || 0;
+const ratingValue = starCount > 0 ? starCount : null;
+
+const schema = movieSchema({
+  canonical,
+  title: m.title,
+  year: m.year,
+  poster: poster && poster.startsWith('http') ? poster : undefined,
+  genre: tmdbGenres[0] || m.genre,
+  runtimeMinutes: runtime || null,
+  rating: ratingValue,
+  review: m.review
+});
 ---
 <Base
   title={`${m.title}${m.year ? ` (${m.year})` : ''} - Movies - Jevan Goldsmith`}
