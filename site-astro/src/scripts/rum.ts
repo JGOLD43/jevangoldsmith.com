@@ -178,25 +178,42 @@ function reportLCP() {
     addEventListener('pagehide', finalize, { once: true });
 }
 
-function reportCLS() {
+// Pure CLS session-windowing algorithm. Extracted so unit tests can drive
+// it with synthetic entries without needing a DOM. Spec:
+//   - hadRecentInput: true entries are ignored
+//   - session ends if gap between entry and last >1000ms, OR length >5000ms
+//   - session value = sum of entry values
+//   - reported CLS = max session value
+// Mirrors web-vitals' CLS attribution; lock-tested in tests/unit/cls-windowing.test.js.
+export interface CLSEntry { startTime: number; value: number; hadRecentInput: boolean; }
+export function computeCLS(entries: CLSEntry[]): number {
     let cls = 0;
     let sessionValue = 0;
-    let sessionEntries: PerformanceEntry[] = [];
+    let sessionEntries: CLSEntry[] = [];
+    for (const e of entries) {
+        if (e.hadRecentInput) continue;
+        const first = sessionEntries[0];
+        const last = sessionEntries[sessionEntries.length - 1];
+        if (sessionEntries.length && (e.startTime - last.startTime > 1000 || e.startTime - first.startTime > 5000)) {
+            if (sessionValue > cls) cls = sessionValue;
+            sessionValue = 0;
+            sessionEntries = [];
+        }
+        sessionValue += e.value;
+        sessionEntries.push(e);
+    }
+    if (sessionValue > cls) cls = sessionValue;
+    return cls;
+}
+
+function reportCLS() {
+    let buffered: CLSEntry[] = [];
     const po = observe('layout-shift', (entries) => {
         for (const e of entries as (PerformanceEntry & { value: number; hadRecentInput: boolean })[]) {
-            if (e.hadRecentInput) continue;
-            const first = sessionEntries[0];
-            const last = sessionEntries[sessionEntries.length - 1];
-            if (sessionEntries.length && (e.startTime - last.startTime > 1000 || e.startTime - first.startTime > 5000)) {
-                if (sessionValue > cls) cls = sessionValue;
-                sessionValue = 0; sessionEntries = [];
-            }
-            sessionValue += e.value;
-            sessionEntries.push(e);
+            buffered.push({ startTime: e.startTime, value: e.value, hadRecentInput: e.hadRecentInput });
         }
-        if (sessionValue > cls) cls = sessionValue;
     });
-    const finalize = () => { record('CLS', cls); po?.disconnect(); };
+    const finalize = () => { record('CLS', computeCLS(buffered)); po?.disconnect(); };
     addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') finalize(); }, { once: true });
     addEventListener('pagehide', finalize, { once: true });
 }
