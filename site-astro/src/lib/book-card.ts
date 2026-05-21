@@ -12,7 +12,7 @@ import { slugify } from './slug';
 // records with missing fields still render gracefully.
 type BookData = Partial<Book>;
 
-type RemoteEntry = { source: string; widths: number[]; formats: Record<string, { avif?: string; jpg?: string }> };
+type RemoteEntry = { formats: Record<string, { avif?: string; jpg?: string }> };
 const REMOTE = remoteAssets as Record<string, RemoteEntry>;
 
 // Localize an OpenLibrary cover URL to the locally-generated jpg

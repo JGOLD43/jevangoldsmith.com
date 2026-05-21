@@ -247,11 +247,7 @@ async function generateRemoteAssetSet() {
     });
 
     if (allVariantsPresent) {
-      const entry = {
-        source: `images/source/remote/${id}.source`,
-        widths,
-        formats: {}
-      };
+      const entry = { formats: {} };
       for (const width of widths) {
         const basename = `${id}-${width}`;
         entry.formats[width] = {
@@ -266,11 +262,7 @@ async function generateRemoteAssetSet() {
     const downloaded = await download(url, source);
     if (!downloaded && (!fs.existsSync(source) || fs.statSync(source).size < 1024)) continue;
 
-    const entry = {
-      source: `images/source/remote/${id}.source`,
-      widths,
-      formats: {}
-    };
+    const entry = { formats: {} };
 
     for (const width of widths) {
       const basename = `${id}-${width}`;

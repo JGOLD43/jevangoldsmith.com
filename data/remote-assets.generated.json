@@ -1,11 +1,5 @@
 {
   "https://covers.openlibrary.org/b/isbn/0205370713-L.jpg": {
-    "source": "images/source/remote/fde0d7b857decb.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/fde0d7b857decb-240.avif",
@@ -22,12 +16,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/0333309170-L.jpg": {
-    "source": "images/source/remote/3595e045f96eca.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/3595e045f96eca-240.avif",
@@ -44,12 +32,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/1541618629-L.jpg": {
-    "source": "images/source/remote/eb43a58a30dfff.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/eb43a58a30dfff-240.avif",
@@ -66,12 +48,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/6074009783-L.jpg": {
-    "source": "images/source/remote/6d65e51fffeb9a.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/6d65e51fffeb9a-240.avif",
@@ -88,12 +64,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780060006648-L.jpg": {
-    "source": "images/source/remote/fb7dd8a70deda4.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/fb7dd8a70deda4-240.avif",
@@ -110,12 +80,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780061241895-L.jpg": {
-    "source": "images/source/remote/9d7c6b3fcac248.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/9d7c6b3fcac248-240.avif",
@@ -132,12 +96,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780062219688-L.jpg": {
-    "source": "images/source/remote/bcc60b039c03d9.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/bcc60b039c03d9-240.avif",
@@ -154,12 +112,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780062273208-L.jpg": {
-    "source": "images/source/remote/2b609cb34b208e.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/2b609cb34b208e-240.avif",
@@ -176,12 +128,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg": {
-    "source": "images/source/remote/c321db98d17d1c.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/c321db98d17d1c-240.avif",
@@ -198,12 +144,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780062852748-L.jpg": {
-    "source": "images/source/remote/c934004db507a4.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/c934004db507a4-240.avif",
@@ -220,12 +160,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780139069093-L.jpg": {
-    "source": "images/source/remote/55dc43a3ef9e48.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/55dc43a3ef9e48-240.avif",
@@ -242,12 +176,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780140136296-L.jpg": {
-    "source": "images/source/remote/7c095db074c3fd.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/7c095db074c3fd-240.avif",
@@ -264,12 +192,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780140152609-L.jpg": {
-    "source": "images/source/remote/a95b947dc1f46b.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/a95b947dc1f46b-240.avif",
@@ -286,12 +208,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780199321667-L.jpg": {
-    "source": "images/source/remote/9cd02341692c7d.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/9cd02341692c7d-240.avif",
@@ -308,12 +224,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780241638668-L.jpg": {
-    "source": "images/source/remote/a6f3412f85ec37.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/a6f3412f85ec37-240.avif",
@@ -330,12 +240,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780300101621-L.jpg": {
-    "source": "images/source/remote/38c407ad432463.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/38c407ad432463-240.avif",
@@ -352,12 +256,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780307269478-L.jpg": {
-    "source": "images/source/remote/e3b3a41b823047.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/e3b3a41b823047-240.avif",
@@ -374,12 +272,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780307887894-L.jpg": {
-    "source": "images/source/remote/635a10dbd3cdc5.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/635a10dbd3cdc5-240.avif",
@@ -396,12 +288,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780312430009-L.jpg": {
-    "source": "images/source/remote/166d81626f56f9.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/166d81626f56f9-240.avif",
@@ -418,12 +304,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780345510440-L.jpg": {
-    "source": "images/source/remote/37d3496eb0d6f3.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/37d3496eb0d6f3-240.avif",
@@ -440,12 +320,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780374533557-L.jpg": {
-    "source": "images/source/remote/feeb856b4054c7.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/feeb856b4054c7-240.avif",
@@ -462,12 +336,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780385347426-L.jpg": {
-    "source": "images/source/remote/f5d1384d3f94e4.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/f5d1384d3f94e4-240.avif",
@@ -484,12 +352,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780385468473-L.jpg": {
-    "source": "images/source/remote/c69d3f9815e73d.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/c69d3f9815e73d-240.avif",
@@ -506,12 +368,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780385482585-L.jpg": {
-    "source": "images/source/remote/0a32a572392367.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/0a32a572392367-240.avif",
@@ -528,12 +384,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780393067576-L.jpg": {
-    "source": "images/source/remote/514c1653e2fb8f.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/514c1653e2fb8f-240.avif",
@@ -550,12 +400,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780393316049-L.jpg": {
-    "source": "images/source/remote/91a6b2980c445e.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/91a6b2980c445e-240.avif",
@@ -572,12 +416,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780394729039-L.jpg": {
-    "source": "images/source/remote/03da558f3c75d3.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/03da558f3c75d3-240.avif",
@@ -594,12 +432,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780470049457-L.jpg": {
-    "source": "images/source/remote/7ab1a48a01365f.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/7ab1a48a01365f-240.avif",
@@ -616,12 +448,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780470051245-L.jpg": {
-    "source": "images/source/remote/d28c63524ab85c.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/d28c63524ab85c-240.avif",
@@ -638,12 +464,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780471155454-L.jpg": {
-    "source": "images/source/remote/b02838c981a5e8.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/b02838c981a5e8-240.avif",
@@ -660,12 +480,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780471244738-L.jpg": {
-    "source": "images/source/remote/c89c0b170171b4.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/c89c0b170171b4-240.avif",
@@ -682,12 +496,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780486290737-L.jpg": {
-    "source": "images/source/remote/17e3e15cd904f7.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/17e3e15cd904f7-240.avif",
@@ -704,12 +512,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780521627498-L.jpg": {
-    "source": "images/source/remote/102d27155b4a91.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/102d27155b4a91-240.avif",
@@ -726,12 +528,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780521680431-L.jpg": {
-    "source": "images/source/remote/085dcee4d1b860.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/085dcee4d1b860-240.avif",
@@ -748,12 +544,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780544734142-L.jpg": {
-    "source": "images/source/remote/a636d02443ed4e.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/a636d02443ed4e-240.avif",
@@ -770,12 +560,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780571258246-L.jpg": {
-    "source": "images/source/remote/b1fcdf393edafc.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/b1fcdf393edafc-240.avif",
@@ -792,12 +576,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780593593967-L.jpg": {
-    "source": "images/source/remote/bc5fff6d7b6685.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/bc5fff6d7b6685-240.avif",
@@ -814,12 +592,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780593719978-L.jpg": {
-    "source": "images/source/remote/cf40d09ee70206.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/cf40d09ee70206-240.avif",
@@ -836,12 +608,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780596006624-L.jpg": {
-    "source": "images/source/remote/f2c0cdf834164b.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/f2c0cdf834164b-240.avif",
@@ -858,12 +624,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780670025299-L.jpg": {
-    "source": "images/source/remote/8a28e7f7854658.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/8a28e7f7854658-240.avif",
@@ -880,12 +640,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780679435204-L.jpg": {
-    "source": "images/source/remote/d005cefc52d459.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/d005cefc52d459-240.avif",
@@ -902,12 +656,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780679757030-L.jpg": {
-    "source": "images/source/remote/c08b39836d3feb.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/c08b39836d3feb-240.avif",
@@ -924,12 +672,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780679757474-L.jpg": {
-    "source": "images/source/remote/f69283782aeb26.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/f69283782aeb26-240.avif",
@@ -946,12 +688,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780689706011-L.jpg": {
-    "source": "images/source/remote/0d11a206b68577.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/0d11a206b68577-240.avif",
@@ -968,12 +704,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780715650141-L.jpg": {
-    "source": "images/source/remote/1114dd0da78e20.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/1114dd0da78e20-240.avif",
@@ -990,12 +720,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg": {
-    "source": "images/source/remote/c14c1b496ab09d.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/c14c1b496ab09d-240.avif",
@@ -1012,12 +736,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780739323038-L.jpg": {
-    "source": "images/source/remote/7e6cd60a1b21fe.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/7e6cd60a1b21fe-240.avif",
@@ -1034,12 +752,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780743258074-L.jpg": {
-    "source": "images/source/remote/2e65d5b40e6217.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/2e65d5b40e6217-240.avif",
@@ -1056,12 +768,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780744056327-L.jpg": {
-    "source": "images/source/remote/9a7195de039d58.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/9a7195de039d58-240.avif",
@@ -1078,12 +784,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780747512028-L.jpg": {
-    "source": "images/source/remote/7d75fa066386d0.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/7d75fa066386d0-240.avif",
@@ -1100,12 +800,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780751515756-L.jpg": {
-    "source": "images/source/remote/908121fdaa4938.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/908121fdaa4938-240.avif",
@@ -1122,12 +816,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780752813837-L.jpg": {
-    "source": "images/source/remote/cb8a3d99f7390e.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/cb8a3d99f7390e-240.avif",
@@ -1144,12 +832,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780753511497-L.jpg": {
-    "source": "images/source/remote/2f10ee6a283416.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/2f10ee6a283416-240.avif",
@@ -1166,12 +848,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780756689704-L.jpg": {
-    "source": "images/source/remote/957eaafcd2bf1d.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/957eaafcd2bf1d-240.avif",
@@ -1188,12 +864,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780804139298-L.jpg": {
-    "source": "images/source/remote/af313220c883ae.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/af313220c883ae-240.avif",
@@ -1210,12 +880,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780804834711-L.jpg": {
-    "source": "images/source/remote/69606db5baccc9.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/69606db5baccc9-240.avif",
@@ -1232,12 +896,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780805510751-L.jpg": {
-    "source": "images/source/remote/9a5955f474a8de.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/9a5955f474a8de-240.avif",
@@ -1254,12 +912,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780812974492-L.jpg": {
-    "source": "images/source/remote/309965cace0fea.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/309965cace0fea-240.avif",
@@ -1276,12 +928,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780812979909-L.jpg": {
-    "source": "images/source/remote/bfa1f380511d32.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/bfa1f380511d32-240.avif",
@@ -1298,12 +944,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780812982008-L.jpg": {
-    "source": "images/source/remote/3afaa15378b0fc.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/3afaa15378b0fc-240.avif",
@@ -1320,12 +960,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780812982404-L.jpg": {
-    "source": "images/source/remote/d626c9a18b3c35.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/d626c9a18b3c35-240.avif",
@@ -1342,12 +976,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780812993011-L.jpg": {
-    "source": "images/source/remote/5dcde71017d7a1.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/5dcde71017d7a1-240.avif",
@@ -1364,12 +992,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780812997699-L.jpg": {
-    "source": "images/source/remote/781492e94312f9.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/781492e94312f9-240.avif",
@@ -1386,12 +1008,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780879803971-L.jpg": {
-    "source": "images/source/remote/8f2c55e217ebbd.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/8f2c55e217ebbd-240.avif",
@@ -1408,12 +1024,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780880889186-L.jpg": {
-    "source": "images/source/remote/e72fe0a97e06ff.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/e72fe0a97e06ff-240.avif",
@@ -1430,12 +1040,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780887306297-L.jpg": {
-    "source": "images/source/remote/2d8091af9824a4.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/2d8091af9824a4-240.avif",
@@ -1452,12 +1056,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780939173457-L.jpg": {
-    "source": "images/source/remote/e0de0e709eab39.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/e0de0e709eab39-240.avif",
@@ -1474,12 +1072,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780945353874-L.jpg": {
-    "source": "images/source/remote/625a5bf8177165.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/625a5bf8177165-240.avif",
@@ -1496,12 +1088,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780979136306-L.jpg": {
-    "source": "images/source/remote/10d8a88c91ae6d.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/10d8a88c91ae6d-240.avif",
@@ -1518,12 +1104,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780981808291-L.jpg": {
-    "source": "images/source/remote/aaebcaa6d43c23.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/aaebcaa6d43c23-240.avif",
@@ -1540,12 +1120,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780984380213-L.jpg": {
-    "source": "images/source/remote/a23ab8d5e5f843.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/a23ab8d5e5f843-240.avif",
@@ -1562,12 +1136,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780984659258-L.jpg": {
-    "source": "images/source/remote/af2de66fce07f4.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/af2de66fce07f4-240.avif",
@@ -1584,12 +1152,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780984659265-L.jpg": {
-    "source": "images/source/remote/1823f56b5ec2b2.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/1823f56b5ec2b2-240.avif",
@@ -1606,12 +1168,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780997311402-L.jpg": {
-    "source": "images/source/remote/c644b62d989794.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/c644b62d989794-240.avif",
@@ -1628,12 +1184,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9780998116303-L.jpg": {
-    "source": "images/source/remote/ae82725145ae37.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/ae82725145ae37-240.avif",
@@ -1650,12 +1200,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781101148464-L.jpg": {
-    "source": "images/source/remote/d99136f6a8fdb4.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/d99136f6a8fdb4-240.avif",
@@ -1672,12 +1216,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781376608304-L.jpg": {
-    "source": "images/source/remote/b747bf4f736216.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/b747bf4f736216-240.avif",
@@ -1694,12 +1232,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781401964115-L.jpg": {
-    "source": "images/source/remote/1d4db2adeb4427.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/1d4db2adeb4427-240.avif",
@@ -1716,12 +1248,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781403978950-L.jpg": {
-    "source": "images/source/remote/c3806b97c04ff7.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/c3806b97c04ff7-240.avif",
@@ -1738,12 +1264,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781408805022-L.jpg": {
-    "source": "images/source/remote/b7fe11185aa4d0.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/b7fe11185aa4d0-240.avif",
@@ -1760,12 +1280,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781421967431-L.jpg": {
-    "source": "images/source/remote/eacca0b73801bb.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/eacca0b73801bb-240.avif",
@@ -1782,12 +1296,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781451648539-L.jpg": {
-    "source": "images/source/remote/8bc50d7ae77061.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/8bc50d7ae77061-240.avif",
@@ -1804,12 +1312,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg": {
-    "source": "images/source/remote/e449cec080e0db.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/e449cec080e0db-240.avif",
@@ -1826,12 +1328,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781465491022-L.jpg": {
-    "source": "images/source/remote/738e13a2f9a3b0.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/738e13a2f9a3b0-240.avif",
@@ -1848,12 +1344,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781476790152-L.jpg": {
-    "source": "images/source/remote/2ef34d0dc5750e.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/2ef34d0dc5750e-240.avif",
@@ -1870,12 +1360,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781477595992-L.jpg": {
-    "source": "images/source/remote/4aeb1e0fa2ea82.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/4aeb1e0fa2ea82-240.avif",
@@ -1892,12 +1376,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781492180746-L.jpg": {
-    "source": "images/source/remote/d20ccf46fe19eb.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/d20ccf46fe19eb-240.avif",
@@ -1914,12 +1392,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781501124020-L.jpg": {
-    "source": "images/source/remote/3300420542417e.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/3300420542417e-240.avif",
@@ -1936,12 +1408,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781501135910-L.jpg": {
-    "source": "images/source/remote/fca78948004cf2.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/fca78948004cf2-240.avif",
@@ -1958,12 +1424,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781501158148-L.jpg": {
-    "source": "images/source/remote/5fb2ae146a8ad9.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/5fb2ae146a8ad9-240.avif",
@@ -1980,12 +1440,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781501190803-L.jpg": {
-    "source": "images/source/remote/1113647e9416a8.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/1113647e9416a8-240.avif",
@@ -2002,12 +1456,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781511318204-L.jpg": {
-    "source": "images/source/remote/ac883069b07de4.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/ac883069b07de4-240.avif",
@@ -2024,12 +1472,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781544507859-L.jpg": {
-    "source": "images/source/remote/56e208edc5a2ca.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/56e208edc5a2ca-240.avif",
@@ -2046,12 +1488,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781544514208-L.jpg": {
-    "source": "images/source/remote/9e4279fe5dc61c.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/9e4279fe5dc61c-240.avif",
@@ -2068,12 +1504,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781576753323-L.jpg": {
-    "source": "images/source/remote/7cf8cf462b0d92.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/7cf8cf462b0d92-240.avif",
@@ -2090,12 +1520,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781577314806-L.jpg": {
-    "source": "images/source/remote/497f26c3956eeb.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/497f26c3956eeb-240.avif",
@@ -2112,12 +1536,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781578644285-L.jpg": {
-    "source": "images/source/remote/bf53cf01620b15.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/bf53cf01620b15-240.avif",
@@ -2134,12 +1552,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781578645015-L.jpg": {
-    "source": "images/source/remote/41cb5a687bf4e3.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/41cb5a687bf4e3-240.avif",
@@ -2156,12 +1568,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781591842712-L.jpg": {
-    "source": "images/source/remote/3c9ba22c12170a.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/3c9ba22c12170a-240.avif",
@@ -2178,12 +1584,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781591846215-L.jpg": {
-    "source": "images/source/remote/43f61be8598a9d.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/43f61be8598a9d-240.avif",
@@ -2200,12 +1600,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781591848233-L.jpg": {
-    "source": "images/source/remote/240a549d25cac8.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/240a549d25cac8-240.avif",
@@ -2222,12 +1616,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781596052925-L.jpg": {
-    "source": "images/source/remote/ec51363c908e0a.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/ec51363c908e0a-240.avif",
@@ -2244,12 +1632,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781637744765-L.jpg": {
-    "source": "images/source/remote/b51c8672f9949e.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/b51c8672f9949e-240.avif",
@@ -2266,12 +1648,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781640854628-L.jpg": {
-    "source": "images/source/remote/5c57569c0618d6.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/5c57569c0618d6-240.avif",
@@ -2288,12 +1664,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781681840482-L.jpg": {
-    "source": "images/source/remote/baf482889a4934.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/baf482889a4934-240.avif",
@@ -2310,12 +1680,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781780924489-L.jpg": {
-    "source": "images/source/remote/c4679bad56f54e.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/c4679bad56f54e-240.avif",
@@ -2332,12 +1696,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781892005281-L.jpg": {
-    "source": "images/source/remote/a460fa75f46962.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/a460fa75f46962-240.avif",
@@ -2354,12 +1712,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781982112691-L.jpg": {
-    "source": "images/source/remote/b5482aa44378e7.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/b5482aa44378e7-240.avif",
@@ -2376,12 +1728,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9781999449063-L.jpg": {
-    "source": "images/source/remote/831ab8b3e91a19.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/831ab8b3e91a19-240.avif",
@@ -2398,12 +1744,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9788197022272-L.jpg": {
-    "source": "images/source/remote/a3dfe3fc9aa181.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/a3dfe3fc9aa181-240.avif",
@@ -2420,12 +1760,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9788199968523-L.jpg": {
-    "source": "images/source/remote/5e8de6e3584877.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/5e8de6e3584877-240.avif",
@@ -2442,12 +1776,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9789812049834-L.jpg": {
-    "source": "images/source/remote/b35c8641e4adad.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/b35c8641e4adad-240.avif",
@@ -2464,12 +1792,6 @@
     }
   },
   "https://covers.openlibrary.org/b/isbn/9789814385282-L.jpg": {
-    "source": "images/source/remote/e2153106e3689c.source",
-    "widths": [
-      240,
-      360,
-      480
-    ],
     "formats": {
       "240": {
         "avif": "images/generated/remote/e2153106e3689c-240.avif",
@@ -2486,13 +1808,6 @@
     }
   },
   "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200": {
-    "source": "images/source/remote/72367927838bb0.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/72367927838bb0-320.avif",
@@ -2513,13 +1828,6 @@
     }
   },
   "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400": {
-    "source": "images/source/remote/5a8c5566894523.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/5a8c5566894523-320.avif",
@@ -2540,13 +1848,6 @@
     }
   },
   "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800": {
-    "source": "images/source/remote/59e615b29758bc.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/59e615b29758bc-320.avif",
@@ -2567,13 +1868,6 @@
     }
   },
   "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400": {
-    "source": "images/source/remote/57a7e6d29cb3bc.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/57a7e6d29cb3bc-320.avif",
@@ -2594,13 +1888,6 @@
     }
   },
   "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800": {
-    "source": "images/source/remote/a5ff41e570d3b0.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/a5ff41e570d3b0-320.avif",
@@ -2621,13 +1908,6 @@
     }
   },
   "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200": {
-    "source": "images/source/remote/7aaf2f82429c31.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/7aaf2f82429c31-320.avif",
@@ -2648,13 +1928,6 @@
     }
   },
   "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400": {
-    "source": "images/source/remote/ebff32bf948786.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/ebff32bf948786-320.avif",
@@ -2675,13 +1948,6 @@
     }
   },
   "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800": {
-    "source": "images/source/remote/60ba311a14be55.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/60ba311a14be55-320.avif",
@@ -2702,13 +1968,6 @@
     }
   },
   "https://images.unsplash.com/photo-1494791368093-85217fbbf8de?w=400": {
-    "source": "images/source/remote/5c62fece55ce86.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/5c62fece55ce86-320.avif",
@@ -2729,13 +1988,6 @@
     }
   },
   "https://images.unsplash.com/photo-1494791368093-85217fbbf8de?w=800": {
-    "source": "images/source/remote/954b3acae47218.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/954b3acae47218-320.avif",
@@ -2756,13 +2008,6 @@
     }
   },
   "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400": {
-    "source": "images/source/remote/464043d0216a4a.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/464043d0216a4a-320.avif",
@@ -2783,13 +2028,6 @@
     }
   },
   "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800": {
-    "source": "images/source/remote/0fb220f958e9cc.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/0fb220f958e9cc-320.avif",
@@ -2810,13 +2048,6 @@
     }
   },
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200": {
-    "source": "images/source/remote/41c59c5d304f33.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/41c59c5d304f33-320.avif",
@@ -2837,13 +2068,6 @@
     }
   },
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400": {
-    "source": "images/source/remote/2e200ec641f0e8.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/2e200ec641f0e8-320.avif",
@@ -2864,13 +2088,6 @@
     }
   },
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800": {
-    "source": "images/source/remote/5328eb6a69bb63.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/5328eb6a69bb63-320.avif",
@@ -2891,13 +2108,6 @@
     }
   },
   "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200": {
-    "source": "images/source/remote/33643ba8028ab0.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/33643ba8028ab0-320.avif",
@@ -2918,13 +2128,6 @@
     }
   },
   "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=400": {
-    "source": "images/source/remote/8eaa2e3b0f5b1f.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/8eaa2e3b0f5b1f-320.avif",
@@ -2945,13 +2148,6 @@
     }
   },
   "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800": {
-    "source": "images/source/remote/0c89b3bbd225d4.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/0c89b3bbd225d4-320.avif",
@@ -2972,13 +2168,6 @@
     }
   },
   "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=400": {
-    "source": "images/source/remote/72f362104e98c2.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/72f362104e98c2-320.avif",
@@ -2999,13 +2188,6 @@
     }
   },
   "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800": {
-    "source": "images/source/remote/3da145136673b0.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/3da145136673b0-320.avif",
@@ -3026,13 +2208,6 @@
     }
   },
   "https://images.unsplash.com/photo-1524293581917-878a6d017c71?w=400": {
-    "source": "images/source/remote/396c5c02503e27.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/396c5c02503e27-320.avif",
@@ -3053,13 +2228,6 @@
     }
   },
   "https://images.unsplash.com/photo-1524293581917-878a6d017c71?w=800": {
-    "source": "images/source/remote/1855ae7b3eff0c.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/1855ae7b3eff0c-320.avif",
@@ -3080,13 +2248,6 @@
     }
   },
   "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200": {
-    "source": "images/source/remote/df41b1a7ecc9af.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/df41b1a7ecc9af-320.avif",
@@ -3107,13 +2268,6 @@
     }
   },
   "https://images.unsplash.com/photo-1528127269322-539801943592?w=400": {
-    "source": "images/source/remote/4d66e4192b0be8.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/4d66e4192b0be8-320.avif",
@@ -3134,13 +2288,6 @@
     }
   },
   "https://images.unsplash.com/photo-1528127269322-539801943592?w=800": {
-    "source": "images/source/remote/6c0ae99c639ac8.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/6c0ae99c639ac8-320.avif",
@@ -3161,13 +2308,6 @@
     }
   },
   "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400": {
-    "source": "images/source/remote/1a349e733a18bb.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/1a349e733a18bb-320.avif",
@@ -3188,13 +2328,6 @@
     }
   },
   "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800": {
-    "source": "images/source/remote/04e233571e0bea.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/04e233571e0bea-320.avif",
@@ -3215,13 +2348,6 @@
     }
   },
   "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=1200": {
-    "source": "images/source/remote/8ced11264e863c.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/8ced11264e863c-320.avif",
@@ -3242,13 +2368,6 @@
     }
   },
   "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=400": {
-    "source": "images/source/remote/a7b555ff343a6e.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/a7b555ff343a6e-320.avif",
@@ -3269,13 +2388,6 @@
     }
   },
   "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=800": {
-    "source": "images/source/remote/d44f3f9f781457.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/d44f3f9f781457-320.avif",
@@ -3296,13 +2408,6 @@
     }
   },
   "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200": {
-    "source": "images/source/remote/ba5520b400ca56.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/ba5520b400ca56-320.avif",
@@ -3323,13 +2428,6 @@
     }
   },
   "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=400": {
-    "source": "images/source/remote/7b1e5842527442.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/7b1e5842527442-320.avif",
@@ -3350,13 +2448,6 @@
     }
   },
   "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=800": {
-    "source": "images/source/remote/36f50e50cdfc81.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/36f50e50cdfc81-320.avif",
@@ -3377,13 +2468,6 @@
     }
   },
   "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400": {
-    "source": "images/source/remote/a7e584ec22d4f0.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/a7e584ec22d4f0-320.avif",
@@ -3404,13 +2488,6 @@
     }
   },
   "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800": {
-    "source": "images/source/remote/8e785f089ec431.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/8e785f089ec431-320.avif",
@@ -3431,13 +2508,6 @@
     }
   },
   "https://images.unsplash.com/photo-1557750255-c76072a7aad1?w=400": {
-    "source": "images/source/remote/dd72c3cf6995af.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/dd72c3cf6995af-320.avif",
@@ -3458,13 +2528,6 @@
     }
   },
   "https://images.unsplash.com/photo-1557750255-c76072a7aad1?w=800": {
-    "source": "images/source/remote/89104c673502a8.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/89104c673502a8-320.avif",
@@ -3485,13 +2548,6 @@
     }
   },
   "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400": {
-    "source": "images/source/remote/7425ee0b85a3ed.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/7425ee0b85a3ed-320.avif",
@@ -3512,13 +2568,6 @@
     }
   },
   "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800": {
-    "source": "images/source/remote/e5b770782d8c2a.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/e5b770782d8c2a-320.avif",
@@ -3539,13 +2588,6 @@
     }
   },
   "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=400": {
-    "source": "images/source/remote/ef8d6780ea575c.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/ef8d6780ea575c-320.avif",
@@ -3566,13 +2608,6 @@
     }
   },
   "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=800": {
-    "source": "images/source/remote/9b239618479b65.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/9b239618479b65-320.avif",
@@ -3593,13 +2628,6 @@
     }
   },
   "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=400": {
-    "source": "images/source/remote/b582958b8b5b03.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/b582958b8b5b03-320.avif",
@@ -3620,13 +2648,6 @@
     }
   },
   "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800": {
-    "source": "images/source/remote/b4375526d47116.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/b4375526d47116-320.avif",
@@ -3647,13 +2668,6 @@
     }
   },
   "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=400": {
-    "source": "images/source/remote/6966ff5e413283.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/6966ff5e413283-320.avif",
@@ -3674,13 +2688,6 @@
     }
   },
   "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=800": {
-    "source": "images/source/remote/900d6aa121bfeb.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/900d6aa121bfeb-320.avif",
@@ -3701,13 +2708,6 @@
     }
   },
   "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400": {
-    "source": "images/source/remote/c52eb51a18f359.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/c52eb51a18f359-320.avif",
@@ -3728,13 +2728,6 @@
     }
   },
   "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800": {
-    "source": "images/source/remote/3fe7629d229dcd.source",
-    "widths": [
-      320,
-      480,
-      800,
-      1200
-    ],
     "formats": {
       "320": {
         "avif": "images/generated/remote/3fe7629d229dcd-320.avif",

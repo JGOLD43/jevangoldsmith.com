@@ -26,7 +26,7 @@ const heroSrcset = p.srcset || [
 // covers under the -L URL only (240/360/480 widths generated). Resolve
 // -M lookups back to the -L manifest key. Falls through to the remote
 // URL if no local asset exists, matching books.astro behavior.
-type RemoteEntry = { source: string; widths: number[]; formats: Record<string, { avif?: string; jpg?: string }> };
+type RemoteEntry = { formats: Record<string, { avif?: string; jpg?: string }> };
 const REMOTE = remoteAssets as Record<string, RemoteEntry>;
 function localizeCover(url: string): string {
   const lookupKey = url.replace(/-M\.jpg(\?.*)?$/, '-L.jpg');
