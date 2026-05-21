@@ -17,8 +17,37 @@ const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibil
   canonical="https://jevangoldsmith.com/challenges.html"
 />
 
+<style is:inline>
+  body.is-challenge-launching .movies-main,
+  body.is-challenge-launching .movies-sidebar {
+    opacity: 0;
+    transition: opacity .32s cubic-bezier(.22, 1, .36, 1);
+    pointer-events: none;
+  }
+  main.detail-page--challenge.is-challenge-arrival > * { opacity: 0; }
+  main.detail-page--challenge.is-challenge-arrival .challenge-hero-image,
+  main.detail-page--challenge.is-challenge-arrival .challenge-hero-image * { opacity: 0; }
+  main.detail-page--challenge.is-challenge-arrival.is-challenge-revealed > * {
+    opacity: 1;
+    transition: opacity .28s cubic-bezier(.22, 1, .36, 1);
+  }
+  main.detail-page--challenge.is-challenge-arrival.is-challenge-cover-revealed .challenge-hero-image,
+  main.detail-page--challenge.is-challenge-arrival.is-challenge-cover-revealed .challenge-hero-image * {
+    opacity: 1;
+    transition: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    main.detail-page--challenge.is-challenge-arrival > *,
+    main.detail-page--challenge.is-challenge-arrival .challenge-hero-image,
+    main.detail-page--challenge.is-challenge-arrival .challenge-hero-image * { opacity: 1; }
+    body.is-challenge-launching .movies-main,
+    body.is-challenge-launching .movies-sidebar { transition: none; }
+  }
+</style>
+
 <script>
   import { createCollectionRuntime } from '../scripts/collection-runtime';
+  import { initCoverFlight } from '../scripts/cover-flight';
 
   const runtime: any = createCollectionRuntime({
     actions: {
@@ -36,12 +65,29 @@ const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibil
     searchClearButtonId: 'challenge-search-clear-btn',
     searchInputId: 'challenge-search',
     sidebarId: 'challenges-sidebar',
-    storageKey: 'challenges-sidebar-collapsed',
-    zoom: { eventName: 'challenge_open' }
+    storageKey: 'challenges-sidebar-collapsed'
+    // No grid-zoom: cover-flight owns the click animation.
   });
+
+  function wireFlight() {
+    const grid = document.getElementById('challenges-container');
+    if (!grid) return;
+    initCoverFlight({
+      grid,
+      cardSelector: 'a.challenge-card',
+      coverSelector: 'img.project-cover',
+      detailMainSelector: 'main.detail-page--challenge',
+      detailHeroImgSelector: '.challenge-hero-image img',
+      bodyLaunchClass: 'is-challenge-launching',
+      arrivalKey: 'challenge',
+      listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
+    });
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => runtime.init(), { once: true });
+    document.addEventListener('DOMContentLoaded', () => { runtime.init(); wireFlight(); }, { once: true });
   } else {
     runtime.init();
+    wireFlight();
   }
 </script>

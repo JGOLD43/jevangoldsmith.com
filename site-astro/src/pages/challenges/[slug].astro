@@ -37,6 +37,8 @@ const percent = Number(progress?.percent) || 0;
     .page-header .container, main.container { max-width: none; padding: 0 1rem; }
     @media (min-width: 769px) { .page-header .container, main.container { padding: 0 3rem; } }
     .challenge-detail { max-width: 720px; margin: 0 auto; padding: 1rem 0 3rem; }
+    .challenge-hero-image { display: block; width: 100%; max-width: 480px; aspect-ratio: 600/400; margin: 0 0 1.5rem; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 22px rgba(0,0,0,.35); }
+    .challenge-hero-image img { width: 100%; height: 100%; display: block; object-fit: cover; }
     .challenge-back { display: inline-block; color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem; text-decoration: none; }
     .challenge-back:hover { color: var(--secondary-color); }
     .challenge-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
@@ -57,9 +59,15 @@ const percent = Number(progress?.percent) || 0;
     .challenge-section p { color: var(--text-light); font-size: 1rem; line-height: 1.6; margin: 0; }
   `} />
 
-  <main class="container">
+  <main class="container detail-page--challenge">
     <article class="challenge-detail">
       <a href="/challenges.html" class="challenge-back">&larr; Back to Challenges</a>
+
+      {c.image && (
+        <div class="challenge-hero-image">
+          <img src={c.image} alt={c.imageAlt || c.title} loading="eager" decoding="async" width="600" height="400" />
+        </div>
+      )}
 
       <div class="challenge-meta">
         <span class={`challenge-badge challenge-badge--status status-${status}`}>{statusLabel}</span>
