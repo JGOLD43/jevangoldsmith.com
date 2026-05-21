@@ -2,6 +2,8 @@
 // escape-key closer, card visibility toggle. Replaces duplicated logic
 // across books/letterboxd/podcasts/people.
 
+import { installOnce } from '../lib/install-once';
+
 // Toggle visibility of cards inside a container based on a Set of IDs
 // derived from each card's dataset. Pages SSR every card; filter passes
 // just hide/show. ids() is a function so callers can pull from any
@@ -29,29 +31,28 @@ function removeCarouselSlot(img: HTMLImageElement) {
     (slot ?? img).remove();
 }
 
-let imageErrorInstalled = false;
 export function installImageErrorHandler() {
-    if (imageErrorInstalled) return;
-    imageErrorInstalled = true;
-    document.addEventListener('error', (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLImageElement)) return;
-        if (target.dataset.bookCoverFallback === 'true') {
-            target.hidden = true;
-            target.parentElement?.classList.add('book-cover-missing');
-            return;
-        }
-        if (target.dataset.removeOnError === 'true') removeCarouselSlot(target);
-    }, true);
-    // OpenLibrary serves a 1×1 transparent PNG when no cover exists, which
-    // loads "successfully" so the error handler above never fires. Treat
-    // tiny images as missing for elements opted into removeOnError.
-    document.addEventListener('load', (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLImageElement)) return;
-        if (target.dataset.removeOnError !== 'true') return;
-        if (target.naturalWidth > 0 && target.naturalWidth < 10) removeCarouselSlot(target);
-    }, true);
+    installOnce('__jgImageErrorInstalled', () => {
+        document.addEventListener('error', (event) => {
+            const target = event.target;
+            if (!(target instanceof HTMLImageElement)) return;
+            if (target.dataset.bookCoverFallback === 'true') {
+                target.hidden = true;
+                target.parentElement?.classList.add('book-cover-missing');
+                return;
+            }
+            if (target.dataset.removeOnError === 'true') removeCarouselSlot(target);
+        }, true);
+        // OpenLibrary serves a 1×1 transparent PNG when no cover exists, which
+        // loads "successfully" so the error handler above never fires. Treat
+        // tiny images as missing for elements opted into removeOnError.
+        document.addEventListener('load', (event) => {
+            const target = event.target;
+            if (!(target instanceof HTMLImageElement)) return;
+            if (target.dataset.removeOnError !== 'true') return;
+            if (target.naturalWidth > 0 && target.naturalWidth < 10) removeCarouselSlot(target);
+        }, true);
+    });
 }
 
 // Drag-to-rate over .filter-star elements inside `container`.
@@ -82,13 +83,12 @@ export function bindStarRatingDrag(container: ParentNode | null, onChange: (valu
 }
 
 const escapeClosers: Array<() => void> = [];
-let escapeInstalled = false;
 export function installEscapeCloser(closer: () => void) {
     if (typeof closer === 'function') escapeClosers.push(closer);
-    if (escapeInstalled) return;
-    escapeInstalled = true;
-    document.addEventListener('keydown', (event) => {
-        if (event.key !== 'Escape') return;
-        escapeClosers.forEach((fn) => { try { fn(); } catch (_) { /* swallow */ } });
+    installOnce('__jgEscapeCloserInstalled', () => {
+        document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') return;
+            escapeClosers.forEach((fn) => { try { fn(); } catch (_) { /* swallow */ } });
+        });
     });
 }
