@@ -11,7 +11,10 @@ test('adventures page renders 7 cards + counter', async ({ page }) => {
   expect(Number(counter)).toBe(7);
 });
 
-test('adventures namespace surfaces are exposed on window', async ({ page }) => {
+// Skipped: window.AdventuresState was removed when adventures-state moved
+// to ES module singletons (no longer leaks onto window). Test asserts a
+// contract that no longer exists.
+test.skip('adventures namespace surfaces are exposed on window', async ({ page }) => {
   await page.goto('/adventures.html');
   await page.waitForFunction(
     () => (window as any).AdventuresState != null,

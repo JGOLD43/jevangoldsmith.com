@@ -8,6 +8,12 @@
       "port": 4321
     },
     {
+      "name": "astro-dev-codex",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "--prefix", ".claude/worktrees/confident-elion-b5ff8e/site-astro", "dev", "--", "--port", "4322"],
+      "port": 4322
+    },
+    {
       "name": "astro-preview",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "--prefix", "site-astro", "preview"],
