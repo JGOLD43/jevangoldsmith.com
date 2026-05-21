@@ -228,11 +228,11 @@ if (seoSlug === 'index' || seoSlug === 'search') {
       }
       .site-footer-back:hover { color: var(--secondary-color); }
       @media (max-width: 960px) {
-        .site-footer-grid { grid-template-columns: 1fr 1fr 1fr; }
-        .site-footer-brand { grid-column: 1 / -1; }
+        .site-footer .site-footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+        .site-footer .site-footer-brand { grid-column: 1 / -1; }
       }
       @media (max-width: 600px) {
-        .site-footer-grid { gap: 1.75rem 1rem; }
+        .site-footer .site-footer-grid { gap: 1.75rem 1rem; grid-template-columns: 1fr 1fr 1fr; }
         .site-footer-col-title { font-size: 0.65rem; letter-spacing: 0.14em; }
         .site-footer-col a { font-size: 0.85rem; }
         .site-footer-bottom { flex-direction: column; text-align: center; gap: 0.5rem; }
@@ -275,7 +275,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
                 <div class="dropdown-wide-header">A Collection of Thoughts</div>
                 <div class="dropdown-columns">
                   <div class="dropdown-column">
-                    <a href="/field-notes.html" class:list={['field-notes.html' === _activeHref ? 'active' : '']}>Field Notes</a>
+                    <a href="/field-notes.html" class:list={['field-notes.html' === _activeHref ? 'active' : '']}>Newsletter</a>
                     <a href="/essays.html" class:list={['essays.html' === _activeHref ? 'active' : '']}>Essays</a>
                     <a href="/takes.html" class:list={['takes.html' === _activeHref ? 'active' : '']}>Takes</a>
                     <a href="/problems.html" class:list={['problems.html' === _activeHref ? 'active' : '']}>Problems</a>
@@ -428,28 +428,28 @@ if (seoSlug === 'index' || seoSlug === 'search') {
           <nav class="site-footer-col" aria-label="Explore">
             <h3 class="site-footer-col-title">Explore</h3>
             <ul>
-              <li><a href="/index.html">Home</a></li>
-              <li><a href="/about.html">About</a></li>
-              <li><a href="/now.html">Now</a></li>
-              <li><a href="/search.html">Search</a></li>
-            </ul>
-          </nav>
-          <nav class="site-footer-col" aria-label="Read">
-            <h3 class="site-footer-col-title">Read</h3>
-            <ul>
-              <li><a href="/field-notes.html">Field Notes</a></li>
+              <li><a href="/field-notes.html">Newsletter</a></li>
               <li><a href="/essays.html">Essays</a></li>
-              <li><a href="/adventures.html">Adventures</a></li>
-              <li><a href="/projects.html">Projects</a></li>
+              <li><a href="/living-manifesto.html">Living</a></li>
+              <li><a href="/about.html">Purpose</a></li>
             </ul>
           </nav>
-          <nav class="site-footer-col" aria-label="More">
-            <h3 class="site-footer-col-title">More</h3>
+          <nav class="site-footer-col" aria-label="Taste">
+            <h3 class="site-footer-col-title">Taste</h3>
             <ul>
+              <li><a href="/books.html">Reading</a></li>
+              <li><a href="/movies.html">Movies</a></li>
               <li><a href="/products.html">The Shelf</a></li>
+              <li><a href="/cool-shit.html">Interests</a></li>
+            </ul>
+          </nav>
+          <nav class="site-footer-col" aria-label="Ventures">
+            <h3 class="site-footer-col-title">Ventures</h3>
+            <ul>
+              <li><a href="/projects.html">Projects</a></li>
+              <li><a href="/challenges.html">Challenges</a></li>
               <li><a href="/free-resources.html">Resources</a></li>
-              <li><a href="/cool-shit.html">Cool Shit</a></li>
-              <li><a href="mailto:hello@jevangoldsmith.com">Contact</a></li>
+              <li><a href="/adventures.html">Trips</a></li>
             </ul>
           </nav>
         </div>

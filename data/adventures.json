@@ -1,97 +1,6 @@
 {
   "adventures": [
     {
-      "id": "sample-adventure",
-      "title": "Sample Adventure",
-      "subtitle": "A placeholder to show how adventures work",
-      "location": "Somewhere Beautiful",
-      "region": "Europe",
-      "startDate": "2024-06-15",
-      "endDate": "2024-06-20",
-      "duration": "5 days",
-      "heroImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200",
-      "shortDescription": "This is a sample adventure to demonstrate the layout. Replace this with your own adventures!",
-      "content": "<p>This is where the full story of your adventure would go. You can write multiple paragraphs here, include photos inline, and really tell the story of your experience.</p><p>Add as much detail as you'd like - the places you visited, the people you met, the food you ate, and the memories you made.</p>",
-      "highlights": [
-        "Beautiful scenery",
-        "Great food",
-        "Amazing people"
-      ],
-      "gallery": [
-        {
-          "src": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400",
-          "caption": "Mountain sunrise",
-          "lat": 46.8182,
-          "lng": 8.2275
-        },
-        {
-          "src": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400",
-          "caption": "Lake reflection",
-          "lat": 46.6863,
-          "lng": 7.8632
-        },
-        {
-          "src": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400",
-          "caption": "Scenic viewpoint",
-          "lat": 46.5197,
-          "lng": 6.6323
-        }
-      ],
-      "mapCenter": { "lat": 46.8182, "lng": 8.2275 },
-      "mapZoom": 8,
-      "tags": ["nature", "photography", "hiking"],
-      "status": "published"
-    },
-    {
-      "id": "japan-adventure",
-      "title": "Temples & Cherry Blossoms",
-      "subtitle": "Exploring ancient Japan during sakura season",
-      "location": "Kyoto, Japan",
-      "region": "Asia",
-      "startDate": "2024-03-25",
-      "endDate": "2024-04-05",
-      "duration": "12 days",
-      "heroImage": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200",
-      "shortDescription": "A journey through Japan's ancient capital during the magical cherry blossom season, visiting temples, shrines, and hidden gardens.",
-      "content": "<p>Japan in spring is a dream come true. The cherry blossoms transform every street, park, and temple into a pink wonderland.</p><p>Kyoto's thousands of temples and shrines each offer their own unique perspective on Japanese history and spirituality. From the golden pavilion of Kinkaku-ji to the endless torii gates of Fushimi Inari, every day brought new discoveries.</p>",
-      "highlights": [
-        "Cherry blossoms",
-        "Ancient temples",
-        "Traditional cuisine",
-        "Zen gardens"
-      ],
-      "gallery": [
-        {
-          "src": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400",
-          "caption": "Fushimi Inari shrine",
-          "lat": 34.9671,
-          "lng": 135.7727
-        },
-        {
-          "src": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400",
-          "caption": "Cherry blossoms in bloom",
-          "lat": 35.0116,
-          "lng": 135.7681
-        },
-        {
-          "src": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400",
-          "caption": "Traditional pagoda",
-          "lat": 34.9949,
-          "lng": 135.7850
-        }
-      ],
-      "mapCenter": { "lat": 35.0116, "lng": 135.7681 },
-      "mapZoom": 12,
-      "tags": ["culture", "temples", "spring", "photography"],
-      "status": "published"
-    },
-    {
       "id": "vietnam-adventure",
       "title": "Motorbikes & Mountains",
       "subtitle": "Discovering Vietnam from north to south",
@@ -121,20 +30,28 @@
           "src": "https://images.unsplash.com/photo-1557750255-c76072a7aad1?w=800",
           "thumbnail": "https://images.unsplash.com/photo-1557750255-c76072a7aad1?w=400",
           "caption": "Traditional boat on the bay",
-          "lat": 20.9500,
-          "lng": 107.0500
+          "lat": 20.95,
+          "lng": 107.05
         },
         {
           "src": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800",
           "thumbnail": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=400",
           "caption": "Hoi An lanterns at night",
           "lat": 15.8801,
-          "lng": 108.3380
+          "lng": 108.338
         }
       ],
-      "mapCenter": { "lat": 20.9101, "lng": 107.1839 },
+      "mapCenter": {
+        "lat": 20.9101,
+        "lng": 107.1839
+      },
       "mapZoom": 6,
-      "tags": ["nature", "food", "culture", "adventure"],
+      "tags": [
+        "nature",
+        "food",
+        "culture",
+        "adventure"
+      ],
       "status": "published"
     },
     {
@@ -178,101 +95,17 @@
           "lng": 151.2108
         }
       ],
-      "mapCenter": { "lat": -33.8688, "lng": 151.2093 },
+      "mapCenter": {
+        "lat": -33.8688,
+        "lng": 151.2093
+      },
       "mapZoom": 11,
-      "tags": ["city", "beach", "culture", "food"],
-      "status": "published"
-    },
-    {
-      "id": "uluru-adventure",
-      "title": "Red Centre Journey",
-      "subtitle": "Walking in the footsteps of ancient traditions",
-      "location": "Uluru, Northern Territory",
-      "region": "Australia",
-      "startDate": "2024-09-05",
-      "endDate": "2024-09-12",
-      "duration": "7 days",
-      "heroImage": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=1200",
-      "shortDescription": "A spiritual journey to Australia's Red Centre, witnessing Uluru's magic at sunrise and sunset while learning about Aboriginal culture.",
-      "content": "<p>Nothing prepares you for the sheer presence of Uluru. Rising from the flat desert landscape, this sacred monolith changes color throughout the day in ways photographs simply cannot capture.</p><p>Learning about the Anangu people's connection to this land over 30,000 years was humbling. The Field of Light art installation at night created a surreal contrast between ancient landscape and modern art.</p>",
-      "highlights": [
-        "Uluru sunrise",
-        "Kata Tjuta hike",
-        "Aboriginal culture",
-        "Field of Light"
+      "tags": [
+        "city",
+        "beach",
+        "culture",
+        "food"
       ],
-      "gallery": [
-        {
-          "src": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?w=400",
-          "caption": "Uluru at sunset",
-          "lat": -25.3444,
-          "lng": 131.0369
-        },
-        {
-          "src": "https://images.unsplash.com/photo-1494791368093-85217fbbf8de?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1494791368093-85217fbbf8de?w=400",
-          "caption": "Kata Tjuta domes",
-          "lat": -25.2869,
-          "lng": 130.7392
-        },
-        {
-          "src": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=400",
-          "caption": "Desert sunset",
-          "lat": -25.3000,
-          "lng": 131.0000
-        }
-      ],
-      "mapCenter": { "lat": -25.3444, "lng": 131.0369 },
-      "mapZoom": 9,
-      "tags": ["nature", "culture", "spiritual", "photography"],
-      "status": "published"
-    },
-    {
-      "id": "austin-adventure",
-      "title": "Live Music & BBQ Capital",
-      "subtitle": "Exploring the heart of Texas",
-      "location": "Austin, Texas",
-      "region": "Americas",
-      "startDate": "2025-03-01",
-      "endDate": "2025-03-08",
-      "duration": "7 days",
-      "heroImage": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=1200",
-      "shortDescription": "A week in Austin experiencing world-famous BBQ, incredible live music, and the unique culture that makes Texas's capital so special.",
-      "content": "<p>Austin lived up to its reputation as the Live Music Capital of the World. Every night brought new discoveries on 6th Street and beyond.</p><p>The BBQ scene here is legendary - from Franklin's to Terry Black's, I sampled brisket that melted in my mouth. Beyond the food and music, the city's tech scene and outdoor activities along Lady Bird Lake made for an unforgettable trip.</p>",
-      "highlights": [
-        "Live music on 6th Street",
-        "World-famous BBQ",
-        "Lady Bird Lake",
-        "South Congress shopping"
-      ],
-      "gallery": [
-        {
-          "src": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=400",
-          "caption": "Austin skyline at dusk",
-          "lat": 30.2672,
-          "lng": -97.7431
-        },
-        {
-          "src": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=400",
-          "caption": "Austin city detail",
-          "lat": 30.2700,
-          "lng": -97.7500
-        },
-        {
-          "src": "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800",
-          "thumbnail": "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400",
-          "caption": "Congress Avenue Bridge",
-          "lat": 30.2614,
-          "lng": -97.7453
-        }
-      ],
-      "mapCenter": { "lat": 30.2672, "lng": -97.7431 },
-      "mapZoom": 11,
-      "tags": ["music", "food", "culture", "city"],
       "status": "published"
     },
     {
@@ -305,20 +138,28 @@
           "src": "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=800",
           "thumbnail": "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=400",
           "caption": "Sugar cane fields",
-          "lat": -19.5500,
-          "lng": 147.3800
+          "lat": -19.55,
+          "lng": 147.38
         },
         {
           "src": "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800",
           "thumbnail": "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400",
           "caption": "Great Barrier Reef",
-          "lat": -19.2500,
-          "lng": 147.5000
+          "lat": -19.25,
+          "lng": 147.5
         }
       ],
-      "mapCenter": { "lat": -19.5744, "lng": 147.4056 },
+      "mapCenter": {
+        "lat": -19.5744,
+        "lng": 147.4056
+      },
       "mapZoom": 10,
-      "tags": ["nature", "rural", "reef", "relaxation"],
+      "tags": [
+        "nature",
+        "rural",
+        "reef",
+        "relaxation"
+      ],
       "status": "published"
     }
   ],
