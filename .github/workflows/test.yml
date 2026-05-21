@@ -46,31 +46,29 @@ jobs:
       - name: Build
         run: npm run build:fast
 
-      - name: Smoke harness against dist
+      - name: Start http-server for dist
+        # Single server for smoke + Playwright + Lighthouse. Avoids
+        # EADDRINUSE between steps from kill-then-restart races where the
+        # port hasn't been released yet.
         run: |
           npx http-server dist -p 8765 -s --cors -c-1 &
-          SERVER_PID=$!
+          echo "SERVER_PID=$!" >> $GITHUB_ENV
           sleep 3
-          BASE_URL=http://localhost:8765 npm run smoke
-          kill $SERVER_PID || true
+
+      - name: Smoke harness against dist
+        run: BASE_URL=http://localhost:8765 npm run smoke
 
       - name: Playwright behavioral + visual smoke
-        run: |
-          npx http-server dist -p 8765 -s --cors -c-1 &
-          SERVER_PID=$!
-          sleep 3
-          PLAYWRIGHT_BASE=http://localhost:8765 npm run test:browser
-          kill $SERVER_PID || true
+        run: PLAYWRIGHT_BASE=http://localhost:8765 npm run test:browser
 
       - name: Lighthouse perf budget check
         # Tier 1+2 plan slice 1.2: fail the build if any of the 8 baseline
         # routes regresses past tolerance vs docs/perf-baseline.md.
-        run: |
-          npx http-server dist -p 8765 -s --cors -c-1 &
-          SERVER_PID=$!
-          sleep 3
-          LIGHTHOUSE_RUNS=2 npm run perf:check
-          kill $SERVER_PID || true
+        run: LIGHTHOUSE_RUNS=2 npm run perf:check
+
+      - name: Stop http-server
+        if: always()
+        run: kill $SERVER_PID || true
 
       - name: Upload Playwright report on failure
         if: failure()
