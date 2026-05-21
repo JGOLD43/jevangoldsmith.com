@@ -106,7 +106,7 @@ if (workToggle) {
         document.documentElement.setAttribute('data-mode', mode);
         workToggle.setAttribute('data-mode', mode === 'work' ? 'work' : 'explore');
         workToggle.setAttribute('aria-pressed', mode === 'personal' ? 'true' : 'false');
-        try { localStorage.setItem('jg-work-mode', mode); } catch {}
+        try { localStorage.setItem(LOCAL_KEYS.workMode, mode); } catch {}
     };
     const current = (): 'work' | 'personal' =>
         (document.documentElement.getAttribute('data-mode') as 'work' | 'personal') || 'work';

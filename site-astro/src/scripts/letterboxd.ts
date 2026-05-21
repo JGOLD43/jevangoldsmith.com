@@ -10,6 +10,7 @@ import {
 import { fetchJson, readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { init as initGridZoom } from './grid-zoom';
+import { LOCAL_KEYS } from './storage-keys';
 
 // Movie stats panel lives below-the-fold; lazy-import on first controls update.
 let renderMovieStatsPromise: Promise<(movies: AnyObj[]) => void> | null = null;
@@ -247,7 +248,7 @@ function buildCollectionController() {
         },
         searchClearButtonId: 'movie-search-clear-btn',
         searchInputId: 'movie-search',
-        storageKey: 'movies-sidebar-collapsed',
+        storageKey: LOCAL_KEYS.moviesSidebar,
         layoutId: 'movies-layout',
         sidebarId: 'movies-sidebar',
         defaultCollapsed: true
