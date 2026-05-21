@@ -5,15 +5,46 @@
 // ES modules are singletons within a page, so importing this from multiple
 // scripts still installs one set of listeners and shares one registry.
 
-const registry: Record<string, unknown> = Object.create(null);
+export type ActionFn = (...args: unknown[]) => unknown;
+export type ActionRegistry = Record<string, ActionFn>;
 
-export function registerActions(actions: Record<string, unknown> | null | undefined) {
-    Object.assign(registry, actions || {});
+const registry: ActionRegistry = Object.create(null);
+
+// Track ALL action names ever attempted via [data-action] so we can warn on
+// typos when a markup attribute names something that was never registered.
+const knownAttempts = new Set<string>();
+
+export function registerActions(actions: ActionRegistry | null | undefined): void {
+    if (!actions) return;
+    for (const [name, fn] of Object.entries(actions)) {
+        if (typeof fn !== 'function') {
+            console.warn(`[action-dispatcher] ignored non-function registration for "${name}"`);
+            continue;
+        }
+        registry[name] = fn;
+    }
+}
+
+// Optional helper for callsites that want strong-typed function shapes.
+// Pass a literal map and TS will infer the names; consumers can then call
+// declared(reg).foo(...) instead of stringly-typed dispatch.
+export function declareActions<T extends ActionRegistry>(actions: T): T {
+    registerActions(actions);
+    return actions;
 }
 
 function resolveAction(name: string | undefined): unknown {
     if (!name) return undefined;
-    return registry[name] || (window as unknown as Record<string, unknown>)[name];
+    const registered = registry[name];
+    if (registered) return registered;
+    const windowFallback = (window as unknown as Record<string, unknown>)[name];
+    if (typeof windowFallback === 'function') return windowFallback;
+    // First time we see this name miss the registry → log once. Typo catcher.
+    if (!knownAttempts.has(name)) {
+        knownAttempts.add(name);
+        console.warn(`[action-dispatcher] data-action="${name}" fired but no handler is registered (typo?)`);
+    }
+    return undefined;
 }
 
 function defaultEventType(el: Element): string {

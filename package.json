@@ -20,6 +20,7 @@
     "perf:check": "node scripts/check-lighthouse-budget.js",
     "movies:sync": "node scripts/sync-letterboxd.js",
     "test:browser": "cd site-astro && npx playwright test",
+    "test:unit": "node --test tests/unit/*.test.js",
     "search:sync": "node scripts/sync-search-index.js --write",
     "snap:routes": "node scripts/snap-popular-routes.js",
     "routes:split": "node scripts/split-popular-routes.js",

@@ -37,6 +37,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Unit tests
+        run: npm run test:unit
+
       - name: Astro type check
         run: npm run --prefix site-astro astro check
 
