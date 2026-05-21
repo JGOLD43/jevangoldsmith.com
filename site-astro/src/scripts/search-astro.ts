@@ -1,6 +1,7 @@
 import { debounce } from '../lib/debounce';
 import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { sanitizeUrl } from '../lib/safe-url';
+import { TIMING } from './timing';
 
 // Standalone search script for the Astro build. Self-contained — does not
 // depend on the legacy js/search.js (which expects JGDataFetch + JGCollectionUI
@@ -75,7 +76,7 @@ import { sanitizeUrl } from '../lib/safe-url';
 
   function bindEvents() {
     if (input) {
-      const debouncedRender = debounce(renderResults, 120);
+      const debouncedRender = debounce(renderResults, TIMING.searchDebounce);
       input.addEventListener('input', () => {
         state.query = input.value;
         debouncedRender();

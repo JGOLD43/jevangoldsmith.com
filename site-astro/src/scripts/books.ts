@@ -9,6 +9,7 @@ import { onDomReady } from './dom-ready';
 import { booksRuntime, setBooksRuntime, state } from './books-state';
 import { LOCAL_KEYS } from './storage-keys';
 import { URL_PARAMS } from './url-params';
+import { TIMING } from './timing';
 import {
     flashCategoryArrow,
     renderBooks,
@@ -228,7 +229,7 @@ function bindBooksEvents() {
 
     const searchInput = document.getElementById('book-search') as HTMLInputElement | null;
     if (searchInput) {
-        const debouncedSearch = debounce((value: string) => searchBooks(value), 120);
+        const debouncedSearch = debounce((value: string) => searchBooks(value), TIMING.searchDebounce);
         searchInput.addEventListener('input', () => debouncedSearch(searchInput.value));
     }
 
