@@ -307,7 +307,10 @@ const walk = (dir) => walkAll(dir).filter((p) => p.endsWith('.html'));
 const outDir = path.join(DIST, 'css/per-page');
 fs.mkdirSync(outDir, { recursive: true });
 
-const htmlFiles = walk(DIST);
+// Sort so chrome rule ordering is filesystem-independent. Without this,
+// fs.readdirSync order can drift between OSes/machines, producing
+// different chrome.HASH.css for byte-identical inputs.
+const htmlFiles = walk(DIST).sort();
 
 // Phase A — chrome extraction.
 //
