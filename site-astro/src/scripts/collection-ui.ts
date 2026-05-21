@@ -77,6 +77,12 @@ export function setCollapsedState({
 }) {
     layout?.classList.toggle(layoutClass, isCollapsed);
     sidebar?.classList.toggle(sidebarClass, isCollapsed);
+    // Mirror state on every sidebar-toggle button for screen readers.
+    // WCAG 1.3.1 — communicate expansion state via ARIA, not just visuals.
+    if (layout) {
+        const toggles = layout.querySelectorAll<HTMLElement>('[data-action="toggle-sidebar"], [data-action="togglePodcastSidebar"], [data-action="toggleProjectSidebar"], [data-action="toggleChallengeSidebar"], [data-action="togglePeopleSidebar"], [data-action="toggleEssaySidebar"], [data-action="toggleMovieSidebar"]');
+        toggles.forEach((btn) => btn.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true'));
+    }
     return isCollapsed;
 }
 

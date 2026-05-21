@@ -169,7 +169,45 @@ type PersonSchema = {
   image?: string;
 };
 
-export type ExtraSchema = TouristTripSchema | PersonSchema;
+type BookSchema = {
+  '@type': 'Book';
+  '@id'?: string;
+  name: string;
+  author: { '@type': 'Person'; name: string };
+  isbn?: string;
+  datePublished?: string | number;
+  image?: string;
+  aggregateRating?: {
+    '@type': 'AggregateRating';
+    ratingValue: number;
+    bestRating: number;
+    ratingCount: number;
+  };
+  review?: {
+    '@type': 'Review';
+    author: { '@id': string };
+    reviewBody: string;
+    reviewRating?: { '@type': 'Rating'; ratingValue: number; bestRating: number };
+  };
+};
+
+type MovieSchema = {
+  '@type': 'Movie';
+  '@id'?: string;
+  name: string;
+  image?: string;
+  datePublished?: string | number;
+  genre?: string;
+  duration?: string;
+  review?: {
+    '@type': 'Review';
+    author: { '@id': string };
+    reviewBody: string;
+    reviewRating?: { '@type': 'Rating'; ratingValue: number; bestRating: number };
+  };
+};
+
+export type ExtraSchema = TouristTripSchema | PersonSchema | BookSchema | MovieSchema;
 
 /**
  * Mirrors scripts/legacy-build/build/page-metadata.js: reads data/pages.json
@@ -334,6 +372,83 @@ export function personSchema(opts: {
     description: opts.description ?? undefined,
     image: opts.image
   };
+}
+
+export function bookSchema(opts: {
+  canonical: string;
+  title: string;
+  author: string;
+  isbn?: string | null;
+  year?: string | number | null;
+  image?: string | null;
+  rating?: number | null;
+  review?: string | null;
+}): BookSchema {
+  const out: BookSchema = {
+    '@id': `${opts.canonical}#book`,
+    '@type': 'Book',
+    name: opts.title,
+    author: { '@type': 'Person', name: opts.author }
+  };
+  if (opts.isbn) out.isbn = String(opts.isbn);
+  if (opts.year != null) out.datePublished = opts.year;
+  if (opts.image) out.image = opts.image;
+  if (opts.rating != null && opts.rating > 0) {
+    out.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: opts.rating,
+      bestRating: 5,
+      ratingCount: 1
+    };
+  }
+  if (opts.review) {
+    out.review = {
+      '@type': 'Review',
+      author: { '@id': `${SITE_URL}/#person` },
+      reviewBody: opts.review,
+      reviewRating: opts.rating != null && opts.rating > 0
+        ? { '@type': 'Rating', ratingValue: opts.rating, bestRating: 5 }
+        : undefined
+    };
+  }
+  return out;
+}
+
+export function movieSchema(opts: {
+  canonical: string;
+  title: string;
+  year?: string | number | null;
+  poster?: string | null;
+  genre?: string | null;
+  runtimeMinutes?: number | null;
+  rating?: number | null;
+  review?: string | null;
+}): MovieSchema {
+  const out: MovieSchema = {
+    '@id': `${opts.canonical}#movie`,
+    '@type': 'Movie',
+    name: opts.title
+  };
+  if (opts.poster) out.image = opts.poster;
+  if (opts.year != null) out.datePublished = opts.year;
+  if (opts.genre) out.genre = opts.genre;
+  if (opts.runtimeMinutes && opts.runtimeMinutes > 0) {
+    // ISO 8601 duration: PT{H}H{M}M
+    const h = Math.floor(opts.runtimeMinutes / 60);
+    const m = opts.runtimeMinutes % 60;
+    out.duration = `PT${h > 0 ? `${h}H` : ''}${m}M`;
+  }
+  if (opts.review) {
+    out.review = {
+      '@type': 'Review',
+      author: { '@id': `${SITE_URL}/#person` },
+      reviewBody: opts.review,
+      reviewRating: opts.rating != null && opts.rating > 0
+        ? { '@type': 'Rating', ratingValue: opts.rating, bestRating: 5 }
+        : undefined
+    };
+  }
+  return out;
 }
 
 export function tripSchema(opts: {
