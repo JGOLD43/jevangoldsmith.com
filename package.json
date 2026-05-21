@@ -35,6 +35,7 @@
     "csp:hashes": "node scripts/update-csp-hashes.js --dist=dist",
     "lint": "npx biome check scripts",
     "verify": "node scripts/verify.js",
+    "check:live": "node scripts/check-live.js",
     "enrich:movies": "node scripts/enrich-movies.js",
     "photos:sync": "node scripts/sync-photos.js"
   },

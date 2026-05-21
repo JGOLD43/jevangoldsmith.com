@@ -61,3 +61,20 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  verify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Wait briefly for the CDN cache layer to pick up the new artifact.
+      - name: Settle
+        run: sleep 30
+      - name: Live verification
+        run: node scripts/check-live.js
+        env:
+          HOST: https://jevangoldsmith.com
