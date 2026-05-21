@@ -1,4 +1,6 @@
 import { SESSION_KEYS } from './storage-keys';
+import { TIMING } from './timing';
+import { BREAKPOINT, HERO_OFFSET_TOP } from './breakpoints';
 
 export function initBooksZoom() {
     const booksGrid = document.getElementById('books-container');
@@ -70,14 +72,11 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     // The hero renders at natural aspect (height auto).
     const cssVw = window.innerWidth;
     const contentVw = document.documentElement.clientWidth;
-    const destWidth = cssVw <= 640
+    const destWidth = cssVw <= BREAKPOINT.mobile
         ? Math.min(cssVw * 0.78, 320)
         : Math.min(cssVw * 0.72, 340);
     const destLeft = (contentVw - destWidth) / 2;
-    // Empirically measured against the rendered detail-hero on the same
-    // viewport. The detail page renders the "Back to Books" link + hero
-    // margin under the navbar at this y.
-    const destTop = cssVw <= 640 ? 123 : 165;
+    const destTop = cssVw <= BREAKPOINT.mobile ? HERO_OFFSET_TOP.mobile : HERO_OFFSET_TOP.desktop;
 
     const clone = cover.cloneNode() as HTMLImageElement;
     clone.removeAttribute('id');
@@ -129,7 +128,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             }
         ],
         {
-            duration: 320,
+            duration: TIMING.bookFlight,
             easing: 'cubic-bezier(.22, 1, .36, 1)',
             fill: 'forwards'
         }
