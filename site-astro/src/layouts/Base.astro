@@ -42,8 +42,6 @@ interface Props {
   noChrome?: boolean;
   /** Hide the site footer (used by full-bleed pages like /adventures). */
   noFooter?: boolean;
-  /** Hide the SeoRelated "Keep exploring this idea" block at the bottom. */
-  noSeoRelated?: boolean;
   /** schema.org page type for JSON-LD. Defaults to "WebPage". */
   pageType?: PageType;
   /** Breadcrumb trail. Defaults to Home → current page. */
@@ -66,7 +64,6 @@ const {
   bodyClass = bodyClassFor(_currentPage),
   noChrome = false,
   noFooter = false,
-  noSeoRelated = false,
   pageType = 'WebPage',
   breadcrumbs,
   robots = 'index, follow, max-image-preview:large',
@@ -76,8 +73,8 @@ const {
 
 const siteName = SITE_NAME;
 
-// Derive the page slug from the current URL so SeoRelated.astro can look up
-// the matching legacy related-cards entry without each page passing a prop.
+// Derive the page slug from the current URL for per-page preconnect hints
+// (cross-origin image hosts on movies/videos).
 const rawPath = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
 const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split('/').pop()!;
 
@@ -316,7 +313,6 @@ if (seoSlug === 'index' || seoSlug === 'search') {
       </nav>
     )}
     <slot />
-    {/* SeoRelated "Keep exploring this idea" block disabled site-wide. */}
     {!noChrome && !noFooter && (
       <footer class="footer">
         <div class="container">
