@@ -8,8 +8,8 @@
 // Requires Python deps: fonttools, brotli, zopfli (pip install).
 
 import { execSync } from 'node:child_process';
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { existsSync, statSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
