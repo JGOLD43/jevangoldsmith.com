@@ -51,6 +51,10 @@ const sections = [
   canonical={canonical}
   pageType="AboutPage"
 >
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin />
+    <link rel="preload" as="image" fetchpriority="high" href={mapThumbUrl} crossorigin />
+  </Fragment>
 <main class="now-page">
   <header class="now-header">
     <h2 class="now-title">Now</h2>
@@ -60,8 +64,11 @@ const sections = [
         <strong class="now-updated-date">{lastUpdated}</strong>
       </div>
       <a class="now-map-thumb" href={mapLink} title={`Open ${lastUpdatedLocation} on the trip map`} aria-label={`Open ${lastUpdatedLocation} on the trip map`}>
-        <img src={mapThumbUrl} alt={`Map showing current location: ${lastUpdatedLocation}`} loading="lazy" decoding="async" width="256" height="256" />
-        <span class="now-map-thumb-pin" style={`left: ${pinLeftPct}%; top: ${pinTopPct}%;`} aria-hidden="true"></span>
+        <img src={mapThumbUrl} alt={`Map showing current location: ${lastUpdatedLocation}`} fetchpriority="high" decoding="async" width="256" height="256" />
+        <span class="now-map-thumb-marker" style={`left: ${pinLeftPct}%; top: ${pinTopPct}%;`} aria-hidden="true">
+          <span class="now-marker-pulse"></span>
+          <span class="now-marker-dot"></span>
+        </span>
         <span class="now-map-thumb-label">{lastUpdatedLocation}</span>
       </a>
     </div>
@@ -157,15 +164,34 @@ const sections = [
     border-color: var(--secondary-color);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
   }
-  .now-map-thumb-pin {
+  .now-map-thumb-marker {
     position: absolute;
     /* left/top set inline from the lat/lng sub-tile offset */
-    width: 14px;
-    height: 14px;
-    margin: -7px 0 0 -7px;
+    width: 22px;
+    height: 22px;
+    margin: -11px 0 0 -11px;
+    pointer-events: none;
+  }
+  .now-map-thumb-marker .now-marker-dot {
+    position: absolute;
+    inset: 6px;
+    background: gold;
     border-radius: 50%;
-    background: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.55), 0 0 0 7px rgba(212, 184, 122, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  }
+  .now-map-thumb-marker .now-marker-pulse {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 215, 0, 0.5);
+    border-radius: 50%;
+    animation: nowPulse 1.8s ease-out infinite;
+  }
+  @keyframes nowPulse {
+    0% { opacity: 0.9; transform: scale(0.6); }
+    100% { opacity: 0; transform: scale(1.6); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .now-map-thumb-marker .now-marker-pulse { animation: none; opacity: 0.5; transform: scale(1); }
   }
   .now-map-thumb-label {
     position: absolute;

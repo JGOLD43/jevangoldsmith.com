@@ -6,6 +6,7 @@ import { CHALLENGES_TASK_CONFIG, renderChallengeCard } from '../lib/collection-s
 
 const allChallenges: Challenge[] = (raw as { challenges?: Challenge[] }).challenges ?? [];
 const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibility !== 'private');
+const lcpCoverUrl = challenges[0]?.image;
 ---
 <CollectionPage
   kind="task"
@@ -15,7 +16,13 @@ const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibil
   title="Challenges, Constraints &amp; Personal Experiments"
   description="A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life."
   canonical="https://jevangoldsmith.com/challenges.html"
-/>
+>
+  {lcpCoverUrl && (
+    <Fragment slot="head">
+      <link rel="preload" as="image" fetchpriority="high" href={lcpCoverUrl} />
+    </Fragment>
+  )}
+</CollectionPage>
 
 <style is:inline>
   body.is-challenge-launching .movies-main,
