@@ -1,17 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-
-const essays = await getCollection('essays', ({ data }: any) => data.status !== 'draft');
-const books = await getCollection('books');
-const projects = await getCollection('projects', ({ data }: any) => data.status !== 'draft').catch(() => []);
-
-const counts: Record<string, number> = {
-  essays: essays.length,
-  books: books.length,
-  projects: projects.length,
-  resources: 0
-};
 ---
 <Base
   title="Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"

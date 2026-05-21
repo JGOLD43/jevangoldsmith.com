@@ -25,11 +25,6 @@ function essayExcerpt(html: string, max = 160): string {
   return text.slice(0, max).replace(/\s+\S*$/, '') + '…';
 }
 
-function readMinutes(html: string): number {
-  const words = String(html || '').replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.round(words / 220));
-}
-
 function categorySlugOf(cat: string): string {
   return String(cat || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
 }

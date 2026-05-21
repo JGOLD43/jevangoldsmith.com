@@ -2,8 +2,9 @@
 // Wisdom ticker is rendered at build time in lib/chrome.ts.
 
 import { tryReadString, tryWrite } from '../lib/storage';
+import { LOCAL_KEYS } from './storage-keys';
 
-const THEME_KEY = 'jg-theme';
+const THEME_KEY = LOCAL_KEYS.theme;
 
 function getPreferredTheme() {
     const stored = tryReadString(THEME_KEY);
