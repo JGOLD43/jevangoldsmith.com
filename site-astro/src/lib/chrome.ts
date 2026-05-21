@@ -19,11 +19,9 @@ const BODY_CLASS_BY_FILE: Record<string, string> = {
   'movies.html': 'nav-compact',
   'people.html': 'nav-compact',
   'podcasts.html': 'nav-compact',
-  'problems.html': 'problems-page',
   'products.html': 'shelf-experience nav-compact',
   'projects.html': 'nav-compact',
   'reading-philosophy.html': 'nav-compact',
-  'takes.html': 'takes-page',
   'weekly-review-template.html': 'resource-detail-page'
 };
 

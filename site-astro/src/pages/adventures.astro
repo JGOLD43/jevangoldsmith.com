@@ -218,6 +218,20 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
     object-fit: cover;
     flex: 0 0 auto;
   }
+  /* Adventure detail hero — straight corners and force the overlay
+     text white in both themes (the base h2 rule applies primary-color
+     which made the title nearly invisible on light mode). */
+  .adventure-story-hero { border-radius: 0 !important; }
+  .adventure-story-hero img { border-radius: 0 !important; }
+  .adventure-story-hero-overlay {
+    background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.78)) !important;
+  }
+  .adventure-story-hero-overlay .adventure-story-location,
+  .adventure-story-hero-overlay .adventure-story-title,
+  .adventure-story-hero-overlay .adventure-story-subtitle {
+    color: #ffffff !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+  }
 </style>
 <script is:inline>
   (() => {

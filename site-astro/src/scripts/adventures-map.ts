@@ -889,7 +889,7 @@ function buildMapControlStack() {
 function renderLayerToggles() {
     const layers = [
         ['now', 'Now'],
-        ['adventures', 'Adventures'],
+        ['adventures', 'Trips'],
         ['routes', 'Routes'],
         ['photos', 'Photos'],
         ['pois', 'POIs'],
