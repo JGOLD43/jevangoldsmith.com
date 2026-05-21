@@ -146,7 +146,7 @@ interface TaskCardOpts {
   hrefBuilder?: (record: TaskRecord) => string | null;
 }
 
-function renderTaskCard(record: TaskRecord, opts: TaskCardOpts): string {
+function renderTaskCard(record: TaskRecord, opts: TaskCardOpts, eager = false): string {
   const status = (record.status || opts.defaultStatus).toLowerCase();
   const category = (record.category || '').toLowerCase();
   const meta = lookupCategoryMeta(opts.categoryMap, category, opts.fallbackEmoji, opts.fallbackPlaceholder);
@@ -169,7 +169,7 @@ function renderTaskCard(record: TaskRecord, opts: TaskCardOpts): string {
   return `<${tag} class="${wrapperClasses}"${hrefAttr} data-status="${escapeAttr(status)}" data-category="${escapeAttr(dataCategory)}" data-search="${escapeAttr(searchTerms)}" id="${escapeAttr(record.slug || record.id)}">
                     <div class="movie-poster-wrapper">
                         ${record.image
-                          ? `<img class="project-cover" src="${escapeAttr(record.image)}" alt="${escapeAttr(record.imageAlt || record.title)}" loading="lazy" decoding="async" width="600" height="400">`
+                          ? `<img class="project-cover" src="${escapeAttr(record.image)}" alt="${escapeAttr(record.imageAlt || record.title)}"${eager ? ' fetchpriority="high"' : ''} decoding="async" width="600" height="400">`
                           : `<div class="podcast-cover-placeholder ${meta.placeholder ?? ''}">${icon}</div>`}
                     </div>
                     <div class="movie-info">
@@ -183,7 +183,7 @@ function renderTaskCard(record: TaskRecord, opts: TaskCardOpts): string {
                 </${tag}>`;
 }
 
-export function renderProjectCard(project: Project): string {
+export function renderProjectCard(project: Project, eager = false): string {
   return renderTaskCard(project, {
     defaultStatus: 'planned',
     cardClass: 'project-card',
@@ -196,10 +196,10 @@ export function renderProjectCard(project: Project): string {
       const slug = record.slug || record.id;
       return slug ? `/projects/${slug}.html` : null;
     }
-  });
+  }, eager);
 }
 
-export function renderChallengeCard(challenge: Challenge): string {
+export function renderChallengeCard(challenge: Challenge, eager = false): string {
   const progress = challenge.progress;
   const progressHtml = progress
     ? `<div class="challenge-progress">
