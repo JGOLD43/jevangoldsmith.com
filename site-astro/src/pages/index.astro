@@ -319,6 +319,12 @@ import Base from '../layouts/Base.astro';
       background: rgba(20, 20, 20, 0.55) !important;
       backdrop-filter: blur(20px) saturate(160%);
       -webkit-backdrop-filter: blur(20px) saturate(160%);
+      /* GPU-composite the slide so backdrop-filter doesn't re-rasterize
+         every frame — without this the slide-up visibly stutters on
+         mid-range phones. */
+      will-change: transform;
+      transform: translate3d(0, 100%, 0);
+      contain: layout paint;
       /* No CSS transition — animation is driven by the Web Animations
          API in home.ts (bypasses cascade fights with legacy rules). */
     }
