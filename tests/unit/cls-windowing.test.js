@@ -13,7 +13,7 @@ const path = require('node:path');
 
 let computeCLS;
 test.before(async () => {
-  const mod = await import(path.join(__dirname, '..', '..', 'site-astro', 'src', 'scripts', 'rum.ts'));
+  const mod = await import(path.join(__dirname, '..', '..', 'site-astro', 'src', 'scripts', 'cls-windowing.ts'));
   computeCLS = mod.computeCLS;
 });
 
