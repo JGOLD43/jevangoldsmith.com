@@ -65,15 +65,12 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     // CSS uses `vw` units which include the scrollbar, so width computes
     // off window.innerWidth. Positioning, though, is relative to the
     // visible content area (excludes scrollbar).
-    // The hero renders at natural aspect (height auto), so destHeight is
-    // computed from naturalAspect — guarantees the clone end frame has
-    // the same aspect/size as the hero.
+    // The hero renders at natural aspect (height auto).
     const cssVw = window.innerWidth;
     const contentVw = document.documentElement.clientWidth;
     const destWidth = cssVw <= 640
         ? Math.min(cssVw * 0.78, 320)
         : Math.min(cssVw * 0.72, 340);
-    const destHeight = destWidth / naturalAspect;
     const destLeft = (contentVw - destWidth) / 2;
     // Empirically measured against the rendered detail-hero on the same
     // viewport. The detail page renders the "Back to Books" link + hero
