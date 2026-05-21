@@ -6,8 +6,6 @@
       "title": "Entrepreneur, Investor",
       "lesson": "Seek wealth, not money or status",
       "category": "writers",
-      "image": "images/generated/people/naval-ravikant-400.jpg",
-      "srcset": "images/generated/people/naval-ravikant-200.jpg 200w, images/generated/people/naval-ravikant-400.jpg 400w, images/generated/people/naval-ravikant-800.jpg 800w",
       "searchText": "Naval Ravikant Entrepreneur Investor Seek wealth not money or status"
     },
     {
@@ -16,8 +14,6 @@
       "title": "CEO, Berkshire Hathaway",
       "lesson": "Be fearful when others are greedy",
       "category": "business",
-      "image": "images/generated/people/warren-buffett-400.jpg",
-      "srcset": "images/generated/people/warren-buffett-200.jpg 200w, images/generated/people/warren-buffett-400.jpg 400w, images/generated/people/warren-buffett-800.jpg 800w",
       "searchText": "Warren Buffett CEO Berkshire Hathaway Be fearful when others are greedy"
     },
     {
@@ -26,8 +22,6 @@
       "title": "Founder, Bridgewater",
       "lesson": "Pain + Reflection = Progress",
       "category": "business",
-      "image": "images/generated/people/ray-dalio-400.jpg",
-      "srcset": "images/generated/people/ray-dalio-200.jpg 200w, images/generated/people/ray-dalio-400.jpg 400w, images/generated/people/ray-dalio-800.jpg 800w",
       "searchText": "Ray Dalio Founder Bridgewater Pain Reflection Progress"
     },
     {
@@ -36,8 +30,6 @@
       "title": "CEO, Tesla & SpaceX",
       "lesson": "Think from first principles",
       "category": "business",
-      "image": "images/generated/people/elon-musk-400.jpg",
-      "srcset": "images/generated/people/elon-musk-200.jpg 200w, images/generated/people/elon-musk-400.jpg 400w, images/generated/people/elon-musk-800.jpg 800w",
       "searchText": "Elon Musk CEO Tesla SpaceX Think from first principles"
     },
     {
@@ -46,8 +38,6 @@
       "title": "Author, Psychology of Money",
       "lesson": "Wealth is what you don't see",
       "category": "writers",
-      "image": "images/generated/people/morgan-housel-400.jpg",
-      "srcset": "images/generated/people/morgan-housel-200.jpg 200w, images/generated/people/morgan-housel-400.jpg 400w, images/generated/people/morgan-housel-800.jpg 800w",
       "searchText": "Morgan Housel Author Psychology of Money Wealth is what you don't see"
     },
     {
@@ -56,8 +46,6 @@
       "title": "Author, Atomic Habits",
       "lesson": "Fall to the level of your systems",
       "category": "writers",
-      "image": "images/generated/people/james-clear-400.jpg",
-      "srcset": "images/generated/people/james-clear-200.jpg 200w, images/generated/people/james-clear-400.jpg 400w, images/generated/people/james-clear-800.jpg 800w",
       "searchText": "James Clear Author Atomic Habits Fall to the level of your systems"
     },
     {
@@ -66,8 +54,6 @@
       "title": "Author, The Daily Stoic",
       "lesson": "The obstacle is the way",
       "category": "writers",
-      "image": "images/generated/people/ryan-holiday-400.jpg",
-      "srcset": "images/generated/people/ryan-holiday-200.jpg 200w, images/generated/people/ryan-holiday-400.jpg 400w, images/generated/people/ryan-holiday-800.jpg 800w",
       "searchText": "Ryan Holiday Author The Daily Stoic The obstacle is the way"
     },
     {
@@ -76,8 +62,6 @@
       "title": "Neuroscientist, Stanford",
       "lesson": "Optimize your biology",
       "category": "science",
-      "image": "images/generated/people/andrew-huberman-400.jpg",
-      "srcset": "images/generated/people/andrew-huberman-200.jpg 200w, images/generated/people/andrew-huberman-400.jpg 400w, images/generated/people/andrew-huberman-800.jpg 800w",
       "searchText": "Andrew Huberman Neuroscientist Stanford Optimize your biology"
     },
     {
@@ -86,8 +70,6 @@
       "title": "AI Researcher, MIT",
       "lesson": "Love is the answer",
       "category": "science",
-      "image": "images/generated/people/lex-fridman-400.jpg",
-      "srcset": "images/generated/people/lex-fridman-200.jpg 200w, images/generated/people/lex-fridman-400.jpg 400w, images/generated/people/lex-fridman-800.jpg 800w",
       "searchText": "Lex Fridman AI Researcher MIT Love is the answer"
     },
     {
@@ -96,8 +78,6 @@
       "title": "Physicist, Nobel Laureate",
       "lesson": "Don't fool yourself",
       "category": "science",
-      "image": "images/generated/people/richard-feynman-400.jpg",
-      "srcset": "images/generated/people/richard-feynman-200.jpg 200w, images/generated/people/richard-feynman-400.jpg 400w, images/generated/people/richard-feynman-800.jpg 800w",
       "searchText": "Richard Feynman Physicist Nobel Laureate Don't fool yourself"
     },
     {
@@ -106,8 +86,6 @@
       "title": "Film Director",
       "lesson": "Challenge audiences to think",
       "category": "creators",
-      "image": "images/generated/people/christopher-nolan-400.jpg",
-      "srcset": "images/generated/people/christopher-nolan-200.jpg 200w, images/generated/people/christopher-nolan-400.jpg 400w, images/generated/people/christopher-nolan-800.jpg 800w",
       "searchText": "Christopher Nolan Film Director Challenge audiences to think"
     },
     {
@@ -116,8 +94,6 @@
       "title": "Music Producer",
       "lesson": "Creativity is removing, not adding",
       "category": "creators",
-      "image": "images/generated/people/rick-rubin-400.jpg",
-      "srcset": "images/generated/people/rick-rubin-200.jpg 200w, images/generated/people/rick-rubin-400.jpg 400w, images/generated/people/rick-rubin-800.jpg 800w",
       "searchText": "Rick Rubin Music Producer Creativity is removing not adding"
     }
   ]
