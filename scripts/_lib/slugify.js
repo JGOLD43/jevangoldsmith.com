@@ -2,7 +2,7 @@
 // and any downstream tooling produce byte-identical slugs.
 
 function slugify(value) {
-  return String(value)
+  return String(value ?? '')
     .toLowerCase()
     .trim()
     .replace(/[^\w\s-]/g, '')

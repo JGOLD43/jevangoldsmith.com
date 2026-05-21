@@ -6,6 +6,7 @@ import {
     state, updateLightboxImage
 } from './adventures-state';
 import { fetchJsonOr } from './data-fetch';
+import { URL_PARAMS } from './url-params';
 
 // Async loader for the heavier Adventures map runtime. Vite/Astro emits
 // a separate chunk for it, kept off the initial adventures bundle.

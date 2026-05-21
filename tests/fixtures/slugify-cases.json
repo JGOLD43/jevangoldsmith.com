@@ -1,0 +1,22 @@
+[
+  { "input": "Hello World", "expected": "hello-world" },
+  { "input": "Foo, Bar & Baz!", "expected": "foo-bar-baz" },
+  { "input": "foo    bar---baz", "expected": "foo-bar-baz" },
+  { "input": "", "expected": "" },
+  { "input": "Atomic Habits", "expected": "atomic-habits" },
+  { "input": "The Great Books", "expected": "the-great-books" },
+  { "input": "47x", "expected": "47x" },
+  { "input": "  leading-trailing  ", "expected": "leading-trailing" },
+  { "input": "snake_case_input", "expected": "snake_case_input" },
+  { "input": "Punctuation!@#$%^&*()", "expected": "punctuation" },
+  { "input": "Apostrophe's", "expected": "apostrophes" },
+  { "input": "Tao of Charlie Munger", "expected": "tao-of-charlie-munger" },
+  { "input": "Naval Ravikant", "expected": "naval-ravikant" },
+  { "input": null, "expected": "" },
+  { "input": "ALLCAPS", "expected": "allcaps" },
+  { "input": "mixed-CASE", "expected": "mixed-case" },
+  { "input": "title-with-numbers-2024", "expected": "title-with-numbers-2024" },
+  { "input": "...dots...", "expected": "dots" },
+  { "input": "no/slashes/allowed", "expected": "noslashesallowed" },
+  { "input": "Hyphenated-Already", "expected": "hyphenated-already" }
+]
