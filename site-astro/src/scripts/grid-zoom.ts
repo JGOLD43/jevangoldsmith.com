@@ -1,3 +1,4 @@
+import { installOnce } from '../lib/install-once';
 import { TIMING } from './timing';
 
 type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; centerOffsetCssX?: number };
@@ -131,18 +132,35 @@ export function init(config: GridZoomConfig) {
     openItem(item);
   });
 
-  document.addEventListener('click', function (event) {
-    if (!state.activeItem) return;
-    if ((event.target as Element | null)?.closest(itemSelector)) return;
-    closeActive();
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape' && state.activeItem) closeActive();
-  });
-
-  window.addEventListener('resize', function () {
-    if (state.activeItem) apply(state.grid, state.activeItem, state.opts);
+  // Document + window listeners gated so multiple grid inits on the same
+  // page don't accumulate duplicates. The handlers check `instances`
+  // for any state with an activeItem, so one listener per document is
+  // enough regardless of how many grids exist.
+  installOnce('__jgGridZoomGlobalListeners', () => {
+    document.addEventListener('click', function (event) {
+      const target = event.target as Element | null;
+      for (const inst of instances) {
+        if (!inst.activeItem) continue;
+        if (target?.closest(inst.itemSelector)) continue;
+        inst.activeItem = null;
+        inst.grid.classList.remove('js-zoom-active');
+        Array.from(inst.grid.querySelectorAll('.js-zoom-item.is-active')).forEach((el) => el.classList.remove('is-active'));
+      }
+    });
+    document.addEventListener('keydown', function (event) {
+      if ((event as KeyboardEvent).key !== 'Escape') return;
+      for (const inst of instances) {
+        if (!inst.activeItem) continue;
+        inst.activeItem = null;
+        inst.grid.classList.remove('js-zoom-active');
+        Array.from(inst.grid.querySelectorAll('.js-zoom-item.is-active')).forEach((el) => el.classList.remove('is-active'));
+      }
+    });
+    window.addEventListener('resize', function () {
+      for (const inst of instances) {
+        if (inst.activeItem) apply(inst.grid, inst.activeItem, inst.opts);
+      }
+    });
   });
 
   instances.push(state);
