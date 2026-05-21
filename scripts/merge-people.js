@@ -8,6 +8,7 @@
 
 const { existsSync, readFileSync, statSync, writeFileSync } = require('node:fs');
 const { resolve } = require('node:path');
+const { normalizePersonName } = require('./_lib/slugify');
 
 const ROOT = resolve(__dirname, '..');
 const DATA = resolve(ROOT, 'data');
@@ -17,16 +18,6 @@ const BOOK_PEOPLE = _CONFIG.BOOK_PEOPLE;
 const MOVIE_PEOPLE = _CONFIG.MOVIE_PEOPLE;
 const GENERATED_PERSON_META = _CONFIG.GENERATED_PERSON_META;
 const PERSON_BIOS = _CONFIG.PERSON_BIOS;
-
-function normalizePersonName(name) {
-  return String(name || '')
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/&/g, ' and ')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
 
 function generatedImageForPerson(name) {
   const slug = normalizePersonName(name);

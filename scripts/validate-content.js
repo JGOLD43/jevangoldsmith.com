@@ -17,6 +17,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { validateIsbn, validateUrl, validateYear, validateDate } = require('./_lib/validators');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = path.resolve(REPO_ROOT, 'data');
@@ -157,52 +158,9 @@ function resolveId(item, cfg) {
   return null;
 }
 
-// Field-shape validators. Only fire if the field is present (not null/empty)
-// — never tighten the required/optional contract. Catch malformed data that
-// the loose Zod schemas would accept and ship as-is.
-
-// ISBN-10 (9 digits + checksum digit/X) or ISBN-13 (13 digits). Hyphens
-// allowed and stripped before length check.
-const ISBN_RE = /^[0-9X-]{10,17}$/i;
-function validateIsbn(value) {
-  if (value == null || value === '') return null;
-  const raw = String(value);
-  if (!ISBN_RE.test(raw)) return `malformed ISBN "${raw}"`;
-  const digits = raw.replace(/[-\s]/g, '');
-  if (digits.length !== 10 && digits.length !== 13) {
-    return `ISBN "${raw}" should be 10 or 13 digits (got ${digits.length})`;
-  }
-  return null;
-}
-
-// URL fields — accept http/https/protocol-relative + repo-relative paths.
-const URL_RE = /^(https?:\/\/|\/\/|\/|images\/|data\/|\.\.?\/)/i;
-function validateUrl(value, fieldName) {
-  if (value == null || value === '') return null;
-  const raw = String(value).trim();
-  if (raw === '#') return null;
-  if (!URL_RE.test(raw)) return `${fieldName} "${raw}" doesn't look like a URL or path`;
-  return null;
-}
-
-function validateYear(value, fieldName = 'year') {
-  if (value == null || value === '') return null;
-  const num = Number(value);
-  if (!Number.isFinite(num)) return `${fieldName} "${value}" is not numeric`;
-  if (num < 1000 || num > 2200) return `${fieldName} ${num} out of range (1000–2200)`;
-  return null;
-}
-
-function validateDate(value, fieldName, { warnFuture = false } = {}) {
-  if (value == null || value === '') return null;
-  const raw = String(value).trim();
-  const parsed = new Date(raw);
-  if (Number.isNaN(parsed.getTime())) return { error: `${fieldName} "${raw}" is not a parseable date` };
-  if (warnFuture && parsed.getTime() > Date.now() + 86400000) {
-    return { warning: `${fieldName} "${raw}" is in the future` };
-  }
-  return null;
-}
+// Field-shape validators imported from _lib/validators.js. They only fire
+// when the field is present — never tighten the required/optional contract.
+// Unit-tested in tests/unit/validators.test.js.
 
 const URL_LIKE_FIELDS = ['url', 'link', 'website', 'href', 'image', 'poster', 'heroImage', 'coverImage', 'coverImageMedium'];
 
