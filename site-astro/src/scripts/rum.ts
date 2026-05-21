@@ -219,4 +219,5 @@ export function startRum() {
     reportLCP();
     reportCLS();
     reportINP();
+    installErrorListeners();
 }
