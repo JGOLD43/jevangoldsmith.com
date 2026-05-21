@@ -12,6 +12,13 @@ const BASE = process.env.PLAYWRIGHT_BASE || 'http://localhost:8765';
 export default defineConfig({
   testDir: './tests/playwright',
   timeout: 30_000,
+  // Drop {platform} from the snapshot path so baselines committed on macOS
+  // also gate CI runs on Linux. The 15% pixel-diff tolerance in visual.spec
+  // absorbs subpixel font-rendering differences between platforms; without
+  // this template, Playwright looks for *-chromium-linux.png on CI and
+  // *-chromium-darwin.png locally — two separate namespaces, defeating the
+  // gate.
+  snapshotPathTemplate: '{snapshotDir}/{testFileName}-snapshots/{arg}{ext}',
   expect: { timeout: 10_000 },
   // fullyParallel + retries=1 absorbs occasional flake from concurrent
   // workers hitting the same http-server (rare race on adventures' lazy
