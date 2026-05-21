@@ -163,6 +163,9 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         the page lifecycle, so we rely on that instead. */}
   </head>
   <body class={bodyClass}>
+    {/* Skip-to-content link: first focusable element. Off-screen until
+        focused via Tab. WCAG 2.4.1 (Bypass Blocks). */}
+    <a href="#main" class="skip-to-content">Skip to content</a>
     {!noChrome && (
       <nav class="navbar">
         <div class="container">
