@@ -209,6 +209,44 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
     background: rgba(212, 184, 122, 0.10) !important;
     border-color: var(--secondary-color) !important;
   }
+  /* Square thumbnail; height is sized from the info column's natural
+     three-line text height by JS below (CSS can't express that
+     without inflating the row with the image's intrinsic size). */
+  .adventures-compact-list .adventure-compact-card { align-items: center; }
+  .adventures-compact-list .adventure-compact-image {
+    aspect-ratio: 1 / 1 !important;
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+</style>
+<script is:inline>
+  (() => {
+    const fit = () => {
+      document.querySelectorAll('.adventures-compact-list .adventure-compact-card').forEach((card) => {
+        const info = card.querySelector('.adventure-compact-info');
+        const img = card.querySelector('.adventure-compact-image');
+        if (!info || !img) return;
+        const h = Math.round(info.getBoundingClientRect().height);
+        if (h > 0) {
+          img.style.width = h + 'px';
+          img.style.height = h + 'px';
+        }
+      });
+    };
+    const onReady = () => {
+      fit();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+      window.addEventListener('resize', fit, { passive: true });
+      // Sidebar visibility flips after first click on mobile-view buttons;
+      // re-fit when the layout container's classes change.
+      const split = document.querySelector('.adventures-page-split');
+      if (split) new MutationObserver(fit).observe(split, { attributes: true, attributeFilter: ['class'] });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady);
+    else onReady();
+  })();
+</script>
+<style is:inline>
 </style>
 
 <script>
