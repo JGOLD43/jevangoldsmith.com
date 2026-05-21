@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { bookCoverUrl } from '../../lib/book-card';
 import { renderCommentary, renderNotes } from '../../lib/notes-render';
+import { bookSchema } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const books = await getCollection('books');
@@ -26,6 +27,17 @@ const timesRead = reReads + 1;
 
 const notesHtml = renderNotes(b.notes);
 const commentaryHtml = renderCommentary(b.commentary);
+
+const schema = bookSchema({
+  canonical,
+  title: b.title,
+  author: b.author,
+  isbn: b.isbn,
+  year: b.year,
+  image: cover && cover.startsWith('http') ? cover : undefined,
+  rating: hasRating ? ratingValue : null,
+  review: b.review
+});
 ---
 <Base
   title={`${b.title} by ${b.author} - Books - Jevan Goldsmith`}
@@ -39,6 +51,7 @@ const commentaryHtml = renderCommentary(b.commentary);
     { name: 'Books', url: 'https://jevangoldsmith.com/books.html' },
     { name: b.title, url: canonical }
   ]}
+  extraSchema={[schema]}
 >
   <Fragment slot="head">
     {cover && <link rel="preload" as="image" fetchpriority="high" href={cover} />}
