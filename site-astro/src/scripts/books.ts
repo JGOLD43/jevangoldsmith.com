@@ -7,6 +7,7 @@ import { closeDropdownOnOutsideClick, toggleClearButton } from './collection-ui'
 import { fetchJson, readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { booksRuntime, setBooksRuntime, state } from './books-state';
+import { LOCAL_KEYS } from './storage-keys';
 import {
     flashCategoryArrow,
     renderBooks,
@@ -110,7 +111,7 @@ function buildCollectionController() {
         },
         searchClearButtonId: 'search-clear-btn',
         searchInputId: 'book-search',
-        storageKey: 'books-sidebar-collapsed',
+        storageKey: LOCAL_KEYS.booksSidebar,
         layoutId: 'books-layout',
         sidebarId: 'books-sidebar',
         defaultCollapsed: true
