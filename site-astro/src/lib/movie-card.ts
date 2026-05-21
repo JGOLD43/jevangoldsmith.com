@@ -38,7 +38,7 @@ export function renderMovieCardHtml(movie: Movie): string {
   const detailHtml = `<div class="js-zoom-detail" aria-hidden="true">
             <p class="zoom-detail-kicker">${escapeHtml(genre || 'Film')}${year ? ' · ' + escapeHtml(year) : ''}</p>
             <p class="zoom-detail-title">${escapeHtml(title)}</p>
-            ${rating ? `<p class="zoom-detail-lead">${escapeHtml(rating)}</p>` : ''}
+            ${rating ? `<p class="zoom-detail-lead"><span aria-hidden="true">${escapeHtml(rating)}</span>${starCount ? `<span class="sr-only">${starCount} out of 5 stars</span>` : ''}</p>` : ''}
             ${reviewLine}
             ${date ? `<p class="zoom-detail-line"><span>Watched —</span> ${escapeHtml(date)}</p>` : ''}
             ${link && link !== '#' ? `<a class="zoom-detail-link" href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer">Letterboxd</a>` : ''}

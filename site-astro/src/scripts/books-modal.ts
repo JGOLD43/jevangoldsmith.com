@@ -65,14 +65,14 @@ export function openCategoryModal(category: string) {
         <div class="category-modal-backdrop" data-action="close-category-modal"></div>
         <div class="category-modal-content">
             <div class="category-expanded-header">
-                <h2 class="category-expanded-title">${escapeHtml(displayName)}</h2>
-                <button class="category-expanded-close" data-action="close-category-modal">&times;</button>
+                <h2 class="category-expanded-title" id="category-expanded-title">${escapeHtml(displayName)}</h2>
+                <button class="category-expanded-close" data-action="close-category-modal" aria-label="Close">&times;</button>
             </div>
             <div class="category-expanded-books">
                 ${books.map((book: AnyObj) => {
                     const coverUrl = getCoverUrl(book);
                     return `
-                        <div class="category-expanded-book" data-action="open-book-from-grid" data-isbn="${escapeAttr(book.isbn)}">
+                        <div class="category-expanded-book" data-action="open-book-from-grid" data-isbn="${escapeAttr(book.isbn)}" tabindex="0" role="button" aria-label="${escapeAttr(book.title)} by ${escapeAttr(book.author)}">
                             <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-remove-on-error="true">
                         </div>
                     `;
@@ -80,8 +80,14 @@ export function openCategoryModal(category: string) {
             </div>
         </div>
     `;
+    // ARIA dialog semantics + focus trap. WCAG 2.4.3 + 4.1.2.
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'category-expanded-title');
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    const trigger = document.activeElement as HTMLElement | null;
+    releaseCategoryModalFocus = trapFocus(modal, trigger);
 }
 
 export function closeCategoryModal() {
@@ -89,6 +95,8 @@ export function closeCategoryModal() {
     if (!modal) return;
     modal.classList.remove('active');
     document.body.style.overflow = '';
+    releaseCategoryModalFocus?.();
+    releaseCategoryModalFocus = null;
 }
 
 export function openBookFromGrid(isbn: string) {
