@@ -22,11 +22,12 @@ const ROUTES = [
   '/robots.txt'
 ];
 
-const REQUIRED_SECURITY_HEADERS = [
-  'content-security-policy',
-  'strict-transport-security',
-  'x-content-type-options'
-];
+// GitHub Pages is the deploy target. It doesn't honor firebase.json's
+// header config (firebase.json is local-emulator only). Security headers
+// (CSP, HSTS, X-Content-Type-Options) only land when something else
+// (Firebase, Cloudflare in front, custom origin) serves the site, so we
+// don't gate on them here. Add the check back when one of those is in
+// front of the deploy.
 
 async function fetchWithTimeout(url, opts = {}) {
   const ctrl = new AbortController();
@@ -40,7 +41,6 @@ async function fetchWithTimeout(url, opts = {}) {
 
 async function check() {
   const failures = [];
-  let homeHeaders = null;
 
   for (const route of ROUTES) {
     const url = HOST.replace(/\/$/, '') + route;
@@ -55,16 +55,7 @@ async function check() {
       failures.push(`${route}: HTTP ${res.status}`);
       continue;
     }
-    if (route === '/') homeHeaders = res.headers;
     console.log(`OK  ${route} (${res.status})`);
-  }
-
-  if (homeHeaders) {
-    for (const header of REQUIRED_SECURITY_HEADERS) {
-      if (!homeHeaders.get(header)) {
-        failures.push(`/: missing security header ${header}`);
-      }
-    }
   }
 
   // SW must be reachable so repeat visitors don't lose their cache layer.
