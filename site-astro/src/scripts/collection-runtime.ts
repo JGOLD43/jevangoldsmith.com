@@ -161,21 +161,35 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
         activateOnly(groupButtons(), button ?? null);
     }
 
+    // Wrap each render hook so a throw in one (e.g. a bad data row, a
+    // missing DOM node) degrades gracefully instead of taking the whole
+    // page down. Logs with hook name for diagnosis; subsequent hooks run.
+    function safe<T>(hookName: string, fn: () => T): T | undefined {
+        try { return fn(); }
+        catch (err) {
+            console.error(`[collection-runtime] ${hookName} threw; continuing.`, err);
+            return undefined;
+        }
+    }
+
     function renderManaged() {
-        const managedState = cfg.getState();
-        const filteredItems = cfg.getFilteredItems(managedState);
+        const managedState = safe('getState', () => cfg.getState());
+        if (managedState === undefined) return [];
+        const filteredItems = safe('getFilteredItems', () => cfg.getFilteredItems(managedState)) ?? [];
         const visibleItems = typeof cfg.getVisibleItems === 'function'
-            ? cfg.getVisibleItems(filteredItems, managedState)
+            ? (safe('getVisibleItems', () => cfg.getVisibleItems(filteredItems, managedState)) ?? filteredItems)
             : filteredItems;
 
         if (cfg.renderSidebar && cfg.groupItems) {
-            cfg.renderSidebar(cfg.groupItems(filteredItems), managedState);
+            safe('renderSidebar', () => {
+                cfg.renderSidebar(cfg.groupItems(filteredItems), managedState);
+            });
         }
 
-        cfg.renderVisibleItems?.(visibleItems, managedState);
-        cfg.updateCount?.(visibleItems, managedState);
-        cfg.updateControls?.(managedState, filteredItems, visibleItems);
-        cfg.onRender?.({ filteredItems, state: managedState, visibleItems });
+        safe('renderVisibleItems', () => cfg.renderVisibleItems?.(visibleItems, managedState));
+        safe('updateCount', () => cfg.updateCount?.(visibleItems, managedState));
+        safe('updateControls', () => cfg.updateControls?.(managedState, filteredItems, visibleItems));
+        safe('onRender', () => cfg.onRender?.({ filteredItems, state: managedState, visibleItems }));
         return visibleItems;
     }
 
@@ -192,7 +206,7 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
         }
         updateCount(visible.length);
         updateClearButton();
-        cfg.onRender?.({ allCards, state: { ...state }, visibleCards: visible });
+        safe('onRender', () => cfg.onRender?.({ allCards, state: { ...state }, visibleCards: visible }));
         return visible;
     }
 

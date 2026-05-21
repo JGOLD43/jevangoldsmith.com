@@ -1,13 +1,20 @@
 // Real User Monitoring. Reports Core Web Vitals (LCP, FCP, CLS, INP,
-// TTFB) to a beacon endpoint. Loaded at idle (theme.ts) only when the
-// RUM_ENDPOINT build flag is set; without it the dynamic import is tree-
-// shaken and this module never ships.
+// TTFB) AND uncaught JS errors to a beacon endpoint. Loaded at idle
+// (theme.ts) only when the RUM_ENDPOINT build flag is set; without it
+// the dynamic import is tree-shaken and this module never ships.
+//
+// To enable production telemetry, set RUM_ENDPOINT at build time:
+//   RUM_ENDPOINT=https://your-receiver/api npm run build
+// Endpoints that work out of the box: Cloudflare Web Analytics, Plausible,
+// any HTTP POST receiver. Errors and metrics share the same beacon path
+// so a single endpoint catches both.
 //
 // Hand-rolled PerformanceObserver wrappers (replaces the `web-vitals`
 // dep). Same {name, value, id, navigationType, rating} shape so the
 // beacon endpoint contract is unchanged.
 
 type MetricName = 'CLS' | 'FCP' | 'INP' | 'LCP' | 'TTFB';
+type ErrorKind = 'error' | 'unhandledrejection';
 type Rating = 'good' | 'needs-improvement' | 'poor';
 
 interface Metric {
@@ -18,11 +25,25 @@ interface Metric {
     navigationType: string;
 }
 
-interface RumPayload extends Metric {
+interface RumMetricPayload extends Metric {
+    kind: 'metric';
     page: string;
     referrer: string;
     connection?: string;
 }
+
+interface RumErrorPayload {
+    kind: ErrorKind;
+    message: string;
+    stack?: string;
+    source?: string;
+    line?: number;
+    col?: number;
+    page: string;
+    referrer: string;
+}
+
+type RumPayload = RumMetricPayload | RumErrorPayload;
 
 const ENDPOINT: string | null = import.meta.env.RUM_ENDPOINT || null;
 const SAMPLE_RATE = 1.0;
@@ -84,12 +105,46 @@ function record(name: MetricName, value: number) {
     if (Math.random() >= SAMPLE_RATE) return;
     const conn = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection;
     queue.push({
+        kind: 'metric',
         name, value, rating: rate(name, value), id: uid(), navigationType: navType(),
         page: location.pathname,
         referrer: document.referrer,
         connection: conn?.effectiveType
     });
     schedule();
+}
+
+function recordError(kind: ErrorKind, payload: Partial<RumErrorPayload>) {
+    queue.push({
+        kind,
+        message: payload.message || 'unknown',
+        stack: payload.stack,
+        source: payload.source,
+        line: payload.line,
+        col: payload.col,
+        page: location.pathname,
+        referrer: document.referrer
+    });
+    schedule();
+}
+
+function installErrorListeners() {
+    addEventListener('error', (event) => {
+        recordError('error', {
+            message: event.message || String(event.error),
+            stack: event.error?.stack,
+            source: event.filename,
+            line: event.lineno,
+            col: event.colno
+        });
+    });
+    addEventListener('unhandledrejection', (event) => {
+        const reason = event.reason;
+        recordError('unhandledrejection', {
+            message: reason?.message || String(reason),
+            stack: reason?.stack
+        });
+    });
 }
 
 function observe(type: string, fn: (entries: PerformanceEntry[]) => void, opts: PerformanceObserverInit = {}) {
