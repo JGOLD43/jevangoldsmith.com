@@ -1,3 +1,5 @@
+import { SESSION_KEYS } from './storage-keys';
+
 export function initBooksZoom() {
     const booksGrid = document.getElementById('books-container');
     if (!booksGrid) return;
@@ -136,7 +138,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     const hardNav = () => {
         // Hand off to the detail page: it will fade its content in
         // around the already-visible hero cover.
-        try { sessionStorage.setItem('book-flight-arrival', '1'); } catch (err) { /* ignore */ }
+        try { sessionStorage.setItem(SESSION_KEYS.bookFlight, '1'); } catch (err) { /* ignore */ }
         window.location.href = href;
     };
 

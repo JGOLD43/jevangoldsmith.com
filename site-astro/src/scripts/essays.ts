@@ -6,6 +6,7 @@ import { createCollectionRuntime } from './collection-runtime';
 import { toggleClearButton } from './collection-ui';
 import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
+import { LOCAL_KEYS } from './storage-keys';
 
 // Essays page orchestrator. State, filters, and view rendering live here
 // because this page is their only consumer.
@@ -235,7 +236,7 @@ function buildCollectionController() {
         },
         searchClearButtonId: 'search-clear-btn',
         searchInputId: 'essay-search',
-        storageKey: 'essays-sidebar-collapsed',
+        storageKey: LOCAL_KEYS.essaysSidebar,
         layoutId: 'essays-layout',
         sidebarId: 'essays-sidebar',
         defaultCollapsed: false
