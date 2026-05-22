@@ -384,25 +384,43 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                         // the clone's shadow matches the wrapper's
                         // exactly and the cross-fade is pixel-identical.
                         //
-                        // Use commitStyles() to bake the animation's
-                        // final transform into inline styles BEFORE
-                        // cancelling. Without it, animation.cancel()
-                        // reverts the clone to its initial inline
-                        // state (source size, source position) for a
-                        // frame — visible as a "small cover flicker".
-                        try { animation.commitStyles(); } catch { /* older browsers */ }
-                        animation.cancel();
-                        clone.style.transform = 'none';
+                        // DO NOT cancel the animation — cancelling reverts
+                        // animated properties (transform, boxShadow) to
+                        // their initial inline values (source rect, no
+                        // scale), which the browser paints for one
+                        // frame before our overrides apply. That's the
+                        // "small cover flicker just before handoff".
+                        //
+                        // Instead, use inline !important to win against
+                        // the animation effect's lingering forwards
+                        // fill. left/top/width/height aren't animated,
+                        // so plain inline is enough for those.
                         clone.style.left = `${realRect.left}px`;
                         clone.style.top = `${realRect.top}px`;
                         clone.style.width = `${realRect.width}px`;
                         clone.style.height = `${realRect.height}px`;
-                        clone.style.boxShadow = '0 24px 60px rgba(0, 0, 0, 0.55)';
+                        clone.style.setProperty('transform', 'none', 'important');
+                        clone.style.setProperty('box-shadow', '0 24px 60px rgba(0, 0, 0, 0.55)', 'important');
+                        // Match the wrapper img's object-fit so the
+                        // visible image content renders IDENTICALLY
+                        // between clone and wrapper-img. The wrapper
+                        // uses `contain` (with letterbox); clone was
+                        // using `fill` (no letterbox). At handoff the
+                        // image would visibly shrink to the contained
+                        // size — that's the "small version flickering
+                        // up" right before the cross-fade completes.
+                        clone.style.objectFit = 'contain';
                     }
                 }
-                clone.style.transition = 'opacity 100ms linear';
-                clone.style.opacity = '0';
-                setTimeout(cleanupFlightCover, 110);
+                // Instant removal — no cross-fade. With the clone now
+                // pixel-aligned to the real hero rect (natural size,
+                // matched object-fit, matched box-shadow), the wrapper
+                // underneath is visually identical to the clone. An
+                // instant swap is imperceptible. The earlier cross-fade
+                // was itself revealing the underlying wrapper-img
+                // through the partly-transparent clone — that's what
+                // the user kept seeing as "flicker".
+                cleanupFlightCover();
                 // Restore sidebar style after cleanup in case the user
                 // hits Back — we'll re-render on popstate.
                 setTimeout(() => {

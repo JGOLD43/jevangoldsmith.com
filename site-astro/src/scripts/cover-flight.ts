@@ -361,22 +361,30 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                     if (newHero) {
                         const realRect = newHero.getBoundingClientRect();
                         if (realRect.width && realRect.height) {
-                            // commitStyles before cancel — otherwise
-                            // the clone reverts to its initial inline
-                            // state (source size at source position)
-                            // for one frame, briefly flickering the
-                            // small grid-card cover at the original
-                            // position. Baking the final transform in
-                            // first keeps the clone visually anchored
-                            // through the cancel.
-                            try { flightAnim.commitStyles(); } catch { /* older browsers */ }
-                            flightAnim.cancel();
-                            clone.style.transform = 'none';
+                            // DO NOT cancel the flight animation —
+                            // cancelling reverts the animated transform
+                            // + boxShadow to their initial values
+                            // (source rect, no scale) for one paint
+                            // frame, which the user perceives as a
+                            // "small cover flicker" at the source
+                            // grid-card position just before handoff.
+                            // Use inline !important to win against the
+                            // animation's lingering forwards fill.
                             clone.style.left = `${realRect.left}px`;
                             clone.style.top = `${realRect.top}px`;
                             clone.style.width = `${realRect.width}px`;
                             clone.style.height = `${realRect.height}px`;
-                            clone.style.boxShadow = '0 18px 50px rgba(0, 0, 0, 0.47)';
+                            clone.style.setProperty('transform', 'none', 'important');
+                            clone.style.setProperty('box-shadow', '0 18px 50px rgba(0, 0, 0, 0.47)', 'important');
+                            // Match the wrapper img's object-fit so the
+                            // visible image content renders IDENTICALLY
+                            // between clone and wrapper-img. Movies use
+                            // `cover` (crops to fill); clone was using
+                            // `fill`. The mismatch made the image
+                            // visually shift at handoff — the "small
+                            // cover flicker" right before cross-fade
+                            // completion.
+                            clone.style.objectFit = 'cover';
                         }
                     }
                     clone.style.transition = 'opacity 100ms linear';
