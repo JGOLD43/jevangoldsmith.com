@@ -98,7 +98,12 @@ function attachCarouselDrag(track: HTMLElement) {
     let pointerId: number | null = null;
     let startX = 0;
     let startOffset = 0; // px translateX at drag start
-    const DRAG_THRESHOLD = 4;
+    // Touch users naturally shift a few pixels between finger-down and
+    // finger-up; the previous 4px threshold tripped that movement as a
+    // drag and swallowed the click. 12px is large enough to ignore the
+    // common touch jitter but still feels responsive once the user
+    // actually drags the carousel.
+    const DRAG_THRESHOLD = 12;
     let armed = false; // crossed threshold → real drag (not a click)
 
     function currentTranslateX(): number {

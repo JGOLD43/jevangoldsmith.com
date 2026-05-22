@@ -10,6 +10,7 @@ import MovieCard from '../components/MovieCard.astro';
 import MovieStatsBody from '../components/MovieStatsBody.astro';
 import SidebarRatingSliderFilters from '../components/SidebarRatingSliderFilters.astro';
 import { MOVIE_SECTIONS, tasteListOptions } from '../lib/collection-sections';
+import { slugify } from '../lib/slug';
 
 const canonical = 'https://jevangoldsmith.com/movies.html';
 
@@ -32,12 +33,18 @@ const recentMovies = [...movies]
   .filter((m) => m.poster)
   .sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime())
   .slice(0, 20);
-const carouselMovies = [...recentMovies, ...recentMovies].map((movie) => ({
-  href: movie.link || '#',
-  title: `${movie.title} (${movie.year || ''})`,
-  image: movie.poster as string,
-  alt: movie.title
-}));
+const carouselMovies = [...recentMovies, ...recentMovies].map((movie) => {
+  const slug = slugify(movie.title || '');
+  return {
+    // Internal detail page — was pointing at movie.link (Letterboxd URL),
+    // sending users off-site. Match the per-card slug routing used by
+    // MovieCard so the carousel routes to the in-site detail page.
+    href: slug ? `/movies/${slug}.html` : '#',
+    title: `${movie.title} (${movie.year || ''})`,
+    image: movie.poster as string,
+    alt: movie.title
+  };
+});
 
 // runtime payload (filter/star/genre state) inlined so letterboxd.ts can
 // avoid the post-FCP fetch round-trip.
@@ -116,7 +123,7 @@ const config = ({
         <span class="carousel-label">Recently Added</span>
         <div class="carousel-track" id="carousel-track" style={`animation-duration:${recentMovies.length * 3}s`}>
           {carouselMovies.map((movie) => (
-            <a class="carousel-book-link" href={movie.href} target="_blank" rel="noopener noreferrer" title={movie.title}>
+            <a class="carousel-book-link" href={movie.href} title={movie.title}>
               <img class="carousel-book" src={movie.image} alt={movie.alt} decoding="async" loading="lazy" data-remove-on-error="true" />
             </a>
           ))}
