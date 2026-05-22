@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updatedAt": "2026-05-15T07:12:47.734Z",
+  "updatedAt": "2026-05-22T00:40:06.711Z",
   "guidance": "Static search/discovery index. Fetch candidate URLs from this file, then fetch canonical collection endpoints or HTML for detail.",
   "records": [
     {
@@ -3159,22 +3159,8 @@
     },
     {
       "type": "projects",
-      "id": "development-ai",
-      "title": "Development AI",
-      "summary": "AI-powered development tools and workflows for accelerating software development and automating coding tasks.",
-      "section": "projects",
-      "url": "https://jevangoldsmith.com/projects.html#development-ai",
-      "tags": [
-        "development",
-        "automation",
-        "coding"
-      ],
-      "searchText": "development ai ai-powered development tools and workflows for accelerating software development and automating coding tasks. projects projects development automation coding"
-    },
-    {
-      "type": "projects",
       "id": "weekly-newsletter",
-      "title": "Field Notes",
+      "title": "Newsletter",
       "summary": "A weekly-ish note sharing useful ideas, books, tools, questions, and experiments from the archive.",
       "section": "projects",
       "url": "https://jevangoldsmith.com/projects.html#weekly-newsletter",
@@ -3184,34 +3170,6 @@
         "email"
       ],
       "searchText": "field notes a weekly-ish note sharing useful ideas, books, tools, questions, and experiments from the archive. projects projects newsletter writing email"
-    },
-    {
-      "type": "projects",
-      "id": "openclaw-agents",
-      "title": "Openclaw Agents",
-      "summary": "Building AI agents that automate complex workflows and tasks.",
-      "section": "projects",
-      "url": "https://jevangoldsmith.com/projects.html#openclaw-agents",
-      "tags": [
-        "agents",
-        "automation",
-        "workflow"
-      ],
-      "searchText": "openclaw agents building ai agents that automate complex workflows and tasks. projects projects agents automation workflow"
-    },
-    {
-      "type": "projects",
-      "id": "people-of-history",
-      "title": "People of History",
-      "summary": "A deep-dive platform for historical and contemporary figures, linking their works, ideas, influences, and primary sources.",
-      "section": "projects",
-      "url": "https://jevangoldsmith.com/projects.html#people-of-history",
-      "tags": [
-        "research",
-        "education",
-        "knowledge-graph"
-      ],
-      "searchText": "people of history a deep-dive platform for historical and contemporary figures, linking their works, ideas, influences, and primary sources. projects projects research education knowledge-graph"
     },
     {
       "type": "projects",
@@ -4144,6 +4102,30 @@
         "Uncategorized"
       ],
       "searchText": "breakfast at tiffany&#039;s uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "syriana",
+      "title": "Syriana",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#syriana",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "syriana uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "the-darjeeling-limited",
+      "title": "The Darjeeling Limited",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#the-darjeeling-limited",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "the darjeeling limited uncategorized uncategorized movies"
     }
   ]
 }
