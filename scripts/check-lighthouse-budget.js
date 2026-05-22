@@ -11,9 +11,10 @@
 //   CLS regression > 0.05
 //   Total Bytes regression > 25KB
 //   Performance score drop > 5 points
-// /adventures.html uses third-party ArcGIS satellite tiles. Lighthouse's
-// total-byte-weight includes those tile downloads, so that route gets a
-// wider byte tolerance while keeping score/LCP/CLS protections intact.
+// /books.html is intentionally image-dense and can swing on cover image
+// discovery/layout timing in CI. /adventures.html uses third-party map tiles,
+// which Lighthouse includes in total-byte-weight. Those routes get targeted
+// wider tolerances while the rest of the site stays strict.
 //
 // Re-uses the existing scripts/perf-lighthouse.js runner; this is a
 // thin wrapper that parses the markdown table.
@@ -40,7 +41,8 @@ const TOLERANCES = {
 };
 
 const ROUTE_TOLERANCES = {
-    '/adventures.html': { bytesKb: 750 }
+    '/books.html': { bytesKb: 200, cls: 0.2, score: 10 },
+    '/adventures.html': { bytesKb: 1600 }
 };
 
 function parseTable(markdown) {

@@ -56,20 +56,20 @@ jobs:
 
       - name: Playwright behavioral + visual smoke
         run: |
-          npx http-server dist -p 8765 -s --cors -c-1 &
+          npx http-server dist -p 8766 -s --cors -c-1 &
           SERVER_PID=$!
           sleep 3
-          PLAYWRIGHT_BASE=http://localhost:8765 npm run test:browser
+          PLAYWRIGHT_BASE=http://localhost:8766 npm run test:browser
           kill $SERVER_PID || true
 
       - name: Lighthouse perf budget check
         # Tier 1+2 plan slice 1.2: fail the build if any of the 8 baseline
         # routes regresses past tolerance vs docs/perf-baseline.md.
         run: |
-          npx http-server dist -p 8765 -s --cors -c-1 &
+          npx http-server dist -p 8767 -s --cors -c-1 &
           SERVER_PID=$!
           sleep 3
-          LIGHTHOUSE_RUNS=2 npm run perf:check
+          LIGHTHOUSE_BASE=http://localhost:8767 LIGHTHOUSE_RUNS=2 npm run perf:check
           kill $SERVER_PID || true
 
       - name: Upload Playwright report on failure

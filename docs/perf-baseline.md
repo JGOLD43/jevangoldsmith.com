@@ -17,6 +17,7 @@
 
 Captured by `scripts/perf-lighthouse.js`. Re-run with `npm run perf:lighthouse`.
 
-Budget note: `/adventures.html` has a wider Total Bytes tolerance in
-`scripts/check-lighthouse-budget.js` because Lighthouse includes
-third-party ArcGIS satellite tile downloads in `total-byte-weight`.
+Budget note: `scripts/check-lighthouse-budget.js` uses targeted route
+tolerances for `/books.html` and `/adventures.html`. Books is intentionally
+cover-image dense and can vary in CI layout/byte discovery. Adventures includes
+third-party map tile downloads in Lighthouse `total-byte-weight`.
