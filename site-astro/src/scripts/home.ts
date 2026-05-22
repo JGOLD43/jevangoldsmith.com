@@ -37,7 +37,8 @@ function initSnapshot() {
                     { transform: to, boxShadow: open ? liftShadow : restShadow, offset: 1 },
                 ],
                 {
-                    duration: open ? 600 : 420,
+                    // Snappy both ways: 100ms open, 150ms close.
+                    duration: open ? 100 : 150,
                     easing: open
                         ? 'cubic-bezier(0.33, 0.0, 0.15, 1.0)'
                         : 'cubic-bezier(0.55, 0.0, 0.75, 0.35)',

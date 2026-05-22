@@ -206,34 +206,37 @@ function renderInlineStory(adventure: AdventureRecord) {
     armScrollUpToDismiss(section);
 }
 
-// Scroll-up-to-dismiss: while the inline story is open, watch the hero
-// image. When the user has scrolled the page up far enough that >2/3 of
-// the hero is above the viewport top, auto-close the story and snap
-// back to the map. Mirrors the "swipe to dismiss" feel users expect on
-// long-scroll detail pages.
+// Scroll-up-to-dismiss: only fires on upward scroll, and only once the
+// user has first pushed the hero fully out of view. After that, while
+// scrolling back up toward the map, dismiss when ~1/4 of the hero is
+// visible again. Scrolling DOWN past the hero never dismisses — that
+// would steal the page from a reader trying to get into the story.
 function armScrollUpToDismiss(section: HTMLElement) {
     const hero = section.querySelector('.adventure-story-hero') as HTMLElement | null;
     if (!hero) return;
-    // Ignore the smooth-scroll the open animation just triggered —
-    // the listener should only react to user-driven scrolling.
     let armed = false;
+    let scrolledPast = false;
+    let lastY = window.scrollY;
     const arm = () => { armed = true; window.removeEventListener('scroll', arm); };
     setTimeout(() => window.addEventListener('scroll', arm, { passive: true, once: true }), 600);
 
     const onScroll = () => {
+        const y = window.scrollY;
+        const goingUp = y < lastY;
+        lastY = y;
         if (!armed || section.hidden) return;
         const rect = hero.getBoundingClientRect();
-        // hero scrolled UP by > 2/3 of its height when its top edge sits
-        // at or above -(2/3 * height) relative to the viewport.
-        if (rect.top < -(rect.height * 2 / 3)) {
+        // Latch once the hero is fully above the viewport.
+        if (rect.bottom <= 0) scrolledPast = true;
+        // Only dismiss on upward scroll, after the user actually
+        // pushed the hero out of view, when ~1/4 of it has come back.
+        if (scrolledPast && goingUp && rect.top > -(rect.height * 0.75)) {
             window.removeEventListener('scroll', onScroll);
             closeAdventureDetail();
             document.getElementById('world-map')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
-    // Store remover on the section so closeAdventureDetail can unbind
-    // if the user closes via the X button.
     (section as AnyObj)._dismissCleanup = () => {
         window.removeEventListener('scroll', onScroll);
         window.removeEventListener('scroll', arm);
