@@ -8,10 +8,13 @@ import Base from '../layouts/Base.astro';
 // (curated newest-first in the JSONs).
 type FeatureCard = { href: string; image: string; kicker: string; title: string; description: string };
 
-const sortByDateDesc = <T extends { date?: string | null; startDate?: string | null }>(arr: T[]): T[] =>
+// Looser typing on purpose — the collection schemas use z.looseObject so
+// each item carries arbitrary extra fields. A narrow generic constraint
+// here would discard everything except date/startDate.
+const sortByDateDesc = (arr: any[]): any[] =>
   [...arr].sort((a, b) => {
-    const aDate = a.date || a.startDate || '';
-    const bDate = b.date || b.startDate || '';
+    const aDate = (a?.date as string) || (a?.startDate as string) || '';
+    const bDate = (b?.date as string) || (b?.startDate as string) || '';
     return bDate.localeCompare(aDate);
   });
 
@@ -20,10 +23,10 @@ const essaysAll = await getCollection('essays');
 const projectsAll = await getCollection('projects');
 const challengesAll = await getCollection('challenges');
 
-const latestAdventure = sortByDateDesc(adventuresAll.map((a) => a.data))[0];
-const latestEssay = sortByDateDesc(essaysAll.map((e) => e.data).filter((e) => e.status !== 'draft'))[0];
-const latestProject = projectsAll.map((p: any) => p.data).filter((p: any) => p.status !== 'draft' && p.visibility !== 'private')[0];
-const latestChallenge = challengesAll.map((c: any) => c.data).filter((c: any) => c.status !== 'draft')[0];
+const latestAdventure: any = sortByDateDesc(adventuresAll.map((a: any) => a.data))[0];
+const latestEssay: any = sortByDateDesc(essaysAll.map((e: any) => e.data).filter((e: any) => e.status !== 'draft'))[0];
+const latestProject: any = projectsAll.map((p: any) => p.data).filter((p: any) => p.status !== 'draft' && p.visibility !== 'private')[0];
+const latestChallenge: any = challengesAll.map((c: any) => c.data).filter((c: any) => c.status !== 'draft')[0];
 
 const featureCards: FeatureCard[] = [];
 if (latestAdventure) {
