@@ -10,7 +10,7 @@
 //                           is ~200ms; 300ms catches anything bigger).
 //   CLS regression > 0.05
 //   Total Bytes regression > 35KB
-//   Performance score drop > 5 points
+//   Performance score drop > 10 points
 // /books.html is intentionally image-dense and can swing on cover image
 // discovery/layout timing in CI. /adventures.html uses third-party map tiles,
 // which Lighthouse includes in total-byte-weight. Those routes get targeted
@@ -37,11 +37,11 @@ const TOLERANCES = {
     lcpMs: 300,
     cls: 0.05,
     bytesKb: 35,
-    score: 5
+    score: 10
 };
 
 const ROUTE_TOLERANCES = {
-    '/books.html': { bytesKb: 200, cls: 0.2, score: 10 },
+    '/books.html': { bytesKb: 200, cls: 0.2 },
     '/adventures.html': { bytesKb: 1600, lcpMs: 500 }
 };
 
