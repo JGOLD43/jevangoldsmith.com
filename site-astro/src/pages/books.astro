@@ -271,7 +271,11 @@ const config = ({
   }
   main.detail-page--book.is-spa-arrival.is-spa-revealed > * {
     opacity: 1;
-    transition: opacity .28s cubic-bezier(.22, 1, .36, 1);
+    /* Was .28s — that ran past the flight's 320ms handoff, so the
+       wrapper's shadow inside .detail-hero kept brightening for ~90ms
+       after the cover landed and read as a delayed shadow flicker.
+       .14s ensures the reveal is fully complete before handoff. */
+    transition: opacity .14s cubic-bezier(.22, 1, .36, 1);
   }
   main.detail-page--book.is-spa-arrival.is-spa-cover-revealed .detail-hero-cover,
   main.detail-page--book.is-spa-arrival.is-spa-cover-revealed .detail-hero-cover * {

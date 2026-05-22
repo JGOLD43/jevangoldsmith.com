@@ -341,6 +341,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             try { history.pushState({ bookFlight: true }, '', href); } catch (err) { /* ignore */ }
             // Force a frame, then add the reveal class so the new main's
             // content transitions from 0 → 1 in parallel with the flight.
+            const newMainRevealedAt = { t: 0 };
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     newMain.classList.add('is-spa-revealed');
@@ -348,6 +349,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                     // at injection time (mirrors the is-spa-revealed
                     // class-driven fade for newMain's children).
                     newMain.style.opacity = '1';
+                    newMainRevealedAt.t = performance.now();
                 });
             });
             // When the clone finishes flying, hand the cover over to the
@@ -397,7 +399,28 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                     newMain.style.transition = '';
                 }, TIMING.spaArrivalReveal);
             };
+            // Wait for BOTH the flight animation AND the newMain opacity
+            // reveal (140ms inline transition) before handing off. If
+            // fetch was slow, the reveal can still be in progress when
+            // the flight ends — handing off then would leave the wrapper
+            // (and its shadow) at sub-100% opacity, briefly brightening
+            // after the cover lands. That late brighten reads as a
+            // shadow flicker. Padding both ensures the page is fully
+            // opaque at the exact moment of handoff.
+            const waitForReveal = () => new Promise<void>((resolve) => {
+                if (newMainRevealedAt.t === 0) {
+                    // Reveal hasn't fired yet — SPA-swap must still be
+                    // pending. Wait an extra 200ms as a safety bound.
+                    setTimeout(resolve, 200);
+                    return;
+                }
+                const elapsed = performance.now() - newMainRevealedAt.t;
+                const remaining = Math.max(0, 150 - elapsed); // 140ms + tiny buffer
+                if (remaining === 0) resolve();
+                else setTimeout(resolve, remaining);
+            });
             animation.finished
+                .then(() => waitForReveal())
                 .then(handoff)
                 .catch(handoff);
         })

@@ -331,12 +331,14 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                     );
                 }
 
+                const newMainRevealedAt = { t: 0 };
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
                         newMain.classList.add(revealCls);
                         // Reveal the detail content (inline fallback —
                         // see comment at injection time).
                         newMain.style.opacity = '1';
+                        newMainRevealedAt.t = performance.now();
                     });
                 });
 
