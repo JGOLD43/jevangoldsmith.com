@@ -10,6 +10,7 @@ import {
 import { fetchJson, readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { init as initGridZoom } from './grid-zoom';
+import { initCoverFlight } from './cover-flight';
 import { LOCAL_KEYS } from './storage-keys';
 import { URL_PARAMS } from './url-params';
 

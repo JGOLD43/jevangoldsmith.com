@@ -5010,22 +5010,26 @@ body.meet-page {
 
 .now-popup-card {
   text-align: center;
-  color: #fff;
+  color: var(--text-color);
   font-family: Chivo, sans-serif;
 }
 
 .now-popup-place {
-  color: #fff;
+  color: var(--text-color);
   margin: .1rem 0 .15rem;
   font-size: 1rem;
   font-weight: 700;
 }
 
 .now-popup-date {
-  color: #aaa;
+  color: var(--text-light);
   margin-bottom: .6rem;
   font-size: .78rem;
 }
+
+[data-theme="dark"] .now-popup-card,
+[data-theme="dark"] .now-popup-place { color: #fff; }
+[data-theme="dark"] .now-popup-date { color: #aaa; }
 
 .map-marker-tooltip:before {
   border-top-color: #1a1a1a !important;

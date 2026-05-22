@@ -72,12 +72,18 @@ export const ROUTE_TYPE_COLORS: Record<string, string> = {
 export const BASEMAPS: Record<string, AnyObj> = {
   streets: { label: 'Streets', tile: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19, subdomains: 'abc' },
   satellite: { label: 'Satellite', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
-  // hybrid used to add an ArcGIS World_Boundaries_and_Places overlay,
-  // but those reference tiles bake a graticule into their PNG/JPG so users
-  // see gridlines through oceans/continents. Same imagery as 'satellite'
-  // now — kept under both labels so localStorage values from old visits
-  // still resolve.
-  hybrid: { label: 'Satellite + Labels', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
+  // Satellite imagery + CARTO Voyager labels-only overlay. The previous
+  // ArcGIS World_Boundaries_and_Places reference tiles baked a graticule
+  // into their PNGs (visible gridlines through oceans), so we switched to
+  // CARTO's transparent labels-only raster — clean place names with no
+  // grid artifacts.
+  hybrid: {
+    label: 'Satellite + Labels',
+    tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    maxZoom: 19,
+    overlay: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
+    overlaySubdomains: 'abcd'
+  },
   terrain: { label: 'Terrain', tile: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
   dark: { label: 'Dark', tile: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', maxZoom: 19, subdomains: 'abcd' },
   light: { label: 'Light', tile: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', maxZoom: 19, subdomains: 'abcd' }

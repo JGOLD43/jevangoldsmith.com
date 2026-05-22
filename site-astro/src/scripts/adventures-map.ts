@@ -273,7 +273,11 @@ function setBasemap(map: AnyObj, name: string) {
     let overlayLayer = null;
 
     if (def.overlay) {
-        overlayLayer = L.tileLayer(def.overlay, { ...options, subdomains: '' }).addTo(map);
+        // Overlay tiles may need their own subdomain rotation (e.g. CARTO
+        // uses a/b/c/d). Fall back to '' so providers without {s} still
+        // resolve cleanly.
+        const overlaySubs = def.overlaySubdomains || '';
+        overlayLayer = L.tileLayer(def.overlay, { ...options, subdomains: overlaySubs }).addTo(map);
     }
 
     if (map === state.worldMap) state.basemapTileLayer = overlayLayer ? [layer, overlayLayer] : layer;
@@ -472,11 +476,15 @@ function renderPlaceMarkers() {
 
         const color = categoryColor(category);
         const label = categoryLabel(category);
+        // Text colors come from the popup-content rule (#1a1a1a light /
+         // #e8e8e8 dark). Using opacity here keeps the muted hierarchy
+         // readable in both themes — hardcoded white text used to vanish
+         // on the white light-mode popup background.
         const popupHtml = `
             <div style="min-width: 180px; padding: 0.5rem;">
                 <strong style="font-size: 0.95rem;">${escapeHtml(place.name)}</strong><br>
-                ${place.location ? `<span style="color: rgba(255,255,255,0.55); font-size: 0.8rem;">${escapeHtml(place.location)}</span><br>` : ''}
-                ${place.notes ? `<p style="margin: 0.4rem 0 0; font-size: 0.85rem; color: rgba(255,255,255,0.85);">${escapeHtml(place.notes)}</p>` : ''}
+                ${place.location ? `<span style="opacity: 0.6; font-size: 0.8rem;">${escapeHtml(place.location)}</span><br>` : ''}
+                ${place.notes ? `<p style="margin: 0.4rem 0 0; font-size: 0.85rem; opacity: 0.85;">${escapeHtml(place.notes)}</p>` : ''}
                 <span style="display:inline-block;margin-top:0.4rem;padding:0.15rem 0.5rem;background:${color};color:#fff;border-radius:3px;font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;">${escapeHtml(label)}</span>
             </div>
         `;
