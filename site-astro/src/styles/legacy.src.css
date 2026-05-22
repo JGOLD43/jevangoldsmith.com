@@ -2121,10 +2121,16 @@ button[type="submit"]:hover {
 }
 
 .featured-carousel-section {
-  background-color: #000;
+  /* Match the page bg in light mode, fall back to black in dark via
+     the override below. Was hard-coded #000 which clashed with the
+     light theme's cream page. */
+  background-color: var(--background);
   padding: 4rem 0;
   position: relative;
   overflow: hidden;
+}
+[data-theme="dark"] .featured-carousel-section {
+  background-color: #000;
 }
 
 .carousel-header {
@@ -3490,6 +3496,11 @@ body.meet-page {
   align-items: center;
   gap: .25rem;
   margin: 0 2rem;
+  /* Vertical padding gives the hover scale(1.1) room to render without
+     getting clipped at the bottom (which previously made the cover
+     edge look square and chopped). overflow:hidden clips at the
+     padding-box, so padding extends the visible region. */
+  padding: 6px 0;
   display: flex;
   position: relative;
   overflow: hidden;
