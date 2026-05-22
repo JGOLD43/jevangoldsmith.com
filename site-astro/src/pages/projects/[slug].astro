@@ -68,19 +68,5 @@ const heroAlt = p.imageAlt || p.title;
       </div>
     </header>
 
-    {(p.whatItIs || p.whyIMadeIt || p.whatILearned || p.nextStep || p.documentaryLead) && (
-      <section class="detail-section">
-        <h2 class="detail-h2">Overview</h2>
-        {p.documentaryLead && <p class="detail-pullquote">{p.documentaryLead}</p>}
-        <dl class="detail-meta-grid">
-          {p.whatItIs && (<><dt>What it is</dt><dd>{p.whatItIs}</dd></>)}
-          {p.whyIMadeIt && (<><dt>Why I made it</dt><dd>{p.whyIMadeIt}</dd></>)}
-          {p.whatILearned && (<><dt>What I learned</dt><dd>{p.whatILearned}</dd></>)}
-          {p.nextStep && (<><dt>Next step</dt><dd>{p.nextStep}</dd></>)}
-          {p.currentQuestion && (<><dt>Current question</dt><dd>{p.currentQuestion}</dd></>)}
-        </dl>
-      </section>
-    )}
-
   </main>
 </Base>

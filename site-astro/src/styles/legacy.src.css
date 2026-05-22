@@ -12980,7 +12980,7 @@ body.shelf-experience {
 }
 
 .detail-back {
-  color: var(--secondary-color);
+  color: var(--text-color);
   margin-bottom: 1.5rem;
   font-size: .95rem;
   font-weight: 600;
@@ -12988,7 +12988,7 @@ body.shelf-experience {
 }
 
 .detail-back:hover {
-  color: var(--accent-color);
+  color: var(--secondary-color);
 }
 
 .detail-hero {

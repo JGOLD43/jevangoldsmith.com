@@ -39,10 +39,24 @@
       ],
       "image": "/images/projects/personal-website.svg",
       "imageAlt": "Mock of the personal website with navigation and project cards",
-      "technologies": ["HTML", "CSS", "JavaScript"],
-      "topics": ["building", "personal-platform"],
-      "tags": ["website", "static-site", "agent-api"],
-      "audience": ["readers", "agents"],
+      "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "topics": [
+        "building",
+        "personal-platform"
+      ],
+      "tags": [
+        "website",
+        "static-site",
+        "agent-api"
+      ],
+      "audience": [
+        "readers",
+        "agents"
+      ],
       "notes": "This is the unscripted thinking layer for the project. Half the value of the site comes from the constraint of needing to write down what's on each page in a way that survives a stranger's first read.\n\nOpen question I keep returning to: how much of the homepage should be static \"this is who I am\" vs. live \"this is what I'm thinking about right now\"? Right now it leans static because that's easier to ship.",
       "commentary": [
         {
@@ -63,132 +77,16 @@
           "icon": "github"
         }
       ],
-      "relatedContent": ["index.html", "search.html", "products.html"]
-    },
-    {
-      "id": "people-of-history",
-      "slug": "people-of-history",
-      "title": "People of History",
-      "status": "active",
-      "category": "research",
-      "shortDescription": "A deep-dive platform for historical and contemporary figures, linking their works, ideas, influences, and primary sources.",
-      "description": "A research platform concept for understanding how important figures thought by connecting works, ideas, influences, and source material.",
-      "whatItIs": "A research concept for mapping people, ideas, works, influences, and source material.",
-      "whyIMadeIt": "I wanted a better way to study how important people actually thought, not just read disconnected summaries.",
-      "whatILearned": "The hard part is not collecting more facts; it is designing relationships between them.",
-      "nextStep": "Define the smallest useful profile format and test it with one historical figure.",
-      "documentaryLead": "This is a research-system experiment. The bet is that people become easier to understand when their ideas, work, influences, contradictions, and primary sources are shown together.",
-      "currentQuestion": "What is the smallest profile format that teaches how someone thought without becoming a giant biography?",
-      "proofArtifacts": [
-        {
-          "label": "Prototype shape",
-          "value": "Person, works, ideas, influences, contradictions, primary sources, and second-order effects."
-        },
-        {
-          "label": "Risk",
-          "value": "It can become a fact collection instead of a thinking tool."
-        }
-      ],
-      "buildLog": [
-        {
-          "date": "2026-04-23",
-          "title": "Narrowed the first version",
-          "note": "The next useful version is one excellent profile, not a database of half-finished people."
-        }
-      ],
-      "image": "/images/projects/people-of-history.svg",
-      "imageAlt": "Knowledge graph linking historical figures, books, and ideas",
-      "technologies": ["Research", "Education", "Web Platform"],
-      "topics": ["learning", "history", "research"],
-      "tags": ["research", "education", "knowledge-graph"],
-      "audience": ["learners", "researchers"],
-      "links": [],
-      "relatedContent": ["people.html", "books.html"]
-    },
-    {
-      "id": "openclaw-agents",
-      "slug": "openclaw-agents",
-      "title": "Openclaw Agents",
-      "status": "active",
-      "category": "ai",
-      "shortDescription": "Building AI agents that automate complex workflows and tasks.",
-      "description": "Exploring the frontier of autonomous systems and practical AI applications through workflow automation agents.",
-      "whatItIs": "A set of experiments with AI agents that can help run practical workflows.",
-      "whyIMadeIt": "I want to understand where agents are genuinely useful and where they just add complexity.",
-      "whatILearned": "Agents need tight scopes, visible feedback, and clear handoff points to stay useful.",
-      "nextStep": "Document the best agent workflows and turn repeatable patterns into examples.",
-      "documentaryLead": "This is where I test which agent workflows survive contact with real work. The interesting part is not that an agent can act. It is whether the loop stays visible, bounded, and useful.",
-      "currentQuestion": "Where do agents save judgment work, and where do they just create a more confident mess?",
-      "proofArtifacts": [
-        {
-          "label": "Useful pattern",
-          "value": "Agents work better when the task has a clear done state, visible logs, and a human review point."
-        },
-        {
-          "label": "Anti-pattern",
-          "value": "Long autonomous loops with vague goals create impressive motion and weak accountability."
-        }
-      ],
-      "buildLog": [
-        {
-          "date": "2026-04-23",
-          "title": "Documenting the handoff points",
-          "note": "The best workflows are the ones where the agent knows when to stop and show its work."
-        }
-      ],
-      "image": "/images/projects/openclaw-agents.svg",
-      "imageAlt": "Agent workflow diagram with plan, act, observe, check, human review loop",
-      "technologies": ["AI", "Agents", "Automation"],
-      "topics": ["ai", "automation", "building"],
-      "tags": ["agents", "automation", "workflow"],
-      "audience": ["builders", "operators"],
-      "links": [],
-      "relatedContent": []
-    },
-    {
-      "id": "development-ai",
-      "slug": "development-ai",
-      "title": "Development AI",
-      "status": "active",
-      "category": "ai",
-      "shortDescription": "AI-powered development tools and workflows for accelerating software development and automating coding tasks.",
-      "description": "A set of experiments around how artificial intelligence can improve software development workflows.",
-      "whatItIs": "A working set of AI-assisted development workflows for research, coding, review, and QA.",
-      "whyIMadeIt": "I want to build faster without outsourcing taste, judgment, or responsibility.",
-      "whatILearned": "The best AI workflow is still a human workflow with better feedback loops.",
-      "nextStep": "Write up the strongest patterns and connect them to the technical skills archive.",
-      "documentaryLead": "This project tracks how I actually use AI while building: where it speeds me up, where it makes me lazy, and where the human taste layer still matters most.",
-      "currentQuestion": "What parts of building should be delegated, and what parts should stay stubbornly human?",
-      "proofArtifacts": [
-        {
-          "label": "Working loop",
-          "value": "Research, plan, implement, review, QA, then tighten the product judgment."
-        },
-        {
-          "label": "Standard",
-          "value": "Speed only counts if the final thing is clearer, more useful, and easier to maintain."
-        }
-      ],
-      "buildLog": [
-        {
-          "date": "2026-04-23",
-          "title": "Separated speed from taste",
-          "note": "The tool can draft, inspect, and verify. It still needs a person deciding what is worth making."
-        }
-      ],
-      "image": "/images/projects/development-ai.svg",
-      "imageAlt": "Code editor showing a ship() function with an AI suggested patch",
-      "technologies": ["AI", "Development", "Automation"],
-      "topics": ["ai", "software", "building"],
-      "tags": ["development", "automation", "coding"],
-      "audience": ["developers", "builders"],
-      "links": [],
-      "relatedContent": ["projects.html"]
+      "relatedContent": [
+        "index.html",
+        "search.html",
+        "products.html"
+      ]
     },
     {
       "id": "weekly-newsletter",
       "slug": "weekly-newsletter",
-      "title": "Field Notes",
+      "title": "Newsletter",
       "status": "planned",
       "category": "writing",
       "shortDescription": "A weekly-ish note sharing useful ideas, books, tools, questions, and experiments from the archive.",
@@ -218,10 +116,24 @@
       ],
       "image": "/images/projects/field-notes.svg",
       "imageAlt": "Open field notebook page with handwritten lines and a pen",
-      "technologies": ["Writing", "Email"],
-      "topics": ["writing", "learning", "business", "field-notes"],
-      "tags": ["newsletter", "writing", "email"],
-      "audience": ["readers"],
+      "technologies": [
+        "Writing",
+        "Email"
+      ],
+      "topics": [
+        "writing",
+        "learning",
+        "business",
+        "field-notes"
+      ],
+      "tags": [
+        "newsletter",
+        "writing",
+        "email"
+      ],
+      "audience": [
+        "readers"
+      ],
       "links": [
         {
           "label": "Subscribe",
@@ -229,7 +141,11 @@
           "icon": "external"
         }
       ],
-      "relatedContent": ["field-notes.html", "essays.html", "books.html"]
+      "relatedContent": [
+        "field-notes.html",
+        "essays.html",
+        "books.html"
+      ]
     }
   ]
 }

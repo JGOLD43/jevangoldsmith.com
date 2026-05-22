@@ -142,18 +142,16 @@ export function init(config: GridZoomConfig) {
       for (const inst of instances) {
         if (!inst.activeItem) continue;
         if (target?.closest(inst.itemSelector)) continue;
+        release(inst.grid);
         inst.activeItem = null;
-        inst.grid.classList.remove('js-zoom-active');
-        Array.from(inst.grid.querySelectorAll('.js-zoom-item.is-active')).forEach((el) => el.classList.remove('is-active'));
       }
     });
     document.addEventListener('keydown', function (event) {
       if ((event as KeyboardEvent).key !== 'Escape') return;
       for (const inst of instances) {
         if (!inst.activeItem) continue;
+        release(inst.grid);
         inst.activeItem = null;
-        inst.grid.classList.remove('js-zoom-active');
-        Array.from(inst.grid.querySelectorAll('.js-zoom-item.is-active')).forEach((el) => el.classList.remove('is-active'));
       }
     });
     window.addEventListener('resize', function () {
