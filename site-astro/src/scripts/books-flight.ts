@@ -204,18 +204,105 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             // already-faded backdrop.
             hiddenSidebars.forEach((el) => { el.style.display = 'none'; });
             document.title = doc.title;
+            // Synchronous swap that yanks the SPA-injected detail main
+            // back out and restores the listing exactly as it was. Used
+            // by the reverse flight after measuring, and as the fallback
+            // when no reverse flight is possible.
+            const swapListingBack = () => {
+                cleanupFlightCover();
+                document.querySelectorAll<HTMLStyleElement>('style[data-spa-detail-css="1"]')
+                    .forEach((existing) => existing.remove());
+                newMain.parentNode!.replaceChild(oldMain, newMain);
+                hiddenSidebars.forEach((el) => { el.style.display = ''; });
+                document.title = previousTitle;
+                window.scrollTo({ top: previousScrollY, left: 0, behavior: 'auto' });
+            };
             restoreBookListFromSpa = () => {
                 if (!newMain.isConnected || !newMain.parentNode) {
                     restoreBookListFromSpa = null;
                     return false;
                 }
-                cleanupFlightCover();
-                document.querySelectorAll<HTMLStyleElement>('style[data-spa-detail-css="1"]')
-                    .forEach((existing) => existing.remove());
-                newMain.parentNode.replaceChild(oldMain, newMain);
-                hiddenSidebars.forEach((el) => { el.style.display = ''; });
-                document.title = previousTitle;
-                window.scrollTo({ top: previousScrollY, left: 0, behavior: 'auto' });
+                // Reverse flight: clone the current hero, swap the
+                // listing back in, then animate the clone from hero rect
+                // → original grid-card cover rect. Mirrors the forward
+                // FLIP so back-navigation feels like the open running
+                // in reverse.
+                const currentHero = newMain.querySelector('.detail-hero-cover img') as HTMLImageElement | null;
+                const heroRect = currentHero?.getBoundingClientRect();
+                if (!currentHero || !heroRect || !heroRect.width || !heroRect.height) {
+                    swapListingBack();
+                    restoreBookListFromSpa = null;
+                    return true;
+                }
+                const backClone = currentHero.cloneNode() as HTMLImageElement;
+                backClone.removeAttribute('id');
+                backClone.removeAttribute('loading');
+                backClone.style.viewTransitionName = 'none';
+                backClone.style.position = 'fixed';
+                backClone.style.left = `${heroRect.left}px`;
+                backClone.style.top = `${heroRect.top}px`;
+                backClone.style.width = `${heroRect.width}px`;
+                backClone.style.height = `${heroRect.height}px`;
+                backClone.style.objectFit = 'fill';
+                backClone.style.margin = '0';
+                backClone.style.zIndex = '99999';
+                backClone.style.transformOrigin = '0 0';
+                backClone.style.pointerEvents = 'none';
+                backClone.style.borderRadius = getComputedStyle(currentHero).borderRadius;
+                backClone.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.45)';
+                backClone.style.background = 'transparent';
+                document.body.appendChild(backClone);
+                currentHero.style.visibility = 'hidden';
+
+                swapListingBack();
+                // Intentionally do NOT re-add is-book-launching — that
+                // class fades .books-main and .books-sidebar to opacity 0,
+                // which is what we want on the forward open (listing
+                // peels away) but the OPPOSITE of what we want on
+                // reverse (listing should be fully visible behind the
+                // returning cover).
+
+                // Hide the destination cover BEFORE the next paint to
+                // avoid a single-frame flash of its #f5f5f5 background
+                // showing through the empty grid-card slot. We measure
+                // after hiding — visibility:hidden preserves layout, so
+                // getBoundingClientRect still returns the real rect.
+                cover.style.visibility = 'hidden';
+                const destRect = cover.getBoundingClientRect();
+                const cleanup = () => {
+                    backClone.remove();
+                    cover.style.visibility = '';
+                };
+                if (!destRect.width || !destRect.height) { cleanup(); }
+                else {
+                    const nW = cover.naturalWidth || destRect.width;
+                    const nH = cover.naturalHeight || destRect.height;
+                    const nA = nW / nH;
+                    const bA = destRect.width / destRect.height;
+                    let dW: number, dH: number, dL: number, dT: number;
+                    if (nA > bA) {
+                        dW = destRect.width;
+                        dH = dW / nA;
+                        dL = destRect.left;
+                        dT = destRect.top + (destRect.height - dH) / 2;
+                    } else {
+                        dH = destRect.height;
+                        dW = dH * nA;
+                        dT = destRect.top;
+                        dL = destRect.left + (destRect.width - dW) / 2;
+                    }
+                    const scale = dW / heroRect.width;
+                    const tx = dL - heroRect.left;
+                    const ty = dT - heroRect.top;
+                    const back = backClone.animate(
+                        [
+                            { transform: 'translate(0px, 0px) scale(1)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.45)' },
+                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, boxShadow: '0 8px 22px rgba(0, 0, 0, 0.35)' }
+                        ],
+                        { duration: TIMING.bookFlight, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' }
+                    );
+                    back.finished.then(cleanup).catch(cleanup);
+                }
                 restoreBookListFromSpa = null;
                 return true;
             };

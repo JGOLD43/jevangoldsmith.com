@@ -234,20 +234,27 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                 backClone.style.background = 'transparent';
                 document.body.appendChild(backClone);
                 currentHero.style.visibility = 'hidden';
-                document.body.classList.add(cfg.bodyLaunchClass);
+                // Intentionally NOT adding cfg.bodyLaunchClass here —
+                // forward uses it to fade the listing away, but during
+                // reverse we want the listing fully visible behind the
+                // returning cover.
 
                 restoreListingDOM();
 
-                requestAnimationFrame(() => {
-                    const destRect = cover.getBoundingClientRect();
-                    const cleanup = () => {
-                        backClone.remove();
-                        cover.style.visibility = '';
-                        (cover.style as CSSStyleDeclaration).viewTransitionName = '';
-                        document.body.classList.remove(cfg.bodyLaunchClass);
-                    };
-                    if (!destRect.width || !destRect.height) { cleanup(); return; }
-                    // Image-rendered destination rect (same math as forward source).
+                // Hide the destination cover BEFORE the next paint to
+                // avoid a single-frame flash of its #f5f5f5 background
+                // showing through the empty grid-card slot. We measure
+                // after hiding — visibility:hidden preserves layout, so
+                // getBoundingClientRect still returns the real rect.
+                cover.style.visibility = 'hidden';
+                const destRect = cover.getBoundingClientRect();
+                const cleanup = () => {
+                    backClone.remove();
+                    cover.style.visibility = '';
+                    (cover.style as CSSStyleDeclaration).viewTransitionName = '';
+                };
+                if (!destRect.width || !destRect.height) { cleanup(); }
+                else {
                     const nW = cover.naturalWidth || destRect.width;
                     const nH = cover.naturalHeight || destRect.height;
                     const nA = nW / nH;
@@ -264,7 +271,6 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                         dT = destRect.top;
                         dL = destRect.left + (destRect.width - dW) / 2;
                     }
-                    cover.style.visibility = 'hidden';
                     const scale = dW / heroRect.width;
                     const tx = dL - heroRect.left;
                     const ty = dT - heroRect.top;
@@ -276,7 +282,7 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                         { duration, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' }
                     );
                     back.finished.then(cleanup).catch(cleanup);
-                });
+                }
                 return true;
             };
             reverseRunners.set(cfg.arrivalKey, runReverseFlight);
