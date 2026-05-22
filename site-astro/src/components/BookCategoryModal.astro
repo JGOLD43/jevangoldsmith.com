@@ -1,0 +1,21 @@
+<div
+  id="category-expanded-modal"
+  class="category-expanded"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="category-expanded-title"
+>
+  <div class="category-modal-backdrop" data-action="close-category-modal"></div>
+  <div class="category-modal-content">
+    <div class="category-expanded-header">
+      <h2 class="category-expanded-title" id="category-expanded-title"></h2>
+      <button class="category-expanded-close" data-action="close-category-modal" aria-label="Close">&times;</button>
+    </div>
+    <div class="category-expanded-books" id="category-expanded-books"></div>
+  </div>
+  <template id="category-expanded-book-template">
+    <div class="category-expanded-book" data-action="open-book-from-grid" data-isbn="" tabindex="0" role="button" aria-label="">
+      <img src="" alt="" title="" decoding="async" data-remove-on-error="true">
+    </div>
+  </template>
+</div>

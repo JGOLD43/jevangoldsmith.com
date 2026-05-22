@@ -141,10 +141,18 @@ function main() {
   }
 
   const merged = [...records, ...additions];
+  const previousRecords = Array.isArray(indexDoc) ? indexDoc : (indexDoc.records || []);
+  const recordsChanged = JSON.stringify(previousRecords) !== JSON.stringify(merged);
   const output = Array.isArray(indexDoc)
     ? merged
-    : { ...indexDoc, updatedAt: new Date().toISOString(), records: merged };
-  fs.writeFileSync(INDEX, `${JSON.stringify(output, null, 2)}\n`);
+    : { ...indexDoc, updatedAt: recordsChanged ? new Date().toISOString() : indexDoc.updatedAt, records: merged };
+  const next = `${JSON.stringify(output, null, 2)}\n`;
+  const current = fs.existsSync(INDEX) ? fs.readFileSync(INDEX, 'utf8') : '';
+  if (current === next) {
+    process.stdout.write(`[search-sync] unchanged ${path.relative(ROOT, INDEX)}\n`);
+    return;
+  }
+  fs.writeFileSync(INDEX, next);
   process.stdout.write(`[search-sync] wrote ${merged.length} records to ${path.relative(ROOT, INDEX)}\n`);
 }
 

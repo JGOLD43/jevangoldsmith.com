@@ -2,13 +2,25 @@
 // collection page (books, podcasts, people, ...). Pages pass the same
 // shape with page-specific selectors + render callbacks.
 
-import type { CollectionRuntimeConfig } from './collection-runtime-types';
+import type {
+    CollectionRuntimeConfig,
+    CoreCollectionConfig,
+    DomCollectionConfig,
+    ManagedCollectionConfig
+} from './collection-runtime-types';
 
 export type { CollectionRuntimeConfig } from './collection-runtime-types';
 
-// Internal callsites still use AnyObj for the dataset reads + render
-// callbacks. The public Cfg is now narrowed.
-type Cfg = CollectionRuntimeConfig & Record<string, AnyObj>;
+type RuntimeState = { category: string; search: string };
+type RuntimeActionSource = Event | Element | null | undefined;
+type RuntimeConfig =
+    CoreCollectionConfig
+    & Partial<DomCollectionConfig>
+    & Partial<ManagedCollectionConfig<unknown, unknown, unknown, unknown>>;
+
+function isManagedRuntimeConfig(cfg: RuntimeConfig): cfg is RuntimeConfig & Required<Pick<ManagedCollectionConfig<unknown, unknown, unknown, unknown>, 'getState' | 'getFilteredItems'>> {
+    return typeof cfg.getFilteredItems === 'function' && typeof cfg.getState === 'function';
+}
 
 import type { ActionFn } from './action-dispatcher';
 import { registerActions } from './action-dispatcher';
@@ -35,9 +47,11 @@ function selectorValue(value: unknown): string {
     return String(value).replace(/["\\]/g, '\\$&');
 }
 
-function resolveActionButton(buttonOrEvent: Cfg, selector: string): HTMLElement | null {
-    if (buttonOrEvent?.target) return (buttonOrEvent.target as Element).closest(selector) as HTMLElement | null;
-    if (buttonOrEvent?.matches?.(selector)) return buttonOrEvent as HTMLElement;
+function resolveActionButton(buttonOrEvent: RuntimeActionSource, selector: string): HTMLElement | null {
+    if (buttonOrEvent instanceof Event) {
+        return (buttonOrEvent.target as Element | null)?.closest(selector) as HTMLElement | null;
+    }
+    if (buttonOrEvent instanceof Element && buttonOrEvent.matches(selector)) return buttonOrEvent as HTMLElement;
     return null;
 }
 
@@ -76,7 +90,7 @@ document.addEventListener('click', (event) => {
 }, true);
 
 export function createCollectionRuntime(config: CollectionRuntimeConfig) {
-    const cfg = config as Cfg;
+    const cfg = config as RuntimeConfig;
     const state = {
         category: cfg.defaultCategory || 'all',
         search: ''
@@ -84,6 +98,7 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
     let initialized = false;
 
     function cards(): HTMLElement[] {
+        if (!cfg.cardSelector) return [];
         return toArray(document.querySelectorAll<HTMLElement>(cfg.cardSelector));
     }
 
@@ -174,6 +189,7 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
     }
 
     function renderManaged() {
+        if (!isManagedRuntimeConfig(cfg)) return [];
         const managedState = safe('getState', () => cfg.getState());
         if (managedState === undefined) return [];
         const filteredItems = safe('getFilteredItems', () => cfg.getFilteredItems(managedState)) ?? [];
@@ -207,16 +223,16 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
         }
         updateCount(visible.length);
         updateClearButton();
-        safe('onRender', () => cfg.onRender?.({ allCards, state: { ...state }, visibleCards: visible }));
+        safe('onRender', () => cfg.onRender?.({ allCards, state: { ...state } as RuntimeState, visibleCards: visible }));
         return visible;
     }
 
     function render() {
-        if (typeof cfg.getFilteredItems === 'function') return renderManaged();
+        if (isManagedRuntimeConfig(cfg)) return renderManaged();
         return renderCards();
     }
 
-    function filter(category: string, buttonOrEvent?: Cfg) {
+    function filter(category: string, buttonOrEvent?: RuntimeActionSource) {
         state.category = category || 'all';
         const button = resolveActionButton(buttonOrEvent, cfg.buttonSelector || '.sidebar-category')
             || document.querySelector(`${cfg.buttonSelector || '.sidebar-category'}[data-action-args="${selectorValue(state.category)}"]`)
@@ -300,6 +316,7 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
 
     function initZoom() {
         if (!cfg.zoom) return;
+        if (!cfg.gridId) return;
         const grid = document.getElementById(cfg.gridId);
         if (!grid) return;
         grid.classList.add('js-zoom-grid');

@@ -1,15 +1,9 @@
 ---
-// Shared collection-page wrapper. Two modes:
-//   kind="collection" (default) — books, movies, people, podcasts, essays.
-//                                  Renders config via renderCollectionMain.
-//   kind="task"                 — challenges, projects. Renders items + a
-//                                  per-item renderCard via renderTaskListMain.
+// Shared collection-page wrapper for books, movies, people, podcasts, essays.
 
 import Base from '../layouts/Base.astro';
-import type { TaskListConfig } from '../lib/collection-sections';
-import { renderTaskListMain } from '../lib/collection-sections';
+import CollectionShell from './CollectionShell.astro';
 import type { CollectionConfig } from '../lib/collection-shell';
-import { renderCollectionMain } from '../lib/collection-shell';
 
 interface CommonProps {
   title: string;
@@ -18,25 +12,12 @@ interface CommonProps {
   pageType?: 'CollectionPage' | 'WebPage' | 'AboutPage' | 'ContactPage';
 }
 
-type CollectionProps = CommonProps & {
-  kind?: 'collection';
+type Props = CommonProps & {
   config: CollectionConfig;
 };
 
-type TaskProps = CommonProps & {
-  kind: 'task';
-  config: TaskListConfig;
-  items: any[];
-  renderCard: (item: any, eager?: boolean) => string;
-};
-
-type Props = CollectionProps | TaskProps;
-
 const props = Astro.props as Props;
 const { title, description, canonical, pageType = 'CollectionPage' } = props;
-const main = props.kind === 'task'
-  ? renderTaskListMain(props.items, props.config, props.renderCard)
-  : renderCollectionMain(props.config);
 ---
 <Base
   title={title}
@@ -45,5 +26,11 @@ const main = props.kind === 'task'
   pageType={pageType}
 >
   <slot name="head" slot="head" />
-  <Fragment set:html={main} />
+  <CollectionShell config={props.config}>
+    <slot name="sidebar-extra" slot="sidebar-extra" />
+    <slot name="header-extra" slot="header-extra" />
+    <slot name="counter-extra" slot="counter-extra" />
+    <slot />
+    <slot name="after-main" slot="after-main" />
+  </CollectionShell>
 </Base>

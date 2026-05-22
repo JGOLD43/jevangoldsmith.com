@@ -1,18 +1,17 @@
 ---
 import raw from '../../../data/challenges.json';
-import CollectionPage from '../components/CollectionPage.astro';
+import TaskListPage from '../components/TaskListPage.astro';
 import type { Challenge } from '../lib/collection-sections';
-import { CHALLENGES_TASK_CONFIG, renderChallengeCard } from '../lib/collection-sections';
+import { CHALLENGES_TASK_CONFIG } from '../lib/collection-sections';
 
 const allChallenges: Challenge[] = (raw as { challenges?: Challenge[] }).challenges ?? [];
 const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibility !== 'private');
 const lcpCoverUrl = challenges[0]?.image;
 ---
-<CollectionPage
-  kind="task"
+<TaskListPage
+  type="challenge"
   items={challenges}
   config={CHALLENGES_TASK_CONFIG}
-  renderCard={renderChallengeCard}
   title="Challenges, Constraints &amp; Personal Experiments"
   description="A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life."
   canonical="https://jevangoldsmith.com/challenges.html"
@@ -22,7 +21,7 @@ const lcpCoverUrl = challenges[0]?.image;
       <link rel="preload" as="image" fetchpriority="high" href={lcpCoverUrl} />
     </Fragment>
   )}
-</CollectionPage>
+</TaskListPage>
 
 <style is:inline>
   body.is-challenge-launching .movies-main,
@@ -53,10 +52,9 @@ const lcpCoverUrl = challenges[0]?.image;
 </style>
 
 <script>
-  import { createCollectionRuntime } from '../scripts/collection-runtime';
-  import { initCoverFlight } from '../scripts/cover-flight';
+  import { initTaskListPage } from '../scripts/task-list-page';
 
-  const runtime: any = createCollectionRuntime({
+  initTaskListPage({
     actions: {
       clearSearch: 'clearChallengeSearch',
       filter: 'filterChallenges',
@@ -64,7 +62,6 @@ const lcpCoverUrl = challenges[0]?.image;
       toggleDropdown: 'toggleChallengeListDropdown',
       toggleSidebar: 'toggleChallengeSidebar'
     },
-    buttonSelector: '.sidebar-category',
     cardSelector: '.challenge-card',
     counterId: 'challenge-count',
     gridId: 'challenges-container',
@@ -72,15 +69,9 @@ const lcpCoverUrl = challenges[0]?.image;
     searchClearButtonId: 'challenge-search-clear-btn',
     searchInputId: 'challenge-search',
     sidebarId: 'challenges-sidebar',
-    storageKey: 'challenges-sidebar-collapsed'
+    storageKey: 'challenges-sidebar-collapsed',
     // No grid-zoom: cover-flight owns the click animation.
-  });
-
-  function wireFlight() {
-    const grid = document.getElementById('challenges-container');
-    if (!grid) return;
-    initCoverFlight({
-      grid,
+    flight: {
       cardSelector: 'a.challenge-card',
       coverSelector: 'img.project-cover',
       detailMainSelector: 'main.detail-page--challenge',
@@ -88,13 +79,6 @@ const lcpCoverUrl = challenges[0]?.image;
       bodyLaunchClass: 'is-challenge-launching',
       arrivalKey: 'challenge',
       listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { runtime.init(); wireFlight(); }, { once: true });
-  } else {
-    runtime.init();
-    wireFlight();
-  }
+    }
+  });
 </script>

@@ -27,6 +27,21 @@ import Base from '../layouts/Base.astro';
           <a href="/api/v1/search-index.json" class="search-api-link">JSON</a>
         </div>
         <div class="search-results" id="site-search-results" />
+        <template id="site-search-filter-template">
+          <button class="site-search-filter" type="button" data-search-type=""></button>
+        </template>
+        <template id="site-search-result-template">
+          <a class="search-result-card" href="#">
+            <span>
+              <span class="search-result-title"></span>
+              <span class="search-result-summary"></span>
+            </span>
+            <span class="search-result-type"></span>
+          </a>
+        </template>
+        <template id="site-search-empty-template">
+          <div class="search-empty"></div>
+        </template>
       </div>
     </section>
   </main>

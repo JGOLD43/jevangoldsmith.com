@@ -20,7 +20,7 @@ engineering and release docs. Historical plans live under `docs/archive/`.
 ├── site-astro/             # Astro project (current build target)
 │   ├── src/
 │   │   ├── layouts/        # Base.astro
-│   │   ├── components/     # Nav, Footer, Card components, JsonLd, AdventureMap
+│   │   ├── components/     # Footer, collection/task components, JsonLd, helpers
 │   │   ├── pages/          # Astro pages → dist/<route>.html
 │   │   └── content.config.ts  # Zod schemas for ../data/*.json
 │   ├── public/             # Static passthrough (CSS, images symlinked, fonts symlinked)

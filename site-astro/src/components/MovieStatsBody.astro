@@ -1,0 +1,109 @@
+---
+import {
+  computeMovieStats,
+  fmtHours,
+  fmtRuntime,
+  watchCount,
+  type RuntimeMovieStatsMovie
+} from '../lib/movie-stats-core';
+
+interface Props {
+  movies: RuntimeMovieStatsMovie[];
+}
+
+const { movies } = Astro.props as Props;
+
+const list = Array.isArray(movies) ? movies : [];
+const stats = computeMovieStats(list);
+const hoursEntries = Object.entries(stats.hoursByGenre).sort((a, b) => b[1] - a[1]);
+const hoursMax = hoursEntries[0]?.[1] || 0;
+const decadeEntries = Object.entries(stats.filmsByDecade).sort((a, b) => a[0].localeCompare(b[0]));
+const decadeMax = decadeEntries.reduce((m, [, v]) => Math.max(m, v), 0);
+const ratingEntries = [5, 4, 3, 2, 1].map((r) => [r, stats.filmsByRating[r] || 0] as [number, number]);
+const ratingTotal = ratingEntries.reduce((acc, [, v]) => acc + v, 0);
+const ratingMax = ratingEntries.reduce((m, [, v]) => Math.max(m, v), 0);
+const extremeCards: Array<[string, RuntimeMovieStatsMovie | null]> = [
+  ['Longest film', stats.longest],
+  ['Shortest film', stats.shortest]
+];
+---
+
+{stats.enrichedCount === 0 ? (
+  <div class="stats-empty">
+    <p>No runtime data yet. Run <code>npm run enrich:movies</code> with a TMDB API key to populate stats.</p>
+    {stats.totalFilms > 0 && <p class="stats-empty-meta">{stats.totalFilms} film{stats.totalFilms === 1 ? '' : 's'} missing runtime.</p>}
+  </div>
+) : (
+  <>
+    <div class="stats-headline-grid">
+      <div class="stats-headline-card"><div class="stats-headline-value">{stats.totalHours.toLocaleString()}</div><div class="stats-headline-label">Total hours watched</div></div>
+      <div class="stats-headline-card"><div class="stats-headline-value">{stats.totalFilms.toLocaleString()}</div><div class="stats-headline-label">Films logged</div></div>
+      <div class="stats-headline-card"><div class="stats-headline-value">{stats.totalWatches.toLocaleString()}</div><div class="stats-headline-label">Total watches</div></div>
+      <div class="stats-headline-card"><div class="stats-headline-value">{fmtRuntime(stats.avgRuntime)}</div><div class="stats-headline-label">Avg runtime</div></div>
+    </div>
+
+    <div class="stats-extremes">
+      {extremeCards.map(([title, movie]) => movie && (
+        <div class="stats-extreme-card">
+          <div class="stats-extreme-title">{title}</div>
+          <div class="stats-extreme-movie">
+            {movie.poster && <img src={movie.poster} alt="" class="stats-extreme-poster" loading="lazy" decoding="async" />}
+            <div>
+              <div class="stats-extreme-name">{movie.title}</div>
+              <div class="stats-extreme-meta">{movie.year || ''} · {fmtRuntime(movie.runtime)}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {hoursEntries.length > 0 && (
+      <section class="stats-section">
+        <h3 class="stats-section-title">Hours by genre</h3>
+        {hoursEntries.map(([genre, mins]) => {
+          const pct = hoursMax > 0 ? Math.max(2, Math.round((mins / hoursMax) * 100)) : 0;
+          return <div class="stats-bar-row"><span class="stats-bar-label">{genre}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{fmtHours(mins)}</span></div>;
+        })}
+      </section>
+    )}
+
+    {decadeEntries.length > 0 && (
+      <section class="stats-section">
+        <h3 class="stats-section-title">Films by decade</h3>
+        {decadeEntries.map(([decade, count]) => {
+          const pct = decadeMax > 0 ? Math.max(2, Math.round((count / decadeMax) * 100)) : 0;
+          return <div class="stats-bar-row"><span class="stats-bar-label">{decade}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{count}</span></div>;
+        })}
+      </section>
+    )}
+
+    {ratingTotal > 0 && (
+      <section class="stats-section">
+        <h3 class="stats-section-title">Films by rating</h3>
+        {ratingEntries.map(([rating, count]) => {
+          const pct = ratingMax > 0 ? Math.max(2, Math.round((count / ratingMax) * 100)) : 0;
+          return <div class="stats-bar-row"><span class="stats-bar-label">{'★'.repeat(rating)}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{count}</span></div>;
+        })}
+      </section>
+    )}
+
+    {stats.avgRatingByGenre.length > 0 && (
+      <section class="stats-section">
+        <h3 class="stats-section-title">Avg rating by genre</h3>
+        {stats.avgRatingByGenre.map(({ genre, avg, count }) => {
+          const pct = Math.max(2, Math.round((avg / 5) * 100));
+          return <div class="stats-bar-row"><span class="stats-bar-label">{genre}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{avg.toFixed(2)}★ <span class="stats-bar-aside">({count})</span></span></div>;
+        })}
+      </section>
+    )}
+
+    {stats.mostRewatched.length > 0 && (
+      <section class="stats-section">
+        <h3 class="stats-section-title">Most rewatched</h3>
+        <ul class="stats-rewatch-list">
+          {stats.mostRewatched.map((movie) => <li><span class="stats-rewatch-count">{watchCount(movie)}×</span><span class="stats-rewatch-title">{movie.title}</span><span class="stats-rewatch-year">{movie.year || ''}</span></li>)}
+        </ul>
+      </section>
+    )}
+  </>
+)}

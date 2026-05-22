@@ -29,13 +29,19 @@ The site is an Astro project rooted at `site-astro/`:
   - dynamic routes: `people/[slug].astro`, `adventure-[slug].astro`, `topics/[slug].astro`
   - `rss.xml.ts` for the essays RSS feed
 - `site-astro/src/layouts/Base.astro` — shared HTML layout (head, nav, footer, JSON-LD)
-- `site-astro/src/components/` — Nav, Footer, JsonLd, SeoRelated, plus the
-  shared `CollectionPage.astro` wrapper that thins out per-page boilerplate
+- `site-astro/src/components/` — shared Astro components such as `Footer`,
+  `JsonLd`, `CollectionPage`, task-list cards/shells, and small payload/style
+  helpers. New static markup should land here before falling back to string
+  renderers.
 - `site-astro/src/content.config.ts` — Zod schemas + custom loaders that read `../data/*.json` directly (no copy)
 - `site-astro/src/lib/seo.ts` — schema.org Person / WebSite descriptors
 - `site-astro/src/lib/collection-shell.ts` + `collection-sections.ts` —
   string-template chrome renderer + section presets consumed by
-  `CollectionPage.astro`
+  `CollectionPage.astro`; Projects/Challenges now use Astro-owned task-list
+  markup and keep these helpers for metadata/config compatibility.
+- `site-astro/src/scripts/task-list-page.ts` — shared Projects/Challenges
+  behavior attach point. Astro renders the static DOM; this module wires
+  filtering/search/sidebar state and cover-flight animation.
 - `site-astro/public/css/legacy-style.css` — current CSS source. The build
   rewrites this into one shared chrome stylesheet plus per-page inline CSS via
   `scripts/purge-css-per-page.js`.

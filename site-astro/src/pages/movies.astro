@@ -3,9 +3,13 @@ import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import moviesRuntimeData from '../../public/data/movies.json';
 import CollectionPage from '../components/CollectionPage.astro';
-import { MOVIE_SECTIONS, renderRatingFilterSection, renderSliderFilterSection, tasteListOptions } from '../lib/collection-sections';
-import { renderMovieCardHtml } from '../lib/movie-card';
-import { escapeAttr } from '../lib/html-escape';
+import ContentVisibilityStyle from '../components/ContentVisibilityStyle.astro';
+import InlineJson from '../components/InlineJson.astro';
+import MovieModal from '../components/MovieModal.astro';
+import MovieCard from '../components/MovieCard.astro';
+import MovieStatsBody from '../components/MovieStatsBody.astro';
+import SidebarRatingSliderFilters from '../components/SidebarRatingSliderFilters.astro';
+import { MOVIE_SECTIONS, tasteListOptions } from '../lib/collection-sections';
 
 const canonical = 'https://jevangoldsmith.com/movies.html';
 
@@ -15,7 +19,11 @@ const canonical = 'https://jevangoldsmith.com/movies.html';
 // stay on screen until the runtime fetch completes (if it runs at all).
 
 const movies = (await getCollection('movies') as CollectionEntry<'movies'>[]).map((m) => m.data);
-const movieCardsHtml = movies.map((m) => renderMovieCardHtml(m)).join('');
+const moviesByGenre = movies.reduce<Record<string, typeof movies>>((groups, movie) => {
+  const genre = movie.genre || 'Uncategorized';
+  (groups[genre] ||= []).push(movie);
+  return groups;
+}, {});
 
 // "Recently Added" carousel — most recent 20 movies with a poster,
 // SSR'd twice so the seamless-scroll loop is complete on first paint.
@@ -24,52 +32,16 @@ const recentMovies = [...movies]
   .filter((m) => m.poster)
   .sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime())
   .slice(0, 20);
-const movieCarouselInner = [...recentMovies, ...recentMovies]
-  .map((m) => `<a class="carousel-book-link" href="${escapeAttr(m.link || '#')}" target="_blank" rel="noopener noreferrer" title="${escapeAttr(`${m.title} (${m.year || ''})`)}"><img class="carousel-book" src="${escapeAttr(m.poster as string)}" alt="${escapeAttr(m.title)}" decoding="async" loading="lazy" data-remove-on-error="true"></a>`)
-  .join('');
-const headerCarouselHtml = recentMovies.length
-  ? `<div class="recent-books-carousel">
-    <span class="carousel-label">Recently Added</span>
-    <div class="carousel-track" id="carousel-track" style="animation-duration:${recentMovies.length * 3}s">${movieCarouselInner}</div>
-</div>`
-  : '';
+const carouselMovies = [...recentMovies, ...recentMovies].map((movie) => ({
+  href: movie.link || '#',
+  title: `${movie.title} (${movie.year || ''})`,
+  image: movie.poster as string,
+  alt: movie.title
+}));
 
 // runtime payload (filter/star/genre state) inlined so letterboxd.ts can
 // avoid the post-FCP fetch round-trip.
 const moviesRuntimeJson = JSON.stringify(moviesRuntimeData);
-
-const sidebarFiltersHtml = renderRatingFilterSection({ clearAction: 'clearAllFilters', preventDefaultOnClear: true })
-    + '\n\n' + renderSliderFilterSection({ label: 'Filter by Times Watched', icon: '🎬', id: 'timeswatched' });
-
-const populatedMainBody = `<div id="error" class="error-message" style="display: none;">
-    <p>Unable to load movies from Letterboxd. Please check the username in the code or try again later.</p>
-</div>
-<section id="movie-stats-panel" class="movie-stats-panel collapsed" aria-label="Watch stats" hidden>
-    <div class="stats-body"></div>
-</section>
-<div id="movies-container" class="movies-grid">${movieCardsHtml}</div>`;
-
-const movieModal = `<div id="movie-modal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close" data-action="closeMovieModal">&times;</span>
-        <div class="modal-body">
-            <div class="modal-header">
-                <img id="modal-movie-poster" src="" alt="" class="modal-cover" decoding="async">
-                <div class="modal-info">
-                    <h2 id="modal-movie-title"></h2>
-                    <p id="modal-movie-year" class="modal-author"></p>
-                    <div id="modal-movie-rating" class="modal-rating"></div>
-                    <p id="modal-movie-date" style="color: var(--text-light); margin-top: 0.5rem;"></p>
-                </div>
-            </div>
-            <div class="modal-review">
-                <h3>My Review</h3>
-                <p id="modal-movie-review" class="review-text"></p>
-                <a id="modal-letterboxd-link" href="" target="_blank" rel="noopener noreferrer" style="display: inline-block; margin-top: 1rem; color: var(--secondary-color); font-weight: 500;">View on Letterboxd →</a>
-            </div>
-        </div>
-    </div>
-</div>`;
 
 const config = ({
   layout: { id: 'movies-layout', className: 'movies-layout collection-layout sidebar-collapsed' },
@@ -91,13 +63,31 @@ const config = ({
       searchEvent: 'input',
       wrapperClass: 'search-input-wrapper search-bubble'
     },
-    extraHtml: sidebarFiltersHtml,
     loadingMessage: 'Loading...',
     sectionsWrapperId: 'sidebar-content',
     footerText: 'Movies with a badge have my full review',
     footerId: 'sidebar-footer',
     footerHidden: true,
-    sections: MOVIE_SECTIONS
+    sections: MOVIE_SECTIONS.map((section) => {
+      const genre = section.attrs?.['data-genre'];
+      if (!section.panelId || !genre || genre === 'all') return section;
+      const list = moviesByGenre[genre] || [];
+      return {
+        ...section,
+        count: String(list.length),
+        panelLinks: list.map((movie) => ({
+          href: '#',
+          className: 'movie-link',
+          label: movie.title,
+          meta: movie.year ? String(movie.year) : '',
+          attrs: {
+            'data-action': 'scrollToMovie',
+            'data-action-args': encodeURIComponent(movie.title),
+            'data-action-eventobj': 'true'
+          }
+        }))
+      };
+    })
   },
   main: {
     className: 'movies-main collection-main',
@@ -105,14 +95,10 @@ const config = ({
     title: 'Movie Lists',
     mobileGridLabel: 'Movies',
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="movie-philosophy.html" class="header-subtitle-link">My Movie Philosophy</a><span class="read-first-note">read this first</span></div>',
-    headerExtraHtml: headerCarouselHtml,
     counterId: 'movie-count',
     counterLabel: 'Movies Watched',
-    counterExtraHtml: '<button type="button" class="stats-toggle" aria-expanded="false" aria-controls="movie-stats-panel" aria-label="Show watch stats">Stats <span aria-hidden="true">▾</span></button>',
-    counterGroupClass: 'movie-counter-group',
-    bodyHtml: populatedMainBody
-  },
-  afterMainHtml: movieModal
+    counterGroupClass: 'movie-counter-group'
+  }
 });
 ---
 <CollectionPage
@@ -120,15 +106,44 @@ const config = ({
   title="Movie Reviews, Watchlist &amp; Taste Notes"
   description="A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste."
   canonical={canonical}
-/>
+>
+  <Fragment slot="sidebar-extra">
+    <SidebarRatingSliderFilters clearAction="clearAllFilters" preventDefaultOnClear sliderLabel="Filter by Times Watched" sliderIcon="🎬" sliderId="timeswatched" />
+  </Fragment>
+  {recentMovies.length > 0 && (
+    <Fragment slot="header-extra">
+      <div class="recent-books-carousel">
+        <span class="carousel-label">Recently Added</span>
+        <div class="carousel-track" id="carousel-track" style={`animation-duration:${recentMovies.length * 3}s`}>
+          {carouselMovies.map((movie) => (
+            <a class="carousel-book-link" href={movie.href} target="_blank" rel="noopener noreferrer" title={movie.title}>
+              <img class="carousel-book" src={movie.image} alt={movie.alt} decoding="async" loading="lazy" data-remove-on-error="true" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </Fragment>
+  )}
+  <Fragment slot="counter-extra">
+    <button type="button" class="stats-toggle" aria-expanded="false" aria-controls="movie-stats-panel" aria-label="Show watch stats">Stats <span aria-hidden="true">▾</span></button>
+  </Fragment>
+  <div id="error" class="error-message" style="display: none;">
+    <p>Unable to load movies from Letterboxd. Please check the username in the code or try again later.</p>
+  </div>
+  <section id="movie-stats-panel" class="movie-stats-panel collapsed" aria-label="Watch stats" hidden>
+    <div class="stats-body" data-initial-count={Array.isArray(moviesRuntimeData) ? moviesRuntimeData.length : 0}>
+      <MovieStatsBody movies={Array.isArray(moviesRuntimeData) ? moviesRuntimeData : []} />
+    </div>
+  </section>
+  <div id="movies-container" class="movies-grid">
+    {movies.map((m) => <MovieCard movie={m} />)}
+  </div>
+  <MovieModal slot="after-main" />
+</CollectionPage>
+
+<ContentVisibilityStyle selector=".movie-card" intrinsicSize="220px 360px" />
 
 <style is:inline>
-  /* Same content-visibility trick as /people: skip layout/paint for
-     off-screen movie cards, reserve their slot to keep scroll stable. */
-  .movie-card {
-    content-visibility: auto;
-    contain-intrinsic-size: 220px 360px;
-  }
   .movie-counter-group {
     display: flex;
     flex-direction: column;
@@ -137,7 +152,7 @@ const config = ({
   }
 </style>
 
-<script is:inline type="application/json" id="jg-movies-data" set:html={moviesRuntimeJson} />
+<InlineJson id="jg-movies-data" json={moviesRuntimeJson} />
 
 <script>
   // letterboxd transitively imports movie-stats; load order is implicit.

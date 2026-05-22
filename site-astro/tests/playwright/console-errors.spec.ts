@@ -42,9 +42,10 @@ for (const route of ROUTES) {
     page.on('pageerror', (err) => errors.push(err.message));
 
     await page.setViewportSize({ width: 1400, height: 900 });
-    await page.goto(route);
-    await page.waitForLoadState('networkidle');
-    // Settle time for runtime fetches.
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.readyState !== 'loading', null, { timeout: 8000 });
+    // Settle time for runtime fetches without making the heavy books page
+    // depend on every image finishing the full load event.
     await page.waitForTimeout(1500);
 
     const fatal = errors.filter((e) =>

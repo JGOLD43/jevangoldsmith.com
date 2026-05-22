@@ -11,6 +11,9 @@
 //   CLS regression > 0.05
 //   Total Bytes regression > 25KB
 //   Performance score drop > 5 points
+// /adventures.html uses third-party ArcGIS satellite tiles. Lighthouse's
+// total-byte-weight includes those tile downloads, so that route gets a
+// wider byte tolerance while keeping score/LCP/CLS protections intact.
 //
 // Re-uses the existing scripts/perf-lighthouse.js runner; this is a
 // thin wrapper that parses the markdown table.
@@ -34,6 +37,10 @@ const TOLERANCES = {
     cls: 0.05,
     bytesKb: 25,
     score: 5
+};
+
+const ROUTE_TOLERANCES = {
+    '/adventures.html': { bytesKb: 750 }
 };
 
 function parseTable(markdown) {
@@ -103,10 +110,11 @@ function main() {
         const dBytes = cur.bytesKb - base.bytesKb;
         process.stdout.write(`| ${cur.route} | ${dScore >= 0 ? '+' : ''}${dScore} | ${dLcp >= 0 ? '+' : ''}${Math.round(dLcp)}ms | ${(dCls >= 0 ? '+' : '') + dCls.toFixed(3)} | ${dBytes >= 0 ? '+' : ''}${dBytes.toFixed(1)}KB |\n`);
 
-        if (dScore < -TOLERANCES.score) failures.push(`${cur.route}: score regressed by ${-dScore} (tolerance ${TOLERANCES.score})`);
-        if (dLcp > TOLERANCES.lcpMs) failures.push(`${cur.route}: LCP regressed by ${Math.round(dLcp)}ms (tolerance ${TOLERANCES.lcpMs}ms)`);
-        if (dCls > TOLERANCES.cls) failures.push(`${cur.route}: CLS regressed by ${dCls.toFixed(3)} (tolerance ${TOLERANCES.cls})`);
-        if (dBytes > TOLERANCES.bytesKb) failures.push(`${cur.route}: Total Bytes regressed by ${dBytes.toFixed(1)}KB (tolerance ${TOLERANCES.bytesKb}KB)`);
+        const tolerances = { ...TOLERANCES, ...(ROUTE_TOLERANCES[cur.route] ?? {}) };
+        if (dScore < -tolerances.score) failures.push(`${cur.route}: score regressed by ${-dScore} (tolerance ${tolerances.score})`);
+        if (dLcp > tolerances.lcpMs) failures.push(`${cur.route}: LCP regressed by ${Math.round(dLcp)}ms (tolerance ${tolerances.lcpMs}ms)`);
+        if (dCls > tolerances.cls) failures.push(`${cur.route}: CLS regressed by ${dCls.toFixed(3)} (tolerance ${tolerances.cls})`);
+        if (dBytes > tolerances.bytesKb) failures.push(`${cur.route}: Total Bytes regressed by ${dBytes.toFixed(1)}KB (tolerance ${tolerances.bytesKb}KB)`);
     }
 
     if (failures.length) {

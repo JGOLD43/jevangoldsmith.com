@@ -87,6 +87,11 @@ export async function renderSpotifyRecentEpisodes() {
     if (!container || !section) return;
 
     const recent = data.episodes.slice(0, 24);
+    if (container.children.length > 0) {
+        section.hidden = false;
+        renderSpotifyMeta('spotify-recent-meta', data.generatedAt, recent.length, recent.length === 1 ? 'recent episode' : 'recent episodes');
+        return;
+    }
     const frag = document.createDocumentFragment();
     recent.forEach((ep: AnyObj) => frag.appendChild(buildSpotifyEpisodeCard(ep)));
     container.appendChild(frag);
@@ -102,6 +107,11 @@ export async function renderSpotifyFollowedShows() {
     const section = document.getElementById('spotify-shows-section');
     if (!container || !section) return;
 
+    if (container.children.length > 0) {
+        section.hidden = false;
+        renderSpotifyMeta('spotify-shows-meta', data.generatedAt, data.shows.length, data.shows.length === 1 ? 'show' : 'shows');
+        return;
+    }
     const frag = document.createDocumentFragment();
     data.shows.forEach((show: AnyObj) => frag.appendChild(buildSpotifyShowCard(show)));
     container.appendChild(frag);

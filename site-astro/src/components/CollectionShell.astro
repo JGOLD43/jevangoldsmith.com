@@ -1,0 +1,205 @@
+---
+import type { CollectionConfig, SectionItem } from '../lib/collection-shell';
+import { getIcon } from '../lib/icons';
+
+interface Props {
+  config: CollectionConfig;
+}
+
+const { config } = Astro.props;
+
+function splitAttrs(attrs: Record<string, string> = {}, extraClass = '') {
+  const { class: className = '', ...rest } = attrs;
+  return {
+    class: [className, extraClass].filter(Boolean).join(' ').trim(),
+    attrs: rest
+  };
+}
+
+function sectionAttrs(item: SectionItem) {
+  return splitAttrs(item.attrs ?? {}, 'sidebar-category');
+}
+
+function iconHtml(item: SectionItem) {
+  const iconSource = item.iconKey ? getIcon(item.iconKey) : (item.icon ?? '');
+  return iconSource.trim().startsWith('<') ? iconSource : '';
+}
+
+function iconText(item: SectionItem) {
+  const iconSource = item.iconKey ? getIcon(item.iconKey) : (item.icon ?? '');
+  return iconSource.trim().startsWith('<') ? '' : iconSource;
+}
+
+function panelAttrs(item: NonNullable<SectionItem['panelLinks']>[number]) {
+  return splitAttrs(item.attrs ?? {}, item.className);
+}
+
+const sections = config.sidebar.sections ?? [];
+const TitleTag = (config.main.titleTag ?? 'h1') as keyof HTMLElementTagNameMap;
+const subtitleHtml = config.main.subtitleHtml ?? '';
+const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
+---
+<main class={config.layout.className} id={config.layout.id}>
+  <div class="collection-mobile-toggle" role="tablist" aria-label="Mobile view toggle">
+    <button type="button" class="mobile-view-btn" data-view="list" data-action="switchCollectionView" data-action-args="list" role="tab" aria-selected="false">
+      <svg class="ico-stroke" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+      List
+    </button>
+    <button type="button" class="mobile-view-btn active" data-view="grid" data-action="switchCollectionView" data-action-args="grid" role="tab" aria-selected="true">
+      <svg class="ico-stroke" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+      {mobileGridLabel}
+    </button>
+  </div>
+
+  <aside class={config.sidebar.className} id={config.sidebar.id}>
+    <div class="sidebar-header">
+      <button class="sidebar-collapse-btn" data-action={config.sidebar.collapseAction} title="Collapse sidebar">
+        <svg class="ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-sidebarCollapse"></use></svg>
+      </button>
+      <span class="sidebar-browse-label">Browse</span>
+    </div>
+
+    {config.sidebar.listOptions && config.sidebar.listOptions.length > 0 && (
+      <div class="sidebar-list-selector">
+        <div class="list-dropdown" id="list-dropdown">
+          <button class="list-dropdown-btn" data-action={config.sidebar.listAction}>
+            <span id="current-list-name">{config.sidebar.currentListName ?? ''}</span>
+            <svg class="ico-stroke ico-12" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-chevronDown"></use></svg>
+          </button>
+          <div class="list-dropdown-menu" id="list-dropdown-menu">
+            {config.sidebar.listOptions.map((item) => {
+              const attrs = splitAttrs(item.attrs ?? {}, item.active ? 'list-option active' : 'list-option');
+              return <a href={item.href} class={attrs.class} {...attrs.attrs}>{item.label}</a>;
+            })}
+          </div>
+        </div>
+      </div>
+    )}
+
+    {config.sidebar.search && (
+      <div class="sidebar-search">
+        <div class={config.sidebar.search.wrapperClass ?? 'search-input-wrapper search-bubble'}>
+          <svg class="search-icon ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-search"></use></svg>
+          <input
+            type="text"
+            id={config.sidebar.search.inputId}
+            class={config.sidebar.search.inputClass}
+            placeholder={config.sidebar.search.placeholder}
+            data-action={config.sidebar.search.searchAction}
+            data-action-event={config.sidebar.search.searchEvent}
+            data-action-value={config.sidebar.search.searchUsesValue ? 'true' : undefined}
+          />
+          <button id={config.sidebar.search.clearButtonId} class="search-clear-btn" data-action={config.sidebar.search.clearAction} style="display: none;">
+            <svg class="ico-stroke ico-14" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-close"></use></svg>
+          </button>
+        </div>
+      </div>
+    )}
+
+    <slot name="sidebar-extra" />
+    {config.sidebar.loadingMessage && (
+      <div id="loading-sidebar" class="loading" style="padding: 1rem;">
+        <p style="font-size: 0.85rem;">{config.sidebar.loadingMessage}</p>
+      </div>
+    )}
+
+    {config.sidebar.sectionsWrapperId ? (
+      <div id={config.sidebar.sectionsWrapperId} style="display: none;">
+        {sections.map((item) => {
+          const attrs = sectionAttrs(item);
+          return (
+            <div class="sidebar-section">
+              <button class={attrs.class} {...attrs.attrs} data-tooltip={item.tooltip}>
+                <span class="category-icon" title={item.tooltip ? item.label : undefined}>
+                  {iconHtml(item) ? <Fragment set:html={iconHtml(item)} /> : iconText(item)}
+                </span>
+                <span class="category-name">{item.label}</span>
+                <span class="category-count" id={item.countId}>{item.count ?? '0'}</span>
+                {item.panelId && <span class="expand-icon">▼</span>}
+              </button>
+              {item.panelId && (
+                <div class={item.panelClass ?? ''} id={item.panelId}>
+                  {item.panelLinks?.map((link) => {
+                    const attrs = panelAttrs(link);
+                    return (
+                      <a href={link.href} class={attrs.class} {...attrs.attrs}>
+                        <div>{link.label}</div>
+                        {link.meta && <div class={`${link.className}-year`}>{link.meta}</div>}
+                      </a>
+                    );
+                  })}
+                  {item.panelInnerHtml && <Fragment set:html={item.panelInnerHtml} />}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    ) : (
+      sections.map((item) => {
+        const attrs = sectionAttrs(item);
+        return (
+          <div class="sidebar-section">
+            <button class={attrs.class} {...attrs.attrs} data-tooltip={item.tooltip}>
+              <span class="category-icon" title={item.tooltip ? item.label : undefined}>
+                {iconHtml(item) ? <Fragment set:html={iconHtml(item)} /> : iconText(item)}
+              </span>
+              <span class="category-name">{item.label}</span>
+              <span class="category-count" id={item.countId}>{item.count ?? '0'}</span>
+              {item.panelId && <span class="expand-icon">▼</span>}
+            </button>
+            {item.panelId && (
+              <div class={item.panelClass ?? ''} id={item.panelId}>
+                {item.panelLinks?.map((link) => {
+                  const attrs = panelAttrs(link);
+                  return (
+                    <a href={link.href} class={attrs.class} {...attrs.attrs}>
+                      <div>{link.label}</div>
+                      {link.meta && <div class={`${link.className}-year`}>{link.meta}</div>}
+                    </a>
+                  );
+                })}
+                {item.panelInnerHtml && <Fragment set:html={item.panelInnerHtml} />}
+              </div>
+            )}
+          </div>
+        );
+      })
+    )}
+
+    {config.sidebar.footerText && (
+      <div class="sidebar-footer" id={config.sidebar.footerId} style={config.sidebar.footerHidden ? 'display: none;' : undefined}>
+        <p>{config.sidebar.footerText}</p>
+      </div>
+    )}
+  </aside>
+
+  <div class={config.main.className}>
+    <header class="main-header collection-header">
+      <div class="header-content">
+        <TitleTag id="collection-title" data-default-title={config.main.title}>{config.main.title}</TitleTag>
+        {subtitleHtml ? <Fragment set:html={subtitleHtml} /> : config.main.subtitleText ? <p class="header-subtitle">{config.main.subtitleText}</p> : null}
+      </div>
+      <slot name="header-extra" />
+      {config.main.counterGroupClass ? (
+        <div class={config.main.counterGroupClass}>
+          <slot name="counter-extra" />
+          <div class="header-counter collection-header-counter">
+            <span class="counter-number collection-counter-number" id={config.main.counterId}>0</span>
+            <span class="counter-label collection-counter-label" id={config.main.counterLabelId}>{config.main.counterLabel}</span>
+          </div>
+        </div>
+      ) : (
+        <>
+          <slot name="counter-extra" />
+          <div class="header-counter collection-header-counter">
+            <span class="counter-number collection-counter-number" id={config.main.counterId}>0</span>
+            <span class="counter-label collection-counter-label" id={config.main.counterLabelId}>{config.main.counterLabel}</span>
+          </div>
+        </>
+      )}
+    </header>
+    <slot />
+  </div>
+  <slot name="after-main" />
+</main>

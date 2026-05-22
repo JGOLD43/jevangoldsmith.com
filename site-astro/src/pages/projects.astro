@@ -1,18 +1,17 @@
 ---
 import raw from '../../../data/projects.json';
-import CollectionPage from '../components/CollectionPage.astro';
+import TaskListPage from '../components/TaskListPage.astro';
 import type { Project } from '../lib/collection-sections';
-import { PROJECTS_TASK_CONFIG, renderProjectCard } from '../lib/collection-sections';
+import { PROJECTS_TASK_CONFIG } from '../lib/collection-sections';
 
 const allProjects: Project[] = (raw as { projects?: Project[] }).projects ?? [];
 const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility !== 'private');
 const lcpCoverUrl = projects[0]?.image;
 ---
-<CollectionPage
-  kind="task"
+<TaskListPage
+  type="project"
   items={projects}
   config={PROJECTS_TASK_CONFIG}
-  renderCard={renderProjectCard}
   title="Projects Jevan Goldsmith Is Building &amp; Exploring"
   description="A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems."
   canonical="https://jevangoldsmith.com/projects.html"
@@ -22,7 +21,7 @@ const lcpCoverUrl = projects[0]?.image;
       <link rel="preload" as="image" fetchpriority="high" href={lcpCoverUrl} />
     </Fragment>
   )}
-</CollectionPage>
+</TaskListPage>
 
 <style is:inline>
   /* While a project card is flying to its detail page, fade out the
@@ -59,10 +58,9 @@ const lcpCoverUrl = projects[0]?.image;
 </style>
 
 <script>
-  import { createCollectionRuntime } from '../scripts/collection-runtime';
-  import { initCoverFlight } from '../scripts/cover-flight';
+  import { initTaskListPage } from '../scripts/task-list-page';
 
-  const runtime: any = createCollectionRuntime({
+  initTaskListPage({
     actions: {
       clearSearch: 'clearProjectSearch',
       filter: 'filterProjects',
@@ -70,7 +68,6 @@ const lcpCoverUrl = projects[0]?.image;
       toggleDropdown: 'toggleProjectListDropdown',
       toggleSidebar: 'toggleProjectSidebar'
     },
-    buttonSelector: '.sidebar-category',
     cardSelector: '.project-card',
     counterId: 'project-count',
     gridId: 'projects-container',
@@ -78,16 +75,10 @@ const lcpCoverUrl = projects[0]?.image;
     searchClearButtonId: 'project-search-clear-btn',
     searchInputId: 'project-search',
     sidebarId: 'projects-sidebar',
-    storageKey: 'projects-sidebar-collapsed'
+    storageKey: 'projects-sidebar-collapsed',
     // No grid-zoom: the cover-flight handler below owns the click →
     // open animation, and grid-zoom's preventDefault would short-circuit it.
-  });
-
-  function wireFlight() {
-    const grid = document.getElementById('projects-container');
-    if (!grid) return;
-    initCoverFlight({
-      grid,
+    flight: {
       cardSelector: 'a.project-card',
       coverSelector: 'img.project-cover',
       detailMainSelector: 'main.detail-page--project',
@@ -95,13 +86,6 @@ const lcpCoverUrl = projects[0]?.image;
       bodyLaunchClass: 'is-project-launching',
       arrivalKey: 'project',
       listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { runtime.init(); wireFlight(); }, { once: true });
-  } else {
-    runtime.init();
-    wireFlight();
-  }
+    }
+  });
 </script>

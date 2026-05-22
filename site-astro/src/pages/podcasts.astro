@@ -1,17 +1,19 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
+import podcastEpisodesData from '../../public/data/podcast-episodes.json';
+import podcastShowsData from '../../public/data/podcast-shows.json';
 import CollectionPage from '../components/CollectionPage.astro';
+import PodcastCard from '../components/PodcastCard.astro';
 import { PODCAST_SECTIONS, tasteListOptions } from '../lib/collection-sections';
-import { renderPodcastCardHtml } from '../lib/podcast-card';
+import { formatEpisodeDuration, formatRelativeDate } from '../lib/dates';
 
 const canonical = 'https://jevangoldsmith.com/podcasts.html';
 
 // pre-render curated podcast cards.
 const podcasts = await getCollection('podcasts') as CollectionEntry<'podcasts'>[];
-const podcastCardsHtml = podcasts
-  .map((p, i) => renderPodcastCardHtml({ ...p.data, id: p.id }, i))
-  .join('');
+const spotifyEpisodes = Array.isArray(podcastEpisodesData.episodes) ? podcastEpisodesData.episodes.slice(0, 24) : [];
+const spotifyShows = Array.isArray(podcastShowsData.shows) ? podcastShowsData.shows : [];
 
 const config = ({
   layout: { id: 'podcasts-layout', className: 'movies-layout podcasts-layout collection-layout sidebar-collapsed' },
@@ -43,30 +45,7 @@ const config = ({
     mobileGridLabel: 'Podcasts',
     subtitleText: 'Conversations, shows, and episodes that shaped how I think about business, technology, and life.',
     counterId: 'podcast-count',
-    counterLabel: 'Audio Notes',
-    bodyHtml: `<section id="spotify-recent-section" class="spotify-section" hidden>
-    <div class="spotify-section-header">
-        <h2>Recently Listened on Spotify</h2>
-        <p class="spotify-section-meta" id="spotify-recent-meta"></p>
-    </div>
-    <div id="spotify-recent-container" class="movies-grid"></div>
-</section>
-
-<section id="spotify-shows-section" class="spotify-section" hidden>
-    <div class="spotify-section-header">
-        <h2>Shows I Follow on Spotify</h2>
-        <p class="spotify-section-meta" id="spotify-shows-meta"></p>
-    </div>
-    <div id="spotify-shows-container" class="movies-grid"></div>
-</section>
-
-<section id="curated-podcasts-section">
-    <div class="spotify-section-header">
-        <h2>Curated Picks</h2>
-        <p class="spotify-section-meta">Hand-picked shows and episodes I return to.</p>
-    </div>
-    <div id="podcasts-container" class="movies-grid">${podcastCardsHtml}</div>
-</section>`
+    counterLabel: 'Audio Notes'
   }
 });
 ---
@@ -75,7 +54,78 @@ const config = ({
   title="Podcasts, Conversations &amp; Audio Notes"
   description="A podcast archive of conversations, shows, and audio ideas Jevan Goldsmith returns to."
   canonical={canonical}
-/>
+>
+  <section id="spotify-recent-section" class="spotify-section" hidden={spotifyEpisodes.length === 0}>
+    <div class="spotify-section-header">
+      <h2>Recently Listened on Spotify</h2>
+      <p class="spotify-section-meta" id="spotify-recent-meta">
+        {spotifyEpisodes.length > 0 && `${spotifyEpisodes.length} ${spotifyEpisodes.length === 1 ? 'recent episode' : 'recent episodes'}${podcastEpisodesData.generatedAt ? ` · synced ${formatRelativeDate(podcastEpisodesData.generatedAt)}` : ''}`}
+      </p>
+    </div>
+    <div id="spotify-recent-container" class="movies-grid">
+      {spotifyEpisodes.map((ep) => (
+        <div class="movie-card podcast-card js-zoom-item" data-spotify="episode">
+          <div class="movie-poster-wrapper">
+            {ep.image
+              ? <img src={ep.image} alt={ep.showName || ep.episodeName || ''} class="podcast-cover" width="150" height="150" loading="lazy" decoding="async" />
+              : <div class="podcast-cover-placeholder">🎧</div>}
+          </div>
+          <div class="movie-info">
+            <div class="movie-title-row">
+              <h3 class="movie-title">{ep.episodeName || 'Untitled episode'}</h3>
+            </div>
+            <div class="podcast-category-badge">{ep.showName || 'Unknown show'}</div>
+            {(formatEpisodeDuration(ep.durationMs) || formatRelativeDate(ep.listenedAt)) && (
+              <div class="spotify-episode-duration">
+                {formatEpisodeDuration(ep.durationMs)}
+                {formatEpisodeDuration(ep.durationMs) && formatRelativeDate(ep.listenedAt) ? ' · ' : ''}
+                {formatRelativeDate(ep.listenedAt)}
+              </div>
+            )}
+            {ep.episodeUrl && <a class="spotify-episode-link" href={ep.episodeUrl} target="_blank" rel="noopener noreferrer">Open in Spotify →</a>}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="spotify-shows-section" class="spotify-section" hidden={spotifyShows.length === 0}>
+    <div class="spotify-section-header">
+      <h2>Shows I Follow on Spotify</h2>
+      <p class="spotify-section-meta" id="spotify-shows-meta">
+        {spotifyShows.length > 0 && `${spotifyShows.length} ${spotifyShows.length === 1 ? 'show' : 'shows'}${podcastShowsData.generatedAt ? ` · synced ${formatRelativeDate(podcastShowsData.generatedAt)}` : ''}`}
+      </p>
+    </div>
+    <div id="spotify-shows-container" class="movies-grid">
+      {spotifyShows.map((show) => (
+        <div class="movie-card podcast-card js-zoom-item" data-spotify="show">
+          <div class="movie-poster-wrapper">
+            {show.image
+              ? <img src={show.image} alt={show.name || ''} class="podcast-cover" width="150" height="150" loading="lazy" decoding="async" />
+              : <div class="podcast-cover-placeholder">🎙️</div>}
+          </div>
+          <div class="movie-info">
+            <div class="movie-title-row">
+              <h3 class="movie-title">{show.name || 'Untitled show'}</h3>
+            </div>
+            {show.publisher && <div class="podcast-category-badge">{show.publisher}</div>}
+            {show.url && <a class="spotify-episode-link" href={show.url} target="_blank" rel="noopener noreferrer">Open in Spotify →</a>}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="curated-podcasts-section">
+    <div class="spotify-section-header">
+      <h2>Curated Picks</h2>
+      <p class="spotify-section-meta">Hand-picked shows and episodes I return to.</p>
+    </div>
+    <div id="podcasts-container" class="movies-grid">
+      {podcasts.map((p, i) => <PodcastCard podcast={{ ...p.data, id: p.id }} index={i} />)}
+    </div>
+  </section>
+</CollectionPage>
 
 <script>
   import { createCollectionRuntime } from '../scripts/collection-runtime';

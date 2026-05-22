@@ -1,12 +1,18 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
+import BookCard from '../components/BookCard.astro';
+import BookCategoryModal from '../components/BookCategoryModal.astro';
+import BookModal from '../components/BookModal.astro';
 import CollectionPage from '../components/CollectionPage.astro';
+import ContentVisibilityStyle from '../components/ContentVisibilityStyle.astro';
+import InlineJson from '../components/InlineJson.astro';
+import SidebarRatingSliderFilters from '../components/SidebarRatingSliderFilters.astro';
 import type { Book } from '../content.config';
-import { bookCoverUrl, renderBookCardHtml } from '../lib/book-card';
+import { bookCoverUrl } from '../lib/book-card';
 import { CATEGORY_MAP } from '../lib/book-categories';
-import { BOOK_SECTIONS, renderRatingFilterSection, renderSliderFilterSection, tasteListOptions } from '../lib/collection-sections';
-import { escapeAttr } from '../lib/html-escape';
+import { BOOK_SECTIONS, tasteListOptions } from '../lib/collection-sections';
+import { categoryDisplayNames } from '../scripts/books-state';
 import { slugify } from '../lib/slug';
 import booksRuntimeData from '../../../data/books.generated.json';
 
@@ -15,15 +21,13 @@ import booksRuntimeData from '../../../data/books.generated.json';
 
 const canonical = 'https://jevangoldsmith.com/books.html';
 
-// SSR every book card. Eager-load the first 6 covers (above-fold on mobile + desktop).
 const books = await getCollection('books') as CollectionEntry<'books'>[];
-const bookCardsHtml = books
-  .map((b, i) => renderBookCardHtml(b.data, i < 6))
-  .join('');
 
 const booksByCategoryKey: Record<string, Book[]> = {};
+const booksByCategoryName: Record<string, Book[]> = {};
 for (const entry of books) {
   const data = entry.data;
+  (booksByCategoryName[data.category] ||= []).push(data);
   const key = CATEGORY_MAP[data.category];
   if (!key) continue;
   (booksByCategoryKey[key] ||= []).push(data);
@@ -53,65 +57,28 @@ const recentBooks = books
   .slice(-20)
   .reverse()
   .map((b) => b.data);
-const carouselTrackInner = [...recentBooks, ...recentBooks]
-  .map((book) => {
-    const url = bookCoverUrl(book, 'medium');
-    const slug = book.isbn || slugify(`${book.title}-${book.author}`);
-    const href = slug ? `/books/${slug}.html` : '#';
-    return `<a class="carousel-book-link" href="${escapeAttr(href)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}"><img class="carousel-book" src="${escapeAttr(url)}" alt="${escapeAttr(book.title)}" decoding="async" data-isbn="${escapeAttr(book.isbn)}" data-remove-on-error="true"></a>`;
-  })
-  .join('');
-
-const sidebarFiltersHtml = renderRatingFilterSection({ clearAction: 'clear-star-filter' })
-    + '\n\n' + renderSliderFilterSection({ label: 'Filter by Times Read', icon: '📖', id: 'timesread' });
-
-const headerCarouselHtml = `<div class="recent-books-carousel">
-    <span class="carousel-label">Recently Added</span>
-    <div class="carousel-track" id="carousel-track" style="animation-duration:${recentBooks.length * 3}s">${carouselTrackInner}</div>
-</div>`;
-
-const headerViewToggleHtml = `<button class="view-toggle-single" id="view-toggle-main" data-action="toggle-view-mode" data-current-mode="list" aria-label="Switch to grid view" title="Switch to grid view">
-    <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
-    <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
-</button>`;
-
-const populatedMainBody = `<div id="books-container" class="books-grid">${bookCardsHtml}</div>
-<div class="category-grid-view" id="category-grid-view" style="display: none;">
-    <header class="main-header grid-view-header">
-        <div class="header-content">
-            <h1>Bookshelf</h1>
-            <div class="philosophy-link-wrapper">
-                <a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a>
-                <span class="read-first-note">read this first</span>
-            </div>
-        </div>
-        <button class="view-toggle-single" id="view-toggle-grid" data-action="toggle-view-mode" data-current-mode="grid" aria-label="Switch to list view" title="Switch to list view">
-            <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
-            <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
-        </button>
-    </header>
-    <div class="category-grid" id="category-grid"></div>
-</div>`;
-
-const afterMainHtml = `<div id="book-modal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close" data-action="close-book-modal">&times;</span>
-        <div class="modal-body">
-            <div class="modal-header">
-                <img id="modal-book-cover" src="" alt="" class="modal-cover" decoding="async">
-                <div class="modal-info">
-                    <h2 id="modal-book-title"></h2>
-                    <p id="modal-book-author" class="modal-author"></p>
-                    <div id="modal-book-rating" class="modal-rating"></div>
-                </div>
-            </div>
-            <div class="modal-review">
-                <h3>My Review</h3>
-                <p id="modal-book-review" class="review-text"></p>
-            </div>
-        </div>
-    </div>
-</div>`;
+const carouselBooks = [...recentBooks, ...recentBooks].map((book) => {
+  const slug = book.isbn || slugify(`${book.title}-${book.author}`);
+  return {
+    href: slug ? `/books/${slug}.html` : '#',
+    title: `${book.title} by ${book.author}`,
+    image: bookCoverUrl(book, 'medium'),
+    alt: book.title,
+    isbn: book.isbn
+  };
+});
+const categoryGridCards = Object.entries(booksByCategoryName)
+  .sort((a, b) => b[1].length - a[1].length)
+  .map(([category, categoryBooks]) => ({
+    category,
+    displayName: categoryDisplayNames[category] || category,
+    count: categoryBooks.length,
+    covers: categoryBooks.slice(0, 8).map((book) => ({
+      src: bookCoverUrl(book, 'medium'),
+      alt: book.title
+    })),
+    emptySlots: Math.max(0, 8 - Math.min(8, categoryBooks.length))
+  }));
 
 const config = ({
   layout: { id: 'books-layout', className: 'books-layout collection-layout sidebar-collapsed' },
@@ -130,7 +97,6 @@ const config = ({
       clearAction: 'clear-search',
       wrapperClass: 'search-input-wrapper search-bubble'
     },
-    extraHtml: sidebarFiltersHtml,
     footerText: 'Books with a badge have my full review',
     sections: SIDEBAR_SECTIONS
   },
@@ -140,15 +106,11 @@ const config = ({
     title: 'Bookshelf',
     mobileGridLabel: 'Gallery',
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a><span class="read-first-note">read this first</span></div>',
-    headerExtraHtml: headerCarouselHtml,
-    counterExtraHtml: headerViewToggleHtml,
     counterGroupClass: 'header-right',
     counterId: 'book-count',
     counterLabelId: 'counter-label',
-    counterLabel: 'Total Books Read',
-    bodyHtml: populatedMainBody
-  },
-  afterMainHtml: afterMainHtml
+    counterLabel: 'Total Books Read'
+  }
 });
 ---
 <CollectionPage
@@ -162,19 +124,72 @@ const config = ({
       <link rel="preload" as="image" fetchpriority="high" href={lcpCoverUrl} />
     </Fragment>
   )}
+  <Fragment slot="sidebar-extra">
+    <SidebarRatingSliderFilters clearAction="clear-star-filter" sliderLabel="Filter by Times Read" sliderIcon="📖" sliderId="timesread" />
+  </Fragment>
+  <Fragment slot="header-extra">
+    <div class="recent-books-carousel">
+      <span class="carousel-label">Recently Added</span>
+      <div class="carousel-track" id="carousel-track" style={`animation-duration:${recentBooks.length * 3}s`}>
+        {carouselBooks.map((book) => (
+          <a class="carousel-book-link" href={book.href} title={book.title}>
+            <img class="carousel-book" src={book.image} alt={book.alt} decoding="async" data-isbn={book.isbn} data-remove-on-error="true" />
+          </a>
+        ))}
+      </div>
+    </div>
+  </Fragment>
+  <Fragment slot="counter-extra">
+    <button class="view-toggle-single" id="view-toggle-main" data-action="toggle-view-mode" data-current-mode="list" aria-label="Switch to grid view" title="Switch to grid view">
+      <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+      <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+    </button>
+  </Fragment>
+  <div id="books-container" class="books-grid">
+    {books.map((b, i) => <BookCard book={b.data} eager={i < 6} />)}
+  </div>
+  <div class="category-grid-view" id="category-grid-view" style="display: none;">
+    <header class="main-header grid-view-header">
+      <div class="header-content">
+        <h1>Bookshelf</h1>
+        <div class="philosophy-link-wrapper">
+          <a href="reading-philosophy.html" class="header-subtitle-link">My Reading Philosophy</a>
+          <span class="read-first-note">read this first</span>
+        </div>
+      </div>
+      <button class="view-toggle-single" id="view-toggle-grid" data-action="toggle-view-mode" data-current-mode="grid" aria-label="Switch to list view" title="Switch to list view">
+        <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+        <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+      </button>
+    </header>
+    <div class="category-grid" id="category-grid">
+      {categoryGridCards.map((category) => (
+        <div class="category-card" data-action="open-category-modal" data-category={category.category}>
+          <div class="category-card-books">
+            {category.covers.map((cover) => (
+              cover.src ? <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" data-remove-on-error="true" /> : <div class="empty-slot"></div>
+            ))}
+            {Array.from({ length: category.emptySlots }).map(() => <div class="empty-slot"></div>)}
+          </div>
+          <div class="category-card-info">
+            <span class="category-card-name">{category.displayName}</span>
+            <span class="category-card-count">{category.count}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  <Fragment slot="after-main">
+    <BookModal />
+    <BookCategoryModal />
+  </Fragment>
 </CollectionPage>
 
-<script is:inline id="jg-books-data" type="application/json" set:html={JSON.stringify(booksRuntimeData)}></script>
+<InlineJson id="jg-books-data" data={booksRuntimeData} />
+
+<ContentVisibilityStyle selector=".book-card" intrinsicSize="220px 360px" />
 
 <style is:inline>
-  /* content-visibility skips offscreen book cards' layout/paint until they
-     scroll into view. contain-intrinsic-size reserves the slot so the
-     scroll position stays stable. Mirrors the people page treatment. */
-  .book-card {
-    content-visibility: auto;
-    contain-intrinsic-size: 220px 360px;
-  }
-
   /* While a book cover is flying to the detail page, fade out the page
      content (main + sidebar) — but NOT the navbar, which renders the
      same on both pages. Fading the navbar would flicker between two

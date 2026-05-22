@@ -16,3 +16,7 @@
 | /search.html | 100 | 638ms | 0.007 | 0ms | 518ms | 518ms | 323.3KB |
 
 Captured by `scripts/perf-lighthouse.js`. Re-run with `npm run perf:lighthouse`.
+
+Budget note: `/adventures.html` has a wider Total Bytes tolerance in
+`scripts/check-lighthouse-budget.js` because Lighthouse includes
+third-party ArcGIS satellite tile downloads in `total-byte-weight`.

@@ -1,14 +1,20 @@
 import { test, expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
-test('adventures page renders 7 cards + counter', async ({ page }) => {
+const dataPath = fileURLToPath(new URL('../../../data/adventures.json', import.meta.url));
+const adventuresData = JSON.parse(readFileSync(dataPath, 'utf8')) as { adventures?: Array<{ status?: string }> };
+const expectedPublishedAdventures = (adventuresData.adventures || []).filter((adventure) => adventure.status === 'published').length;
+
+test('adventures page renders published cards + counter', async ({ page }) => {
   await page.goto('/adventures.html');
   await page.waitForFunction(
-    () => Number(document.getElementById('adventure-count')?.textContent || 0) >= 7,
-    null,
+    (expected) => Number(document.getElementById('adventure-count')?.textContent || 0) >= expected,
+    expectedPublishedAdventures,
     { timeout: 10_000 }
   );
   const counter = await page.locator('#adventure-count').innerText();
-  expect(Number(counter)).toBe(7);
+  expect(Number(counter)).toBe(expectedPublishedAdventures);
 });
 
 // Skipped: window.AdventuresState was removed when adventures-state moved

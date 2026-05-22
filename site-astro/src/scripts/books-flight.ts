@@ -2,6 +2,8 @@ import { SESSION_KEYS } from './storage-keys';
 import { TIMING } from './timing';
 import { BREAKPOINT, HERO_OFFSET_TOP } from './breakpoints';
 
+let restoreBookListFromSpa: (() => boolean) | null = null;
+
 export function initBooksZoom() {
     const booksGrid = document.getElementById('books-container');
     if (!booksGrid) return;
@@ -161,6 +163,16 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 return;
             }
             spaTookOver = true;
+            const previousTitle = document.title;
+            const previousScrollY = window.scrollY;
+            const hiddenSidebars = Array.from(document.querySelectorAll<HTMLElement>('.books-sidebar'));
+            let handoffComplete = false;
+            const cleanupFlightCover = () => {
+                clone.remove();
+                cover.style.visibility = '';
+                (cover.style as CSSStyleDeclaration).viewTransitionName = '';
+                document.body.classList.remove('is-book-launching');
+            };
             // Carry the detail page's <head> inline styles into the
             // current page so the SPA-injected main has access to
             // every style rule the standalone /books/{slug} page does
@@ -190,9 +202,28 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             // The detail page doesn't render a sidebar — hide the
             // listing sidebar so the new main can center under its
             // already-faded backdrop.
-            document.querySelectorAll<HTMLElement>('.books-sidebar')
-                .forEach((el) => { el.style.display = 'none'; });
+            hiddenSidebars.forEach((el) => { el.style.display = 'none'; });
             document.title = doc.title;
+            restoreBookListFromSpa = () => {
+                if (!newMain.isConnected || !newMain.parentNode) {
+                    restoreBookListFromSpa = null;
+                    return false;
+                }
+                cleanupFlightCover();
+                document.querySelectorAll<HTMLStyleElement>('style[data-spa-detail-css="1"]')
+                    .forEach((existing) => existing.remove());
+                newMain.parentNode.replaceChild(oldMain, newMain);
+                hiddenSidebars.forEach((el) => { el.style.display = ''; });
+                document.title = previousTitle;
+                window.scrollTo({ top: previousScrollY, left: 0, behavior: 'auto' });
+                restoreBookListFromSpa = null;
+                return true;
+            };
+            const backLink = newMain.querySelector<HTMLAnchorElement>('.detail-back[href="/books.html"]');
+            backLink?.addEventListener('click', (event) => {
+                event.preventDefault();
+                history.back();
+            });
             // Reset scroll so the new detail-hero ends up at viewport
             // top (matching the clone's flight destination). The clone
             // is position:fixed and stays put across the scroll, and the
@@ -211,6 +242,8 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             // hero img and remove the clone. Both sit at the same
             // pixel-exact position so the swap is invisible.
             const handoff = () => {
+                if (handoffComplete || !newMain.isConnected) return;
+                handoffComplete = true;
                 // Reveal the real hero (clear the inline hides we set
                 // at injection time) and remove the clone in the same
                 // tick — both occupy identical pixel-exact rects so the
@@ -220,10 +253,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                     newHeroImg.style.opacity = '';
                 }
                 newMain.classList.add('is-spa-cover-revealed');
-                clone.remove();
-                cover.style.visibility = '';
-                (cover.style as CSSStyleDeclaration).viewTransitionName = '';
-                document.body.classList.remove('is-book-launching');
+                cleanupFlightCover();
                 // Restore sidebar style after cleanup in case the user
                 // hits Back — we'll re-render on popstate.
                 setTimeout(() => {
@@ -252,6 +282,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
 export function installBookFlightPopstate() {
     if (typeof window === 'undefined') return;
     window.addEventListener('popstate', (event) => {
+        if (restoreBookListFromSpa?.()) return;
         const navState = (event.state || {}) as Record<string, unknown>;
         if (navState.bookFlight) window.location.reload();
         // If location is now /books and we have an SPA-injected detail

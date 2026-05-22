@@ -1,0 +1,9 @@
+---
+interface Props {
+  selector: string;
+  intrinsicSize: string;
+}
+
+const { selector, intrinsicSize } = Astro.props as Props;
+---
+<style is:inline set:html={`${selector}{content-visibility:auto;contain-intrinsic-size:${intrinsicSize};}`} />

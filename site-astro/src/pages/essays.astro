@@ -1,12 +1,11 @@
 ---
 import essaysData from '../../public/data/essays.json';
 import CollectionPage from '../components/CollectionPage.astro';
+import InlineJson from '../components/InlineJson.astro';
 import { ESSAY_LIST_OPTIONS, ESSAY_SECTIONS } from '../lib/collection-sections';
-import { formatDate } from '../lib/dates';
-import { escapeAttr, escapeHtml } from '../lib/html-escape';
+import { formatDate, formatDateShort } from '../lib/dates';
 
 const canonical = 'https://jevangoldsmith.com/essays.html';
-const essaysJson = JSON.stringify(essaysData);
 
 // SSR the first (most recent) published essay so the page reaches its
 // final layout in one paint — eliminates the JS-driven CLS that shows
@@ -49,57 +48,39 @@ const orderedCategories = [
   ...CATEGORY_ORDER.filter((c) => byCategory.has(c)),
   ...Array.from(byCategory.keys()).filter((c) => !CATEGORY_ORDER.includes(c))
 ];
+const essaySections = ESSAY_SECTIONS.map((section) => {
+  if (!section.panelId) return { ...section, count: String(sortedEssays.length) };
+  const categoryKey = section.panelId.replace(/^category-/, '');
+  const list = byCategory.get(CATEGORY_ORDER.find((cat) => categorySlugOf(cat) === categoryKey) || '') || [];
+  return {
+    ...section,
+    count: String(list.length),
+    panelLinks: list.map((essay) => ({
+      href: `#${essay.id as string}`,
+      className: 'essay-link',
+      label: essay.title as string || '',
+      meta: formatDateShort(essay.date as string),
+      attrs: {
+        'data-action': 'scrollToEssay',
+        'data-action-args': encodeURIComponent(essay.id as string),
+        'data-action-eventobj': 'true'
+      }
+    }))
+  };
+});
 
-// Render all essays in a single "Writing" section — no per-category headings.
-const allRowsHtml = orderedCategories.flatMap((cat) => {
+const essayRows = orderedCategories.flatMap((cat) => {
   const slug = categorySlugOf(cat);
   return (byCategory.get(cat) || []).map((essay) => {
-    const id = escapeAttr(essay.id as string);
-    const title = escapeHtml(essay.title as string || '');
-    const subtitle = escapeHtml(subtitleFor(essay));
-    return `<li class="essay-row" data-essay-id="${id}" data-category="${escapeAttr(slug)}">
-            <a href="#${id}" class="essay-row-link" data-action="openEssayFromCard" data-action-args="${id}" data-action-eventobj="true">
-                <span class="essay-row-title">${title}</span>
-                <span class="essay-row-subtitle">${subtitle}</span>
-            </a>
-        </li>`;
+    const id = essay.id as string;
+    return {
+      id,
+      slug,
+      title: essay.title as string || '',
+      subtitle: subtitleFor(essay)
+    };
   });
-}).join('\n        ');
-
-const ssrCardsHtml = `<section class="essay-section" data-category="writing">
-        <h3 class="essay-section-title">Writing</h3>
-        <ul class="essay-list">
-        ${allRowsHtml}
-        </ul>
-    </section>`;
-
-const ssrEssayHtml = firstEssay
-  ? `<article class="article-full" id="${escapeAttr(firstEssay.id as string)}">
-        <div class="post-meta">
-            <span class="post-date">${escapeHtml(formatDate(firstEssay.date as string))}</span>
-            <span class="post-category">${escapeHtml(firstEssay.category as string || '')}</span>
-        </div>
-        <h2>${escapeHtml(firstEssay.title as string || '')}</h2>
-        ${firstEssay.subtitle ? `<p><em>${escapeHtml(firstEssay.subtitle as string)}</em></p>` : ''}
-        ${(firstEssay.content as string) || ''}
-    </article>
-    <div class="essay-nav">
-        <button class="essay-nav-btn essay-nav-prev" disabled data-action="prevEssay">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            <span class="essay-nav-label">
-                <span class="essay-nav-direction">Previous</span>
-            </span>
-        </button>
-        <span class="essay-nav-counter">1 / ${total}</span>
-        <button class="essay-nav-btn essay-nav-next" ${total <= 1 ? 'disabled' : ''} data-action="nextEssay">
-            <span class="essay-nav-label essay-nav-label-right">
-                <span class="essay-nav-direction">Next</span>
-                ${nextTitle ? `<span class="essay-nav-title">${escapeHtml(nextTitle)}</span>` : ''}
-            </span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-    </div>`
-  : '';
+});
 
 // after-main.html (field-notes inline CTA + seo-related) is added by the
 // post-build normalizer + Base layout, so we leave it out here.
@@ -123,39 +104,16 @@ const config = ({
       searchEvent: 'input',
       wrapperClass: 'search-input-wrapper search-bubble'
     },
-    sections: ESSAY_SECTIONS
+    sections: essaySections
   },
   main: {
     className: 'essays-main collection-main',
     titleTag: 'h2',
     title: 'Essays',
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="writing-philosophy.html" class="header-subtitle-link">My Writing Philosophy</a><span class="read-first-note">read this first</span></div>',
-    counterExtraHtml: `<div class="view-toggle main-view-toggle">
-    <button class="view-toggle-btn active" id="list-view-btn-main" data-action="set-view-mode" data-mode="list" title="List view">
-        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"/></svg>
-    </button>
-    <button class="view-toggle-btn" id="grid-view-btn-main" data-action="set-view-mode" data-mode="grid" title="Grid view">
-        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"/></svg>
-    </button>
-</div>`,
     counterGroupClass: 'header-right',
     counterId: 'essay-count',
-    counterLabel: 'Total Essays',
-    headerExtraHtml: '',
-    bodyHtml: `<button type="button" class="essay-back-to-list" data-action="setEssayView" data-action-args="cards" data-view="reader">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        All essays
-    </button>
-    <div id="essays-container" class="content-section essays-view-reader" data-view="reader" hidden>${ssrEssayHtml}</div>
-    <div id="essays-cards" class="essays-cards essays-view-cards" data-view="cards">
-        ${ssrCardsHtml}
-    </div>
-    <section class="field-notes-inline-cta" data-field-notes-inline>
-        <p class="archive-kicker">Field Notes</p>
-        <h2>Want more notes like this?</h2>
-        <p>Field Notes is where I send useful ideas before they become polished essays: books, objects, questions, and experiments worth keeping.</p>
-        <a href="field-notes.html" class="btn-primary">Get Field Notes</a>
-    </section>`
+    counterLabel: 'Total Essays'
   }
 });
 ---
@@ -164,9 +122,95 @@ const config = ({
   title="Essays on Thinking, Business, Culture &amp; Personal Systems"
   description="Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems."
   canonical={canonical}
-/>
+>
+  <Fragment slot="counter-extra">
+    <div class="view-toggle main-view-toggle">
+      <button class="view-toggle-btn active" id="list-view-btn-main" data-action="set-view-mode" data-mode="list" title="List view">
+        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+      </button>
+      <button class="view-toggle-btn" id="grid-view-btn-main" data-action="set-view-mode" data-mode="grid" title="Grid view">
+        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+      </button>
+    </div>
+  </Fragment>
+  <button type="button" class="essay-back-to-list" data-action="setEssayView" data-action-args="cards" data-view="reader">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    All essays
+  </button>
+  <div id="essays-container" class="content-section essays-view-reader" data-view="reader" hidden>
+    {firstEssay && (
+      <>
+        <article class="article-full" id={firstEssay.id as string}>
+          <div class="post-meta">
+            <span class="post-date">{formatDate(firstEssay.date as string)}</span>
+            <span class="post-category">{firstEssay.category as string || ''}</span>
+          </div>
+          <h2>{firstEssay.title as string || ''}</h2>
+          <p hidden={!firstEssay.subtitle}><em>{firstEssay.subtitle as string || ''}</em></p>
+          <div data-essay-content set:html={(firstEssay.content as string) || ''}></div>
+        </article>
+        <div class="essay-nav">
+          <button class="essay-nav-btn essay-nav-prev" disabled data-action="prevEssay">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span class="essay-nav-label">
+              <span class="essay-nav-direction">Previous</span>
+              <span class="essay-nav-title" data-essay-prev-title></span>
+            </span>
+          </button>
+          <span class="essay-nav-counter">1 / {total}</span>
+          <button class="essay-nav-btn essay-nav-next" disabled={total <= 1} data-action="nextEssay">
+            <span class="essay-nav-label essay-nav-label-right">
+              <span class="essay-nav-direction">Next</span>
+              <span class="essay-nav-title" data-essay-next-title>{nextTitle || ''}</span>
+            </span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </>
+    )}
+  </div>
+  <template id="essay-empty-template">
+    <p class="essay-runtime-message">No essays published yet.</p>
+  </template>
+  <template id="essay-render-error-template">
+    <p class="essay-runtime-message">Unable to render essay.</p>
+  </template>
+  <template id="essay-load-error-template">
+    <div class="essay-runtime-message essay-runtime-message--error">
+      <p class="essay-runtime-title">Unable to load essays</p>
+      <p>Please try refreshing the page.</p>
+    </div>
+  </template>
+  <template id="essay-sidebar-link-template">
+    <a href="#" class="essay-link" data-action="scrollToEssay" data-action-args="" data-action-eventobj="true">
+      <div data-essay-link-title></div>
+      <div class="essay-link-date" data-essay-link-date></div>
+    </a>
+  </template>
+  <div id="essays-cards" class="essays-cards essays-view-cards" data-view="cards">
+    <section class="essay-section" data-category="writing">
+      <h3 class="essay-section-title">Writing</h3>
+      <ul class="essay-list">
+        {essayRows.map((essay) => (
+          <li class="essay-row" data-essay-id={essay.id} data-category={essay.slug}>
+            <a href={`#${essay.id}`} class="essay-row-link" data-action="openEssayFromCard" data-action-args={essay.id} data-action-eventobj="true">
+              <span class="essay-row-title">{essay.title}</span>
+              <span class="essay-row-subtitle">{essay.subtitle}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+  <section class="field-notes-inline-cta" data-field-notes-inline>
+    <p class="archive-kicker">Field Notes</p>
+    <h2>Want more notes like this?</h2>
+    <p>Field Notes is where I send useful ideas before they become polished essays: books, objects, questions, and experiments worth keeping.</p>
+    <a href="field-notes.html" class="btn-primary">Get Field Notes</a>
+  </section>
+</CollectionPage>
 
-<script is:inline type="application/json" id="jg-essays-data" set:html={essaysJson} />
+<InlineJson id="jg-essays-data" data={essaysData} />
 
 <script>
   import '../scripts/essays.ts';
@@ -174,6 +218,16 @@ const config = ({
 
 <style is:global>
   /* Index view — minimal grouped list, inspired by emilkowal.ski */
+  .essay-runtime-message {
+    text-align: center;
+    color: var(--text-light);
+    padding: 3rem;
+  }
+  .essay-runtime-message--error .essay-runtime-title {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
   .essays-cards {
     max-width: 640px;
     margin: 0 auto;

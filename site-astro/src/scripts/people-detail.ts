@@ -1,41 +1,56 @@
-import { escapeAttr, escapeHtml } from '../lib/html-escape';
+import { cloneTemplateElement } from './dom-template';
 
 let lastFocusedPerson: HTMLElement | null = null;
 
-function createMediaMarkup(person: AnyObj, key: string, label: string) {
+interface PersonMediaItem {
+    href?: string;
+    coverImage?: string;
+    title?: string;
+    label?: string;
+    author?: string;
+}
+
+interface PersonDetailRecord {
+    image?: string;
+    name?: string;
+    srcset?: string;
+    title?: string;
+    bio?: string;
+    lesson?: string;
+    profileHref?: string;
+    books?: PersonMediaItem[];
+    movies?: PersonMediaItem[];
+}
+
+function renderMediaList(person: PersonDetailRecord, key: 'books' | 'movies', sectionId: string, listId: string) {
     const entries = person[key] || [];
-    if (!entries.length) return '';
-    return `
-        <div class="person-detail-books">
-            <p class="person-detail-section-label">${escapeHtml(label)}</p>
-            <div class="person-detail-book-list">
-                ${entries.map((item: AnyObj) => `
-                    <a class="person-detail-book-link" href="${escapeAttr(item.href)}">
-                        ${item.coverImage ? `<img class="person-detail-book-cover" src="${escapeAttr(item.coverImage)}" alt="${escapeAttr(item.title)} cover" loading="lazy" decoding="async">` : '<span class="person-detail-book-cover person-detail-book-cover-fallback" aria-hidden="true"></span>'}
-                        <span class="person-detail-book-meta">
-                            <span class="person-detail-book-title">${escapeHtml(item.label)}</span>
-                            ${item.author ? `<span class="person-detail-book-author">${escapeHtml(item.author)}</span>` : ''}
-                        </span>
-                    </a>
-                `).join('')}
-            </div>
-        </div>
-    `;
-}
-
-function createBooksMarkup(person: AnyObj) {
-    return `${createMediaMarkup(person, 'books', 'Books')}${createMediaMarkup(person, 'movies', 'Movies')}`;
-}
-
-function ensurePeopleDetailModal() {
-    let modal = document.getElementById('person-detail-modal');
-    if (modal) return modal;
-    modal = document.createElement('div');
-    modal.id = 'person-detail-modal';
-    modal.className = 'person-detail-modal';
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(modal);
-    return modal;
+    const section = document.getElementById(sectionId);
+    const list = document.getElementById(listId);
+    if (!section || !list) return;
+    section.hidden = entries.length === 0;
+    const fragment = document.createDocumentFragment();
+    entries.forEach((item) => {
+        const link = cloneTemplateElement<HTMLAnchorElement>('person-detail-media-link-template');
+        if (!link) return;
+        const image = link.querySelector('.person-detail-book-cover:not(.person-detail-book-cover-fallback)') as HTMLImageElement | null;
+        const fallback = link.querySelector('.person-detail-book-cover-fallback') as HTMLElement | null;
+        const title = link.querySelector('.person-detail-book-title');
+        const author = link.querySelector('.person-detail-book-author') as HTMLElement | null;
+        link.href = item.href || '#';
+        if (image) {
+            image.hidden = !item.coverImage;
+            image.src = item.coverImage || '';
+            image.alt = item.title ? `${item.title} cover` : '';
+        }
+        if (fallback) fallback.hidden = Boolean(item.coverImage);
+        if (title) title.textContent = item.label || '';
+        if (author) {
+            author.hidden = !item.author;
+            author.textContent = item.author || '';
+        }
+        fragment.appendChild(link);
+    });
+    list.replaceChildren(fragment);
 }
 
 function closePeopleDetail() {
@@ -48,35 +63,43 @@ function closePeopleDetail() {
     lastFocusedPerson = null;
 }
 
-function openPeopleDetail(person: AnyObj, trigger: HTMLElement | null) {
-    const modal = ensurePeopleDetailModal();
+function openPeopleDetail(person: PersonDetailRecord, trigger: HTMLElement | null) {
+    const modal = document.getElementById('person-detail-modal');
+    if (!modal) return;
     lastFocusedPerson = (trigger || document.activeElement) as HTMLElement | null;
-    modal.innerHTML = `
-        <div class="person-detail-backdrop" data-action="close-person-detail"></div>
-        <article class="person-detail-panel" role="dialog" aria-modal="true" aria-labelledby="person-detail-title">
-            <button class="person-detail-close" type="button" data-action="close-person-detail" aria-label="Close person detail">X</button>
-            <div class="person-detail-hero">
-                <div class="person-detail-image-wrap">
-                    <img src="${escapeAttr(person.image)}" alt="${escapeAttr(person.name)}" class="person-detail-image" srcset="${escapeAttr(person.srcset || '')}" sizes="(max-width: 768px) 78vw, 320px" width="400" height="400" loading="lazy" decoding="async">
-                </div>
-                <div class="person-detail-copy">
-                    <p class="person-detail-kicker">${escapeHtml(person.title)}</p>
-                    <h2 id="person-detail-title">${escapeHtml(person.name)}</h2>
-                    <p class="person-detail-bio">${escapeHtml(person.bio || person.lesson)}</p>
-                    <p class="person-detail-blurb">${escapeHtml(person.lesson)}</p>
-                    ${person.profileHref ? `<a class="person-detail-profile-link" href="${escapeAttr(person.profileHref)}">View profile</a>` : ''}
-                </div>
-            </div>
-            ${createBooksMarkup(person)}
-        </article>
-    `;
+    const image = document.getElementById('person-detail-image') as HTMLImageElement | null;
+    const profile = document.getElementById('person-detail-profile-link') as HTMLAnchorElement | null;
+    if (image) {
+        image.src = person.image || '';
+        image.alt = person.name || '';
+        image.srcset = person.srcset || '';
+    }
+    const setText = (id: string, value: unknown) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = String(value || '');
+    };
+    setText('person-detail-kicker', person.title);
+    setText('person-detail-title', person.name);
+    setText('person-detail-bio', person.bio || person.lesson);
+    setText('person-detail-blurb', person.lesson);
+    if (profile) {
+        if (person.profileHref) {
+            profile.href = person.profileHref;
+            profile.hidden = false;
+        } else {
+            profile.hidden = true;
+            profile.removeAttribute('href');
+        }
+    }
+    renderMediaList(person, 'books', 'person-detail-books-section', 'person-detail-books-list');
+    renderMediaList(person, 'movies', 'person-detail-movies-section', 'person-detail-movies-list');
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('person-detail-open');
     (modal.querySelector('.person-detail-close') as HTMLElement | null)?.focus?.();
 }
 
-export function initPeopleDetail(loadPeopleById: () => Promise<Map<string, AnyObj>>) {
+export function initPeopleDetail(loadPeopleById: () => Promise<Map<string, PersonDetailRecord>>) {
     const grid = document.querySelector('.people-grid');
     if (!grid) return;
 

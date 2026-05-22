@@ -1,6 +1,5 @@
 // Centralized HTML escape helpers. Consolidates the six near-identical
-// implementations that previously lived inline in chrome.ts, seo.ts,
-// collection-chrome.ts, book-card.ts, podcast-card.ts, and
+// implementations that previously lived inline in chrome.ts, seo.ts, and
 // free-resources-render.ts.
 
 // Escape for HTML text content: & < > only (text nodes can't contain raw

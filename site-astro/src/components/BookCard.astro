@@ -1,0 +1,69 @@
+---
+import type { Book } from '../content.config';
+import { bookCoverUrl } from '../lib/book-card';
+import { slugify } from '../lib/slug';
+
+interface Props {
+  book: Partial<Book>;
+  eager?: boolean;
+}
+
+const { book, eager = false } = Astro.props;
+const title = String(book.title ?? '');
+const author = String(book.author ?? '');
+const yearStr = book.year != null && book.year !== '' ? String(book.year) : '';
+const isbn = String(book.isbn ?? '');
+const review = String(book.review ?? '').trim();
+const shortDescription = String(book.shortDescription ?? '');
+const ratingValue = Number(book.rating ?? 0);
+const reReads = Number(book.reReads ?? 0);
+const isUnread = book.read === false;
+const hasRating = !isUnread && ratingValue > 0;
+const timesRead = reReads + 1;
+const stars = hasRating ? '★'.repeat(ratingValue) + '☆'.repeat(5 - ratingValue) : '';
+const detailBody = review || shortDescription;
+const detailLabel = review ? 'Review' : 'Notes';
+const coverUrl = bookCoverUrl(book);
+const zoomLead = isUnread ? 'To Read' : !hasRating ? 'Read' : stars;
+const zoomLeadClass = isUnread || !hasRating ? 'zoom-detail-lead zoom-detail-unread' : 'zoom-detail-lead';
+const ratingLabel = isUnread ? 'Not yet read' : !hasRating ? 'Read' : '';
+const vtSlug = isbn || slugify(`${title}-${author}`);
+const href = vtSlug ? `/books/${vtSlug}.html` : '#';
+const classes = ['book-card', 'card-link', isUnread ? 'is-unread' : '', review ? 'has-review' : ''].filter(Boolean).join(' ');
+---
+<a class={classes} href={href} data-isbn={isbn || undefined} data-title={isbn ? undefined : title}>
+  {isUnread ? <div class="to-read-badge">📚 To Read</div> : timesRead > 1 ? <div class="times-read-badge">📖 {timesRead}x Read</div> : null}
+  <div class="book-cover-wrapper">
+    {coverUrl && (
+      <img
+        src={coverUrl}
+        alt={title}
+        class="book-cover"
+        width="150"
+        height="230"
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : undefined}
+        decoding="async"
+        data-book-cover-fallback="true"
+        style={vtSlug ? `view-transition-name: book-cover-${vtSlug}` : undefined}
+      />
+    )}
+    <div class="js-zoom-detail" aria-hidden="true">
+      <p class="zoom-detail-kicker">{author}{yearStr ? ` · ${yearStr}` : ''}</p>
+      <p class="zoom-detail-title">{title}</p>
+      <p class={zoomLeadClass}>{zoomLead}</p>
+      {detailBody && <p class="zoom-detail-line"><span>{detailLabel} —</span> {detailBody}</p>}
+    </div>
+  </div>
+  <div class="book-info">
+    <div class="book-title-row">
+      <h3 class="book-title">{title}</h3>
+      {yearStr && <span class="book-year">{yearStr}</span>}
+    </div>
+    <p class="book-author">by {author}</p>
+    {ratingLabel
+      ? <div class={`book-rating ${isUnread ? 'book-rating-unread' : 'book-rating-unrated'}`}>{ratingLabel}</div>
+      : <div class="book-rating"><span class="rating-number">{ratingValue}</span> {stars}</div>}
+    {review && <p class="book-description">{shortDescription}</p>}
+  </div>
+</a>

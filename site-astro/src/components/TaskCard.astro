@@ -1,0 +1,65 @@
+---
+import type { Challenge, Project } from '../lib/collection-sections';
+import { challengeCardView, projectCardView } from '../lib/collection-sections';
+
+type Props =
+  | { item: Project; type: 'project'; eager?: boolean }
+  | { item: Challenge; type: 'challenge'; eager?: boolean };
+
+const { item, type, eager = false } = Astro.props as Props;
+const view = type === 'project'
+  ? projectCardView(item as Project)
+  : challengeCardView(item as Challenge);
+const cardClass = type === 'project' ? 'project-card' : 'challenge-card';
+const id = item.slug || item.id;
+const progress = type === 'challenge' ? (item as Challenge).progress : undefined;
+const progressPercent = Number(progress?.percent) || 0;
+---
+{view.href ? (
+  <a class={`movie-card ${cardClass} card-link`} href={view.href} data-status={view.status} data-category={view.dataCategory} data-search={view.searchTerms} id={id}>
+    <div class="movie-poster-wrapper">
+      {item.image ? (
+        <img class="project-cover" src={item.image} alt={view.imageAlt} fetchpriority={eager ? 'high' : undefined} decoding="async" width="600" height="400" />
+      ) : (
+        <div class={`podcast-cover-placeholder ${view.placeholder}`}>{view.icon}</div>
+      )}
+    </div>
+    <div class="movie-info">
+      <div class={`times-read-badge movie-watch-badge status-${view.status}`}>{view.statusLabel}</div>
+      <div class="movie-title-row">
+        <h3 class="movie-title">{item.title}</h3>
+      </div>
+      <div class="podcast-category-badge">{view.categoryLine}</div>
+      <p class="movie-description">{view.description}</p>
+      {progress && (
+        <div class="challenge-progress">
+          <div class="progress-header">
+            <span class="progress-label">{progress.label || 'Progress'}</span>
+            <span class="progress-value">{progress.value || ''}</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style={`width: ${progressPercent}%;`}></div>
+          </div>
+        </div>
+      )}
+    </div>
+  </a>
+) : (
+  <div class={`movie-card ${cardClass} js-zoom-item`} data-status={view.status} data-category={view.dataCategory} data-search={view.searchTerms} id={id}>
+    <div class="movie-poster-wrapper">
+      {item.image ? (
+        <img class="project-cover" src={item.image} alt={view.imageAlt} fetchpriority={eager ? 'high' : undefined} decoding="async" width="600" height="400" />
+      ) : (
+        <div class={`podcast-cover-placeholder ${view.placeholder}`}>{view.icon}</div>
+      )}
+    </div>
+    <div class="movie-info">
+      <div class={`times-read-badge movie-watch-badge status-${view.status}`}>{view.statusLabel}</div>
+      <div class="movie-title-row">
+        <h3 class="movie-title">{item.title}</h3>
+      </div>
+      <div class="podcast-category-badge">{view.categoryLine}</div>
+      <p class="movie-description">{view.description}</p>
+    </div>
+  </div>
+)}

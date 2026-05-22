@@ -1,0 +1,38 @@
+<div id="person-detail-modal" class="person-detail-modal" aria-hidden="true">
+  <div class="person-detail-backdrop" data-action="close-person-detail"></div>
+  <article class="person-detail-panel" role="dialog" aria-modal="true" aria-labelledby="person-detail-title">
+    <button class="person-detail-close" type="button" data-action="close-person-detail" aria-label="Close person detail">X</button>
+    <div class="person-detail-hero">
+      <div class="person-detail-image-wrap">
+        <img id="person-detail-image" src="" alt="" class="person-detail-image" sizes="(max-width: 768px) 78vw, 320px" width="400" height="400" loading="lazy" decoding="async" />
+      </div>
+      <div class="person-detail-copy">
+        <p class="person-detail-kicker" id="person-detail-kicker"></p>
+        <h2 id="person-detail-title"></h2>
+        <p class="person-detail-bio" id="person-detail-bio"></p>
+        <p class="person-detail-blurb" id="person-detail-blurb"></p>
+        <a class="person-detail-profile-link" id="person-detail-profile-link" href="">View profile</a>
+      </div>
+    </div>
+    <div id="person-detail-media">
+      <div class="person-detail-books" id="person-detail-books-section" hidden>
+        <p class="person-detail-section-label">Books</p>
+        <div class="person-detail-book-list" id="person-detail-books-list"></div>
+      </div>
+      <div class="person-detail-books" id="person-detail-movies-section" hidden>
+        <p class="person-detail-section-label">Movies</p>
+        <div class="person-detail-book-list" id="person-detail-movies-list"></div>
+      </div>
+      <template id="person-detail-media-link-template">
+        <a class="person-detail-book-link" href="">
+          <img class="person-detail-book-cover" src="" alt="" loading="lazy" decoding="async" hidden>
+          <span class="person-detail-book-cover person-detail-book-cover-fallback" aria-hidden="true" hidden></span>
+          <span class="person-detail-book-meta">
+            <span class="person-detail-book-title"></span>
+            <span class="person-detail-book-author"></span>
+          </span>
+        </a>
+      </template>
+    </div>
+  </article>
+</div>

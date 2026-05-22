@@ -1,0 +1,45 @@
+---
+import type { Person as PersonRecord } from '../content.config';
+
+type Person = Partial<PersonRecord> & { name: string; sourceType?: string | null };
+
+interface Props {
+  person: Person;
+  index?: number;
+}
+
+const { person, index = Number.MAX_SAFE_INTEGER } = Astro.props;
+const name = person.name ?? '';
+const title = person.title ?? '';
+const lesson = person.lesson ?? '';
+const image = person.image ?? '';
+const srcset = person.srcset ?? '';
+const category = person.category ?? '';
+const searchText = person.searchText || `${name} ${title} ${lesson}`;
+const sourceType = person.sourceType || (title.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
+const sourceLabel = sourceType === 'fiction' ? 'Fiction' : 'Non-fiction';
+const personId = String(name || '')
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .toLowerCase()
+  .replace(/&/g, ' and ')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '');
+const eager = index < 6;
+const gridSrcset = srcset ? srcset.replace(/,?\s*[^,]+-800\.jpg 800w/g, '') : '';
+const avifSrcset = gridSrcset ? gridSrcset.replace(/\.jpg\b/g, '.avif') : '';
+---
+<article class="person-card" data-category={category} data-person-id={personId} data-search={searchText} data-source-type={sourceType} role="button" tabindex="0">
+  <div class="person-image-container">
+    <picture>
+      {avifSrcset && <source type="image/avif" srcset={avifSrcset} sizes="(max-width: 768px) 42vw, 220px" />}
+      <img src={image} alt={name} class="person-image" srcset={gridSrcset} sizes="(max-width: 768px) 42vw, 220px" width="400" height="400" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} decoding="async" />
+    </picture>
+  </div>
+  <div class="person-info">
+    <h3 class="person-name">{name}</h3>
+    <p class="person-source-type">{sourceLabel}</p>
+    <p class="person-title">{title}</p>
+    <p class="person-lesson">{lesson}</p>
+  </div>
+</article>

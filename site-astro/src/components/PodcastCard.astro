@@ -1,0 +1,38 @@
+---
+import type { Podcast } from '../content.config';
+import { slugify } from '../lib/slug';
+
+type PodcastData = Partial<Podcast> & { id?: string };
+
+interface Props {
+  podcast: PodcastData;
+  index?: number;
+}
+
+const { podcast, index = 0 } = Astro.props;
+const title = podcast.title ?? '';
+const host = podcast.host ?? '';
+const description = podcast.description ?? '';
+const category = podcast.category ?? '';
+const badge = podcast.badge ?? '';
+const image = podcast.image ?? '';
+const searchText = podcast.searchText ?? `${title} ${host} ${description} ${category}`;
+const slug = podcast.id || slugify(title);
+const eager = index < 6;
+---
+<a class="movie-card podcast-card card-link" href={slug ? `/podcasts/${slug}.html` : '#'} data-category={category} data-search={searchText}>
+  {badge && <div class="times-read-badge podcast-badge">{badge}</div>}
+  <div class="movie-poster-wrapper">
+    {image
+      ? <img src={image} alt={title} class="movie-poster podcast-cover" width="150" height="150" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} decoding="async" />
+      : <div class="podcast-cover-placeholder">🎧</div>}
+  </div>
+  <div class="movie-info">
+    <div class="movie-title-row">
+      <h3 class="movie-title">{title}</h3>
+    </div>
+    {host && <p class="movie-runtime">{host}</p>}
+    {category && <div class="podcast-category-badge">{category}</div>}
+    {description && <p class="movie-description">{description}</p>}
+  </div>
+</a>

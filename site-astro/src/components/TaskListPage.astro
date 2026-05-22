@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import type { Challenge, Project, TaskListConfig } from '../lib/collection-sections';
+import TaskCard from './TaskCard.astro';
+
+type TaskItem = Project | Challenge;
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  config: TaskListConfig;
+  items: TaskItem[];
+  type: 'project' | 'challenge';
+}
+
+const { title, description, canonical, config, items, type } = Astro.props as Props;
+const total = items.length;
+const statusCounts: Record<string, number> = {};
+for (const status of config.statusOrder) statusCounts[status] = 0;
+const categoryCounts = new Map<string, number>();
+for (const item of items) {
+  const status = (item.status || config.defaultStatus || '').toLowerCase();
+  if (statusCounts[status] !== undefined) statusCounts[status] += 1;
+  const category = (item.category || '').toLowerCase();
+  if (category) categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
+}
+
+const titleCase = (s: string) => s.replace(/\b[a-z]/g, (c) => c.toUpperCase());
+const categoryMetaFor = (category: string) => {
+  const key = (category || '').toLowerCase();
+  return config.categoryMap[key] ?? {
+    label: titleCase(category || 'General'),
+    emoji: config.categoryFallback.emoji
+  };
+};
+const categoryKeys = config.categoryOrder
+  ? config.categoryOrder.filter((category) => categoryCounts.has(category))
+  : Array.from(categoryCounts.keys()).sort();
+---
+<Base title={title} description={description} canonical={canonical} pageType="CollectionPage">
+  <slot name="head" slot="head" />
+  <main class="movies-layout collection-layout sidebar-collapsed" id={config.layoutId}>
+    <aside class="movies-sidebar collection-sidebar collapsed" id={config.sidebarId}>
+      <div class="sidebar-header">
+        <button class="sidebar-collapse-btn" data-action={config.toggleSidebarAction} title="Collapse sidebar">
+          <svg class="ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-sidebarCollapse"></use></svg>
+        </button>
+        <span class="sidebar-browse-label">Browse</span>
+      </div>
+
+      <div class="sidebar-list-selector">
+        <div class="list-dropdown" id="list-dropdown">
+          <button class="list-dropdown-btn" data-action={config.toggleListDropdownAction}>
+            <span id="current-list-name">{config.listCurrentName}</span>
+            <svg class="ico-stroke ico-12" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-chevronDown"></use></svg>
+          </button>
+          <div class="list-dropdown-menu" id="list-dropdown-menu">
+            {config.listOptions.map((item) => <a href={item.href} class={`list-option${item.active ? ' active' : ''}`}>{item.label}</a>)}
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-search">
+        <div class="search-input-wrapper search-bubble">
+          <svg class="search-icon ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-search"></use></svg>
+          <input
+            type="text"
+            id={config.searchInputId}
+            class="movie-search-input collection-search-input"
+            placeholder={config.searchPlaceholder}
+            data-action={config.searchAction}
+            data-action-event="input"
+            data-action-value="true"
+          />
+          <button id={config.searchClearButtonId} class="search-clear-btn" data-action={config.searchClearAction} style="display: none;">
+            <svg class="ico-stroke ico-14" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-close"></use></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <button class="sidebar-category active" data-action={config.filterAction} data-action-args="all" data-action-this="true" data-tooltip={config.allLabel}>
+          <span class="category-icon">🎯</span>
+          <span class="category-name">{config.allLabel}</span>
+          <span class="category-count" id={config.allCountId}>{total}</span>
+        </button>
+      </div>
+
+      {config.statusOrder.map((status) => {
+        const meta = config.statusMeta[status];
+        return (
+          <div class="sidebar-section">
+            <button class="sidebar-category" data-action={config.filterAction} data-action-args={status} data-action-this="true" data-tooltip={meta.label}>
+              <span class="category-icon">{meta.emoji}</span>
+              <span class="category-name">{meta.label}</span>
+              <span class="category-count" id={`count-${status}`}>{statusCounts[status] || 0}</span>
+            </button>
+          </div>
+        );
+      })}
+
+      {categoryKeys.map((category) => {
+        const meta = categoryMetaFor(category);
+        return (
+          <div class="sidebar-section">
+            <button class="sidebar-category" data-action={config.filterAction} data-action-args={category} data-action-this="true" data-tooltip={meta.label}>
+              <span class="category-icon">{meta.emoji}</span>
+              <span class="category-name">{meta.label}</span>
+              <span class="category-count" id={`count-cat-${category}`}>{categoryCounts.get(category) || 0}</span>
+            </button>
+          </div>
+        );
+      })}
+
+      <div class="sidebar-footer">
+        <p>{config.sidebarFooter}</p>
+      </div>
+    </aside>
+
+    <div class="movies-main">
+      <header class="main-header">
+        <div class="header-content">
+          <h2 id="collection-title" data-default-title={config.headerTitle}>{config.headerTitle}</h2>
+          {config.headerSubtitle && <p>{config.headerSubtitle}</p>}
+        </div>
+        <div class="header-counter">
+          <span class="counter-number" id={config.counterId}>{total}</span>
+          <span class="counter-label">{config.counterLabel}</span>
+        </div>
+      </header>
+
+      <div id={config.gridId} class="movies-grid">
+        {items.map((item, i) => <TaskCard item={item as never} type={type as never} eager={i === 0} />)}
+      </div>
+    </div>
+  </main>
+</Base>

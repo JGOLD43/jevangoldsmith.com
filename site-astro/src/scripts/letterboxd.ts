@@ -152,6 +152,8 @@ function setError() {
 
 function renderSidebar(genreGroups: AnyObj) {
     setSidebarLoaded();
+    const hasSsrGenreLinks = Array.from(document.querySelectorAll('.genre-movies'))
+        .some((container) => container.children.length > 0);
     const countAllEl = document.getElementById('count-all-movies');
     if (countAllEl) {
         const total = (Object.values(genreGroups) as AnyObj[][]).reduce((sum: number, movies) => sum + movies.length, 0);
@@ -165,7 +167,7 @@ function renderSidebar(genreGroups: AnyObj) {
         const countEl = document.getElementById(`count-${key}`);
         const container = document.getElementById(`genre-${key}`);
         if (countEl) countEl.textContent = '0';
-        if (container) container.innerHTML = '';
+        if (container && !hasSsrGenreLinks) container.innerHTML = '';
         (section as HTMLElement).style.display = 'none';
     });
     Object.keys(genreGroups).forEach((genre) => {
@@ -176,7 +178,7 @@ function renderSidebar(genreGroups: AnyObj) {
         const container = document.getElementById(`genre-${key}`);
         if (countEl) countEl.textContent = String(movies.length);
         if (section) section.style.display = movies.length === 0 ? 'none' : 'block';
-        if (container) {
+        if (container && !container.children.length) {
             container.innerHTML = movies.map((movie: AnyObj) => `
                 <a href="#" class="movie-link" data-action="scrollToMovie" data-action-args="${encodeURIComponent(movie.title)}" data-action-eventobj="true">
                     <div>${escapeHtml(movie.title)}</div>

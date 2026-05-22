@@ -1,8 +1,8 @@
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
+import { slugify } from '../lib/slug';
 import { CATEGORY_NAME_BY_KEY } from '../lib/book-categories';
 import { applyCardVisibility } from './collection-helpers';
 import { highlightAndScroll } from './collection-ui';
-import { escapeAttr, escapeHtml } from '../lib/html-escape';
-import { slugify } from '../lib/slug';
 import { categoryDisplayNames, getCoverUrl, state } from './books-state';
 import { TIMING } from './timing';
 
@@ -244,30 +244,9 @@ export function getBooksByCategory(): Record<string, AnyObj[]> {
 export function renderCategoryGrid() {
     const container = document.getElementById('category-grid');
     if (!container) return;
-    const booksByCategory = getBooksByCategory();
-    const sortedCategories = (Object.entries(booksByCategory) as [string, AnyObj[]][]).sort((a, b) => b[1].length - a[1].length);
-    container.innerHTML = sortedCategories.map(([category, books]) => {
-        const previewBooks = books.slice(0, 8);
-        const displayName = categoryDisplayNames[category] || category;
-        const bookCovers = previewBooks.map((book: AnyObj) => {
-            const coverUrl = getCoverUrl(book, 'medium');
-            return `<img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" loading="lazy" decoding="async" data-remove-on-error="true">`;
-        }).join('');
-        const emptySlots = Array(Math.max(0, 8 - previewBooks.length))
-            .fill('<div class="empty-slot"></div>')
-            .join('');
-        return `
-            <div class="category-card" data-action="open-category-modal" data-category="${escapeAttr(category)}">
-                <div class="category-card-books">
-                    ${bookCovers}${emptySlots}
-                </div>
-                <div class="category-card-info">
-                    <span class="category-card-name">${escapeHtml(displayName)}</span>
-                    <span class="category-card-count">${books.length}</span>
-                </div>
-            </div>
-        `;
-    }).join('');
+    // Category grid cards are owned by books.astro. This function remains
+    // as a stable call site for the view toggle, but it no longer builds
+    // static category markup at runtime.
 }
 
 export function setViewMode(mode: string) {

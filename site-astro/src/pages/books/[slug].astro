@@ -180,5 +180,6 @@ const schema = bookSchema({
     )}
   </main>
 
+  <script is:inline set:html={`(function(){var back=document.querySelector('.detail-back[href="/books.html"]');if(!back)return;back.addEventListener('click',function(event){try{var ref=document.referrer?new URL(document.referrer):null;var cameFromBooks=!!ref&&ref.origin===location.origin&&/\\/books(?:\\.html)?$/.test(ref.pathname);if(cameFromBooks&&history.length>1){event.preventDefault();history.back();}}catch(e){}});})();`} />
   <script is:inline set:html={`(function(){if(!document.documentElement.classList.contains('is-flight-arrival'))return;requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.add('is-flight-revealed');setTimeout(function(){document.documentElement.classList.remove('is-flight-arrival','is-flight-revealed');},420);});});})();`} />
 </Base>

@@ -1,12 +1,22 @@
-import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { trapFocus } from '../lib/focus-trap';
 import { categoryDisplayNames, getCoverUrl, state } from './books-state';
 import { getBooksByCategory } from './books-render';
+import { cloneTemplateElement } from './dom-template';
 
 let releaseBookModalFocus: (() => void) | null = null;
 let releaseCategoryModalFocus: (() => void) | null = null;
 
-export function openBookModal(book: AnyObj) {
+interface BookModalRecord {
+    author?: string;
+    isbn?: string;
+    rating?: number;
+    read?: boolean;
+    review?: string;
+    title?: string;
+    year?: string | number;
+}
+
+export function openBookModal(book: BookModalRecord) {
     if (!book?.review) return false;
     const modal = document.getElementById('book-modal');
     const modalTitle = document.getElementById('modal-book-title');
@@ -16,12 +26,13 @@ export function openBookModal(book: AnyObj) {
     const modalReview = document.getElementById('modal-book-review');
     if (!modal || !modalTitle || !modalAuthor || !modalCover || !modalRating || !modalReview) return false;
     const isUnread = book.read === false;
-    const stars = isUnread ? '' : '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
-    const coverUrl = getCoverUrl(book);
-    modalTitle.textContent = book.title;
-    modalAuthor.textContent = `by ${book.author}${book.year ? ` (${book.year})` : ''}`;
+    const rating = Number(book.rating) || 0;
+    const stars = isUnread ? '' : '★'.repeat(rating) + '☆'.repeat(5 - rating);
+    const coverUrl = getCoverUrl(book) || '';
+    modalTitle.textContent = book.title || '';
+    modalAuthor.textContent = `by ${book.author || ''}${book.year ? ` (${book.year})` : ''}`;
     modalCover.src = coverUrl;
-    modalCover.alt = book.title;
+    modalCover.alt = book.title || '';
     modalCover.onerror = () => { modalCover.hidden = true; };
     modalCover.onload = () => { modalCover.hidden = false; };
     // Visual stars stay aria-hidden; an sr-only sibling carries the
@@ -29,8 +40,8 @@ export function openBookModal(book: AnyObj) {
     // star glyphs.
     modalRating.innerHTML = isUnread
         ? '<span>To Read</span>'
-        : `<span aria-hidden="true">${stars}</span><span class="sr-only">${book.rating} out of 5 stars</span>`;
-    modalReview.textContent = book.review;
+        : `<span aria-hidden="true">${stars}</span><span class="sr-only">${rating} out of 5 stars</span>`;
+    modalReview.textContent = book.review || '';
     // ARIA dialog semantics + focus trap. WCAG 2.4.3 + 4.1.2.
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
@@ -54,36 +65,26 @@ export function closeBookModal() {
 export function openCategoryModal(category: string) {
     const books = getBooksByCategory()[category] || [];
     const displayName = categoryDisplayNames[category] || category;
-    let modal = document.getElementById('category-expanded-modal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'category-expanded-modal';
-        modal.className = 'category-expanded';
-        document.body.appendChild(modal);
-    }
-    modal.innerHTML = `
-        <div class="category-modal-backdrop" data-action="close-category-modal"></div>
-        <div class="category-modal-content">
-            <div class="category-expanded-header">
-                <h2 class="category-expanded-title" id="category-expanded-title">${escapeHtml(displayName)}</h2>
-                <button class="category-expanded-close" data-action="close-category-modal" aria-label="Close">&times;</button>
-            </div>
-            <div class="category-expanded-books">
-                ${books.map((book: AnyObj) => {
-                    const coverUrl = getCoverUrl(book);
-                    return `
-                        <div class="category-expanded-book" data-action="open-book-from-grid" data-isbn="${escapeAttr(book.isbn)}" tabindex="0" role="button" aria-label="${escapeAttr(book.title)} by ${escapeAttr(book.author)}">
-                            <img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(book.title)}" title="${escapeAttr(book.title)} by ${escapeAttr(book.author)}" decoding="async" data-remove-on-error="true">
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-        </div>
-    `;
+    const modal = document.getElementById('category-expanded-modal');
+    const title = document.getElementById('category-expanded-title');
+    const list = document.getElementById('category-expanded-books');
+    if (!modal || !title || !list) return;
+    title.textContent = displayName;
+    const fragment = document.createDocumentFragment();
+    books.forEach((book: BookModalRecord) => {
+        const coverUrl = getCoverUrl(book) || '';
+        const item = cloneTemplateElement<HTMLElement>('category-expanded-book-template');
+        const image = item?.querySelector('img') as HTMLImageElement | null;
+        if (!item || !image) return;
+        item.dataset.isbn = book.isbn || '';
+        item.setAttribute('aria-label', `${book.title || ''} by ${book.author || ''}`);
+        image.src = coverUrl;
+        image.alt = book.title || '';
+        image.title = `${book.title || ''} by ${book.author || ''}`;
+        fragment.appendChild(item);
+    });
+    list.replaceChildren(fragment);
     // ARIA dialog semantics + focus trap. WCAG 2.4.3 + 4.1.2.
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-labelledby', 'category-expanded-title');
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     const trigger = document.activeElement as HTMLElement | null;
@@ -100,7 +101,7 @@ export function closeCategoryModal() {
 }
 
 export function openBookFromGrid(isbn: string) {
-    const book = state.books.find((entry: AnyObj) => entry.isbn === isbn);
+    const book = state.books.find((entry: BookModalRecord) => entry.isbn === isbn);
     if (!book) return;
     closeCategoryModal();
     openBookModal(book);

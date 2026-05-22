@@ -1,50 +1,21 @@
-import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { tryReadString, tryWrite } from '../lib/storage';
 import { registerActions } from './action-dispatcher';
 import {
     ADVENTURES_DATA_URL, loadFilters, saveFilters,
-    state, updateLightboxImage
+    state
 } from './adventures-state';
+import { renderMapCarousel } from './adventures-carousel';
+import { bindLightboxEvents, closeLightbox, nextImage, openLightbox, prevImage } from './adventures-lightbox';
+import {
+    clearMapHighlight,
+    ensureWorldMap,
+    highlightAdventureOnMap,
+    setupWorldMapLazyLoad
+} from './adventures-map-ui';
 import { fetchJsonOr } from './data-fetch';
+import { cloneTemplateElement } from './dom-template';
 import { URL_PARAMS } from './url-params';
-
-// Async loader for the heavier Adventures map runtime. Vite/Astro emits
-// a separate chunk for it, kept off the initial adventures bundle.
-function loadAdventuresMapBundle(): Promise<AnyObj> {
-    if (state.adventuresMapBundlePromise) return state.adventuresMapBundlePromise;
-    state.adventuresMapBundlePromise = import('./adventures-map').then((mod) => {
-        if (typeof mod.ensureWorldMap !== 'function') throw new Error('adventures-map module did not export ensureWorldMap');
-        return mod;
-    });
-    return state.adventuresMapBundlePromise;
-}
-
-function setupWorldMapLazyLoad(adventures: AnyObj[]) {
-    const mapContainer = document.getElementById('world-map');
-    if (!mapContainer) return;
-
-    // On mobile, the map starts hidden (tab-style layout). Don't mount
-    // until the user switches to the map tab.
-    const split = document.querySelector('.adventures-page-split');
-    const mobileToggle = document.querySelector('.adventures-mobile-toggle');
-    const isMobileTabs = mobileToggle && getComputedStyle(mobileToggle).display !== 'none';
-    if (isMobileTabs && !split?.classList.contains('map-view')) {
-        const load = () => ensureWorldMap(adventures);
-        mapContainer.addEventListener('pointerdown', load, { once: true, passive: true });
-        mapContainer.addEventListener('touchstart', load, { once: true, passive: true });
-        return;
-    }
-
-    // Desktop: mount the map immediately. Users want to see the map, not
-    // a placeholder asking them to click Load.
-    ensureWorldMap(adventures);
-}
-
-function ensureWorldMap(adventures = state.allAdventures) {
-    const mapContainer = document.getElementById('world-map');
-    mapContainer?.classList.add('map-loading');
-    return loadAdventuresMapBundle().then((api: AnyObj) => api.ensureWorldMap(adventures));
-}
+import type { AdventureGalleryItem, AdventureRecord } from './adventures-types';
 
 
 // ============================================
@@ -52,16 +23,12 @@ function ensureWorldMap(adventures = state.allAdventures) {
 // ============================================
 
 let hasAdoptedSsrAdventures = false;
-function renderAdventures(adventures: AnyObj[]) {
+function renderAdventures(adventures: AdventureRecord[]) {
     const container = document.getElementById('adventures-container');
     if (!container) return;
 
     if (adventures.length === 0) {
-        container.innerHTML = `
-            <div style="text-align: center; padding: 3rem;">
-                <p style="color: var(--text-light);">No adventures found in this region.</p>
-            </div>
-        `;
+        container.replaceChildren(createStatusMessage('No adventures found in this region.', 'var(--text-light)'));
         return;
     }
 
@@ -87,39 +54,48 @@ function renderAdventures(adventures: AnyObj[]) {
     }
 
     hasAdoptedSsrAdventures = true;
-    container.innerHTML = '';
+    container.replaceChildren();
     adventures.forEach((adventure) => {
         container.appendChild(createCompactCard(adventure));
     });
 }
 
-function createCompactCard(adventure: AnyObj) {
+function createCompactCard(adventure: AdventureRecord) {
     const card = document.createElement('div');
     card.className = 'adventure-compact-card';
     card.id = `card-${adventure.id}`;
     card.setAttribute('data-adventure-id', adventure.id);
 
     const formattedDate = formatDateRange(adventure.startDate, adventure.endDate);
+    const image = document.createElement('img');
+    image.src = adventure.heroImage || '';
+    image.alt = adventure.title || '';
+    image.className = 'adventure-compact-image';
+    image.width = 80;
+    image.height = 80;
+    image.loading = 'eager';
+    image.decoding = 'async';
 
-    // width/height attrs matching the displayed CSS size (80×80 desktop)
-    // so the browser reserves a square box before the image loads —
-    // matches the legacy-style.css `.adventure-compact-image` rule and
-    // eliminates the CLS spike from late-arriving image dimensions.
-    card.innerHTML = `
-        <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-compact-image" width="80" height="80" loading="eager" decoding="async">
-        <div class="adventure-compact-info">
-            <div class="adventure-compact-location">${escapeHtml(adventure.location)}</div>
-            <h3 class="adventure-compact-title">${escapeHtml(adventure.title)}</h3>
-            <div class="adventure-compact-meta">${escapeHtml(formattedDate)} · ${escapeHtml(adventure.duration)}</div>
-        </div>
-    `;
+    const info = document.createElement('div');
+    info.className = 'adventure-compact-info';
+    const location = document.createElement('div');
+    location.className = 'adventure-compact-location';
+    location.textContent = adventure.location || '';
+    const title = document.createElement('h3');
+    title.className = 'adventure-compact-title';
+    title.textContent = adventure.title || '';
+    const meta = document.createElement('div');
+    meta.className = 'adventure-compact-meta';
+    meta.textContent = `${formattedDate} · ${adventure.duration || ''}`;
+    info.append(location, title, meta);
+    card.append(image, info);
 
     card.addEventListener('click', () => selectAdventure(adventure.id));
     return card;
 }
 
 function selectAdventure(id: string) {
-    const adventure = state.allAdventures.find((item: AnyObj) => item.id === id);
+    const adventure = (state.allAdventures as AdventureRecord[]).find((item) => item.id === id);
     if (!adventure) return;
 
     document.querySelectorAll('.adventure-compact-card').forEach((card) => {
@@ -145,31 +121,28 @@ function selectAdventure(id: string) {
     }
 }
 
-function showAdventureDetail(adventure: AnyObj) {
+function showAdventureDetail(adventure: AdventureRecord) {
     const overlay = document.getElementById('adventure-detail-overlay');
-    const content = document.getElementById('adventure-detail-content');
-    if (!overlay || !content) return;
+    const hero = document.getElementById('adventure-detail-hero') as HTMLImageElement | null;
+    const location = document.getElementById('adventure-detail-location');
+    const title = document.getElementById('adventure-detail-title');
+    const date = document.getElementById('adventure-detail-date');
+    const duration = document.getElementById('adventure-detail-duration');
+    const description = document.getElementById('adventure-detail-description');
+    if (!overlay || !hero || !location || !title || !date || !duration || !description) return;
 
     const formattedDate = formatDateRange(adventure.startDate, adventure.endDate);
-
-    content.innerHTML = `
-        <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" class="adventure-detail-hero" loading="lazy" decoding="async">
-        <div class="adventure-detail-body">
-            <div class="adventure-location">${escapeHtml(adventure.location)}</div>
-            <h2 class="adventure-title">${escapeHtml(adventure.title)}</h2>
-            <div class="adventure-meta">
-                <span>${escapeHtml(formattedDate)}</span>
-                <span>${escapeHtml(adventure.duration)}</span>
-            </div>
-            <p class="adventure-description">${escapeHtml(adventure.shortDescription)}</p>
-            <button type="button" class="view-full-story-btn" data-action="scrollToStory">Read Full Story</button>
-        </div>
-    `;
-
+    hero.src = adventure.heroImage || '';
+    hero.alt = adventure.title || '';
+    location.textContent = adventure.location || '';
+    title.textContent = adventure.title || '';
+    date.textContent = formattedDate;
+    duration.textContent = adventure.duration || '';
+    description.textContent = adventure.shortDescription || '';
     overlay.classList.add('active');
 }
 
-function renderInlineStory(adventure: AnyObj) {
+function renderInlineStory(adventure: AdventureRecord) {
     const section = document.getElementById('adventure-story-inline');
     const inner = document.getElementById('adventure-story-inner');
     if (!section || !inner) return;
@@ -178,39 +151,55 @@ function renderInlineStory(adventure: AnyObj) {
     const highlights = Array.isArray(adventure.highlights) ? adventure.highlights : [];
     const gallery = Array.isArray(adventure.gallery) ? adventure.gallery : [];
 
-    inner.innerHTML = `
-        <button type="button" class="adventure-story-close" data-action="closeInlineStory" aria-label="Close story">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <div class="adventure-story-hero">
-            <img src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" loading="lazy" decoding="async">
-            <div class="adventure-story-hero-overlay">
-                <div class="adventure-story-location">${escapeHtml(adventure.location)}</div>
-                <h2 class="adventure-story-title">${escapeHtml(adventure.title)}</h2>
-                ${adventure.subtitle ? `<p class="adventure-story-subtitle">${escapeHtml(adventure.subtitle)}</p>` : ''}
-            </div>
-        </div>
-        <div class="adventure-story-body">
-            <div class="adventure-story-meta">
-                <span>${escapeHtml(formattedDate)}</span>
-                <span>${escapeHtml(adventure.duration)}</span>
-            </div>
-            <div class="adventure-story-content">${adventure.content || ''}</div>
-            ${highlights.length ? `<div class="adventure-story-highlights">
-                <h3>Highlights</h3>
-                <ul>${highlights.map((item: AnyObj) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
-            </div>` : ''}
-            ${gallery.length ? `<div class="adventure-story-gallery">
-                <h3>Gallery</h3>
-                <div class="adventure-story-gallery-grid">
-                    ${gallery.map((item: AnyObj, index: number) => `<figure class="adventure-story-gallery-item" data-action="open-adventure-lightbox" data-adventure-id="${escapeAttr(adventure.id)}" data-index="${index}">
-                        <img src="${escapeAttr(item.thumbnail || item.src)}" alt="${escapeAttr(item.caption || '')}" loading="lazy" decoding="async">
-                        ${item.caption ? `<figcaption>${escapeHtml(item.caption)}</figcaption>` : ''}
-                    </figure>`).join('')}
-                </div>
-            </div>` : ''}
-        </div>
-    `;
+    const hero = document.getElementById('adventure-story-hero-image') as HTMLImageElement | null;
+    const location = document.getElementById('adventure-story-location');
+    const title = document.getElementById('adventure-story-title');
+    const subtitle = document.getElementById('adventure-story-subtitle');
+    const date = document.getElementById('adventure-story-date');
+    const duration = document.getElementById('adventure-story-duration');
+    const content = document.getElementById('adventure-story-content');
+    const highlightsSection = document.getElementById('adventure-story-highlights');
+    const highlightsList = document.getElementById('adventure-story-highlights-list');
+    const gallerySection = document.getElementById('adventure-story-gallery');
+    const galleryGrid = document.getElementById('adventure-story-gallery-grid');
+    if (!hero || !location || !title || !subtitle || !date || !duration || !content || !highlightsSection || !highlightsList || !gallerySection || !galleryGrid) return;
+
+    hero.src = adventure.heroImage || '';
+    hero.alt = adventure.title || '';
+    location.textContent = adventure.location || '';
+    title.textContent = adventure.title || '';
+    subtitle.textContent = adventure.subtitle || '';
+    subtitle.hidden = !adventure.subtitle;
+    date.textContent = formattedDate;
+    duration.textContent = adventure.duration || '';
+    content.innerHTML = adventure.content || '';
+
+    highlightsSection.hidden = highlights.length === 0;
+    highlightsList.replaceChildren(...highlights.map((item) => {
+        const li = cloneTemplateElement<HTMLLIElement>('adventure-highlight-template');
+        if (!li) return document.createTextNode('');
+        li.textContent = String(item || '');
+        return li;
+    }));
+
+    gallerySection.hidden = gallery.length === 0;
+    galleryGrid.replaceChildren(...gallery.map((item: AdventureGalleryItem, index: number) => {
+        const figure = cloneTemplateElement<HTMLElement>('adventure-gallery-item-template');
+        if (!figure) return document.createTextNode('');
+        figure.dataset.adventureId = String(adventure.id || '');
+        figure.dataset.index = String(index);
+        const image = figure.querySelector('img') as HTMLImageElement | null;
+        const caption = figure.querySelector('figcaption') as HTMLElement | null;
+        if (image) {
+            image.src = item.thumbnail || item.src || '';
+            image.alt = item.caption || '';
+        }
+        if (caption) {
+            caption.hidden = !item.caption;
+            caption.textContent = item.caption;
+        }
+        return figure;
+    }));
 
     section.hidden = false;
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -256,18 +245,11 @@ function closeAdventureDetail() {
     if (overlay) overlay.classList.remove('active');
 
     const inlineStory = document.getElementById('adventure-story-inline');
-    const inlineInner = document.getElementById('adventure-story-inner');
     if (inlineStory) {
         const cleanup = (inlineStory as AnyObj)._dismissCleanup;
         if (typeof cleanup === 'function') { cleanup(); delete (inlineStory as AnyObj)._dismissCleanup; }
         inlineStory.hidden = true;
     }
-    if (inlineInner) inlineInner.innerHTML = '';
-    // Belt-and-suspenders: the close button is position:fixed so even
-    // when its parent section is display:none some browsers retain a
-    // stale paint of it during the smooth-scroll-back animation.
-    // Explicitly remove any stray instance from the document.
-    document.querySelectorAll('.adventure-story-close').forEach((el) => el.remove());
 
     document.querySelectorAll('.adventure-compact-card').forEach((card) => {
         card.classList.remove('active');
@@ -277,75 +259,7 @@ function closeAdventureDetail() {
     clearMapHighlight();
 }
 
-function highlightAdventureOnMap(adventure: AnyObj) {
-    if (!state.worldMap) {
-        ensureWorldMap().then(() => highlightAdventureOnMap(adventure));
-        return;
-    }
-    if (!adventure || !adventure.mapCenter) return;
-
-    const targetLng = nearestWrappedLongitude(adventure.mapCenter.lng, state.worldMap.getCenter().lng);
-    state.worldMap.setView([adventure.mapCenter.lat, targetLng], 5, {
-        animate: true,
-        duration: 0.5
-    });
-}
-
-function clearMapHighlight() {
-    if (!state.worldMap) {
-        if (state.adventuresMapBundlePromise) {
-            state.adventuresMapBundlePromise.then((api) => api.ensureWorldMap()).then(clearMapHighlight);
-        }
-        return;
-    }
-    state.worldMap.setView([20, 0], 2, {
-        animate: true,
-        duration: 0.5
-    });
-}
-
-function openLightbox(adventureId: string, index: number) {
-    const adventure = state.allAdventures.find((item: AnyObj) => item.id === adventureId);
-    if (!adventure || !adventure.gallery) return;
-
-    state.lightboxImages = adventure.gallery;
-    state.lightboxIndex = index;
-
-    updateLightboxImage();
-    (document.getElementById('lightbox') as HTMLElement).classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    (document.getElementById('lightbox') as HTMLElement).classList.remove('active');
-    document.body.style.overflow = 'auto';
-}
-
-function nextImage() {
-    state.lightboxIndex = (state.lightboxIndex + 1) % state.lightboxImages.length;
-    updateLightboxImage();
-}
-
-function prevImage() {
-    state.lightboxIndex = (state.lightboxIndex - 1 + state.lightboxImages.length) % state.lightboxImages.length;
-    updateLightboxImage();
-}
-
-document.addEventListener('keydown', (event) => {
-    const lightbox = document.getElementById('lightbox');
-    if (!lightbox || !lightbox.classList.contains('active')) return;
-
-    if (event.key === 'Escape') closeLightbox();
-    if (event.key === 'ArrowRight') nextImage();
-    if (event.key === 'ArrowLeft') prevImage();
-});
-
-document.addEventListener('click', (event) => {
-    const lightbox = document.getElementById('lightbox');
-    if (lightbox && event.target === lightbox) closeLightbox();
-});
-
-function populateSidebar(adventures: AnyObj[]) {
+function populateSidebar(adventures: AdventureRecord[]) {
     const regions: Record<string, number> = {
         all: adventures.length,
         europe: 0,
@@ -355,7 +269,7 @@ function populateSidebar(adventures: AnyObj[]) {
         other: 0
     };
 
-    adventures.forEach((adventure: AnyObj) => {
+    adventures.forEach((adventure) => {
         const region = (adventure.region || 'other').toLowerCase();
         if (Object.prototype.hasOwnProperty.call(regions, region)) regions[region] += 1;
         else regions.other += 1;
@@ -393,7 +307,7 @@ function resetFilters(buttonEl: HTMLElement) {
 
     buttonEl.classList.add('active');
     closeAdventureDetail();
-    renderAdventures(state.allAdventures);
+    renderAdventures(state.allAdventures as AdventureRecord[]);
     updateAdventureCount(state.allAdventures.length);
 }
 
@@ -404,10 +318,10 @@ function updateAllButtonState() {
 }
 
 function applyFilters() {
-    let filtered = state.allAdventures;
+    let filtered = state.allAdventures as AdventureRecord[];
 
     if (state.activeFilters.size > 0) {
-        filtered = state.allAdventures.filter((adventure: AnyObj) => {
+        filtered = (state.allAdventures as AdventureRecord[]).filter((adventure) => {
             const region = (adventure.region || 'other').toLowerCase();
             return state.activeFilters.has(region);
         });
@@ -427,16 +341,27 @@ function updateAdventureCount(count: number) {
 function showErrorMessage() {
     const container = document.getElementById('adventures-container');
     if (container) {
-        container.innerHTML = `
-            <div style="text-align: center; padding: 3rem;">
-                <p style="color: var(--accent-color);">Unable to load adventures</p>
-                <p style="color: var(--text-light);">Please try refreshing the page.</p>
-            </div>
-        `;
+        const message = createStatusMessage('Unable to load adventures', 'var(--accent-color)');
+        const hint = document.createElement('p');
+        hint.style.color = 'var(--text-light)';
+        hint.textContent = 'Please try refreshing the page.';
+        message.appendChild(hint);
+        container.replaceChildren(message);
     }
 
     const worldMapEl = document.getElementById('world-map');
     if (worldMapEl) (worldMapEl as HTMLElement).style.display = 'none';
+}
+
+function createStatusMessage(text: string, color: string) {
+    const wrap = document.createElement('div');
+    wrap.style.textAlign = 'center';
+    wrap.style.padding = '3rem';
+    const message = document.createElement('p');
+    message.style.color = color;
+    message.textContent = text;
+    wrap.appendChild(message);
+    return wrap;
 }
 
 function switchMobileView(view: string) {
@@ -478,7 +403,7 @@ function bindAdventureActions() {
         }
 
         if (action === 'scrollToStory') {
-            const adventure = state.allAdventures.find((item: AnyObj) => item.id === state.selectedAdventureId);
+            const adventure = (state.allAdventures as AdventureRecord[]).find((item) => item.id === state.selectedAdventureId);
             if (adventure) renderInlineStory(adventure);
             return;
         }
@@ -500,16 +425,6 @@ function bindAdventureActions() {
 // Adventures Page Bootstrap
 // ============================================
 
-// copy of nearestWrappedLongitude so
-// adventures.js's highlightAdventureOnMap path doesn't depend on the
-// map-module having loaded. Same impl as adventures-map.js.
-function nearestWrappedLongitude(lng: number, referenceLng: number) {
-    let wrappedLng = lng;
-    while (wrappedLng - referenceLng > 180) wrappedLng -= 360;
-    while (wrappedLng - referenceLng < -180) wrappedLng += 360;
-    return wrappedLng;
-}
-
 async function loadAdventures() {
     const data = await fetchJsonOr(ADVENTURES_DATA_URL) as AnyObj;
     if (!data || !Array.isArray(data.adventures)) {
@@ -517,80 +432,14 @@ async function loadAdventures() {
         showErrorMessage();
         return;
     }
-    state.allAdventures = (data.adventures as AnyObj[]).filter((item: AnyObj) => item.status === 'published');
-    state.allAdventures.sort((left: AnyObj, right: AnyObj) => new Date(right.startDate).getTime() - new Date(left.startDate).getTime());
+    state.allAdventures = (data.adventures as AdventureRecord[]).filter((item) => item.status === 'published');
+    state.allAdventures.sort((left: AdventureRecord, right: AdventureRecord) => new Date(right.startDate || '').getTime() - new Date(left.startDate || '').getTime());
 
-    renderAdventures(state.allAdventures);
-    populateSidebar(state.allAdventures);
-    renderMapCarousel(state.allAdventures);
-    setupWorldMapLazyLoad(state.allAdventures);
+    renderAdventures(state.allAdventures as AdventureRecord[]);
+    populateSidebar(state.allAdventures as AdventureRecord[]);
+    renderMapCarousel(state.allAdventures as AdventureRecord[], selectAdventure);
+    setupWorldMapLazyLoad(state.allAdventures as AdventureRecord[]);
     updateAdventureCount(state.allAdventures.length);
-}
-
-// Horizontal trip carousel along the bottom of the map. Each card is the
-// adventure hero + place + year; tap one to fly the world map to it.
-function renderMapCarousel(adventures: AnyObj[]) {
-    const wrap = document.getElementById('adventures-map-carousel-wrap');
-    const carousel = document.getElementById('adventures-map-carousel');
-    if (!wrap || !carousel) return;
-    if (adventures.length === 0) {
-        wrap.hidden = true;
-        return;
-    }
-    // The trip carousel is a surface of the Adventures layer — only
-    // show it when the LAYERS panel "Adventures" checkbox is ticked.
-    wrap.hidden = state.mapFilters?.layers?.adventures !== true;
-    carousel.innerHTML = adventures.map((adventure: AnyObj) => {
-        const year = adventure.startDate ? String(adventure.startDate).slice(0, 4) : '';
-        const place = adventure.location || '';
-        const img = adventure.heroImage
-            ? `<img class="adv-carousel-img" src="${escapeAttr(adventure.heroImage)}" alt="${escapeAttr(adventure.title)}" loading="lazy" decoding="async">`
-            : '<span class="adv-carousel-img adv-carousel-img-fallback" aria-hidden="true"></span>';
-        return `<button type="button" class="adv-carousel-card" data-adventure-id="${escapeAttr(adventure.id)}">
-            ${img}
-            <span class="adv-carousel-meta">
-                <span class="adv-carousel-place">${escapeHtml(place)}</span>
-                ${year ? `<span class="adv-carousel-year">${escapeHtml(year)}</span>` : ''}
-            </span>
-        </button>`;
-    }).join('');
-    carousel.addEventListener('click', (event: Event) => {
-        const card = (event.target as Element | null)?.closest?.('[data-adventure-id]') as HTMLElement | null;
-        if (!card) return;
-        selectAdventure(card.dataset.adventureId || '');
-    });
-    attachMapCarouselToggle(wrap);
-}
-
-// Tap-to-hide / tap-to-show + swipe-down gesture on the map trip carousel.
-function attachMapCarouselToggle(wrap: HTMLElement) {
-    if (wrap.dataset.toggleBound === 'true') return;
-    wrap.dataset.toggleBound = 'true';
-    const handle = wrap.querySelector('#adv-carousel-handle') as HTMLButtonElement | null;
-    if (!handle) return;
-    const setHidden = (hidden: boolean) => {
-        wrap.classList.toggle('is-collapsed', hidden);
-        handle.setAttribute('aria-expanded', String(!hidden));
-        handle.setAttribute('aria-label', hidden ? 'Show trips' : 'Hide trips');
-    };
-    handle.addEventListener('click', () => setHidden(!wrap.classList.contains('is-collapsed')));
-    // Swipe gesture: drag the wrap downwards by > 30px to hide, upwards on
-    // the handle to show.
-    let startY: number | null = null;
-    let collapsedAtStart = false;
-    wrap.addEventListener('touchstart', (event: TouchEvent) => {
-        if (!event.touches[0]) return;
-        startY = event.touches[0].clientY;
-        collapsedAtStart = wrap.classList.contains('is-collapsed');
-    }, { passive: true });
-    wrap.addEventListener('touchend', (event: TouchEvent) => {
-        if (startY === null) return;
-        const endY = (event.changedTouches[0]?.clientY) ?? startY;
-        const dy = endY - startY;
-        startY = null;
-        if (!collapsedAtStart && dy > 30) setHidden(true);
-        if (collapsedAtStart && dy < -20) setHidden(false);
-    }, { passive: true });
 }
 
 function readNowLocation() {
@@ -690,6 +539,7 @@ function placeNowMarkerAndFocus() {
 function initAdventuresPage() {
     loadFilters();
     bindAdventureActions();
+    bindLightboxEvents();
     // Mobile lands on the map (SSR pre-applies .map-view to avoid flicker);
     // desktop strips it before paint via the inline script in adventures.astro
     // setting html.adv-desktop. JS just synchronizes button state and ensures
@@ -740,6 +590,10 @@ function initAdventuresPage() {
 
 // Register data-action handlers used by HTML markup.
 registerActions({
+    closeAdventureDetail,
+    closeLightbox,
+    nextImage,
+    prevImage,
     saveFilters,
     toggleFilter,
     resetFilters,

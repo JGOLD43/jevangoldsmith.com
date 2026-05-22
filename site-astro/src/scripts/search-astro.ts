@@ -1,6 +1,6 @@
 import { debounce } from '../lib/debounce';
-import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { sanitizeUrl } from '../lib/safe-url';
+import { cloneTemplateElement } from './dom-template';
 import { TIMING } from './timing';
 
 // Standalone search script for the Astro build. Self-contained — does not
@@ -28,13 +28,19 @@ import { TIMING } from './timing';
   const filters = document.getElementById('site-search-filters');
   const results = document.getElementById('site-search-results');
   const count = document.getElementById('site-search-count');
-
   function renderFilters() {
     if (!filters) return;
     const types = ['all', ...Array.from(new Set(state.records.map((r) => r.type))).sort()];
-    filters.innerHTML = types.map((type) => (
-      `<button class="site-search-filter ${type === state.type ? 'active' : ''}" type="button" data-search-type="${escapeAttr(type)}">${escapeHtml(displayType(type))}</button>`
-    )).join('');
+    const fragment = document.createDocumentFragment();
+    for (const type of types) {
+      const button = cloneTemplateElement<HTMLButtonElement>('site-search-filter-template');
+      if (!button) continue;
+      button.dataset.searchType = type;
+      button.textContent = displayType(type);
+      button.classList.toggle('active', type === state.type);
+      fragment.appendChild(button);
+    }
+    filters.replaceChildren(fragment);
   }
 
   function filteredRecords() {
@@ -51,19 +57,31 @@ import { TIMING } from './timing';
     const records = filteredRecords();
     count.textContent = `${records.length} ${records.length === 1 ? 'result' : 'results'}`;
     if (records.length === 0) {
-      results.innerHTML = '<div class="search-empty">No results found.</div>';
+      renderEmpty('No results found.');
       return;
     }
-    results.innerHTML = records.slice(0, 80).map((r) => {
-      const safeHref = sanitizeUrl(r.url);
-      const safeTitle = escapeHtml(r.title);
-      const safeSummary = escapeHtml(r.summary || '');
-      const safeType = escapeHtml(displayType(r.type));
-      return '<a class="search-result-card" ' + 'hr' + 'ef="' + safeHref + '">' +
-        '<span><span class="search-result-title">' + safeTitle + '</span>' +
-        '<span class="search-result-summary">' + safeSummary + '</span></span>' +
-        '<span class="search-result-type">' + safeType + '</span></a>';
-    }).join('');
+    const fragment = document.createDocumentFragment();
+    for (const record of records.slice(0, 80)) {
+      const card = cloneTemplateElement<HTMLAnchorElement>('site-search-result-template');
+      if (!card) continue;
+      card.href = sanitizeUrl(record.url);
+      const title = card.querySelector('.search-result-title');
+      const summary = card.querySelector('.search-result-summary');
+      const type = card.querySelector('.search-result-type');
+      if (title) title.textContent = record.title;
+      if (summary) summary.textContent = record.summary || '';
+      if (type) type.textContent = displayType(record.type);
+      fragment.appendChild(card);
+    }
+    results.replaceChildren(fragment);
+  }
+
+  function renderEmpty(message: string) {
+    if (!results) return;
+    const empty = cloneTemplateElement<HTMLElement>('site-search-empty-template');
+    if (!empty) return;
+    empty.textContent = message;
+    results.replaceChildren(empty);
   }
 
   function applyUrlQuery() {
@@ -106,7 +124,7 @@ import { TIMING } from './timing';
       renderResults();
     } catch {
       count.textContent = 'Search unavailable';
-      results.innerHTML = '<div class="search-empty">Search index unavailable.</div>';
+      renderEmpty('Search index unavailable.');
     }
   }
 

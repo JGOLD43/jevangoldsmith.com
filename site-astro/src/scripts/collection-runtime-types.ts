@@ -27,6 +27,28 @@ interface CollectionRuntimeActions {
     toggleDropdown?: string;
 }
 
+export interface DomCollectionRenderInfo {
+    allCards: HTMLElement[];
+    state: { category: string; search: string };
+    visibleCards: HTMLElement[];
+}
+
+export interface ManagedCollectionRenderInfo<TState = unknown, TFiltered = unknown, TVisible = TFiltered> {
+    filteredItems: TFiltered;
+    state: TState;
+    visibleItems: TVisible;
+}
+
+export interface GridZoomConfig {
+    anchorSelector?: string;
+    eventName?: string;
+    fillH?: number;
+    fillW?: number;
+    itemSelector?: string;
+    maxScale?: number;
+    triggerSelector?: string;
+}
+
 /**
  * Fields used by both modes (universal). These configure the DOM hooks
  * the runtime touches regardless of where rendering happens.
@@ -71,28 +93,35 @@ export interface DomCollectionConfig extends CoreCollectionConfig {
     /** Action name registry — registers default handlers under these names. */
     actions?: CollectionRuntimeActions;
     /** grid-zoom config (passed straight to initGridZoom). */
-    zoom?: AnyObj;
-    onRender?: (info?: AnyObj) => void;
+    zoom?: GridZoomConfig;
+    onRender?: (info: DomCollectionRenderInfo) => void;
 }
 
 /**
  * Managed-mode only: caller owns rendering via these hooks. Used by
  * books, movies/letterboxd, essays.
  */
-export interface ManagedCollectionConfig extends CoreCollectionConfig {
-    getState: () => AnyObj;
-    getFilteredItems: (state: AnyObj) => AnyObj;
-    getVisibleItems?: (filtered: AnyObj, state: AnyObj) => AnyObj;
-    groupItems?: (filtered: AnyObj) => AnyObj;
-    renderSidebar?: (groups: AnyObj, state: AnyObj) => void;
-    renderVisibleItems?: (items: AnyObj, state: AnyObj) => void;
-    updateCount?: (visible: AnyObj, state: AnyObj) => void;
-    updateControls?: (state: AnyObj, filtered: AnyObj, visible: AnyObj) => void;
-    onRender?: (info?: AnyObj) => void;
+export interface ManagedCollectionConfig<
+    TState = unknown,
+    TFiltered = unknown,
+    TVisible = TFiltered,
+    TGroup = unknown
+> extends CoreCollectionConfig {
+    getState: () => TState;
+    getFilteredItems: (state: TState) => TFiltered;
+    getVisibleItems?: (filtered: TFiltered, state: TState) => TVisible;
+    groupItems?: (filtered: TFiltered) => TGroup;
+    renderSidebar?: (groups: TGroup, state: TState) => void;
+    renderVisibleItems?: (items: TVisible, state: TState) => void;
+    updateCount?: (visible: TVisible, state: TState) => void;
+    updateControls?: (state: TState, filtered: TFiltered, visible: TVisible) => void;
+    onRender?: (info: ManagedCollectionRenderInfo<TState, TFiltered, TVisible>) => void;
 }
 
 /**
  * Union of both modes. createCollectionRuntime branches on whether
  * getFilteredItems is supplied.
  */
-export type CollectionRuntimeConfig = DomCollectionConfig | ManagedCollectionConfig;
+export type CollectionRuntimeConfig<TState = unknown, TFiltered = unknown, TVisible = TFiltered, TGroup = unknown> =
+    | DomCollectionConfig
+    | ManagedCollectionConfig<TState, TFiltered, TVisible, TGroup>;

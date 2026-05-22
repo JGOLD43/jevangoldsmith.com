@@ -1,10 +1,10 @@
-import { formatDate, formatDateShort } from '../lib/dates';
+import { formatDateShort, formatDate } from '../lib/dates';
 import { debounce } from '../lib/debounce';
-import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { registerActions } from './action-dispatcher';
 import { createCollectionRuntime } from './collection-runtime';
 import { toggleClearButton } from './collection-ui';
 import { readInlineJson } from './data-fetch';
+import { cloneTemplateElement } from './dom-template';
 import { onDomReady } from './dom-ready';
 import { LOCAL_KEYS } from './storage-keys';
 
@@ -64,49 +64,41 @@ function findEssayIndex(essays: AnyObj[], essayId: string) {
 }
 
 // --- view ---
-function createEssayArticle(essay: AnyObj) {
-    const article = document.createElement('article');
-    article.className = 'article-full';
-    article.id = essay.id;
-    article.innerHTML = `
-        <div class="post-meta">
-            <span class="post-date">${escapeHtml(formatDate(essay.date))}</span>
-            <span class="post-category">${escapeHtml(essay.category)}</span>
-        </div>
-        <h2>${escapeHtml(essay.title)}</h2>
-        ${essay.subtitle ? `<p><em>${escapeHtml(essay.subtitle)}</em></p>` : ''}
-        ${essay.content || ''}
-    `;
-    return article;
-}
-
-function createEssayNav(filteredEssays: AnyObj[], currentIndex: number) {
-    const nav = document.createElement('div');
-    nav.className = 'essay-nav';
+function renderEssayShell(container: HTMLElement, essay: AnyObj, filteredEssays: AnyObj[], currentIndex: number) {
+    const article = container.querySelector<HTMLElement>('article.article-full');
+    const nav = container.querySelector<HTMLElement>('.essay-nav');
+    if (!article || !nav) return false;
     const total = filteredEssays.length;
     const atStart = currentIndex <= 0;
     const atEnd = currentIndex >= total - 1;
     const prevTitle = !atStart ? filteredEssays[currentIndex - 1].title : '';
     const nextTitle = !atEnd ? filteredEssays[currentIndex + 1].title : '';
-
-    nav.innerHTML = `
-        <button class="essay-nav-btn essay-nav-prev" ${atStart ? 'disabled' : ''} data-action="prevEssay">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            <span class="essay-nav-label">
-                <span class="essay-nav-direction">Previous</span>
-                ${prevTitle ? `<span class="essay-nav-title">${escapeHtml(prevTitle)}</span>` : ''}
-            </span>
-        </button>
-        <span class="essay-nav-counter">${currentIndex + 1} / ${total}</span>
-        <button class="essay-nav-btn essay-nav-next" ${atEnd ? 'disabled' : ''} data-action="nextEssay">
-            <span class="essay-nav-label essay-nav-label-right">
-                <span class="essay-nav-direction">Next</span>
-                ${nextTitle ? `<span class="essay-nav-title">${escapeHtml(nextTitle)}</span>` : ''}
-            </span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-    `;
-    return nav;
+    article.id = essay.id;
+    const date = article.querySelector('.post-date');
+    const category = article.querySelector('.post-category');
+    const title = article.querySelector('h2');
+    const subtitle = article.querySelector('p em');
+    const subtitleWrap = subtitle?.closest('p') as HTMLElement | null;
+    const content = article.querySelector<HTMLElement>('[data-essay-content]');
+    if (date) date.textContent = formatDate(essay.date);
+    if (category) category.textContent = essay.category || '';
+    if (title) title.textContent = essay.title || '';
+    if (subtitleWrap && subtitle) {
+        subtitleWrap.hidden = !essay.subtitle;
+        subtitle.textContent = essay.subtitle || '';
+    }
+    if (content) content.innerHTML = essay.content || '';
+    const prev = nav.querySelector<HTMLButtonElement>('.essay-nav-prev');
+    const next = nav.querySelector<HTMLButtonElement>('.essay-nav-next');
+    const counter = nav.querySelector('.essay-nav-counter');
+    const prevTitleEl = nav.querySelector('[data-essay-prev-title]');
+    const nextTitleEl = nav.querySelector('[data-essay-next-title]');
+    if (prev) prev.disabled = atStart;
+    if (next) next.disabled = atEnd;
+    if (counter) counter.textContent = `${currentIndex + 1} / ${total}`;
+    if (prevTitleEl) prevTitleEl.textContent = prevTitle || '';
+    if (nextTitleEl) nextTitleEl.textContent = nextTitle || '';
+    return true;
 }
 
 function updateActiveSidebarLink(essayId: string) {
@@ -116,11 +108,18 @@ function updateActiveSidebarLink(essayId: string) {
 }
 
 let hasAdoptedSsrEssay = false;
+function renderTemplateInto(container: HTMLElement, templateId: string) {
+    const node = cloneTemplateElement<HTMLElement>(templateId);
+    if (!node) return false;
+    container.replaceChildren(node);
+    return true;
+}
+
 function renderCurrentEssay(filteredEssays: AnyObj[], currentIndex: number) {
     const container = document.getElementById('essays-container');
     if (!container) return;
     if (!filteredEssays.length) {
-        container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 3rem;">No essays published yet.</p>';
+        renderTemplateInto(container, 'essay-empty-template');
         return;
     }
     const essay = filteredEssays[currentIndex];
@@ -136,13 +135,15 @@ function renderCurrentEssay(filteredEssays: AnyObj[], currentIndex: number) {
             return;
         }
     }
-    container.innerHTML = '';
-    container.appendChild(createEssayArticle(essay));
-    container.appendChild(createEssayNav(filteredEssays, currentIndex));
+    if (!renderEssayShell(container, essay, filteredEssays, currentIndex)) {
+        renderTemplateInto(container, 'essay-render-error-template');
+    }
     updateActiveSidebarLink(essay.id);
 }
 
 function renderEssaySidebar(groups: Record<string, AnyObj[]>) {
+    const hasSsrEssayLinks = Array.from(document.querySelectorAll('.category-essays'))
+        .some((container) => container.children.length > 0);
     const countAll = document.getElementById('count-all');
     if (countAll) {
         const total = Object.values(groups).reduce((sum, essays) => sum + essays.length, 0);
@@ -155,13 +156,20 @@ function renderEssaySidebar(groups: Record<string, AnyObj[]>) {
         const container = document.getElementById(`category-${category}`);
         if (countEl) countEl.textContent = String(essays.length);
         if (section) section.style.display = essays.length === 0 ? 'none' : 'block';
-        if (container) {
-            container.innerHTML = essays.map((essay: AnyObj) => `
-                <a href="#${escapeAttr(essay.id)}" class="essay-link" data-action="scrollToEssay" data-action-args="${encodeURIComponent(essay.id)}" data-action-eventobj="true">
-                    <div>${escapeHtml(essay.title)}</div>
-                    <div class="essay-link-date">${escapeHtml(formatDateShort(essay.date))}</div>
-                </a>
-            `).join('');
+        if (container && !container.children.length && !hasSsrEssayLinks) {
+            const fragment = document.createDocumentFragment();
+            essays.forEach((essay: AnyObj) => {
+                const link = cloneTemplateElement<HTMLAnchorElement>('essay-sidebar-link-template');
+                if (!link) return;
+                link.href = `#${essay.id}`;
+                link.dataset.actionArgs = encodeURIComponent(essay.id);
+                const title = link.querySelector('[data-essay-link-title]');
+                const date = link.querySelector('[data-essay-link-date]');
+                if (title) title.textContent = essay.title || '';
+                if (date) date.textContent = formatDateShort(essay.date);
+                fragment.appendChild(link);
+            });
+            container.replaceChildren(fragment);
         }
     });
 }
@@ -174,12 +182,7 @@ function updateEssayCount(count: number) {
 function showEssayErrorMessage() {
     const container = document.getElementById('essays-container');
     if (!container) return;
-    container.innerHTML = `
-        <div style="text-align: center; padding: 3rem;">
-            <p style="color: var(--accent-color); font-size: 1.2rem; margin-bottom: 1rem;">Unable to load essays</p>
-            <p style="color: var(--text-light);">Please try refreshing the page.</p>
-        </div>
-    `;
+    renderTemplateInto(container, 'essay-load-error-template');
 }
 
 function scrollEssaysToTop() {

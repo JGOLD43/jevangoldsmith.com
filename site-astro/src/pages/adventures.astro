@@ -8,6 +8,14 @@ interface RemoteAssetEntry {
   formats?: Record<string, Record<string, string>>;
 }
 
+interface CarouselAdventure {
+  id: string;
+  title: string;
+  year: string;
+  place: string;
+  image: string;
+}
+
 // Mirrors scripts/legacy-build/build/html-normalize.js remoteAssetFor:
 // resolve a remote URL to its localized generated raster at the requested
 // width (or the next-larger available width).
@@ -38,6 +46,13 @@ function shortDateRange(start?: string | null, end?: string | null): string {
 }
 
 const canonical = 'https://jevangoldsmith.com/adventures.html';
+const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) => ({
+  id: adventure.id,
+  title: adventure.data.title,
+  year: adventure.data.startDate ? String(adventure.data.startDate).slice(0, 4) : '',
+  place: adventure.data.location || '',
+  image: remoteAssetFor(adventure.data.heroImage, 240)
+}));
 ---
 <Base
   title="Adventures, Travel Notes &amp; Places Worth Remembering"
@@ -157,19 +172,78 @@ const canonical = 'https://jevangoldsmith.com/adventures.html';
           <button type="button" class="adv-carousel-handle" id="adv-carousel-handle" aria-label="Hide trips" aria-controls="adventures-map-carousel" aria-expanded="true">
             <svg class="adv-carousel-handle-chevron" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
-          <div class="adventures-map-carousel" id="adventures-map-carousel" aria-label="Trips"></div>
+          <div class="adventures-map-carousel" id="adventures-map-carousel" aria-label="Trips">
+            {carouselAdventures.map((adventure) => (
+              <button type="button" class="adv-carousel-card" data-adventure-id={adventure.id}>
+                {adventure.image
+                  ? <img class="adv-carousel-img" src={adventure.image} alt={adventure.title} loading="lazy" decoding="async" />
+                  : <span class="adv-carousel-img adv-carousel-img-fallback" aria-hidden="true"></span>}
+                <span class="adv-carousel-meta">
+                  <span class="adv-carousel-place">{adventure.place}</span>
+                  {adventure.year && <span class="adv-carousel-year">{adventure.year}</span>}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
         <div class="adventure-detail-overlay" id="adventure-detail-overlay">
           <button class="detail-close-btn" data-action="closeAdventureDetail">&times;</button>
           <div class="adventure-detail-content" id="adventure-detail-content">
+            <img id="adventure-detail-hero" src="" alt="" class="adventure-detail-hero" loading="lazy" decoding="async">
+            <div class="adventure-detail-body">
+              <div class="adventure-location" id="adventure-detail-location"></div>
+              <h2 class="adventure-title" id="adventure-detail-title"></h2>
+              <div class="adventure-meta">
+                <span id="adventure-detail-date"></span>
+                <span id="adventure-detail-duration"></span>
+              </div>
+              <p class="adventure-description" id="adventure-detail-description"></p>
+              <button type="button" class="view-full-story-btn" data-action="scrollToStory">Read Full Story</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <section class="adventure-story-inline" id="adventure-story-inline" hidden>
-      <div class="adventure-story-inner" id="adventure-story-inner"></div>
+      <div class="adventure-story-inner" id="adventure-story-inner">
+        <button type="button" class="adventure-story-close" data-action="closeInlineStory" aria-label="Close story">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="adventure-story-hero">
+          <img id="adventure-story-hero-image" src="" alt="" loading="lazy" decoding="async">
+          <div class="adventure-story-hero-overlay">
+            <div class="adventure-story-location" id="adventure-story-location"></div>
+            <h2 class="adventure-story-title" id="adventure-story-title"></h2>
+            <p class="adventure-story-subtitle" id="adventure-story-subtitle"></p>
+          </div>
+        </div>
+        <div class="adventure-story-body">
+          <div class="adventure-story-meta">
+            <span id="adventure-story-date"></span>
+            <span id="adventure-story-duration"></span>
+          </div>
+          <div class="adventure-story-content" id="adventure-story-content"></div>
+          <div class="adventure-story-highlights" id="adventure-story-highlights" hidden>
+            <h3>Highlights</h3>
+            <ul id="adventure-story-highlights-list"></ul>
+          </div>
+          <div class="adventure-story-gallery" id="adventure-story-gallery" hidden>
+            <h3>Gallery</h3>
+            <div class="adventure-story-gallery-grid" id="adventure-story-gallery-grid"></div>
+          </div>
+          <template id="adventure-highlight-template">
+            <li></li>
+          </template>
+          <template id="adventure-gallery-item-template">
+            <figure class="adventure-story-gallery-item" data-action="open-adventure-lightbox" data-adventure-id="" data-index="">
+              <img src="" alt="" loading="lazy" decoding="async">
+              <figcaption hidden></figcaption>
+            </figure>
+          </template>
+        </div>
+      </div>
     </section>
   </main>
 

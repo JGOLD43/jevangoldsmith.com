@@ -1,0 +1,46 @@
+---
+interface Props {
+  clearAction: string;
+  preventDefaultOnClear?: boolean;
+  sliderLabel: string;
+  sliderIcon: string;
+  sliderId: string;
+}
+
+const { clearAction, preventDefaultOnClear = false, sliderLabel, sliderIcon, sliderId } = Astro.props;
+const ticks = Array.from({ length: 11 });
+---
+<div class="sidebar-filter-section">
+  <div class="filter-header">
+    <div class="filter-label">Filter by Rating</div>
+    <a href="#" class="show-all-link" data-action={clearAction} data-action-prevent-default={preventDefaultOnClear ? 'true' : undefined}>Show All</a>
+  </div>
+  <div class="star-rating-filter">
+    <div class="star-filter-container" id="star-filter-container">
+      <span class="filter-star" data-star="1">★</span>
+      <span class="filter-star" data-star="2">★</span>
+      <span class="filter-star" data-star="3">★</span>
+      <span class="filter-star" data-star="4">★</span>
+      <span class="filter-star" data-star="5">★</span>
+      <span class="filter-rating-text" id="filter-rating-text"></span>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar-filter-section">
+  <div class="filter-header">
+    <div class="filter-label">{sliderLabel}</div>
+  </div>
+  <div class={`${sliderId}-filter`}>
+    <div class={`${sliderId}-filter-container`}>
+      <span class={`filter-${sliderId}-icon`}>{sliderIcon}</span>
+      <div class={`${sliderId}-slider-wrapper`}>
+        <input type="range" min="0" max="10" value="0" class={`${sliderId}-slider`} id={`${sliderId}-slider`} />
+        <div class={`${sliderId}-ticks`} id={`${sliderId}-ticks`}>
+          {ticks.map(() => <span class="tick"></span>)}
+        </div>
+      </div>
+      <span class={`filter-${sliderId}-text`} id={`filter-${sliderId}-text`}></span>
+    </div>
+  </div>
+</div>
