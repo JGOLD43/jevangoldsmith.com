@@ -260,15 +260,21 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         .site-footer-col a { font-size: 0.85rem; }
         .site-footer-bottom { flex-direction: column; text-align: center; gap: 0.5rem; }
       }
-      /* On collection pages (books, movies, adventures, etc.) the
-         .collection-mobile-toggle is position:fixed at the bottom of
-         the viewport on mobile and covers ~56px of anything at the
-         bottom — footer content, gallery images on detail pages,
+      /* On collection pages (books, movies, etc.) the
+         .collection-mobile-toggle, and on /adventures the
+         .adventures-mobile-toggle, are position:fixed at the bottom of
+         the viewport on mobile/tablet and cover ~56px of anything at
+         the bottom — footer content, gallery images on detail pages,
          everything. Pad the body so the entire page has clearance for
          the toolbar instead of solving the overlap one element at a
          time. */
       @media (max-width: 768px) {
         body:has(.collection-mobile-toggle) {
+          padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+        }
+      }
+      @media (max-width: 968px) {
+        body:has(.adventures-mobile-toggle) {
           padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
         }
       }

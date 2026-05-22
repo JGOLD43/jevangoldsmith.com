@@ -41,9 +41,9 @@ const config = ({
   main: {
     className: 'movies-main collection-main',
     titleTag: 'h2',
-    title: 'Podcasts I Listen To',
+    title: 'Podcasts',
     mobileGridLabel: 'Podcasts',
-    subtitleText: 'Conversations, shows, and episodes that shaped how I think about business, technology, and life.',
+    subtitleText: '',
     counterId: 'podcast-count',
     counterLabel: 'Audio Notes'
   }
@@ -117,10 +117,6 @@ const config = ({
   </section>
 
   <section id="curated-podcasts-section">
-    <div class="spotify-section-header">
-      <h2>Curated Picks</h2>
-      <p class="spotify-section-meta">Hand-picked shows and episodes I return to.</p>
-    </div>
     <div id="podcasts-container" class="movies-grid">
       {podcasts.map((p, i) => <PodcastCard podcast={{ ...p.data, id: p.id }} index={i} />)}
     </div>
