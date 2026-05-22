@@ -263,7 +263,10 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 backClone.style.transformOrigin = '0 0';
                 backClone.style.pointerEvents = 'none';
                 backClone.style.borderRadius = getComputedStyle(currentHero).borderRadius;
-                backClone.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.45)';
+                // Match the hero wrapper's own shadow so the clone
+                // starts the reverse flight visually identical to what
+                // the user was just seeing.
+                backClone.style.boxShadow = '0 24px 60px rgba(0, 0, 0, 0.55)';
                 backClone.style.background = 'transparent';
                 document.body.appendChild(backClone);
                 currentHero.style.visibility = 'hidden';
@@ -310,7 +313,7 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                     const ty = dT - heroRect.top;
                     const back = backClone.animate(
                         [
-                            { transform: 'translate(0px, 0px) scale(1)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.45)' },
+                            { transform: 'translate(0px, 0px) scale(1)', boxShadow: '0 24px 60px rgba(0, 0, 0, 0.55)' },
                             { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, boxShadow: '0 8px 22px rgba(0, 0, 0, 0.35)' }
                         ],
                         { duration: TIMING.bookFlight, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' }
@@ -349,16 +352,30 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             const handoff = () => {
                 if (handoffComplete || !newMain.isConnected) return;
                 handoffComplete = true;
-                // Reveal the real hero (clear the inline hides we set
-                // at injection time) and remove the clone in the same
-                // tick — both occupy identical pixel-exact rects so the
-                // swap is invisible.
+                // Reveal the real hero immediately at full opacity.
                 if (newHeroImg) {
                     newHeroImg.style.visibility = '';
                     newHeroImg.style.opacity = '';
                 }
                 newMain.classList.add('is-spa-cover-revealed');
-                cleanupFlightCover();
+                // The clone's final position was computed against the
+                // hardcoded HERO_OFFSET_TOP, which can be off by a few
+                // pixels from the actual rendered hero position. Snap
+                // the clone to the MEASURED real-hero rect just before
+                // fading it out, so the cross-fade hides any sub-pixel
+                // mismatch — no shading flicker.
+                if (newHeroImg) {
+                    const realRect = newHeroImg.getBoundingClientRect();
+                    if (realRect.width && realRect.height) {
+                        const newScale = realRect.width / srcRenderW;
+                        const newTx = realRect.left - srcRenderLeft;
+                        const newTy = realRect.top - srcRenderTop;
+                        clone.style.transform = `translate(${newTx}px, ${newTy}px) scale(${newScale})`;
+                    }
+                }
+                clone.style.transition = 'opacity 100ms linear';
+                clone.style.opacity = '0';
+                setTimeout(cleanupFlightCover, 110);
                 // Restore sidebar style after cleanup in case the user
                 // hits Back — we'll re-render on popstate.
                 setTimeout(() => {

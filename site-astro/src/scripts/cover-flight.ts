@@ -344,7 +344,14 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                         newHero.style.opacity = '';
                     }
                     newMain.classList.add(coverRevealCls);
-                    clone.remove();
+                    // Cross-fade the clone out instead of removing it
+                    // instantly. The real hero img and clone may differ
+                    // subtly (object-fit cover vs clone's fill, sub-pixel
+                    // alignment, etc) — fading hides any shading flicker
+                    // at the handoff moment.
+                    clone.style.transition = 'opacity 100ms linear';
+                    clone.style.opacity = '0';
+                    setTimeout(() => clone.remove(), 110);
                     cover.style.visibility = '';
                     (cover.style as CSSStyleDeclaration).viewTransitionName = '';
                     document.body.classList.remove(cfg.bodyLaunchClass);

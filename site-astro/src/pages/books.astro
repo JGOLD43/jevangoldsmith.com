@@ -259,6 +259,17 @@ const config = ({
   main.detail-page--book.is-spa-arrival .detail-hero-cover {
     background: transparent !important;
     box-shadow: none !important;
+    transition: background 100ms linear, box-shadow 100ms linear;
+  }
+  /* Restore the wrapper's bg + shadow exactly when the cover-revealed
+     class fires (at handoff). Doing it here — instead of waiting for
+     is-spa-arrival to be removed 240ms later — keeps the shadow from
+     appearing to "pop in" after the animation finishes. The 100ms
+     transition above overlaps the clone's 100ms cross-fade, so the
+     shadow grows in as the clone fades out. */
+  main.detail-page--book.is-spa-arrival.is-spa-cover-revealed .detail-hero-cover {
+    background: #1a1a1a !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55) !important;
   }
   main.detail-page--book.is-spa-arrival.is-spa-revealed > * {
     opacity: 1;
