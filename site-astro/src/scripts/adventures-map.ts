@@ -379,7 +379,7 @@ function initWorldMap(adventures: AnyObj[]) {
         const popupHtml = `
             <div style="min-width: 180px; text-align: center; padding: 0.5rem;">
                 <strong style="font-size: 1rem;">${escapeHtml(adventure.title)}</strong><br>
-                <span style="color: #666; font-size: 0.85rem;">${escapeHtml(adventure.location)}</span><br>
+                <span style="opacity: 0.7; font-size: 0.85rem;">${escapeHtml(adventure.location)}</span><br>
                 <button data-action="select-adventure" data-adventure-id="${escapeAttr(adventure.id)}"
                    style="margin-top: 0.5rem; padding: 0.4rem 1rem; background: #C9A86C; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">
                    View Details
