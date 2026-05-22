@@ -373,18 +373,33 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 if (newHeroImg) {
                     const realRect = newHeroImg.getBoundingClientRect();
                     if (realRect.width && realRect.height) {
-                        const newScale = realRect.width / srcRenderW;
-                        const newTx = realRect.left - srcRenderLeft;
-                        const newTy = realRect.top - srcRenderTop;
-                        clone.style.transform = `translate(${newTx}px, ${newTy}px) scale(${newScale})`;
+                        // Snap the clone to the REAL hero rect with NO
+                        // transform. Why: box-shadow is subject to CSS
+                        // transforms, so a clone at scale(X) renders a
+                        // shadow at X-scaled blur/spread. The wrapper's
+                        // CSS shadow is at natural size — switching
+                        // from one to the other was making the shadow
+                        // visibly shrink ("final-state shadow flicking
+                        // in"). At natural width/height with no scale,
+                        // the clone's shadow matches the wrapper's
+                        // exactly and the cross-fade is pixel-identical.
+                        //
+                        // Use commitStyles() to bake the animation's
+                        // final transform into inline styles BEFORE
+                        // cancelling. Without it, animation.cancel()
+                        // reverts the clone to its initial inline
+                        // state (source size, source position) for a
+                        // frame — visible as a "small cover flicker".
+                        try { animation.commitStyles(); } catch { /* older browsers */ }
+                        animation.cancel();
+                        clone.style.transform = 'none';
+                        clone.style.left = `${realRect.left}px`;
+                        clone.style.top = `${realRect.top}px`;
+                        clone.style.width = `${realRect.width}px`;
+                        clone.style.height = `${realRect.height}px`;
+                        clone.style.boxShadow = '0 24px 60px rgba(0, 0, 0, 0.55)';
                     }
                 }
-                // Drop the clone's shadow BEFORE fading the clone out.
-                // The wrapper underneath now provides the shadow (via
-                // is-spa-cover-revealed). Leaving the clone's shadow on
-                // during the fade would superpose two identical shadows
-                // and read as a brief doubling/darkening flicker.
-                clone.style.boxShadow = 'none';
                 clone.style.transition = 'opacity 100ms linear';
                 clone.style.opacity = '0';
                 setTimeout(cleanupFlightCover, 110);

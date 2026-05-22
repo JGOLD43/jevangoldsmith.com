@@ -348,11 +348,37 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                         newHero.style.opacity = '';
                     }
                     newMain.classList.add(coverRevealCls);
-                    // Drop the clone's shadow BEFORE the fade so it
-                    // doesn't superpose with the wrapper's shadow during
-                    // the cross-fade — that doubling reads as a brief
-                    // shadow flicker just after the animation lands.
-                    clone.style.boxShadow = 'none';
+                    // Snap the clone to the real hero rect with NO
+                    // transform so its box-shadow renders at natural
+                    // CSS size — pixel-identical to the wrapper's
+                    // shadow underneath. Without this, the clone's
+                    // scaled transform also scales its shadow, and
+                    // when the clone is removed the visible shadow
+                    // suddenly shrinks to the wrapper's natural size
+                    // ("final-state shadow flicking in"). Matching the
+                    // wrapper's shadow value exactly makes the cross-
+                    // fade pixel-identical to the underlying wrapper.
+                    if (newHero) {
+                        const realRect = newHero.getBoundingClientRect();
+                        if (realRect.width && realRect.height) {
+                            // commitStyles before cancel — otherwise
+                            // the clone reverts to its initial inline
+                            // state (source size at source position)
+                            // for one frame, briefly flickering the
+                            // small grid-card cover at the original
+                            // position. Baking the final transform in
+                            // first keeps the clone visually anchored
+                            // through the cancel.
+                            try { flightAnim.commitStyles(); } catch { /* older browsers */ }
+                            flightAnim.cancel();
+                            clone.style.transform = 'none';
+                            clone.style.left = `${realRect.left}px`;
+                            clone.style.top = `${realRect.top}px`;
+                            clone.style.width = `${realRect.width}px`;
+                            clone.style.height = `${realRect.height}px`;
+                            clone.style.boxShadow = '0 18px 50px rgba(0, 0, 0, 0.47)';
+                        }
+                    }
                     clone.style.transition = 'opacity 100ms linear';
                     clone.style.opacity = '0';
                     setTimeout(() => clone.remove(), 110);
@@ -368,7 +394,25 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                         newMain.style.transition = '';
                     }, 320);
                 };
-                flightAnim.finished.then(handoff).catch(handoff);
+                // Wait for the newMain reveal (140ms) to fully complete
+                // before handing off — same reasoning as books-flight.
+                // If the reveal is still in progress at handoff, the
+                // wrapper's shadow inside newMain keeps brightening
+                // past flight end and reads as a delayed flicker.
+                const waitForReveal = () => new Promise<void>((resolve) => {
+                    if (newMainRevealedAt.t === 0) {
+                        setTimeout(resolve, 200);
+                        return;
+                    }
+                    const elapsed = performance.now() - newMainRevealedAt.t;
+                    const remaining = Math.max(0, 150 - elapsed);
+                    if (remaining === 0) resolve();
+                    else setTimeout(resolve, remaining);
+                });
+                flightAnim.finished
+                    .then(() => waitForReveal())
+                    .then(handoff)
+                    .catch(handoff);
             });
         })
         .catch(() => {
