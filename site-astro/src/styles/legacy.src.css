@@ -3430,7 +3430,9 @@ body.meet-page {
 .view-toggle-single {
   color: var(--text-light);
   cursor: pointer;
-  background: #ffffff1a;
+  /* Dark-tinted bg shows on light themes; the dark-theme override
+     below uses a white tint so it stays visible on dark too. */
+  background: rgba(0, 0, 0, 0.06);
   border: none;
   border-radius: 6px;
   justify-content: center;
@@ -3446,8 +3448,17 @@ body.meet-page {
 }
 
 .view-toggle-single:hover {
+  color: var(--text-color);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="dark"] .view-toggle-single {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .view-toggle-single:hover {
   color: #fff;
-  background: #ffffff2e;
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .view-toggle-single:focus-visible {

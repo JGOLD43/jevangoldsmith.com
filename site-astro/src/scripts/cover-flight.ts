@@ -387,9 +387,15 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                             clone.style.objectFit = 'cover';
                         }
                     }
-                    clone.style.transition = 'opacity 100ms linear';
-                    clone.style.opacity = '0';
-                    setTimeout(() => clone.remove(), 110);
+                    // Instant removal — no cross-fade. With the clone
+                    // pixel-aligned to the real hero rect (natural
+                    // size, matched object-fit, matched box-shadow),
+                    // the wrapper-img underneath is visually identical.
+                    // An instant swap is imperceptible. The earlier
+                    // cross-fade was itself revealing the underlying
+                    // wrapper-img through the partly-transparent clone,
+                    // which read as a "small cover flickering up".
+                    clone.remove();
                     cover.style.visibility = '';
                     (cover.style as CSSStyleDeclaration).viewTransitionName = '';
                     document.body.classList.remove(cfg.bodyLaunchClass);

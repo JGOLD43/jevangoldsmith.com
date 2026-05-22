@@ -158,8 +158,15 @@ if (seoSlug === 'index' || seoSlug === 'search') {
     <style is:inline>
       /* Restructured site footer — overrides the legacy .footer rules
          so the same chrome ships on every page. */
-      .site-footer { color: #fff; background: #0f0f0f; border-top: 1px solid rgba(255,255,255,0.08); padding: 3rem 0 1.5rem; }
-      [data-theme="dark"] .site-footer { background: #0a0a0a; border-top-color: #222; }
+      /* Light theme (default): cream bg with dark text, mirroring the
+         rest of the light-mode page. Dark theme overrides below flip
+         to the original near-black with light text. */
+      .site-footer {
+        color: var(--text-color);
+        background: var(--background);
+        border-top: 1px solid rgba(0,0,0,0.08);
+        padding: 3rem 0 1.5rem;
+      }
       .site-footer .container { max-width: var(--site-max-width, 1200px); margin: 0 auto; padding: 0 1.25rem; }
       .site-footer .site-footer-grid {
         display: grid;
@@ -167,12 +174,12 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         gap: 2.5rem;
         padding-bottom: 2.75rem;
         margin-bottom: 1.75rem;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
+        border-bottom: 1px solid rgba(0,0,0,0.08);
         text-align: left;
       }
       .site-footer .site-footer-bottom { padding-top: 0.25rem; }
       .site-footer-brand-link {
-        color: #fff;
+        color: var(--text-color);
         font-family: Chivo, sans-serif;
         font-weight: 700;
         font-size: 1.05rem;
@@ -181,7 +188,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
       }
       .site-footer-brand-link:hover { color: var(--secondary-color); }
       .site-footer-tagline {
-        color: rgba(255,255,255,0.55);
+        color: var(--text-light);
         font-size: 0.9rem;
         line-height: 1.55;
         margin: 0.5rem 0 1rem;
@@ -189,14 +196,14 @@ if (seoSlug === 'index' || seoSlug === 'search') {
       }
       .site-footer-social { display: flex; gap: 0.9rem; align-items: center; }
       .site-footer-social a {
-        color: rgba(255,255,255,0.7);
+        color: var(--text-light);
         display: inline-flex;
         transition: color 0.2s ease, transform 0.2s ease;
       }
       .site-footer-social a:hover { color: var(--secondary-color); transform: translateY(-2px); }
       .site-footer-social svg { width: 20px; height: 20px; fill: currentColor; }
       .site-footer-col-title {
-        color: #fff;
+        color: var(--text-color);
         font-family: Chivo, sans-serif;
         font-size: 0.72rem;
         letter-spacing: 0.18em;
@@ -206,7 +213,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
       }
       .site-footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
       .site-footer-col a {
-        color: rgba(255,255,255,0.6);
+        color: var(--text-light);
         font-size: 0.9rem;
         text-decoration: none;
         transition: color 0.2s ease;
@@ -220,14 +227,29 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         gap: 1rem;
         flex-wrap: wrap;
       }
-      .site-footer-bottom p { color: rgba(255,255,255,0.4); margin: 0; font-size: 0.8rem; }
+      .site-footer-bottom p { color: var(--text-light); margin: 0; font-size: 0.8rem; }
       .site-footer-back {
-        color: rgba(255,255,255,0.55);
+        color: var(--text-light);
         font-size: 0.8rem;
         text-decoration: none;
         transition: color 0.2s ease;
       }
       .site-footer-back:hover { color: var(--secondary-color); }
+
+      /* Dark theme: keep the original near-black footer chrome. */
+      [data-theme="dark"] .site-footer {
+        color: #fff;
+        background: #0a0a0a;
+        border-top-color: #222;
+      }
+      [data-theme="dark"] .site-footer .site-footer-grid { border-bottom-color: rgba(255,255,255,0.08); }
+      [data-theme="dark"] .site-footer-brand-link { color: #fff; }
+      [data-theme="dark"] .site-footer-tagline { color: rgba(255,255,255,0.55); }
+      [data-theme="dark"] .site-footer-social a { color: rgba(255,255,255,0.7); }
+      [data-theme="dark"] .site-footer-col-title { color: #fff; }
+      [data-theme="dark"] .site-footer-col a { color: rgba(255,255,255,0.6); }
+      [data-theme="dark"] .site-footer-bottom p { color: rgba(255,255,255,0.4); }
+      [data-theme="dark"] .site-footer-back { color: rgba(255,255,255,0.55); }
       @media (max-width: 960px) {
         .site-footer .site-footer-grid { grid-template-columns: 1fr 1fr 1fr; }
         .site-footer .site-footer-brand { grid-column: 1 / -1; }
@@ -237,6 +259,16 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         .site-footer-col-title { font-size: 0.65rem; letter-spacing: 0.14em; }
         .site-footer-col a { font-size: 0.85rem; }
         .site-footer-bottom { flex-direction: column; text-align: center; gap: 0.5rem; }
+      }
+      /* On collection pages (books, movies, etc.) the .collection-mobile-toggle
+         is position:fixed at the bottom of the viewport on mobile and
+         covers the footer's bottom row (copyright + "Back to top"). Add
+         room below the footer content so it clears the toolbar — same
+         vertical spacing as non-collection pages. */
+      @media (max-width: 768px) {
+        body:has(.collection-mobile-toggle) .site-footer {
+          padding-bottom: calc(1.5rem + 56px + env(safe-area-inset-bottom, 0px));
+        }
       }
     </style>
     {/* View Transitions (ClientRouter) was tried but Astro's swap-
