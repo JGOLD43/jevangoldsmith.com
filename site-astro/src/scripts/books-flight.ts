@@ -126,7 +126,11 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             },
             {
                 transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
-                boxShadow: '0 28px 60px rgba(0, 0, 0, 0.55)'
+                // End shadow matches .detail-page--book .detail-hero-cover's
+                // own box-shadow exactly so the handoff (clone removed →
+                // wrapper shadow takes over) is seamless. Any mismatch
+                // here reads as a shading flicker at landing.
+                boxShadow: '0 24px 60px rgba(0, 0, 0, 0.55)'
             }
         ],
         {
@@ -198,6 +202,16 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 // raw size before CSS sizes it.
                 newHeroImg.style.visibility = 'hidden';
             }
+            // Same belt-and-suspenders for newMain itself. The
+            // is-spa-arrival CSS hides children at opacity 0, but in
+            // light mode users were still seeing a single-frame white
+            // flash on click — likely a 1-frame race between class
+            // application and the browser's first paint of the
+            // injected subtree. Setting inline opacity:0 on newMain
+            // itself is iron-clad: nothing in the new main paints
+            // until we explicitly fade it in below.
+            newMain.style.opacity = '0';
+            newMain.style.transition = 'opacity 320ms cubic-bezier(.22, 1, .36, 1)';
             oldMain.parentNode.replaceChild(newMain, oldMain);
             // The detail page doesn't render a sidebar — hide the
             // listing sidebar so the new main can center under its
@@ -323,6 +337,10 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     newMain.classList.add('is-spa-revealed');
+                    // Reveal newMain via the inline opacity fade we set
+                    // at injection time (mirrors the is-spa-revealed
+                    // class-driven fade for newMain's children).
+                    newMain.style.opacity = '1';
                 });
             });
             // When the clone finishes flying, hand the cover over to the
@@ -345,6 +363,11 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 // hits Back — we'll re-render on popstate.
                 setTimeout(() => {
                     newMain.classList.remove('is-spa-arrival', 'is-spa-revealed', 'is-spa-cover-revealed');
+                    // Drop the inline opacity fade now that the page is
+                    // fully revealed — leaving them would interfere
+                    // with subsequent renders (e.g. the reverse flight).
+                    newMain.style.opacity = '';
+                    newMain.style.transition = '';
                 }, TIMING.spaArrivalReveal);
             };
             animation.finished

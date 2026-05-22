@@ -251,6 +251,15 @@ const config = ({
   main.detail-page--book.is-spa-arrival .detail-hero-cover * {
     opacity: 0;
   }
+  /* Belt-and-suspenders against a late-flight flash: even at opacity 0
+     the wrapper's dark background (#1a1a1a) and heavy box-shadow have
+     been reported to render as a black-rectangle flash a frame before
+     handoff in some browsers. Null both during arrival so there's
+     literally nothing to paint until the cover-revealed swap. */
+  main.detail-page--book.is-spa-arrival .detail-hero-cover {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
   main.detail-page--book.is-spa-arrival.is-spa-revealed > * {
     opacity: 1;
     transition: opacity .28s cubic-bezier(.22, 1, .36, 1);
