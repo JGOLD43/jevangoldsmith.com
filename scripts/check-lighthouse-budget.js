@@ -42,7 +42,7 @@ const TOLERANCES = {
 
 const ROUTE_TOLERANCES = {
     '/books.html': { bytesKb: 200, cls: 0.2, score: 10 },
-    '/adventures.html': { bytesKb: 1600 }
+    '/adventures.html': { bytesKb: 1600, lcpMs: 500 }
 };
 
 function parseTable(markdown) {
