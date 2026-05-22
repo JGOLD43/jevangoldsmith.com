@@ -1035,14 +1035,19 @@ button[type="submit"]:hover {
 }
 
 .collection-sidebar .category-count {
-  border-radius: 10px;
+  /* Was a small badge-pill; now a plain bold tabular number for
+     readability. */
+  background: transparent;
+  border-radius: 0;
   flex: none;
   justify-content: center;
   align-items: center;
-  min-width: 18px;
-  padding: .12rem .42rem;
-  font-size: .7rem;
+  min-width: 28px;
+  padding: 0;
+  font-family: Chivo, sans-serif;
+  font-size: 0.95rem;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
   display: inline-flex;
 }
 
@@ -2702,14 +2707,18 @@ button[type="submit"]:hover {
 }
 
 .category-count {
-  color: var(--text-light);
+  /* Bigger and clearer than the previous tiny pill — easier to scan
+     and no longer overlaps the (now-removed) expand arrow. */
+  color: var(--text-color);
   text-align: center;
-  background: #e7e5e4;
-  border-radius: 10px;
-  min-width: 20px;
-  padding: .15rem .5rem;
-  font-size: .75rem;
-  font-weight: 600;
+  background: transparent;
+  border-radius: 0;
+  min-width: 28px;
+  padding: 0;
+  font-family: Chivo, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .expand-icon {

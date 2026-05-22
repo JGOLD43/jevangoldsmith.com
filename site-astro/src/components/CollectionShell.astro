@@ -115,7 +115,6 @@ const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
                 </span>
                 <span class="category-name">{item.label}</span>
                 <span class="category-count" id={item.countId}>{item.count ?? '0'}</span>
-                {item.panelId && <span class="expand-icon">▼</span>}
               </button>
               {item.panelId && (
                 <div class={item.panelClass ?? ''} id={item.panelId}>
@@ -146,7 +145,6 @@ const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
               </span>
               <span class="category-name">{item.label}</span>
               <span class="category-count" id={item.countId}>{item.count ?? '0'}</span>
-              {item.panelId && <span class="expand-icon">▼</span>}
             </button>
             {item.panelId && (
               <div class={item.panelClass ?? ''} id={item.panelId}>
