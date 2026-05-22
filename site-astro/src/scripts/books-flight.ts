@@ -211,7 +211,11 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             // itself is iron-clad: nothing in the new main paints
             // until we explicitly fade it in below.
             newMain.style.opacity = '0';
-            newMain.style.transition = 'opacity 320ms cubic-bezier(.22, 1, .36, 1)';
+            // Short transition so newMain is fully opaque well BEFORE
+            // the flight handoff at TIMING.bookFlight=320ms. Otherwise
+            // the wrapper's shadow keeps brightening after the clone
+            // lands, reading as a delayed flicker.
+            newMain.style.transition = 'opacity 140ms cubic-bezier(.22, 1, .36, 1)';
             oldMain.parentNode.replaceChild(newMain, oldMain);
             // The detail page doesn't render a sidebar — hide the
             // listing sidebar so the new main can center under its
@@ -373,6 +377,12 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                         clone.style.transform = `translate(${newTx}px, ${newTy}px) scale(${newScale})`;
                     }
                 }
+                // Drop the clone's shadow BEFORE fading the clone out.
+                // The wrapper underneath now provides the shadow (via
+                // is-spa-cover-revealed). Leaving the clone's shadow on
+                // during the fade would superpose two identical shadows
+                // and read as a brief doubling/darkening flicker.
+                clone.style.boxShadow = 'none';
                 clone.style.transition = 'opacity 100ms linear';
                 clone.style.opacity = '0';
                 setTimeout(cleanupFlightCover, 110);

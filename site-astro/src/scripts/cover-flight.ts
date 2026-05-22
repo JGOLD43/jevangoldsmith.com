@@ -174,11 +174,13 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
             // detail content the instant it lands in the DOM. Pages with
             // their own arrival CSS (books) use class-based opacity on
             // children; for everything else this inline fallback handles
-            // the staging. We transition to opacity:1 in parallel with
-            // the flight so the detail content fades in as the cover
-            // arrives.
+            // the staging. Duration is short and well under the flight
+            // duration so newMain is fully opaque BEFORE handoff —
+            // otherwise the wrapper's shadow inside newMain would still
+            // be brightening after the clone lands, reading as a
+            // delayed shadow flicker.
             newMain.style.opacity = '0';
-            newMain.style.transition = 'opacity 280ms cubic-bezier(.22, 1, .36, 1)';
+            newMain.style.transition = 'opacity 140ms cubic-bezier(.22, 1, .36, 1)';
             const newHero = newMain.querySelector(cfg.detailHeroImgSelector) as HTMLImageElement | null;
             if (newHero) {
                 newHero.style.opacity = '0';
@@ -344,11 +346,11 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                         newHero.style.opacity = '';
                     }
                     newMain.classList.add(coverRevealCls);
-                    // Cross-fade the clone out instead of removing it
-                    // instantly. The real hero img and clone may differ
-                    // subtly (object-fit cover vs clone's fill, sub-pixel
-                    // alignment, etc) — fading hides any shading flicker
-                    // at the handoff moment.
+                    // Drop the clone's shadow BEFORE the fade so it
+                    // doesn't superpose with the wrapper's shadow during
+                    // the cross-fade — that doubling reads as a brief
+                    // shadow flicker just after the animation lands.
+                    clone.style.boxShadow = 'none';
                     clone.style.transition = 'opacity 100ms linear';
                     clone.style.opacity = '0';
                     setTimeout(() => clone.remove(), 110);
