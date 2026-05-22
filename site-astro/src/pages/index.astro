@@ -1,5 +1,67 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+
+// Pull one fresh item from each of the four feature sections so this
+// carousel stays current with no hand-editing. Sorting prefers explicit
+// dates where available; otherwise we trust the source array order
+// (curated newest-first in the JSONs).
+type FeatureCard = { href: string; image: string; kicker: string; title: string; description: string };
+
+const sortByDateDesc = <T extends { date?: string | null; startDate?: string | null }>(arr: T[]): T[] =>
+  [...arr].sort((a, b) => {
+    const aDate = a.date || a.startDate || '';
+    const bDate = b.date || b.startDate || '';
+    return bDate.localeCompare(aDate);
+  });
+
+const adventuresAll = await getCollection('adventures');
+const essaysAll = await getCollection('essays');
+const projectsAll = await getCollection('projects');
+const challengesAll = await getCollection('challenges');
+
+const latestAdventure = sortByDateDesc(adventuresAll.map((a) => a.data))[0];
+const latestEssay = sortByDateDesc(essaysAll.map((e) => e.data).filter((e) => e.status !== 'draft'))[0];
+const latestProject = projectsAll.map((p: any) => p.data).filter((p: any) => p.status !== 'draft' && p.visibility !== 'private')[0];
+const latestChallenge = challengesAll.map((c: any) => c.data).filter((c: any) => c.status !== 'draft')[0];
+
+const featureCards: FeatureCard[] = [];
+if (latestAdventure) {
+  featureCards.push({
+    href: `/adventure-${latestAdventure.id}.html`,
+    image: latestAdventure.heroImage || '/images/generated/remote/bedf9633d8221e-800.jpg',
+    kicker: 'Adventure',
+    title: latestAdventure.title,
+    description: [latestAdventure.location, latestAdventure.duration].filter(Boolean).join(' • ')
+  });
+}
+if (latestEssay) {
+  featureCards.push({
+    href: `/essays.html#${latestEssay.id}`,
+    image: (latestEssay as any).featuredImage || '/images/generated/remote/cd2aacee7b912f-800.jpg',
+    kicker: 'Essay',
+    title: latestEssay.title,
+    description: latestEssay.subtitle || latestEssay.category || ''
+  });
+}
+if (latestProject) {
+  featureCards.push({
+    href: `/projects/${latestProject.slug || latestProject.id}.html`,
+    image: latestProject.image || '/images/generated/remote/3764adabb88a12-800.jpg',
+    kicker: 'Project',
+    title: latestProject.title,
+    description: latestProject.shortDescription || latestProject.description || ''
+  });
+}
+if (latestChallenge) {
+  featureCards.push({
+    href: `/challenges/${latestChallenge.slug || latestChallenge.id}.html`,
+    image: latestChallenge.image || '/images/generated/remote/0c026ddcd6c4bb-800.jpg',
+    kicker: 'Challenge',
+    title: latestChallenge.title,
+    description: latestChallenge.shortDescription || latestChallenge.timeframe || ''
+  });
+}
 ---
 <Base
   title="Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
@@ -154,62 +216,22 @@ import Base from '../layouts/Base.astro';
         </div>
         <div class="carousel-container">
             <div class="feature-carousel-track" id="carousel-track">
-                <!-- Adventure -->
-                <a href="adventures.html#japan-adventure" class="feature-card">
-                    <img src="/images/generated/remote/bedf9633d8221e-800.jpg" alt="Temples & Cherry Blossoms" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
-                    <div class="feature-content">
-                        <span class="feature-kicker">Adventure</span>
-                        <h3 class="feature-title">Temples & Cherry Blossoms</h3>
-                        <p class="feature-description">Kyoto, Japan • 12 days</p>
-                    </div>
-                </a>
-
-                <!-- Essay -->
-                <a href="essays.html#feed-my-addiction" class="feature-card">
-                    <img src="/images/generated/remote/cd2aacee7b912f-800.jpg" alt="Feed My Addiction" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
-                    <div class="feature-content">
-                        <span class="feature-kicker">Essay</span>
-                        <h3 class="feature-title">Feed My Addiction</h3>
-                        <p class="feature-description">The way of modern life</p>
-                    </div>
-                </a>
-
-                <!-- Project -->
-                <a href="projects.html#development-ai" class="feature-card">
-                    <img src="/images/generated/remote/3764adabb88a12-800.jpg" alt="Development AI" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
-                    <div class="feature-content">
-                        <span class="feature-kicker">Project</span>
-                        <h3 class="feature-title">Development AI</h3>
-                        <p class="feature-description">Separating speed from taste</p>
-                    </div>
-                </a>
-
-                <!-- Cool Shit -->
-                <a href="cool-shit.html" class="feature-card">
-                    <img src="/images/generated/remote/0c026ddcd6c4bb-800.jpg" alt="AI agents that actually work" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
-                    <div class="feature-content">
-                        <span class="feature-kicker">Cool Shit</span>
-                        <h3 class="feature-title">AI agents that actually work</h3>
-                        <p class="feature-description">Crossed the threshold from demo to useful</p>
-                    </div>
-                </a>
-
-                <!-- Adventure -->
-                <a href="adventures.html#sample-adventure" class="feature-card">
-                    <img src="/images/generated/remote/cf593c7e611076-800.jpg" alt="Mountain Exploration" class="feature-image" width="800" height="600" loading="lazy" decoding="async">
-                    <div class="feature-content">
-                        <span class="feature-kicker">Adventure</span>
-                        <h3 class="feature-title">Mountain Exploration</h3>
-                        <p class="feature-description">Europe • 5 days</p>
-                    </div>
-                </a>
+                {featureCards.map((card) => (
+                    <a href={card.href} class="feature-card">
+                        <img src={card.image} alt={card.title} class="feature-image" width="800" height="600" loading="lazy" decoding="async">
+                        <div class="feature-content">
+                            <span class="feature-kicker">{card.kicker}</span>
+                            <h3 class="feature-title">{card.title}</h3>
+                            <p class="feature-description">{card.description}</p>
+                        </div>
+                    </a>
+                ))}
             </div>
         </div>
         <div class="carousel-dots" id="carousel-dots">
-            <span class="dot active" data-carousel-slide="0"></span>
-            <span class="dot" data-carousel-slide="1"></span>
-            <span class="dot" data-carousel-slide="2"></span>
-            <span class="dot" data-carousel-slide="3"></span>
+            {featureCards.map((_, i) => (
+                <span class={i === 0 ? 'dot active' : 'dot'} data-carousel-slide={i}></span>
+            ))}
         </div>
     </section>
 

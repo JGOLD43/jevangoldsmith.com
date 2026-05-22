@@ -2143,21 +2143,23 @@ button[type="submit"]:hover {
 }
 
 .carousel-title {
-  color: #fff;
+  color: var(--text-color);
   letter-spacing: 0;
   margin: 0;
   font-family: Chivo, sans-serif;
   font-size: 2rem;
   font-weight: 600;
 }
+[data-theme="dark"] .carousel-title { color: #fff; }
 
 .carousel-discover {
-  color: #fff;
+  color: var(--text-color);
   font-size: 1rem;
   font-weight: 400;
   text-decoration: none;
   transition: color .3s;
 }
+[data-theme="dark"] .carousel-discover { color: #fff; }
 
 .carousel-discover:hover {
   color: var(--secondary-color);
@@ -2293,7 +2295,7 @@ button[type="submit"]:hover {
 
 .dot {
   cursor: pointer;
-  background: #ffffff4d;
+  background: rgba(0, 0, 0, 0.25);
   border-radius: 50%;
   width: 10px;
   height: 10px;
@@ -2301,14 +2303,18 @@ button[type="submit"]:hover {
 }
 
 .dot.active {
-  background: #fff;
+  background: var(--text-color);
   border-radius: 5px;
   width: 30px;
 }
 
 .dot:hover {
-  background: #fff9;
+  background: rgba(0, 0, 0, 0.45);
 }
+
+[data-theme="dark"] .dot { background: rgba(255, 255, 255, 0.3); }
+[data-theme="dark"] .dot.active { background: #fff; }
+[data-theme="dark"] .dot:hover { background: rgba(255, 255, 255, 0.6); }
 
 @media (width <= 1400px) {
   .feature-card {

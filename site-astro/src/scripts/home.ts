@@ -73,6 +73,17 @@ function initCarousel() {
         let startScrollLeft = 0;
         let dragging = false;
         let lastTouchTime = 0;
+
+        const cardWidth = () => (cards[0]?.offsetWidth || 0) + 24;
+        const updateDotsFromScroll = () => {
+            const w = cardWidth();
+            if (!w) return;
+            const idx = Math.round(container.scrollLeft / w);
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === idx);
+            });
+        };
+
         container.addEventListener('touchstart', (event) => {
             const t = event.touches[0];
             if (!t) return;
@@ -93,12 +104,23 @@ function initCarousel() {
             if (!dragging) return;
             dragging = false;
             // Snap to nearest card after the drag settles.
-            const cardWidth = cards[0].offsetWidth + 24;
-            const idx = Math.round(container.scrollLeft / cardWidth);
-            container.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
+            const idx = Math.round(container.scrollLeft / cardWidth());
+            container.scrollTo({ left: idx * cardWidth(), behavior: 'smooth' });
         };
         container.addEventListener('touchend', endDrag, { passive: true });
         container.addEventListener('touchcancel', endDrag, { passive: true });
+        // Keep the dot indicator in sync as the user scrolls / drags.
+        container.addEventListener('scroll', updateDotsFromScroll, { passive: true });
+        // Dots themselves should be tappable to jump straight to a card.
+        // The desktop path binds these below; the mobile path was
+        // returning before reaching it, so dots looked clickable
+        // (cursor: pointer in CSS) but did nothing.
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                container.scrollTo({ left: index * cardWidth(), behavior: 'smooth' });
+                dots.forEach((d, i) => d.classList.toggle('active', i === index));
+            });
+        });
         // Suppress the link click if user dragged > 8px during the touch.
         cards.forEach((card) => {
             let downX = 0;
