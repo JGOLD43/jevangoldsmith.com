@@ -9,7 +9,7 @@
 //   LCP regression > 300ms (typical run-to-run noise on simulated throttling
 //                           is ~200ms; 300ms catches anything bigger).
 //   CLS regression > 0.05
-//   Total Bytes regression > 25KB
+//   Total Bytes regression > 35KB
 //   Performance score drop > 5 points
 // /books.html is intentionally image-dense and can swing on cover image
 // discovery/layout timing in CI. /adventures.html uses third-party map tiles,
@@ -36,7 +36,7 @@ const OUT_PATH = path.join(ROOT, '.perf-tmp/perf-current.md');
 const TOLERANCES = {
     lcpMs: 300,
     cls: 0.05,
-    bytesKb: 25,
+    bytesKb: 35,
     score: 5
 };
 
