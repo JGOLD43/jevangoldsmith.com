@@ -61,7 +61,7 @@ for (const l of lessons) {
 }
 ---
 <Base
-  title="Lesson Logger: Capture Lessons Before They Vanish | Jevan Goldsmith"
+  title="Lesson Log: Capture Lessons Before They Vanish | Jevan Goldsmith"
   description="A simple lesson-logging page for turning mistakes, wins, and observations into reusable judgment."
   canonical="https://jevangoldsmith.com/lesson-logger.html"
 >
@@ -127,8 +127,8 @@ for (const l of lessons) {
 
 <main class="lesson-page">
   <header>
-    <h1 class="lesson-page-title">Lesson Logger</h1>
-    <p class="lesson-page-sub">Lessons I have picked up along the way. Click a line to read it.</p>
+    <h1 class="lesson-page-title">Lesson Log</h1>
+    <p class="lesson-page-sub">Lessons I wrote down to not forget. Click a line to read it.</p>
   </header>
 
   {Array.from(groupedByYear.entries()).map(([year, items]) => (
@@ -140,7 +140,6 @@ for (const l of lessons) {
             <details class="lesson-row">
               <summary>
                 <span>
-                  <span class="lesson-row-cat">{l.category}</span>
                   <span class="lesson-row-title">{l.title}</span>
                 </span>
                 <span class="lesson-row-meta">{l.date.replace(/\s\d{4}$/, '')} <span class="lesson-chevron">›</span></span>
