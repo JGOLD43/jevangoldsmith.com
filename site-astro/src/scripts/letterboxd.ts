@@ -9,7 +9,6 @@ import {
 } from './collection-ui';
 import { fetchJson, readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
-import { init as initGridZoom } from './grid-zoom';
 import { initCoverFlight } from './cover-flight';
 import { LOCAL_KEYS } from './storage-keys';
 import { URL_PARAMS } from './url-params';
@@ -393,14 +392,20 @@ function bindMovieEvents() {
 function initMoviesZoom() {
     const moviesGrid = document.getElementById('movies-container');
     if (!moviesGrid) return;
-    moviesGrid.classList.add('js-zoom-grid');
-    moviesGrid.querySelectorAll('.movie-card').forEach((el) => el.classList.add('js-zoom-item'));
-    initGridZoom({
-        anchorSelector: '.movie-poster',
-        eventName: 'movie_open',
+    // Movies now use the same FLIP cover-flight animation as books — the
+    // poster clones, lifts, then flies from the grid card into the detail
+    // hero. Mirrors initBooksZoom in books-flight.ts. The grid-zoom
+    // call-site below would short-circuit the flight handler's
+    // preventDefault, so movies opt OUT of grid-zoom entirely.
+    initCoverFlight({
         grid: moviesGrid,
-        itemSelector: '.movie-card',
-        triggerSelector: '.movie-card'
+        cardSelector: 'a.movie-card',
+        coverSelector: 'img.movie-poster',
+        detailMainSelector: 'main.detail-page--movie',
+        detailHeroImgSelector: '.detail-hero-poster img',
+        bodyLaunchClass: 'is-movie-launching',
+        arrivalKey: 'movie',
+        listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
     });
 }
 

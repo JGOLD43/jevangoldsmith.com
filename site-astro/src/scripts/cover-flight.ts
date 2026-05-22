@@ -20,6 +20,12 @@ export interface CoverFlightConfig {
 
 const POP_HOOK_FLAG = '__coverFlightPopHooked';
 
+// When the SPA-swap forward flight completes, we register a reverse-flight
+// closure here so the popstate handler can fly the cover back to its grid
+// position before swapping the listing main back in. One entry per
+// arrivalKey at a time — opening another card replaces it.
+const reverseRunners = new Map<string, () => boolean>();
+
 export function initCoverFlight(cfg: CoverFlightConfig) {
     if (!cfg.grid) return;
     cfg.grid.addEventListener('click', (event) => {
@@ -50,6 +56,16 @@ function hookPopStateOnce() {
     w[POP_HOOK_FLAG] = true;
     window.addEventListener('popstate', (event) => {
         const state = (event.state || {}) as Record<string, unknown>;
+        // Forward flight pushed { coverFlight: arrivalKey }. The previous
+        // history entry has either no state or a different arrivalKey, so
+        // when we pop we get the OLD state here — meaning we're going
+        // back from a detail page. Try every registered reverse runner;
+        // the one whose newMain is still connected to the doc wins.
+        let restored = false;
+        for (const [, runner] of reverseRunners) {
+            if (runner()) { restored = true; break; }
+        }
+        if (restored) return;
         if (state && state.coverFlight) window.location.reload();
     });
 }
@@ -159,13 +175,119 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                 newHero.style.visibility = 'hidden';
             }
 
+            // Snapshot listing state so the reverse flight can restore it.
+            const previousTitle = document.title;
+            const previousScrollY = window.scrollY;
+            const hiddenBacks = (cfg.listingBackSelectors || []).flatMap((sel) =>
+                Array.from(document.querySelectorAll<HTMLElement>(sel))
+            );
+
             oldMain.parentNode.replaceChild(newMain, oldMain);
-            (cfg.listingBackSelectors || []).forEach((sel) => {
-                document.querySelectorAll<HTMLElement>(sel).forEach((el) => { el.style.display = 'none'; });
-            });
+            hiddenBacks.forEach((el) => { el.style.display = 'none'; });
             document.title = doc.title;
             window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
             try { history.pushState({ coverFlight: cfg.arrivalKey }, '', href); } catch { /* ignore */ }
+
+            // Register reverse flight. Runs on popstate (browser back or
+            // wrapped .detail-back link). Mirrors the forward flight:
+            // clone the current hero, swap the listing main back in to
+            // make the destination cover laid out, then animate the
+            // clone from hero rect → original cover rect.
+            const runReverseFlight = (): boolean => {
+                if (!newMain.isConnected || !oldMain) return false;
+                reverseRunners.delete(cfg.arrivalKey);
+                const currentHero = newMain.querySelector(cfg.detailHeroImgSelector) as HTMLImageElement | null;
+                const heroRect = currentHero?.getBoundingClientRect();
+                const restoreListingDOM = () => {
+                    if (!newMain.parentNode) return;
+                    document.querySelectorAll<HTMLStyleElement>(`style[data-spa-detail-css="${cfg.arrivalKey}"]`)
+                        .forEach((existing) => existing.remove());
+                    newMain.parentNode.replaceChild(oldMain, newMain);
+                    hiddenBacks.forEach((el) => { el.style.display = ''; });
+                    document.title = previousTitle;
+                    window.scrollTo({ top: previousScrollY, left: 0, behavior: 'auto' });
+                };
+                if (!currentHero || !heroRect || !heroRect.width || !heroRect.height) {
+                    restoreListingDOM();
+                    cover.style.visibility = '';
+                    (cover.style as CSSStyleDeclaration).viewTransitionName = '';
+                    document.body.classList.remove(cfg.bodyLaunchClass);
+                    return true;
+                }
+                // Clone hero at its current rect — this is the new flight source.
+                const backClone = currentHero.cloneNode() as HTMLImageElement;
+                backClone.removeAttribute('id');
+                backClone.removeAttribute('loading');
+                backClone.style.viewTransitionName = 'none';
+                backClone.style.position = 'fixed';
+                backClone.style.left = `${heroRect.left}px`;
+                backClone.style.top = `${heroRect.top}px`;
+                backClone.style.width = `${heroRect.width}px`;
+                backClone.style.height = `${heroRect.height}px`;
+                backClone.style.objectFit = 'fill';
+                backClone.style.margin = '0';
+                backClone.style.zIndex = '99999';
+                backClone.style.transformOrigin = '0 0';
+                backClone.style.pointerEvents = 'none';
+                backClone.style.borderRadius = getComputedStyle(currentHero).borderRadius;
+                backClone.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.45)';
+                backClone.style.background = 'transparent';
+                document.body.appendChild(backClone);
+                currentHero.style.visibility = 'hidden';
+                document.body.classList.add(cfg.bodyLaunchClass);
+
+                restoreListingDOM();
+
+                requestAnimationFrame(() => {
+                    const destRect = cover.getBoundingClientRect();
+                    const cleanup = () => {
+                        backClone.remove();
+                        cover.style.visibility = '';
+                        (cover.style as CSSStyleDeclaration).viewTransitionName = '';
+                        document.body.classList.remove(cfg.bodyLaunchClass);
+                    };
+                    if (!destRect.width || !destRect.height) { cleanup(); return; }
+                    // Image-rendered destination rect (same math as forward source).
+                    const nW = cover.naturalWidth || destRect.width;
+                    const nH = cover.naturalHeight || destRect.height;
+                    const nA = nW / nH;
+                    const bA = destRect.width / destRect.height;
+                    let dW: number, dH: number, dL: number, dT: number;
+                    if (nA > bA) {
+                        dW = destRect.width;
+                        dH = dW / nA;
+                        dL = destRect.left;
+                        dT = destRect.top + (destRect.height - dH) / 2;
+                    } else {
+                        dH = destRect.height;
+                        dW = dH * nA;
+                        dT = destRect.top;
+                        dL = destRect.left + (destRect.width - dW) / 2;
+                    }
+                    cover.style.visibility = 'hidden';
+                    const scale = dW / heroRect.width;
+                    const tx = dL - heroRect.left;
+                    const ty = dT - heroRect.top;
+                    const back = backClone.animate(
+                        [
+                            { transform: 'translate(0px, 0px) scale(1)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.45)' },
+                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, boxShadow: '0 8px 22px rgba(0, 0, 0, 0.35)' }
+                        ],
+                        { duration, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' }
+                    );
+                    back.finished.then(cleanup).catch(cleanup);
+                });
+                return true;
+            };
+            reverseRunners.set(cfg.arrivalKey, runReverseFlight);
+
+            // Wrap the detail page's back link so it triggers history.back(),
+            // which fires our popstate → reverse flight.
+            const backLink = newMain.querySelector<HTMLAnchorElement>('.detail-back');
+            backLink?.addEventListener('click', (event) => {
+                event.preventDefault();
+                history.back();
+            });
 
             // Measure destination after injection. The hero is laid out
             // (visibility:hidden preserves layout) so we get a real rect.
