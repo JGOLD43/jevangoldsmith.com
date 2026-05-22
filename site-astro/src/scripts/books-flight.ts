@@ -262,16 +262,16 @@ function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 // reverse (listing should be fully visible behind the
                 // returning cover).
 
-                // Hide the destination cover BEFORE the next paint to
-                // avoid a single-frame flash of its #f5f5f5 background
-                // showing through the empty grid-card slot. We measure
-                // after hiding — visibility:hidden preserves layout, so
-                // getBoundingClientRect still returns the real rect.
-                cover.style.visibility = 'hidden';
+                // Leave the destination cover visible throughout the
+                // reverse flight. The clone (z-index 99999) sits on top
+                // during flight; when it lands and is removed, the cover
+                // underneath is already there pixel-perfectly. Previously
+                // we hid the destination to avoid an empty-card flash —
+                // that itself caused a different flash at flight end as
+                // the cover unhid. Leaving it visible has neither.
                 const destRect = cover.getBoundingClientRect();
                 const cleanup = () => {
                     backClone.remove();
-                    cover.style.visibility = '';
                 };
                 if (!destRect.width || !destRect.height) { cleanup(); }
                 else {

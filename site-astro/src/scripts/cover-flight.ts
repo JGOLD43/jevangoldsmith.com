@@ -169,6 +169,16 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
             });
 
             newMain.classList.add(arrivalCls);
+            // Hide the entire new detail main before injection so the
+            // user never sees an unstyled / fully-revealed flash of the
+            // detail content the instant it lands in the DOM. Pages with
+            // their own arrival CSS (books) use class-based opacity on
+            // children; for everything else this inline fallback handles
+            // the staging. We transition to opacity:1 in parallel with
+            // the flight so the detail content fades in as the cover
+            // arrives.
+            newMain.style.opacity = '0';
+            newMain.style.transition = 'opacity 280ms cubic-bezier(.22, 1, .36, 1)';
             const newHero = newMain.querySelector(cfg.detailHeroImgSelector) as HTMLImageElement | null;
             if (newHero) {
                 newHero.style.opacity = '0';
@@ -241,16 +251,14 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
 
                 restoreListingDOM();
 
-                // Hide the destination cover BEFORE the next paint to
-                // avoid a single-frame flash of its #f5f5f5 background
-                // showing through the empty grid-card slot. We measure
-                // after hiding — visibility:hidden preserves layout, so
-                // getBoundingClientRect still returns the real rect.
-                cover.style.visibility = 'hidden';
+                // Leave the destination cover VISIBLE throughout the
+                // reverse flight. The clone (z-index 99999) sits on top
+                // of the destination during flight; when it lands and is
+                // removed, the cover underneath is already there pixel-
+                // perfectly — no flash, no swap timing to get wrong.
                 const destRect = cover.getBoundingClientRect();
                 const cleanup = () => {
                     backClone.remove();
-                    cover.style.visibility = '';
                     (cover.style as CSSStyleDeclaration).viewTransitionName = '';
                 };
                 if (!destRect.width || !destRect.height) { cleanup(); }
@@ -322,7 +330,12 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                 }
 
                 requestAnimationFrame(() => {
-                    requestAnimationFrame(() => newMain.classList.add(revealCls));
+                    requestAnimationFrame(() => {
+                        newMain.classList.add(revealCls);
+                        // Reveal the detail content (inline fallback —
+                        // see comment at injection time).
+                        newMain.style.opacity = '1';
+                    });
                 });
 
                 const handoff = () => {
@@ -337,7 +350,12 @@ function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig)
                     document.body.classList.remove(cfg.bodyLaunchClass);
                     setTimeout(() => {
                         newMain.classList.remove(arrivalCls, revealCls, coverRevealCls);
-                    }, 240);
+                        // Drop the inline opacity/transition fallback now
+                        // that the page is fully revealed — leaving them
+                        // behind would interfere with subsequent renders.
+                        newMain.style.opacity = '';
+                        newMain.style.transition = '';
+                    }, 320);
                 };
                 flightAnim.finished.then(handoff).catch(handoff);
             });
