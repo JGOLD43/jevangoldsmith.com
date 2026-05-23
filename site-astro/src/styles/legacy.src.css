@@ -13951,15 +13951,14 @@ body.shelf-experience {
 }
 
 ::view-transition-old(root) {
-  animation: .12s ease-out both vt-fade-out;
+  animation: .08s linear both vt-fade-out;
 }
 
 ::view-transition-new(root) {
-  /* Was .55s fade + .55s slide-up. Slide-up made every page-to-page
-     transition feel like a fresh load animation rather than a quick
-     swap; dropping it + shortening the fade halves the perceived
-     duration without losing the cross-page continuity. */
-  animation: .18s cubic-bezier(.22, 1, .36, 1) both vt-fade-in;
+  /* Snappy 100ms crossfade for the SPA-swap. With matching imagery on
+     both sides the visual delta is small, so a short crossfade reads
+     as fast and seamless. */
+  animation: .1s cubic-bezier(.22, 1, .36, 1) both vt-fade-in;
 }
 
 @keyframes vt-fade-out {
