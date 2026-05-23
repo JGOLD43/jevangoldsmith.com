@@ -80,21 +80,55 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
         if (window.matchMedia('(min-width: 769px)').matches) {
           document.documentElement.classList.add('adv-desktop');
         }
-        // When arriving from /now via ?focus=now, hide the world-map
-        // until Leaflet has zoomed to Ayr + opened the popup. This
-        // suppresses the brief "world view at default zoom" render
-        // before our focus logic kicks in. adventures.ts fades it
-        // back in once the focused view is committed.
         try {
           var p = new URLSearchParams(window.location.search);
           if (p.get('focus') === 'now') {
             document.documentElement.classList.add('adv-focus-now-pending');
+            // Compute the same satellite tile URL /now used for its
+            // thumb, so the overlay shows the IDENTICAL image. The
+            // browser then has a same-named, same-source img on both
+            // pages and morphs them into each other — no fade gap.
+            var lat = parseFloat(p.get('lat') || '');
+            var lng = parseFloat(p.get('lng') || '');
+            if (isFinite(lat) && isFinite(lng)) {
+              var z = 6;
+              var x = Math.floor((lng + 180) / 360 * Math.pow(2, z));
+              var y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, z));
+              var url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/' + z + '/' + y + '/' + x;
+              document.documentElement.setAttribute('data-now-overlay-src', url);
+            }
           }
         } catch (e) { /* noop */ }
       })();
+      // Apply the overlay src as soon as the img element exists.
+      document.addEventListener('DOMContentLoaded', function () {
+        var src = document.documentElement.getAttribute('data-now-overlay-src');
+        if (!src) return;
+        var img = document.getElementById('now-thumb-overlay');
+        if (img) {
+          img.src = src;
+          img.classList.add('show');
+        }
+      });
     </script>
     <style is:inline set:html={`
       html.adv-focus-now-pending #world-map { opacity: 0; }
+      .now-thumb-overlay {
+        display: none;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 50;
+        pointer-events: none;
+        view-transition-name: now-thumb-image;
+      }
+      .now-thumb-overlay.show { display: block; }
+      .now-thumb-overlay.fading-out {
+        transition: opacity 280ms cubic-bezier(.22, 1, .36, 1);
+        opacity: 0;
+      }
     `} />
   </Fragment>
   <main>
@@ -177,6 +211,14 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
 
       <div class="adventures-map-panel">
         <div class="adventures-main-map" id="world-map" aria-label="Interactive adventures map"></div>
+        {/* Same-image overlay used for the seamless morph from /now's
+            map thumb. The img shares view-transition-name with the
+            thumb, so the browser morphs the small thumb into this large
+            overlay. Then adventures.ts crossfades the overlay out once
+            Leaflet's tiles have painted underneath. SSR-hidden by
+            default; the inline script in head adds .show when ?focus=now
+            is in the URL so the overlay only appears for that path. */}
+        <img id="now-thumb-overlay" class="now-thumb-overlay" alt="" aria-hidden="true" decoding="async" />
 
         {/* Horizontal trip carousel along the bottom of the map (mobile + tablet).
             Populated by adventures.ts after the data loads; tap an item to fly

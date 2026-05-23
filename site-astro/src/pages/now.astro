@@ -254,13 +254,16 @@ const sections = [
     .now-sections { gap: 2rem; }
   }
 
-  /* No matched-element view-transition between the thumb and the
-     destination map: Leaflet renders briefly at its default zoom
-     before our focus-on-Ayr logic runs, and the browser was capturing
-     THAT for the morph target — producing a "world map flashes" effect
-     mid-transition. Skipping the name lets @view-transition fall back
-     to a clean root crossfade between pages, which has no opportunity
-     to show wrong map state. */
+  /* The thumb IMG morphs into a same-image overlay on the destination
+     page. Adventures.astro renders that overlay when ?focus=now is in
+     the URL — it covers the map area, uses the same satellite tile,
+     and shares this view-transition-name so the browser morphs them
+     into each other. The overlay fades out once Leaflet's tiles load,
+     so the visual chain is: thumb → grown thumb → live map, with no
+     disappearance gap. */
+  .now-map-thumb img {
+    view-transition-name: now-thumb-image;
+  }
 </style>
 
 <script>

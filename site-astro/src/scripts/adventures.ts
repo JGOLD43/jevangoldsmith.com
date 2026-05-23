@@ -538,18 +538,34 @@ function placeNowMarkerAndFocus() {
         if (params.get('focus') === 'now') {
             state.worldMap.fitBounds(circle.getBounds(), { padding: [40, 40], animate: false });
             marker.openPopup();
-            // Single rAF + short fade — the map is already laid out
-            // when this code runs (initial setView already happened in
-            // adventures-map.ts). The 120ms fade is just enough to mask
-            // any sub-frame Leaflet tile work without adding perceived
-            // delay.
-            requestAnimationFrame(() => {
-                const el = document.getElementById('world-map');
-                if (el) {
-                    el.style.transition = 'opacity 120ms cubic-bezier(.22, 1, .36, 1)';
-                    el.style.opacity = '1';
-                }
-            });
+            // Reveal the live map immediately — the overlay (same image
+            // as /now's thumb, morphed into place by the browser via
+            // view-transition-name) sits ON TOP at z-index 50, hiding
+            // any Leaflet tile-load lag underneath. Once tiles paint
+            // we crossfade the overlay out to reveal the live map.
+            const el = document.getElementById('world-map');
+            if (el) el.style.opacity = '1';
+            const overlay = document.getElementById('now-thumb-overlay');
+            if (overlay) {
+                let faded = false;
+                const fadeOut = () => {
+                    if (faded) return;
+                    faded = true;
+                    overlay.classList.add('fading-out');
+                    setTimeout(() => overlay.remove(), 220);
+                };
+                // Use the FIRST tileload (single tile painted), not the
+                // map's `load` event which waits for every tile. The
+                // overlay can crossfade out the moment the first tile
+                // is visible underneath — earlier reveal of the live
+                // interactive map.
+                state.worldMap.eachLayer((layer: any) => {
+                    if (layer.on) layer.on('load', fadeOut);
+                });
+                // Safety: fade out anyway after 800ms in case no tile
+                // events fire (offline / very slow tiles).
+                setTimeout(fadeOut, 800);
+            }
         } else {
             state.worldMap.setView([now.lat, now.lng], 4, { animate: false });
         }
