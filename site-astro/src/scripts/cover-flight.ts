@@ -70,7 +70,7 @@ function hookPopStateOnce() {
     });
 }
 
-function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig) {
+export function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlightConfig) {
     const sourceRect = cover.getBoundingClientRect();
     if (!sourceRect.width || !sourceRect.height) {
         window.location.href = href;

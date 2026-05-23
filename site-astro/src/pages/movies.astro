@@ -211,6 +211,14 @@ const config = ({
     align-items: flex-end;
     gap: 0.5rem;
   }
+  /* Stats + grid toggle on the same row, matching the books page
+     layout. */
+  .movie-counter-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
 </style>
 
 <InlineJson id="jg-movies-data" json={moviesRuntimeJson} />
@@ -218,4 +226,5 @@ const config = ({
 <script>
   // letterboxd transitively imports movie-stats; load order is implicit.
   import '../scripts/letterboxd.ts';
+  import '../scripts/movies-folder-view.ts';
 </script>
