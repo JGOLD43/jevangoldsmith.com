@@ -552,7 +552,7 @@ function placeNowMarkerAndFocus() {
                     if (faded) return;
                     faded = true;
                     overlay.classList.add('fading-out');
-                    setTimeout(() => overlay.remove(), 160);
+                    setTimeout(() => overlay.remove(), 120);
                 };
                 // Use the FIRST tileload (single tile painted), not the
                 // map's `load` event which waits for every tile. The
