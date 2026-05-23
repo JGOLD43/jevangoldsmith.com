@@ -1,0 +1,61 @@
+---
+// Listening stats panel for the podcasts page. Mirrors BookStatsBody +
+// MovieStatsBody — derived at build time, zero runtime fetches.
+
+interface PodcastLite {
+  title?: string | null;
+  host?: string | null;
+  category?: string | null;
+  badge?: string | null;
+}
+
+interface Props {
+  podcasts: PodcastLite[];
+  spotifyEpisodeCount: number;
+  spotifyShowCount: number;
+}
+
+const { podcasts, spotifyEpisodeCount, spotifyShowCount } = Astro.props as Props;
+const list = Array.isArray(podcasts) ? podcasts : [];
+
+const total = list.length;
+const mustListen = list.filter((p) => (p.badge || '').toLowerCase().includes('must')).length;
+const uniqueHosts = new Set(list.map((p) => (p.host || '').trim()).filter(Boolean)).size;
+
+const categoryCounts: Record<string, number> = {};
+list.forEach((p) => {
+  const c = (p.category || '').trim();
+  if (!c) return;
+  categoryCounts[c] = (categoryCounts[c] || 0) + 1;
+});
+const topCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+const categoryMax = topCategories[0]?.[1] || 1;
+---
+
+<div class="stats-headline-grid">
+  <div class="stats-headline-card"><div class="stats-headline-value">{total.toLocaleString()}</div><div class="stats-headline-label">Curated picks</div></div>
+  <div class="stats-headline-card"><div class="stats-headline-value">{mustListen.toLocaleString()}</div><div class="stats-headline-label">Must listen</div></div>
+  <div class="stats-headline-card"><div class="stats-headline-value">{spotifyEpisodeCount.toLocaleString()}</div><div class="stats-headline-label">Recent Spotify</div></div>
+  <div class="stats-headline-card"><div class="stats-headline-value">{spotifyShowCount.toLocaleString()}</div><div class="stats-headline-label">Shows followed</div></div>
+</div>
+
+{uniqueHosts > 0 && (
+  <div class="stats-reread-note">
+    <strong>{uniqueHosts}</strong> distinct host{uniqueHosts === 1 ? '' : 's'} across the curated set.
+  </div>
+)}
+
+{topCategories.length > 0 && (
+  <div class="stats-section">
+    <h3 class="stats-section-title">Categories</h3>
+    <div class="stats-bars">
+      {topCategories.map(([name, count]) => (
+        <div class="stats-bar-row">
+          <div class="stats-bar-label">{name}</div>
+          <div class="stats-bar-track"><div class="stats-bar-fill" style={`width: ${(count / categoryMax) * 100}%`}></div></div>
+          <div class="stats-bar-value">{count}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}

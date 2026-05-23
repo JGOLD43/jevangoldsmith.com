@@ -5,6 +5,7 @@ import podcastEpisodesData from '../../public/data/podcast-episodes.json';
 import podcastShowsData from '../../public/data/podcast-shows.json';
 import CollectionPage from '../components/CollectionPage.astro';
 import PodcastCard from '../components/PodcastCard.astro';
+import PodcastStatsBody from '../components/PodcastStatsBody.astro';
 import { PODCAST_SECTIONS, tasteListOptions } from '../lib/collection-sections';
 import { formatEpisodeDuration, formatRelativeDate } from '../lib/dates';
 
@@ -14,6 +15,24 @@ const canonical = 'https://jevangoldsmith.com/podcasts.html';
 const podcasts = await getCollection('podcasts') as CollectionEntry<'podcasts'>[];
 const spotifyEpisodes = Array.isArray(podcastEpisodesData.episodes) ? podcastEpisodesData.episodes.slice(0, 24) : [];
 const spotifyShows = Array.isArray(podcastShowsData.shows) ? podcastShowsData.shows : [];
+
+// Build category-folder cards for the grid view — mirrors books/movies.
+const podcastsByCategory = podcasts.reduce<Record<string, typeof podcasts>>((groups, p) => {
+  const c = (p.data.category || 'Uncategorized').trim();
+  (groups[c] ||= []).push(p);
+  return groups;
+}, {});
+const categoryGridCards = Object.entries(podcastsByCategory)
+  .sort((a, b) => b[1].length - a[1].length)
+  .map(([category, items]) => ({
+    category,
+    count: items.length,
+    covers: items.slice(0, 8).map((p) => ({
+      src: p.data.image || '',
+      alt: p.data.title || ''
+    })),
+    emptySlots: Math.max(0, 8 - Math.min(8, items.length))
+  }));
 
 const config = ({
   layout: { id: 'podcasts-layout', className: 'movies-layout podcasts-layout collection-layout sidebar-collapsed' },
@@ -45,7 +64,8 @@ const config = ({
     mobileGridLabel: 'Podcasts',
     subtitleText: '',
     counterId: 'podcast-count',
-    counterLabel: 'Audio Notes'
+    counterLabel: 'Audio Notes',
+    counterGroupClass: 'movie-counter-group'
   }
 });
 ---
