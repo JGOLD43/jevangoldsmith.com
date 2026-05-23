@@ -50,6 +50,21 @@ const carouselMovies = [...recentMovies, ...recentMovies].map((movie) => {
 // avoid the post-FCP fetch round-trip.
 const moviesRuntimeJson = JSON.stringify(moviesRuntimeData);
 
+// Build genre-folder cards for the Kindle-style grid view — mirrors the
+// category-grid pattern on the books page. Each card shows up to 8
+// poster thumbs + the genre name + count.
+const genreGridCards = Object.entries(moviesByGenre)
+  .sort((a, b) => b[1].length - a[1].length)
+  .map(([genre, genreMovies]) => ({
+    genre,
+    count: genreMovies.length,
+    covers: genreMovies.slice(0, 8).map((movie) => ({
+      src: movie.poster || '',
+      alt: movie.title || ''
+    })),
+    emptySlots: Math.max(0, 8 - Math.min(8, genreMovies.length))
+  }));
+
 const config = ({
   layout: { id: 'movies-layout', className: 'movies-layout collection-layout sidebar-collapsed' },
   sidebar: {
@@ -132,7 +147,13 @@ const config = ({
     </Fragment>
   )}
   <Fragment slot="counter-extra">
-    <button type="button" class="stats-toggle" aria-expanded="false" aria-controls="movie-stats-panel" aria-label="Show watch stats">Stats <span aria-hidden="true">▾</span></button>
+    <div class="movie-counter-row">
+      <button type="button" class="stats-toggle" aria-expanded="false" aria-controls="movie-stats-panel" aria-label="Show watch stats">Stats <span aria-hidden="true">▾</span></button>
+      <button class="view-toggle-single" id="movies-view-toggle" data-action="toggle-movies-view-mode" data-current-mode="list" aria-label="Switch to genre grid view" title="Switch to genre grid view">
+        <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+        <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+      </button>
+    </div>
   </Fragment>
   <div id="error" class="error-message" style="display: none;">
     <p>Unable to load movies from Letterboxd. Please check the username in the code or try again later.</p>
@@ -144,6 +165,39 @@ const config = ({
   </section>
   <div id="movies-container" class="movies-grid">
     {movies.map((m) => <MovieCard movie={m} />)}
+  </div>
+  <div class="category-grid-view" id="movies-genre-grid-view" style="display: none;">
+    <div class="category-grid" id="movies-genre-grid">
+      {genreGridCards.map((g) => (
+        <div class="category-card" data-action="open-genre-modal" data-genre={g.genre}>
+          <div class="category-card-books">
+            {g.covers.map((cover) => (
+              cover.src ? <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" data-remove-on-error="true" /> : <div class="empty-slot"></div>
+            ))}
+            {Array.from({ length: g.emptySlots }).map(() => <div class="empty-slot"></div>)}
+          </div>
+          <div class="category-card-info">
+            <span class="category-card-name">{g.genre}</span>
+            <span class="category-card-count">{g.count}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div id="genre-expanded-modal" class="category-expanded" role="dialog" aria-modal="true" aria-labelledby="genre-expanded-title">
+    <div class="category-modal-backdrop" data-action="close-genre-modal"></div>
+    <div class="category-modal-content">
+      <div class="category-expanded-header">
+        <h2 class="category-expanded-title" id="genre-expanded-title"></h2>
+        <button class="category-expanded-close" data-action="close-genre-modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="category-expanded-books" id="genre-expanded-movies"></div>
+    </div>
+    <template id="genre-expanded-movie-template">
+      <div class="category-expanded-book" data-action="open-movie-from-grid" data-slug="" tabindex="0" role="button" aria-label="">
+        <img src="" alt="" title="" decoding="async" data-remove-on-error="true">
+      </div>
+    </template>
   </div>
   <MovieModal slot="after-main" />
 </CollectionPage>

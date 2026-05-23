@@ -113,8 +113,13 @@ export function openBookFromGrid(isbn: string, sourceEl?: HTMLElement | null) {
     const href = slug ? `/books/${slug}.html` : '';
     const cover = sourceEl?.querySelector('img') as HTMLImageElement | null;
     if (href && cover) {
-        closeCategoryModal();
+        // Fire the flight FIRST so it captures the cover's rect while the
+        // modal is still visible. closeCategoryModal sets display:none on
+        // the modal, which would zero out the source rect and force the
+        // hardNav fallback (no animation). The flight clones into <body>
+        // and hides the original — closing the modal after is harmless.
         flyCoverToDetail(cover, href);
+        closeCategoryModal();
         return;
     }
     closeCategoryModal();

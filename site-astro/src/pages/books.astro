@@ -189,6 +189,15 @@ const config = ({
 <ContentVisibilityStyle selector=".book-card" intrinsicSize="220px 360px" />
 
 <style is:inline>
+  /* Stats button + grid toggle sit side-by-side on the same row,
+     to the left of the count, matching the user's requested layout. */
+  .book-counter-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   /* While a book cover is flying to the detail page, fade out the page
      content (main + sidebar) — but NOT the navbar, which renders the
      same on both pages. Fading the navbar would flicker between two
