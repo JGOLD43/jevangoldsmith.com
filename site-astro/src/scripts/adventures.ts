@@ -527,16 +527,29 @@ function placeNowMarkerAndFocus() {
             circle.addTo(state.worldMap);
         }
         // ?focus=now: the map already initialized with the focused
-        // center+zoom in adventures-map.ts (so there's no world-view
-        // flash mid-transition). Just refine to the 25km circle bounds
-        // WITHOUT animating, and open the popup immediately. Animating
-        // from the close-but-not-perfect initial view to fitBounds was
-        // the subtle "second zoom" the user noticed.
+        // center+zoom in adventures-map.ts. Refine to the 25km circle
+        // bounds without animating, open the popup, then fade the map
+        // in. The world-map element starts at opacity 0 (set by the
+        // inline script in adventures.astro) so any tile-load lag /
+        // brief render at default zoom is invisible — the user only
+        // ever sees the fully-focused map.
         // Default load (no param) → regional zoom centered on Now pin.
         const params = new URLSearchParams(window.location.search);
         if (params.get('focus') === 'now') {
             state.worldMap.fitBounds(circle.getBounds(), { padding: [40, 40], animate: false });
             marker.openPopup();
+            // Single rAF + short fade — the map is already laid out
+            // when this code runs (initial setView already happened in
+            // adventures-map.ts). The 120ms fade is just enough to mask
+            // any sub-frame Leaflet tile work without adding perceived
+            // delay.
+            requestAnimationFrame(() => {
+                const el = document.getElementById('world-map');
+                if (el) {
+                    el.style.transition = 'opacity 120ms cubic-bezier(.22, 1, .36, 1)';
+                    el.style.opacity = '1';
+                }
+            });
         } else {
             state.worldMap.setView([now.lat, now.lng], 4, { animate: false });
         }

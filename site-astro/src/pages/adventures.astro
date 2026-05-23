@@ -80,8 +80,22 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
         if (window.matchMedia('(min-width: 769px)').matches) {
           document.documentElement.classList.add('adv-desktop');
         }
+        // When arriving from /now via ?focus=now, hide the world-map
+        // until Leaflet has zoomed to Ayr + opened the popup. This
+        // suppresses the brief "world view at default zoom" render
+        // before our focus logic kicks in. adventures.ts fades it
+        // back in once the focused view is committed.
+        try {
+          var p = new URLSearchParams(window.location.search);
+          if (p.get('focus') === 'now') {
+            document.documentElement.classList.add('adv-focus-now-pending');
+          }
+        } catch (e) { /* noop */ }
       })();
     </script>
+    <style is:inline set:html={`
+      html.adv-focus-now-pending #world-map { opacity: 0; }
+    `} />
   </Fragment>
   <main>
     {/* Phase H: SSR with `sidebar-collapsed` matching the JS default
@@ -162,7 +176,7 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
       </aside>
 
       <div class="adventures-map-panel">
-        <div class="adventures-main-map" id="world-map" aria-label="Interactive adventures map" style="view-transition-name: now-to-trip-map;"></div>
+        <div class="adventures-main-map" id="world-map" aria-label="Interactive adventures map"></div>
 
         {/* Horizontal trip carousel along the bottom of the map (mobile + tablet).
             Populated by adventures.ts after the data loads; tap an item to fly

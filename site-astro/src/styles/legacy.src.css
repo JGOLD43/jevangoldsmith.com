@@ -13951,11 +13951,15 @@ body.shelf-experience {
 }
 
 ::view-transition-old(root) {
-  animation: .2s ease-in both vt-fade-out;
+  animation: .12s ease-out both vt-fade-out;
 }
 
 ::view-transition-new(root) {
-  animation: .55s cubic-bezier(.22, 1, .36, 1) both vt-fade-in, .55s cubic-bezier(.22, 1, .36, 1) both vt-slide-up;
+  /* Was .55s fade + .55s slide-up. Slide-up made every page-to-page
+     transition feel like a fresh load animation rather than a quick
+     swap; dropping it + shortening the fade halves the perceived
+     duration without losing the cross-page continuity. */
+  animation: .18s cubic-bezier(.22, 1, .36, 1) both vt-fade-in;
 }
 
 @keyframes vt-fade-out {
