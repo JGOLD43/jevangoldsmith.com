@@ -1,0 +1,113 @@
+---
+// Reading stats panel. Mirrors the structure of MovieStatsBody.astro:
+// headline cards on top, then a few distributions. Pure derivation from
+// the books data passed in — no runtime fetches.
+
+interface BookLite {
+  title?: string | null;
+  author?: string | null;
+  rating?: number | null;
+  category?: string | null;
+  read?: boolean | null;
+  reReads?: number | null;
+  year?: string | number | null;
+  coverImage?: string | null;
+}
+
+interface Props { books: BookLite[]; }
+
+const { books } = Astro.props as Props;
+const list = Array.isArray(books) ? books : [];
+
+const totalBooks = list.length;
+const readBooks = list.filter((b) => b.read !== false);
+const toReadBooks = list.filter((b) => b.read === false);
+const ratedBooks = readBooks.filter((b) => typeof b.rating === 'number' && (b.rating as number) > 0);
+const avgRating = ratedBooks.length
+  ? (ratedBooks.reduce((acc, b) => acc + ((b.rating as number) || 0), 0) / ratedBooks.length)
+  : 0;
+const totalReReads = list.reduce((acc, b) => acc + (Number(b.reReads) || 0), 0);
+
+// Rating distribution (1-5 stars).
+const ratingBuckets: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+ratedBooks.forEach((b) => {
+  const r = Math.round(b.rating as number);
+  if (r >= 1 && r <= 5) ratingBuckets[r] += 1;
+});
+const ratingMax = Math.max(...Object.values(ratingBuckets), 1);
+
+// Top categories.
+const categoryCounts: Record<string, number> = {};
+list.forEach((b) => {
+  const c = (b.category || '').trim();
+  if (!c) return;
+  categoryCounts[c] = (categoryCounts[c] || 0) + 1;
+});
+const topCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+const categoryMax = topCategories[0]?.[1] || 1;
+
+// Top-rated books (5-star, pick first 3 we can show a cover for).
+const fiveStar = ratedBooks
+  .filter((b) => Math.round(b.rating as number) === 5)
+  .slice(0, 3);
+---
+
+<div class="stats-headline-grid">
+  <div class="stats-headline-card"><div class="stats-headline-value">{totalBooks.toLocaleString()}</div><div class="stats-headline-label">Total books</div></div>
+  <div class="stats-headline-card"><div class="stats-headline-value">{readBooks.length.toLocaleString()}</div><div class="stats-headline-label">Read</div></div>
+  <div class="stats-headline-card"><div class="stats-headline-value">{toReadBooks.length.toLocaleString()}</div><div class="stats-headline-label">To read</div></div>
+  <div class="stats-headline-card"><div class="stats-headline-value">{avgRating ? avgRating.toFixed(1) : '—'}</div><div class="stats-headline-label">Avg rating</div></div>
+</div>
+
+{totalReReads > 0 && (
+  <div class="stats-reread-note">
+    <strong>{totalReReads}</strong> re-read{totalReReads === 1 ? '' : 's'} logged across the shelf.
+  </div>
+)}
+
+<div class="stats-section">
+  <h3 class="stats-section-title">Rating breakdown</h3>
+  <div class="stats-bars">
+    {[5, 4, 3, 2, 1].map((r) => (
+      <div class="stats-bar-row">
+        <div class="stats-bar-label">{'★'.repeat(r)}{'☆'.repeat(5 - r)}</div>
+        <div class="stats-bar-track"><div class="stats-bar-fill" style={`width: ${(ratingBuckets[r] / ratingMax) * 100}%`}></div></div>
+        <div class="stats-bar-value">{ratingBuckets[r]}</div>
+      </div>
+    ))}
+  </div>
+</div>
+
+{topCategories.length > 0 && (
+  <div class="stats-section">
+    <h3 class="stats-section-title">Top categories</h3>
+    <div class="stats-bars">
+      {topCategories.map(([name, count]) => (
+        <div class="stats-bar-row">
+          <div class="stats-bar-label">{name}</div>
+          <div class="stats-bar-track"><div class="stats-bar-fill" style={`width: ${(count / categoryMax) * 100}%`}></div></div>
+          <div class="stats-bar-value">{count}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+{fiveStar.length > 0 && (
+  <div class="stats-section">
+    <h3 class="stats-section-title">5-star reads</h3>
+    <div class="stats-extremes">
+      {fiveStar.map((b) => (
+        <div class="stats-extreme-card">
+          <div class="stats-extreme-movie">
+            {b.coverImage && <img src={b.coverImage} alt="" class="stats-extreme-poster" loading="lazy" decoding="async" />}
+            <div class="stats-extreme-meta">
+              <div class="stats-extreme-name">{b.title}</div>
+              {b.author && <div class="stats-extreme-sub">{b.author}</div>}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}

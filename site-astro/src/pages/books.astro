@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import BookCard from '../components/BookCard.astro';
 import BookCategoryModal from '../components/BookCategoryModal.astro';
 import BookModal from '../components/BookModal.astro';
+import BookStatsBody from '../components/BookStatsBody.astro';
 import CollectionPage from '../components/CollectionPage.astro';
 import ContentVisibilityStyle from '../components/ContentVisibilityStyle.astro';
 import InlineJson from '../components/InlineJson.astro';
@@ -140,11 +141,19 @@ const config = ({
     </div>
   </Fragment>
   <Fragment slot="counter-extra">
-    <button class="view-toggle-single" id="view-toggle-main" data-action="toggle-view-mode" data-current-mode="list" aria-label="Switch to grid view" title="Switch to grid view">
-      <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
-      <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
-    </button>
+    <div class="book-counter-group">
+      <button type="button" class="stats-toggle book-stats-toggle" aria-expanded="false" aria-controls="book-stats-panel" aria-label="Show reading stats">Stats <span aria-hidden="true">▾</span></button>
+      <button class="view-toggle-single" id="view-toggle-main" data-action="toggle-view-mode" data-current-mode="list" aria-label="Switch to grid view" title="Switch to grid view">
+        <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+        <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+      </button>
+    </div>
   </Fragment>
+  <section id="book-stats-panel" class="book-stats-panel movie-stats-panel collapsed" aria-label="Reading stats" hidden>
+    <div class="stats-body">
+      <BookStatsBody books={Array.isArray(booksRuntimeData) ? booksRuntimeData : []} />
+    </div>
+  </section>
   <div id="books-container" class="books-grid">
     {books.map((b, i) => <BookCard book={b.data} eager={i < 6} />)}
   </div>
@@ -355,4 +364,5 @@ const config = ({
 
 <script>
   import '../scripts/books.ts';
+  import '../scripts/book-stats.ts';
 </script>
