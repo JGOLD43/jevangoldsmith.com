@@ -119,20 +119,30 @@ const categoryKeys = config.categoryOrder
     </aside>
 
     <div class="movies-main">
-      <header class="main-header">
+      <header class="main-header collection-header">
         <div class="header-content">
           <h2 id="collection-title" data-default-title={config.headerTitle}>{config.headerTitle}</h2>
           {(config as any).headerSubtitleHtml
             ? <Fragment set:html={(config as any).headerSubtitleHtml} />
             : (config.headerSubtitle && <p>{config.headerSubtitle}</p>)}
         </div>
-        <div class={`header-counter ${(config as any).counterGroupClass ?? ''}`.trim()}>
-          <slot name="counter-extra" />
-          <div class="header-counter-numbers">
-            <span class="counter-number" id={config.counterId}>{total}</span>
-            <span class="counter-label">{config.counterLabel}</span>
+        {(config as any).counterGroupClass ? (
+          <div class={(config as any).counterGroupClass}>
+            <slot name="counter-extra" />
+            <div class="header-counter">
+              <span class="counter-number" id={config.counterId}>{total}</span>
+              <span class="counter-label">{config.counterLabel}</span>
+            </div>
           </div>
-        </div>
+        ) : (
+          <>
+            <slot name="counter-extra" />
+            <div class="header-counter">
+              <span class="counter-number" id={config.counterId}>{total}</span>
+              <span class="counter-label">{config.counterLabel}</span>
+            </div>
+          </>
+        )}
       </header>
 
       <slot name="pre-grid" />

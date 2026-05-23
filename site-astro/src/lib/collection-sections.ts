@@ -237,8 +237,10 @@ export interface TaskListConfig {
   sidebarFooter: string;
   headerTitle: string;
   headerSubtitle: string;
+  headerSubtitleHtml?: string;
   counterId: string;
   counterLabel: string;
+  counterGroupClass?: string;
   gridId: string;
 }
 
