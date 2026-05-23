@@ -63,7 +63,7 @@ const sections = [
         <span class="now-updated-label">Last updated</span>
         <strong class="now-updated-date">{lastUpdated}</strong>
       </div>
-      <a class="now-map-thumb" href={mapLink} title={`Open ${lastUpdatedLocation} on the trip map`} aria-label={`Open ${lastUpdatedLocation} on the trip map`}>
+      <a class="now-map-thumb" id="now-map-thumb-link" href={mapLink} title={`Open ${lastUpdatedLocation} on the trip map`} aria-label={`Open ${lastUpdatedLocation} on the trip map`}>
         <img src={mapThumbUrl} alt={`Map showing current location: ${lastUpdatedLocation}`} fetchpriority="high" decoding="async" width="256" height="256" />
         <span class="now-map-thumb-marker" style={`left: ${pinLeftPct}%; top: ${pinTopPct}%;`} aria-hidden="true">
           <span class="now-marker-pulse"></span>
@@ -253,5 +253,64 @@ const sections = [
     .now-header { margin-bottom: 2.5rem; }
     .now-sections { gap: 2rem; }
   }
+
+  /* Quick fade-to-black overlay before navigating to the trip map.
+     Cleaner than trying to scale the thumb to fullscreen (which blurs
+     the source image badly). The destination Adventures page is dark
+     too, so the transition reads as a single black-out → map appears. */
+  .now-nav-fade {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    opacity: 0;
+    z-index: 99999;
+    pointer-events: none;
+    will-change: opacity;
+  }
 </style>
+
+<script>
+  // Fast crossfade-to-black on Now-map-thumb click. Prefetch the
+  // destination so it's ready in cache by the time the fade lands;
+  // the actual navigation feels instant.
+  const link = document.getElementById('now-map-thumb-link') as HTMLAnchorElement | null;
+  if (link) {
+    // Eagerly prefetch the trip map page so the navigation, when it
+    // happens, is a cache hit. Speculation Rules already covers some
+    // links, but this guarantees this specific URL is warmed.
+    const prefetch = () => {
+      if (document.querySelector(`link[rel="prefetch"][href="${link.href}"]`)) return;
+      const l = document.createElement('link');
+      l.rel = 'prefetch';
+      l.href = link.href;
+      l.as = 'document';
+      document.head.appendChild(l);
+    };
+    link.addEventListener('pointerenter', prefetch, { once: true });
+    link.addEventListener('focus', prefetch, { once: true });
+
+    link.addEventListener('click', (event) => {
+      const me = event as MouseEvent;
+      if (me.metaKey || me.ctrlKey || me.shiftKey || me.altKey || me.button !== 0) return;
+      event.preventDefault();
+      const href = link.href;
+
+      const overlay = document.createElement('div');
+      overlay.className = 'now-nav-fade';
+      document.body.appendChild(overlay);
+
+      // Force a frame so the transition fires.
+      requestAnimationFrame(() => {
+        overlay.animate(
+          [{ opacity: 0 }, { opacity: 1 }],
+          { duration: 220, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }
+        );
+      });
+
+      // Navigate as soon as the overlay is mostly opaque. The dark
+      // overlay covers any visible discontinuity between pages.
+      setTimeout(() => { window.location.href = href; }, 200);
+    });
+  }
+</script>
 </Base>

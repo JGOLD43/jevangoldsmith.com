@@ -17,7 +17,6 @@ const srcset = person.srcset ?? '';
 const category = person.category ?? '';
 const searchText = person.searchText || `${name} ${title} ${lesson}`;
 const sourceType = person.sourceType || (title.toLowerCase().includes('fictional') ? 'fiction' : 'nonfiction');
-const sourceLabel = sourceType === 'fiction' ? 'Fiction' : 'Non-fiction';
 const personId = String(name || '')
   .normalize('NFD')
   .replace(/[\u0300-\u036f]/g, '')
@@ -38,7 +37,9 @@ const avifSrcset = gridSrcset ? gridSrcset.replace(/\.jpg\b/g, '.avif') : '';
   </div>
   <div class="person-info">
     <h3 class="person-name">{name}</h3>
-    <p class="person-source-type">{sourceLabel}</p>
+    {/* Fiction / Non-fiction badge is intentionally NOT shown on the
+        card — only on the full profile view. The card stays focused on
+        name + title + lesson. */}
     <p class="person-title">{title}</p>
     <p class="person-lesson">{lesson}</p>
   </div>
