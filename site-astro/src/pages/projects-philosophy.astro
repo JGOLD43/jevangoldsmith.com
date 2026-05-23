@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="How I Build: A Practical Project Philosophy | Jevan Goldsmith"
+  description="Notes on choosing projects, shipping in public, and building things that compound."
+  canonical="https://jevangoldsmith.com/projects-philosophy.html"
+  bodyClass="nav-compact"
+>
+  <style slot="head" is:inline set:html={`
+    .page-header .container,
+    main.container { max-width: none; padding: 0 1rem; }
+    .reading-philosophy-content { max-width: none; padding-left: 0; padding-right: 0; }
+    @media (min-width: 769px) {
+      .page-header .container,
+      main.container { padding: 0 3rem; }
+    }
+  `} />
+  <header class="page-header">
+    <div class="container">
+      <h1>How I Build</h1>
+      <p>A practical project philosophy for choosing what to ship, in public, that compounds.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="reading-philosophy-content">
+      <section class="philosophy-section">
+        <h2>Why I Build</h2>
+        <p>I build to think. A project forces a vague idea into a working thing — and the working thing teaches me what was actually true. Reading and talking only get you so far. Shipping is the real curriculum.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>How I Choose Projects</h2>
+        <p>I pick projects at the intersection of three things: a real problem I keep hitting, a skill I want to sharpen, and something I would still find interesting after the novelty wears off. If two of three line up, it makes the queue. If only one does, I write a note and move on.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>How I Build</h2>
+        <p>Small, ugly, and shipped beats large, beautiful, and theoretical. I aim for an end-to-end v0 in the first session — even if every piece is held together with tape — so the whole shape is testable. Polish is a separate phase.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>What I Look For</h2>
+        <p>Compounding assets. A project is worth more if its outputs feed future projects: reusable components, a clean dataset, a habit, a list of people I now know, a piece of writing. One-shot wins are fine. Building blocks are better.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>Where to Go Next</h2>
+        <p>Start with the active projects list. Each card has a current question, recent build notes, and what shipped — that is the live state of what I am working on.</p>
+      </section>
+
+      <div class="back-to-books">
+        <a href="/projects.html" class="back-link">&larr; Back to Projects</a>
+      </div>
+    </article>
+  </main>
+</Base>

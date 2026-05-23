@@ -122,8 +122,10 @@
       "sidebarFooter": "Things I am building, exploring, and planning",
       "headerTitle": "Projects",
       "headerSubtitle": "",
+      "headerSubtitleHtml": "<div class=\"philosophy-link-wrapper\"><a href=\"projects-philosophy.html\" class=\"header-subtitle-link\">My Build Philosophy</a><span class=\"read-first-note\">read this first</span></div>",
       "counterId": "project-count",
       "counterLabel": "Projects",
+      "counterGroupClass": "movie-counter-group",
       "gridId": "projects-container"
     },
     "challenges": {
@@ -153,8 +155,10 @@
       "sidebarFooter": "Personal challenges, constraints, and experiments",
       "headerTitle": "Challenges",
       "headerSubtitle": "",
+      "headerSubtitleHtml": "<div class=\"philosophy-link-wrapper\"><a href=\"challenges-philosophy.html\" class=\"header-subtitle-link\">My Challenge Philosophy</a><span class=\"read-first-note\">read this first</span></div>",
       "counterId": "challenge-count",
       "counterLabel": "Challenges",
+      "counterGroupClass": "movie-counter-group",
       "gridId": "challenges-container"
     }
   }
