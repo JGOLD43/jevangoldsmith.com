@@ -75,6 +75,11 @@ export function openCategoryModal(category: string) {
     const fragment = document.createDocumentFragment();
     books.forEach((book: BookModalRecord) => {
         const coverUrl = getCoverUrl(book) || '';
+        // Skip books with no cover — rendering them produces an empty
+        // slot in the modal grid (the broken <img> is removed by the
+        // load-error handler, but its parent .category-expanded-book
+        // would remain as a visible gap).
+        if (!coverUrl) return;
         const item = cloneTemplateElement<HTMLElement>('category-expanded-book-template');
         const image = item?.querySelector('img') as HTMLImageElement | null;
         if (!item || !image) return;

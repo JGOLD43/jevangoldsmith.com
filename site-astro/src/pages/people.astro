@@ -136,6 +136,15 @@ const config = ({
     align-items: center;
     gap: 0.5rem;
   }
+
+  /* People folder-view cards: render all preview photos in black &
+     white so the grid reads as a unified portrait wall instead of a
+     riot of color tones. Also applies to the category modal that
+     opens when a folder card is tapped. */
+  #people-category-grid-view .category-card-books img,
+  #people-category-modal .category-expanded-book img {
+    filter: grayscale(100%);
+  }
 </style>
 
 <ContentVisibilityStyle selector=".person-card" intrinsicSize="320px 380px" />

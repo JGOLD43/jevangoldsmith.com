@@ -122,8 +122,13 @@ const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
                     const attrs = panelAttrs(link);
                     return (
                       <a href={link.href} class={attrs.class} {...attrs.attrs}>
-                        <div>{link.label}</div>
-                        {link.meta && <div class={`${link.className}-year`}>{link.meta}</div>}
+                        {link.coverUrl
+                          ? <img class="book-link-cover" src={link.coverUrl} alt="" loading="lazy" decoding="async" data-remove-on-error="true" />
+                          : null}
+                        <span class="book-link-meta">
+                          <span class="book-link-title">{link.label}</span>
+                          {link.meta && <span class={`book-link-author ${link.className}-year`}>{link.meta}</span>}
+                        </span>
                       </a>
                     );
                   })}

@@ -17,6 +17,8 @@ export interface SectionItem {
     className: string;
     label: string;
     meta?: string;
+    /** Optional thumbnail (e.g. book cover, movie poster) rendered left of the label. */
+    coverUrl?: string;
     attrs?: Record<string, string>;
   }>;
   panelInnerHtml?: string;
