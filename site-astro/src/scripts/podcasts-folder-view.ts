@@ -6,6 +6,18 @@
 import { onDomReady } from './dom-ready';
 import { tryReadString, tryWrite } from '../lib/storage';
 import { trapFocus } from '../lib/focus-trap';
+import { flyCover } from './cover-flight';
+
+const PODCAST_FLIGHT_CFG = {
+    grid: document.body,
+    cardSelector: 'a.podcast-card',
+    coverSelector: 'img.podcast-cover',
+    detailMainSelector: 'main.detail-page--podcast',
+    detailHeroImgSelector: '.detail-hero-cover img',
+    bodyLaunchClass: 'is-podcast-launching',
+    arrivalKey: 'podcast',
+    listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
+};
 
 const STATS_PANEL_ID = 'podcast-stats-panel';
 const STATS_BTN = '.podcast-stats-toggle';
@@ -135,12 +147,20 @@ function init() {
             closeCategoryModal();
             return;
         }
-        // Clicking a podcast inside the modal — navigate via stored href.
+        // Clicking a podcast inside the modal — fire the cover-flight
+        // before closing the modal so the source rect stays valid.
         const item = target.closest?.('.category-expanded-book') as HTMLElement | null;
         if (item && item.closest?.(`#${MODAL_ID}`)) {
             event.preventDefault();
             const href = item.dataset.href;
-            if (href) window.location.href = href;
+            if (!href) return;
+            const cover = item.querySelector('img') as HTMLImageElement | null;
+            if (cover) {
+                flyCover(cover, href, PODCAST_FLIGHT_CFG);
+                closeCategoryModal();
+            } else {
+                window.location.href = href;
+            }
         }
     });
 }

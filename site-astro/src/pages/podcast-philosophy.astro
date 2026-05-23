@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="How I Listen: A Practical Podcast Philosophy | Jevan Goldsmith"
+  description="Notes on listening for judgment, taste, decision-making, and a better personal operating system."
+  canonical="https://jevangoldsmith.com/podcast-philosophy.html"
+  bodyClass="nav-compact"
+>
+  <style slot="head" is:inline set:html={`
+    .page-header .container,
+    main.container {
+      max-width: none;
+      padding: 0 1rem;
+    }
+    .reading-philosophy-content {
+      max-width: none;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    @media (min-width: 769px) {
+      .page-header .container,
+      main.container {
+        padding: 0 3rem;
+      }
+    }
+  `} />
+  <header class="page-header">
+    <div class="container">
+      <h1>How I Listen</h1>
+      <p>A practical podcast philosophy for taste, leverage, and ideas worth carrying.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="reading-philosophy-content">
+      <section class="philosophy-section">
+        <h2>Why I Listen</h2>
+        <p>Podcasts give me access to long-form thinking from operators, investors, builders, and writers I would otherwise never meet. The good ones compress decades of judgment into a few hours of conversation.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>How I Choose Shows</h2>
+        <p>I follow people, not shows. If a host asks better questions than the room, I keep coming back. I drop shows that drift into news, ad reads, and recycled takes.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>How I Listen</h2>
+        <p>I listen at 1.3x on walks, at the gym, and on long drives. When something lands I stop, replay it, and write down the sentence in plain English. The note is the asset, not the listen.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>What I Look For</h2>
+        <p>Specifics over abstractions. Lived experience over commentary. Distinctions that change how I would act next time. The best episodes survive a re-listen six months later.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>Where to Go Next</h2>
+        <p>Start with the curated picks on the podcasts page. The "Must Listen" badge marks the episodes I keep returning to.</p>
+      </section>
+
+      <div class="back-to-books">
+        <a href="/podcasts.html" class="back-link">&larr; Back to Podcasts</a>
+      </div>
+    </article>
+  </main>
+</Base>

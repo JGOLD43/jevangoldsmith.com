@@ -235,12 +235,18 @@ const config = ({
 
       const grid = document.getElementById('podcasts-container');
       if (grid) {
-          grid.classList.add('js-zoom-grid');
-          initGridZoom({
-              grid: grid,
-              itemSelector: '.podcast-card',
-              triggerSelector: '.podcast-card',
-              eventName: 'podcast_open'
+          // Replace the old grid-zoom with cover-flight so the open
+          // animation matches books/movies — clone the cover, FLIP it
+          // from the card to the detail-page hero, then SPA-swap.
+          initCoverFlight({
+              grid: grid as HTMLElement,
+              cardSelector: 'a.podcast-card',
+              coverSelector: 'img.podcast-cover',
+              detailMainSelector: 'main.detail-page--podcast',
+              detailHeroImgSelector: '.detail-hero-cover img',
+              bodyLaunchClass: 'is-podcast-launching',
+              arrivalKey: 'podcast',
+              listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
           });
       }
 
