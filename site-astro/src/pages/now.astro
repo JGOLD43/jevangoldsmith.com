@@ -254,30 +254,23 @@ const sections = [
     .now-sections { gap: 2rem; }
   }
 
-  /* Quick fade-to-black overlay before navigating to the trip map.
-     Cleaner than trying to scale the thumb to fullscreen (which blurs
-     the source image badly). The destination Adventures page is dark
-     too, so the transition reads as a single black-out → map appears. */
-  .now-nav-fade {
-    position: fixed;
-    inset: 0;
-    background: #000;
-    opacity: 0;
-    z-index: 99999;
-    pointer-events: none;
-    will-change: opacity;
-  }
+  /* No matched-element view-transition between the thumb and the
+     destination map: Leaflet renders briefly at its default zoom
+     before our focus-on-Ayr logic runs, and the browser was capturing
+     THAT for the morph target — producing a "world map flashes" effect
+     mid-transition. Skipping the name lets @view-transition fall back
+     to a clean root crossfade between pages, which has no opportunity
+     to show wrong map state. */
 </style>
 
 <script>
-  // Fast crossfade-to-black on Now-map-thumb click. Prefetch the
-  // destination so it's ready in cache by the time the fade lands;
-  // the actual navigation feels instant.
+  // Warm the destination page on hover/focus so the actual click
+  // navigation is a cache hit. We intentionally do NOT intercept the
+  // click — letting the browser navigate normally is what allows
+  // @view-transition { navigation: auto } to fire and produce a
+  // native cross-doc crossfade. Any JS preventDefault would block it.
   const link = document.getElementById('now-map-thumb-link') as HTMLAnchorElement | null;
   if (link) {
-    // Eagerly prefetch the trip map page so the navigation, when it
-    // happens, is a cache hit. Speculation Rules already covers some
-    // links, but this guarantees this specific URL is warmed.
     const prefetch = () => {
       if (document.querySelector(`link[rel="prefetch"][href="${link.href}"]`)) return;
       const l = document.createElement('link');
@@ -288,29 +281,6 @@ const sections = [
     };
     link.addEventListener('pointerenter', prefetch, { once: true });
     link.addEventListener('focus', prefetch, { once: true });
-
-    link.addEventListener('click', (event) => {
-      const me = event as MouseEvent;
-      if (me.metaKey || me.ctrlKey || me.shiftKey || me.altKey || me.button !== 0) return;
-      event.preventDefault();
-      const href = link.href;
-
-      const overlay = document.createElement('div');
-      overlay.className = 'now-nav-fade';
-      document.body.appendChild(overlay);
-
-      // Force a frame so the transition fires.
-      requestAnimationFrame(() => {
-        overlay.animate(
-          [{ opacity: 0 }, { opacity: 1 }],
-          { duration: 220, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }
-        );
-      });
-
-      // Navigate as soon as the overlay is mostly opaque. The dark
-      // overlay covers any visible discontinuity between pages.
-      setTimeout(() => { window.location.href = href; }, 200);
-    });
   }
 </script>
 </Base>

@@ -526,13 +526,17 @@ function placeNowMarkerAndFocus() {
             marker.addTo(state.worldMap);
             circle.addTo(state.worldMap);
         }
-        // ?focus=now → fly close so the 25km circle fills the screen.
-        // Default load (no param) → regional zoom centered on the Now pin so
-        // the user immediately sees where I am in the world.
+        // ?focus=now: the map already initialized with the focused
+        // center+zoom in adventures-map.ts (so there's no world-view
+        // flash mid-transition). Just refine to the 25km circle bounds
+        // WITHOUT animating, and open the popup immediately. Animating
+        // from the close-but-not-perfect initial view to fitBounds was
+        // the subtle "second zoom" the user noticed.
+        // Default load (no param) → regional zoom centered on Now pin.
         const params = new URLSearchParams(window.location.search);
         if (params.get('focus') === 'now') {
-            state.worldMap.fitBounds(circle.getBounds(), { padding: [40, 40], animate: true });
-            setTimeout(() => marker.openPopup(), 600);
+            state.worldMap.fitBounds(circle.getBounds(), { padding: [40, 40], animate: false });
+            marker.openPopup();
         } else {
             state.worldMap.setView([now.lat, now.lng], 4, { animate: false });
         }

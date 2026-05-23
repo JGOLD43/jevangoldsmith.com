@@ -324,6 +324,25 @@ function initWorldMap(adventures: AnyObj[]) {
         [WEB_MERCATOR_MAX_LAT, HORIZONTAL_WRAP_BOUND]
     );
 
+    // Compute the initial view BEFORE creating the map. If the user
+    // arrived via /now?focus=now&lat=...&lng=..., setView directly at
+    // that location at a close zoom — otherwise the map paints the
+    // global default view first and flashes "world view" mid-transition
+    // before the focus-now zoom kicks in later.
+    let initialCenter: [number, number] = [25, 40];
+    let initialZoom = 3;
+    try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('focus') === 'now') {
+            const lat = parseFloat(params.get('lat') || '');
+            const lng = parseFloat(params.get('lng') || '');
+            if (Number.isFinite(lat) && Number.isFinite(lng)) {
+                initialCenter = [lat, lng];
+                initialZoom = 10;
+            }
+        }
+    } catch { /* fall through to default */ }
+
     state.worldMap = L.map('world-map', {
         preferCanvas: true,
         zoomControl: true,
@@ -365,7 +384,7 @@ function initWorldMap(adventures: AnyObj[]) {
         // this off would cause the visible-flicker pattern (Leaflet adds
         // leaflet-zoom-hide → visibility:hidden during the animation).
         markerZoomAnimation: true
-    }).setView([25, 40], 3);
+    }).setView(initialCenter, initialZoom);
 
     addFastBaseMap(state.worldMap);
     addSatelliteTiles(state.worldMap);
