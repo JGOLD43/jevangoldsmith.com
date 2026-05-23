@@ -6,6 +6,7 @@ import ContentVisibilityStyle from '../components/ContentVisibilityStyle.astro';
 import PeopleModal from '../components/PeopleModal.astro';
 import PersonCard from '../components/PersonCard.astro';
 import PeopleSourceFilter from '../components/PeopleSourceFilter.astro';
+import PeopleStatsBody from '../components/PeopleStatsBody.astro';
 import { PEOPLE_SECTIONS } from '../lib/collection-sections';
 
 const canonical = 'https://jevangoldsmith.com/people.html';
@@ -19,6 +20,21 @@ const canonical = 'https://jevangoldsmith.com/people.html';
 // itself (name/title/lesson/image/srcset/searchText) so this fetch
 // only kicks in once a user actually opens a person detail modal.
 const peopleEntries = await getCollection('peopleMerged') as CollectionEntry<'peopleMerged'>[];
+
+// Build category-folder cards — mirrors the other collections.
+const peopleByCategory = peopleEntries.reduce<Record<string, typeof peopleEntries>>((groups, p) => {
+  const c = (p.data.category || 'Uncategorized').trim();
+  (groups[c] ||= []).push(p);
+  return groups;
+}, {});
+const categoryGridCards = Object.entries(peopleByCategory)
+  .sort((a, b) => b[1].length - a[1].length)
+  .map(([category, items]) => ({
+    category,
+    count: items.length,
+    covers: items.slice(0, 8).map((p) => ({ src: p.data.image || '', alt: p.data.name || '' })),
+    emptySlots: Math.max(0, 8 - Math.min(8, items.length))
+  }));
 
 const config = ({
   layout: { id: 'people-layout', className: 'people-layout collection-layout sidebar-collapsed' },
@@ -45,7 +61,8 @@ const config = ({
     title: 'People',
     subtitleHtml: '<div class="philosophy-link-wrapper"><a href="people-philosophy.html" class="header-subtitle-link">People Philosophy</a><span class="read-first-note">read this first</span></div>',
     counterId: 'people-count',
-    counterLabel: 'People Listed'
+    counterLabel: 'People Listed',
+    counterGroupClass: 'movie-counter-group'
   }
 });
 ---
@@ -62,13 +79,64 @@ const config = ({
     <link rel="prefetch" href="/api/v1/people-modal.json" as="fetch" crossorigin />
   </Fragment>
   <PeopleSourceFilter slot="sidebar-extra" />
+  <Fragment slot="counter-extra">
+    <div class="movie-counter-row">
+      <button type="button" class="stats-toggle people-stats-toggle" aria-expanded="false" aria-controls="people-stats-panel" aria-label="Show people stats">Stats <span aria-hidden="true">▾</span></button>
+      <button class="view-toggle-single" id="people-view-toggle" data-action="toggle-people-view-mode" data-current-mode="list" aria-label="Switch to category grid view" title="Switch to category grid view">
+        <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+        <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+      </button>
+    </div>
+  </Fragment>
+  <section id="people-stats-panel" class="movie-stats-panel collapsed" aria-label="People stats" hidden>
+    <div class="stats-body">
+      <PeopleStatsBody people={peopleEntries.map((p) => ({ name: p.data.name, category: p.data.category, sourceType: (p.data as any).sourceType }))} />
+    </div>
+  </section>
   <div id="people-container">
     <div class="people-grid" id="people-grid">
       {peopleEntries.map((p, i) => <PersonCard person={p.data} index={i} />)}
     </div>
   </div>
+  <div class="category-grid-view" id="people-category-grid-view" style="display: none;">
+    <div class="category-grid">
+      {categoryGridCards.map((g) => (
+        <div class="category-card" data-action="open-people-category-modal" data-category={g.category}>
+          <div class="category-card-books">
+            {g.covers.map((cover) => (
+              cover.src ? <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" data-remove-on-error="true" /> : <div class="empty-slot"></div>
+            ))}
+            {Array.from({ length: g.emptySlots }).map(() => <div class="empty-slot"></div>)}
+          </div>
+          <div class="category-card-info">
+            <span class="category-card-name">{g.category}</span>
+            <span class="category-card-count">{g.count}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div id="people-category-modal" class="category-expanded" role="dialog" aria-modal="true" aria-labelledby="people-category-title">
+    <div class="category-modal-backdrop" data-action="close-people-category-modal"></div>
+    <div class="category-modal-content">
+      <div class="category-expanded-header">
+        <h2 class="category-expanded-title" id="people-category-title"></h2>
+        <button class="category-expanded-close" data-action="close-people-category-modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="category-expanded-books" id="people-category-list"></div>
+    </div>
+  </div>
   <PeopleModal slot="after-main" />
 </CollectionPage>
+
+<style is:inline>
+  .movie-counter-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+</style>
 
 <ContentVisibilityStyle selector=".person-card" intrinsicSize="320px 380px" />
 
@@ -79,6 +147,7 @@ const config = ({
   import { loadPeopleModalData, preloadPeopleModalData } from '../scripts/people-data';
   import { initPeopleDetail } from '../scripts/people-detail';
   import { applyPeopleSourceFilter, registerPeopleFilterActions } from '../scripts/people-filter';
+  import '../scripts/people-folder-view.ts';
 
   let peopleRuntime: AnyObj = null;
 
