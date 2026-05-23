@@ -268,13 +268,17 @@ export function setViewMode(mode: string) {
         btn.setAttribute('aria-label', nextLabel);
         btn.setAttribute('title', nextLabel);
     });
-    const booksMain = document.querySelector('.books-main') as HTMLElement | null;
+    // #category-grid-view lives INSIDE .books-main. Toggling .books-main's
+    // display was a bug — it hid the grid view we were trying to show.
+    // Instead hide #books-container (the list grid) and toggle the
+    // category-grid-view sibling.
+    const booksContainer = document.getElementById('books-container');
     const categoryGridView = document.getElementById('category-grid-view');
     const sidebar = document.getElementById('books-sidebar');
     const booksLayout = document.getElementById('books-layout');
 
     if (mode === 'grid') {
-        if (booksMain) booksMain.style.display = 'none';
+        if (booksContainer) booksContainer.style.display = 'none';
         if (categoryGridView) categoryGridView.style.display = 'block';
         if (sidebar) sidebar.style.display = 'none';
         if (booksLayout) {
@@ -284,9 +288,9 @@ export function setViewMode(mode: string) {
         renderCategoryGrid();
         return;
     }
-    if (booksMain) booksMain.style.display = 'block';
+    if (booksContainer) booksContainer.style.display = '';
     if (categoryGridView) categoryGridView.style.display = 'none';
-    if (sidebar) sidebar.style.display = 'block';
+    if (sidebar) sidebar.style.display = '';
     if (booksLayout) booksLayout.classList.remove('grid-view-active');
     if (sidebar?.classList.contains('collapsed')) booksLayout?.classList.add('sidebar-collapsed');
 }
