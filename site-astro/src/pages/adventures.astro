@@ -91,7 +91,7 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
             var lat = parseFloat(p.get('lat') || '');
             var lng = parseFloat(p.get('lng') || '');
             if (isFinite(lat) && isFinite(lng)) {
-              var z = 6;
+              var z = 10;
               var x = Math.floor((lng + 180) / 360 * Math.pow(2, z));
               var y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, z));
               var url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/' + z + '/' + y + '/' + x;

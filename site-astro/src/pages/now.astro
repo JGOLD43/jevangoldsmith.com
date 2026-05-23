@@ -13,9 +13,11 @@ const lastUpdatedLng = 147.4035;
 const mapLink = `/adventures.html?focus=now&lat=${lastUpdatedLat}&lng=${lastUpdatedLng}&place=${encodeURIComponent(lastUpdatedLocation)}`;
 
 // Build an Esri World Imagery satellite tile URL that contains the
-// "now" location. zoom 6 ≈ regional view — enough context to recognise
-// the place at a glance.
-const MAP_ZOOM = 6;
+// "now" location. zoom 10 is the same level the trip map ends at
+// after fitBounds-to-25km-circle, so the zoom-in animation lands on
+// the same imagery the user will see on the destination — visual
+// continuity across the swap, no zoom mismatch.
+const MAP_ZOOM = 10;
 const _xFrac = (lastUpdatedLng + 180) / 360 * Math.pow(2, MAP_ZOOM);
 const _yFrac = (1 - Math.log(Math.tan(lastUpdatedLat * Math.PI / 180) + 1 / Math.cos(lastUpdatedLat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, MAP_ZOOM);
 const tileX = Math.floor(_xFrac);
@@ -309,15 +311,76 @@ const sections = [
       event.preventDefault();
       const href = link.href;
 
-      // Get the destination doc (prefetched on hover, fetched now if not).
-      let doc = prefetchedDoc;
-      if (!doc) {
-        try {
-          const res = await fetch(href, { credentials: 'same-origin' });
-          if (!res.ok) { window.location.href = href; return; }
-          doc = new DOMParser().parseFromString(await res.text(), 'text/html');
-        } catch { window.location.href = href; return; }
+      // Capture the thumb rect BEFORE we touch anything else.
+      const thumbImg = link.querySelector('img') as HTMLImageElement | null;
+      const rect = (thumbImg || link).getBoundingClientRect();
+      if (!thumbImg || !rect.width || !rect.height) { window.location.href = href; return; }
+
+      // Clone the thumb image as a fixed-position floater. This is the
+      // element the user watches "zoom in" — we animate transform scale
+      // on it while the SPA swap happens behind it. When the swap
+      // completes the clone is removed and the destination's same-image
+      // overlay takes over the same screen position. Visual continuity
+      // looks like a single continuous zoom.
+      const clone = thumbImg.cloneNode(true) as HTMLImageElement;
+      clone.style.position = 'fixed';
+      clone.style.left = `${rect.left}px`;
+      clone.style.top = `${rect.top}px`;
+      clone.style.width = `${rect.width}px`;
+      clone.style.height = `${rect.height}px`;
+      clone.style.objectFit = 'cover';
+      clone.style.borderRadius = getComputedStyle(thumbImg).borderRadius;
+      clone.style.zIndex = '99999';
+      clone.style.pointerEvents = 'none';
+      clone.style.transformOrigin = 'center center';
+      clone.style.willChange = 'transform, border-radius';
+      // Strip the view-transition-name so the browser doesn't also try
+      // to morph the original thumb during any concurrent VT.
+      (clone.style as CSSStyleDeclaration).viewTransitionName = 'none';
+      document.body.appendChild(clone);
+      // Hide the original immediately so we don't see double.
+      thumbImg.style.visibility = 'hidden';
+
+      // Scale needed to make the clone fill the viewport.
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const scale = Math.max(vw / rect.width, vh / rect.height) * 1.05; // tiny overshoot for cleaner edges
+      const cx = vw / 2 - (rect.left + rect.width / 2);
+      const cy = vh / 2 - (rect.top + rect.height / 2);
+
+      // Fade the rest of the now page out while the thumb grows. The
+      // background going dark + the thumb growing reads as a continuous
+      // dolly-in zoom into the same imagery that will appear on the
+      // destination.
+      const nowPage = document.querySelector('.now-page') as HTMLElement | null;
+      if (nowPage) {
+        nowPage.style.transition = 'opacity 200ms cubic-bezier(.4, 0, .2, 1)';
+        nowPage.style.opacity = '0';
       }
+
+      // 240ms zoom-in. With matching imagery (same zoom 10 tile on now
+      // + destination) the user perceives this as a single continuous
+      // dolly-in to where they were already pointing.
+      const zoomAnim = clone.animate(
+        [
+          { transform: 'translate(0px, 0px) scale(1)', borderRadius: getComputedStyle(thumbImg).borderRadius },
+          { transform: `translate(${cx}px, ${cy}px) scale(${scale})`, borderRadius: '0px' }
+        ],
+        { duration: 240, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }
+      );
+
+      // Get the destination doc (prefetched on hover, fetched now if not).
+      // Run this IN PARALLEL with the zoom animation so the swap is
+      // ready by the time the zoom lands.
+      const docPromise = prefetchedDoc
+        ? Promise.resolve(prefetchedDoc)
+        : fetch(href, { credentials: 'same-origin' })
+            .then((res) => res.ok ? res.text() : Promise.reject(new Error(String(res.status))))
+            .then((html) => new DOMParser().parseFromString(html, 'text/html'))
+            .catch(() => null);
+
+      const [doc] = await Promise.all([docPromise, zoomAnim.finished]);
+      if (!doc) { window.location.href = href; return; }
 
       const newMain = doc.querySelector('main');
       const currentMain = document.querySelector('main');
@@ -326,52 +389,45 @@ const sections = [
         return;
       }
 
-      // Carry over the destination doc's inline <style> blocks so the
-      // injected main has access to all of its layout rules. Tag them
-      // for cleanup if the user ever goes back via popstate.
+      // Inject destination styles.
       doc.querySelectorAll('head style').forEach((style) => {
         const cloned = style.cloneNode(true) as HTMLStyleElement;
         cloned.setAttribute('data-now-spa-style', '1');
         document.head.appendChild(cloned);
       });
 
-      // Mirror the destination's html-level class hooks (used by the
-      // inline focus-now detection there).
+      // Set focus-now hooks + overlay tile URL.
       document.documentElement.classList.add('adv-focus-now-pending');
-      // Set the data attr that the overlay-src setter looks for.
       const url = new URL(href, location.origin);
       const lat = parseFloat(url.searchParams.get('lat') || '');
       const lng = parseFloat(url.searchParams.get('lng') || '');
       if (isFinite(lat) && isFinite(lng)) {
-        const z = 6;
+        const z = 10;
         const x = Math.floor((lng + 180) / 360 * Math.pow(2, z));
         const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, z));
         document.documentElement.setAttribute('data-now-overlay-src', `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`);
       }
 
-      // Wrap the swap in a View Transition so the browser still does
-      // the thumb-image morph between the current thumb and the new
-      // overlay img inside newMain. Both share view-transition-name.
-      const doSwap = () => {
-        currentMain.parentNode!.replaceChild(newMain, currentMain);
-        document.title = doc!.title;
-        history.pushState({ nowSpa: true }, '', href);
-        // Apply overlay src right away — the newly-attached img is in DOM.
-        const overlayImg = document.getElementById('now-thumb-overlay') as HTMLImageElement | null;
-        const src = document.documentElement.getAttribute('data-now-overlay-src');
-        if (overlayImg && src) {
-          overlayImg.src = src;
-          overlayImg.classList.add('show');
-        }
-        // Mount Leaflet + adventures init on the freshly-swapped DOM.
-        initAdventuresPage();
-      };
+      // Swap main, set up overlay so it covers the map (same image as
+      // the now-zoomed clone), THEN remove the clone. The destination
+      // overlay sits at the same position the clone landed at —
+      // continuous visual.
+      currentMain.parentNode!.replaceChild(newMain, currentMain);
+      document.title = doc.title;
+      history.pushState({ nowSpa: true }, '', href);
 
-      if (typeof (document as any).startViewTransition === 'function') {
-        (document as any).startViewTransition(doSwap);
-      } else {
-        doSwap();
+      const overlayImg = document.getElementById('now-thumb-overlay') as HTMLImageElement | null;
+      const src = document.documentElement.getAttribute('data-now-overlay-src');
+      if (overlayImg && src) {
+        overlayImg.src = src;
+        overlayImg.classList.add('show');
       }
+
+      // Now safely remove the clone — the overlay is already in place.
+      clone.remove();
+
+      // Mount Leaflet on the new world-map div.
+      initAdventuresPage();
     });
 
     // Going back from the SPA-swapped state — hard reload to /now so
