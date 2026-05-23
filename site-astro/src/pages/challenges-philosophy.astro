@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="How I Challenge Myself: A Practical Challenge Philosophy | Jevan Goldsmith"
+  description="Notes on using public challenges to build habits, learn faster, and ship more."
+  canonical="https://jevangoldsmith.com/challenges-philosophy.html"
+  bodyClass="nav-compact"
+>
+  <style slot="head" is:inline set:html={`
+    .page-header .container,
+    main.container { max-width: none; padding: 0 1rem; }
+    .reading-philosophy-content { max-width: none; padding-left: 0; padding-right: 0; }
+    @media (min-width: 769px) {
+      .page-header .container,
+      main.container { padding: 0 3rem; }
+    }
+  `} />
+  <header class="page-header">
+    <div class="container">
+      <h1>How I Challenge Myself</h1>
+      <p>A practical challenge philosophy for building habits, learning faster, and shipping in public.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="reading-philosophy-content">
+      <section class="philosophy-section">
+        <h2>Why I Run Challenges</h2>
+        <p>A public challenge converts a soft intention into a hard constraint. I do not need motivation if the rule is already binding — I just need to honor what I said yesterday. The discipline is in the structure, not in the willpower.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>How I Choose Challenges</h2>
+        <p>The best challenges have a clear unit (one book a week, 100 days of writing, 10k a day), a public scoreboard, and a fixed timebox. Vague targets ("get better at X") never finish. Countable units finish themselves.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>How I Run Them</h2>
+        <p>Show up daily. Track the unit. Never miss twice in a row. The streak is the asset — each individual day is mediocre on its own, but the body of work compounds. When a streak breaks I restart the next day rather than abandon the challenge.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>What I Look For</h2>
+        <p>Challenges where the daily work and the end-of-period work are both useful. A reading challenge gives me a stack of books I have actually read. A writing challenge gives me publishable essays. The byproduct should outlast the streak.</p>
+      </section>
+
+      <section class="philosophy-section">
+        <h2>Where to Go Next</h2>
+        <p>Open the active challenges below — each has its timeframe, progress, and the rule I am holding myself to.</p>
+      </section>
+
+      <div class="back-to-books">
+        <a href="/challenges.html" class="back-link">&larr; Back to Challenges</a>
+      </div>
+    </article>
+  </main>
+</Base>

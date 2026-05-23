@@ -1,0 +1,59 @@
+---
+// Generic stats body for projects + challenges. Pure derivation from
+// the items array — zero runtime fetches. Mirrors BookStatsBody +
+// MovieStatsBody + PodcastStatsBody.
+
+interface TaskLite {
+  title?: string | null;
+  category?: string | null;
+  status?: string | null;
+  image?: string | null;
+}
+
+interface Props {
+  items: TaskLite[];
+  /** Singular noun, e.g. "project" or "challenge". */
+  noun: string;
+  /** Plural form used in headline labels. */
+  nounPlural: string;
+}
+
+const { items, noun, nounPlural } = Astro.props as Props;
+const list = Array.isArray(items) ? items : [];
+
+const total = list.length;
+const active = list.filter((i) => i.status === 'active').length;
+const completed = list.filter((i) => i.status === 'completed').length;
+const upcoming = list.filter((i) => i.status === 'upcoming' || i.status === 'planned').length;
+
+const categoryCounts: Record<string, number> = {};
+list.forEach((i) => {
+  const c = (i.category || '').trim();
+  if (!c) return;
+  categoryCounts[c] = (categoryCounts[c] || 0) + 1;
+});
+const topCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+const categoryMax = topCategories[0]?.[1] || 1;
+---
+
+<div class="stats-headline-grid">
+  <div class="stats-headline-card"><div class="stats-headline-value">{total.toLocaleString()}</div><div class="stats-headline-label">Total {nounPlural}</div></div>
+  <div class="stats-headline-card"><div class="stats-headline-value">{active.toLocaleString()}</div><div class="stats-headline-label">Active</div></div>
+  <div class="stats-headline-card"><div class="stats-headline-value">{upcoming.toLocaleString()}</div><div class="stats-headline-label">{noun === 'project' ? 'Planned' : 'Upcoming'}</div></div>
+  <div class="stats-headline-card"><div class="stats-headline-value">{completed.toLocaleString()}</div><div class="stats-headline-label">Completed</div></div>
+</div>
+
+{topCategories.length > 0 && (
+  <div class="stats-section">
+    <h3 class="stats-section-title">Categories</h3>
+    <div class="stats-bars">
+      {topCategories.map(([name, count]) => (
+        <div class="stats-bar-row">
+          <div class="stats-bar-label">{name}</div>
+          <div class="stats-bar-track"><div class="stats-bar-fill" style={`width: ${(count / categoryMax) * 100}%`}></div></div>
+          <div class="stats-bar-value">{count}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}

@@ -1,12 +1,28 @@
 ---
 import raw from '../../../data/projects.json';
 import TaskListPage from '../components/TaskListPage.astro';
+import TaskStatsBody from '../components/TaskStatsBody.astro';
 import type { Project } from '../lib/collection-sections';
 import { PROJECTS_TASK_CONFIG } from '../lib/collection-sections';
 
 const allProjects: Project[] = (raw as { projects?: Project[] }).projects ?? [];
 const projects = allProjects.filter((p) => p.status !== 'draft' && p.visibility !== 'private');
 const lcpCoverUrl = projects[0]?.image;
+
+// Build category-folder cards — mirrors books/movies/podcasts.
+const projectsByCategory = projects.reduce<Record<string, Project[]>>((groups, p) => {
+  const c = (p.category || 'Uncategorized').trim();
+  (groups[c] ||= []).push(p);
+  return groups;
+}, {});
+const categoryGridCards = Object.entries(projectsByCategory)
+  .sort((a, b) => b[1].length - a[1].length)
+  .map(([category, items]) => ({
+    category,
+    count: items.length,
+    covers: items.slice(0, 8).map((p) => ({ src: p.image || '', alt: p.title || '' })),
+    emptySlots: Math.max(0, 8 - Math.min(8, items.length))
+  }));
 ---
 <TaskListPage
   type="project"
@@ -21,12 +37,62 @@ const lcpCoverUrl = projects[0]?.image;
       <link rel="preload" as="image" fetchpriority="high" href={lcpCoverUrl} />
     </Fragment>
   )}
+  <Fragment slot="counter-extra">
+    <div class="movie-counter-row">
+      <button type="button" class="stats-toggle project-stats-toggle" aria-expanded="false" aria-controls="project-stats-panel" aria-label="Show project stats">Stats <span aria-hidden="true">▾</span></button>
+      <button class="view-toggle-single" id="projects-view-toggle" data-action="toggle-projects-view-mode" data-current-mode="list" aria-label="Switch to category grid view" title="Switch to category grid view">
+        <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+        <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+      </button>
+    </div>
+  </Fragment>
+  <Fragment slot="pre-grid">
+    <section id="project-stats-panel" class="movie-stats-panel collapsed" aria-label="Project stats" hidden>
+      <div class="stats-body">
+        <TaskStatsBody items={projects} noun="project" nounPlural="projects" />
+      </div>
+    </section>
+  </Fragment>
+  <Fragment slot="post-grid">
+    <div class="category-grid-view" id="projects-category-grid-view" style="display: none;">
+      <div class="category-grid">
+        {categoryGridCards.map((g) => (
+          <div class="category-card" data-action="open-project-category-modal" data-category={g.category}>
+            <div class="category-card-books">
+              {g.covers.map((cover) => (
+                cover.src ? <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" data-remove-on-error="true" /> : <div class="empty-slot"></div>
+              ))}
+              {Array.from({ length: g.emptySlots }).map(() => <div class="empty-slot"></div>)}
+            </div>
+            <div class="category-card-info">
+              <span class="category-card-name">{g.category}</span>
+              <span class="category-card-count">{g.count}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div id="project-category-modal" class="category-expanded" role="dialog" aria-modal="true" aria-labelledby="project-category-title">
+      <div class="category-modal-backdrop" data-action="close-project-category-modal"></div>
+      <div class="category-modal-content">
+        <div class="category-expanded-header">
+          <h2 class="category-expanded-title" id="project-category-title"></h2>
+          <button class="category-expanded-close" data-action="close-project-category-modal" aria-label="Close">&times;</button>
+        </div>
+        <div class="category-expanded-books" id="project-category-list"></div>
+      </div>
+    </div>
+  </Fragment>
 </TaskListPage>
 
 <style is:inline>
-  /* While a project card is flying to its detail page, fade out the
-     listing chrome (main + sidebar) while keeping the navbar steady.
-     The clone is appended to <body> at z-index 99999, above the fade. */
+  .movie-counter-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   body.is-project-launching .movies-main,
   body.is-project-launching .movies-sidebar {
     opacity: 0;
@@ -34,8 +100,6 @@ const lcpCoverUrl = projects[0]?.image;
     pointer-events: none;
   }
 
-  /* SPA-injected project detail main: hide content from initial paint,
-     then fade it in around the still-flying cover clone. */
   main.detail-page--project.is-project-arrival > * { opacity: 0; }
   main.detail-page--project.is-project-arrival .detail-hero-image,
   main.detail-page--project.is-project-arrival .detail-hero-image * { opacity: 0; }
@@ -59,6 +123,18 @@ const lcpCoverUrl = projects[0]?.image;
 
 <script>
   import { initTaskListPage } from '../scripts/task-list-page';
+  import { initTaskFolderView } from '../scripts/task-folder-view';
+
+  const flightCfg = {
+    grid: document.body,
+    cardSelector: 'a.project-card',
+    coverSelector: 'img.project-cover',
+    detailMainSelector: 'main.detail-page--project',
+    detailHeroImgSelector: '.detail-hero-image img',
+    bodyLaunchClass: 'is-project-launching',
+    arrivalKey: 'project',
+    listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
+  };
 
   initTaskListPage({
     actions: {
@@ -76,16 +152,24 @@ const lcpCoverUrl = projects[0]?.image;
     searchInputId: 'project-search',
     sidebarId: 'projects-sidebar',
     storageKey: 'projects-sidebar-collapsed',
-    // No grid-zoom: the cover-flight handler below owns the click →
-    // open animation, and grid-zoom's preventDefault would short-circuit it.
-    flight: {
-      cardSelector: 'a.project-card',
-      coverSelector: 'img.project-cover',
-      detailMainSelector: 'main.detail-page--project',
-      detailHeroImgSelector: '.detail-hero-image img',
-      bodyLaunchClass: 'is-project-launching',
-      arrivalKey: 'project',
-      listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
-    }
+    flight: flightCfg
+  });
+
+  initTaskFolderView({
+    listId: 'projects-container',
+    gridViewId: 'projects-category-grid-view',
+    toggleId: 'projects-view-toggle',
+    sidebarId: 'projects-sidebar',
+    modalId: 'project-category-modal',
+    modalTitleId: 'project-category-title',
+    modalListId: 'project-category-list',
+    statsPanelId: 'project-stats-panel',
+    statsBtnSelector: '.project-stats-toggle',
+    statsKey: 'project-stats-collapsed',
+    toggleActionName: 'toggle-projects-view-mode',
+    openModalActionName: 'open-project-category-modal',
+    closeModalActionName: 'close-project-category-modal',
+    cardSelector: 'a.project-card',
+    flightCfg
   });
 </script>

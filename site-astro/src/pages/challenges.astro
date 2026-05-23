@@ -1,12 +1,28 @@
 ---
 import raw from '../../../data/challenges.json';
 import TaskListPage from '../components/TaskListPage.astro';
+import TaskStatsBody from '../components/TaskStatsBody.astro';
 import type { Challenge } from '../lib/collection-sections';
 import { CHALLENGES_TASK_CONFIG } from '../lib/collection-sections';
 
 const allChallenges: Challenge[] = (raw as { challenges?: Challenge[] }).challenges ?? [];
 const challenges = allChallenges.filter((c) => c.status !== 'draft' && c.visibility !== 'private');
 const lcpCoverUrl = challenges[0]?.image;
+
+// Build category-folder cards — mirrors books/movies/podcasts/projects.
+const challengesByCategory = challenges.reduce<Record<string, Challenge[]>>((groups, c) => {
+  const cat = (c.category || 'Uncategorized').trim();
+  (groups[cat] ||= []).push(c);
+  return groups;
+}, {});
+const categoryGridCards = Object.entries(challengesByCategory)
+  .sort((a, b) => b[1].length - a[1].length)
+  .map(([category, items]) => ({
+    category,
+    count: items.length,
+    covers: items.slice(0, 8).map((c) => ({ src: c.image || '', alt: c.title || '' })),
+    emptySlots: Math.max(0, 8 - Math.min(8, items.length))
+  }));
 ---
 <TaskListPage
   type="challenge"
@@ -21,9 +37,62 @@ const lcpCoverUrl = challenges[0]?.image;
       <link rel="preload" as="image" fetchpriority="high" href={lcpCoverUrl} />
     </Fragment>
   )}
+  <Fragment slot="counter-extra">
+    <div class="movie-counter-row">
+      <button type="button" class="stats-toggle challenge-stats-toggle" aria-expanded="false" aria-controls="challenge-stats-panel" aria-label="Show challenge stats">Stats <span aria-hidden="true">▾</span></button>
+      <button class="view-toggle-single" id="challenges-view-toggle" data-action="toggle-challenges-view-mode" data-current-mode="list" aria-label="Switch to category grid view" title="Switch to category grid view">
+        <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+        <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+      </button>
+    </div>
+  </Fragment>
+  <Fragment slot="pre-grid">
+    <section id="challenge-stats-panel" class="movie-stats-panel collapsed" aria-label="Challenge stats" hidden>
+      <div class="stats-body">
+        <TaskStatsBody items={challenges} noun="challenge" nounPlural="challenges" />
+      </div>
+    </section>
+  </Fragment>
+  <Fragment slot="post-grid">
+    <div class="category-grid-view" id="challenges-category-grid-view" style="display: none;">
+      <div class="category-grid">
+        {categoryGridCards.map((g) => (
+          <div class="category-card" data-action="open-challenge-category-modal" data-category={g.category}>
+            <div class="category-card-books">
+              {g.covers.map((cover) => (
+                cover.src ? <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" data-remove-on-error="true" /> : <div class="empty-slot"></div>
+              ))}
+              {Array.from({ length: g.emptySlots }).map(() => <div class="empty-slot"></div>)}
+            </div>
+            <div class="category-card-info">
+              <span class="category-card-name">{g.category}</span>
+              <span class="category-card-count">{g.count}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div id="challenge-category-modal" class="category-expanded" role="dialog" aria-modal="true" aria-labelledby="challenge-category-title">
+      <div class="category-modal-backdrop" data-action="close-challenge-category-modal"></div>
+      <div class="category-modal-content">
+        <div class="category-expanded-header">
+          <h2 class="category-expanded-title" id="challenge-category-title"></h2>
+          <button class="category-expanded-close" data-action="close-challenge-category-modal" aria-label="Close">&times;</button>
+        </div>
+        <div class="category-expanded-books" id="challenge-category-list"></div>
+      </div>
+    </div>
+  </Fragment>
 </TaskListPage>
 
 <style is:inline>
+  .movie-counter-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   body.is-challenge-launching .movies-main,
   body.is-challenge-launching .movies-sidebar {
     opacity: 0;
@@ -53,6 +122,18 @@ const lcpCoverUrl = challenges[0]?.image;
 
 <script>
   import { initTaskListPage } from '../scripts/task-list-page';
+  import { initTaskFolderView } from '../scripts/task-folder-view';
+
+  const flightCfg = {
+    grid: document.body,
+    cardSelector: 'a.challenge-card',
+    coverSelector: 'img.project-cover',
+    detailMainSelector: 'main.detail-page--challenge',
+    detailHeroImgSelector: '.challenge-hero-image img',
+    bodyLaunchClass: 'is-challenge-launching',
+    arrivalKey: 'challenge',
+    listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
+  };
 
   initTaskListPage({
     actions: {
@@ -70,15 +151,24 @@ const lcpCoverUrl = challenges[0]?.image;
     searchInputId: 'challenge-search',
     sidebarId: 'challenges-sidebar',
     storageKey: 'challenges-sidebar-collapsed',
-    // No grid-zoom: cover-flight owns the click animation.
-    flight: {
-      cardSelector: 'a.challenge-card',
-      coverSelector: 'img.project-cover',
-      detailMainSelector: 'main.detail-page--challenge',
-      detailHeroImgSelector: '.challenge-hero-image img',
-      bodyLaunchClass: 'is-challenge-launching',
-      arrivalKey: 'challenge',
-      listingBackSelectors: ['.movies-sidebar', '.collection-sidebar']
-    }
+    flight: flightCfg
+  });
+
+  initTaskFolderView({
+    listId: 'challenges-container',
+    gridViewId: 'challenges-category-grid-view',
+    toggleId: 'challenges-view-toggle',
+    sidebarId: 'challenges-sidebar',
+    modalId: 'challenge-category-modal',
+    modalTitleId: 'challenge-category-title',
+    modalListId: 'challenge-category-list',
+    statsPanelId: 'challenge-stats-panel',
+    statsBtnSelector: '.challenge-stats-toggle',
+    statsKey: 'challenge-stats-collapsed',
+    toggleActionName: 'toggle-challenges-view-mode',
+    openModalActionName: 'open-challenge-category-modal',
+    closeModalActionName: 'close-challenge-category-modal',
+    cardSelector: 'a.challenge-card',
+    flightCfg
   });
 </script>
