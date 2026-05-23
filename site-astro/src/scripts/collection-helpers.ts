@@ -24,10 +24,11 @@ export function applyCardVisibility(
 
 
 
-// If the image lives in a carousel slot wrapper (e.g. <a class="carousel-book-link">),
-// remove the whole slot — otherwise the empty link leaves a phantom gap.
+// If the image lives in a slot wrapper (carousel link, category-modal
+// book/movie tile, etc.), remove the whole slot — otherwise the empty
+// wrapper leaves a phantom gap in the grid.
 function removeCarouselSlot(img: HTMLImageElement) {
-    const slot = img.closest('.carousel-book-link');
+    const slot = img.closest('.carousel-book-link, .category-expanded-book, .category-card');
     (slot ?? img).remove();
 }
 

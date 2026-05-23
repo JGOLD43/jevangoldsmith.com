@@ -3825,11 +3825,12 @@ body.meet-page {
 
 /* Reads as a page, not an overlay. Theme-aware bg so the books read on
    a clean surface like a Kindle category folder, not a dark modal over
-   the listing. */
+   the listing. Top padding clears the fixed navbar (~58px) so the
+   title isn't hidden behind it. */
 .category-expanded {
   z-index: 10000;
   background: var(--background);
-  padding: 1.5rem 1rem;
+  padding: calc(58px + 1.25rem) 1rem 1.5rem;
   display: none;
   position: fixed;
   inset: 0;

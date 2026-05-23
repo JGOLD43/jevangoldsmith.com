@@ -72,8 +72,11 @@ export function initTaskFolderView(opts: TaskFolderViewOpts): void {
         if (!modal || !title || !container) return;
         title.textContent = category;
         const cards = Array.from(document.querySelectorAll(`#${opts.listId} ${opts.cardSelector}`));
+        // TaskCard packs multiple tokens into data-category (e.g.
+        // "active software"), so check membership rather than equality.
         const matching = cards.filter((c) => {
-            return (c as HTMLElement).dataset.category === category;
+            const cats = ((c as HTMLElement).dataset.category || '').split(/\s+/);
+            return cats.includes(category);
         });
         const fragment = document.createDocumentFragment();
         matching.forEach((card) => {
