@@ -75,6 +75,24 @@ const config = ({
   description="A podcast archive of conversations, shows, and audio ideas Jevan Goldsmith returns to."
   canonical={canonical}
 >
+  <Fragment slot="counter-extra">
+    <div class="movie-counter-row">
+      <button type="button" class="stats-toggle podcast-stats-toggle" aria-expanded="false" aria-controls="podcast-stats-panel" aria-label="Show listening stats">Stats <span aria-hidden="true">▾</span></button>
+      <button class="view-toggle-single" id="podcasts-view-toggle" data-action="toggle-podcasts-view-mode" data-current-mode="list" aria-label="Switch to category grid view" title="Switch to category grid view">
+        <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+        <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+      </button>
+    </div>
+  </Fragment>
+  <section id="podcast-stats-panel" class="movie-stats-panel collapsed" aria-label="Listening stats" hidden>
+    <div class="stats-body">
+      <PodcastStatsBody
+        podcasts={podcasts.map((p) => ({ title: p.data.title, host: p.data.host, category: p.data.category, badge: p.data.badge }))}
+        spotifyEpisodeCount={spotifyEpisodes.length}
+        spotifyShowCount={spotifyShows.length}
+      />
+    </div>
+  </section>
   <section id="spotify-recent-section" class="spotify-section" hidden={spotifyEpisodes.length === 0}>
     <div class="spotify-section-header">
       <h2>Recently Listened on Spotify</h2>
@@ -141,13 +159,51 @@ const config = ({
       {podcasts.map((p, i) => <PodcastCard podcast={{ ...p.data, id: p.id }} index={i} />)}
     </div>
   </section>
+  <div class="category-grid-view" id="podcasts-category-grid-view" style="display: none;">
+    <div class="category-grid">
+      {categoryGridCards.map((g) => (
+        <div class="category-card" data-action="open-podcast-category-modal" data-category={g.category}>
+          <div class="category-card-books">
+            {g.covers.map((cover) => (
+              cover.src ? <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" data-remove-on-error="true" /> : <div class="empty-slot"></div>
+            ))}
+            {Array.from({ length: g.emptySlots }).map(() => <div class="empty-slot"></div>)}
+          </div>
+          <div class="category-card-info">
+            <span class="category-card-name">{g.category}</span>
+            <span class="category-card-count">{g.count}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div id="podcast-category-modal" class="category-expanded" role="dialog" aria-modal="true" aria-labelledby="podcast-category-title">
+    <div class="category-modal-backdrop" data-action="close-podcast-category-modal"></div>
+    <div class="category-modal-content">
+      <div class="category-expanded-header">
+        <h2 class="category-expanded-title" id="podcast-category-title"></h2>
+        <button class="category-expanded-close" data-action="close-podcast-category-modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="category-expanded-books" id="podcast-category-list"></div>
+    </div>
+  </div>
 </CollectionPage>
+
+<style is:inline>
+  .movie-counter-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+</style>
 
 <script>
   import { createCollectionRuntime } from '../scripts/collection-runtime';
   import { onDomReady } from '../scripts/dom-ready';
-  import { init as initGridZoom } from '../scripts/grid-zoom';
+  import { initCoverFlight } from '../scripts/cover-flight';
   import { renderSpotifyFollowedShows, renderSpotifyRecentEpisodes } from '../scripts/podcasts-spotify';
+  import '../scripts/podcasts-folder-view.ts';
 
   let podcastRuntime: AnyObj = null;
 
