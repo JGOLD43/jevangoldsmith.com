@@ -267,23 +267,119 @@ const sections = [
 </style>
 
 <script>
-  // Warm the destination page on hover/focus so the actual click
-  // navigation is a cache hit. We intentionally do NOT intercept the
-  // click — letting the browser navigate normally is what allows
-  // @view-transition { navigation: auto } to fire and produce a
-  // native cross-doc crossfade. Any JS preventDefault would block it.
+  import { initAdventuresPage } from '../scripts/adventures.ts';
+
+  // SPA-style swap from /now → /adventures.html?focus=now. Instead of a
+  // full browser navigation (which has to unload + parse + paint the
+  // new doc), we fetch the destination, splice its <main> into the
+  // current page, and call initAdventuresPage() in-place. The Leaflet
+  // map mounts in the newly-injected #world-map div with no document
+  // reload. Combined with the overlay-image morph, the user sees the
+  // thumb scale up directly into the live interactive map.
   const link = document.getElementById('now-map-thumb-link') as HTMLAnchorElement | null;
+  let prefetchedDoc: Document | null = null;
+
   if (link) {
-    const prefetch = () => {
-      if (document.querySelector(`link[rel="prefetch"][href="${link.href}"]`)) return;
-      const l = document.createElement('link');
-      l.rel = 'prefetch';
-      l.href = link.href;
-      l.as = 'document';
-      document.head.appendChild(l);
+    const prefetchDoc = async () => {
+      if (prefetchedDoc) return;
+      try {
+        const res = await fetch(link.href, { credentials: 'same-origin' });
+        if (!res.ok) return;
+        const html = await res.text();
+        prefetchedDoc = new DOMParser().parseFromString(html, 'text/html');
+      } catch { /* ignore — fall back to hard nav on click */ }
     };
-    link.addEventListener('pointerenter', prefetch, { once: true });
-    link.addEventListener('focus', prefetch, { once: true });
+    link.addEventListener('pointerenter', prefetchDoc, { once: true });
+    link.addEventListener('focus', prefetchDoc, { once: true });
+
+    // Also preload the satellite tile (same URL as this thumb) so the
+    // destination overlay paints instantly.
+    const img = link.querySelector('img') as HTMLImageElement | null;
+    if (img && img.src) {
+      const pre = document.createElement('link');
+      pre.rel = 'preload';
+      pre.as = 'image';
+      pre.href = img.src;
+      document.head.appendChild(pre);
+    }
+
+    link.addEventListener('click', async (event) => {
+      const me = event as MouseEvent;
+      if (me.metaKey || me.ctrlKey || me.shiftKey || me.altKey || me.button !== 0) return;
+      event.preventDefault();
+      const href = link.href;
+
+      // Get the destination doc (prefetched on hover, fetched now if not).
+      let doc = prefetchedDoc;
+      if (!doc) {
+        try {
+          const res = await fetch(href, { credentials: 'same-origin' });
+          if (!res.ok) { window.location.href = href; return; }
+          doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+        } catch { window.location.href = href; return; }
+      }
+
+      const newMain = doc.querySelector('main');
+      const currentMain = document.querySelector('main');
+      if (!newMain || !currentMain || !currentMain.parentNode) {
+        window.location.href = href;
+        return;
+      }
+
+      // Carry over the destination doc's inline <style> blocks so the
+      // injected main has access to all of its layout rules. Tag them
+      // for cleanup if the user ever goes back via popstate.
+      doc.querySelectorAll('head style').forEach((style) => {
+        const cloned = style.cloneNode(true) as HTMLStyleElement;
+        cloned.setAttribute('data-now-spa-style', '1');
+        document.head.appendChild(cloned);
+      });
+
+      // Mirror the destination's html-level class hooks (used by the
+      // inline focus-now detection there).
+      document.documentElement.classList.add('adv-focus-now-pending');
+      // Set the data attr that the overlay-src setter looks for.
+      const url = new URL(href, location.origin);
+      const lat = parseFloat(url.searchParams.get('lat') || '');
+      const lng = parseFloat(url.searchParams.get('lng') || '');
+      if (isFinite(lat) && isFinite(lng)) {
+        const z = 6;
+        const x = Math.floor((lng + 180) / 360 * Math.pow(2, z));
+        const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, z));
+        document.documentElement.setAttribute('data-now-overlay-src', `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`);
+      }
+
+      // Wrap the swap in a View Transition so the browser still does
+      // the thumb-image morph between the current thumb and the new
+      // overlay img inside newMain. Both share view-transition-name.
+      const doSwap = () => {
+        currentMain.parentNode!.replaceChild(newMain, currentMain);
+        document.title = doc!.title;
+        history.pushState({ nowSpa: true }, '', href);
+        // Apply overlay src right away — the newly-attached img is in DOM.
+        const overlayImg = document.getElementById('now-thumb-overlay') as HTMLImageElement | null;
+        const src = document.documentElement.getAttribute('data-now-overlay-src');
+        if (overlayImg && src) {
+          overlayImg.src = src;
+          overlayImg.classList.add('show');
+        }
+        // Mount Leaflet + adventures init on the freshly-swapped DOM.
+        initAdventuresPage();
+      };
+
+      if (typeof (document as any).startViewTransition === 'function') {
+        (document as any).startViewTransition(doSwap);
+      } else {
+        doSwap();
+      }
+    });
+
+    // Going back from the SPA-swapped state — hard reload to /now so
+    // its scripts re-bind cleanly rather than try to un-mount Leaflet.
+    window.addEventListener('popstate', (event) => {
+      const state = (event.state || {}) as Record<string, unknown>;
+      if (state.nowSpa) window.location.reload();
+    });
   }
 </script>
 </Base>

@@ -572,7 +572,7 @@ function placeNowMarkerAndFocus() {
     });
 }
 
-function initAdventuresPage() {
+export function initAdventuresPage() {
     loadFilters();
     bindAdventureActions();
     bindLightboxEvents();
@@ -636,10 +636,19 @@ registerActions({
     switchMobileView
 });
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAdventuresPage, { once: true });
-} else {
+// Only auto-init on pages that actually have the world-map mount
+// point. This module is now also imported by /now (for the SPA-swap
+// to /adventures) — there, init is called manually after the DOM
+// swap, not at module load.
+function maybeAutoInit() {
+    if (!document.getElementById('world-map')) return;
     initAdventuresPage();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', maybeAutoInit, { once: true });
+} else {
+    maybeAutoInit();
 }
 
 export {};
