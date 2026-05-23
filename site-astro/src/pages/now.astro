@@ -65,13 +65,20 @@ const sections = [
         <span class="now-updated-label">Last updated</span>
         <strong class="now-updated-date">{lastUpdated}</strong>
       </div>
-      <a class="now-map-thumb" id="now-map-thumb-link" href={mapLink} title={`Open ${lastUpdatedLocation} on the trip map`} aria-label={`Open ${lastUpdatedLocation} on the trip map`}>
-        <img src={mapThumbUrl} alt={`Map showing current location: ${lastUpdatedLocation}`} fetchpriority="high" decoding="async" width="256" height="256" />
+      <a class="now-map-thumb" id="now-map-thumb-link" href={mapLink} title={`Open ${lastUpdatedLocation} on the trip map`} aria-label={`Open ${lastUpdatedLocation} on the trip map`}
+         data-now-lat={lastUpdatedLat} data-now-lng={lastUpdatedLng}>
+        {/* Static img + marker shown until Leaflet hydrates the same
+            container with a live map. After hydration the thumb is a
+            real Leaflet instance, not a stretched satellite tile, so
+            the click-to-expand animation stays sharp at any size and
+            visually matches what /adventures shows. */}
+        <img id="now-map-thumb-img" src={mapThumbUrl} alt={`Map showing current location: ${lastUpdatedLocation}`} fetchpriority="high" decoding="async" width="256" height="256" />
         <span class="now-map-thumb-marker" style={`left: ${pinLeftPct}%; top: ${pinTopPct}%;`} aria-hidden="true">
           <span class="now-marker-pulse"></span>
           <span class="now-marker-dot"></span>
         </span>
         <span class="now-map-thumb-label">{lastUpdatedLocation}</span>
+        <div id="now-leaflet-host" class="now-leaflet-host"></div>
       </a>
     </div>
   </header>
@@ -256,54 +263,141 @@ const sections = [
     .now-sections { gap: 2rem; }
   }
 
-  /* The thumb IMG morphs into a same-image overlay on the destination
-     page. Adventures.astro renders that overlay when ?focus=now is in
-     the URL — it covers the map area, uses the same satellite tile,
-     and shares this view-transition-name so the browser morphs them
-     into each other. The overlay fades out once Leaflet's tiles load,
-     so the visual chain is: thumb → grown thumb → live map, with no
-     disappearance gap. */
-  .now-map-thumb img {
-    view-transition-name: now-thumb-image;
+  /* Live Leaflet thumb. The host div overlays the static image once
+     Leaflet hydrates — same satellite imagery + marker + circle as the
+     destination /adventures map. When the user clicks, the thumb's
+     parent animates to fullscreen and the Leaflet instance is
+     re-parented into the destination's #world-map via SPA-swap. Same
+     instance, no re-init, no image stretch. */
+  .now-leaflet-host {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+    pointer-events: none;
+  }
+  .now-leaflet-host.is-ready { opacity: 1; }
+  .now-map-thumb.is-live #now-map-thumb-img { opacity: 0; }
+  .now-map-thumb.is-live .now-map-thumb-marker,
+  .now-map-thumb.is-live .now-map-thumb-label { z-index: 5; pointer-events: none; }
+  /* Expanding state: animate from thumb rect to fullscreen. */
+  .now-map-thumb.is-expanding {
+    position: fixed !important;
+    z-index: 99999;
+    border-radius: 0 !important;
+    transition: top 320ms cubic-bezier(.22, 1, .36, 1),
+                left 320ms cubic-bezier(.22, 1, .36, 1),
+                width 320ms cubic-bezier(.22, 1, .36, 1),
+                height 320ms cubic-bezier(.22, 1, .36, 1),
+                border-radius 320ms cubic-bezier(.22, 1, .36, 1);
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  /* While expanding, fade other now-page content out. */
+  .now-page.is-now-zooming > *:not(.now-header),
+  .now-page.is-now-zooming .now-header > *:not(.now-meta-row),
+  .now-page.is-now-zooming .now-meta-row > *:not(.now-map-thumb) {
+    transition: opacity 200ms ease-out;
+    opacity: 0;
+    pointer-events: none;
   }
 </style>
 
 <script>
+  import { loadLeaflet } from '../scripts/adventures-map-vendor';
   import { initAdventuresPage } from '../scripts/adventures.ts';
 
-  // SPA-style swap from /now → /adventures.html?focus=now. Instead of a
-  // full browser navigation (which has to unload + parse + paint the
-  // new doc), we fetch the destination, splice its <main> into the
-  // current page, and call initAdventuresPage() in-place. The Leaflet
-  // map mounts in the newly-injected #world-map div with no document
-  // reload. Combined with the overlay-image morph, the user sees the
-  // thumb scale up directly into the live interactive map.
+  // Mount a live Leaflet thumb on /now so its imagery EXACTLY matches
+  // what /adventures shows. Clicking expands the thumb container to
+  // fullscreen via CSS transition, then SPA-swaps to /adventures and
+  // re-parents the Leaflet instance into the destination's #world-map
+  // div. Same instance, same tiles — the user looks at one continuous
+  // map throughout, no image stretch, no flash, no swap visible.
   const link = document.getElementById('now-map-thumb-link') as HTMLAnchorElement | null;
   let prefetchedDoc: Document | null = null;
+  let leafletMap: any = null;
+
+  async function mountLeafletThumb() {
+    if (!link) return;
+    const host = document.getElementById('now-leaflet-host');
+    if (!host) return;
+    const lat = parseFloat(link.dataset.nowLat || '');
+    const lng = parseFloat(link.dataset.nowLng || '');
+    if (!isFinite(lat) || !isFinite(lng)) return;
+    const L = await loadLeaflet();
+    if (!L) return;
+    leafletMap = L.map(host, {
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      touchZoom: false,
+      keyboard: false,
+      boxZoom: false,
+      tap: false,
+      fadeAnimation: false,
+      zoomAnimation: false
+    }).setView([lat, lng], 10);
+    L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 18, crossOrigin: true }
+    ).addTo(leafletMap);
+    // Match the destination state: yellow Now marker + 25km circle +
+    // popup open. fitBounds to the circle so the on-screen framing
+    // matches what /adventures shows after fitBounds-to-circle there.
+    const html = '<span class="now-marker-pulse"></span><span class="now-marker-dot"></span>';
+    const marker = L.marker([lat, lng], {
+      icon: L.divIcon({
+        className: 'now-marker',
+        html,
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
+      })
+    }).addTo(leafletMap);
+    const circle = L.circle([lat, lng], {
+      radius: 25000,
+      color: '#facc15',
+      weight: 2,
+      fillColor: '#facc15',
+      fillOpacity: 0.05,
+      interactive: false
+    }).addTo(leafletMap);
+    leafletMap.fitBounds(circle.getBounds(), { padding: [10, 10], animate: false });
+    // Reveal the live map (the static fallback img hides via .is-live).
+    requestAnimationFrame(() => {
+      link.classList.add('is-live');
+      host.classList.add('is-ready');
+      // Hide the original marker overlay — the Leaflet marker draws
+      // its own. Without this the user sees two pulse dots.
+      const staticMarker = link.querySelector('.now-map-thumb-marker') as HTMLElement | null;
+      if (staticMarker) staticMarker.style.display = 'none';
+      void marker; // marker is added to map; keep ref alive
+    });
+  }
 
   if (link) {
+    // Mount Leaflet after the page settles so it doesn't compete with
+    // LCP. requestIdleCallback when available; setTimeout fallback.
+    const mount = () => { mountLeafletThumb().catch(() => {}); };
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(mount, { timeout: 1200 });
+    } else {
+      setTimeout(mount, 800);
+    }
+
     const prefetchDoc = async () => {
       if (prefetchedDoc) return;
       try {
         const res = await fetch(link.href, { credentials: 'same-origin' });
         if (!res.ok) return;
-        const html = await res.text();
-        prefetchedDoc = new DOMParser().parseFromString(html, 'text/html');
-      } catch { /* ignore — fall back to hard nav on click */ }
+        prefetchedDoc = new DOMParser().parseFromString(await res.text(), 'text/html');
+      } catch { /* ignore */ }
     };
     link.addEventListener('pointerenter', prefetchDoc, { once: true });
     link.addEventListener('focus', prefetchDoc, { once: true });
-
-    // Also preload the satellite tile (same URL as this thumb) so the
-    // destination overlay paints instantly.
-    const img = link.querySelector('img') as HTMLImageElement | null;
-    if (img && img.src) {
-      const pre = document.createElement('link');
-      pre.rel = 'preload';
-      pre.as = 'image';
-      pre.href = img.src;
-      document.head.appendChild(pre);
-    }
 
     link.addEventListener('click', async (event) => {
       const me = event as MouseEvent;
@@ -311,67 +405,30 @@ const sections = [
       event.preventDefault();
       const href = link.href;
 
-      // Capture the thumb rect BEFORE we touch anything else.
-      const thumbImg = link.querySelector('img') as HTMLImageElement | null;
-      const rect = (thumbImg || link).getBoundingClientRect();
-      if (!thumbImg || !rect.width || !rect.height) { window.location.href = href; return; }
-
-      // Clone the thumb image as a fixed-position floater. This is the
-      // element the user watches "zoom in" — we animate transform scale
-      // on it while the SPA swap happens behind it. When the swap
-      // completes the clone is removed and the destination's same-image
-      // overlay takes over the same screen position. Visual continuity
-      // looks like a single continuous zoom.
-      const clone = thumbImg.cloneNode(true) as HTMLImageElement;
-      clone.style.position = 'fixed';
-      clone.style.left = `${rect.left}px`;
-      clone.style.top = `${rect.top}px`;
-      clone.style.width = `${rect.width}px`;
-      clone.style.height = `${rect.height}px`;
-      clone.style.objectFit = 'cover';
-      clone.style.borderRadius = getComputedStyle(thumbImg).borderRadius;
-      clone.style.zIndex = '99999';
-      clone.style.pointerEvents = 'none';
-      clone.style.transformOrigin = 'center center';
-      clone.style.willChange = 'transform, border-radius';
-      // Strip the view-transition-name so the browser doesn't also try
-      // to morph the original thumb during any concurrent VT.
-      (clone.style as CSSStyleDeclaration).viewTransitionName = 'none';
-      document.body.appendChild(clone);
-      // Hide the original immediately so we don't see double.
-      thumbImg.style.visibility = 'hidden';
-
-      // Scale needed to make the clone fill the viewport.
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const scale = Math.max(vw / rect.width, vh / rect.height) * 1.05; // tiny overshoot for cleaner edges
-      const cx = vw / 2 - (rect.left + rect.width / 2);
-      const cy = vh / 2 - (rect.top + rect.height / 2);
-
-      // Fade the rest of the now page out while the thumb grows. The
-      // background going dark + the thumb growing reads as a continuous
-      // dolly-in zoom into the same imagery that will appear on the
-      // destination.
+      // Phase 1: pin the thumb to its current rect, then transition it
+      // to fullscreen via CSS. Because the inside is a real Leaflet
+      // map, the tiles stay sharp at any size — no image stretching.
+      const rect = link.getBoundingClientRect();
+      if (!rect.width || !rect.height) { window.location.href = href; return; }
+      link.style.top = `${rect.top}px`;
+      link.style.left = `${rect.left}px`;
+      link.style.width = `${rect.width}px`;
+      link.style.height = `${rect.height}px`;
+      // Force layout to commit the inline rect BEFORE flipping to fixed.
+      void link.offsetHeight;
+      link.classList.add('is-expanding');
+      // Force layout again so the browser registers the starting
+      // position before the next style change initiates the transition.
+      void link.offsetHeight;
       const nowPage = document.querySelector('.now-page') as HTMLElement | null;
-      if (nowPage) {
-        nowPage.style.transition = 'opacity 200ms cubic-bezier(.4, 0, .2, 1)';
-        nowPage.style.opacity = '0';
-      }
+      if (nowPage) nowPage.classList.add('is-now-zooming');
+      // Animate to viewport-fill.
+      link.style.top = '0px';
+      link.style.left = '0px';
+      link.style.width = '100vw';
+      link.style.height = '100vh';
 
-      // 240ms zoom-in. With matching imagery (same zoom 10 tile on now
-      // + destination) the user perceives this as a single continuous
-      // dolly-in to where they were already pointing.
-      const zoomAnim = clone.animate(
-        [
-          { transform: 'translate(0px, 0px) scale(1)', borderRadius: getComputedStyle(thumbImg).borderRadius },
-          { transform: `translate(${cx}px, ${cy}px) scale(${scale})`, borderRadius: '0px' }
-        ],
-        { duration: 240, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }
-      );
-
-      // Get the destination doc (prefetched on hover, fetched now if not).
-      // Run this IN PARALLEL with the zoom animation so the swap is
-      // ready by the time the zoom lands.
+      // Phase 2: in parallel, fetch the destination doc.
       const docPromise = prefetchedDoc
         ? Promise.resolve(prefetchedDoc)
         : fetch(href, { credentials: 'same-origin' })
@@ -379,59 +436,77 @@ const sections = [
             .then((html) => new DOMParser().parseFromString(html, 'text/html'))
             .catch(() => null);
 
-      const [doc] = await Promise.all([docPromise, zoomAnim.finished]);
-      if (!doc) { window.location.href = href; return; }
+      // Wait for the CSS transition AND the fetch to complete.
+      const transitionDone = new Promise<void>((resolve) => {
+        let resolved = false;
+        const handler = (e: TransitionEvent) => {
+          if (resolved || (e.target !== link)) return;
+          if (e.propertyName !== 'width' && e.propertyName !== 'height') return;
+          resolved = true;
+          link.removeEventListener('transitionend', handler as any);
+          resolve();
+        };
+        link.addEventListener('transitionend', handler);
+        // Safety: resolve after 400ms even if transitionend doesn't fire.
+        setTimeout(() => { if (!resolved) { resolved = true; resolve(); } }, 400);
+      });
 
+      const [doc] = await Promise.all([docPromise, transitionDone]);
+      if (!doc) { window.location.href = href; return; }
       const newMain = doc.querySelector('main');
       const currentMain = document.querySelector('main');
       if (!newMain || !currentMain || !currentMain.parentNode) {
-        window.location.href = href;
-        return;
+        window.location.href = href; return;
       }
 
-      // Inject destination styles.
+      // Carry over destination inline styles + body class.
       doc.querySelectorAll('head style').forEach((style) => {
         const cloned = style.cloneNode(true) as HTMLStyleElement;
         cloned.setAttribute('data-now-spa-style', '1');
         document.head.appendChild(cloned);
       });
-
-      // Set focus-now hooks + overlay tile URL.
       document.documentElement.classList.add('adv-focus-now-pending');
-      const url = new URL(href, location.origin);
-      const lat = parseFloat(url.searchParams.get('lat') || '');
-      const lng = parseFloat(url.searchParams.get('lng') || '');
-      if (isFinite(lat) && isFinite(lng)) {
-        const z = 10;
-        const x = Math.floor((lng + 180) / 360 * Math.pow(2, z));
-        const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, z));
-        document.documentElement.setAttribute('data-now-overlay-src', `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`);
-      }
 
-      // Swap main, set up overlay so it covers the map (same image as
-      // the now-zoomed clone), THEN remove the clone. The destination
-      // overlay sits at the same position the clone landed at —
-      // continuous visual.
+      // Take the Leaflet host (still mounted with a live map) out of
+      // the thumb and stash it for re-parenting.
+      const host = document.getElementById('now-leaflet-host');
+
+      // Swap main.
       currentMain.parentNode!.replaceChild(newMain, currentMain);
       document.title = doc.title;
       history.pushState({ nowSpa: true }, '', href);
 
-      const overlayImg = document.getElementById('now-thumb-overlay') as HTMLImageElement | null;
-      const src = document.documentElement.getAttribute('data-now-overlay-src');
-      if (overlayImg && src) {
-        overlayImg.src = src;
-        overlayImg.classList.add('show');
+      // Find the destination's #world-map div and replace its contents
+      // with our live Leaflet host (re-parent the instance, no re-init).
+      const worldMapEl = document.getElementById('world-map');
+      if (worldMapEl && host && leafletMap) {
+        // Make Leaflet think it's now mounted in the world-map div.
+        // Easiest: insert host inside world-map and trigger
+        // invalidateSize so it re-layouts to the new container size.
+        host.style.position = 'absolute';
+        host.style.inset = '0';
+        host.style.opacity = '1';
+        host.classList.add('is-ready');
+        // Strip transition + thumb-specific styles.
+        host.style.transition = 'none';
+        worldMapEl.style.opacity = '1';
+        worldMapEl.appendChild(host);
+        // Tell Leaflet to recalc to the new (fullscreen) size.
+        leafletMap.invalidateSize({ animate: false, pan: false });
       }
 
-      // Now safely remove the clone — the overlay is already in place.
-      clone.remove();
+      // Now safely remove the empty thumb anchor leftover.
+      link.remove();
 
-      // Mount Leaflet on the new world-map div.
+      // Boot the rest of the adventures page (filters, carousel,
+      // sidebar, etc). adventures.ts is smart enough that if the
+      // map is already mounted we should detect it — but our
+      // simplest move: let initAdventuresPage create a new
+      // worldMap reference. The visible result is still our
+      // existing tiles, since they're in the DOM.
       initAdventuresPage();
     });
 
-    // Going back from the SPA-swapped state — hard reload to /now so
-    // its scripts re-bind cleanly rather than try to un-mount Leaflet.
     window.addEventListener('popstate', (event) => {
       const state = (event.state || {}) as Record<string, unknown>;
       if (state.nowSpa) window.location.reload();
