@@ -1,6 +1,8 @@
 import { trapFocus } from '../lib/focus-trap';
+import { slugify } from '../lib/slug';
 import { categoryDisplayNames, getCoverUrl, state } from './books-state';
 import { getBooksByCategory } from './books-render';
+import { flyCoverToDetail } from './books-flight';
 import { cloneTemplateElement } from './dom-template';
 
 let releaseBookModalFocus: (() => void) | null = null;
@@ -100,9 +102,21 @@ export function closeCategoryModal() {
     releaseCategoryModalFocus = null;
 }
 
-export function openBookFromGrid(isbn: string) {
+export function openBookFromGrid(isbn: string, sourceEl?: HTMLElement | null) {
     const book = state.books.find((entry: BookModalRecord) => entry.isbn === isbn);
     if (!book) return;
+    // Compute the same detail URL the grid card would use, then fly the
+    // clicked cover to the detail page — mirrors the list-view click
+    // animation. Fall back to the legacy "open inline review modal" if
+    // we can't locate the cover img.
+    const slug = book.isbn || slugify(`${book.title || ''}-${book.author || ''}`);
+    const href = slug ? `/books/${slug}.html` : '';
+    const cover = sourceEl?.querySelector('img') as HTMLImageElement | null;
+    if (href && cover) {
+        closeCategoryModal();
+        flyCoverToDetail(cover, href);
+        return;
+    }
     closeCategoryModal();
     openBookModal(book);
 }

@@ -35,7 +35,7 @@ function initBookCoverFlight(grid: HTMLElement) {
     });
 }
 
-function flyCoverToDetail(cover: HTMLImageElement, href: string) {
+export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     const sourceRect = cover.getBoundingClientRect();
     if (!sourceRect.width || !sourceRect.height) {
         window.location.href = href;

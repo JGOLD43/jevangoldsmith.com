@@ -3823,15 +3823,19 @@ body.meet-page {
   font-weight: 600;
 }
 
+/* Reads as a page, not an overlay. Theme-aware bg so the books read on
+   a clean surface like a Kindle category folder, not a dark modal over
+   the listing. */
 .category-expanded {
   z-index: 10000;
-  background: #000000e6;
-  padding: 2rem;
+  background: var(--background);
+  padding: 1.5rem 1rem;
   display: none;
   position: fixed;
   inset: 0;
   overflow-y: auto;
 }
+[data-theme="dark"] .category-expanded { background: #0a0a0a; }
 
 .category-expanded.active {
   justify-content: center;
@@ -3853,34 +3857,53 @@ body.meet-page {
 }
 
 .category-expanded-header {
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--border-color);
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   display: flex;
 }
 
 .category-expanded-title {
-  color: #fff;
-  font-size: 2rem;
+  color: var(--text-color);
+  font-size: 1.5rem;
   font-weight: 700;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
 }
+@media (min-width: 768px) {
+  .category-expanded-title { font-size: 2rem; }
+}
+[data-theme="dark"] .category-expanded-title { color: #fff; }
 
 .category-expanded-close {
-  color: #fff;
+  color: var(--text-color);
   cursor: pointer;
   background: none;
   border: none;
-  padding: .5rem;
+  padding: .25rem .5rem;
   font-size: 2rem;
   line-height: 1;
+  flex: none;
 }
+[data-theme="dark"] .category-expanded-close { color: #fff; }
 
+/* 3-col grid even on narrow mobile (Kindle-style), then auto-fill on
+   wider screens. */
 .category-expanded-books {
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1.5rem;
   display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 600px) {
+  .category-expanded-books {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1.5rem;
+  }
 }
 
 .category-expanded-book {

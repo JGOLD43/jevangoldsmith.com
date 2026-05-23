@@ -220,7 +220,7 @@ function bindBooksEvents() {
         if (categoryModal) { openCategoryModal(categoryModal.dataset.category || ''); return; }
         if (target.closest?.('[data-action="close-category-modal"]')) { closeCategoryModal(); return; }
         const openFromGrid = target.closest?.('[data-action="open-book-from-grid"]') as HTMLElement | null;
-        if (openFromGrid) openBookFromGrid(openFromGrid.dataset.isbn || '');
+        if (openFromGrid) openBookFromGrid(openFromGrid.dataset.isbn || '', openFromGrid);
     });
 
     document.addEventListener('click', (event) => {
