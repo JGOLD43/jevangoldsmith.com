@@ -456,8 +456,12 @@ const config = ({
   }
   .essay-row-link:hover,
   .essay-row-link:focus-visible {
-    background: var(--background-alt);
+    background: rgba(0, 0, 0, 0.06);
     outline: none;
+  }
+  [data-theme="dark"] .essay-row-link:hover,
+  [data-theme="dark"] .essay-row-link:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
   }
   .essay-row-title {
     font-family: Chivo, sans-serif;
