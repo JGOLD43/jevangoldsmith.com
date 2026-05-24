@@ -236,10 +236,16 @@ function main() {
     if (html.includes('data-critical-css="true"')) continue; // already processed
     const linkPattern = new RegExp(`<link rel="stylesheet" href="${chromeRel}"[^>]*>`);
     if (!linkPattern.test(html)) continue;
-    // Inline-script promote pattern: avoids `onload=` inline handler so
-    // CSP can stay restrictive (no 'unsafe-hashes' / per-handler hashes).
-    // The script gets a sha256 from update-csp-hashes.js automatically.
-    const replacement = `<style data-critical-css="true">${critical}</style><link id="jg-chrome-css" rel="preload" href="${chromeRel}" as="style"><noscript><link rel="stylesheet" href="${chromeRel}"></noscript><script>(()=>{const l=document.getElementById('jg-chrome-css');if(l){l.rel='stylesheet';l.removeAttribute('id');}})();</script>`;
+    // Load chrome.css as a normal blocking stylesheet. The previous
+    // preload + JS rel-flip pattern was producing FOUC on real mobile
+    // connections: HTML painted before the rel-flip ran, so pages with
+    // page-specific styles outside the critical inline (e.g.
+    // /adventures with its trip cards + region tabs) showed unstyled
+    // content for ~200-800ms on first load. Blocking the initial paint
+    // until chrome.css is parsed is the correct trade-off — the
+    // critical inline above-fold rules already provide a near-instant
+    // first paint, and chrome.css is small + heavily cached.
+    const replacement = `<style data-critical-css="true">${critical}</style><link rel="stylesheet" href="${chromeRel}">`;
     html = html.replace(linkPattern, replacement);
     fs.writeFileSync(file, html);
     mutated++;

@@ -4189,7 +4189,7 @@ body.meet-page {
   overflow: hidden;
 }
 
-.book-link {
+.book-link, .movie-link {
   grid-template-columns: 28px 1fr;
   align-items: center;
   gap: .6rem;

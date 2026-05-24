@@ -1,4 +1,4 @@
-import { escapeHtml } from '../lib/html-escape';
+import { escapeAttr, escapeHtml } from '../lib/html-escape';
 import { registerActions } from './action-dispatcher';
 import { applyCardVisibility, bindStarRatingDrag, installEscapeCloser } from './collection-helpers';
 import { createCollectionRuntime } from './collection-runtime';
@@ -179,12 +179,19 @@ function renderSidebar(genreGroups: AnyObj) {
         if (countEl) countEl.textContent = String(movies.length);
         if (section) section.style.display = movies.length === 0 ? 'none' : 'block';
         if (container && !container.children.length) {
-            container.innerHTML = movies.map((movie: AnyObj) => `
+            container.innerHTML = movies.map((movie: AnyObj) => {
+                const cover = movie.poster
+                    ? `<img class="book-link-cover" src="${escapeAttr(movie.poster)}" alt="" loading="lazy" decoding="async" data-remove-on-error="true">`
+                    : '';
+                return `
                 <a href="#" class="movie-link" data-action="scrollToMovie" data-action-args="${encodeURIComponent(movie.title)}" data-action-eventobj="true">
-                    <div>${escapeHtml(movie.title)}</div>
-                    <div class="movie-link-year">${escapeHtml(movie.year || '')}</div>
-                </a>
-            `).join('');
+                    ${cover}
+                    <span class="book-link-meta">
+                        <span class="book-link-title">${escapeHtml(movie.title)}</span>
+                        <span class="book-link-author movie-link-year">${escapeHtml(movie.year || '')}</span>
+                    </span>
+                </a>`;
+            }).join('');
         }
     });
 }

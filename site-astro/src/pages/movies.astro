@@ -102,6 +102,7 @@ const config = ({
           className: 'movie-link',
           label: movie.title,
           meta: movie.year ? String(movie.year) : '',
+          coverUrl: movie.poster ?? undefined,
           attrs: {
             'data-action': 'scrollToMovie',
             'data-action-args': encodeURIComponent(movie.title),
