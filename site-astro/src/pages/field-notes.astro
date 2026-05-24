@@ -1,31 +1,20 @@
 ---
-import Base from '../layouts/Base.astro';
+// Legacy URL kept ONLY as a redirect to /newsletter.html. The "Field
+// Notes" branding was retired; all inbound links inside the site now
+// point at /newsletter.html. External backlinks (search results, old
+// social posts) land here and get bounced.
 ---
-<Base
-  title="Newsletter | Jevan Goldsmith"
-  description="Exclusive, newsletter-only content once a month. No spam, no nonsense."
-  canonical="https://jevangoldsmith.com/field-notes.html"
-  pageType="CollectionPage"
->
-<main class="field-notes-main">
-    <section class="field-notes-hero">
-        <p class="archive-kicker">Newsletter</p>
-        <h1>Exclusive, newsletter-only content once a month.</h1>
-        <p>Books worth reading, tools that stayed, questions I am stuck on, systems I am testing, and ideas I keep returning to — sent direct to your inbox. No spam, no nonsense.</p>
-        <form class="field-notes-form field-notes-form-large" action="https://formsubmit.co/hello@jevangoldsmith.com" method="POST" data-newsletter-form data-endpoint="https://formsubmit.co/ajax/hello@jevangoldsmith.com">
-            <input type="hidden" name="_subject" value="Newsletter signup">
-            <input type="hidden" name="_template" value="table">
-            <label class="sr-only" for="field-notes-hero-email">Email for newsletter</label>
-            <input id="field-notes-hero-email" type="email" name="email" placeholder="Enter your email" autocomplete="email" required>
-            <button type="submit">Subscribe</button>
-        </form>
-        <p class="field-note-microcopy">Monthly. Short. Useful. No spam.</p>
-    </section>
-
-
-</main>
-</Base>
-
-<script>
-  import '../scripts/newsletter.ts';
-</script>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting… | Jevan Goldsmith</title>
+    <link rel="canonical" href="https://jevangoldsmith.com/newsletter.html" />
+    <meta http-equiv="refresh" content="0; url=/newsletter.html" />
+    <meta name="robots" content="noindex, follow" />
+    <script>window.location.replace('/newsletter.html');</script>
+  </head>
+  <body>
+    <p>Redirecting to <a href="/newsletter.html">/newsletter.html</a>…</p>
+  </body>
+</html>
