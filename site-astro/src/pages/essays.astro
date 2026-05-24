@@ -383,16 +383,22 @@ const config = ({
       toggle.dataset.currentMode = showingGrid ? 'list' : 'grid';
       toggle.setAttribute('aria-label', nextLabel);
       toggle.setAttribute('title', nextLabel);
-      // Reset scroll to the very top of the document. Scrolling to the
-      // top of .essays-main with offsets was unreliable on mobile (iOS
-      // Safari ignored scroll-margin-top on the smooth path, and an
-      // explicit offset still left the first row partially behind the
-      // navbar in some viewports). The collection header lives at the
-      // top of the page in normal flow, so a hard scroll-to-0 puts the
-      // navbar above the header above the cards — the natural reading
-      // order. rAF defers until the post-toggle layout settles.
+      // Reset scroll to the very top of the document. Doubled rAF
+      // schedules the scroll AFTER layout has reflowed for the new view
+      // — otherwise mobile Safari occasionally lands on a stale layout
+      // and leaves the page scrolled mid-list, hiding the collection
+      // header and the first row's title behind the fixed navbar.
+      const hardScrollTop = () => {
+        // Cover both scroll roots (some mobile browsers anchor to one
+        // or the other depending on body/html overflow).
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      };
+      hardScrollTop();
       requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: 'auto' });
+        hardScrollTop();
+        requestAnimationFrame(hardScrollTop);
       });
       return;
     }
