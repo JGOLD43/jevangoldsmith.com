@@ -102,6 +102,7 @@ function tileFor(idx: number, hasImage: boolean) {
      in legacy.src.css don't leak in.
      ============================================================ */
   .wall-mode {
+    /* Light mode: warm cream Are.na aesthetic. */
     --wall-bg: #f4f0e8;
     --wall-ink: #1a1a1a;
     --wall-muted: #7a7468;
@@ -110,6 +111,10 @@ function tileFor(idx: number, hasImage: boolean) {
     --wall-sage: #c9d3bf;
     --wall-rose: #e8c9c1;
     --wall-charcoal: #2a2a26;
+    --wall-tile-bg: #ddd;
+    --wall-label-text: #f4f0e8;
+    --wall-charcoal-text: #f4f0e8;
+    --wall-charcoal-muted: #a8a298;
 
     background: var(--wall-bg);
     color: var(--wall-ink);
@@ -118,6 +123,24 @@ function tileFor(idx: number, hasImage: boolean) {
     line-height: 1.4;
     grid-template-columns: 1fr;
     min-height: 100vh;
+  }
+
+  /* Dark mode: same wall layout, dark palette. Keeps the colored tile
+     variants (cream/sage/rose) but shifts each to its dark-friendly
+     counterpart so the page reads as one piece, not light squares on
+     a dark background. */
+  [data-theme="dark"] .wall-mode {
+    --wall-bg: #0f0f0f;
+    --wall-ink: #f0f0f0;
+    --wall-muted: #8a8a8a;
+    --wall-line: #2a2a2a;
+    --wall-cream: #1f1d18;
+    --wall-sage: #1d2620;
+    --wall-rose: #261d1d;
+    --wall-charcoal: #050505;
+    --wall-tile-bg: #1a1a1a;
+    --wall-charcoal-text: #ececec;
+    --wall-charcoal-muted: #777;
   }
 
   .wall-mode .wall-topbar {
@@ -191,7 +214,7 @@ function tileFor(idx: number, hasImage: boolean) {
     position: relative;
     overflow: hidden;
     border-radius: 2px;
-    background: #ddd;
+    background: var(--wall-tile-bg);
     outline: 1px solid transparent;
     transition: outline-color .15s;
     cursor: pointer;
@@ -239,7 +262,7 @@ function tileFor(idx: number, hasImage: boolean) {
   }
   .wall-mode .wall-text.sage { background: var(--wall-sage); }
   .wall-mode .wall-text.rose { background: var(--wall-rose); }
-  .wall-mode .wall-text.dark { background: var(--wall-charcoal); color: #f4f0e8; }
+  .wall-mode .wall-text.dark { background: var(--wall-charcoal); color: var(--wall-charcoal-text); }
   .wall-mode .wall-text .wall-text-body { width: 100%; }
   .wall-mode .wall-text .feed-item-title {
     font-family: inherit;
@@ -259,7 +282,7 @@ function tileFor(idx: number, hasImage: boolean) {
     flex-wrap: wrap;
     gap: 8px;
   }
-  .wall-mode .wall-text.dark .feed-item-meta { color: #a8a298; }
+  .wall-mode .wall-text.dark .feed-item-meta { color: var(--wall-charcoal-muted); }
   .wall-mode .wall-text .feed-item-tag { color: inherit; background: none; padding: 0; }
   .wall-mode .wall-text .feed-item-source::before { content: '· '; }
   .wall-mode .wall-text .feed-item-link {
