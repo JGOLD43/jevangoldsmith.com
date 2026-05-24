@@ -14203,7 +14203,12 @@ body.nav-compact .navbar .work-mode-icon {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    touch-action: pan-x;
+    /* Allow BOTH axes: horizontal pans scroll the carousel (native
+       overflow-x), vertical pans fall through to the page. The
+       previous `pan-x` value told the browser to drop vertical pans
+       entirely, which trapped the user on the card and prevented
+       scrolling down the page when their finger landed on it. */
+    touch-action: pan-x pan-y;
     -webkit-user-select: none;
     user-select: none;
     padding: 8px 1rem;
@@ -14216,14 +14221,14 @@ body.nav-compact .navbar .work-mode-icon {
   }
 
   .feature-carousel-track {
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
     transition: none;
     transform: none !important;
   }
 
   .feature-card {
     scroll-snap-align: start;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
     -webkit-touch-callout: none;
   }
 

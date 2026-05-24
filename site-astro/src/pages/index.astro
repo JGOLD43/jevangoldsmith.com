@@ -47,7 +47,12 @@ const latestChallenge: any = challengesAll.map((c: any) => c.data).filter((c: an
 const featureCards: FeatureCard[] = [];
 if (latestAdventure) {
   featureCards.push({
-    href: `/adventure-${latestAdventure.id}.html`,
+    // Route through the polished /adventures overlay rather than the
+    // standalone /adventure-<slug>.html legacy page — the two render
+    // very differently and clicking from the homepage carousel should
+    // land users in the same view as clicking from the trips list /
+    // map. adventures.ts reads ?trip= and opens the overlay on load.
+    href: `/adventures.html?trip=${latestAdventure.id}`,
     image: remoteAssetFor(latestAdventure.heroImage) || '/images/generated/remote/bedf9633d8221e-800.jpg',
     kicker: 'Adventure',
     title: latestAdventure.title,

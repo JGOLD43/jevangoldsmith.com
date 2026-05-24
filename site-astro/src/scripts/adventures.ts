@@ -605,6 +605,19 @@ export function initAdventuresPage() {
         setTimeout(placeNowMarkerAndFocus, 1500);
     }
 
+    // Auto-open a specific trip when arrived via ?trip=<id>. The home
+    // page carousel links here that way so the user sees the polished
+    // in-page overlay instead of the legacy /adventure-<id>.html page.
+    const tripParam = new URLSearchParams(window.location.search).get('trip');
+    if (tripParam) {
+        const tryOpen = (retries: number) => {
+            const list = state.allAdventures as AdventureRecord[] | undefined;
+            if (list && list.length > 0) { selectAdventure(tripParam); return; }
+            if (retries > 0) setTimeout(() => tryOpen(retries - 1), 120);
+        };
+        tryOpen(20);
+    }
+
     const key = 'adventures-sidebar-collapsed';
     const split = document.querySelector('.adventures-page-split');
     const button = document.getElementById('adventures-sidebar-toggle');
