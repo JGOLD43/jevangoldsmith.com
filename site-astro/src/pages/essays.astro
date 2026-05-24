@@ -144,7 +144,6 @@ const config = ({
         <article class="article-full" id={firstEssay.id as string}>
           <div class="post-meta">
             <span class="post-date">{formatDate(firstEssay.date as string)}</span>
-            <span class="post-category">{firstEssay.category as string || ''}</span>
           </div>
           <h2>{firstEssay.title as string || ''}</h2>
           <p hidden={!firstEssay.subtitle}><em>{firstEssay.subtitle as string || ''}</em></p>
@@ -506,13 +505,10 @@ const config = ({
     .essays-main { padding: 1rem; }
     .essays-cards { padding: 0.5rem 0 3rem; max-width: none; }
     .essay-section-title { padding: 0; }
-    .essay-row-link { padding-left: 0; padding-right: 0; }
-    .essay-row-link:hover,
-    .essay-row-link:focus-visible {
-      /* Background hover would otherwise extend past the text edge
-         and look untidy against the now-edge-to-edge layout. */
-      background: transparent;
-    }
+    /* Negative margin offsets the inner padding so the row text still
+       aligns with the section title, but the hover pill extends outside
+       the text edge — gives breathing room between text and box edge. */
+    .essay-row-link { padding-left: 0.6rem; padding-right: 0.6rem; margin-left: -0.6rem; margin-right: -0.6rem; }
   }
   @media (max-width: 640px) {
     .essay-section { margin-bottom: 2.25rem; }
@@ -527,6 +523,50 @@ const config = ({
   .essays-main[data-view="cards"] .field-notes-inline-cta {
     display: none;
   }
+
+  /* When an essay is open (reader view), strip the surrounding collection
+     chrome — title block ("Essays / My Writing Philosophy / N Total"),
+     the browse sidebar, and the newsletter CTA — so the essay reads like
+     its own standalone page. The "All essays" back link stays as the
+     way home. */
+  .essays-main[data-view="reader"] .main-header.collection-header,
+  .essays-main[data-view="reader"] .field-notes-inline-cta {
+    display: none !important;
+  }
+  /* Collapse the sidebar column entirely in reader view by collapsing the
+     grid template. The sidebar lives outside .essays-main, so target it
+     from the layout wrapper. */
+  .essays-layout:has(.essays-main[data-view="reader"]) .essays-sidebar {
+    display: none;
+  }
+  .essays-layout:has(.essays-main[data-view="reader"]) {
+    grid-template-columns: 1fr !important;
+  }
+  /* Widen the article column so it reads like a standalone post. */
+  .essays-main[data-view="reader"] {
+    max-width: 760px;
+    margin-inline: auto;
+  }
+  /* Tighten the gap between the "All essays" back link and the article. */
+  .essays-main[data-view="reader"] .essay-back-to-list { margin-bottom: 0.25rem; }
+  .essays-main[data-view="reader"] #essays-container.content-section { padding-top: 0; }
+  /* Strip the card chrome on the article so it reads as a standalone
+     post. Reorder children via flexbox order so the date sits between
+     the title and the subtitle. */
+  .essays-main[data-view="reader"] .article-full {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0 0 2rem;
+  }
+  .essays-main[data-view="reader"] .article-full > h2 { order: 1; margin-top: 0; margin-bottom: 0.35rem; }
+  .essays-main[data-view="reader"] .article-full > .post-meta { order: 2; margin: 0 0 0.5rem; }
+  .essays-main[data-view="reader"] .article-full > p:has(em) { order: 3; }
+  .essays-main[data-view="reader"] .article-full > [data-essay-content] { order: 4; }
+  .essays-main[data-view="reader"] .article-full > .essay-nav { order: 5; }
 
   /* Hide the mobile List/Grid view toggle on essays — only one view exists. */
   .essays-layout > .collection-mobile-toggle { display: none !important; }
