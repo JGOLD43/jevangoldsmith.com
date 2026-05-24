@@ -69,17 +69,22 @@ const essaySections = ESSAY_SECTIONS.map((section) => {
   };
 });
 
-const essayRows = orderedCategories.flatMap((cat) => {
+// Build the data the cards-view and category-grid-view consume up
+// front — Astro/JSX parses the actual template easier when each map
+// callback returns plain values, no inline type casts.
+const categoryCards = orderedCategories.map((cat) => {
   const slug = categorySlugOf(cat);
-  return (byCategory.get(cat) || []).map((essay) => {
-    const id = essay.id as string;
-    return {
-      id,
-      slug,
-      title: essay.title as string || '',
-      subtitle: subtitleFor(essay)
-    };
-  });
+  const list = byCategory.get(cat) || [];
+  const sample = list.slice(0, 4).map((e) => ({
+    title: (e.title as string) || ''
+  }));
+  return {
+    cat,
+    slug,
+    count: list.length,
+    sample,
+    emptySlots: Math.max(0, 4 - sample.length)
+  };
 });
 
 // after-main.html (field-notes inline CTA + seo-related) is added by the
@@ -124,14 +129,10 @@ const config = ({
   canonical={canonical}
 >
   <Fragment slot="counter-extra">
-    <div class="view-toggle main-view-toggle">
-      <button class="view-toggle-btn active" id="list-view-btn-main" data-action="set-view-mode" data-mode="list" title="List view">
-        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
-      </button>
-      <button class="view-toggle-btn" id="grid-view-btn-main" data-action="set-view-mode" data-mode="grid" title="Grid view">
-        <svg class="ico-stroke" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
-      </button>
-    </div>
+    <button class="view-toggle-single" id="essays-view-toggle" data-action="toggleEssayCardsView" data-current-mode="list" aria-label="Switch to category grid view" title="Switch to category grid view">
+      <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
+      <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-gridView"></use></svg>
+    </button>
   </Fragment>
   <button type="button" class="essay-back-to-list" data-action="setEssayView" data-action-args="cards" data-view="reader">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -188,19 +189,52 @@ const config = ({
     </a>
   </template>
   <div id="essays-cards" class="essays-cards essays-view-cards" data-view="cards">
-    <section class="essay-section" data-category="writing">
-      <h3 class="essay-section-title">Writing</h3>
-      <ul class="essay-list">
-        {essayRows.map((essay) => (
-          <li class="essay-row" data-essay-id={essay.id} data-category={essay.slug}>
-            <a href={`#${essay.id}`} class="essay-row-link" data-action="openEssayFromCard" data-action-args={essay.id} data-action-eventobj="true">
-              <span class="essay-row-title">{essay.title}</span>
-              <span class="essay-row-subtitle">{essay.subtitle}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </section>
+    {orderedCategories.map((cat) => {
+      const slug = categorySlugOf(cat);
+      const rows = (byCategory.get(cat) || []).map((e) => ({
+        id: e.id as string,
+        title: e.title as string || '',
+        subtitle: subtitleFor(e)
+      }));
+      return (
+        <section class="essay-section" data-category={slug}>
+          <h3 class="essay-section-title">{cat}</h3>
+          <ul class="essay-list">
+            {rows.map((essay) => (
+              <li class="essay-row" data-essay-id={essay.id} data-category={slug}>
+                <a href={`#${essay.id}`} class="essay-row-link" data-action="openEssayFromCard" data-action-args={essay.id} data-action-eventobj="true">
+                  <span class="essay-row-title">{essay.title}</span>
+                  <span class="essay-row-subtitle">{essay.subtitle}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })}
+  </div>
+  {/* Category-folder grid view — one card per category, click to filter
+      the cards list down to that category. Toggled in by
+      #essays-view-toggle. */}
+  <div id="essays-category-grid-view" class="essays-category-grid-view" hidden>
+    <div class="essays-category-grid">
+      {categoryCards.map((card) => (
+        <button class="essays-category-card" type="button" data-action="filterEssaysByCategory" data-action-args={card.slug}>
+          <div class="essays-category-previews">
+            {card.sample.map((s) => (
+              <div class="essays-category-preview">
+                <div class="essays-category-preview-title">{s.title}</div>
+              </div>
+            ))}
+            {Array.from({ length: card.emptySlots }).map(() => <div class="essays-category-preview empty"></div>)}
+          </div>
+          <div class="essays-category-info">
+            <span class="essays-category-name">{card.cat}</span>
+            <span class="essays-category-count">{card.count}</span>
+          </div>
+        </button>
+      ))}
+    </div>
   </div>
   <section class="field-notes-inline-cta" data-field-notes-inline>
     <p class="archive-kicker">Field Notes</p>
@@ -211,6 +245,156 @@ const config = ({
 </CollectionPage>
 
 <InlineJson id="jg-essays-data" data={essaysData} />
+
+<style is:inline>
+  /* Smooth open transitions for essay reader (emilkowal.ski-style:
+     fade + tiny rise instead of a hard hide/show swap). */
+  .essays-view-reader,
+  .essays-view-cards {
+    transition: opacity 220ms cubic-bezier(.22, 1, .36, 1),
+                transform 220ms cubic-bezier(.22, 1, .36, 1);
+  }
+  .essays-view-reader[hidden],
+  .essays-view-cards[hidden] {
+    display: block !important;
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .essays-view-reader:not([hidden]),
+  .essays-view-cards:not([hidden]) {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Category-folder grid view — one card per category, mirroring the
+     books/movies folder view but with text previews instead of covers. */
+  .essays-category-grid-view { padding: 1rem 0; }
+  .essays-category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .essays-category-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-color);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+    font: inherit;
+  }
+  .essays-category-card:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: var(--text-light);
+    transform: translateY(-2px);
+  }
+  [data-theme="dark"] .essays-category-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .essays-category-previews {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+  .essays-category-preview {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  [data-theme="dark"] .essays-category-preview {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .essays-category-preview.empty { background: transparent; }
+  .essays-category-preview-title {
+    font-size: 0.7rem;
+    line-height: 1.25;
+    font-weight: 500;
+    color: var(--text-color);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+  }
+  .essays-category-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 0.25rem;
+  }
+  .essays-category-name {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .essays-category-count {
+    font-family: Chivo, sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--text-light);
+  }
+</style>
+
+<script>
+  // Toggle button + category-filter handlers. Mounts after essays.ts
+  // has already set up the runtime registry; we just wire two new
+  // actions: toggleEssayCardsView (swap the cards/list view with the
+  // category-folder grid view) and filterEssaysByCategory (click a
+  // category card → show only that category in the cards view).
+  document.addEventListener('click', (event) => {
+    const target = event.target as Element | null;
+    if (!target) return;
+
+    const toggle = target.closest?.('[data-action="toggleEssayCardsView"]') as HTMLElement | null;
+    if (toggle) {
+      event.preventDefault();
+      const cards = document.getElementById('essays-cards');
+      const grid = document.getElementById('essays-category-grid-view');
+      if (!cards || !grid) return;
+      const showingGrid = !grid.hidden;
+      grid.hidden = showingGrid;
+      cards.hidden = !showingGrid;
+      const nextLabel = showingGrid ? 'Switch to category grid view' : 'Switch to list view';
+      toggle.dataset.currentMode = showingGrid ? 'list' : 'grid';
+      toggle.setAttribute('aria-label', nextLabel);
+      toggle.setAttribute('title', nextLabel);
+      return;
+    }
+
+    const filterBtn = target.closest?.('[data-action="filterEssaysByCategory"]') as HTMLElement | null;
+    if (filterBtn) {
+      event.preventDefault();
+      const slug = (filterBtn.getAttribute('data-action-args') || '').toLowerCase();
+      const cards = document.getElementById('essays-cards');
+      const grid = document.getElementById('essays-category-grid-view');
+      if (!cards || !grid) return;
+      // Show only the matching section.
+      cards.querySelectorAll<HTMLElement>('.essay-section').forEach((sec) => {
+        sec.style.display = sec.dataset.category === slug ? '' : 'none';
+      });
+      // Swap to cards view.
+      grid.hidden = true;
+      cards.hidden = false;
+      const toggle = document.getElementById('essays-view-toggle');
+      if (toggle) {
+        toggle.dataset.currentMode = 'list';
+        toggle.setAttribute('aria-label', 'Switch to category grid view');
+      }
+      cards.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+</script>
 
 <script>
   import '../scripts/essays.ts';
