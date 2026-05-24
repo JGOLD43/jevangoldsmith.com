@@ -360,7 +360,17 @@ const config = ({
       event.preventDefault();
       const cards = document.getElementById('essays-cards');
       const grid = document.getElementById('essays-category-grid-view');
+      const reader = document.getElementById('essays-container');
+      const main = document.querySelector('.essays-main') as HTMLElement | null;
       if (!cards || !grid) return;
+      // If the reader is currently open, the toggle should first take the
+      // user back to the cards/list view (matching the "All essays" back
+      // link's job), then proceed with the grid/list toggle.
+      if (reader && !reader.hidden) {
+        reader.hidden = true;
+        cards.hidden = false;
+        if (main) main.setAttribute('data-view', 'cards');
+      }
       const showingGrid = !grid.hidden;
       grid.hidden = showingGrid;
       cards.hidden = !showingGrid;
@@ -373,6 +383,17 @@ const config = ({
       toggle.dataset.currentMode = showingGrid ? 'list' : 'grid';
       toggle.setAttribute('aria-label', nextLabel);
       toggle.setAttribute('title', nextLabel);
+      // Reset scroll to the very top of the document. Scrolling to the
+      // top of .essays-main with offsets was unreliable on mobile (iOS
+      // Safari ignored scroll-margin-top on the smooth path, and an
+      // explicit offset still left the first row partially behind the
+      // navbar in some viewports). The collection header lives at the
+      // top of the page in normal flow, so a hard scroll-to-0 puts the
+      // navbar above the header above the cards — the natural reading
+      // order. rAF defers until the post-toggle layout settles.
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      });
       return;
     }
 
@@ -547,6 +568,11 @@ const config = ({
     max-width: 760px;
     margin-inline: auto;
   }
+  /* scrollIntoView({block:'start'}) on .essays-main puts the wrapper at
+     viewport top, but the sticky navbar covers the first ~64px — so the
+     back link + title disappear under it. scroll-margin-top makes
+     scrollIntoView leave that gap clear. */
+  .essays-main { scroll-margin-top: 72px; }
   /* Tighten the gap between the "All essays" back link and the article. */
   .essays-main[data-view="reader"] .essay-back-to-list { margin-bottom: 0.25rem; }
   .essays-main[data-view="reader"] #essays-container.content-section { padding-top: 0; }
@@ -567,6 +593,70 @@ const config = ({
   .essays-main[data-view="reader"] .article-full > p:has(em) { order: 3; }
   .essays-main[data-view="reader"] .article-full > [data-essay-content] { order: 4; }
   .essays-main[data-view="reader"] .article-full > .essay-nav { order: 5; }
+
+  /* Cleaner Prev / Next paginator. The default card-style buttons look
+     dated next to the stripped-down reader. Override to a minimal
+     chevron + label + title layout, no borders or boxes. */
+  .essays-main[data-view="reader"] .essay-nav {
+    margin: 3rem 0 1rem;
+    padding-top: 1.5rem;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .essays-main[data-view="reader"] .essay-nav-btn {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0.25rem 0;
+    box-shadow: none;
+    gap: 0.5rem;
+    transition: opacity .18s ease;
+  }
+  .essays-main[data-view="reader"] .essay-nav-btn:hover:not(:disabled) {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
+  }
+  .essays-main[data-view="reader"] .essay-nav-direction {
+    font-size: 0.68rem;
+    letter-spacing: 1.4px;
+    opacity: 0.7;
+  }
+  .essays-main[data-view="reader"] .essay-nav-btn:hover:not(:disabled) .essay-nav-direction {
+    color: var(--text-light);
+    opacity: 1;
+  }
+  .essays-main[data-view="reader"] .essay-nav-title {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-color);
+    opacity: 0.85;
+    transition: opacity .18s ease;
+  }
+  .essays-main[data-view="reader"] .essay-nav-btn:hover:not(:disabled) .essay-nav-title {
+    opacity: 1;
+    text-decoration: none;
+  }
+  .essays-main[data-view="reader"] .essay-nav-btn svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0.6;
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .essays-main[data-view="reader"] .essay-nav-btn:hover:not(:disabled) svg { opacity: 1; }
+  .essays-main[data-view="reader"] .essay-nav-counter {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    opacity: 0.55;
+  }
+  /* Disabled previous on first essay reads as ghosted, not as a clickable card. */
+  .essays-main[data-view="reader"] .essay-nav-btn:disabled { opacity: 0.25; }
+  @media (max-width: 640px) {
+    .essays-main[data-view="reader"] .essay-nav { gap: 0.75rem; padding-top: 1.25rem; margin-top: 2rem; }
+    .essays-main[data-view="reader"] .essay-nav-counter { order: -1; flex-basis: 100%; text-align: center; }
+    .essays-main[data-view="reader"] .essay-nav-title { font-size: 0.88rem; }
+  }
 
   /* Hide the mobile List/Grid view toggle on essays — only one view exists. */
   .essays-layout > .collection-mobile-toggle { display: none !important; }
