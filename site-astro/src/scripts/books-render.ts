@@ -134,10 +134,11 @@ function attachCarouselDrag(track: HTMLElement) {
         startX = event.clientX;
         startOffset = currentTranslateX();
         armed = false;
-        // Freeze at current position immediately.
-        track.style.transform = `translateX(${startOffset}px)`;
-        track.style.animationPlayState = 'paused';
-        track.setPointerCapture(event.pointerId);
+        // Do NOT freeze the track or capture the pointer here. Capturing
+        // on pointerdown causes mobile browsers to redirect the eventual
+        // `click` event to the track element instead of the anchor under
+        // the finger, so taps on a cover swallow navigation. Wait until
+        // the user actually crosses the drag threshold.
     }
 
     function onPointerMove(event: PointerEvent) {
@@ -147,6 +148,11 @@ function attachCarouselDrag(track: HTMLElement) {
             if (Math.abs(dx) < DRAG_THRESHOLD) return;
             armed = true;
             track.classList.add('is-dragging');
+            // Now that we've confirmed a drag (not a tap), freeze the
+            // animation and capture so subsequent moves track this pointer.
+            track.style.transform = `translateX(${startOffset}px)`;
+            track.style.animationPlayState = 'paused';
+            try { track.setPointerCapture(event.pointerId); } catch {}
         }
         let next = startOffset + dx;
         // Constrain to one loop's worth so we don't drift off the cloned set.
@@ -166,11 +172,14 @@ function attachCarouselDrag(track: HTMLElement) {
         armed = false;
         track.classList.remove('is-dragging');
         if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId);
-        const finalOffset = currentTranslateX();
-        resumeAt(finalOffset);
-        track.style.animationPlayState = '';
-        // Swallow the click that fires after a real drag so we don't follow the link.
+        // Only resume / unfreeze if we actually dragged. A tap never
+        // paused the animation, so leave it alone — touching the styles
+        // can perturb the click delivery on mobile.
         if (wasDragging) {
+            const finalOffset = currentTranslateX();
+            resumeAt(finalOffset);
+            track.style.animationPlayState = '';
+            // Swallow the click that fires after a real drag so we don't follow the link.
             const swallow = (ev: Event) => { ev.preventDefault(); ev.stopPropagation(); };
             track.addEventListener('click', swallow, { capture: true, once: true });
         }

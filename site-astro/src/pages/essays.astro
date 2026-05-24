@@ -365,6 +365,11 @@ const config = ({
       const showingGrid = !grid.hidden;
       grid.hidden = showingGrid;
       cards.hidden = !showingGrid;
+      // Always reset any prior per-section display:none from a filter
+      // click so toggling back to the cards view shows ALL essays.
+      cards.querySelectorAll<HTMLElement>('.essay-section').forEach((sec) => {
+        sec.style.display = '';
+      });
       const nextLabel = showingGrid ? 'Switch to category grid view' : 'Switch to list view';
       toggle.dataset.currentMode = showingGrid ? 'list' : 'grid';
       toggle.setAttribute('aria-label', nextLabel);
