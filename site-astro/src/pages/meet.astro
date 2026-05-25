@@ -12,16 +12,13 @@ import Base from '../layouts/Base.astro';
     <a href="/index.html" class="meet-logo">
         <picture><source type="image/avif" srcset="/images/generated/logo/logo-nav-88.avif 88w, /images/generated/logo/logo-nav-176.avif 176w, /images/generated/logo/logo-nav-264.avif 264w, /images/generated/logo/logo-nav-352.avif 352w" sizes="88px"><img src="/images/generated/logo/logo-nav-352.png" alt="J.GOLD" height="50" srcset="/images/generated/logo/logo-nav-88.png 88w, /images/generated/logo/logo-nav-176.png 176w, /images/generated/logo/logo-nav-264.png 264w, /images/generated/logo/logo-nav-352.png 352w" sizes="88px" loading="lazy" decoding="async" width="88"></picture>
     </a>
+    <h1 class="meet-header-title">Let's Chat</h1>
     <a href="/index.html" class="meet-close" aria-label="Close">
         <svg class="ico-stroke" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-close"/></svg>
     </a>
 </header>
 <main class="meet-main">
     <div class="meet-container">
-        <div class="meet-content-header">
-            <h1>Let's Chat</h1>
-            <p>Whether it's a coffee chat, business idea, or just to say hi — I'd love to hear from you.</p>
-        </div>
         <form class="meet-form" action="mailto:hello@jevangoldsmith.com" method="get" enctype="text/plain">
             <p class="meet-form-note">Takes less than a minute</p>
             <div class="meet-form-group">
@@ -64,3 +61,25 @@ import Base from '../layouts/Base.astro';
     </div>
 </main>
 </Base>
+
+<style is:inline>
+  /* Tighter top spacing — header sits closer to viewport top, and the
+     gap between the logo/close row and "Let's Chat" is reduced so the
+     whole composition reads as a single block instead of a logo
+     floating above an unrelated headline. */
+  .meet-header,
+  .meet-page .meet-header {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 1.25rem) !important;
+    padding-bottom: 0.25rem !important;
+  }
+  .meet-main {
+    padding-top: 0.5rem !important;
+    align-items: flex-start !important;
+  }
+  .meet-content-header {
+    margin-bottom: 1.25rem !important;
+  }
+  .meet-content-header h1 {
+    margin-bottom: 0 !important;
+  }
+</style>

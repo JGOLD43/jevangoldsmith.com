@@ -321,22 +321,31 @@ if (latestChallenge) {
     box-shadow: none !important;
   }
   .newsletter-cta-form.newsletter-cta-form--inline .newsletter-cta-input::placeholder { color: var(--text-light); opacity: 0.7; }
+  /* Match the navbar "Follow" button: gold pill with a black border
+     and black text. Hover inverts to black background with gold text
+     so the affordance pattern reads the same across the site. */
   .newsletter-cta-form.newsletter-cta-form--inline .newsletter-cta-button {
     flex: 0 0 auto !important;
     width: auto !important;
-    background: var(--text-color) !important;
-    color: var(--background) !important;
-    border: none !important;
+    background: gold !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
     border-radius: 999px !important;
-    padding: 0.6rem 1.25rem !important;
+    padding: 0.55rem 1.25rem !important;
     font-size: 0.9rem !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
     font-family: inherit;
     cursor: pointer;
-    transition: opacity .15s ease, transform .15s ease;
+    transition: background .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease;
     margin: 0 !important;
   }
-  .newsletter-cta-form--inline .newsletter-cta-button:hover { opacity: 0.88; }
+  .newsletter-cta-form--inline .newsletter-cta-button:hover {
+    background: #000 !important;
+    color: gold !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px #0003;
+  }
   @media (max-width: 480px) {
     .newsletter-cta-form--inline { padding-left: 14px; }
     .newsletter-cta-form--inline .newsletter-cta-button { padding: 0.55rem 1rem; font-size: 0.85rem; }
