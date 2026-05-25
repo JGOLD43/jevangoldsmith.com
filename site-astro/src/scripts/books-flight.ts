@@ -223,6 +223,49 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             // already-faded backdrop.
             hiddenSidebars.forEach((el) => { el.style.display = 'none'; });
             document.title = doc.title;
+
+            // Re-target the in-flight animation toward the REAL hero
+            // position now that the SPA-injected detail main is laid
+            // out. Previously the flight aimed at a hardcoded
+            // HERO_OFFSET_TOP guess that was often a few pixels off,
+            // which read as a "jump" when handoff() snap-corrected at
+            // the end. Now we measure the actual hero rect after a
+            // double-rAF (so layout has settled), compute the correct
+            // destination transform, and replace the in-flight
+            // keyframes mid-animation. The clone glides toward the
+            // real destination — no end-of-flight snap.
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (!newHeroImg || !newHeroImg.isConnected) return;
+                    const realRect = newHeroImg.getBoundingClientRect();
+                    if (!realRect.width || !realRect.height) return;
+                    // Recompute destination using the measured rect.
+                    // srcRenderLeft/Top/W are the clone's start frame in
+                    // viewport coords. The animation start keyframe is
+                    // translate(0,0) scale(1) relative to that start
+                    // frame, so the corrected end transform is the
+                    // delta from the source rect to the real hero rect.
+                    const realScale = realRect.width / srcRenderW;
+                    const realTx = realRect.left - srcRenderLeft;
+                    const realTy = realRect.top - srcRenderTop;
+                    try {
+                        // setKeyframes lives on KeyframeEffect, not the
+                        // base AnimationEffect. Cast through unknown so
+                        // TS is happy on browsers/older lib versions
+                        // that haven't typed it on the base.
+                        const effect = animation.effect as unknown as KeyframeEffect | null;
+                        effect?.setKeyframes([
+                            { transform: 'translate(0px, 0px) scale(1)' },
+                            { transform: `translate(${realTx}px, ${realTy}px) scale(${realScale})` }
+                        ]);
+                    } catch (_err) {
+                        // If setKeyframes isn't supported, fall back to
+                        // the original animation; handoff() will still
+                        // snap-correct at the end. No visible regression
+                        // vs. the previous behaviour.
+                    }
+                });
+            });
             // Synchronous swap that yanks the SPA-injected detail main
             // back out and restores the listing exactly as it was. Used
             // by the reverse flight after measuring, and as the fallback

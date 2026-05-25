@@ -206,13 +206,13 @@ const config = ({
      same on both pages. Fading the navbar would flicker between two
      identical navbars. The flight clone is appended to <body> with
      z-index 99999, so it stays visible above the fade. */
-  /* Listing fade-out matches the cover-flight duration (340ms) and
+  /* Listing fade-out matches the cover-flight duration (240ms) and
      easing exactly, so the two motions resolve as one coordinated
      transition. */
   body.is-book-launching .books-main,
   body.is-book-launching .books-sidebar {
     opacity: 0;
-    transition: opacity .34s cubic-bezier(.25, .8, .25, 1);
+    transition: opacity .24s cubic-bezier(.25, .8, .25, 1);
     pointer-events: none;
   }
 
