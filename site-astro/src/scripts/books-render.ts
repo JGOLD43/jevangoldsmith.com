@@ -26,9 +26,32 @@ export function renderSidebar(categories: Record<string, AnyObj[]>) {
     if (ssrAlreadyRendered) return;
 
     const countAll = document.getElementById('count-all');
-    if (countAll) {
-        const total = (Object.values(categories) as AnyObj[][]).reduce((sum: number, books) => sum + books.length, 0);
-        countAll.textContent = String(total);
+    const allList: AnyObj[] = (Object.values(categories) as AnyObj[][]).reduce((acc: AnyObj[], list) => acc.concat(list), []);
+    if (countAll) countAll.textContent = String(allList.length);
+    // Render the All Books drop-down (#category-all) with every book in
+    // the collection, sorted by title for browsability. Same row markup
+    // as per-category panels so styling stays consistent.
+    const allContainer = document.getElementById('category-all');
+    if (allContainer && allContainer.children.length === 0) {
+        const sorted = [...allList].sort((a, b) =>
+            String(a.title || '').localeCompare(String(b.title || ''))
+        );
+        allContainer.innerHTML = sorted.map((book: AnyObj) => {
+            const cover = getCoverUrl(book, 'medium');
+            const coverImg = cover
+                ? `<img class="book-link-cover" src="${escapeAttr(cover)}" alt="" loading="lazy" decoding="async" data-remove-on-error="true">`
+                : '<span class="book-link-cover book-link-cover-fallback" aria-hidden="true"></span>';
+            const slug = book.isbn || slugify(`${book.title}-${book.author}`);
+            const href = slug ? `/books/${slug}.html` : '#';
+            return `
+            <a href="${escapeAttr(href)}" class="book-link" data-book-title="${escapeAttr(book.title)}">
+                ${coverImg}
+                <span class="book-link-meta">
+                    <span class="book-link-title">${escapeHtml(book.title)}</span>
+                    <span class="book-link-author">${escapeHtml(book.author)}</span>
+                </span>
+            </a>`;
+        }).join('');
     }
     Object.keys(categories).forEach((categoryKey) => {
         const books = categories[categoryKey];

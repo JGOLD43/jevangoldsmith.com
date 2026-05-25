@@ -108,7 +108,10 @@ function buildCollectionController() {
         group: {
             allButtonSelector: '.sidebar-category[data-category="all"]',
             buttonSelector: '.sidebar-category',
-            panelForValue: (category: string) => category === 'all' ? null : document.getElementById(`category-${category}`),
+            // Return the all-panel for value='all' too so clicking
+            // "All Books" expands a dropdown of the full library
+            // (matching the per-category expand behaviour).
+            panelForValue: (category: string) => document.getElementById(`category-${category}`),
             panelSelector: '.category-books'
         },
         searchClearButtonId: 'search-clear-btn',
