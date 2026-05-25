@@ -184,6 +184,11 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
           <button class="filter-pill" data-region="americas" data-action="toggleFilter" data-action-args="" data-action-this="true">Americas <span id="count-americas"></span></button>
         </div>
 
+        {/* Sidebar trip list. Only the first 2 thumbs eager-load (above
+            the fold on mobile) — the rest are native-lazy so the
+            browser fetches them just-in-time as the user scrolls.
+            Saves ~1.2 MB of initial image transfer on /adventures
+            without any perceived speed regression. */}
         <div class="adventures-compact-list" id="adventures-container">
           {adventures.map((a: any, i: number) => (
             <div class="adventure-compact-card" id={`card-${a.id}`} data-adventure-id={a.id}>
@@ -194,13 +199,6 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
                   class="adventure-compact-image"
                   width="80"
                   height="80"
-                  /* Only eager-load the first 2 sidebar thumbs (the
-                     ones the user sees above the fold). The rest are
-                     below the viewport and rendered as native lazy
-                     images — the browser pre-fetches them well before
-                     the user scrolls into view, so this is invisible
-                     to the user but cuts ~1.2 MB off initial transfer
-                     on /adventures. */
                   loading={i < 2 ? 'eager' : 'lazy'}
                   decoding="async"
                   fetchpriority={i === 0 ? 'high' : undefined}
