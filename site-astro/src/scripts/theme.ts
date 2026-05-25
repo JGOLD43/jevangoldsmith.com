@@ -358,11 +358,42 @@ async function initDeferredChrome() {
     }
 }
 
+// Hook every `.view-toggle-single` (grid/list switch on books, movies,
+// essays, projects, etc.) so it shows a "Switched to …" toast just like
+// the theme + work-mode toggles. Page-specific click handlers update the
+// button's `data-current-mode` attribute when they swap views — a
+// MutationObserver picks that up and we briefly flash the matching
+// label. Centralising it in theme.ts keeps every collection page
+// behaviour consistent without per-page edits.
+function initViewToggleToast() {
+    const toggles = document.querySelectorAll<HTMLElement>('.view-toggle-single');
+    if (toggles.length === 0) return;
+    toggles.forEach((btn) => {
+        attachHoverTip(btn);
+        const observer = new MutationObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.attributeName !== 'data-current-mode') continue;
+                const next = btn.getAttribute('data-current-mode') || '';
+                const label = next === 'list' ? 'Switched to list' : 'Switched to collections';
+                flashToast(btn, label);
+            }
+        });
+        observer.observe(btn, { attributes: true, attributeFilter: ['data-current-mode'] });
+        // Stamp an initial tooltip so the hover-tip CSS has something to
+        // render. Page-specific code can override `title=` / `aria-label`,
+        // but `data-tooltip` is read by the shared toast CSS.
+        if (!btn.getAttribute('data-tooltip')) {
+            btn.setAttribute('data-tooltip', 'Toggle list / collections view');
+        }
+    });
+}
+
 function bootChrome() {
     initTheme();
     initWorkModeToggle();
     initMobileNav();
     initNavHeight();
+    initViewToggleToast();
     runWhenIdle(initDeferredChrome);
 }
 

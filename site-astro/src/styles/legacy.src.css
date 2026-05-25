@@ -14273,11 +14273,11 @@ body.nav-compact .navbar .work-mode-icon {
   color: var(--accent-color);
 }
 
-.work-mode-toggle, .theme-toggle {
+.work-mode-toggle, .theme-toggle, .view-toggle-single {
   position: relative;
 }
 
-.work-mode-toggle:after, .theme-toggle:after {
+.work-mode-toggle:after, .theme-toggle:after, .view-toggle-single:after {
   content: attr(data-tooltip);
   color: #fff;
   white-space: nowrap;
@@ -14295,7 +14295,9 @@ body.nav-compact .navbar .work-mode-icon {
   transform: translateX(-50%);
 }
 
-.work-mode-toggle:not(.show-hover-tip):not(.show-toast):after, .theme-toggle:not(.show-hover-tip):not(.show-toast):after {
+.work-mode-toggle:not(.show-hover-tip):not(.show-toast):after,
+.theme-toggle:not(.show-hover-tip):not(.show-toast):after,
+.view-toggle-single:not(.show-hover-tip):not(.show-toast):after {
   transition: none;
 }
 
@@ -14307,16 +14309,31 @@ body.nav-compact .navbar .work-mode-icon {
   content: attr(data-tooltip-explore);
 }
 
-.work-mode-toggle.show-hover-tip:after, .theme-toggle.show-hover-tip:after {
+.work-mode-toggle.show-hover-tip:after,
+.theme-toggle.show-hover-tip:after,
+.view-toggle-single.show-hover-tip:after {
   opacity: 1;
 }
 
-.work-mode-toggle.show-toast:after, .theme-toggle.show-toast:after {
+.work-mode-toggle.show-toast:after,
+.theme-toggle.show-toast:after,
+.view-toggle-single.show-toast:after {
   content: attr(data-toast);
   opacity: 1;
 }
 
-[data-theme="dark"] .work-mode-toggle:after, [data-theme="dark"] .theme-toggle:after {
+/* The view-toggle button sits at the far right edge of the header on
+   mobile; anchoring the toast at the button's horizontal centre would
+   push half of it off-screen. Pin the right edge to the button instead. */
+.view-toggle-single:after {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+[data-theme="dark"] .work-mode-toggle:after,
+[data-theme="dark"] .theme-toggle:after,
+[data-theme="dark"] .view-toggle-single:after {
   color: #111;
   background: #fff;
 }

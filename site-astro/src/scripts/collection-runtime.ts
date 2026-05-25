@@ -299,7 +299,24 @@ export function createCollectionRuntime(config: CollectionRuntimeConfig) {
         if (cfg.group.panelSelector) {
             const resolvedPanel = panel || cfg.group.panelForValue?.(value) || null;
             const isExpanded = Boolean(resolvedPanel?.classList.contains('expanded'));
-            if (value === 'all' || isExpanded) {
+            // Special case: the "all" button. Historically clicking it
+            // simply reset the active filter and collapsed every panel.
+            // If the collection now exposes an `category-all` (or
+            // equivalent) panel containing the full item list, we
+            // ALSO toggle that panel — so tapping All Books shows a
+            // drop-down of every book, the same way tapping a category
+            // shows the books in it. Collections without an all-panel
+            // (panelForValue returns null) keep the previous behaviour.
+            if (value === 'all') {
+                onCollapse?.();
+                if (isExpanded || !resolvedPanel || !button) {
+                    resetGrouping();
+                    return render();
+                }
+                activateGrouping(button, resolvedPanel);
+                return render();
+            }
+            if (isExpanded) {
                 onCollapse?.();
                 resetGrouping();
                 return render();

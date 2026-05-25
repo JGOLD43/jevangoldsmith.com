@@ -67,7 +67,11 @@ export const MOVIE_SECTIONS: SectionItem[] = [
 ];
 
 export const BOOK_SECTIONS: SectionItem[] = [
-  buildAll(presets.book.all, { 'data-category': 'all' }),
+  // The "All Books" entry now exposes a panel (#category-all) so the
+  // sidebar can drop down every book in the collection — matching the
+  // per-category expand behaviour the user expects from the same UI.
+  // books.ts populates it at runtime from the books.generated.json fetch.
+  { ...buildAll(presets.book.all, { 'data-category': 'all' }), panelId: 'category-all', panelClass: 'category-books' } as SectionItem,
   ...presets.book.categories.map(([label, key, iconKey, tooltip]) => categorySection({
     label, key, iconKey, tooltip,
     attrs: { 'data-category': key },
