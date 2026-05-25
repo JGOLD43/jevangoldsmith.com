@@ -126,26 +126,17 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     const tx = destLeft - srcRenderLeft;
     const ty = destTop - srcRenderTop;
 
-    // Forward flight (open): mirror of the reverse-close smoothing.
-    //   - 480ms — long enough to read as a deliberate transition,
-    //     short enough that the open feels snappier than the close
-    //     (520ms). Open should always feel a hair faster than close.
-    //   - cubic-bezier(.25, .8, .25, 1): same wider standard ease-out
-    //     used on the reverse, so opens and closes share an animation
-    //     "voice". Steady deceleration, no late snap.
-    //   - Three keyframes: position+scale tween 0 → 0.85, then HOLD
-    //     position+scale and fade opacity 1 → 0 over the last 15%.
-    //     The clone "lands" then dissolves into the SPA-injected hero
-    //     underneath. Eliminates the previous abrupt clone-removal
-    //     pop at handoff.
+    // Forward flight (open): single continuous position+scale tween.
+    // Snappy duration (340ms) — fast enough to feel responsive on a
+    // tap, slow enough to still read as a deliberate transition.
+    // Same curve as reverse so opens and closes share a voice.
     const animation = clone.animate(
         [
-            { transform: 'translate(0px, 0px) scale(1)', opacity: 1, offset: 0 },
-            { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, opacity: 1, offset: 0.85 },
-            { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, opacity: 0, offset: 1 }
+            { transform: 'translate(0px, 0px) scale(1)' },
+            { transform: `translate(${tx}px, ${ty}px) scale(${scale})` }
         ],
         {
-            duration: 480,
+            duration: 340,
             easing: 'cubic-bezier(.25, .8, .25, 1)',
             fill: 'forwards'
         }
@@ -321,18 +312,14 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 // CSS transitions on a just-attached element race the
                 // browser's first paint and frequently no-op (the from
                 // and to opacities collapse into a single render).
-                // Listing fades in OVER THE SAME DURATION and with the
-                // SAME ease as the clone flight, so the two motions
-                // resolve as a single orchestrated transition rather
-                // than two competing animations finishing at different
-                // times. (Previously: 260ms vs 520ms, which made the
-                // listing pop in early and leave the clone "alone" for
-                // the second half — that disconnect read as a hitch.)
+                // Listing fades in over the same duration as the clone
+                // flight, with matching easing — single coordinated
+                // transition, not two competing animations.
                 const listingMain = document.querySelector('.books-main') as HTMLElement | null;
                 if (listingMain) {
                     listingMain.animate(
                         [{ opacity: 0 }, { opacity: 1 }],
-                        { duration: 520, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
+                        { duration: 380, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
                     );
                 }
                 // Intentionally do NOT re-add is-book-launching — that
@@ -397,22 +384,15 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                     //   - Opacity held at 1; the destination cover
                     //     underneath is pixel-aligned, so the clone
                     //     removal at end is invisible.
-                    // The clone fades to opacity 0 in the LAST 80ms of
-                    // its flight. By that point it's already at the
-                    // destination position+scale, so the fade simply
-                    // crossdissolves into the underlying destination
-                    // cover (which is pixel-aligned and visible the
-                    // whole time). Without this fade-out the clone
-                    // abruptly disappears on cleanup — the user sees
-                    // a "pop" at the very end, which read as the
-                    // animation "going further up just before
-                    // finishing" because the eye registered a sudden
-                    // visual change with no corresponding motion.
+                    // Reverse flight: single continuous position+scale
+                    // tween. Opacity stays at 1 throughout — the
+                    // destination cover is pixel-aligned underneath,
+                    // so removing the clone at the end of the flight
+                    // is invisible without any fade.
                     const back = backClone.animate(
                         [
-                            { transform: 'translate(0px, 0px) scale(1)', opacity: 1, offset: 0 },
-                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, opacity: 1, offset: 0.85 },
-                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, opacity: 0, offset: 1 }
+                            { transform: 'translate(0px, 0px) scale(1)' },
+                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})` }
                         ],
                         { duration: 520, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
                     );
@@ -546,20 +526,14 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 if (remaining === 0) resolve();
                 else setTimeout(resolve, remaining);
             });
-            // Trigger handoff at 85% of the flight (408ms of 480ms).
-            // At that moment the clone is locked at its destination
-            // position+scale but still fully opaque. handoff() reveals
-            // the underlying hero (instant via .is-spa-cover-revealed),
-            // and the remaining 15% of the flight crossfades the clone's
-            // opacity 1 → 0 OVER the now-visible hero. The result is a
-            // smooth dissolve between clone and hero rather than the
-            // previous abrupt-pop swap when the animation completed.
-            const handoffAtFlight = () => waitForReveal().then(handoff).catch(handoff);
-            setTimeout(handoffAtFlight, 480 * 0.85);
-            // Safety net: if handoff didn't fire for any reason, force
-            // it when the animation finishes anyway so the clone is
-            // never stranded above the hero.
-            animation.finished.then(handoffAtFlight).catch(handoffAtFlight);
+            // Handoff fires when the flight ends. Hero is pixel-aligned
+            // under the clone at that exact moment, so removing the
+            // clone and revealing the hero is invisible — no fade
+            // needed.
+            animation.finished
+                .then(() => waitForReveal())
+                .then(handoff)
+                .catch(handoff);
         })
         .catch(() => {
             // Fallback: hard navigation if anything went wrong. Wait for
