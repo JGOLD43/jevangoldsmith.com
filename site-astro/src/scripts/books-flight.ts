@@ -233,7 +233,26 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 newMain.parentNode!.replaceChild(oldMain, newMain);
                 hiddenSidebars.forEach((el) => { el.style.display = ''; });
                 document.title = previousTitle;
-                window.scrollTo({ top: previousScrollY, left: 0, behavior: 'auto' });
+                // Restore scroll to where the user was before they clicked
+                // the book card. We call this AFTER the DOM swap so the
+                // listing's height is back to its full extent. However,
+                // immediately after replaceChild the layout may not have
+                // re-flowed yet — a scrollTo to a position beyond the
+                // (briefly-zero) document height silently clamps to 0
+                // and the user lands at the top. Schedule the scroll on
+                // the next animation frame so layout has settled, and
+                // double-set it (sync + rAF) so the browser doesn't
+                // animate-and-lose-the-target in the gap.
+                const restoreScroll = () => {
+                    window.scrollTo({ top: previousScrollY, left: 0, behavior: 'auto' });
+                    document.documentElement.scrollTop = previousScrollY;
+                    document.body.scrollTop = previousScrollY;
+                };
+                restoreScroll();
+                requestAnimationFrame(() => {
+                    restoreScroll();
+                    requestAnimationFrame(restoreScroll);
+                });
             };
             restoreBookListFromSpa = () => {
                 if (!newMain.isConnected || !newMain.parentNode) {
@@ -272,10 +291,32 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 // the user was just seeing.
                 backClone.style.boxShadow = '0 24px 60px rgba(0, 0, 0, 0.55)';
                 backClone.style.background = 'transparent';
+                // Hint the compositor that transform is about to change,
+                // so the browser promotes the clone to its own layer
+                // and the flight runs entirely on the GPU. Without this
+                // the reverse animation can drop frames on lower-end
+                // mobile because the browser has to repaint each tick.
+                backClone.style.willChange = 'transform, opacity, box-shadow';
+                backClone.style.backfaceVisibility = 'hidden';
                 document.body.appendChild(backClone);
                 currentHero.style.visibility = 'hidden';
 
                 swapListingBack();
+                // Briefly fade the listing in underneath the flying
+                // clone instead of snapping it in at full opacity. The
+                // eye locks onto the clone (the only object in motion)
+                // and the page rebuild feels calm rather than busy.
+                // Web Animations API instead of CSS transitions —
+                // CSS transitions on a just-attached element race the
+                // browser's first paint and frequently no-op (the from
+                // and to opacities collapse into a single render).
+                const listingMain = document.querySelector('.books-main') as HTMLElement | null;
+                if (listingMain) {
+                    listingMain.animate(
+                        [{ opacity: 0 }, { opacity: 1 }],
+                        { duration: 260, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' }
+                    );
+                }
                 // Intentionally do NOT re-add is-book-launching — that
                 // class fades .books-main and .books-sidebar to opacity 0,
                 // which is what we want on the forward open (listing
@@ -315,12 +356,35 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                     const scale = dW / heroRect.width;
                     const tx = dL - heroRect.left;
                     const ty = dT - heroRect.top;
+                    // Reverse flight: one continuous tween, no
+                    // intermediate keyframes. Earlier the curve had a
+                    // 3-stop arc which created a perceptible "hitch"
+                    // at 85% — each segment's local ease reset, so the
+                    // eye saw a tiny acceleration change just before
+                    // landing. A single 2-keyframe tween with one
+                    // gentle ease eliminates that.
+                    //
+                    // Animation choices:
+                    //   - 520ms — long enough to read as smooth at low
+                    //     frame rates on mobile, short enough to stay
+                    //     responsive.
+                    //   - cubic-bezier(.25, .8, .25, 1): a wider
+                    //     "standard ease-out". Steady deceleration
+                    //     across the whole flight, no late snap.
+                    //   - Shadow held constant. Animating box-shadow
+                    //     alongside transform forces the browser to
+                    //     repaint the shadow each tick, which on lower
+                    //     end devices reads as a flicker. The clone's
+                    //     scale already implies depth change visually.
+                    //   - Opacity held at 1; the destination cover
+                    //     underneath is pixel-aligned, so the clone
+                    //     removal at end is invisible.
                     const back = backClone.animate(
                         [
-                            { transform: 'translate(0px, 0px) scale(1)', boxShadow: '0 24px 60px rgba(0, 0, 0, 0.55)' },
-                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, boxShadow: '0 8px 22px rgba(0, 0, 0, 0.35)' }
+                            { transform: 'translate(0px, 0px) scale(1)' },
+                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})` }
                         ],
-                        { duration: TIMING.bookFlight, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' }
+                        { duration: 520, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
                     );
                     back.finished.then(cleanup).catch(cleanup);
                 }
