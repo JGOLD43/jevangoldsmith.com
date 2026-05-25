@@ -127,16 +127,15 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     const ty = destTop - srcRenderTop;
 
     // Forward flight (open): single continuous position+scale tween.
-    // Snappy duration (340ms) — fast enough to feel responsive on a
-    // tap, slow enough to still read as a deliberate transition.
-    // Same curve as reverse so opens and closes share a voice.
+    // Snappy 240ms — feels like a fast tap response. Same easing as
+    // reverse so opens and closes share a voice.
     const animation = clone.animate(
         [
             { transform: 'translate(0px, 0px) scale(1)' },
             { transform: `translate(${tx}px, ${ty}px) scale(${scale})` }
         ],
         {
-            duration: 340,
+            duration: 240,
             easing: 'cubic-bezier(.25, .8, .25, 1)',
             fill: 'forwards'
         }
@@ -319,7 +318,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 if (listingMain) {
                     listingMain.animate(
                         [{ opacity: 0 }, { opacity: 1 }],
-                        { duration: 380, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
+                        { duration: 280, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
                     );
                 }
                 // Intentionally do NOT re-add is-book-launching — that
@@ -384,17 +383,15 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                     //   - Opacity held at 1; the destination cover
                     //     underneath is pixel-aligned, so the clone
                     //     removal at end is invisible.
-                    // Reverse flight: single continuous position+scale
-                    // tween. Opacity stays at 1 throughout — the
-                    // destination cover is pixel-aligned underneath,
-                    // so removing the clone at the end of the flight
-                    // is invisible without any fade.
+                    // Reverse flight: 280ms, a hair slower than the
+                    // forward open (240ms) so closing reads as slightly
+                    // more deliberate than opening.
                     const back = backClone.animate(
                         [
                             { transform: 'translate(0px, 0px) scale(1)' },
                             { transform: `translate(${tx}px, ${ty}px) scale(${scale})` }
                         ],
-                        { duration: 520, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
+                        { duration: 280, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
                     );
                     back.finished.then(cleanup).catch(cleanup);
                 }
