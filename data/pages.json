@@ -16,7 +16,7 @@
       "Personal Systems",
       "Better Thinking",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
@@ -338,7 +338,7 @@
       "Adventure",
       "Personal Systems",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
@@ -383,7 +383,7 @@
       "Taste",
       "How I Read: A Practical Reading Philosophy",
       "Useful Resources for Thinking, Building & Learning",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
     "audience": "Readers looking for taste, recommendations, books, tools, and objects",
@@ -424,7 +424,7 @@
       "Better Thinking",
       "Personal Systems",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
@@ -454,7 +454,7 @@
     "path": "contact.html",
     "url": "/contact.html",
     "title": "Contact Jevan Goldsmith",
-    "description": "Contact Jevan Goldsmith about projects, ideas, useful resources, Field Notes, or collaboration.",
+    "description": "Contact Jevan Goldsmith about projects, ideas, useful resources, the newsletter, or collaboration.",
     "intent": "contact",
     "topics": [
       "business-building"
@@ -509,7 +509,7 @@
       "The Shelf: Tools, Objects & Gear That Earned Their Place",
       "Movies",
       "Books",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+      "Newsletter | Jevan Goldsmith"
     ],
     "audience": "Readers looking for taste, recommendations, books, tools, and objects",
     "searchIntent": "explore",
@@ -552,7 +552,7 @@
       "Personal Systems",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
       "Useful Resources for Thinking, Building & Learning",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy"
     ],
     "audience": "Builders and operators looking for practical judgment",
@@ -647,7 +647,7 @@
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
       "How I Read: A Practical Reading Philosophy",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+      "Newsletter | Jevan Goldsmith"
     ],
     "audience": "Readers looking for taste, recommendations, books, tools, and objects",
     "searchIntent": "explore",
@@ -688,7 +688,7 @@
       "Health & Performance",
       "Personal Systems",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
@@ -739,7 +739,7 @@
       "AI-Assisted Work",
       "Personal Systems",
       "Tools & Objects",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+      "Newsletter | Jevan Goldsmith"
     ],
     "audience": "Readers, builders, collaborators, and curious visitors",
     "searchIntent": "navigate",
@@ -780,7 +780,7 @@
       "Personal Systems",
       "Better Thinking",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
@@ -823,7 +823,7 @@
       "Personal Systems",
       "Better Thinking",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
@@ -949,7 +949,7 @@
       "The Shelf: Tools, Objects & Gear That Earned Their Place",
       "Cool Shit",
       "Books",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+      "Newsletter | Jevan Goldsmith"
     ],
     "audience": "Readers looking for taste, recommendations, books, tools, and objects",
     "searchIntent": "explore",
@@ -987,7 +987,7 @@
     "secondaryKeywords": [
       "Personal Systems",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+      "Newsletter | Jevan Goldsmith"
     ],
     "audience": "Friends, colleagues, and readers curious about current focus",
     "searchIntent": "understand",
@@ -1025,7 +1025,7 @@
       "Personal Systems",
       "Weekly Review Template for Reflection, Planning & Better Decisions",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy"
     ],
     "audience": "Readers looking for useful ideas and practical systems",
@@ -1095,7 +1095,7 @@
     "path": "people/andrew-huberman.html",
     "url": "/people/andrew-huberman.html",
     "title": "Andrew Huberman - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1137,7 +1137,7 @@
     "path": "people/andrew-wilkinson.html",
     "url": "/people/andrew-wilkinson.html",
     "title": "Andrew Wilkinson - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1179,7 +1179,7 @@
     "path": "people/anne-lamott.html",
     "url": "/people/anne-lamott.html",
     "title": "Anne Lamott - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1221,7 +1221,7 @@
     "path": "people/atul-gawande.html",
     "url": "/people/atul-gawande.html",
     "title": "Atul Gawande - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1263,7 +1263,7 @@
     "path": "people/baltasar-gracian.html",
     "url": "/people/baltasar-gracian.html",
     "title": "Baltasar Graci\u00e1n - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1305,7 +1305,7 @@
     "path": "people/cal-newport.html",
     "url": "/people/cal-newport.html",
     "title": "Cal Newport - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1347,7 +1347,7 @@
     "path": "people/charlie-munger.html",
     "url": "/people/charlie-munger.html",
     "title": "Charlie Munger - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1389,7 +1389,7 @@
     "path": "people/christopher-nolan.html",
     "url": "/people/christopher-nolan.html",
     "title": "Christopher Nolan - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1431,7 +1431,7 @@
     "path": "people/david-goggins.html",
     "url": "/people/david-goggins.html",
     "title": "David Goggins - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1473,7 +1473,7 @@
     "path": "people/david-ogilvy.html",
     "url": "/people/david-ogilvy.html",
     "title": "David Ogilvy - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1515,7 +1515,7 @@
     "path": "people/eckhart-tolle.html",
     "url": "/people/eckhart-tolle.html",
     "title": "Eckhart Tolle - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1557,7 +1557,7 @@
     "path": "people/elon-musk.html",
     "url": "/people/elon-musk.html",
     "title": "Elon Musk - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1599,7 +1599,7 @@
     "path": "people/eric-ries.html",
     "url": "/people/eric-ries.html",
     "title": "Eric Ries - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1641,7 +1641,7 @@
     "path": "people/james-clear.html",
     "url": "/people/james-clear.html",
     "title": "James Clear - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1683,7 +1683,7 @@
     "path": "people/john-d-rockefeller.html",
     "url": "/people/john-d-rockefeller.html",
     "title": "John D. Rockefeller - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1725,7 +1725,7 @@
     "path": "people/keith-j-cunningham.html",
     "url": "/people/keith-j-cunningham.html",
     "title": "Keith J. Cunningham - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1767,7 +1767,7 @@
     "path": "people/lex-fridman.html",
     "url": "/people/lex-fridman.html",
     "title": "Lex Fridman - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1809,7 +1809,7 @@
     "path": "people/morgan-housel.html",
     "url": "/people/morgan-housel.html",
     "title": "Morgan Housel - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1851,7 +1851,7 @@
     "path": "people/naval-ravikant.html",
     "url": "/people/naval-ravikant.html",
     "title": "Naval Ravikant - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1893,7 +1893,7 @@
     "path": "people/peter-thiel.html",
     "url": "/people/peter-thiel.html",
     "title": "Peter Thiel - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1935,7 +1935,7 @@
     "path": "people/ray-dalio.html",
     "url": "/people/ray-dalio.html",
     "title": "Ray Dalio - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -1977,7 +1977,7 @@
     "path": "people/richard-feynman.html",
     "url": "/people/richard-feynman.html",
     "title": "Richard Feynman - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -2019,7 +2019,7 @@
     "path": "people/rick-rubin.html",
     "url": "/people/rick-rubin.html",
     "title": "Rick Rubin - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -2061,7 +2061,7 @@
     "path": "people/rob-fitzpatrick.html",
     "url": "/people/rob-fitzpatrick.html",
     "title": "Rob Fitzpatrick - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -2103,7 +2103,7 @@
     "path": "people/robert-cialdini.html",
     "url": "/people/robert-cialdini.html",
     "title": "Robert Cialdini - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -2145,7 +2145,7 @@
     "path": "people/ryan-holiday.html",
     "url": "/people/ryan-holiday.html",
     "title": "Ryan Holiday - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -2187,7 +2187,7 @@
     "path": "people/shane-parrish.html",
     "url": "/people/shane-parrish.html",
     "title": "Shane Parrish - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -2229,7 +2229,7 @@
     "path": "people/sherlock-holmes.html",
     "url": "/people/sherlock-holmes.html",
     "title": "Sherlock Holmes - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -2271,7 +2271,7 @@
     "path": "people/victor-o-schwab.html",
     "url": "/people/victor-o-schwab.html",
     "title": "Victor O. Schwab - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -2313,7 +2313,7 @@
     "path": "people/warren-buffett.html",
     "url": "/people/warren-buffett.html",
     "title": "Warren Buffett - People",
-    "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
+    "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
       "taste",
@@ -2411,7 +2411,7 @@
       "Personal Systems",
       "Weekly Review Template for Reflection, Planning & Better Decisions",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy"
     ],
     "audience": "Readers looking for useful ideas and practical systems",
@@ -2456,7 +2456,7 @@
       "Personal Systems",
       "Taste",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "Projects Jevan Goldsmith Is Building & Exploring",
       "Cool Shit"
     ],
@@ -2503,7 +2503,7 @@
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
       "The Shelf: Tools, Objects & Gear That Earned Their Place",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+      "Newsletter | Jevan Goldsmith"
     ],
     "audience": "Builders and operators looking for practical judgment",
     "searchIntent": "explore",
@@ -2588,7 +2588,7 @@
       "Better Thinking",
       "Personal Systems",
       "Useful Resources for Thinking, Building & Learning",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
       "Books"
     ],
@@ -2617,7 +2617,7 @@
     "path": "search.html",
     "url": "/search.html",
     "title": "Search Jevan Goldsmith's Archive",
-    "description": "Search Jevan Goldsmith's archive of Field Notes, essays, books, resources, projects, skills, tools, and ideas.",
+    "description": "Search Jevan Goldsmith's archive of essays, books, resources, projects, skills, tools, and ideas.",
     "intent": "site-search",
     "topics": [
       "better-thinking"
@@ -2630,7 +2630,7 @@
       "Weekly Review Template for Reflection, Planning & Better Decisions",
       "Books",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+      "Newsletter | Jevan Goldsmith"
     ],
     "audience": "Readers looking for useful ideas and practical systems",
     "searchIntent": "search",
@@ -2670,7 +2670,7 @@
       "Better Thinking",
       "Personal Systems",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
@@ -2713,7 +2713,7 @@
       "Personal Systems",
       "Weekly Review Template for Reflection, Planning & Better Decisions",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy"
     ],
     "audience": "Readers looking for useful ideas and practical systems",
@@ -2780,8 +2780,8 @@
   {
     "path": "topics/better-thinking.html",
     "url": "/topics/better-thinking.html",
-    "title": "Better Thinking: Field Notes, Essays, Books & Tools",
-    "description": "A topic hub for better thinking: first principles, decision-making, mental models, reflection, books, essays, resources, and Field Notes.",
+    "title": "Better Thinking: Essays, Books & Tools",
+    "description": "A topic hub for better thinking: first principles, decision-making, mental models, reflection, books, essays, and resources.",
     "intent": "topic-better-thinking",
     "topics": [
       "better-thinking"
@@ -2793,7 +2793,7 @@
       "Better Thinking",
       "Books",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy"
     ],
     "audience": "Readers exploring a focused topic trail",
@@ -2821,7 +2821,7 @@
     "path": "topics/books-reading.html",
     "url": "/topics/books-reading.html",
     "title": "Books & Reading: Recommendations, Philosophy & Notes",
-    "description": "A topic hub for books and reading: recommendations, reading philosophy, book notes, useful ideas, and Field Notes from Jevan Goldsmith.",
+    "description": "A topic hub for books and reading: recommendations, reading philosophy, book notes, and useful ideas from Jevan Goldsmith.",
     "intent": "topic-books-reading",
     "topics": [
       "books-reading"
@@ -2832,7 +2832,7 @@
     "secondaryKeywords": [
       "Books & Reading",
       "Books",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
@@ -2914,7 +2914,7 @@
       "Health",
       "Books",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+      "Newsletter | Jevan Goldsmith"
     ],
     "audience": "Readers exploring a focused topic trail",
     "searchIntent": "explore",
@@ -2952,7 +2952,7 @@
     "secondaryKeywords": [
       "Personal Systems",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
@@ -2994,7 +2994,7 @@
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
       "Books",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments"
+      "Newsletter | Jevan Goldsmith"
     ],
     "audience": "Readers exploring a focused topic trail",
     "searchIntent": "explore",
@@ -3021,7 +3021,7 @@
     "path": "topics/tools-objects.html",
     "url": "/topics/tools-objects.html",
     "title": "Tools & Objects That Earned Their Place",
-    "description": "A topic hub for tools, objects, gear, and digital systems Jevan Goldsmith actually uses, including The Shelf and related Field Notes.",
+    "description": "A topic hub for tools, objects, gear, and digital systems Jevan Goldsmith actually uses, including The Shelf and related notes.",
     "intent": "topic-tools-objects",
     "topics": [
       "tools-objects"
@@ -3031,7 +3031,7 @@
     "primaryKeyword": "tools & objects",
     "secondaryKeywords": [
       "Tools & Objects",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
       "Projects Jevan Goldsmith Is Building & Exploring",
       "The Shelf: Tools, Objects & Gear That Earned Their Place"
@@ -3074,7 +3074,7 @@
       "Personal Systems",
       "Better Thinking",
       "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
+      "Newsletter | Jevan Goldsmith",
       "How I Read: A Practical Reading Philosophy",
       "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
     ],
