@@ -33,7 +33,7 @@ async function submitNewsletter(event: SubmitEvent): Promise<void> {
 
         if (!response.ok) throw new Error('Newsletter submit failed');
         form.reset();
-        setStatus(form, 'You are in. Check your inbox for Field Notes confirmation.');
+        setStatus(form, 'You are in. Check your inbox for the newsletter confirmation.');
     } catch (_error) {
         setStatus(form, 'That did not go through. Email hello@jevangoldsmith.com and I will add you manually.');
     } finally {

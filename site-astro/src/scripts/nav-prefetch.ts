@@ -49,12 +49,10 @@
                 eagerness: 'conservative'
             }],
             prefetch: [{
-                where: {
-                    or: [
-                        { href_matches: '/search.html' },
-                        { href_matches: '/adventure-*.html' }
-                    ]
-                },
+                // /adventure-<slug>.html is now a 0ms HTML redirect to
+                // /adventures.html?trip=<slug>; no point prefetching the
+                // stub itself. Keep search prefetched for quick autocomplete.
+                where: { href_matches: '/search.html' },
                 eagerness: saveData ? 'conservative' : 'moderate'
             }]
         };
