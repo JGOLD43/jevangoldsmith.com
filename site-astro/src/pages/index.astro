@@ -416,9 +416,15 @@ if (latestChallenge) {
     .profile-container .snapshot-label { color: rgba(255, 255, 255, 0.65) !important; }
     .profile-container .snapshot-value { color: #fff !important; }
     .profile-container .snapshot-row { border-bottom-color: rgba(255, 255, 255, 0.12) !important; }
+    /* The last snapshot-row (Stats) AND the bio-link below it BOTH had a
+       border, stacking into a double hairline above Read Full Bio. Drop
+       the bio-link's top border — the row's bottom border serves as the
+       divider. Keep the spacing (margin/padding) so the bio-link still
+       breathes below the row. */
+    .snapshot-content > .snapshot-row + .snapshot-bio-link { border-top: 0 !important; }
     .profile-container .snapshot-bio-link {
       color: #fff !important;
-      border-top-color: rgba(255, 255, 255, 0.18) !important;
+      border-top: 0 !important;
     }
     /* PROFILE button stays anchored in the bottom-right of the card.
        Always on top of both photo and the sliding snapshot. */

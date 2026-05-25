@@ -20,7 +20,6 @@ import Base from '../layouts/Base.astro';
 <main class="meet-main">
     <div class="meet-container">
         <form class="meet-form" action="mailto:hello@jevangoldsmith.com" method="get" enctype="text/plain">
-            <p class="meet-form-note">Takes less than a minute</p>
             <div class="meet-form-group">
                 <label for="name">Your Name</label>
                 <input type="text" id="name" name="name" required placeholder="First name is fine">
@@ -28,17 +27,6 @@ import Base from '../layouts/Base.astro';
             <div class="meet-form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required placeholder="Where can I reach you?">
-            </div>
-            <div class="meet-form-group">
-                <label for="reason">What brings you here?</label>
-                <select id="reason" name="reason" required>
-                    <option value="" disabled selected>Select one...</option>
-                    <option value="coffee-chat">Coffee chat / networking</option>
-                    <option value="business">Business opportunity</option>
-                    <option value="collaboration">Collaboration idea</option>
-                    <option value="saying-hi">Just saying hi</option>
-                    <option value="other">Something else</option>
-                </select>
             </div>
             <div class="meet-form-group">
                 <label for="message">Anything you'd like to add?</label>
@@ -63,23 +51,35 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <style is:inline>
-  /* Tighter top spacing — header sits closer to viewport top, and the
-     gap between the logo/close row and "Let's Chat" is reduced so the
-     whole composition reads as a single block instead of a logo
-     floating above an unrelated headline. */
+  /* Single-row header: logo on the left, "Let's Chat" centered, close
+     button on the right — all aligned on the same baseline so there's
+     no awkward gap between the chrome and the headline. The form sits
+     immediately below this band. */
   .meet-header,
   .meet-page .meet-header {
     padding-top: calc(env(safe-area-inset-top, 0px) + 1.25rem) !important;
-    padding-bottom: 0.25rem !important;
+    padding-bottom: 1rem !important;
+    position: relative;
+  }
+  .meet-header-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    color: var(--text-color);
+    font-family: Chivo, sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
   }
   .meet-main {
-    padding-top: 0.5rem !important;
+    padding-top: 1rem !important;
     align-items: flex-start !important;
   }
-  .meet-content-header {
-    margin-bottom: 1.25rem !important;
-  }
-  .meet-content-header h1 {
-    margin-bottom: 0 !important;
+  /* Old centered headline block is gone; the form sits flush to the
+     top of .meet-main. */
+  @media (max-width: 480px) {
+    .meet-header-title { font-size: 1.4rem; }
   }
 </style>
