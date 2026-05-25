@@ -1,8 +1,8 @@
 # Jevan Goldsmith Website
 
 Static personal website for `jevangoldsmith.com`, hosted on Firebase Hosting.
-The public experience is organized as a living archive, with Field Notes as the
-recurring audience thread.
+The public experience is organized as a living archive, with the newsletter as
+the recurring audience thread.
 
 As of the Astro migration (May 2026), the build is **Astro 6 + per-page legacy
 CSS purge**. `npm run build` invokes Astro under the hood and writes generated
@@ -118,7 +118,7 @@ The site currently uses an Astro content model:
 - shared nav/footer source lives in `site-astro/src/components/`
 - collections live in `data/*.json` where migrated
 - primary commercial actions live in `data/ctas.json`
-- Field Notes configuration lives in `data/newsletter.json`
+- Newsletter configuration lives in `data/newsletter.json`
 - topic taxonomy starts in `data/topics.json`
 - books live in `data/books.json` and are rendered by Astro
 - admin tools are present, but not all content types persist through a backend

@@ -2,7 +2,7 @@
   "primary": {
     "id": "newsletter",
     "label": "Get Field Notes",
-    "href": "field-notes.html",
+    "href": "newsletter.html",
     "intent": "retention",
     "description": "Give curious readers a recurring thread back into the archive."
   },
@@ -10,22 +10,34 @@
     {
       "section": "home",
       "primaryCta": "newsletter",
-      "secondaryCtas": ["free-resources", "best-essays"]
+      "secondaryCtas": [
+        "free-resources",
+        "best-essays"
+      ]
     },
     {
       "section": "resources",
       "primaryCta": "free-resources",
-      "secondaryCtas": ["newsletter", "contact"]
+      "secondaryCtas": [
+        "newsletter",
+        "contact"
+      ]
     },
     {
       "section": "products",
       "primaryCta": "product-recommendations",
-      "secondaryCtas": ["newsletter", "free-resources"]
+      "secondaryCtas": [
+        "newsletter",
+        "free-resources"
+      ]
     },
     {
       "section": "writing",
       "primaryCta": "best-essays",
-      "secondaryCtas": ["newsletter", "search"]
+      "secondaryCtas": [
+        "newsletter",
+        "search"
+      ]
     }
   ],
   "ctas": [
@@ -40,7 +52,7 @@
     {
       "id": "newsletter",
       "label": "Get Field Notes",
-      "href": "field-notes.html",
+      "href": "newsletter.html",
       "intent": "retention",
       "priority": 1,
       "description": "Give curious readers a recurring thread back into the archive."
@@ -83,43 +95,62 @@
       "path": "index.html",
       "journeyStage": "orientation",
       "primaryCta": "newsletter",
-      "secondaryCtas": ["free-resources", "best-essays"]
+      "secondaryCtas": [
+        "free-resources",
+        "best-essays"
+      ]
     },
     {
-      "path": "field-notes.html",
+      "path": "newsletter.html",
       "journeyStage": "lead",
       "primaryCta": "newsletter",
-      "secondaryCtas": ["best-essays", "free-resources"]
+      "secondaryCtas": [
+        "best-essays",
+        "free-resources"
+      ]
     },
     {
       "path": "products.html",
       "journeyStage": "trust",
       "primaryCta": "product-recommendations",
-      "secondaryCtas": ["newsletter", "free-resources"]
+      "secondaryCtas": [
+        "newsletter",
+        "free-resources"
+      ]
     },
     {
       "path": "free-resources.html",
       "journeyStage": "lead",
       "primaryCta": "free-resources",
-      "secondaryCtas": ["newsletter", "contact"]
+      "secondaryCtas": [
+        "newsletter",
+        "contact"
+      ]
     },
     {
       "path": "essays.html",
       "journeyStage": "authority",
       "primaryCta": "best-essays",
-      "secondaryCtas": ["newsletter", "search"]
+      "secondaryCtas": [
+        "newsletter",
+        "search"
+      ]
     },
     {
       "path": "contact.html",
       "journeyStage": "contact",
       "primaryCta": "contact",
-      "secondaryCtas": ["newsletter"]
+      "secondaryCtas": [
+        "newsletter"
+      ]
     },
     {
       "path": "meet.html",
       "journeyStage": "contact",
       "primaryCta": "contact",
-      "secondaryCtas": ["newsletter"]
+      "secondaryCtas": [
+        "newsletter"
+      ]
     }
   ]
 }

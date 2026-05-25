@@ -130,9 +130,7 @@
         "camera",
         "android"
       ],
-      "relatedContent": [
-        "videos.html"
-      ]
+      "relatedContent": []
     },
     {
       "id": "dji-osmo-action-4",
@@ -170,8 +168,7 @@
         "travel"
       ],
       "relatedContent": [
-        "adventures.html",
-        "videos.html"
+        "adventures.html"
       ]
     },
     {
@@ -193,8 +190,8 @@
       "ctaLabel": "View Recommendation",
       "checkoutUrl": "",
       "verdict": "The boots that get better the more they're worn.",
-      "whyItStayed": "Built to be repaired instead of replaced — the leather softens, the shape holds, and they keep going.",
-      "howIUseIt": "Default footwear for everything that isn't running or hiking — work, travel, and just walking out the door.",
+      "whyItStayed": "Built to be repaired instead of replaced \u2014 the leather softens, the shape holds, and they keep going.",
+      "howIUseIt": "Default footwear for everything that isn't running or hiking \u2014 work, travel, and just walking out the door.",
       "replaced": "Boots that fell apart faster than they broke in.",
       "audience": [
         "builders",
@@ -273,9 +270,7 @@
         "reflection",
         "weekly-review"
       ],
-      "relatedContent": [
-        "notes.html"
-      ]
+      "relatedContent": []
     },
     {
       "id": "personal-finance-tracker",

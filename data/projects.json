@@ -90,7 +90,7 @@
       "status": "planned",
       "category": "writing",
       "shortDescription": "A weekly-ish note sharing useful ideas, books, tools, questions, and experiments from the archive.",
-      "description": "Field Notes is the lightweight dispatch for useful things before they become polished essays.",
+      "description": "A monthly newsletter for useful things before they become polished essays.",
       "whatItIs": "A short email for ideas, objects, books, questions, and experiments worth keeping.",
       "whyIMadeIt": "Some useful things are too small for essays but too valuable to disappear into private notes.",
       "whatILearned": "A newsletter needs a clear promise before it needs volume.",
@@ -124,7 +124,7 @@
         "writing",
         "learning",
         "business",
-        "field-notes"
+        "newsletter"
       ],
       "tags": [
         "newsletter",
@@ -137,12 +137,12 @@
       "links": [
         {
           "label": "Subscribe",
-          "url": "field-notes.html",
+          "url": "newsletter.html",
           "icon": "external"
         }
       ],
       "relatedContent": [
-        "field-notes.html",
+        "newsletter.html",
         "essays.html",
         "books.html"
       ]

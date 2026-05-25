@@ -25,7 +25,7 @@
     "contentDepth": "supporting",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "free-resources.html",
@@ -347,7 +347,7 @@
     "contentDepth": "utility",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "products.html",
@@ -392,7 +392,7 @@
     "relatedPages": [
       "reading-philosophy.html",
       "free-resources.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html",
       "people.html",
       "podcasts.html"
@@ -433,50 +433,7 @@
     "contentDepth": "archive",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
-      "reading-philosophy.html",
-      "index.html",
-      "free-resources.html",
-      "weekly-review-template.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "section": "experience",
-    "generatedFrom": "_src/pages",
-    "journeyStage": "authority",
-    "primaryCta": "search",
-    "secondaryCtas": [
-      "free-resources",
-      "contact"
-    ],
-    "ctaOptional": false
-  },
-  {
-    "path": "changed-my-mind.html",
-    "url": "/changed-my-mind.html",
-    "title": "Changed My Mind: Belief Updates & Public Learning Log",
-    "description": "A public record of ideas Jevan Goldsmith has updated, softened, reversed, or stopped believing.",
-    "intent": "changed-my-mind",
-    "topics": [
-      "better-thinking",
-      "personal-systems"
-    ],
-    "index": true,
-    "schemaType": "Article",
-    "primaryKeyword": "changed my mind",
-    "secondaryKeywords": [
-      "Better Thinking",
-      "Personal Systems",
-      "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-      "How I Read: A Practical Reading Philosophy",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-    ],
-    "audience": "Builders and operators looking for practical judgment",
-    "searchIntent": "learn",
-    "contentDepth": "supporting",
-    "relatedPages": [
-      "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "free-resources.html",
@@ -561,7 +518,7 @@
       "products.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html",
       "projects.html"
     ],
@@ -604,7 +561,7 @@
     "relatedPages": [
       "index.html",
       "free-resources.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "weekly-review-template.html",
       "challenges.html"
@@ -621,10 +578,10 @@
     "ctaOptional": false
   },
   {
-    "path": "field-notes.html",
-    "url": "/field-notes.html",
-    "title": "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-    "description": "One useful idea, object, book, question, or experiment each week from Jevan Goldsmith's living archive.",
+    "path": "newsletter.html",
+    "url": "/newsletter.html",
+    "title": "Newsletter | Jevan Goldsmith",
+    "description": "Exclusive, newsletter-only content once a month. No spam, no nonsense.",
     "intent": "newsletter",
     "topics": [
       "better-thinking",
@@ -699,7 +656,7 @@
       "index.html",
       "reading-philosophy.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "books.html",
       "weekly-review-template.html"
     ],
@@ -740,7 +697,7 @@
     "contentDepth": "archive",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "products.html",
@@ -753,49 +710,6 @@
     "primaryCta": "contact",
     "secondaryCtas": [
       "newsletter"
-    ],
-    "ctaOptional": false
-  },
-  {
-    "path": "important-or-not.html",
-    "url": "/important-or-not.html",
-    "title": "Important or Not: Decision Notes &amp; Priority Filters",
-    "description": "A decision-making page about separating what matters from noise, urgency, and attractive distractions.",
-    "intent": "priority-filter",
-    "topics": [
-      "better-thinking",
-      "personal-systems"
-    ],
-    "index": true,
-    "schemaType": "Article",
-    "primaryKeyword": "priority filter",
-    "secondaryKeywords": [
-      "Better Thinking",
-      "Personal Systems",
-      "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-      "How I Read: A Practical Reading Philosophy",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-    ],
-    "audience": "Builders and operators looking for practical judgment",
-    "searchIntent": "learn",
-    "contentDepth": "supporting",
-    "relatedPages": [
-      "essays.html",
-      "field-notes.html",
-      "reading-philosophy.html",
-      "index.html",
-      "free-resources.html",
-      "weekly-review-template.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "section": "experience",
-    "generatedFrom": "_src/pages",
-    "journeyStage": "authority",
-    "primaryCta": "search",
-    "secondaryCtas": [
-      "free-resources",
-      "contact"
     ],
     "ctaOptional": false
   },
@@ -831,7 +745,7 @@
     "searchIntent": "navigate",
     "contentDepth": "pillar",
     "relatedPages": [
-      "field-notes.html",
+      "newsletter.html",
       "free-resources.html",
       "essays.html",
       "reading-philosophy.html",
@@ -875,7 +789,7 @@
     "contentDepth": "supporting",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "free-resources.html",
@@ -918,7 +832,7 @@
     "contentDepth": "supporting",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "free-resources.html",
@@ -1003,7 +917,7 @@
       "weekly-review-template.html",
       "books.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1044,7 +958,7 @@
       "products.html",
       "cool-shit.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html",
       "projects.html"
     ],
@@ -1059,93 +973,9 @@
     "ctaOptional": false
   },
   {
-    "path": "north-star.html",
-    "url": "/north-star.html",
-    "title": "North Star: Principles, Direction &amp; Useful Ambition",
-    "description": "A page about Jevan Goldsmith's north-star principles, long-term direction, and standards for useful ambition.",
-    "intent": "north-star",
-    "topics": [
-      "personal-systems",
-      "better-thinking"
-    ],
-    "index": true,
-    "schemaType": "Article",
-    "primaryKeyword": "north star",
-    "secondaryKeywords": [
-      "Personal Systems",
-      "Better Thinking",
-      "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-      "How I Read: A Practical Reading Philosophy",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-    ],
-    "audience": "People trying to understand Jevan Goldsmith and his operating context",
-    "searchIntent": "learn",
-    "contentDepth": "supporting",
-    "relatedPages": [
-      "essays.html",
-      "field-notes.html",
-      "reading-philosophy.html",
-      "index.html",
-      "free-resources.html",
-      "weekly-review-template.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "section": "explore",
-    "generatedFrom": "_src/pages",
-    "journeyStage": "trust",
-    "primaryCta": "contact",
-    "secondaryCtas": [
-      "newsletter"
-    ],
-    "ctaOptional": false
-  },
-  {
-    "path": "notes.html",
-    "url": "/notes.html",
-    "title": "Notes on Personal Systems, Learning &amp; Better Thinking",
-    "description": "A working notebook of Jevan Goldsmith's ideas on personal systems, learning, decisions, and useful experiments.",
-    "intent": "notes",
-    "topics": [
-      "personal-systems",
-      "better-thinking"
-    ],
-    "index": true,
-    "schemaType": "CollectionPage",
-    "primaryKeyword": "notes",
-    "secondaryKeywords": [
-      "Personal Systems",
-      "Better Thinking",
-      "Weekly Review Template for Reflection, Planning & Better Decisions",
-      "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-      "How I Read: A Practical Reading Philosophy"
-    ],
-    "audience": "Readers looking for useful ideas and practical systems",
-    "searchIntent": "explore",
-    "contentDepth": "archive",
-    "relatedPages": [
-      "weekly-review-template.html",
-      "essays.html",
-      "field-notes.html",
-      "reading-philosophy.html",
-      "index.html",
-      "free-resources.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "section": "page",
-    "generatedFrom": "_src/pages",
-    "journeyStage": "orientation",
-    "primaryCta": "newsletter",
-    "secondaryCtas": [
-      "search"
-    ],
-    "ctaOptional": false
-  },
-  {
     "path": "now.html",
     "url": "/now.html",
-    "title": "Now — What Jevan Goldsmith is up to",
+    "title": "Now \u2014 What Jevan Goldsmith is up to",
     "description": "A snapshot of what I'm working on, reading, and thinking about right now. Updated occasionally.",
     "intent": "now",
     "topics": [
@@ -1164,7 +994,7 @@
     "contentDepth": "supporting",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "about.html",
       "contact.html",
       "index.html"
@@ -1204,7 +1034,7 @@
     "relatedPages": [
       "weekly-review-template.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "products.html"
@@ -1249,7 +1079,7 @@
       "products.html",
       "free-resources.html",
       "essays.html",
-      "field-notes.html"
+      "newsletter.html"
     ],
     "lastReviewed": "2026-04-22",
     "section": "taste",
@@ -1290,7 +1120,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1332,7 +1162,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1374,7 +1204,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1416,7 +1246,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1432,7 +1262,7 @@
   {
     "path": "people/baltasar-gracian.html",
     "url": "/people/baltasar-gracian.html",
-    "title": "Baltasar Gracián - People",
+    "title": "Baltasar Graci\u00e1n - People",
     "description": "A living archive of Field Notes, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
@@ -1458,7 +1288,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1500,7 +1330,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1542,7 +1372,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1584,7 +1414,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1626,7 +1456,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1668,7 +1498,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1710,7 +1540,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1752,7 +1582,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1794,7 +1624,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1836,7 +1666,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1878,7 +1708,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1920,7 +1750,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -1962,7 +1792,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2004,7 +1834,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2046,7 +1876,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2088,7 +1918,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2130,7 +1960,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2172,7 +2002,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2214,7 +2044,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2256,7 +2086,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2298,7 +2128,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2340,7 +2170,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2382,7 +2212,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2424,7 +2254,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2466,7 +2296,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2508,7 +2338,7 @@
       "cool-shit.html",
       "movies.html",
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2550,7 +2380,7 @@
       "reading-philosophy.html",
       "products.html",
       "free-resources.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html"
     ],
     "lastReviewed": "2026-04-22",
@@ -2590,7 +2420,7 @@
     "relatedPages": [
       "weekly-review-template.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "free-resources.html"
@@ -2635,7 +2465,7 @@
     "contentDepth": "pillar",
     "relatedPages": [
       "index.html",
-      "field-notes.html",
+      "newsletter.html",
       "projects.html",
       "cool-shit.html",
       "movies.html",
@@ -2682,7 +2512,7 @@
       "index.html",
       "products.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "free-resources.html",
       "contact.html"
     ],
@@ -2767,7 +2597,7 @@
     "contentDepth": "pillar",
     "relatedPages": [
       "free-resources.html",
-      "field-notes.html",
+      "newsletter.html",
       "index.html",
       "books.html",
       "essays.html",
@@ -2809,7 +2639,7 @@
       "weekly-review-template.html",
       "books.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html"
     ],
@@ -2849,7 +2679,7 @@
     "contentDepth": "supporting",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "free-resources.html",
@@ -2892,7 +2722,7 @@
     "relatedPages": [
       "weekly-review-template.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "free-resources.html"
@@ -2935,7 +2765,7 @@
       "products.html",
       "books.html",
       "essays.html",
-      "field-notes.html"
+      "newsletter.html"
     ],
     "lastReviewed": "2026-04-22",
     "section": "topics",
@@ -2972,7 +2802,7 @@
     "relatedPages": [
       "books.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "free-resources.html"
@@ -3011,7 +2841,7 @@
     "contentDepth": "pillar",
     "relatedPages": [
       "books.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "free-resources.html",
@@ -3093,7 +2923,7 @@
       "health.html",
       "books.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html"
     ],
@@ -3131,7 +2961,7 @@
     "contentDepth": "pillar",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
       "products.html",
@@ -3173,7 +3003,7 @@
       "index.html",
       "books.html",
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "projects.html"
     ],
@@ -3210,7 +3040,7 @@
     "searchIntent": "explore",
     "contentDepth": "pillar",
     "relatedPages": [
-      "field-notes.html",
+      "newsletter.html",
       "index.html",
       "projects.html",
       "products.html",
@@ -3224,48 +3054,6 @@
     "primaryCta": "newsletter",
     "secondaryCtas": [
       "free-resources"
-    ],
-    "ctaOptional": false
-  },
-  {
-    "path": "videos.html",
-    "url": "/videos.html",
-    "title": "Videos, Channels & Useful Visual Learning",
-    "description": "A video archive of talks, channels, clips, and visual lessons Jevan Goldsmith found useful.",
-    "intent": "videos",
-    "topics": [
-      "books-reading",
-      "tools-objects"
-    ],
-    "index": true,
-    "schemaType": "CollectionPage",
-    "primaryKeyword": "videos",
-    "secondaryKeywords": [
-      "Books & Reading",
-      "Tools & Objects",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
-      "Books",
-      "How I Read: A Practical Reading Philosophy"
-    ],
-    "audience": "Readers looking for useful ideas and practical systems",
-    "searchIntent": "explore",
-    "contentDepth": "archive",
-    "relatedPages": [
-      "field-notes.html",
-      "index.html",
-      "books.html",
-      "reading-philosophy.html",
-      "projects.html",
-      "products.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "section": "page",
-    "generatedFrom": "_src/pages",
-    "journeyStage": "orientation",
-    "primaryCta": "newsletter",
-    "secondaryCtas": [
-      "search"
     ],
     "ctaOptional": false
   },
@@ -3295,11 +3083,10 @@
     "contentDepth": "pillar",
     "relatedPages": [
       "essays.html",
-      "field-notes.html",
+      "newsletter.html",
       "reading-philosophy.html",
       "index.html",
-      "free-resources.html",
-      "notes.html"
+      "free-resources.html"
     ],
     "lastReviewed": "2026-04-22",
     "section": "page",
