@@ -260,7 +260,19 @@ if (latestChallenge) {
 <style is:inline>
   /* Minimal newsletter section — clean, low-key block with a single-row
      pill input that has the Subscribe button tucked inside the right edge. */
-  .newsletter-cta-section--minimal { background: transparent; padding: 3rem 1.25rem; }
+  /* Edge-to-edge horizontal band, bounded by hairlines top + bottom —
+     matches the dark-mode treatment shown in the original design. Fill
+     is white in light mode so it pops against the creamy --background,
+     transparent in dark mode (page bg already provides contrast). */
+  .newsletter-cta-section--minimal {
+    background: #fff;
+    padding: 3rem 1.25rem;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+  [data-theme="dark"] .newsletter-cta-section--minimal {
+    background: transparent;
+  }
   .newsletter-cta-section--minimal .newsletter-cta-container { max-width: 720px; margin: 0 auto; }
   .newsletter-cta-section--minimal .newsletter-cta-content { text-align: left; }
   .newsletter-cta-section--minimal .newsletter-cta-title {
