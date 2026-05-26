@@ -314,6 +314,19 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
 </Base>
 
 <style is:inline>
+  /* Mobile bottom toggle band matches the navbar (pure white in light
+     mode) rather than the page's creamy --background, so the chrome
+     reads as a single continuous frame around the map. Dark mode
+     keeps a neutral dark surface for the same reason. */
+  @media (max-width: 968px) {
+    .adventures-mobile-toggle {
+      background: #fff !important;
+    }
+    [data-theme="dark"] .adventures-mobile-toggle {
+      background: #1a1a1a !important;
+    }
+  }
+
   /* Trip list: no box by default; only reveal background/border on hover or
      when the trip is the active selection. */
   .adventure-compact-card {
