@@ -5866,8 +5866,13 @@ body.meet-page {
   border: 1px solid #0000002e;
   border-radius: 6px;
   width: 100%;
-  padding: .3rem .4rem;
-  font-size: .85rem;
+  /* Tighter padding so each dropdown row is ~30px tall instead of
+     ~50px. Smaller font keeps the selected value readable but
+     reclaims ~30% vertical space across 4 dropdowns. */
+  padding: 0.2rem 0.45rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  min-height: 28px;
 }
 
 .map-controls-empty {
@@ -14458,20 +14463,27 @@ body.nav-compact .navbar .work-mode-icon {
 }
 
 .map-controls-grid {
-  grid-template-columns: 1fr 1fr;
-  gap: .1rem .75rem;
+  /* Auto-fit: keeps a 2-col layout when there's room ("POIs",
+     "Countries visited" both fit), collapses to 1 col on narrow
+     panels so labels are never ellipsis-truncated. */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .15rem .9rem;
   display: grid;
 }
 
 .map-controls-grid .map-controls-check {
   min-width: 0;
-  padding: .18rem 0;
+  padding: .15rem 0;
 }
 
 .map-controls-grid .map-controls-check span {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  /* Allow the label to wrap to a second line rather than truncate
+     with an ellipsis — readable labels beat a perfectly-uniform
+     grid when both can't fit. */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.2;
 }
 
 @media (width <= 900px) {

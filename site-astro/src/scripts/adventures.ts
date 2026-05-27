@@ -653,6 +653,39 @@ export function initAdventuresPage() {
         button.setAttribute('aria-expanded', String(!collapsed));
         button.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
     });
+
+    // The mobile address bar collapses on scroll-down and re-shows on
+    // scroll-up; each transition changes 100dvh by ~50-100px, but
+    // Leaflet caches its container dimensions at init and doesn't
+    // notice. Without this listener the map ends up either letterboxed
+    // (cream strip below the tiles) or clipped (last tile row hidden
+    // behind the bottom toggle bar). A debounced invalidateSize on
+    // resize keeps the tile grid filling the actual container.
+    let resizeRaf: number | null = null;
+    window.addEventListener('resize', () => {
+        if (resizeRaf !== null) cancelAnimationFrame(resizeRaf);
+        resizeRaf = requestAnimationFrame(() => {
+            resizeRaf = null;
+            if (state.worldMap) state.worldMap.invalidateSize();
+        });
+    }, { passive: true });
+
+    // Click-to-deselect: tapping empty space inside the sidebar (below
+    // the last trip card, between region filter pills, anywhere that
+    // isn't an interactive control) clears the currently-active trip.
+    // Restores the "no selection" baseline without requiring the user
+    // to hunt for an X button.
+    const sidebar = document.querySelector('.adventures-sidebar') as HTMLElement | null;
+    sidebar?.addEventListener('click', (event) => {
+        const target = event.target as Element | null;
+        if (!target) return;
+        // Bail if the click landed on (or inside) something that
+        // already has a meaning: a trip card, a filter pill, the
+        // sidebar header buttons, an anchor, etc.
+        if (target.closest('.adventure-compact-card, .filter-pill, button, a, [data-action], input, select, label')) return;
+        if (!state.selectedAdventureId) return;
+        closeAdventureDetail();
+    });
 }
 
 // Register data-action handlers used by HTML markup.

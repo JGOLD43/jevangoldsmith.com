@@ -314,6 +314,17 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
 </Base>
 
 <style is:inline>
+  /* The site-wide body has padding-bottom:72px to clear the mobile
+     book-detail toolbar. The adventures page has its OWN fixed
+     bottom toggle (54px, already accounted for in the page-split
+     height calc), so the extra 72px padding here just adds dead
+     space below the map that shows as a cream strip when the user
+     exits a trip and lands back on the map. Zero it out on this
+     page only. */
+  body:has(.adventures-page-split) {
+    padding-bottom: 0 !important;
+  }
+
   /* Mobile bottom toggle band matches the navbar (pure white in light
      mode) rather than the page's creamy --background, so the chrome
      reads as a single continuous frame around the map. Dark mode
