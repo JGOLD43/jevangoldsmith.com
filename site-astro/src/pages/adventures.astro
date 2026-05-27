@@ -324,6 +324,15 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
   body:has(.adventures-page-split) {
     padding-bottom: 0 !important;
   }
+  /* …but the inline trip-story sits BELOW the map (a separate
+     section), and its gallery's last row was getting clipped
+     behind the fixed bottom toggle (54px) once body padding-bottom
+     went to 0. Add a matching bottom pad to the story section so
+     the gallery clears the toggle. env() picks up the iPhone home-
+     indicator inset so it doesn't sit underneath it either. */
+  .adventure-story-inline {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+  }
 
   /* Mobile bottom toggle band matches the navbar (pure white in light
      mode) rather than the page's creamy --background, so the chrome

@@ -39,11 +39,16 @@ export function applyCardVisibility(
 function removeCarouselSlot(img: HTMLImageElement) {
     const slot = img.closest('.carousel-book-link, .category-expanded-book, .category-card');
     if (slot && slot.classList.contains('carousel-book-link') && slot.closest('.carousel-track')) {
-        // Hide the broken image but leave the anchor slot in place so
-        // the doubled-track math keeps working.
-        img.style.visibility = 'hidden';
+        // Keep the slot in place to preserve the doubled-track math,
+        // but swap the broken image for a styled neutral placeholder
+        // (book-shape gray box). The carousel stays infinite and
+        // symmetric, the empty rectangle reads as "cover not yet
+        // loaded" rather than a navigation jank.
+        img.style.background = 'var(--background-alt, #efe9db)';
+        img.style.borderRadius = '3px';
+        img.style.opacity = '0.5';
+        img.removeAttribute('src');
         const wrapper = slot as HTMLElement;
-        wrapper.style.opacity = '0';
         wrapper.style.pointerEvents = 'none';
         return;
     }
