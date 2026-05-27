@@ -79,6 +79,13 @@ const siteName = SITE_NAME;
 const rawPath = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
 const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split('/').pop()!;
 
+// Whether to fire a low-priority preload for the homepage portrait.
+// Triggers on every non-home page so by the time the user taps the
+// logo home-link the image is in the HTTP cache and renders
+// instantly. fetchpriority="low" keeps it out of the way of the
+// current page's LCP.
+const _preloadHomePortrait = seoSlug !== 'index';
+
 // per-page preconnect hints for cross-origin image hosts. One
 // DNS+TLS round-trip up front beats paying it on every <img> request.
 const preconnectOrigins: string[] = [];
@@ -131,6 +138,28 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         static-weight files (60KB total) with a single ~33KB variable
         file — net first-visit font bytes ~−27KB. */}
     <link rel="preload" href="/fonts/chivo/chivo-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
+    {_preloadHomePortrait && (
+      <>
+        <link
+          rel="preload"
+          as="image"
+          type="image/avif"
+          href="/images/generated/profile/profile-520.avif"
+          imagesrcset="/images/generated/profile/profile-360.avif 360w, /images/generated/profile/profile-520.avif 520w, /images/generated/profile/profile-720.avif 720w, /images/generated/profile/profile-960.avif 960w"
+          imagesizes="(max-width: 768px) 82vw, 42vw"
+          fetchpriority="low"
+        />
+        <link
+          rel="preload"
+          as="image"
+          type="image/jpeg"
+          href="/images/generated/profile/profile-520.jpg"
+          imagesrcset="/images/generated/profile/profile-360.jpg 360w, /images/generated/profile/profile-520.jpg 520w, /images/generated/profile/profile-720.jpg 720w, /images/generated/profile/profile-960.jpg 960w"
+          imagesizes="(max-width: 768px) 82vw, 42vw"
+          fetchpriority="low"
+        />
+      </>
+    )}
     {preconnectOrigins.map((origin) => (
       <link rel="preconnect" href={origin} crossorigin />
     ))}
