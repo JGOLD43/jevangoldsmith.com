@@ -156,13 +156,27 @@ if (workToggle) {
         // would otherwise follow the NEW mode and render the wrong
         // copy on the OLD side of the wipe line.
         const oldMode = current();
-        // Hero headline + welcome stack variants in grid cells
-        // (visibility:hidden inactive) so socials sit at same y.
-        clone.querySelectorAll('.hero-headline .mode-work, .hero-welcome .mode-work').forEach((el) => {
-            (el as HTMLElement).style.visibility = oldMode === 'work' ? '' : 'hidden';
+        // Lock the clone to the OLD mode's hero content. The hero's
+        // .mode-work and .mode-personal spans are STACKED in the same
+        // grid cell (`grid-area: 1 / 1`); only ONE is `visibility:
+        // visible` at a time. The inactive one is `visibility:
+        // hidden; display: block` — taking the grid cell's space but
+        // invisible. Once applyMode(next) flips html[data-mode], the
+        // cascade flips which span is hidden — and on the clone
+        // BOTH become hidden if we don't override.
+        //
+        // Earlier we tried display:none/inline — wrong property.
+        // The grid uses visibility. Override visibility !important
+        // on the clone so the OLD mode stays visible while the NEW
+        // mode is locked hidden, regardless of what the live html's
+        // data-mode is.
+        clone.querySelectorAll<HTMLElement>('.hero-headline .mode-work, .hero-welcome .mode-work').forEach((el) => {
+            el.style.removeProperty('display');
+            el.style.setProperty('visibility', oldMode === 'work' ? 'visible' : 'hidden', 'important');
         });
-        clone.querySelectorAll('.hero-headline .mode-personal, .hero-welcome .mode-personal').forEach((el) => {
-            (el as HTMLElement).style.visibility = oldMode === 'personal' ? '' : 'hidden';
+        clone.querySelectorAll<HTMLElement>('.hero-headline .mode-personal, .hero-welcome .mode-personal').forEach((el) => {
+            el.style.removeProperty('display');
+            el.style.setProperty('visibility', oldMode === 'personal' ? 'visible' : 'hidden', 'important');
         });
         // Preserve the live body's computed padding/margin so the
         // cloned content lines up exactly with what the user was
