@@ -266,7 +266,9 @@ const sections = [
 
 
 <script>
-  import { initAdventuresPage } from '../scripts/adventures.ts';
+  // SPA-swap to /adventures was removed (kept landing users in
+  // inconsistent states). Now uses a plain navigation; the
+  // adventures page initialises Leaflet on its own load path.
 
   // Snappy SPA swap. Target: <150ms perceived. No big zoom animation —
   // matching imagery means the swap itself is almost invisible. The
@@ -300,80 +302,18 @@ const sections = [
       document.head.appendChild(pre);
     }
 
-    link.addEventListener('click', async (event) => {
-      const me = event as MouseEvent;
-      if (me.metaKey || me.ctrlKey || me.shiftKey || me.altKey || me.button !== 0) return;
-      event.preventDefault();
-      const href = link.href;
-
-      // No zoom animation. Just swap. The thumb image stays visible on
-      // /now until we replace the main, then the overlay on /adventures
-      // (same image, same screen-anchored position) takes over.
-      const doc = prefetchedDoc
-        || await fetch(href, { credentials: 'same-origin' })
-            .then((res) => res.ok ? res.text() : Promise.reject(new Error(String(res.status))))
-            .then((html) => new DOMParser().parseFromString(html, 'text/html'))
-            .catch(() => null);
-
-      if (!doc) { window.location.href = href; return; }
-
-      const newMain = doc.querySelector('main');
-      const currentMain = document.querySelector('main');
-      if (!newMain || !currentMain || !currentMain.parentNode) { window.location.href = href; return; }
-
-      doc.querySelectorAll('head style').forEach((style: Element) => {
-        const cloned = style.cloneNode(true) as HTMLStyleElement;
-        cloned.setAttribute('data-now-spa-style', '1');
-        document.head.appendChild(cloned);
-      });
-      document.documentElement.classList.add('adv-focus-now-pending');
-
-      const url = new URL(href, location.origin);
-      const lat = parseFloat(url.searchParams.get('lat') || '');
-      const lng = parseFloat(url.searchParams.get('lng') || '');
-      if (isFinite(lat) && isFinite(lng)) {
-        const z = 10;
-        const x = Math.floor((lng + 180) / 360 * Math.pow(2, z));
-        const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, z));
-        document.documentElement.setAttribute('data-now-overlay-src', `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`);
-      }
-
-      // Wrap the swap in a View Transition for a 100ms crossfade — the
-      // browser handles the visual blend between current /now and the
-      // new /adventures content. Falls back to instant swap.
-      const doSwap = () => {
-        currentMain.parentNode!.replaceChild(newMain, currentMain);
-        document.title = doc.title;
-        history.pushState({ nowSpa: true }, '', href);
-        const overlayImg = document.getElementById('now-thumb-overlay') as HTMLImageElement | null;
-        const src = document.documentElement.getAttribute('data-now-overlay-src');
-        if (overlayImg && src) {
-          overlayImg.src = src;
-          overlayImg.classList.add('show');
-        }
-        // Force scroll to top so the user lands on the MAP, not at
-        // a trip story buried mid-page. The SSR'd /adventures main
-        // includes a hidden #adventure-story-inline section below
-        // the map; if scroll position from /now carried over, the
-        // user could see that story instead of the map. Triple-set
-        // (sync + 2 rAFs) so it lands after the layout settles.
-        const hardScrollTop = () => {
-          window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-        };
-        hardScrollTop();
-        requestAnimationFrame(() => {
-          hardScrollTop();
-          requestAnimationFrame(hardScrollTop);
-        });
-        initAdventuresPage();
-      };
-      if (typeof (document as any).startViewTransition === 'function') {
-        (document as any).startViewTransition(doSwap);
-      } else {
-        doSwap();
-      }
+    // Plain navigation — no SPA swap. The prior in-page swap was
+    // landing users in inconsistent states (sometimes the trip
+    // story buried under the map, sometimes a half-initialised
+    // Leaflet, sometimes nothing). A normal navigation reaches
+    // /adventures cleanly, the page initialises Leaflet on its
+    // own load path, and the View Transitions API (already
+    // configured site-wide via @view-transition { navigation: auto })
+    // handles the crossfade.
+    link.addEventListener('click', () => {
+      // Let the prefetched doc warm the HTTP cache but don't try
+      // to swap — just let the browser navigate naturally.
+      void prefetchedDoc;
     });
 
     window.addEventListener('popstate', (event) => {

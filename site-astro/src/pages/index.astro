@@ -94,10 +94,29 @@ if (latestChallenge) {
   pageType="WebSite"
 >
   <Fragment slot="head">
-    {/* LCP candidate — profile portrait. Preload so the fetch starts
-        alongside HTML parsing instead of waiting for the parser to
-        reach the <img> deep in <body>. */}
-    <link rel="preload" as="image" href="/images/generated/profile/profile-720.jpg" fetchpriority="high" />
+    {/* LCP candidate — profile portrait. Preload BOTH the AVIF
+        srcset and the JPG fallback, with matching imagesizes, so the
+        browser preloads the exact variant it will actually display.
+        Previously only the 720 JPG was preloaded, but the <img> uses
+        responsive AVIF srcset — so the variant the browser picked
+        (e.g. AVIF 520 on a 414px viewport) wasn't preloaded and the
+        portrait visibly faded in after HTML parse reached the img. */}
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      imagesrcset="/images/generated/profile/profile-360.avif 360w, /images/generated/profile/profile-520.avif 520w, /images/generated/profile/profile-720.avif 720w, /images/generated/profile/profile-960.avif 960w"
+      imagesizes="(max-width: 768px) 82vw, 42vw"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      type="image/jpeg"
+      imagesrcset="/images/generated/profile/profile-360.jpg 360w, /images/generated/profile/profile-520.jpg 520w, /images/generated/profile/profile-720.jpg 720w, /images/generated/profile/profile-960.jpg 960w"
+      imagesizes="(max-width: 768px) 82vw, 42vw"
+      fetchpriority="high"
+    />
   </Fragment>
     <!-- Side Navigation Dots -->
     <nav class="side-nav" id="side-nav">
