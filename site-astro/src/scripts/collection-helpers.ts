@@ -27,8 +27,26 @@ export function applyCardVisibility(
 // If the image lives in a slot wrapper (carousel link, category-modal
 // book/movie tile, etc.), remove the whole slot — otherwise the empty
 // wrapper leaves a phantom gap in the grid.
+//
+// EXCEPTION: the infinite "Recently Added" carousel (`.carousel-track`
+// children) MUST stay symmetric — its CSS animation translates from
+// 0 → -50% of the track's own width, assuming the track is exactly
+// 2× the displayed items. Removing one carousel-book-link breaks the
+// math: the second half is no longer a perfect duplicate of the
+// first, so the wrap-around at -50% shows a visible gap where the
+// removed slot would have been. For carousel children, hide the
+// broken img (keep its slot) so the row stays a perfect 2× copy.
 function removeCarouselSlot(img: HTMLImageElement) {
     const slot = img.closest('.carousel-book-link, .category-expanded-book, .category-card');
+    if (slot && slot.classList.contains('carousel-book-link') && slot.closest('.carousel-track')) {
+        // Hide the broken image but leave the anchor slot in place so
+        // the doubled-track math keeps working.
+        img.style.visibility = 'hidden';
+        const wrapper = slot as HTMLElement;
+        wrapper.style.opacity = '0';
+        wrapper.style.pointerEvents = 'none';
+        return;
+    }
     (slot ?? img).remove();
 }
 

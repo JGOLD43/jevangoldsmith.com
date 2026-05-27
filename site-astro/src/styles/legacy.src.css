@@ -644,36 +644,47 @@ body.nav-compact .navbar .theme-toggle-icon {
   color: var(--secondary-color);
 }
 
+/* Simplified page-header — matches the standalone-essay reader voice
+   instead of the previous "big dark hero box" treatment (which looked
+   like an ugly card floating above the page, especially in dark
+   mode where it picked up the --background-alt fill). The title now
+   reads as inline article copy: smaller, lighter weight, modest
+   margin, italic muted subtitle. Used by the philosophy + living
+   + health-style pages. */
 .page-header {
-  background-color: var(--background);
+  background: transparent;
   margin-bottom: 0;
-  padding: 4rem 0;
+  padding: 1.25rem 0 0.5rem;
 }
 
 [data-theme="dark"] .page-header {
-  background-color: var(--background-alt);
+  background: transparent;
 }
 
 .page-header .container {
   text-align: left;
-  max-width: 1400px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 .page-header h1 {
   color: var(--text-color);
-  margin-bottom: 1rem;
+  margin-bottom: 0.35rem;
   font-family: Chivo, sans-serif;
-  font-size: 3rem;
+  font-size: 1.85rem;
   font-weight: 600;
+  line-height: 1.2;
 }
 
 .page-header p {
-  color: var(--text-color);
+  color: var(--text-light);
   font-family: Chivo, sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  font-style: italic;
   font-weight: 400;
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
 }
 
 .content-section {
@@ -2444,29 +2455,36 @@ button[type="submit"]:hover {
 }
 
 .reading-philosophy-content {
-  max-width: 800px;
+  /* Match the standalone-essay reader width + padding so the
+     philosophy body reads as a single quiet column instead of
+     stretching to a max-width:800 hero box. */
+  max-width: 760px;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 0.5rem 1rem 3rem;
 }
 
 .philosophy-section {
-  margin-bottom: 3rem;
+  /* Tighter rhythm — paragraphs are shorter than essay paragraphs
+     so heavy 3rem section gaps feel airy and disconnected. */
+  margin-bottom: 1.75rem;
 }
 
 .philosophy-section h2 {
   color: var(--text-color);
-  margin-bottom: 1rem;
+  margin-bottom: 0.55rem;
   font-family: Chivo, sans-serif;
-  font-size: 1.75rem;
+  font-size: 1.25rem;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .philosophy-section p {
   color: var(--text-color);
   font-family: Chivo, sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 400;
-  line-height: 1.8;
+  line-height: 1.65;
+  margin-bottom: 0.6rem;
 }
 
 .back-to-books {
@@ -10004,50 +10022,56 @@ body.shelf-experience {
   }
 }
 
+/* Health page — restyled to match the essay-reader voice instead
+   of the big-hero / oversized-headline treatment that read as
+   "heavy" against the rest of the site. Same rhythm as the
+   philosophy pages and the standalone essay reader. */
 .health-content {
   max-width: 760px;
   margin: 0 auto;
-  padding: 3rem 1.5rem 4rem;
+  padding: 1rem 1rem 3rem;
 }
 
 .health-intro {
   border-bottom: 1px solid var(--border-color);
-  margin-bottom: 3.5rem;
-  padding-bottom: 2.5rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
 }
 
 .health-eyebrow {
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--secondary-color);
-  margin-bottom: 1rem;
-  font-size: .7rem;
+  margin-bottom: 0.4rem;
+  font-size: .68rem;
   font-weight: 600;
 }
 
 .health-title {
-  letter-spacing: -.02em;
-  margin-bottom: 1.25rem;
-  font-size: 3rem;
-  font-weight: 700;
-  line-height: 1.1;
+  letter-spacing: -.01em;
+  margin-bottom: 0.6rem;
+  font-size: 1.85rem;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 .health-thesis {
-  color: var(--text-color);
-  font-size: 1.25rem;
+  color: var(--text-light);
+  font-size: 1rem;
   font-weight: 400;
+  font-style: italic;
   line-height: 1.55;
 }
 
 .health-thesis strong {
   color: var(--secondary-color);
   font-weight: 600;
+  font-style: normal;
 }
 
 .health-block {
   border-top: 1px solid var(--border-color);
-  padding: 3rem 0;
+  padding: 1.5rem 0;
 }
 
 .health-block:first-of-type {
@@ -10056,26 +10080,27 @@ body.shelf-experience {
 }
 
 .block-eyebrow {
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--secondary-color);
-  margin-bottom: .75rem;
-  font-size: .7rem;
+  margin-bottom: 0.35rem;
+  font-size: .68rem;
   font-weight: 600;
 }
 
 .block-title {
   letter-spacing: -.01em;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
-  font-weight: 700;
+  margin-bottom: 0.6rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 .block-prose p {
   color: var(--text-color);
-  margin-bottom: 1.25rem;
-  font-size: 1.05rem;
-  line-height: 1.75;
+  margin-bottom: 0.7rem;
+  font-size: 1rem;
+  line-height: 1.65;
 }
 
 .block-prose p:last-child {
@@ -10084,9 +10109,9 @@ body.shelf-experience {
 
 .block-prose h3 {
   color: var(--text-color);
-  margin-top: 2rem;
-  margin-bottom: .75rem;
-  font-size: 1.15rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -10094,12 +10119,12 @@ body.shelf-experience {
   border-left: 3px solid var(--secondary-color);
   color: var(--text-color);
   letter-spacing: -.01em;
-  margin: 2.5rem -1rem;
-  padding: 1.5rem 2rem;
-  font-size: 1.4rem;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+  font-size: 1.05rem;
   font-style: italic;
-  font-weight: 600;
-  line-height: 1.4;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
 .pull-quote:before {
