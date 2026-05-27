@@ -5,6 +5,7 @@ import pages from '../../../data/pages.json';
 import quotes from '../../public/data/quotes.json';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
 import { type BreadcrumbStep, DEFAULT_OG_IMAGE, type ExtraSchema, type PageType, SITE_NAME } from '../lib/seo';
+import { nowMapThumbUrl } from '../lib/now-location';
 
 // Site-wide navbar — inlined here (was components/Nav.astro). Active marker:
 //   - leaf nav-link active when current page matches its href (adventure-*
@@ -86,6 +87,15 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
 // current page's LCP.
 const _preloadHomePortrait = seoSlug !== 'index';
 
+// Warm the /now satellite-tile cache from every page that isn't
+// /now. The tile is served by a third-party (arcgis) so without a
+// preload it doesn't start fetching until the /now HTML is parsed
+// — visible empty box on tap. Cross-origin preload + preconnect
+// gets the TLS handshake AND the bytes started in parallel with
+// the HTML nav.
+const _preloadNowMap = seoSlug !== 'now';
+const _nowMapThumbUrl = _preloadNowMap ? nowMapThumbUrl() : '';
+
 // per-page preconnect hints for cross-origin image hosts. One
 // DNS+TLS round-trip up front beats paying it on every <img> request.
 const preconnectOrigins: string[] = [];
@@ -138,6 +148,12 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         static-weight files (60KB total) with a single ~33KB variable
         file — net first-visit font bytes ~−27KB. */}
     <link rel="preload" href="/fonts/chivo/chivo-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
+    {_preloadNowMap && (
+      <>
+        <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin />
+        <link rel="preload" as="image" href={_nowMapThumbUrl} fetchpriority="low" crossorigin />
+      </>
+    )}
     {_preloadHomePortrait && (
       <>
         <link
