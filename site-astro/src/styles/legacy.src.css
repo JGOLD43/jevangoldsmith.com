@@ -1737,7 +1737,7 @@ button[type="submit"]:hover {
 
 .hero-social-links a {
   background-color: var(--background);
-  border: 1px solid var(--border-color);
+  border: 1px solid #888;
   color: #000;
   border-radius: 50%;
   justify-content: center;
@@ -7405,7 +7405,7 @@ body.meet-page {
 [data-theme="dark"] .hero-social-links a {
   color: #fff;
   background-color: #0000;
-  border-color: #ffffff4d;
+  border-color: #ffffff99;
 }
 
 [data-theme="dark"] .hero-social-links a:hover {
