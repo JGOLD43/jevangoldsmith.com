@@ -391,9 +391,39 @@ function initWisdomTickerPause() {
     observer.observe(track);
 }
 
+// Warm the HTTP cache for the homepage portrait when the user is on
+// another page. Safari iOS doesn't support Speculation Rules, so the
+// nav-prefetch fallback only caches the home HTML — the AVIF/JPG
+// srcset preloads inside that HTML don't fire until activation, and
+// the portrait visibly loads in after navigation. A plain
+// `new Image()` request follows the normal HTTP cache in every
+// browser, so by the time the user taps the logo home-link the
+// image is already there.
+function warmHomePortrait() {
+    const path = location.pathname;
+    if (path === '/' || path === '' || path.endsWith('/index.html')) return;
+    // Pick the variant the homepage <img> will most likely resolve
+    // to on the current viewport. sizes is "(max-width: 768px) 82vw,
+    // 42vw" — work out the CSS px target, then map to the closest
+    // srcset width.
+    const vw = window.innerWidth;
+    const target = vw <= 768 ? vw * 0.82 : vw * 0.42;
+    const dpr = window.devicePixelRatio || 1;
+    const need = target * dpr;
+    const widths = [360, 520, 720, 960];
+    const pick = widths.find((w) => w >= need) || 960;
+    // Prefer AVIF — every modern browser that runs this bundle supports it.
+    const supportsAvif = 'HTMLPictureElement' in window;
+    const ext = supportsAvif ? 'avif' : 'jpg';
+    const img = new Image();
+    img.decoding = 'async';
+    img.src = `/images/generated/profile/profile-${pick}.${ext}`;
+}
+
 async function initDeferredChrome() {
     initLogoVideoLazy();
     initWisdomTickerPause();
+    warmHomePortrait();
     const { registerServiceWorker } = await import('./sw-register');
     registerServiceWorker();
     if (import.meta.env.RUM_ENDPOINT) {
