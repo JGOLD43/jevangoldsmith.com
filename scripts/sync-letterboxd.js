@@ -35,8 +35,22 @@ function warn(msg) { process.stderr.write(`[letterboxd-sync] WARN ${msg}\n`); }
 async function fetchRss() {
   const rssUrl = `https://letterboxd.com/${username}/rss/`;
   const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
+  const ua = 'jevangoldsmith-site-sync (https://jevangoldsmith.com)';
+  // Try direct first — Node has no CORS, so we don't need the proxy.
+  // The proxy was a leftover from when this fetch ran in the browser
+  // and was failing with HTTP 408 timeouts, silently breaking the
+  // daily sync. Fall back to the proxy only if Letterboxd itself
+  // returns a non-2xx (rate-limit, blocked UA, etc).
+  try {
+    log(`fetching ${rssUrl} directly...`);
+    const res = await fetch(rssUrl, { headers: { 'User-Agent': ua } });
+    if (res.ok) return await res.text();
+    warn(`direct fetch returned HTTP ${res.status}, falling back to proxy`);
+  } catch (err) {
+    warn(`direct fetch threw: ${err.message}; falling back to proxy`);
+  }
   log(`fetching ${rssUrl} via allorigins proxy...`);
-  const res = await fetch(proxyUrl, { headers: { 'User-Agent': 'jevangoldsmith-site-sync' } });
+  const res = await fetch(proxyUrl, { headers: { 'User-Agent': ua } });
   if (!res.ok) throw new Error(`HTTP ${res.status} from proxy`);
   return res.text();
 }
