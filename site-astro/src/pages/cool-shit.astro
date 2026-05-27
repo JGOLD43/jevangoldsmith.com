@@ -330,6 +330,157 @@ function tileFor(idx: number, hasImage: boolean) {
     /* On touch devices the hover label never shows — pin it visible */
     .wall-mode .wall-img .wall-label { opacity: 1; background: linear-gradient(transparent, rgba(0,0,0,.7)); }
   }
+
+  /* === Card text + tag cleanup ===
+     The default .feed-item-tag is a gold pill that competes with
+     the imagery and shouts on every card. Strip the bubble — keep
+     just an uppercase category label as small uppercase text in
+     the corner. Also strengthen the image-overlay gradient and
+     brighten + shadow the title text so it stays readable on
+     bright photos. */
+  .wall-mode .feed-item-tag {
+    background: none !important;
+    color: inherit !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    font-weight: 700 !important;
+    opacity: 0.85;
+  }
+
+  /* Image tiles: stronger gradient + brighter title with text-shadow
+     so it survives against high-key photos (sky, snow, neon). */
+  .wall-mode .wall-img .wall-label {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.55) 45%, transparent 100%) !important;
+    color: #fff !important;
+    padding: 14px 12px 10px !important;
+    gap: 4px !important;
+  }
+  .wall-mode .wall-img .wall-label .feed-item-title {
+    color: #fff !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  }
+  .wall-mode .wall-img .wall-label .feed-item-tag,
+  .wall-mode .wall-img .wall-label .feed-item-date {
+    color: rgba(255, 255, 255, 0.85) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Text tiles (no image): label uses theme colours already, just
+     keep the tag stripped of its pill background and ensure the
+     title is plenty contrasted with the cream / sage / rose / dark
+     panel backgrounds (which the legacy CSS already handles). */
+  .wall-mode .wall-text .feed-item-tag {
+    opacity: 0.7;
+  }
+
+  /* === Tag rail alignment ===
+     The pills have 4px 8px padding, so the text of the "all" pill
+     sits 8px inset from the rail's left edge. The brand text
+     ("interests") has no such inset. Shift the rail left by the
+     pill's horizontal padding so the first pill's TEXT aligns with
+     the brand text (and the tile grid edges align too). */
+  .wall-mode .wall-rail {
+    margin-left: -8px;
+  }
+
+  /* === Text-tile layout polish ===
+     Rework the entire text-tile vertical rhythm:
+       - body flex-column, anchored to TOP (not center) so title
+         doesn't float and cards read predictably
+       - title font-size clamps to the tile width so big tiles get
+         a larger headline and small ones don't overflow
+       - meta row stays compact, single-line where possible
+       - SOURCE text is hidden when a "visit" link is present —
+         the link itself shows the URL, so showing it twice was
+         the main source of the duplicated/cluttered look
+       - link sits inline at the bottom, no wrap, no border that
+         wraps onto multiple lines */
+  .wall-mode .wall-text {
+    align-items: stretch !important;
+    padding: 14px !important;
+  }
+  .wall-mode .wall-text .wall-text-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;
+  }
+  .wall-mode .wall-text .feed-item-title {
+    margin: 0 !important;
+    font-size: clamp(13px, 2.4cqi + 10px, 22px) !important;
+    line-height: 1.18 !important;
+    font-weight: 600 !important;
+    overflow-wrap: anywhere;
+  }
+  .wall-mode .wall-text .feed-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 6px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  /* Hide the source span entirely when a visit-link follows it
+     (the link text already shows the URL). Use :has() to scope. */
+  .wall-mode .wall-text .feed-item-body:has(.feed-item-link) .feed-item-source {
+    display: none !important;
+  }
+  /* If no visit link, source still shows with a leading bullet
+     that wraps WITH the source text (no orphan dots). */
+  .wall-mode .wall-text .feed-item-source::before {
+    content: none !important;
+  }
+  .wall-mode .wall-text .feed-item-source:not(:empty)::before {
+    content: "· ";
+    opacity: 0.5;
+    margin-right: 2px;
+  }
+  .wall-mode .wall-text .feed-item-source:empty {
+    display: none;
+  }
+
+  /* "visit raycast.com →" link: stays on one row, ellipsis if the
+     URL is long, sits just below the meta row. Container queries
+     scale the link size with the tile so it doesn't dominate. */
+  .wall-mode .wall-text {
+    container-type: inline-size;
+  }
+  .wall-mode .wall-text .feed-item-link {
+    margin-top: auto !important;
+    padding-top: 8px;
+    font-size: 11px !important;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    border-bottom: none !important;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block !important;
+    transition: opacity 0.2s ease;
+  }
+  .wall-mode .wall-text .feed-item-link:hover { opacity: 0.7; }
+
+  /* On very small/short tiles the link still needs to be readable
+     — drop it to 10px if the tile is narrower than 200px. */
+  @container (max-width: 200px) {
+    .wall-mode .wall-text .feed-item-link {
+      font-size: 10px !important;
+    }
+    .wall-mode .wall-text .feed-item-title {
+      font-size: clamp(12px, 2cqi + 9px, 16px) !important;
+    }
+  }
 </style>
 
 <script is:inline type="application/json" id="jg-cool-shit-data" set:html={coolShitJson} />

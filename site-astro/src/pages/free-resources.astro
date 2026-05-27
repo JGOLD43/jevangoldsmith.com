@@ -51,72 +51,53 @@ const cards = resources.map((r) => renderResourceCard(r, resourceCategories)).jo
 
   <style is:inline>
     /* === Restyled resource cards ===
-       Cleaner, more refined treatment: tighter card geometry, a
-       small icon in its own muted square (no longer a heavy gold
-       block), a hairline gold accent on the top-edge that grows on
-       hover, and an underlined CTA that animates an arrow on hover
-       instead of changing colour. Inline overrides win against the
-       legacy-css base rules. */
+       Aligned with the site's broader visual language: cream/white
+       cards with thin neutral borders (matching the books, movies,
+       people cards), navy as the primary text accent, and gold used
+       sparingly — only on the icon and as a small hover lift. No
+       full-card gold border, no top accent line. Keeps the page
+       quiet so the content stays the focus. */
     .resources-grid {
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 1rem;
       margin: 0 0 4rem;
     }
     .resource-card {
-      position: relative;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.4rem 1.4rem 1.2rem;
+      border-radius: 12px;
+      padding: 1.4rem;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
       transition: transform 0.22s cubic-bezier(.25, .8, .25, 1),
                   box-shadow 0.22s ease,
                   border-color 0.22s ease;
-      overflow: hidden;
-    }
-    /* Gold accent line at the top of every card — subtle in resting
-       state, brightens + thickens on hover so the card feels alive
-       without changing its visual weight. */
-    .resource-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--secondary-color);
-      opacity: 0.35;
-      transform: scaleX(0.18);
-      transform-origin: left center;
-      transition: opacity 0.25s ease, transform 0.35s cubic-bezier(.25, .8, .25, 1);
     }
     .resource-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--secondary-color);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-    }
-    .resource-card:hover::before {
-      opacity: 1;
-      transform: scaleX(1);
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--primary-color) 30%, var(--border-color));
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
     }
 
+    /* Soft cream-tinted icon square that matches the site's
+       background palette. The gold accent shows on the icon glyph
+       itself, not the full block — so it reads as part of the
+       overall design language rather than shouting. */
     .resource-icon {
-      background: color-mix(in srgb, var(--secondary-color) 16%, transparent);
+      background: color-mix(in srgb, var(--secondary-color) 14%, var(--background));
       color: var(--secondary-color);
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 0.4rem;
-      transition: background 0.2s ease, color 0.2s ease;
+      transition: background 0.2s ease;
     }
     .resource-card:hover .resource-icon {
-      background: var(--secondary-color);
-      color: #1a1a1a;
+      background: color-mix(in srgb, var(--secondary-color) 22%, var(--background));
     }
     .resource-icon svg {
       width: 18px;
@@ -149,25 +130,24 @@ const cards = resources.map((r) => renderResourceCard(r, resourceCategories)).jo
       margin: 0.3rem 0 1rem;
     }
 
+    /* CTA: subtle navy text + arrow that slides on hover. No
+       underline, no gold — matches the navbar-style hover voice. */
     .resource-link {
       color: var(--primary-color);
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 600;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
       margin-top: auto;
-      padding-bottom: 2px;
-      border-bottom: 1px solid transparent;
-      transition: color 0.2s ease, border-color 0.2s ease, gap 0.25s cubic-bezier(.25, .8, .25, 1);
+      transition: gap 0.25s cubic-bezier(.25, .8, .25, 1), color 0.2s ease;
       align-self: flex-start;
       width: fit-content;
     }
     .resource-link:hover {
       color: var(--secondary-color);
-      border-bottom-color: var(--secondary-color);
-      gap: 0.6rem;
+      gap: 0.65rem;
     }
     .resource-link svg {
       width: 14px;
@@ -175,15 +155,16 @@ const cards = resources.map((r) => renderResourceCard(r, resourceCategories)).jo
       transition: transform 0.25s cubic-bezier(.25, .8, .25, 1);
     }
     .resource-link:hover svg {
-      transform: translateX(2px);
+      transform: translateX(3px);
     }
 
     [data-theme="dark"] .resource-card {
-      background: #1c1c1c;
+      background: #1a1a1a;
       border-color: #2a2a2a;
     }
     [data-theme="dark"] .resource-card:hover {
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+      border-color: #3a3a3a;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
     }
 
     /* Tidier CTA pair matching the navbar Follow button: primary is
