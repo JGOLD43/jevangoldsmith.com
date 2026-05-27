@@ -26,6 +26,18 @@ const DATA_CACHE = `data-${CACHE_VERSION}`;
 // Top-traffic pages that benefit from being warm in cache before the
 // user visits them. Best-effort prefetch — failures are swallowed.
 const PRECACHE_HTML = ['/', '/books.html', '/movies.html', '/people.html', '/adventures.html'];
+// Homepage portrait variants — LCP candidate on /, often the first
+// thing the user sees after any in-site navigation. Precaching here
+// means tap-to-home renders the portrait from cache (instant)
+// instead of waiting on the network round-trip.
+const PRECACHE_ASSETS = [
+  '/images/generated/profile/profile-360.avif',
+  '/images/generated/profile/profile-520.avif',
+  '/images/generated/profile/profile-720.avif',
+  '/images/generated/profile/profile-360.jpg',
+  '/images/generated/profile/profile-520.jpg',
+  '/images/generated/profile/profile-720.jpg',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
@@ -34,6 +46,11 @@ self.addEventListener('install', (event) => {
       await Promise.allSettled(PRECACHE_HTML.map(async (url) => {
         const response = await fetch(url, { credentials: 'same-origin' });
         if (response.ok) await cache.put(url, response);
+      }));
+      const assetCache = await caches.open(ASSET_CACHE);
+      await Promise.allSettled(PRECACHE_ASSETS.map(async (url) => {
+        const response = await fetch(url, { credentials: 'same-origin' });
+        if (response.ok) await assetCache.put(url, response);
       }));
     } catch {
       // Precache is opportunistic; never block install.

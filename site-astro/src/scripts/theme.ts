@@ -423,7 +423,6 @@ function warmHomePortrait() {
 async function initDeferredChrome() {
     initLogoVideoLazy();
     initWisdomTickerPause();
-    warmHomePortrait();
     const { registerServiceWorker } = await import('./sw-register');
     registerServiceWorker();
     if (import.meta.env.RUM_ENDPOINT) {
@@ -468,6 +467,12 @@ function bootChrome() {
     initMobileNav();
     initNavHeight();
     initViewToggleToast();
+    // Fire portrait warm immediately (not at idle) so the cache is
+    // populated as soon as possible. Head <link rel="preload"> hits
+    // first; this JS pass is a redundant safety net for browsers
+    // that ignore fetchpriority or never honored the preload hint
+    // (older Safari).
+    warmHomePortrait();
     runWhenIdle(initDeferredChrome);
 }
 
