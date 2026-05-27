@@ -351,6 +351,22 @@ const sections = [
           overlayImg.src = src;
           overlayImg.classList.add('show');
         }
+        // Force scroll to top so the user lands on the MAP, not at
+        // a trip story buried mid-page. The SSR'd /adventures main
+        // includes a hidden #adventure-story-inline section below
+        // the map; if scroll position from /now carried over, the
+        // user could see that story instead of the map. Triple-set
+        // (sync + 2 rAFs) so it lands after the layout settles.
+        const hardScrollTop = () => {
+          window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        };
+        hardScrollTop();
+        requestAnimationFrame(() => {
+          hardScrollTop();
+          requestAnimationFrame(hardScrollTop);
+        });
         initAdventuresPage();
       };
       if (typeof (document as any).startViewTransition === 'function') {

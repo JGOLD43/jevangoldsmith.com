@@ -352,6 +352,27 @@ const config = ({
     padding-top: 6px;
   }
 
+  /* Light-mode active category — guarantee high contrast.
+     Previously, when an active category had its panel expanded,
+     some cascade combinations dropped the active background to a
+     light gray with near-invisible text. Lock the active state
+     to solid black bg + white text with !important so no later
+     rule can wash it out. */
+  .books-sidebar .sidebar-category.active {
+    background: #111 !important;
+    color: #fff !important;
+  }
+  .books-sidebar .sidebar-category.active .category-name {
+    color: #fff !important;
+  }
+  .books-sidebar .sidebar-category.active .category-icon svg {
+    stroke: #fff !important;
+  }
+  .books-sidebar .sidebar-category.active .category-count {
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #fff !important;
+  }
+
   /* --- Dark-mode-friendly selected category --- */
   [data-theme="dark"] .books-sidebar .sidebar-category {
     border-left: 3px solid transparent;
