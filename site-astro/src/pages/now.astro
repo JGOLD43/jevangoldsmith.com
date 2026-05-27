@@ -1,32 +1,24 @@
 ---
 import Base from '../layouts/Base.astro';
+import {
+  NOW_LAST_UPDATED,
+  NOW_LOCATION_LABEL,
+  NOW_LAT,
+  NOW_LNG,
+  nowMapThumbUrl,
+  nowMapPinOffset,
+} from '../lib/now-location';
 
 const canonical = 'https://jevangoldsmith.com/now.html';
 
-// Edit these as life changes. Newest section first.
-const lastUpdated = 'May 12, 2026';
-const lastUpdatedLocation = 'Ayr, QLD';
-// Coordinates for the location above — used by /adventures map to drop a
-// "now" pin and to focus the view when arriving via the link below.
-const lastUpdatedLat = -19.5765;
-const lastUpdatedLng = 147.4035;
+const lastUpdated = NOW_LAST_UPDATED;
+const lastUpdatedLocation = NOW_LOCATION_LABEL;
+const lastUpdatedLat = NOW_LAT;
+const lastUpdatedLng = NOW_LNG;
 const mapLink = `/adventures.html?focus=now&lat=${lastUpdatedLat}&lng=${lastUpdatedLng}&place=${encodeURIComponent(lastUpdatedLocation)}`;
 
-// Build an Esri World Imagery satellite tile URL that contains the
-// "now" location. zoom 10 is the same level the trip map ends at
-// after fitBounds-to-25km-circle, so the zoom-in animation lands on
-// the same imagery the user will see on the destination — visual
-// continuity across the swap, no zoom mismatch.
-const MAP_ZOOM = 10;
-const _xFrac = (lastUpdatedLng + 180) / 360 * Math.pow(2, MAP_ZOOM);
-const _yFrac = (1 - Math.log(Math.tan(lastUpdatedLat * Math.PI / 180) + 1 / Math.cos(lastUpdatedLat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, MAP_ZOOM);
-const tileX = Math.floor(_xFrac);
-const tileY = Math.floor(_yFrac);
-const mapThumbUrl = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${MAP_ZOOM}/${tileY}/${tileX}`;
-// Sub-tile pin offset (0..100%) so the marker lands on the actual lat/lng
-// instead of the tile's center.
-const pinLeftPct = ((_xFrac - tileX) * 100).toFixed(2);
-const pinTopPct = ((_yFrac - tileY) * 100).toFixed(2);
+const mapThumbUrl = nowMapThumbUrl();
+const { leftPct: pinLeftPct, topPct: pinTopPct } = nowMapPinOffset();
 
 const sections = [
   {
