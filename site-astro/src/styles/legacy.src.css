@@ -6468,8 +6468,10 @@ body.meet-page {
   opacity: 1;
 }
 
-[data-theme="dark"] .theme-toggle:hover {
-  background: #333;
+@media (hover: hover) {
+  [data-theme="dark"] .theme-toggle:hover {
+    background: #333;
+  }
 }
 
 [data-theme="dark"] .navbar-contact-btn {
@@ -8960,6 +8962,18 @@ body.zoom-open .shelf-filter {
   top: 100%;
   left: 50%;
   transform: translate(-50%, 10px);
+}
+
+/* On narrow viewports the movies grid collapses to a single wide column,
+   so this centered panel's 112% width spilled ~6% past each screen edge.
+   Absolutely positioned, it widened the page enough to inflate the fixed
+   navbar's containing block and push the hamburger off-screen. The zoom
+   panel isn't used on touch (cards navigate on tap), so cap it to the
+   card width on mobile. */
+@media (width <= 968px) {
+  .js-zoom-detail {
+    width: 100%;
+  }
 }
 
 .js-zoom-grid.is-zoomed .js-zoom-item.is-zoom-target .js-zoom-detail {
@@ -14267,8 +14281,10 @@ body.shelf-experience {
   }
 }
 
-[data-theme="dark"] .work-mode-toggle:hover {
-  background: #333;
+@media (hover: hover) {
+  [data-theme="dark"] .work-mode-toggle:hover {
+    background: #333;
+  }
 }
 
 .work-mode-icon {
@@ -14284,6 +14300,33 @@ body.shelf-experience {
 .work-mode-toggle[data-mode="work"] .icon-digger, .work-mode-toggle[data-mode="explore"] .icon-explorer {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1) rotate(0);
+}
+
+/* Tap feedback. JS adds .tap-active on click and removes it after ~1.4s
+   (the buttons' `transition: all .2s` fades the background out), so the
+   toggle flashes "selected" then clears itself rather than the sticky
+   :hover background leaving it looking permanently selected after a tap. */
+.work-mode-toggle.tap-active, .theme-toggle.tap-active {
+  color: var(--text-color);
+  background: var(--background-alt);
+}
+
+[data-theme="dark"] .work-mode-toggle.tap-active, [data-theme="dark"] .theme-toggle.tap-active {
+  background: #333;
+}
+
+@keyframes work-mode-pop {
+  0% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+  35% { transform: translate(-50%, -50%) scale(1.28) rotate(-10deg); }
+  70% { transform: translate(-50%, -50%) scale(.9) rotate(6deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .work-mode-toggle.tap-active[data-mode="work"] .icon-digger,
+  .work-mode-toggle.tap-active[data-mode="explore"] .icon-explorer {
+    animation: work-mode-pop .55s cubic-bezier(.34, 1.4, .64, 1);
+  }
 }
 
 body.nav-compact .navbar .work-mode-toggle {

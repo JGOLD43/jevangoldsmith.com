@@ -52,6 +52,28 @@ function attachHoverTip(el: HTMLElement | null) {
     el.addEventListener('click', cancel);
 }
 
+// Track the pointer type of the last interaction so flashTapState only
+// runs the sticky-hover reset on touch/pen — on a real mouse the user
+// expects the normal :hover background to persist while hovering.
+let lastPointerType = 'mouse';
+document.addEventListener('pointerdown', (e) => { lastPointerType = (e as PointerEvent).pointerType || 'mouse'; }, true);
+
+// Flash a transient "selected" state on a toggle, then clear it after
+// ~1.4s. On touch devices the tap leaves a sticky :hover background that
+// makes the toggle look permanently selected; momentarily dropping
+// pointer-events forces the browser to recompute hover and clear it.
+function flashTapState(el: HTMLElement | null) {
+    if (!el) return;
+    el.classList.add('tap-active');
+    window.setTimeout(() => {
+        el.classList.remove('tap-active');
+        if (lastPointerType !== 'mouse') {
+            el.style.pointerEvents = 'none';
+            requestAnimationFrame(() => { el.style.pointerEvents = ''; });
+        }
+    }, 1400);
+}
+
 // Briefly show a confirmation toast on a toggle button by stamping
 // data-toast with the message and adding .show-toast for 1500ms.
 function flashToast(el: Element | null, message: string) {
@@ -69,6 +91,7 @@ function toggleTheme() {
     setTheme(next);
     const btn = document.querySelector('.theme-toggle') as HTMLElement | null;
     flashToast(btn, `Switched to ${next} mode`);
+    flashTapState(btn);
     btn?.blur();
 }
 
@@ -229,6 +252,7 @@ if (workToggle) {
             requestAnimationFrame(() => {
                 applyMode(next);
                 flashToast(workToggle, `Switched to ${next} mode`);
+                flashTapState(workToggle);
 
                 // Thin black line that travels with the clip edge —
                 // visual marker of where OLD ends and NEW begins.
