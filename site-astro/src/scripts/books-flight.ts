@@ -181,33 +181,11 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             const previousTitle = document.title;
             const previousScrollY = window.scrollY;
             const hiddenSidebars = Array.from(document.querySelectorAll<HTMLElement>('.books-sidebar'));
-            // Snapshot the listing's UI state so the reverse flight can
-            // put the user back exactly where they were before the flight
-            // started. Two pieces of state matter:
-            //   1. view mode — list vs collections (grid). The toggle
-            //      button's data-current-mode attribute is the source of
-            //      truth used by books-render.setViewMode.
-            //   2. open category modal — when the user clicked the cover
-            //      from inside a category-expanded modal, books-modal
-            //      closed it as part of the forward flight. We capture
-            //      the .category-expanded-modal's data-category so we
-            //      can re-open the same category on the way back.
-            const viewToggleSnapshot = document.getElementById('view-toggle-main');
-            const previousViewMode = viewToggleSnapshot?.dataset.currentMode || 'list';
-            const previousModalCategory = (() => {
-                const modal = document.getElementById('category-expanded-modal');
-                if (!modal) return null;
-                // The modal class .active is removed before our forward
-                // flight runs (books-modal closes it just after invoking
-                // flyCoverToDetail). Use the SSR-side .last-opened
-                // marker books-modal stamps when opening — but it
-                // doesn't stamp one, so fall back to a session cache.
-                // Easiest source of truth: data-category we stamp on
-                // the modal each time it opens. If the user came from
-                // a category modal, books-modal.ts now stamps it (see
-                // edit below).
-                return modal.getAttribute('data-last-category');
-            })();
+            // The synchronously-captured snapshots above are the source
+            // of truth for the reverse-flight's UI restoration. We just
+            // alias them with shorter names for use inside this closure.
+            const previousViewMode = initialViewModeSnap;
+            const previousModalCategory = initialModalCategorySnap;
             let handoffComplete = false;
             const cleanupFlightCover = () => {
                 clone.remove();

@@ -12990,14 +12990,33 @@ body.shelf-experience {
       margin-bottom: .85rem;
     }
 
+    /* Mobile: stack the label ON TOP of the bar so long category
+       names ("Patience and Clear Thinking", "Out of the Box
+       Thinking") read on one line instead of wrapping into a tall
+       3-line column. Bar + count share the second row. */
     .stats-bar-row {
-      grid-template-columns: 72px 1fr 56px;
-      gap: .55rem;
-      margin-bottom: .3rem;
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "label label"
+        "bar value";
+      column-gap: .5rem;
+      row-gap: .2rem;
+      margin-bottom: .55rem;
     }
-
-    .stats-bar-label, .stats-bar-value {
+    .stats-bar-label {
+      grid-area: label;
       font-size: .78rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stats-bar-track {
+      grid-area: bar;
+    }
+    .stats-bar-value {
+      grid-area: value;
+      font-size: .78rem;
+      min-width: 30px;
     }
   }
 

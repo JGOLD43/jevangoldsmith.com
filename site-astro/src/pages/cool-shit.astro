@@ -102,8 +102,12 @@ function tileFor(idx: number, hasImage: boolean) {
      in legacy.src.css don't leak in.
      ============================================================ */
   .wall-mode {
-    /* Light mode: warm cream Are.na aesthetic. */
-    --wall-bg: #f4f0e8;
+    /* Light mode: warm cream Are.na aesthetic. Matches the body /
+       footer --background token (#f5f3ed) so the page reads as one
+       continuous surface from header through grid through footer.
+       Previously: #f4f0e8 (slightly warmer/yellower) created a
+       visible seam where the wall ended and the footer began. */
+    --wall-bg: #f5f3ed;
     --wall-ink: #1a1a1a;
     --wall-muted: #7a7468;
     --wall-line: #d9d3c4;

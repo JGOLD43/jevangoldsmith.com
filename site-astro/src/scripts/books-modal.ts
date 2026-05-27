@@ -109,6 +109,13 @@ export function closeCategoryModal() {
     document.body.style.overflow = '';
     releaseCategoryModalFocus?.();
     releaseCategoryModalFocus = null;
+    // Clear the data-last-category stamp on a NORMAL close (user
+    // hit Escape / clicked the backdrop). When a click from inside
+    // the modal launches a book detail page, books-flight has
+    // already captured the value synchronously BEFORE this close
+    // runs, so clearing it now is safe and prevents a later
+    // list-view book click from inheriting a stale category.
+    modal.removeAttribute('data-last-category');
 }
 
 export function openBookFromGrid(isbn: string, sourceEl?: HTMLElement | null) {
