@@ -148,6 +148,16 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
         window.location.href = href;
     };
 
+    // Snapshot the listing's UI state RIGHT NOW (synchronously, before
+    // the fetch resolves and before any other handler — books-modal's
+    // closeCategoryModal() — gets a chance to mutate it). The reverse
+    // flight reads these to restore the user to exactly where they
+    // were before the click.
+    const initialViewModeSnap =
+        document.getElementById('view-toggle-main')?.dataset.currentMode || 'list';
+    const initialModalCategorySnap =
+        document.getElementById('category-expanded-modal')?.getAttribute('data-last-category') || null;
+
     // SPA-style transition: fetch the detail page in parallel with the
     // flight, swap in its <main> as soon as it arrives, and start its
     // content fade-in WHILE the clone is still flying. The clone is the
@@ -171,6 +181,33 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             const previousTitle = document.title;
             const previousScrollY = window.scrollY;
             const hiddenSidebars = Array.from(document.querySelectorAll<HTMLElement>('.books-sidebar'));
+            // Snapshot the listing's UI state so the reverse flight can
+            // put the user back exactly where they were before the flight
+            // started. Two pieces of state matter:
+            //   1. view mode — list vs collections (grid). The toggle
+            //      button's data-current-mode attribute is the source of
+            //      truth used by books-render.setViewMode.
+            //   2. open category modal — when the user clicked the cover
+            //      from inside a category-expanded modal, books-modal
+            //      closed it as part of the forward flight. We capture
+            //      the .category-expanded-modal's data-category so we
+            //      can re-open the same category on the way back.
+            const viewToggleSnapshot = document.getElementById('view-toggle-main');
+            const previousViewMode = viewToggleSnapshot?.dataset.currentMode || 'list';
+            const previousModalCategory = (() => {
+                const modal = document.getElementById('category-expanded-modal');
+                if (!modal) return null;
+                // The modal class .active is removed before our forward
+                // flight runs (books-modal closes it just after invoking
+                // flyCoverToDetail). Use the SSR-side .last-opened
+                // marker books-modal stamps when opening — but it
+                // doesn't stamp one, so fall back to a session cache.
+                // Easiest source of truth: data-category we stamp on
+                // the modal each time it opens. If the user came from
+                // a category modal, books-modal.ts now stamps it (see
+                // edit below).
+                return modal.getAttribute('data-last-category');
+            })();
             let handoffComplete = false;
             const cleanupFlightCover = () => {
                 clone.remove();
@@ -277,6 +314,29 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 newMain.parentNode!.replaceChild(oldMain, newMain);
                 hiddenSidebars.forEach((el) => { el.style.display = ''; });
                 document.title = previousTitle;
+                // Restore the view mode (list vs collections) that the
+                // user was in before the flight. Without this, the
+                // reverse always lands them in 'list' even if they
+                // opened the book from the collections grid view.
+                try {
+                    if (previousViewMode === 'grid') {
+                        // setViewMode is the source-of-truth setter for
+                        // the books page. Loading it lazily avoids a
+                        // circular import on the flight module.
+                        import('./books-render').then((mod) => {
+                            mod.setViewMode?.('grid');
+                            // After the swap-back, if the user came from
+                            // an OPEN category modal, re-open the modal
+                            // at the same category so they continue
+                            // browsing where they left off.
+                            if (previousModalCategory) {
+                                import('./books-modal').then((m) => {
+                                    m.openCategoryModal?.(previousModalCategory);
+                                });
+                            }
+                        });
+                    }
+                } catch (_err) { /* non-fatal */ }
                 // Restore scroll to where the user was before they clicked
                 // the book card. We call this AFTER the DOM swap so the
                 // listing's height is back to its full extent. However,

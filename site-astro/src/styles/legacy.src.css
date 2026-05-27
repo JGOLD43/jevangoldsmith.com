@@ -14557,7 +14557,14 @@ body.nav-compact .navbar .work-mode-icon {
   background: none !important;
 }
 
-.dropdown-menu, .dropdown-menu a, .dropdown-wide-header, .dropdown-column a, .dropdown-column .dropdown-header, .nav-dropdown .dropdown-trigger {
+.dropdown-menu, .dropdown-menu a, .dropdown-wide-header, .dropdown-column a, .dropdown-column .dropdown-header, .nav-dropdown .dropdown-trigger,
+/* Plain nav anchors (HOME, NOW, TRIPS) previously inherited
+   Chivo + 0.5px letter-spacing while the dropdown-trigger
+   siblings used Inter + -0.01em. The mismatch made the plain
+   anchors read as heavier than their dropdown counterparts.
+   Including them in this rule normalises font + spacing across
+   the entire nav so every link has the same visual weight. */
+.nav-links > li > a {
   letter-spacing: -.01em;
   font-family: Inter, -apple-system, BlinkMacSystemFont, Chivo, sans-serif;
 }

@@ -93,6 +93,10 @@ export function openCategoryModal(category: string) {
     list.replaceChildren(fragment);
     // ARIA dialog semantics + focus trap. WCAG 2.4.3 + 4.1.2.
     modal.classList.add('active');
+    // Stamp the active category so the reverse cover-flight can
+    // re-open the same modal when the user returns from a book
+    // detail page (books-flight reads data-last-category).
+    modal.setAttribute('data-last-category', category);
     document.body.style.overflow = 'hidden';
     const trigger = document.activeElement as HTMLElement | null;
     releaseCategoryModalFocus = trapFocus(modal, trigger);
