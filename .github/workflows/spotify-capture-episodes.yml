@@ -10,6 +10,9 @@ on:
 
 permissions:
   contents: write
+  # notify-on-failure calls _cron-failure-issue.yml which needs
+  # issues:write. Without it the whole workflow fails to start.
+  issues: write
 
 concurrency:
   group: spotify-capture-episodes
