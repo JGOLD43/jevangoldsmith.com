@@ -554,7 +554,21 @@ function placeNowMarkerAndFocus() {
         // Default load (no param) → regional zoom centered on Now pin.
         const params = new URLSearchParams(window.location.search);
         if (params.get('focus') === 'now') {
+            // Mobile: the map container's final size depends on the
+            // .map-view layout + safe-area-bottom toggle bar. If
+            // fitBounds runs before the container has been measured,
+            // the resulting view is offset and the yellow Now dot
+            // ends up off-center / off-screen. invalidateSize forces
+            // Leaflet to re-read the container dims first.
+            state.worldMap.invalidateSize();
             state.worldMap.fitBounds(circle.getBounds(), { padding: [40, 40], animate: false });
+            // Belt-and-braces: rerun after the next frame in case the
+            // bottom-toggle bar is still settling into its safe-area
+            // position when this first fires.
+            requestAnimationFrame(() => {
+                state.worldMap.invalidateSize();
+                state.worldMap.fitBounds(circle.getBounds(), { padding: [40, 40], animate: false });
+            });
             marker.openPopup();
             // Reveal the live map immediately — the overlay (same image
             // as /now's thumb, morphed into place by the browser via

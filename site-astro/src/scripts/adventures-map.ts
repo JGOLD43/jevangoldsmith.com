@@ -439,11 +439,25 @@ function initWorldMap(adventures: AnyObj[]) {
         adventure.mapCenter.lat,
         adventure.mapCenter.lng
     ]));
-    state.worldMap.fitBounds(markerBounds.pad(0.28), { animate: false, maxZoom: 3 });
+    // When arriving via /now?focus=now, the map was initialized at the
+    // Now coordinates at zoom 10 (above). fitBounds to all adventures
+    // would yank the view back to a global zoom — leaving the Now pin
+    // off-screen and the user staring at a world map. placeNowMarkerAndFocus
+    // (called from adventures.ts) will re-fit to the 25km Now circle
+    // after this — but on mobile the intermediate global fitBounds was
+    // running with a still-sizing container, breaking the final
+    // fit-to-now positioning so the yellow dot never landed centered.
+    // Skip the marker-bounds fit when focus=now.
+    const arrivedFocusNow = new URLSearchParams(window.location.search).get('focus') === 'now';
+    if (!arrivedFocusNow) {
+        state.worldMap.fitBounds(markerBounds.pad(0.28), { animate: false, maxZoom: 3 });
+    }
 
     requestAnimationFrame(() => {
         state.worldMap.invalidateSize();
-        state.worldMap.fitBounds(markerBounds.pad(0.28), { animate: false, maxZoom: 3 });
+        if (!arrivedFocusNow) {
+            state.worldMap.fitBounds(markerBounds.pad(0.28), { animate: false, maxZoom: 3 });
+        }
     });
 
     if ('ResizeObserver' in window) {
