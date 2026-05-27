@@ -38,6 +38,16 @@ for (const entry of books) {
 // HTML parse so the LCP paint isn't waiting on the cover-grid img to be
 // discovered by the parser further down the document.
 const lcpCoverUrl = books[0] ? bookCoverUrl(books[0].data) : '';
+// Preload the FIRST ROW (6 covers) too — those use loading="eager" on
+// the BookCard but eager loading still kicks off only when the parser
+// reaches the <img>. On a slow connection one of the first-row covers
+// visibly pops in after its neighbours. Preloading every above-fold
+// cover in <head> kicks all the fetches in parallel with HTML parse
+// so the row paints together, not staggered.
+const firstRowCoverUrls = books
+  .slice(0, 6)
+  .map((b) => bookCoverUrl(b.data))
+  .filter((u) => u && u !== lcpCoverUrl);
 
 // Sidebar lists hydrate at runtime from the books.generated.json fetch.
 // SSR ships only the per-section counts so the badges paint correctly.
@@ -126,6 +136,9 @@ const config = ({
   {lcpCoverUrl && (
     <Fragment slot="head">
       <link rel="preload" as="image" fetchpriority="high" href={lcpCoverUrl} />
+      {firstRowCoverUrls.map((u) => (
+        <link rel="preload" as="image" href={u} />
+      ))}
     </Fragment>
   )}
   <Fragment slot="sidebar-extra">

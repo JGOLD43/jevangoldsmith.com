@@ -7908,7 +7908,19 @@ body.meet-page {
 
 @media (width <= 480px) {
   .navbar .container {
-    padding: 0 1rem;
+    /* Tighter on narrow viewports so logo + Follow + theme + mode +
+       hamburger all fit without the hamburger getting clipped at
+       the right edge. Was 1rem each side; 0.5rem each side leaves
+       16px more horizontal room and a small gap from the viewport
+       edge for the hamburger to read as on-screen. */
+    padding: 0 0.5rem;
+    gap: 0.4rem;
+  }
+  /* Trim the Follow button and circular toggles a touch on
+     phones so they don't crowd the hamburger. */
+  .navbar .navbar-contact-btn {
+    padding: 0.55rem 1.1rem;
+    font-size: 0.95rem;
   }
 
   .nav-links {
