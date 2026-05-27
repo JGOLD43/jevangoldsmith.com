@@ -166,18 +166,18 @@ if (latestChallenge) {
                             <button class="snapshot-close" data-snapshot-toggle aria-label="Close">&times;</button>
                         </div>
                         <div class="snapshot-content">
-                            <div class="snapshot-row">
+                            <a class="snapshot-row" href="/about.html#focus" aria-label="Read more about my focus">
                                 <div class="snapshot-label">Focus</div>
                                 <div class="snapshot-value">Building Beautiful Products</div>
-                            </div>
-                            <div class="snapshot-row">
+                            </a>
+                            <a class="snapshot-row" href="/about.html#values" aria-label="Read more about my values">
                                 <div class="snapshot-label">Values</div>
                                 <div class="snapshot-value">Impact • Mastery • Adventure</div>
-                            </div>
-                            <div class="snapshot-row">
+                            </a>
+                            <a class="snapshot-row" href="/about.html#stats" aria-label="Read more about my stats">
                                 <div class="snapshot-label">Stats</div>
                                 <div class="snapshot-value">Height 183cm • <img src="/images/flags/au.png" alt="Australian Flag" class="snapshot-flag" width="80" height="40" loading="lazy" decoding="async"></div>
-                            </div>
+                            </a>
                             <a href="about.html" class="snapshot-bio-link">Read Full Bio</a>
                         </div>
                     </div>
@@ -414,7 +414,40 @@ if (latestChallenge) {
     .profile-container .snapshot-header h4 { color: #fff !important; }
     .profile-container .snapshot-content { color: #fff; }
     .profile-container .snapshot-label { color: rgba(255, 255, 255, 0.65) !important; }
-    .profile-container .snapshot-value { color: #fff !important; }
+    .profile-container .snapshot-value {
+      color: #fff !important;
+      /* Match the "What I'm working on now" hero text exactly —
+         same Inter font stack, same letter-spacing, lighter weight
+         so the values read as body copy rather than headings. */
+      font-family: Inter, -apple-system, BlinkMacSystemFont, Chivo, sans-serif !important;
+      font-weight: 400 !important;
+      letter-spacing: -0.01em !important;
+    }
+    .profile-container .snapshot-bio-link {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, Chivo, sans-serif !important;
+      font-weight: 500 !important;
+      letter-spacing: -0.01em !important;
+    }
+    /* Each snapshot row is now a link to a specific section on the
+       About page — strip the default link colour/underline, then
+       add a subtle background highlight on hover to signal that the
+       row is clickable. Same affordance pattern as the essay rows. */
+    .profile-container .snapshot-row {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.18s ease;
+      border-radius: 6px;
+      margin: 0 -0.5rem;
+      padding: 0.85rem 0.5rem;
+    }
+    .profile-container .snapshot-row:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .profile-container .snapshot-row:focus-visible {
+      outline: 2px solid var(--secondary-color);
+      outline-offset: 2px;
+    }
     .profile-container .snapshot-row { border-bottom-color: rgba(255, 255, 255, 0.12) !important; }
     /* The last snapshot-row (Stats) AND the bio-link below it BOTH had a
        border, stacking into a double hairline above Read Full Bio. Drop
