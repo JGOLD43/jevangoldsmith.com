@@ -422,7 +422,23 @@ const config = ({
         toggle.dataset.currentMode = 'list';
         toggle.setAttribute('aria-label', 'Switch to category grid view');
       }
-      cards.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Scroll to the TOP of the document, not the cards container.
+      // scrollIntoView put .essays-cards at viewport top — but the
+      // .essays-main section above it (header + counter) was getting
+      // pushed BEHIND the fixed navbar, cutting off the nav row and
+      // the first essay row. Hard scroll to 0 with a triple-rAF so
+      // the layout settles, then the natural document flow places
+      // the navbar at top → header → cards beneath.
+      const hardScrollTop = () => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      };
+      hardScrollTop();
+      requestAnimationFrame(() => {
+        hardScrollTop();
+        requestAnimationFrame(hardScrollTop);
+      });
     }
   });
 </script>

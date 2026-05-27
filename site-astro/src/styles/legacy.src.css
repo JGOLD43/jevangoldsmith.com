@@ -61,12 +61,24 @@
   padding: 0;
 }
 
+/* Belt-and-suspenders overflow lock. Some mobile browsers
+   (especially iOS Safari) ignore body's overflow-x:hidden if the
+   HTML element doesn't also clip — the page can still scroll
+   horizontally when a descendant overflows, even when the body
+   does NOT. Locking both elements + body's max-width to 100svw
+   makes horizontal scroll structurally impossible regardless of
+   what any descendant tries to do. Fixes the movies-page
+   "hamburger getting clipped" report. */
+html {
+  overflow-x: clip;
+}
+
 body {
   color: var(--text-color);
   background-color: var(--background);
   font-family: Chivo, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 [data-theme="dark"] body {
