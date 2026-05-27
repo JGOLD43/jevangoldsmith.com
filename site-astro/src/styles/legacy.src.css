@@ -11987,6 +11987,15 @@ body.shelf-experience {
   display: block;
 }
 
+/* The PeopleModal template ships BOTH an <img> and a fallback <span>
+   for each book, then sets `hidden` on whichever isn't needed. CSS
+   `display: block` above overrode the hidden attribute → both
+   showed and the modal rendered a phantom empty book cover next to
+   every real cover. Force the hidden attribute to win. */
+.person-detail-book-cover[hidden] {
+  display: none !important;
+}
+
 .person-detail-book-cover-fallback {
   background: linear-gradient(135deg, #efede7, #d8d2c4);
 }
