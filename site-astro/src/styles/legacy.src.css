@@ -4484,7 +4484,9 @@ body.meet-page {
 }
 
 .lightbox {
-  z-index: 2000;
+  /* Sit above the navbar (z-index 9999) so chrome doesn't occlude
+     the close button. */
+  z-index: 10000;
   background-color: #000000f2;
   justify-content: center;
   align-items: center;
@@ -4509,12 +4511,20 @@ body.meet-page {
 .lightbox-close {
   color: #fff;
   cursor: pointer;
-  z-index: 2001;
+  z-index: 10001;
   font-size: 2.5rem;
+  line-height: 1;
   transition: color .2s;
   position: absolute;
-  top: 1rem;
-  right: 2rem;
+  /* Inset by safe-area on notched devices, then add 1rem of
+     breathing room. Previously top: 1rem could sit behind the
+     navbar (z-index 9999) on screens where the navbar was taller
+     than the close button's offset; the new z-index puts the
+     lightbox above the navbar, and this padding guarantees the
+     close button never gets clipped by the iOS notch. */
+  top: calc(env(safe-area-inset-top, 0px) + 1rem);
+  right: calc(env(safe-area-inset-right, 0px) + 1.25rem);
+  padding: 0.25rem 0.5rem;
 }
 
 .lightbox-close:hover {
@@ -12087,7 +12097,7 @@ body.shelf-experience {
 
 .person-profile-books, .person-resource-list {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
+  gap: 0.6rem;
   margin-top: 1rem;
   display: grid;
 }
@@ -12095,16 +12105,26 @@ body.shelf-experience {
 .person-profile-book-card, .person-resource-card {
   border: 1px solid var(--border-color);
   color: #111;
-  gap: .9rem;
-  padding: .9rem;
   text-decoration: none;
   transition: border-color .2s, box-shadow .2s, transform .2s;
-  display: grid;
 }
 
+/* Flexbox instead of grid — the previous `grid-template-columns:
+   72px minmax(0, 1fr)` could wrap a third grid-area when any
+   browser rendering hiccup gave the card a stray child node,
+   producing a phantom empty box next to the cover. Flexbox with
+   explicit children counts as one row of two items only. */
 .person-profile-book-card {
-  grid-template-columns: 72px minmax(0, 1fr);
+  display: flex;
   align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.7rem;
+}
+
+.person-resource-card {
+  display: grid;
+  gap: .9rem;
+  padding: .9rem;
 }
 
 .person-profile-book-card:hover, .person-resource-card:hover {
@@ -12119,21 +12139,27 @@ body.shelf-experience {
   border: 1px solid var(--border-color);
   object-fit: cover;
   background: #efede7;
-  width: 72px;
+  width: 52px;
+  flex: 0 0 52px;
   display: block;
 }
 
+.person-profile-book-card > span {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .person-profile-book-card strong, .person-resource-card strong {
-  font-size: 1rem;
+  font-size: 0.92rem;
   line-height: 1.25;
   display: block;
 }
 
 .person-profile-book-card small, .person-resource-card span, .person-resource-card p {
   color: var(--text-light);
-  margin-top: .3rem;
-  font-size: .82rem;
-  line-height: 1.5;
+  margin-top: .2rem;
+  font-size: .78rem;
+  line-height: 1.4;
   display: block;
 }
 

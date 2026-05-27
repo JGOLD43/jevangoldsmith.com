@@ -111,7 +111,14 @@ export function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlight
     clone.style.transformOrigin = '0 0';
     clone.style.pointerEvents = 'none';
     clone.style.borderRadius = getComputedStyle(cover).borderRadius;
-    clone.style.boxShadow = '0 8px 22px rgba(0, 0, 0, 0.35)';
+    // Shadow held constant at the destination's heavier value through
+    // the whole flight. Animating box-shadow alongside transform forces
+    // a paint on every tick (shadow blur is expensive) and the
+    // progressive brightening reads as a separate motion the eye tracks
+    // alongside the cover. Constant shadow = one motion only.
+    clone.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.45)';
+    clone.style.willChange = 'transform, opacity';
+    clone.style.backfaceVisibility = 'hidden';
     clone.style.background = 'transparent';
 
     cover.style.visibility = 'hidden';
@@ -120,7 +127,10 @@ export function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlight
     document.body.appendChild(clone);
     document.body.classList.add(cfg.bodyLaunchClass);
 
-    const duration = cfg.durationMs ?? 340;
+    // Snappier defaults matching the books flight: 240ms is fast enough
+    // to feel like an instant tap response, slow enough to still read
+    // as a deliberate transition.
+    const duration = cfg.durationMs ?? 240;
     const arrivalCls = `is-${cfg.arrivalKey}-arrival`;
     const revealCls = `is-${cfg.arrivalKey}-revealed`;
     const coverRevealCls = `is-${cfg.arrivalKey}-cover-revealed`;
@@ -131,15 +141,16 @@ export function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlight
         window.location.href = href;
     };
 
-    // Subtle holding animation — clone lifts slightly while we wait for
-    // the detail page to arrive. Replaced by the real flight once we can
-    // measure the destination.
+    // Subtle holding animation — clone lifts slightly while we wait
+    // for the detail page to arrive. Replaced by the real flight once
+    // we can measure the destination. Matches the new ease curve so
+    // the transition from hold → flight feels continuous.
     const holdAnim = clone.animate(
         [
-            { transform: 'translate(0px, 0px) scale(1)', boxShadow: '0 8px 22px rgba(0, 0, 0, 0.35)' },
-            { transform: 'translate(0px, -6px) scale(1.02)', boxShadow: '0 14px 34px rgba(0, 0, 0, 0.45)' }
+            { transform: 'translate(0px, 0px) scale(1)' },
+            { transform: 'translate(0px, -4px) scale(1.015)' }
         ],
-        { duration: 180, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' }
+        { duration: 140, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
     );
 
     let spaTookOver = false;
