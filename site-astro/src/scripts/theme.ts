@@ -170,13 +170,32 @@ if (workToggle) {
         // on the clone so the OLD mode stays visible while the NEW
         // mode is locked hidden, regardless of what the live html's
         // data-mode is.
+        // Lock the clone to OLD mode by overriding BOTH display AND
+        // visibility. Cascade has multiple conflicting rules:
+        //   [data-mode="personal"] .hero-headline .mode-work { display:none }
+        //   [data-mode="work"]     .hero-welcome  .mode-personal { display:-webkit-box }
+        //   the visibility-based grid stack rule
+        // When applyMode(next) flips html[data-mode], the clone's
+        // OLD-mode span gets `display: none` from the cascade — the
+        // grid cell collapses to NEW span's height → visible shuffle
+        // BEHIND the wipe (inside the clone itself, not the live page).
+        //
+        // Force OLD span fully visible + in-flow, NEW span fully
+        // removed, with !important so html[data-mode] flip can't
+        // touch the clone.
+        const lock = (el: HTMLElement, show: boolean) => {
+            if (show) {
+                el.style.setProperty('display', 'block', 'important');
+                el.style.setProperty('visibility', 'visible', 'important');
+            } else {
+                el.style.setProperty('display', 'none', 'important');
+            }
+        };
         clone.querySelectorAll<HTMLElement>('.hero-headline .mode-work, .hero-welcome .mode-work').forEach((el) => {
-            el.style.removeProperty('display');
-            el.style.setProperty('visibility', oldMode === 'work' ? 'visible' : 'hidden', 'important');
+            lock(el, oldMode === 'work');
         });
         clone.querySelectorAll<HTMLElement>('.hero-headline .mode-personal, .hero-welcome .mode-personal').forEach((el) => {
-            el.style.removeProperty('display');
-            el.style.setProperty('visibility', oldMode === 'personal' ? 'visible' : 'hidden', 'important');
+            lock(el, oldMode === 'personal');
         });
         // Preserve the live body's computed padding/margin so the
         // cloned content lines up exactly with what the user was
@@ -195,38 +214,49 @@ if (workToggle) {
         // user was seeing.
         wrap.getBoundingClientRect();
 
-        // Schedule the mode swap + animations on the next paint
-        // tick so the wrap is guaranteed to be on screen first.
+        // DOUBLE-rAF: first rAF queues a callback before the next
+        // paint. The browser paints the wrap. Second rAF then runs
+        // AFTER the wrap has been committed to the screen. Only
+        // then do we flip html[data-mode] (applyMode), so the live
+        // page's mode-change can't possibly be visible to the user
+        // — the wrap is already on top covering it. Single rAF
+        // wasn't enough: the browser sometimes batched the wrap's
+        // first paint and applyMode's repaint into the SAME frame,
+        // letting the live page's NEW state flash for ~16ms before
+        // the wrap occluded it (the "text changes at the start"
+        // the user reported).
         requestAnimationFrame(() => {
-            applyMode(next);
-            flashToast(workToggle, `Switched to ${next} mode`);
+            requestAnimationFrame(() => {
+                applyMode(next);
+                flashToast(workToggle, `Switched to ${next} mode`);
 
-            // Thin black line that travels with the clip edge —
-            // visual marker of where OLD ends and NEW begins.
-            const line = document.createElement('div');
-            line.setAttribute('aria-hidden', 'true');
-            line.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:6px;background:#000;z-index:10000;pointer-events:none;transform:translateX(-6px);box-shadow:0 0 12px #0008';
-            document.body.appendChild(line);
+                // Thin black line that travels with the clip edge —
+                // visual marker of where OLD ends and NEW begins.
+                const line = document.createElement('div');
+                line.setAttribute('aria-hidden', 'true');
+                line.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:6px;background:#000;z-index:10000;pointer-events:none;transform:translateX(-6px);box-shadow:0 0 12px #0008';
+                document.body.appendChild(line);
 
-            const duration = 700;
-            const easing = 'cubic-bezier(.65,0,.35,1)';
+                const duration = 700;
+                const easing = 'cubic-bezier(.65,0,.35,1)';
 
-            // Wipe the snapshot away from left → right. clip-path
-            // `inset(0 0 0 X)` clips from the left edge: as X grows
-            // from 0 to 100%, the snapshot shrinks to a 0-width strip
-            // on the right, revealing the new state beneath.
-            const wipe = wrap.animate(
-                { clipPath: ['inset(0 0 0 0)', 'inset(0 0 0 100%)'] },
-                { duration, easing, fill: 'forwards' }
-            );
-            line.animate(
-                { transform: ['translateX(-6px)', `translateX(${window.innerWidth}px)`] },
-                { duration, easing, fill: 'forwards' }
-            );
-            wipe.onfinish = () => {
-                wrap.remove();
-                line.remove();
-            };
+                // Wipe the snapshot away from left → right. clip-path
+                // `inset(0 0 0 X)` clips from the left edge: as X grows
+                // from 0 to 100%, the snapshot shrinks to a 0-width strip
+                // on the right, revealing the new state beneath.
+                const wipe = wrap.animate(
+                    { clipPath: ['inset(0 0 0 0)', 'inset(0 0 0 100%)'] },
+                    { duration, easing, fill: 'forwards' }
+                );
+                line.animate(
+                    { transform: ['translateX(-6px)', `translateX(${window.innerWidth}px)`] },
+                    { duration, easing, fill: 'forwards' }
+                );
+                wipe.onfinish = () => {
+                    wrap.remove();
+                    line.remove();
+                };
+            });
         });
     });
 }
