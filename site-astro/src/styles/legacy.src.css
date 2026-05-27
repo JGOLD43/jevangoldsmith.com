@@ -1737,7 +1737,7 @@ button[type="submit"]:hover {
 
 .hero-social-links a {
   background-color: var(--background);
-  border: 1px solid #888;
+  border: 1px solid #555;
   color: #000;
   border-radius: 50%;
   justify-content: center;
@@ -2290,12 +2290,24 @@ button[type="submit"]:hover {
   font-weight: 600;
 }
 
+.feature-meta {
+  color: #666;
+  margin: 0 0 .5rem;
+  font-family: Chivo, sans-serif;
+  font-size: .85rem;
+  font-weight: 500;
+}
+
 .feature-description {
   color: #333;
   margin: 0;
   font-family: Chivo, sans-serif;
   font-size: .95rem;
   font-weight: 400;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .feature-content {
@@ -2304,6 +2316,10 @@ button[type="submit"]:hover {
 
 [data-theme="dark"] .feature-title {
   color: var(--primary-color);
+}
+
+[data-theme="dark"] .feature-meta {
+  color: var(--text-light);
 }
 
 [data-theme="dark"] .feature-description {

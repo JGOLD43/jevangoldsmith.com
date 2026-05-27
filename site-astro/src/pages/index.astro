@@ -22,7 +22,7 @@ function remoteAssetFor(url: string | undefined | null, preferredWidth = 800, fo
 // carousel stays current with no hand-editing. Sorting prefers explicit
 // dates where available; otherwise we trust the source array order
 // (curated newest-first in the JSONs).
-type FeatureCard = { href: string; image: string; kicker: string; title: string; description: string };
+type FeatureCard = { href: string; image: string; kicker: string; title: string; meta: string; description: string };
 
 // Looser typing on purpose — the collection schemas use z.looseObject so
 // each item carries arbitrary extra fields. A narrow generic constraint
@@ -56,7 +56,8 @@ if (latestAdventure) {
     image: remoteAssetFor(latestAdventure.heroImage) || '/images/generated/remote/bedf9633d8221e-800.jpg',
     kicker: 'Adventure',
     title: latestAdventure.title,
-    description: [latestAdventure.location, latestAdventure.duration].filter(Boolean).join(' • ')
+    meta: [latestAdventure.location, latestAdventure.duration].filter(Boolean).join(' • '),
+    description: latestAdventure.subtitle || latestAdventure.shortDescription || ''
   });
 }
 if (latestEssay) {
@@ -65,6 +66,7 @@ if (latestEssay) {
     image: remoteAssetFor((latestEssay as any).featuredImage) || '/images/generated/remote/cd2aacee7b912f-800.jpg',
     kicker: 'Essay',
     title: latestEssay.title,
+    meta: latestEssay.category || '',
     description: latestEssay.subtitle || latestEssay.category || ''
   });
 }
@@ -74,6 +76,7 @@ if (latestProject) {
     image: remoteAssetFor(latestProject.image) || '/images/generated/remote/3764adabb88a12-800.jpg',
     kicker: 'Project',
     title: latestProject.title,
+    meta: latestProject.category || '',
     description: latestProject.shortDescription || latestProject.description || ''
   });
 }
@@ -83,7 +86,8 @@ if (latestChallenge) {
     image: remoteAssetFor(latestChallenge.image) || '/images/generated/remote/0c026ddcd6c4bb-800.jpg',
     kicker: 'Challenge',
     title: latestChallenge.title,
-    description: latestChallenge.shortDescription || latestChallenge.timeframe || ''
+    meta: latestChallenge.timeframe || '',
+    description: latestChallenge.shortDescription || ''
   });
 }
 ---
@@ -261,7 +265,8 @@ if (latestChallenge) {
                         <div class="feature-content">
                             <span class="feature-kicker">{card.kicker}</span>
                             <h3 class="feature-title">{card.title}</h3>
-                            <p class="feature-description">{card.description}</p>
+                            {card.meta && <p class="feature-meta">{card.meta}</p>}
+                            {card.description && <p class="feature-description">{card.description}</p>}
                         </div>
                     </a>
                 ))}
