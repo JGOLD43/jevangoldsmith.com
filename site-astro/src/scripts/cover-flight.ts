@@ -228,7 +228,22 @@ export function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlight
                     newMain.parentNode.replaceChild(oldMain, newMain);
                     hiddenBacks.forEach((el) => { el.style.display = ''; });
                     document.title = previousTitle;
-                    window.scrollTo({ top: previousScrollY, left: 0, behavior: 'auto' });
+                    // Restore scroll AFTER the DOM swap. Triple-set
+                    // (sync + 2 rAFs) so it lands after the listing
+                    // layout settles — without this, the immediate
+                    // scrollTo can silently clamp to 0 if the document
+                    // height hasn't reflowed yet, leaving the user at
+                    // the top of the list. Same fix as books-flight.
+                    const restoreScroll = () => {
+                        window.scrollTo({ top: previousScrollY, left: 0, behavior: 'auto' });
+                        document.documentElement.scrollTop = previousScrollY;
+                        document.body.scrollTop = previousScrollY;
+                    };
+                    restoreScroll();
+                    requestAnimationFrame(() => {
+                        restoreScroll();
+                        requestAnimationFrame(restoreScroll);
+                    });
                 };
                 if (!currentHero || !heroRect || !heroRect.width || !heroRect.height) {
                     restoreListingDOM();
@@ -254,6 +269,8 @@ export function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlight
                 backClone.style.pointerEvents = 'none';
                 backClone.style.borderRadius = getComputedStyle(currentHero).borderRadius;
                 backClone.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.45)';
+                backClone.style.willChange = 'transform, opacity';
+                backClone.style.backfaceVisibility = 'hidden';
                 backClone.style.background = 'transparent';
                 document.body.appendChild(backClone);
                 currentHero.style.visibility = 'hidden';
@@ -263,6 +280,19 @@ export function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlight
                 // returning cover.
 
                 restoreListingDOM();
+
+                // Fade the listing main in over the same duration as
+                // the reverse flight so the two motions resolve as one
+                // coordinated transition (instead of the listing
+                // popping in at full opacity while the cover is still
+                // mid-flight). Matches the books-flight pattern.
+                const listingMain = document.querySelector('main') as HTMLElement | null;
+                if (listingMain) {
+                    listingMain.animate(
+                        [{ opacity: 0 }, { opacity: 1 }],
+                        { duration: 280, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
+                    );
+                }
 
                 // Leave the destination cover VISIBLE throughout the
                 // reverse flight. The clone (z-index 99999) sits on top
@@ -295,12 +325,20 @@ export function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlight
                     const scale = dW / heroRect.width;
                     const tx = dL - heroRect.left;
                     const ty = dT - heroRect.top;
+                    // Reverse flight: single position+scale tween,
+                    // 280ms (a hair slower than the 240ms forward open
+                    // so closing reads as slightly more deliberate
+                    // than opening). Shadow + opacity held constant;
+                    // destination cover is pixel-aligned underneath so
+                    // clone removal at end is invisible without any
+                    // fade. Same easing as forward for a shared
+                    // animation voice.
                     const back = backClone.animate(
                         [
-                            { transform: 'translate(0px, 0px) scale(1)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.45)' },
-                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, boxShadow: '0 8px 22px rgba(0, 0, 0, 0.35)' }
+                            { transform: 'translate(0px, 0px) scale(1)' },
+                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})` }
                         ],
-                        { duration, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' }
+                        { duration: 280, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
                     );
                     back.finished.then(cleanup).catch(cleanup);
                 }
@@ -328,12 +366,19 @@ export function flyCover(cover: HTMLImageElement, href: string, cfg: CoverFlight
                     const scale = destRect.width / srcW;
                     const tx = destRect.left - srcL;
                     const ty = destRect.top - srcT;
+                    // Single position+scale tween. No opacity, no
+                    // shadow morph. The destination cover (hero) is
+                    // pixel-aligned underneath, so removing the clone
+                    // at the end of the flight is invisible without
+                    // any fade. cubic-bezier(.25, .8, .25, 1) is the
+                    // wider standard ease-out — steady deceleration,
+                    // no late snap.
                     flightAnim = clone.animate(
                         [
-                            { transform: 'translate(0px, 0px) scale(1)', boxShadow: '0 8px 22px rgba(0, 0, 0, 0.35)' },
-                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})`, boxShadow: '0 20px 40px rgba(0, 0, 0, 0.45)' }
+                            { transform: 'translate(0px, 0px) scale(1)' },
+                            { transform: `translate(${tx}px, ${ty}px) scale(${scale})` }
                         ],
-                        { duration, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' }
+                        { duration, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards' }
                     );
                 } else {
                     flightAnim = clone.animate(

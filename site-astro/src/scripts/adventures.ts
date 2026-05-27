@@ -416,6 +416,24 @@ function bindAdventureActions() {
             if (section) section.hidden = true;
             const list = document.getElementById('adventures-container') || document.querySelector('.adventures-sidebar');
             list?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Leaflet caches container dimensions at init. After a
+            // trip story session the dynamic viewport (100dvh) often
+            // measures differently than when the map was first
+            // mounted — the mobile address bar may have hidden /
+            // re-shown — leaving a strip of page background visible
+            // below the rendered tiles. Force the map to remeasure
+            // its container and repaint its tile grid. Multiple
+            // ticks because the dvh recalc happens on the next
+            // layout, and Leaflet's internal panes also need a
+            // frame after the resize event.
+            if (state.worldMap) {
+                const wm = state.worldMap;
+                wm.invalidateSize();
+                requestAnimationFrame(() => {
+                    wm.invalidateSize();
+                    setTimeout(() => wm.invalidateSize(), 200);
+                });
+            }
             return;
         }
 
