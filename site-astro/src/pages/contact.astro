@@ -13,14 +13,17 @@ import Base from '../layouts/Base.astro';
   <p>Send a note, ask a question, or just say hi.</p>
 </header>
 <div class="content-section">
-<form class="contact-form" action="mailto:hello@jevangoldsmith.com" method="get" enctype="text/plain">
+<form class="contact-form" action="https://formsubmit.co/hello@jevangoldsmith.com" method="POST" data-contact-form data-endpoint="https://formsubmit.co/ajax/hello@jevangoldsmith.com">
+    <input type="hidden" name="_subject" value="Contact form: new message">
+    <input type="hidden" name="_template" value="table">
+    <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
     <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name" autocomplete="name" required>
     </div>
     <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" autocomplete="email" required>
     </div>
     <div class="form-group">
         <label for="subject">Subject</label>
