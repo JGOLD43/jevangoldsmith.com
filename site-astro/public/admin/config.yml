@@ -143,3 +143,54 @@ collections:
                   - { name: value, label: Value, widget: string, hint: 'e.g. 5 / 52 books' }
                   - { name: percent, label: Percent, widget: number, value_type: int, min: 0, max: 100 }
               - { name: searchTerms, label: Search terms, widget: list, required: false, field: { name: term, label: Term, widget: string } }
+
+  - name: adventures
+    label: Trips
+    icon: travel_explore
+    files:
+      - name: adventures
+        label: All trips
+        file: data/adventures.json
+        description: Every field is enumerated (incl. gallery + map center) so saves don't drop data.
+        fields:
+          - { name: lastUpdated, label: Last updated, widget: string, required: false }
+          - name: adventures
+            label: Trips
+            widget: list
+            label_singular: Trip
+            summary: '{{fields.title}}'
+            fields:
+              - { name: id, label: ID / slug, widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: subtitle, label: Subtitle, widget: string, required: false }
+              - { name: location, label: Location, widget: string, required: false }
+              - { name: region, label: Region, widget: string, required: false }
+              - { name: startDate, label: Start date, widget: string, required: false }
+              - { name: endDate, label: End date, widget: string, required: false }
+              - { name: duration, label: Duration, widget: string, required: false }
+              - { name: status, label: Status, widget: string, required: false }
+              - { name: heroImage, label: Hero image, widget: image, required: false }
+              - { name: shortDescription, label: Short description, widget: text, required: false }
+              - { name: content, label: Content, widget: markdown, required: false }
+              - { name: highlights, label: Highlights, widget: list, required: false, field: { name: item, label: Highlight, widget: string } }
+              - { name: tags, label: Tags, widget: list, required: false, field: { name: tag, label: Tag, widget: string } }
+              - { name: mapZoom, label: Map zoom, widget: number, value_type: int, required: false }
+              - name: mapCenter
+                label: Map center
+                widget: object
+                required: false
+                fields:
+                  - { name: lat, label: Latitude, widget: number, value_type: float }
+                  - { name: lng, label: Longitude, widget: number, value_type: float }
+              - name: gallery
+                label: Gallery
+                widget: list
+                required: false
+                label_singular: Photo
+                summary: '{{fields.caption}}'
+                fields:
+                  - { name: src, label: Image, widget: image }
+                  - { name: thumbnail, label: Thumbnail, widget: image, required: false }
+                  - { name: caption, label: Caption, widget: string, required: false }
+                  - { name: lat, label: Latitude, widget: number, value_type: float, required: false }
+                  - { name: lng, label: Longitude, widget: number, value_type: float, required: false }

@@ -97,19 +97,23 @@ data exactly, but verify once: in the CMS, add a dummy **Challenge** (or essay),
 save, then look at the commit it created on GitHub. Confirm the diff only adds
 your new entry and doesn't strip fields from neighbours. Delete the dummy after.
 
-## What you can edit in v1
+## What you can edit in the CMS
 
-Essays, Podcasts, People, Challenges — the flat, fully-round-trippable
-collections. Each shows as one item (e.g. "All essays"); open it and use the
-list's **+** to add an entry.
+Essays, Podcasts, People, Challenges, and **Trips** (adventures — including the
+photo gallery and map center). Each collection shows as one item (e.g. "All
+trips"); open it and use the list's **+** to add an entry. Every field is
+enumerated in the config so saves never drop data.
 
-**Deliberately not in the CMS yet:**
-- **Adventures, Projects** — nested map/gallery and build-documentary fields are
-  risky to round-trip blind. Add via `npm run new:adventure` / `new:project` and
-  the editor autocomplete for now.
-- **Books, Movies** — books come via bulk import, movies via the Letterboxd
-  cron; a 100+ item list form would be unwieldy. Use `npm run new:book` or let
-  the cron handle movies.
+**Not in the CMS (by design):**
+- **Books, Movies** — these files are a bare top-level JSON array
+  (`[ {...}, {...} ]`), which Decap/Sveltia can't edit as a form without
+  restructuring the file into `{ "books": [...] }` (a change that touches the
+  content loader, the cover generator, and the validator). Books also arrive via
+  bulk import and movies via the Letterboxd cron, so for now use
+  `npm run new:book` + editor autocomplete, or let the cron handle movies. If you
+  want Books in the CMS, it's a one-time wrap migration — ask and it can be done.
+- **Projects** — the build-documentary structure (proof artifacts, build log,
+  commentary, links) is deeply nested; left on `npm run new:project` for now.
 
 ## Cleanup
 
