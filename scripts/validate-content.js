@@ -279,6 +279,45 @@ function validateCollection(cfg, strict) {
   return { errors, warnings };
 }
 
+// Cross-file referential integrity: the people merge links people to books and
+// movies by exact TITLE STRING (people-merge-config.json BOOK_PEOPLE /
+// MOVIE_PEOPLE keys). If a title is later edited in books.json/movies.json the
+// key silently stops matching and the person link vanishes with no error. This
+// asserts every join key still resolves to a real title.
+function validateCrossFileJoins() {
+  const errors = [];
+  let config;
+  try {
+    config = readJson('people-merge-config.json');
+  } catch {
+    return errors; // config optional — nothing to validate
+  }
+
+  const titlesOf = (relPath, key) => {
+    try {
+      return new Set(unwrap(readJson(relPath), key).map((item) => item.title).filter(Boolean));
+    } catch {
+      return new Set();
+    }
+  };
+
+  const joins = [
+    { map: 'BOOK_PEOPLE', titles: titlesOf('books.json'), source: 'books.json' },
+    { map: 'MOVIE_PEOPLE', titles: titlesOf('movies.json'), source: 'movies.json' }
+  ];
+
+  for (const { map, titles, source } of joins) {
+    const links = config[map];
+    if (!links || titles.size === 0) continue;
+    for (const title of Object.keys(links)) {
+      if (!titles.has(title)) {
+        errors.push(`people-merge-config.json ${map}: "${title}" matches no title in ${source} (stale link — person→item join is silently dropped)`);
+      }
+    }
+  }
+  return errors;
+}
+
 function main() {
   const strict = process.argv.includes('--strict');
   const quiet = process.argv.includes('--quiet');
@@ -289,6 +328,7 @@ function main() {
     allErrors.push(...errors);
     allWarnings.push(...warnings);
   }
+  allErrors.push(...validateCrossFileJoins());
 
   if (!quiet) {
     const summary = new Map();

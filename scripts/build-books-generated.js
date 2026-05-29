@@ -37,16 +37,16 @@ function pickJpg(formats, order) {
 }
 
 function coversFor(book) {
+  // Mirrors book-card.ts localize(): a book with an ISBN always gets a cover —
+  // the locally-optimized jpg when the remote-asset manifest has it, otherwise
+  // the raw OpenLibrary URL as fallback. Books without an ISBN get no cover.
   const cleanIsbn = String(book.isbn ?? '').replace(/[^0-9X]/g, '');
   if (!cleanIsbn) return {};
-  const entry = remote[`https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg`];
-  if (!entry || !entry.formats) return {};
-  const out = {};
-  const large = pickJpg(entry.formats, LARGE_ORDER);
-  const medium = pickJpg(entry.formats, MEDIUM_ORDER);
-  if (large) out.coverImage = large;
-  if (medium) out.coverImageMedium = medium;
-  return out;
+  const url = `https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg`;
+  const entry = remote[url];
+  const large = entry ? pickJpg(entry.formats, LARGE_ORDER) : undefined;
+  const medium = entry ? pickJpg(entry.formats, MEDIUM_ORDER) : undefined;
+  return { coverImage: large || url, coverImageMedium: medium || url };
 }
 
 function generate() {
