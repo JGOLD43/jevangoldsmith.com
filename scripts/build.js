@@ -58,6 +58,7 @@ async function main() {
   // was added in a sibling worktree / auto-batch.)
   const sequential = fast
     ? [
+        ['css:build-legacy', 'node', ['scripts/build-legacy-css.js']],
         ['content:validate', 'node', ['scripts/validate-content.js']],
         ['search:sync', 'node', ['scripts/sync-search-index.js', '--write']],
         ['search:audit:strict', 'node', ['scripts/audit-search-index.js', '--strict']],
@@ -68,6 +69,7 @@ async function main() {
         ...COMMON_TAIL
       ]
     : [
+        ['css:build-legacy', 'node', ['scripts/build-legacy-css.js']],
         ['content:validate', 'node', ['scripts/validate-content.js']],
         ['search:sync', 'node', ['scripts/sync-search-index.js', '--write']],
         ['search:audit:strict', 'node', ['scripts/audit-search-index.js', '--strict']],
