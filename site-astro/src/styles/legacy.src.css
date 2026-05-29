@@ -467,9 +467,17 @@ body.nav-compact .navbar .theme-toggle-icon {
   border-bottom-color: var(--dropdown-bg);
 }
 
-.nav-dropdown:hover .dropdown-menu {
+.nav-dropdown:hover .dropdown-menu,
+.nav-dropdown:focus-within .dropdown-menu {
   opacity: 1;
   visibility: visible;
+}
+
+/* Escape key sets this to force-close a dropdown even while the trigger
+   still holds keyboard focus (focus-within would otherwise keep it open). */
+.nav-dropdown.dropdown-suppress .dropdown-menu {
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 .nav-dropdown .dropdown-menu a {

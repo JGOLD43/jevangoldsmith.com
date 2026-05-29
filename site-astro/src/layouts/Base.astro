@@ -356,7 +356,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
           <ul class="nav-links">
             <li><a href="/index.html" class:list={['index.html' === _activeHref ? 'active' : '']}>Home</a></li>
             <li class="nav-dropdown">
-              <a href="#" class:list={['dropdown-trigger', _isTriggerActive('Explore') ? 'active' : '']}>Explore</a>
+              <a href="#" aria-haspopup="true" aria-expanded="false" class:list={['dropdown-trigger', _isTriggerActive('Explore') ? 'active' : '']}>Explore</a>
               <div class="dropdown-menu dropdown-menu-wide">
                 <div class="dropdown-wide-header">A Collection of Thoughts</div>
                 <div class="dropdown-columns">
@@ -374,7 +374,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
             </li>
             <li><a href="/now.html" class:list={['now.html' === _activeHref ? 'active' : '']}>Now</a></li>
             <li class="nav-dropdown">
-              <a href="#" class="dropdown-trigger">Content</a>
+              <a href="#" aria-haspopup="true" aria-expanded="false" class="dropdown-trigger">Content</a>
               <div class="dropdown-menu dropdown-menu-icons">
                 <a href="https://youtube.com/@JevanGoldsmith" target="_blank" class="dropdown-icon-link" title="YouTube">
                   <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-youtube" /></svg>
@@ -394,7 +394,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
               </div>
             </li>
             <li class="nav-dropdown">
-              <a href="#" class:list={['dropdown-trigger', _isTriggerActive('Taste') ? 'active' : '']}>Taste</a>
+              <a href="#" aria-haspopup="true" aria-expanded="false" class:list={['dropdown-trigger', _isTriggerActive('Taste') ? 'active' : '']}>Taste</a>
               <div class="dropdown-menu dropdown-menu-wide">
                 <div class="dropdown-wide-header">Things I Interact With</div>
                 <div class="dropdown-columns">
@@ -413,7 +413,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
             </li>
             <li><a href="/adventures.html" class:list={['adventures.html' === _activeHref ? 'active' : '']}>Trips</a></li>
             <li class="nav-dropdown">
-              <a href="#" class="dropdown-trigger">Ventures</a>
+              <a href="#" aria-haspopup="true" aria-expanded="false" class="dropdown-trigger">Ventures</a>
               <div class="dropdown-menu dropdown-menu-wide">
                 <div class="dropdown-wide-header">Things I think up, build and learn</div>
                 <div class="dropdown-columns">
