@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updatedAt": "2026-05-22T00:40:06.711Z",
+  "updatedAt": "2026-05-29T02:52:04.887Z",
   "guidance": "Static search/discovery index. Fetch candidate URLs from this file, then fetch canonical collection endpoints or HTML for detail.",
   "records": [
     {
@@ -4126,6 +4126,54 @@
         "Uncategorized"
       ],
       "searchText": "the darjeeling limited uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "reservoir-dogs",
+      "title": "Reservoir Dogs",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#reservoir-dogs",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "reservoir dogs uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "a-million-ways-to-die-in-the-west",
+      "title": "A Million Ways to Die in the West",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#a-million-ways-to-die-in-the-west",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "a million ways to die in the west uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "the-negotiator",
+      "title": "The Negotiator",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#the-negotiator",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "the negotiator uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "primal-fear",
+      "title": "Primal Fear",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#primal-fear",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "primal fear uncategorized uncategorized movies"
     }
   ]
 }

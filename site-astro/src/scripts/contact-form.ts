@@ -1,3 +1,5 @@
+export {}; // module scope — keep helper names out of the global script namespace
+
 // Shared AJAX handler for the contact + meet forms. Mirrors newsletter.ts:
 // posts to a formsubmit.co/ajax endpoint so the message is actually delivered
 // (the old mailto: GET forms silently failed for anyone without a desktop
