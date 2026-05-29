@@ -111,6 +111,19 @@ any HTTP POST receiver.
 
 ## Adding content
 
+**Fastest way to add an entry:** scaffold a valid skeleton, then fill it in:
+
+```bash
+npm run new:essay -- "Why I Keep a Commonplace Book"
+# also: new:book, new:adventure, new:podcast, new:person, new:project, new:challenge
+```
+
+This appends a correctly-shaped stub (id/slug derived from the title, required
+fields filled) to the right `data/*.json`. Your editor also autocompletes and
+validates these files as you type — JSON Schemas live in `schema/` and are wired
+via `.vscode/settings.json` (loose collections allow extra fields, so nothing
+false-flags).
+
 All collections are hand-authored JSON in `data/`. Edit the **source** file;
 the build regenerates any `*.generated.json` and the search index for you
 (`npm run build` runs content:validate → books:generate → search:sync →
