@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "People (data/people.json)",
+  "description": "Basic person records. Bios, book/movie links, and timelines live in people.profiles.json + people-merge-config.json (merged at build time).",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["people"],
+  "properties": {
+    "people": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": true,
+        "properties": {
+          "id": { "type": "string", "description": "Stable slug id." },
+          "name": { "type": "string", "description": "Person's name (required). Photo expected at images/generated/people/{slug}-{200,400,800}.jpg." },
+          "title": { "type": ["string", "null"], "description": "Role / one-line descriptor." },
+          "lesson": { "type": ["string", "null"] },
+          "category": { "type": ["string", "null"] },
+          "image": { "type": ["string", "null"] },
+          "srcset": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

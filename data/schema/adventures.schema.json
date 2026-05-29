@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adventures (data/adventures.json)",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["adventures"],
+  "properties": {
+    "lastUpdated": { "type": "string" },
+    "adventures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title"],
+        "additionalProperties": true,
+        "properties": {
+          "id": { "type": "string", "description": "Stable slug id (required)." },
+          "title": { "type": "string", "description": "Trip title (required)." },
+          "subtitle": { "type": ["string", "null"] },
+          "location": { "type": ["string", "null"] },
+          "region": { "type": ["string", "null"] },
+          "startDate": { "type": ["string", "null"] },
+          "endDate": { "type": ["string", "null"] },
+          "duration": { "type": ["string", "null"] },
+          "heroImage": { "type": ["string", "null"] },
+          "shortDescription": { "type": ["string", "null"] },
+          "content": { "type": ["string", "null"], "description": "Body (HTML/markdown string)." },
+          "highlights": { "type": ["array", "null"], "items": { "type": "string" } },
+          "status": { "type": ["string", "null"] },
+          "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+          "mapCenter": { "description": "Map center as [lat, lng] or {lat,lng}." },
+          "mapZoom": { "type": ["number", "null"] },
+          "gallery": {
+            "type": ["array", "null"],
+            "description": "Photos. lat/lng position the marker on the map (currently hand-entered).",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "src": { "type": ["string", "null"] },
+                "thumbnail": { "type": ["string", "null"] },
+                "caption": { "type": ["string", "null"] },
+                "lat": { "type": ["number", "null"] },
+                "lng": { "type": ["number", "null"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

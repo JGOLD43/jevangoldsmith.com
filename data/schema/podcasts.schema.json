@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Podcasts (data/podcasts.json)",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["podcasts"],
+  "properties": {
+    "podcasts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title"],
+        "additionalProperties": true,
+        "properties": {
+          "id": { "type": "string", "description": "Stable slug id." },
+          "title": { "type": "string", "description": "Show name (required)." },
+          "host": { "type": ["string", "null"] },
+          "description": { "type": ["string", "null"] },
+          "category": { "type": ["string", "null"], "examples": ["business", "ideas", "development", "episodes"] },
+          "badge": { "type": ["string", "null"], "examples": ["Must Listen"] },
+          "image": { "type": ["string", "null"] },
+          "searchText": { "type": ["string", "null"], "description": "Denormalized search string; keep in sync with title/host/description." },
+          "link": { "type": ["string", "null"] },
+          "notes": { "type": ["string", "null"] },
+          "takeaways": { "type": ["array", "null"], "items": { "type": "string" } },
+          "episodes": {
+            "type": ["array", "null"],
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "title": { "type": ["string", "null"] },
+                "url": { "type": ["string", "null"] },
+                "note": { "type": ["string", "null"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
