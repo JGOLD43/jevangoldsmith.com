@@ -1,0 +1,142 @@
+# Sveltia CMS configuration (Decap-compatible).
+#
+# IMPORTANT — fill in `base_url` after deploying the auth relay (see
+# docs/cms-setup.md). Until GitHub auth is configured the login will fail.
+#
+# SAFETY: Decap/Sveltia write back ONLY the fields listed here — any field you
+# omit is deleted from the JSON on save. Every field below is enumerated to
+# match data/*.json exactly so nothing is dropped. Before trusting the CMS,
+# add ONE throwaway entry, save, and check the git commit diff. Collections
+# with nested map/documentary structures (adventures, projects) and the
+# sync-driven ones (books, movies) are intentionally left out of v1 — edit
+# those via `npm run new:<collection>` + the JSON-schema autocomplete.
+
+backend:
+  name: github
+  repo: JGOLD43/jevangoldsmith.com
+  branch: main
+  base_url: https://REPLACE-WITH-YOUR-AUTH-WORKER.workers.dev # ← see docs/cms-setup.md
+
+# Where the CMS uploads images. Committed into the repo like any other asset.
+media_folder: images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: essays
+    label: Essays
+    icon: article
+    files:
+      - name: essays
+        label: All essays
+        file: data/essays.json
+        description: One entry per essay. status=draft hides it publicly.
+        fields:
+          - { name: lastUpdated, label: Last updated, widget: string, required: false }
+          - name: essays
+            label: Essays
+            widget: list
+            label_singular: Essay
+            summary: '{{fields.title}}'
+            fields:
+              - { name: id, label: ID / slug, widget: string, hint: kebab-case, e.g. my-essay-title }
+              - { name: title, label: Title, widget: string }
+              - { name: subtitle, label: Subtitle, widget: string, required: false }
+              - { name: author, label: Author, widget: string, required: false, default: Jevan Goldsmith }
+              - { name: date, label: Display date, widget: string, required: false }
+              - { name: category, label: Category, widget: string, required: false }
+              - { name: status, label: Status, widget: select, options: [published, draft], default: draft }
+              - { name: content, label: Content, widget: markdown }
+              - { name: featuredImage, label: Featured image, widget: image, required: false }
+              - { name: media, label: Media, widget: list, required: false, default: [] }
+              - { name: createdAt, label: Created at, widget: string, required: false }
+              - { name: updatedAt, label: Updated at, widget: string, required: false }
+
+  - name: podcasts
+    label: Podcasts
+    icon: podcasts
+    files:
+      - name: podcasts
+        label: All podcasts
+        file: data/podcasts.json
+        fields:
+          - name: podcasts
+            label: Podcasts
+            widget: list
+            label_singular: Podcast
+            summary: '{{fields.title}}'
+            fields:
+              - { name: id, label: ID / slug, widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: host, label: Host, widget: string, required: false }
+              - { name: description, label: Description, widget: text, required: false }
+              - { name: category, label: Category, widget: string, required: false }
+              - { name: badge, label: Badge, widget: string, required: false }
+              - { name: image, label: Cover image, widget: image, required: false }
+              - { name: searchText, label: Search text, widget: string, required: false }
+              - { name: link, label: Link, widget: string, required: false }
+              - { name: notes, label: Notes, widget: text, required: false }
+              - { name: takeaways, label: Takeaways, widget: list, required: false, field: { name: item, label: Takeaway, widget: string } }
+              - name: episodes
+                label: Episodes
+                widget: list
+                required: false
+                fields:
+                  - { name: title, label: Title, widget: string, required: false }
+                  - { name: url, label: URL, widget: string, required: false }
+                  - { name: note, label: Note, widget: text, required: false }
+
+  - name: people
+    label: People
+    icon: group
+    files:
+      - name: people
+        label: All people
+        file: data/people.json
+        description: Basic records only. Bios and book/movie links live in people.profiles.json + people-merge-config.json.
+        fields:
+          - name: people
+            label: People
+            widget: list
+            label_singular: Person
+            summary: '{{fields.name}}'
+            fields:
+              - { name: id, label: ID / slug, widget: string }
+              - { name: name, label: Name, widget: string }
+              - { name: title, label: Role / descriptor, widget: string, required: false }
+              - { name: lesson, label: Lesson, widget: text, required: false }
+              - { name: category, label: Category, widget: string, required: false }
+              - { name: image, label: Image, widget: image, required: false }
+
+  - name: challenges
+    label: Challenges
+    icon: flag
+    files:
+      - name: challenges
+        label: All challenges
+        file: data/challenges.json
+        fields:
+          - { name: schemaVersion, label: Schema version, widget: number, required: false, default: 1 }
+          - name: challenges
+            label: Challenges
+            widget: list
+            label_singular: Challenge
+            summary: '{{fields.title}}'
+            fields:
+              - { name: id, label: ID / slug, widget: string }
+              - { name: slug, label: Slug, widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: status, label: Status, widget: select, options: [active, completed, planned], default: planned }
+              - { name: category, label: Category, widget: string, required: false }
+              - { name: timeframe, label: Timeframe, widget: string, required: false }
+              - { name: shortDescription, label: Short description, widget: text, required: false }
+              - { name: image, label: Image, widget: image, required: false }
+              - { name: imageAlt, label: Image alt text, widget: string, required: false }
+              - name: progress
+                label: Progress
+                widget: object
+                required: false
+                fields:
+                  - { name: label, label: Label, widget: string, default: Progress }
+                  - { name: value, label: Value, widget: string, hint: 'e.g. 5 / 52 books' }
+                  - { name: percent, label: Percent, widget: number, value_type: int, min: 0, max: 100 }
+              - { name: searchTerms, label: Search terms, widget: list, required: false, field: { name: term, label: Term, widget: string } }

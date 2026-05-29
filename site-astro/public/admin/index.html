@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Content Admin · Jevan Goldsmith</title>
+  </head>
+  <body>
+    <!--
+      Sveltia CMS — a Decap-compatible, git-backed admin UI. It reads/writes the
+      JSON files in data/ directly via the GitHub API; there is no backend.
+      Config lives in ./config.yml (auto-loaded). Authentication requires a
+      GitHub OAuth App + an auth relay — see docs/cms-setup.md.
+
+      This page is intentionally excluded from the site's strict CSP
+      (scripts/update-csp-hashes.js skips dist/admin) because the CMS loads its
+      bundle from a CDN and talks to api.github.com.
+    -->
+    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>
+  </body>
+</html>
