@@ -1,8 +1,16 @@
 # Jevan Goldsmith Website
 
-Static personal website for `jevangoldsmith.com`, hosted on Firebase Hosting.
-The public experience is organized as a living archive, with the newsletter as
-the recurring audience thread.
+Static personal website for `jevangoldsmith.com`, deployed to **GitHub Pages**
+(see `.github/workflows/deploy-pages.yml`). The public experience is organized
+as a living archive, with the newsletter as the recurring audience thread.
+
+> Serving note: GitHub Pages serves no custom response headers, so the security
+> headers in `firebase.json` apply only to the local Firebase emulator, not the
+> live site. The live Content-Security-Policy ships as a per-page
+> `<meta http-equiv>` tag injected by `scripts/update-csp-hashes.js`.
+> `X-Frame-Options`, `X-Content-Type-Options` and HSTS cannot be set via meta
+> and are therefore unavailable until the site is fronted by a header-capable
+> proxy (e.g. Cloudflare).
 
 As of the Astro migration (May 2026), the build is **Astro 6 + per-page legacy
 CSS purge**. `npm run build` invokes Astro under the hood and writes generated
@@ -95,11 +103,14 @@ artifacts stay ignored.
 
 ## Deployment
 
-Firebase Hosting serves `dist/`, not the repository root. The previous
-placeholder `/api/**` Cloud Function rewrite has been removed until there is a
-real server-side API to expose.
+GitHub Pages serves the built `dist/` directory. On every push to `main`,
+`.github/workflows/deploy-pages.yml` runs `npm run build:fast` and publishes
+`dist/` via `actions/deploy-pages`. The `firebase.json` config is retained only
+for the local Hosting emulator (`npm run serve`) and as the source of truth for
+the CSP that `update-csp-hashes.js` mirrors into per-page `<meta>` tags.
 
-`admin/**` is excluded from Hosting until admin writes are server-enforced.
+`admin/**` is not part of the Astro build, so it never enters `dist/` and is
+not published.
 
 Relevant files:
 
