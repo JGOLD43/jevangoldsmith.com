@@ -89,6 +89,13 @@ async function main() {
     const apiKey = process.env.TMDB_API_KEY;
 
     if (!apiKey) {
+        // --skip-if-no-key lets the Letterboxd cron run enrichment opportunistically:
+        // if the TMDB_API_KEY secret is configured the catalog gets enriched, and if
+        // not the step is a no-op instead of failing the daily sync.
+        if (args.skipIfNoKey || process.argv.includes('--skip-if-no-key')) {
+            console.warn('[enrich-movies] TMDB_API_KEY not set — skipping enrichment.');
+            process.exit(0);
+        }
         console.error('TMDB_API_KEY not set. Add to .env.local or pass via env.');
         console.error('  Get a free key at https://www.themoviedb.org/settings/api');
         process.exit(1);
