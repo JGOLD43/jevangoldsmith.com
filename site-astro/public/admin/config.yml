@@ -1,7 +1,10 @@
 # Sveltia CMS configuration (Decap-compatible).
 #
-# IMPORTANT — fill in `base_url` after deploying the auth relay (see
-# docs/cms-setup.md). Until GitHub auth is configured the login will fail.
+# AUTH: see docs/cms-setup.md. The easiest paths need NO setup here —
+#   Option A "Work with Local Repository" (edit local files) or
+#   Option B "Sign In Using Access Token" (paste a GitHub token).
+# Only Option C (one-click "Sign In with GitHub") needs the `base_url` below
+# pointed at a Cloudflare auth Worker. Leave the placeholder if using A or B.
 #
 # SAFETY: Decap/Sveltia write back ONLY the fields listed here — any field you
 # omit is deleted from the JSON on save. Every field below is enumerated to
