@@ -40,6 +40,7 @@ const subtitleHtml = config.main.subtitleHtml ?? '';
 const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
 ---
 <main class={config.layout.className} id={config.layout.id}>
+  {TitleTag !== 'h1' && <h1 class="sr-only">{config.main.title}</h1>}
   <div class="collection-mobile-toggle" role="tablist" aria-label="Mobile view toggle">
     <button type="button" class="mobile-view-btn" data-view="list" data-action="switchCollectionView" data-action-args="list" role="tab" aria-selected="false">
       <svg class="ico-stroke" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-listView"></use></svg>
