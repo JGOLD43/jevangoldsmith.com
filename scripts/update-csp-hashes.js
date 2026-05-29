@@ -105,8 +105,13 @@ fs.writeFileSync(FIREBASE, `${JSON.stringify(firebase, null, 2)}\n`);
 // inline hashes. Injected right after <head> so it governs every inline
 // script/style that follows (including the pre-paint theme guard).
 const META_RE = /<meta\s+http-equiv=["']Content-Security-Policy["'][^>]*>/i;
+// The Sveltia CMS admin (dist/admin) loads its bundle from a CDN and talks to
+// api.github.com + the auth relay, so the strict 'self' CSP would break it.
+// It's a noindex authoring tool, not public content — skip CSP injection there.
+const ADMIN_DIR = path.join(DIST, 'admin') + path.sep;
 let injected = 0;
 for (const [file, { html, scripts, styles }] of fileHashes) {
+  if (file.startsWith(ADMIN_DIR)) continue;
   const meta = `<meta http-equiv="Content-Security-Policy" content="${buildPolicy(scripts, styles)}">`;
   const charsetRe = /(<meta\s+charset=[^>]*>)/i;
   let out;
