@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Projects (data/projects.json)",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["projects"],
+  "properties": {
+    "schemaVersion": { "type": ["number", "string"] },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title"],
+        "additionalProperties": true,
+        "properties": {
+          "id": { "type": "string", "description": "Stable slug id (required)." },
+          "slug": { "type": "string" },
+          "title": { "type": "string", "description": "Project name (required)." },
+          "status": { "type": ["string", "null"], "examples": ["active", "shipped", "planned", "archived"] },
+          "category": { "type": ["string", "null"], "examples": ["software", "writing", "hardware"] },
+          "shortDescription": { "type": ["string", "null"], "description": "One-line card summary." },
+          "description": { "type": ["string", "null"] },
+          "whatItIs": { "type": ["string", "null"] },
+          "whyIMadeIt": { "type": ["string", "null"] },
+          "whatILearned": { "type": ["string", "null"] },
+          "nextStep": { "type": ["string", "null"] },
+          "currentQuestion": { "type": ["string", "null"] },
+          "image": { "type": ["string", "null"] },
+          "imageAlt": { "type": ["string", "null"] },
+          "technologies": { "type": ["array", "null"], "items": { "type": "string" } },
+          "topics": { "type": ["array", "null"], "items": { "type": "string" } },
+          "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+          "notes": { "type": ["string", "null"] },
+          "buildLog": {
+            "type": ["array", "null"],
+            "items": { "type": "object", "additionalProperties": true, "properties": {
+              "date": { "type": "string" }, "title": { "type": "string" }, "note": { "type": "string" } } }
+          },
+          "links": {
+            "type": ["array", "null"],
+            "items": { "type": "object", "additionalProperties": true, "properties": {
+              "label": { "type": "string" }, "url": { "type": "string" }, "icon": { "type": "string" } } }
+          }
+        }
+      }
+    }
+  }
+}

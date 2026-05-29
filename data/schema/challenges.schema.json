@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Challenges (data/challenges.json)",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["challenges"],
+  "properties": {
+    "schemaVersion": { "type": ["number", "string"] },
+    "challenges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title"],
+        "additionalProperties": true,
+        "properties": {
+          "id": { "type": "string", "description": "Stable slug id (required)." },
+          "slug": { "type": "string" },
+          "title": { "type": "string", "description": "Challenge name (required)." },
+          "status": { "type": ["string", "null"], "examples": ["active", "completed", "planned"] },
+          "category": { "type": ["string", "null"] },
+          "timeframe": { "type": ["string", "null"], "description": "e.g. 'Jan 1 – Dec 31, 2026'." },
+          "shortDescription": { "type": ["string", "null"] },
+          "image": { "type": ["string", "null"] },
+          "imageAlt": { "type": ["string", "null"] },
+          "progress": {
+            "type": ["object", "null"],
+            "additionalProperties": true,
+            "properties": {
+              "label": { "type": "string" },
+              "value": { "type": "string", "description": "e.g. '5 / 52 books'." },
+              "percent": { "type": "number", "minimum": 0, "maximum": 100 }
+            }
+          },
+          "searchTerms": { "type": ["array", "null"], "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}
