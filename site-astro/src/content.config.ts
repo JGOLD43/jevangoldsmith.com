@@ -220,7 +220,7 @@ const peopleMergedSchema = z.looseObject({
 export type PeopleMerged = z.infer<typeof peopleMergedSchema>;
 
 const books = defineCollection({
-  loader: jsonArrayLoader('books.json', { idFrom: 'isbn', idDisambiguator: 'author' }),
+  loader: jsonArrayLoader('books.json', { key: 'books', idFrom: 'isbn', idDisambiguator: 'author' }),
   schema: bookSchema
 });
 

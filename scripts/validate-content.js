@@ -46,7 +46,7 @@ const COLLECTIONS = [
   {
     name: 'books',
     file: 'books.json',
-    key: null,
+    key: 'books',
     defaultStatus: 'published',
     idFrom: ['id', 'isbn'],
     titleFrom: ['title'],
@@ -302,7 +302,7 @@ function validateCrossFileJoins() {
   };
 
   const joins = [
-    { map: 'BOOK_PEOPLE', titles: titlesOf('books.json'), source: 'books.json' },
+    { map: 'BOOK_PEOPLE', titles: titlesOf('books.json', 'books'), source: 'books.json' },
     { map: 'MOVIE_PEOPLE', titles: titlesOf('movies.json'), source: 'movies.json' }
   ];
 
