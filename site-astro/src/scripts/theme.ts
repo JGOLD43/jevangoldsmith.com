@@ -141,6 +141,13 @@ if (workToggle) {
         (workToggle as HTMLElement).blur();
         const next: 'work' | 'personal' = current() === 'work' ? 'personal' : 'work';
 
+        // Respect prefers-reduced-motion: skip the full-screen clip-path
+        // wipe entirely and swap the mode instantly (WCAG 2.3.3).
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            applyMode(next);
+            return;
+        }
+
         // Snapshot the current scroll so the cloned <body> can be
         // offset to where the user actually was on the page. We do
         // NOT lock body scroll any more — the user wants to keep
@@ -485,10 +492,55 @@ function initViewToggleToast() {
     });
 }
 
+// Desktop keyboard access for the nav dropdowns. The menus open on
+// :hover (mouse) and :focus-within (keyboard) via CSS; this wires the
+// ARIA state, stops the href="#" triggers from jumping to top on
+// activation, and lets Escape close an open menu.
+function initDropdownA11y() {
+    const dropdowns = document.querySelectorAll<HTMLElement>('.nav-dropdown');
+    dropdowns.forEach((dropdown) => {
+        const trigger = dropdown.querySelector<HTMLElement>('.dropdown-trigger');
+        if (!trigger) return;
+
+        const setExpanded = (open: boolean) => trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+        // Desktop: don't let the href="#" trigger scroll to the top.
+        trigger.addEventListener('click', (e) => {
+            if (window.innerWidth > 968) e.preventDefault();
+        });
+        trigger.addEventListener('keydown', (e) => {
+            const key = (e as KeyboardEvent).key;
+            if (key === 'Enter' || key === ' ' || key === 'ArrowDown') {
+                dropdown.classList.remove('dropdown-suppress');
+                setExpanded(true);
+                if (key !== 'Enter') e.preventDefault();
+            }
+        });
+
+        dropdown.addEventListener('focusin', () => { dropdown.classList.remove('dropdown-suppress'); setExpanded(true); });
+        dropdown.addEventListener('focusout', (e) => {
+            if (!dropdown.contains((e as FocusEvent).relatedTarget as Node | null)) {
+                dropdown.classList.remove('dropdown-suppress');
+                setExpanded(false);
+            }
+        });
+        dropdown.addEventListener('mouseenter', () => { dropdown.classList.remove('dropdown-suppress'); setExpanded(true); });
+        dropdown.addEventListener('mouseleave', () => setExpanded(false));
+        dropdown.addEventListener('keydown', (e) => {
+            if ((e as KeyboardEvent).key === 'Escape') {
+                dropdown.classList.add('dropdown-suppress');
+                setExpanded(false);
+                trigger.focus();
+            }
+        });
+    });
+}
+
 function bootChrome() {
     initTheme();
     initWorkModeToggle();
     initMobileNav();
+    initDropdownA11y();
     initNavHeight();
     initViewToggleToast();
     // Fire portrait warm immediately (not at idle) so the cache is
