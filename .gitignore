@@ -80,3 +80,6 @@ eng.traineddata
 .claude/edit-count.txt
 .claude/auto-batch.log
 .claude/scripts/
+
+# Local git worktrees (should never be tracked)
+.claude/worktrees/
