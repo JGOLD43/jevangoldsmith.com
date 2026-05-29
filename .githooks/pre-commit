@@ -2,3 +2,7 @@
 set -e
 npx biome check scripts
 npm run --prefix site-astro astro check
+# Validate source content JSON (duplicate ids/slugs, missing titles, bad
+# URLs/dates). Fast + no network. Catches bad data before it reaches main,
+# where pushes deploy without a separate gate.
+npm run content:validate

@@ -31,9 +31,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Sync Letterboxd RSS
         run: node scripts/sync-letterboxd.js
+      - name: Enrich new movies with TMDB metadata
+        # No-op when the TMDB_API_KEY secret is unset, so the sync never
+        # fails just because enrichment is unconfigured.
+        run: node scripts/enrich-movies.js --skip-if-no-key
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+      - name: Validate content before commit
+        run: npm run content:validate
       - name: Commit if changed
         run: |
           if git diff --quiet -- data/movies.json; then
