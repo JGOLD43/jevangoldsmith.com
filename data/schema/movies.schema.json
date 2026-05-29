@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Movies (data/movies.json)",
+  "description": "Mostly populated by the Letterboxd sync + TMDB enrichment cron. Hand-edit only title/notes/review for new or special entries.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["title"],
+    "additionalProperties": true,
+    "properties": {
+      "title": { "type": "string", "description": "Film title (required)." },
+      "date": { "type": ["string", "null"], "description": "Watched date." },
+      "link": { "type": ["string", "null"], "description": "Letterboxd URL." },
+      "rating": { "type": ["string", "null"] },
+      "starCount": { "type": ["number", "null"], "description": "0–5 stars." },
+      "year": { "type": ["string", "number", "null"] },
+      "poster": { "type": ["string", "null"] },
+      "genre": { "type": ["string", "null"] },
+      "timesWatched": { "type": ["number", "null"] },
+      "tmdbId": { "type": ["number", "null"], "description": "Set by TMDB enrichment — leave blank for the cron to fill." },
+      "runtime": { "type": ["number", "null"] },
+      "overview": { "type": ["string", "null"] },
+      "review": { "type": ["string", "null"] },
+      "notes": { "type": ["string", "null"] }
+    }
+  }
+}

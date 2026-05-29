@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Essays (data/essays.json)",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["essays"],
+  "properties": {
+    "lastUpdated": { "type": "string", "description": "ISO date the collection was last touched." },
+    "essays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "content"],
+        "additionalProperties": true,
+        "properties": {
+          "id": { "type": "string", "description": "Stable slug id (kebab-case)." },
+          "title": { "type": "string", "description": "Essay title (required)." },
+          "subtitle": { "type": ["string", "null"] },
+          "author": { "type": ["string", "null"] },
+          "date": { "type": ["string", "null"], "description": "Display date." },
+          "category": { "type": ["string", "null"] },
+          "status": { "type": ["string", "null"], "enum": ["published", "draft", null], "description": "Only 'published' renders publicly." },
+          "content": { "type": "string", "description": "Body (HTML/markdown string). Required." },
+          "featuredImage": { "type": ["string", "null"] },
+          "media": { "type": "array", "description": "Attached media (usually empty)." },
+          "createdAt": { "type": ["string", "null"] },
+          "updatedAt": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}
