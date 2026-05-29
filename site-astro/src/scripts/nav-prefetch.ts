@@ -31,7 +31,6 @@
                 where: {
                     and: [
                         { href_matches: '/*.html' },
-                        { not: { href_matches: '/data-smoke.html' } },
                         { not: { href_matches: '/meet.html' } },
                         { not: { href_matches: '/adventures.html' } },
                         { not: { href_matches: '/search.html' } },

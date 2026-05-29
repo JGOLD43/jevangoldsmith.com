@@ -50,7 +50,7 @@ interface Props {
   breadcrumbs?: BreadcrumbStep[];
   /** Robots meta content. Defaults to public indexing. */
   robots?: string;
-  /** Skip JSON-LD (e.g. for /data-smoke or other non-public pages). */
+  /** Skip JSON-LD (e.g. for non-public or redirect-only pages). */
   noJsonLd?: boolean;
   /** Per-page schema.org @graph nodes. Currently used by adventure-[slug]. */
   extraSchema?: ExtraSchema[];
@@ -367,7 +367,6 @@ if (seoSlug === 'index' || seoSlug === 'search') {
                   </div>
                   <div class="dropdown-column">
                     <a href="/living-manifesto.html" class:list={['living-manifesto.html' === _activeHref ? 'active' : '']}>Living</a>
-                    <a href="/speeches.html" class:list={['speeches.html' === _activeHref ? 'active' : '']}>Speeches</a>
                     <a href="/health.html" class:list={['health.html' === _activeHref ? 'active' : '']}>Health</a>
                   </div>
                 </div>
