@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Books (data/books.json)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["title", "author"],
+    "additionalProperties": true,
+    "properties": {
+      "title": { "type": "string", "description": "Book title (required)." },
+      "author": { "type": "string", "description": "Author name (required)." },
+      "isbn": { "type": "string", "description": "13-digit ISBN. The cover resolves automatically from this via the remote-asset manifest — do NOT set coverImage by hand (books.generated.json is generated)." },
+      "year": { "type": ["string", "number"], "description": "Publication year." },
+      "rating": { "type": "number", "minimum": 0, "maximum": 5, "description": "Your rating, 0–5." },
+      "reReads": { "type": ["number", "null"], "description": "Number of times re-read." },
+      "category": { "type": ["string", "null"] },
+      "shortDescription": { "type": ["string", "null"] },
+      "review": { "type": ["string", "null"], "description": "Long-form review (supports \\n line breaks)." },
+      "read": { "type": ["boolean", "null"] },
+      "notes": { "type": ["string", "null"] }
+    }
+  }
+}
