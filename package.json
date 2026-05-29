@@ -12,6 +12,7 @@
     "build": "node scripts/build.js",
     "build:fast": "node scripts/build.js --fast",
     "people:merge": "node scripts/merge-people.js",
+    "books:generate": "node scripts/build-books-generated.js",
     "search:audit:strict": "node scripts/audit-search-index.js --strict",
     "content:validate": "node scripts/validate-content.js",
     "content:validate:strict": "node scripts/validate-content.js --strict",
