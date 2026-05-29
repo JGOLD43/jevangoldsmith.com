@@ -6,7 +6,7 @@ Purpose: `describe the current static-site architecture (Astro 6 + per-page CSS 
 
 ## Runtime Shape
 
-Firebase Hosting serves generated files from `dist/`.
+GitHub Pages serves generated files from `dist/` (`.github/workflows/deploy-pages.yml`).
 
 The public runtime contains:
 
@@ -19,6 +19,24 @@ The public runtime contains:
 - `sitemap-index.xml` + `sitemap-0.xml`, `rss.xml`, `robots.txt`, `llms.txt`
 
 There is no active Cloud Functions package and no `/api/**` rewrite.
+
+## Serving & headers
+
+The live site is GitHub Pages, which serves **no custom response headers**. As a
+result:
+
+- The header block in `firebase.json` (CSP, HSTS, X-Frame-Options,
+  X-Content-Type-Options, Referrer-Policy, Permissions-Policy) applies **only**
+  to the local Firebase Hosting emulator (`npm run serve`), not production.
+- The production **Content-Security-Policy ships as a per-page
+  `<meta http-equiv>` tag**, injected as the final build step by
+  `scripts/update-csp-hashes.js`. Each page carries only its own inline
+  script/style hashes; the same script also writes the aggregate policy into
+  `firebase.json` for the emulator.
+- `X-Frame-Options`, `X-Content-Type-Options` and HSTS **cannot** be expressed
+  as meta tags, so they are unavailable until the site is fronted by a
+  header-capable proxy (e.g. Cloudflare). Putting Cloudflare (or Firebase
+  Hosting) in front and serving `firebase.json`'s headers is the upgrade path.
 
 ## Source Shape
 
@@ -134,9 +152,10 @@ the legacy build; the Astro build embeds the relevant subset directly in
 
 ## Security Boundary
 
-Firebase Hosting is the public serving layer. `admin/**` is intentionally
-ignored by Hosting deploys. Firestore denies all non-admin documents and only
-allows the configured admin email to access `/admin/**`.
+GitHub Pages is the public serving layer (see "Serving & headers"). `admin/**`
+is not part of the Astro build and never reaches `dist/`, so it is never
+published. Firestore denies all non-admin documents and only allows the
+configured admin email to access `/admin/**`.
 
 The admin UI still runs in the browser. Do not treat client-side two-factor
 checks as a backend authorization boundary. Any future write-capable admin
@@ -146,5 +165,8 @@ verifies Firebase ID tokens and second-factor state before writing data.
 ## Evolution Rule
 
 Keep new styles scoped to Astro components where possible. When shared CSS is
-unavoidable, add it to `legacy-style.css` with stable selectors so
-`scripts/purge-css-per-page.js` can keep the shipped CSS small.
+unavoidable, edit `site-astro/src/styles/legacy.src.css` (the single source of
+truth) with stable selectors — never the generated
+`site-astro/public/css/legacy-style.css`, which `scripts/build-legacy-css.js`
+recompiles on every build (first step of `scripts/build.js`). Stable selectors
+let `scripts/purge-css-per-page.js` keep the shipped CSS small.

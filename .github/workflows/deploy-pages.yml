@@ -1,7 +1,13 @@
 name: deploy-pages
 
+# Deploy is gated on the `test` workflow: a push to main runs `test`, and only
+# when it concludes successfully does this workflow run. This prevents a broken
+# build (or a bad auto-batch / cron data commit) from going live. Manual
+# `workflow_dispatch` bypasses the gate for emergency redeploys.
 on:
-  push:
+  workflow_run:
+    workflows: [test]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -16,6 +22,8 @@ concurrency:
 
 jobs:
   build:
+    # Only deploy when the gating test run passed (or on manual dispatch).
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
