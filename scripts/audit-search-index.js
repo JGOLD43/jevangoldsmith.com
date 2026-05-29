@@ -44,7 +44,7 @@ const COLLECTIONS = [
   { name: 'projects', file: 'projects.json', key: 'projects', titleFrom: ['title'] },
   { name: 'people', file: 'people.json', key: 'people', titleFrom: ['name'] },
   { name: 'podcasts', file: 'podcasts.json', key: 'podcasts', titleFrom: ['title'] },
-  { name: 'books', file: 'books.json', key: null, titleFrom: ['title'] },
+  { name: 'books', file: 'books.json', key: 'books', titleFrom: ['title'] },
   { name: 'movies', file: 'movies.json', key: null, titleFrom: ['title'] }
 ];
 

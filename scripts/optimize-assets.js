@@ -164,7 +164,8 @@ function collectRemoteMediaUrls() {
 
   const booksPath = path.join(root, 'data', 'books.json');
   if (fs.existsSync(booksPath)) {
-    const books = JSON.parse(fs.readFileSync(booksPath, 'utf8'));
+    const booksRaw = JSON.parse(fs.readFileSync(booksPath, 'utf8'));
+    const books = Array.isArray(booksRaw) ? booksRaw : booksRaw.books;
     for (const book of books) {
       const isbn = String(book.isbn || '').replace(/[^0-9X]/gi, '');
       if (isbn) urls.add(`https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`);

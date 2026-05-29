@@ -36,7 +36,7 @@ const REGISTRY = {
     build: (title, slug) => ({ id: slug, title, subtitle: '', author: 'Jevan Goldsmith', date: '', category: '', status: 'draft', content: '', featuredImage: null, media: [], createdAt: nowIso(), updatedAt: nowIso() })
   },
   book: {
-    file: 'books.json', key: null,
+    file: 'books.json', key: 'books',
     build: (title) => ({ title, author: '', isbn: '', year: '', rating: 0, category: '', shortDescription: '', review: '', read: false })
   },
   adventure: {

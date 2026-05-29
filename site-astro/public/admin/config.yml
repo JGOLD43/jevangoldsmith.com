@@ -194,3 +194,29 @@ collections:
                   - { name: caption, label: Caption, widget: string, required: false }
                   - { name: lat, label: Latitude, widget: number, value_type: float, required: false }
                   - { name: lng, label: Longitude, widget: number, value_type: float, required: false }
+
+  - name: books
+    label: Books
+    icon: book
+    files:
+      - name: books
+        label: All books
+        file: data/books.json
+        description: Source of truth. Covers resolve automatically from the ISBN on build — don't set a cover field here.
+        fields:
+          - name: books
+            label: Books
+            widget: list
+            label_singular: Book
+            summary: '{{fields.title}} — {{fields.author}}'
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: author, label: Author, widget: string }
+              - { name: isbn, label: ISBN, widget: string, required: false, hint: 13-digit ISBN — the cover is fetched from this }
+              - { name: year, label: Year, widget: string, required: false }
+              - { name: rating, label: Rating (0–5), widget: number, value_type: int, min: 0, max: 5, required: false }
+              - { name: reReads, label: Re-reads, widget: number, value_type: int, required: false }
+              - { name: category, label: Category, widget: string, required: false }
+              - { name: shortDescription, label: Short description, widget: text, required: false }
+              - { name: review, label: Review, widget: text, required: false }
+              - { name: read, label: Read?, widget: boolean, required: false, default: false }
