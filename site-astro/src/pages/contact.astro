@@ -49,9 +49,17 @@ import Base from '../layouts/Base.astro';
         </a>
     </div>
     <p style="margin-top: 2rem; color: var(--text-light);">
-        <em>The form opens your email client so you can send the message directly.</em>
+        <em>I typically respond within 24–48 hours.</em>
     </p>
 </div>
 </div>
 </main>
+<script>
+  import '../scripts/contact-form.ts';
+</script>
+<style is:inline>
+  .contact-form-status { margin-top: 1rem; text-align: center; font-size: 0.95rem; }
+  .contact-form-status[data-state="ok"] { color: var(--accent-color, #2e7d32); }
+  .contact-form-status[data-state="error"] { color: #c0392b; }
+</style>
 </Base>

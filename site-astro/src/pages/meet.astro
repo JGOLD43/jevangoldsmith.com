@@ -19,14 +19,17 @@ import Base from '../layouts/Base.astro';
 </header>
 <main class="meet-main">
     <div class="meet-container">
-        <form class="meet-form" action="mailto:hello@jevangoldsmith.com" method="get" enctype="text/plain">
+        <form class="meet-form" action="https://formsubmit.co/hello@jevangoldsmith.com" method="POST" data-contact-form data-endpoint="https://formsubmit.co/ajax/hello@jevangoldsmith.com">
+            <input type="hidden" name="_subject" value="Meet form: new message">
+            <input type="hidden" name="_template" value="table">
+            <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
             <div class="meet-form-group">
                 <label for="name">Your Name</label>
-                <input type="text" id="name" name="name" required placeholder="First name is fine">
+                <input type="text" id="name" name="name" required autocomplete="name" placeholder="First name is fine">
             </div>
             <div class="meet-form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required placeholder="Where can I reach you?">
+                <input type="email" id="email" name="email" required autocomplete="email" placeholder="Where can I reach you?">
             </div>
             <div class="meet-form-group">
                 <label for="message">Anything you'd like to add?</label>
@@ -48,6 +51,9 @@ import Base from '../layouts/Base.astro';
         </div>
     </div>
 </main>
+<script>
+  import '../scripts/contact-form.ts';
+</script>
 </Base>
 
 <style is:inline>
@@ -82,4 +88,7 @@ import Base from '../layouts/Base.astro';
   @media (max-width: 480px) {
     .meet-header-title { font-size: 1.4rem; }
   }
+  .contact-form-status { margin-top: 1rem; text-align: center; font-size: 0.95rem; }
+  .contact-form-status[data-state="ok"] { color: var(--accent-color, #2e7d32); }
+  .contact-form-status[data-state="error"] { color: #c0392b; }
 </style>
