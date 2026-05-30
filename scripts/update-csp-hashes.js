@@ -16,11 +16,12 @@ function hashContent(value) {
 const scriptHashes = new Set();
 const styleHashes = new Set();
 
-// data-only <script> types (application/json, application/ld+json,
-// speculationrules, importmap) are NOT executed by the browser, so they
-// don't need a CSP script-src hash. Hashing them anyway bloats the CSP
-// header by ~5-10KB on a content-heavy site like this.
-const NON_EXECUTABLE_TYPES = /(?:application\/(?:json|ld\+json)|speculationrules|importmap)/i;
+// True data-only <script> types that CSP does NOT govern: application/json and
+// application/ld+json (JSON-LD). These don't need a script-src hash and hashing
+// them would bloat the CSP. NOTE: `speculationrules` and `importmap` ARE
+// enforced under script-src by Chrome, so they must be hashed — excluding them
+// gets them blocked once the CSP is actually enforced (via the <meta> tag).
+const NON_EXECUTABLE_TYPES = /application\/(?:json|ld\+json)/i;
 
 // Per-file inline hashes — used to inject a tight <meta> CSP into each page
 // (see injectMetaCsp). The aggregate Sets above feed the firebase.json header
@@ -82,10 +83,17 @@ if (rumEndpoint) {
 // they require real response headers and are therefore unavailable on raw
 // GitHub Pages (see docs/ARCHITECTURE.md "Serving & headers").
 function buildPolicy(scripts, styles) {
+  // scripts: hashed (real XSS protection). styles: 'unsafe-inline' — CSP hashes
+  // do NOT cover inline style="" ATTRIBUTES (only <style> elements), and this
+  // site uses inline style attributes throughout, so a hashed style-src blocks
+  // them and breaks layout (e.g. style="display:none"). 'unsafe-inline' for
+  // styles is the standard, low-risk concession on a static site; script-src
+  // stays locked down. (styles arg kept for the firebase.json aggregate only.)
+  void styles;
   return [
     "default-src 'self'",
     `script-src 'self' ${Array.from(scripts).sort().join(' ')}`.trim(),
-    `style-src 'self' ${Array.from(styles).sort().join(' ')}`.trim(),
+    "style-src 'self' 'unsafe-inline'",
     "font-src 'self'",
     "img-src 'self' https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com data:",
     `connect-src 'self' ${connectOrigins.join(' ')}`,

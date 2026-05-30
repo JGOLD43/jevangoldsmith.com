@@ -75,6 +75,31 @@ const {
 
 const siteName = SITE_NAME;
 
+// Speculation Rules (prerender/prefetch) emitted as a STATIC script so the
+// build can hash it for the CSP. Previously injected at runtime by
+// nav-prefetch.ts, which the CSP blocked once enforced. Supporting browsers use
+// this; nav-prefetch.ts now only provides the <link rel=prefetch> fallback for
+// browsers without Speculation Rules. (Dropped the saveData→conservative
+// downgrade — minor; static content is required for a stable CSP hash.)
+const speculationRules = {
+  prerender: [
+    {
+      where: {
+        and: [
+          { href_matches: '/*.html' },
+          { not: { href_matches: '/meet.html' } },
+          { not: { href_matches: '/adventures.html' } },
+          { not: { href_matches: '/search.html' } },
+          { not: { href_matches: '/adventure-*.html' } },
+        ],
+      },
+      eagerness: 'moderate',
+    },
+    { where: { href_matches: '/adventures.html' }, eagerness: 'conservative' },
+  ],
+  prefetch: [{ where: { href_matches: '/search.html' }, eagerness: 'moderate' }],
+};
+
 // Derive the page slug from the current URL for per-page preconnect hints
 // (cross-origin image hosts on movies/videos).
 const rawPath = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
@@ -489,12 +514,12 @@ if (seoSlug === 'index' || seoSlug === 'search') {
     </div>
     {!noChrome && !noFooter && <Footer />}
     <slot name="scripts" />
+    <script type="speculationrules" is:inline set:html={JSON.stringify(speculationRules)} />
     <script>
       import '../scripts/theme.ts';
-      // Speculation Rules + hover-prefetch fallback. Externalized from
-      // Base.astro so the inline-script CSP hash list stays small and
-      // the saveData branch can read navigator.connection at runtime
-      // without re-shipping the whole rules payload per page.
+      // Static Speculation Rules above handle prerender for supporting
+      // browsers; this only wires the <link rel=prefetch> hover fallback for
+      // browsers without Speculation Rules support.
       import '../scripts/nav-prefetch.ts';
     </script>
     {/* JSON-LD at end of <body>: ~4KB structured-data block was previously

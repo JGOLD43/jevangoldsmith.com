@@ -11,9 +11,17 @@ need **no Cloudflare Worker and no OAuth App**.
 
 ---
 
+## Accessing the admin page
+
+- **Live site:** `https://jevangoldsmith.com/admin` (redirects to `/admin/`). Only
+  exists once the branch is deployed.
+- **Local dev (`npm run dev`):** use **`http://localhost:4321/admin/index.html`**
+  — the bare `/admin` path 404s under the dev server (it doesn't auto-serve the
+  directory index; the built/production site handles `/admin` fine via redirect).
+
 ## Option A — Local Repository (zero setup, best for trying it)
 
-On the `/admin` sign-in screen, click **"Work with Local Repository"** and pick
+On the sign-in screen, click **"Work with Local Repository"** and pick
 this repo's folder on disk. The CMS edits your local `data/*.json` files
 directly (via the browser's File System Access API, Chrome/Edge). You then
 `git commit` + `git push` the changes yourself. No tokens, no servers.
