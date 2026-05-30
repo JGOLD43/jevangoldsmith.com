@@ -10,13 +10,22 @@
     <!--
       Sveltia CMS — a Decap-compatible, git-backed admin UI. It reads/writes the
       JSON files in data/ directly via the GitHub API; there is no backend.
-      Config lives in ./config.yml (auto-loaded). Authentication requires a
-      GitHub OAuth App + an auth relay — see docs/cms-setup.md.
+      Config lives in ./config.yml (auto-loaded). See docs/cms-setup.md.
 
-      This page is intentionally excluded from the site's strict CSP
-      (scripts/update-csp-hashes.js skips dist/admin) because the CMS loads its
-      bundle from a CDN and talks to api.github.com.
+      SECURITY: the CMS bundle is SELF-HOSTED (vendored same-origin), not loaded
+      from a CDN — so a compromised CDN/npm package can't inject code into the
+      page that handles your GitHub token. SRI is set as belt-and-suspenders.
+      Pinned to @sveltia/cms@0.164.2. To update: re-download
+      https://unpkg.com/@sveltia/cms@<version>/dist/sveltia-cms.js into this dir,
+      recompute the integrity hash (openssl dgst -sha384 -binary … | openssl
+      base64 -A), and bump both here and the version note. /admin also gets a
+      scoped CSP (see scripts/update-csp-hashes.js).
     -->
-    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>
+    <script
+      src="/admin/sveltia-cms.js"
+      type="module"
+      integrity="sha384-8jh4ZuqWt5C7gHKiGgd+Ywoy7eALhOiKhUKx/m6KhUXgomY4Jx6Wf+j++aBPeOhf"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
