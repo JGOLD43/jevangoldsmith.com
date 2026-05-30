@@ -16,53 +16,13 @@
         && typeof HTMLScriptElement.supports === 'function'
         && HTMLScriptElement.supports('speculationrules');
 
-    if (supportsSpeculation) {
-        const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-        const saveData = conn?.saveData === true;
-        const eagerness = saveData ? 'conservative' : 'moderate';
-        // Heavy pages downgrade from `prerender` to `prefetch`. Prerender
-        // pulls the full DOM + scripts (Leaflet on adventures, search
-        // index on /search), which wastes bandwidth on a hover that may
-        // never become a click. Prefetch only warms the HTTP cache.
-        const rules = {
-            prerender: [{
-                // Light pages — prerender on hover/moderate intent so a hover
-                // navigation is effectively instant.
-                where: {
-                    and: [
-                        { href_matches: '/*.html' },
-                        { not: { href_matches: '/meet.html' } },
-                        { not: { href_matches: '/adventures.html' } },
-                        { not: { href_matches: '/search.html' } },
-                        { not: { href_matches: '/adventure-*.html' } }
-                    ]
-                },
-                eagerness
-            }, {
-                // Adventures is heavy (Leaflet) but the user opens it often
-                // enough that the previous-page flash is the bigger UX cost.
-                // Prerender it conservatively — fires on touchstart/mousedown
-                // so we don't pay the cost on stray hovers but still beat the
-                // browser to the punch on a real tap.
-                where: { href_matches: '/adventures.html' },
-                eagerness: 'conservative'
-            }],
-            prefetch: [{
-                // /adventure-<slug>.html is now a 0ms HTML redirect to
-                // /adventures.html?trip=<slug>; no point prefetching the
-                // stub itself. Keep search prefetched for quick autocomplete.
-                where: { href_matches: '/search.html' },
-                eagerness: saveData ? 'conservative' : 'moderate'
-            }]
-        };
-        const script = document.createElement('script');
-        script.type = 'speculationrules';
-        script.textContent = JSON.stringify(rules);
-        document.head.appendChild(script);
-        return;
-    }
+    // Browsers WITH Speculation Rules use the static <script
+    // type="speculationrules"> block emitted by Base.astro (kept static so the
+    // CSP can hash it). Nothing to do here for them.
+    if (supportsSpeculation) return;
 
-    // Fallback for non-supporting browsers.
+    // Fallback for non-supporting browsers (older Firefox, current Safari):
+    // warm the HTTP cache with <link rel="prefetch"> on hover/touchstart.
     const seen = new Set<string>();
     const prefetch = (href: string) => {
         if (seen.has(href)) return;
