@@ -113,14 +113,31 @@ fs.writeFileSync(FIREBASE, `${JSON.stringify(firebase, null, 2)}\n`);
 // inline hashes. Injected right after <head> so it governs every inline
 // script/style that follows (including the pre-paint theme guard).
 const META_RE = /<meta\s+http-equiv=["']Content-Security-Policy["'][^>]*>/i;
-// The Sveltia CMS admin (dist/admin) loads its bundle from a CDN and talks to
-// api.github.com + the auth relay, so the strict 'self' CSP would break it.
-// It's a noindex authoring tool, not public content — skip CSP injection there.
+
+// Scoped CSP for the Sveltia CMS admin (dist/admin). The bundle is self-hosted
+// (script-src 'self'; 'wasm-unsafe-eval' for its WASM, NOT full unsafe-eval),
+// so this caps the blast radius even if the site were otherwise compromised:
+// the admin page — which holds the GitHub token — can only talk to GitHub.
+// connect-src is locked to GitHub (REST/GraphQL/raw/OAuth); add your auth
+// Worker origin here if you wire up OAuth (Option C). img-src allows GitHub
+// avatars + the content-image hosts so entry previews render.
+const ADMIN_CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'wasm-unsafe-eval'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://avatars.githubusercontent.com https://*.githubusercontent.com https://covers.openlibrary.org https://*.ltrbxd.com https://image.tmdb.org https://server.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://images.unsplash.com",
+  "connect-src 'self' https://api.github.com https://*.githubusercontent.com https://github.com",
+  "font-src 'self' data:",
+  "frame-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'"
+].join('; ');
 const ADMIN_DIR = path.join(DIST, 'admin') + path.sep;
 let injected = 0;
 for (const [file, { html, scripts, styles }] of fileHashes) {
-  if (file.startsWith(ADMIN_DIR)) continue;
-  const meta = `<meta http-equiv="Content-Security-Policy" content="${buildPolicy(scripts, styles)}">`;
+  const policy = file.startsWith(ADMIN_DIR) ? ADMIN_CSP : buildPolicy(scripts, styles);
+  const meta = `<meta http-equiv="Content-Security-Policy" content="${policy}">`;
   const charsetRe = /(<meta\s+charset=[^>]*>)/i;
   let out;
   if (META_RE.test(html)) {
