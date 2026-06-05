@@ -45,7 +45,7 @@ const categoryKeys = config.categoryOrder
     <aside class="movies-sidebar collection-sidebar collapsed" id={config.sidebarId}>
       <div class="sidebar-header">
         <button class="sidebar-collapse-btn" data-action={config.toggleSidebarAction} title="Collapse sidebar">
-          <svg class="ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-sidebarCollapse"></use></svg>
+          <svg class="ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-sidebarCollapse"></use></svg>
         </button>
         <span class="sidebar-browse-label">Browse</span>
       </div>
@@ -54,7 +54,7 @@ const categoryKeys = config.categoryOrder
         <div class="list-dropdown" id="list-dropdown">
           <button class="list-dropdown-btn" data-action={config.toggleListDropdownAction}>
             <span id="current-list-name">{config.listCurrentName}</span>
-            <svg class="ico-stroke ico-12" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-chevronDown"></use></svg>
+            <svg class="ico-stroke ico-12" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-chevronDown"></use></svg>
           </button>
           <div class="list-dropdown-menu" id="list-dropdown-menu">
             {config.listOptions.map((item) => <a href={item.href} class={`list-option${item.active ? ' active' : ''}`}>{item.label}</a>)}
@@ -64,7 +64,7 @@ const categoryKeys = config.categoryOrder
 
       <div class="sidebar-search">
         <div class="search-input-wrapper search-bubble">
-          <svg class="search-icon ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-search"></use></svg>
+          <svg class="search-icon ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-search"></use></svg>
           <input
             type="text"
             id={config.searchInputId}
@@ -76,7 +76,7 @@ const categoryKeys = config.categoryOrder
             data-action-value="true"
           />
           <button id={config.searchClearButtonId} class="search-clear-btn" data-action={config.searchClearAction} style="display: none;">
-            <svg class="ico-stroke ico-14" viewBox="0 0 24 24" aria-hidden="true"><use href="/sprite.svg#icon-close"></use></svg>
+            <svg class="ico-stroke ico-14" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-close"></use></svg>
           </button>
         </div>
       </div>

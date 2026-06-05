@@ -7,6 +7,9 @@ const fast = process.argv.includes('--fast');
 // pipeline: purge → critical CSS → minify → SW finalize → CSP hashes go
 // last (every prior phase mutates HTML).
 const COMMON_TAIL = [
+  // Generate public/sprite.svg BEFORE astro:build so Base.astro can inline it
+  // (lib/icon-sprite.ts reads it at build time → icons paint with first HTML).
+  ['sprite:public', 'node', ['scripts/generate-icon-sprite.js', '--public-out=site-astro/public/sprite.svg']],
   ['astro:build', 'npm', ['run', '--prefix', 'site-astro', 'build']],
   ['people:modal', 'node', ['scripts/build-people-modal-json.js', '--dist=dist']],
   ['icons:sprite', 'node', ['scripts/generate-icon-sprite.js', '--dist=dist']],

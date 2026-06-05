@@ -82,5 +82,5 @@ export function getIcon(name: string): string {
   const isFill = /\bfill="currentColor"/.test(source) && !/\bstroke="currentColor"/.test(source);
   const sizeClass = ' ico-24';
   const styleClass = isFill ? 'ico-fill' : 'ico-stroke';
-  return `<svg class="${styleClass}${sizeClass}" viewBox="${viewBox}" aria-hidden="true"><use href="/sprite.svg#icon-${name}"/></svg>`;
+  return `<svg class="${styleClass}${sizeClass}" viewBox="${viewBox}" aria-hidden="true"><use href="#icon-${name}"/></svg>`;
 }
