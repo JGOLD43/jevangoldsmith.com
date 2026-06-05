@@ -95,7 +95,7 @@ function buildPolicy(scripts, styles) {
     `script-src 'self' ${Array.from(scripts).sort().join(' ')}`.trim(),
     "style-src 'self' 'unsafe-inline'",
     "font-src 'self'",
-    "img-src 'self' https://*.ltrbxd.com https://covers.openlibrary.org https://server.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com data:",
+    "img-src 'self' https://*.ltrbxd.com https://covers.openlibrary.org https://images.unsplash.com https://server.arcgisonline.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com data:",
     `connect-src 'self' ${connectOrigins.join(' ')}`,
     "frame-src 'none'",
     "object-src 'none'",

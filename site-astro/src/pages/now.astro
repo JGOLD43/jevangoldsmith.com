@@ -59,8 +59,9 @@ const sections = [
         <strong class="now-updated-date">{lastUpdated}</strong>
       </div>
       <a class="now-map-thumb" id="now-map-thumb-link" href={mapLink} title={`Open ${lastUpdatedLocation} on the trip map`} aria-label={`Open ${lastUpdatedLocation} on the trip map`}
-         data-now-lat={lastUpdatedLat} data-now-lng={lastUpdatedLng}>
-        <img id="now-map-thumb-img" src={mapThumbUrl} alt={`Map showing current location: ${lastUpdatedLocation}`} fetchpriority="high" decoding="async" width="256" height="256" />
+         data-now-lat={lastUpdatedLat} data-now-lng={lastUpdatedLng}
+         style="border-radius:12px;overflow:hidden">
+        <img id="now-map-thumb-img" src={mapThumbUrl} alt={`Map showing current location: ${lastUpdatedLocation}`} fetchpriority="high" decoding="async" width="256" height="256" style="width:100%;height:100%;object-fit:cover;display:block" />
         <span class="now-map-thumb-marker" style={`left: ${pinLeftPct}%; top: ${pinTopPct}%;`} aria-hidden="true">
           <span class="now-marker-pulse"></span>
           <span class="now-marker-dot"></span>

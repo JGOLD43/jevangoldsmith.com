@@ -4,8 +4,8 @@
   "private": true,
   "description": "Static personal website for jevangoldsmith.com",
   "scripts": {
-    "dev": "node scripts/generate-icon-sprite.js --public-out=site-astro/public/sprite.svg && npm run --prefix site-astro dev",
-    "dev:full": "node scripts/generate-icon-sprite.js --public-out=site-astro/public/sprite.svg && (node scripts/watch-assets.js & npm run --prefix site-astro dev)",
+    "dev": "node scripts/generate-icon-sprite.js --public-out=site-astro/public/sprite.svg && node scripts/build-adventures-runtime.js && npm run --prefix site-astro dev",
+    "dev:full": "node scripts/generate-icon-sprite.js --public-out=site-astro/public/sprite.svg && node scripts/build-adventures-runtime.js && (node scripts/watch-assets.js & npm run --prefix site-astro dev)",
     "watch:assets": "node scripts/watch-assets.js",
     "serve": "npx firebase-tools emulators:start --only hosting",
     "prepare": "git config core.hooksPath .githooks || true",
