@@ -45,7 +45,10 @@ export const state: Record<string, AnyObj> = {
   popularRoutesPromise: null
 };
 
-export const ADVENTURES_DATA_URL = 'data/adventures.json';
+// Localized at build by scripts/build-adventures-runtime.js — image URLs point
+// at local rasters (not external Unsplash) so trip hero/gallery images load
+// fast, reliably, and aren't CSP-blocked. Source of truth is adventures.json.
+export const ADVENTURES_DATA_URL = 'data/adventures.generated.json';
 export const PLACES_DATA_URL = 'data/placeofinterest.json';
 export const ROUTES_DATA_URL = 'data/routes.generated.json';
 export const POPULAR_ROUTES_INDEX_URL = 'data/popular-routes.index.json';
