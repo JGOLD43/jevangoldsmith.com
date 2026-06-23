@@ -114,11 +114,9 @@ const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split(
 const _preloadHomePortrait = seoSlug !== 'index';
 
 // Warm the /now satellite-tile cache from every page that isn't
-// /now. The tile is served by a third-party (arcgis) so without a
-// preload it doesn't start fetching until the /now HTML is parsed
-// — visible empty box on tap. Cross-origin preload + preconnect
-// gets the TLS handshake AND the bytes started in parallel with
-// the HTML nav.
+// /now, so tap-to-now shows the image instantly. The tile is now a
+// local same-origin asset (/images/now-map.jpg), so a plain preload
+// is enough — no preconnect / crossorigin.
 const _preloadNowMap = seoSlug !== 'now';
 const _nowMapThumbUrl = _preloadNowMap ? nowMapThumbUrl() : '';
 
@@ -176,8 +174,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
     <link rel="preload" href="/fonts/chivo/chivo-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
     {_preloadNowMap && (
       <>
-        <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin />
-        <link rel="preload" as="image" href={_nowMapThumbUrl} fetchpriority="low" crossorigin />
+        <link rel="preload" as="image" href={_nowMapThumbUrl} fetchpriority="low" />
       </>
     )}
     {_preloadHomePortrait && (

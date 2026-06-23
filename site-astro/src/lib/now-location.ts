@@ -1,7 +1,14 @@
 // Single source of truth for the /now page's "currently here" pin.
 // now.astro renders the map thumb from this data; Base.astro preloads
-// the same arcgis tile on every non-Now page so tap-to-now shows the
-// satellite image instantly instead of waiting on a third-party fetch.
+// the same tile on every non-Now page so tap-to-now shows the
+// satellite image instantly.
+//
+// The satellite tile is served LOCALLY (public/images/now-map.jpg) — it
+// was a third-party arcgis fetch that loaded slowly, so the white label +
+// pin painted over an empty placeholder until it arrived. Re-download with:
+//   curl -o site-astro/public/images/now-map.jpg \
+//     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${NOW_MAP_ZOOM}/${tileY}/${tileX}"
+// whenever NOW_LAT/NOW_LNG/NOW_MAP_ZOOM change (see nowMapTileUrl below).
 
 export const NOW_LAST_UPDATED = 'May 12, 2026';
 export const NOW_LOCATION_LABEL = 'Ayr, QLD';
@@ -20,7 +27,14 @@ function tileCoords(lat: number, lng: number, zoom: number) {
     };
 }
 
+// Local, same-origin satellite tile — paints with the page, no third-party
+// round-trip, so the label + pin are never stranded over an empty box.
 export function nowMapThumbUrl() {
+    return '/images/now-map.jpg';
+}
+
+// The remote source for the local tile (used by the re-download note above).
+export function nowMapTileUrl() {
     const { tileX, tileY } = tileCoords(NOW_LAT, NOW_LNG, NOW_MAP_ZOOM);
     return `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${NOW_MAP_ZOOM}/${tileY}/${tileX}`;
 }
