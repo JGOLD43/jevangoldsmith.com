@@ -1,0 +1,162 @@
+---
+import Base from '../../layouts/Base.astro';
+import history from '../../../../data/now-history.json';
+
+const canonical = 'https://jevangoldsmith.com/now/archive.html';
+
+// Pin offset within the entry's satellite tile — mirrors nowMapPinOffset()
+// in lib/now-location.ts, computed per archived location.
+function pinOffset(lat: number, lng: number, zoom: number) {
+  const xFrac = (lng + 180) / 360 * Math.pow(2, zoom);
+  const yFrac = (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom);
+  return {
+    leftPct: ((xFrac - Math.floor(xFrac)) * 100).toFixed(2),
+    topPct: ((yFrac - Math.floor(yFrac)) * 100).toFixed(2),
+  };
+}
+
+const entries = history.map((e) => ({ ...e, pin: pinOffset(e.location.lat, e.location.lng, e.location.zoom) }));
+---
+<Base
+  title="Now archive — every past update"
+  description="A complete record of every Now update: where Jevan was, and what he was working on, reading, and thinking about at the time."
+  canonical={canonical}
+  pageType="AboutPage"
+>
+<main class="now-archive-page">
+  <header class="now-archive-header">
+    <p class="now-archive-eyebrow"><a href="/now.html">← Now</a></p>
+    <h1 class="now-archive-title">Now — the archive</h1>
+    <p class="now-archive-intro">Every past Now update, kept on the record. The most recent is current; each older one is frozen exactly as it was when it changed.</p>
+  </header>
+
+  {entries.length === 0 ? (
+    <p class="now-archive-empty">No updates archived yet.</p>
+  ) : (
+    <ol class="now-archive-list">
+      {entries.map((entry, i) => (
+        <li class="now-archive-entry">
+          <div class="now-archive-entry-head">
+            <span class="now-archive-date">{entry.lastUpdated}</span>
+            {i === 0 && <span class="now-archive-current">Current</span>}
+          </div>
+          <div class="now-archive-entry-body">
+            {entry.map && (
+              <div class="now-archive-map" aria-hidden="false">
+                <img src={entry.map} alt={`Map of ${entry.location.label}`} width="256" height="256" loading="lazy" decoding="async" />
+                <span class="now-archive-pin" style={`left: ${entry.pin.leftPct}%; top: ${entry.pin.topPct}%;`} aria-hidden="true"></span>
+                <span class="now-archive-place">{entry.location.label}</span>
+              </div>
+            )}
+            <div class="now-archive-sections">
+              {entry.sections.map((s) => (
+                <section class="now-archive-section">
+                  <h2 class="now-archive-section-title">{s.title}</h2>
+                  <div class="now-archive-section-text" set:html={s.body} />
+                </section>
+              ))}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+  )}
+</main>
+
+<style is:global>
+  .now-archive-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem;
+  }
+  .now-archive-header { margin-bottom: 3rem; }
+  .now-archive-eyebrow { font-size: 0.85rem; margin: 0 0 0.75rem; }
+  .now-archive-eyebrow a { color: var(--secondary-color); text-decoration: none; }
+  .now-archive-eyebrow a:hover { text-decoration: underline; }
+  .now-archive-title {
+    font-family: Chivo, Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    color: var(--primary-color);
+  }
+  .now-archive-intro { font-size: 1.05rem; line-height: 1.6; color: var(--text-light); margin: 0; max-width: 60ch; }
+
+  .now-archive-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem; }
+  .now-archive-entry {
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+  .now-archive-entry:first-child { border-top: 0; padding-top: 0; }
+
+  .now-archive-entry-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+  .now-archive-date {
+    font-family: Chivo, Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+  .now-archive-current {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #000;
+    background: var(--secondary-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .now-archive-entry-body { display: grid; grid-template-columns: 220px 1fr; gap: 1.75rem; align-items: start; }
+
+  .now-archive-map {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: var(--background-alt);
+  }
+  .now-archive-map img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 12px; }
+  .now-archive-pin {
+    position: absolute;
+    width: 14px; height: 14px;
+    margin: -7px 0 0 -7px;
+    background: gold;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+  .now-archive-place {
+    position: absolute;
+    left: 8px; bottom: 8px; right: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.85);
+  }
+
+  .now-archive-sections { display: grid; gap: 1.5rem; }
+  .now-archive-section-title {
+    font-family: Chivo, Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    color: var(--primary-color);
+  }
+  .now-archive-section-text { font-size: 1rem; line-height: 1.65; color: var(--text-color); }
+  .now-archive-section-text p { margin: 0 0 0.75rem; }
+  .now-archive-section-text p:last-child { margin-bottom: 0; }
+  .now-archive-section-text a { color: var(--secondary-color); text-decoration: underline; text-underline-offset: 3px; }
+
+  .now-archive-empty { color: var(--text-light); }
+
+  @media (max-width: 600px) {
+    .now-archive-page { padding: 2.5rem 1.25rem 4rem; }
+    .now-archive-title { font-size: 2rem; }
+    .now-archive-entry-body { grid-template-columns: 1fr; gap: 1.25rem; }
+    .now-archive-map { max-width: 220px; }
+  }
+</style>
+</Base>
