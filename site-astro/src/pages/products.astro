@@ -125,7 +125,8 @@ const categories = productsData.productCategories ?? [];
                       alt={p.title}
                       width={asset.width}
                       height={asset.height}
-                      loading="lazy"
+                      loading="eager"
+                      fetchpriority={i < 6 ? 'high' : 'auto'}
                       decoding="async"
                     />
                   </picture>

@@ -141,13 +141,9 @@ if (workToggle) {
         (workToggle as HTMLElement).blur();
         const next: 'work' | 'personal' = current() === 'work' ? 'personal' : 'work';
 
-        // Respect prefers-reduced-motion: skip the full-screen clip-path
-        // wipe entirely and swap the mode instantly (WCAG 2.3.3).
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            applyMode(next);
-            return;
-        }
-
+        // Always play the full-screen clip-path wipe + sweeping line, even
+        // under prefers-reduced-motion (explicit product choice — the line
+        // is the point of the toggle).
         // Snapshot the current scroll so the cloned <body> can be
         // offset to where the user actually was on the page. We do
         // NOT lock body scroll any more — the user wants to keep
