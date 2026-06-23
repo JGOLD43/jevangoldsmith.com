@@ -21,7 +21,10 @@ const RATE_LIMIT_MS = 30; // ~33 req/sec, well under TMDB's 50/sec cap
 // Use dotenv to load .env.local. Scripts previously parsed it themselves
 // (~25 LOC each duplicated four times); dotenv handles quoted values,
 // comments, and escapes correctly out of the box.
-require('dotenv').config({ path: path.resolve(__dirname, '../.env.local') });
+// Optional: dotenv is for local .env.local. In CI (Letterboxd cron) env comes
+// from secrets and node_modules isn't installed, so don't hard-fail here —
+// this script runs with --skip-if-no-key and must no-op cleanly without deps.
+try { require('dotenv').config({ path: path.resolve(__dirname, '../.env.local') }); } catch { /* dotenv optional outside local dev */ }
 function loadEnvLocal() { /* no-op: dotenv.config() above already loaded vars */ }
 
 function parseArgs(argv) {

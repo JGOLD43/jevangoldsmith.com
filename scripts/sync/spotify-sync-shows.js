@@ -20,7 +20,9 @@ const PAGE_LIMIT = 50;
 // Use dotenv to load .env.local. Scripts previously parsed it themselves
 // (~25 LOC each duplicated four times); dotenv handles quoted values,
 // comments, and escapes correctly out of the box.
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env.local') });
+// Optional: dotenv is for local .env.local. In CI env comes from secrets and
+// node_modules isn't installed for this cron, so don't crash on a missing dep.
+try { require('dotenv').config({ path: path.resolve(__dirname, '../../.env.local') }); } catch { /* dotenv optional outside local dev */ }
 function loadEnvLocal() { /* no-op: dotenv.config() above already loaded vars */ }
 
 const { refreshAccessToken, spotifyFetch, readSpotifyEnv } = require('./_spotify-lib');
