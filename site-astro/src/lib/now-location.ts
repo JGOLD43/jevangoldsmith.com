@@ -1,20 +1,30 @@
-// Single source of truth for the /now page's "currently here" pin.
-// now.astro renders the map thumb from this data; Base.astro preloads
-// the same tile on every non-Now page so tap-to-now shows the
-// satellite image instantly.
+// Single source of truth for the /now page lives in data/now.json (edit
+// THAT to update what you're doing now — location, date, and the text
+// sections). This module re-exports it as typed constants/helpers so pages
+// don't each reach into the JSON shape.
 //
-// The satellite tile is served LOCALLY (public/images/now-map.jpg) — it
-// was a third-party arcgis fetch that loaded slowly, so the white label +
-// pin painted over an empty placeholder until it arrived. Re-download with:
-//   curl -o site-astro/public/images/now-map.jpg \
-//     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${NOW_MAP_ZOOM}/${tileY}/${tileX}"
-// whenever NOW_LAT/NOW_LNG/NOW_MAP_ZOOM change (see nowMapTileUrl below).
+// now.astro renders the current snapshot; Base.astro preloads the map tile
+// on every non-Now page so tap-to-now shows the image instantly.
+//
+// The satellite tile is served LOCALLY (public/images/now-map.jpg), kept in
+// sync by scripts/build-now-map.js. Every time data/now.json's `lastUpdated`
+// changes, scripts/build-now-archive.js snapshots the whole update into
+// data/now-history.json (powering /now/archive) — automatic in the build +
+// dev pipeline.
 
-export const NOW_LAST_UPDATED = 'May 12, 2026';
-export const NOW_LOCATION_LABEL = 'Ayr, QLD';
-export const NOW_LAT = -19.5765;
-export const NOW_LNG = 147.4035;
-export const NOW_MAP_ZOOM = 10;
+import nowData from '../../../data/now.json';
+
+export interface NowSection {
+    title: string;
+    body: string;
+}
+
+export const NOW_LAST_UPDATED: string = nowData.lastUpdated;
+export const NOW_LOCATION_LABEL: string = nowData.location.label;
+export const NOW_LAT: number = nowData.location.lat;
+export const NOW_LNG: number = nowData.location.lng;
+export const NOW_MAP_ZOOM: number = nowData.location.zoom;
+export const NOW_SECTIONS: NowSection[] = nowData.sections;
 
 function tileCoords(lat: number, lng: number, zoom: number) {
     const xFrac = (lng + 180) / 360 * Math.pow(2, zoom);
@@ -33,7 +43,7 @@ export function nowMapThumbUrl() {
     return '/images/now-map.jpg';
 }
 
-// The remote source for the local tile (used by the re-download note above).
+// The remote source for the local tile (used by build-now-map.js).
 export function nowMapTileUrl() {
     const { tileX, tileY } = tileCoords(NOW_LAT, NOW_LNG, NOW_MAP_ZOOM);
     return `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${NOW_MAP_ZOOM}/${tileY}/${tileX}`;

@@ -1,0 +1,27 @@
+{
+  "lastUpdated": "May 12, 2026",
+  "location": {
+    "label": "Ayr, QLD",
+    "lat": -19.5765,
+    "lng": 147.4035,
+    "zoom": 10
+  },
+  "sections": [
+    {
+      "title": "Building this archive",
+      "body": "<p>Most of my recent free hours have gone into the site you're reading. It's an experiment in keeping a record — essays, books, movies, people, places — that's mine to shape rather than a feed someone else owns. The performance audit branch I'm on now is shaving the page weight down so it loads fast even on bad hotel Wi-Fi.</p>"
+    },
+    {
+      "title": "Reading deliberately",
+      "body": "<p>Trying to finish one book before starting the next. Currently working through long-form non-fiction on attention, money, and craft. Notes land on the <a href=\"books.html\">books page</a> when they're worth keeping.</p>"
+    },
+    {
+      "title": "Health reset",
+      "body": "<p>Cut alcohol and most processed food for the year. Lifting four days a week, walking everywhere I reasonably can. Goal is less about a number and more about staying useful at 40, 50, 60.</p>"
+    },
+    {
+      "title": "Work in motion",
+      "body": "<p>Spending most professional hours on finance, real-estate development, and the spaces where technology bends those industries. Open to interesting conversations — <a href=\"contact.html\">say hi</a>.</p>"
+    }
+  ]
+}
