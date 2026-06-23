@@ -54,6 +54,12 @@ const sections = NOW_SECTIONS;
         <span class="now-map-thumb-label">{lastUpdatedLocation}</span>
       </a>
     </div>
+    <p class="now-archive-cta">
+      <a href="/now/archive.html">
+        <svg class="ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-clock" /></svg>
+        See every past Now update
+      </a>
+    </p>
   </header>
 
   <div class="now-sections">
@@ -78,6 +84,25 @@ const sections = NOW_SECTIONS;
     padding: 4rem 1.5rem 6rem;
   }
   .now-header { margin-bottom: 3.5rem; }
+  .now-archive-cta { margin: 1.5rem 0 0; }
+  .now-archive-cta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .now-archive-cta a:hover {
+    border-color: var(--secondary-color);
+    background: var(--background-alt);
+  }
+  .now-archive-cta svg { width: 18px; height: 18px; flex: 0 0 auto; }
   .now-eyebrow {
     font-size: 0.75rem;
     font-weight: 700;

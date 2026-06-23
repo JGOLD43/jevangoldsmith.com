@@ -25,8 +25,10 @@ const EPISODES_PATH = path.join(ROOT, 'data', 'podcast-episodes.json');
 const MAX_EPISODES = 500; // cap file size; oldest pruned
 const DEDUPE_WINDOW_MS = 30 * 60 * 1000; // same episode within 30 min = no-op
 
-// dotenv reads .env.local. Token refresh + GET helpers live in _spotify-lib.js.
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env.local') });
+// dotenv reads .env.local for LOCAL dev. In CI the env comes from GitHub
+// secrets and node_modules isn't installed for this lightweight cron, so
+// treat dotenv as optional instead of crashing with "Cannot find module".
+try { require('dotenv').config({ path: path.resolve(__dirname, '../../.env.local') }); } catch { /* dotenv optional outside local dev */ }
 const { refreshAccessToken, spotifyFetch, readSpotifyEnv } = require('./_spotify-lib');
 
 const fetchCurrentlyPlaying = (token) =>
