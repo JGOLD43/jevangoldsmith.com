@@ -85,7 +85,18 @@ function mapEpisode(item) {
 }
 
 async function main() {
-    const { clientId, clientSecret, refreshToken } = readSpotifyEnv();
+    // When the Spotify secrets aren't configured, no-op cleanly (exit 0)
+    // instead of failing — otherwise this hourly cron emails a failure every
+    // run until someone adds the secrets. Same philosophy as the revoked-token
+    // branch below.
+    let creds;
+    try {
+        creds = readSpotifyEnv();
+    } catch (err) {
+        console.log(`Spotify not configured (${err.message}). Skipping.`);
+        process.exit(0);
+    }
+    const { clientId, clientSecret, refreshToken } = creds;
 
     let accessToken;
     try {

@@ -22,7 +22,8 @@
 
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
+// Optional: dotenv is for local .env; don't hard-fail when node_modules is absent.
+try { require('dotenv').config(); } catch { /* dotenv optional outside local dev */ }
 let google;
 try {
   ({ google } = require('googleapis'));
