@@ -35,28 +35,32 @@ const entries = history.map((e) => ({ ...e, pin: pinOffset(e.location.lat, e.loc
   ) : (
     <ol class="now-archive-list">
       {entries.map((entry, i) => (
-        <li class="now-archive-entry">
-          <div class="now-archive-entry-head">
-            <span class="now-archive-date">{entry.lastUpdated}</span>
-            {i === 0 && <span class="now-archive-current">Current</span>}
-          </div>
-          <div class="now-archive-entry-body">
-            {entry.map && (
-              <div class="now-archive-map" aria-hidden="false">
-                <img src={entry.map} alt={`Map of ${entry.location.label}`} width="256" height="256" loading="lazy" decoding="async" />
-                <span class="now-archive-pin" style={`left: ${entry.pin.leftPct}%; top: ${entry.pin.topPct}%;`} aria-hidden="true"></span>
-                <span class="now-archive-place">{entry.location.label}</span>
+        <li>
+          <details class="now-archive-entry" open={i === 0}>
+            <summary class="now-archive-summary">
+              <span class="now-archive-date">{entry.lastUpdated}</span>
+              <span class="now-archive-place-inline">{entry.location.label}</span>
+              {i === 0 && <span class="now-archive-current">Current</span>}
+              <svg class="now-archive-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="now-archive-entry-body">
+              {entry.map && (
+                <div class="now-archive-map" aria-hidden="false">
+                  <img src={entry.map} alt={`Map of ${entry.location.label}`} width="256" height="256" loading="lazy" decoding="async" />
+                  <span class="now-archive-pin" style={`left: ${entry.pin.leftPct}%; top: ${entry.pin.topPct}%;`} aria-hidden="true"></span>
+                  <span class="now-archive-place">{entry.location.label}</span>
+                </div>
+              )}
+              <div class="now-archive-sections">
+                {entry.sections.map((s) => (
+                  <section class="now-archive-section">
+                    <h2 class="now-archive-section-title">{s.title}</h2>
+                    <div class="now-archive-section-text" set:html={s.body} />
+                  </section>
+                ))}
               </div>
-            )}
-            <div class="now-archive-sections">
-              {entry.sections.map((s) => (
-                <section class="now-archive-section">
-                  <h2 class="now-archive-section-title">{s.title}</h2>
-                  <div class="now-archive-section-text" set:html={s.body} />
-                </section>
-              ))}
             </div>
-          </div>
+          </details>
         </li>
       ))}
     </ol>
@@ -82,20 +86,30 @@ const entries = history.map((e) => ({ ...e, pin: pinOffset(e.location.lat, e.loc
   }
   .now-archive-intro { font-size: 1.05rem; line-height: 1.6; color: var(--text-light); margin: 0; max-width: 60ch; }
 
-  .now-archive-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem; }
-  .now-archive-entry {
-    padding-top: 2.5rem;
-    border-top: 1px solid var(--border-color);
-  }
-  .now-archive-entry:first-child { border-top: 0; padding-top: 0; }
+  .now-archive-list { list-style: none; margin: 0; padding: 0; }
+  .now-archive-list > li { border-top: 1px solid var(--border-color); }
+  .now-archive-list > li:last-child { border-bottom: 1px solid var(--border-color); }
 
-  .now-archive-entry-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+  /* Each update is a collapsed row; click the summary to expand. Keeps the
+     page a scannable list however many updates accumulate. */
+  .now-archive-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 0.25rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .now-archive-summary::-webkit-details-marker { display: none; }
+  .now-archive-summary:hover .now-archive-date { color: var(--secondary-color); }
   .now-archive-date {
     font-family: Chivo, Georgia, serif;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 600;
     color: var(--primary-color);
+    transition: color 0.15s ease;
   }
+  .now-archive-place-inline { font-size: 0.95rem; color: var(--text-light); }
   .now-archive-current {
     font-size: 0.7rem;
     font-weight: 700;
@@ -106,8 +120,22 @@ const entries = history.map((e) => ({ ...e, pin: pinOffset(e.location.lat, e.loc
     padding: 0.2rem 0.5rem;
     border-radius: 999px;
   }
+  .now-archive-chevron {
+    width: 20px; height: 20px;
+    margin-left: auto;
+    color: var(--text-light);
+    flex: 0 0 auto;
+    transition: transform 0.2s ease;
+  }
+  .now-archive-entry[open] .now-archive-chevron { transform: rotate(180deg); }
 
-  .now-archive-entry-body { display: grid; grid-template-columns: 220px 1fr; gap: 1.75rem; align-items: start; }
+  .now-archive-entry-body {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.75rem;
+    align-items: start;
+    padding: 0.25rem 0.25rem 1.75rem;
+  }
 
   .now-archive-map {
     position: relative;
