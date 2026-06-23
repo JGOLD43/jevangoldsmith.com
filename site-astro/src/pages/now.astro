@@ -46,8 +46,9 @@ const sections = [
   pageType="AboutPage"
 >
   <Fragment slot="head">
-    <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin />
-    <link rel="preload" as="image" fetchpriority="high" href={mapThumbUrl} crossorigin />
+    {/* Local same-origin tile — no crossorigin (would force a mismatched
+        second fetch), no arcgis preconnect (no third-party request). */}
+    <link rel="preload" as="image" fetchpriority="high" href={mapThumbUrl} />
   </Fragment>
 <main class="now-page">
   <h1 class="sr-only">Now</h1>
