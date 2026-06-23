@@ -155,6 +155,10 @@ const sections = [
     height: 100%;
     object-fit: cover;
     display: block;
+    /* Round the image itself, not just the parent's overflow clip. On iOS
+       Safari a child <img> isn't clipped to the parent's rounded corners
+       until the first repaint, which flashed sharp 90° corners on load. */
+    border-radius: 12px;
   }
   .now-map-thumb:hover {
     transform: translateY(-2px);
