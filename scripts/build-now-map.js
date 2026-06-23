@@ -4,9 +4,8 @@
 // but a static file won't follow the coords — so this step re-downloads the
 // correct satellite tile whenever NOW_LAT/NOW_LNG/NOW_MAP_ZOOM change.
 //
-// Source of truth: site-astro/src/lib/now-location.ts (constants parsed
-// below so we never duplicate them). Runs in build.js + the dev script,
-// before Astro reads the image.
+// Source of truth: data/now.json (location.lat/lng/zoom). Runs in build.js +
+// the dev script, before Astro reads the image.
 //
 // Caching: a sidecar now-map.jpg.meta records the tile URL the current image
 // came from. If the computed URL matches and the image exists, we skip the
@@ -17,15 +16,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
-const SRC = path.join(ROOT, 'site-astro', 'src', 'lib', 'now-location.ts');
+const SRC = path.join(ROOT, 'data', 'now.json');
 const OUT = path.join(ROOT, 'site-astro', 'public', 'images', 'now-map.jpg');
 const META = `${OUT}.meta`;
-
-function readConst(src, name) {
-  const m = src.match(new RegExp(`export const ${name}\\s*=\\s*(-?[0-9.]+)`));
-  if (!m) throw new Error(`[now-map] could not parse ${name} from now-location.ts`);
-  return Number(m[1]);
-}
 
 function tileCoords(lat, lng, zoom) {
   const xFrac = ((lng + 180) / 360) * 2 ** zoom;
@@ -36,10 +29,8 @@ function tileCoords(lat, lng, zoom) {
 }
 
 async function main() {
-  const src = fs.readFileSync(SRC, 'utf8');
-  const lat = readConst(src, 'NOW_LAT');
-  const lng = readConst(src, 'NOW_LNG');
-  const zoom = readConst(src, 'NOW_MAP_ZOOM');
+  const now = JSON.parse(fs.readFileSync(SRC, 'utf8'));
+  const { lat, lng, zoom } = now.location;
   const { tileX, tileY } = tileCoords(lat, lng, zoom);
   const url = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${tileY}/${tileX}`;
 
