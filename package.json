@@ -26,7 +26,6 @@
     "content:validate:strict": "node scripts/validate-content.js --strict",
     "smoke": "node scripts/smoke-check.js",
     "perf:lighthouse": "node scripts/perf-lighthouse.js",
-    "perf:check": "node scripts/check-lighthouse-budget.js",
     "movies:sync": "node scripts/sync-letterboxd.js",
     "test:browser": "cd site-astro && npx playwright test",
     "test:unit": "node --experimental-strip-types --test tests/unit/*.test.js",

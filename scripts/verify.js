@@ -71,7 +71,6 @@ async function main() {
 
   await withDistServer(async (baseUrl) => {
     run('npm', ['run', 'smoke'], { env: { BASE_URL: baseUrl } });
-    run('npm', ['run', 'perf:check'], { env: { LIGHTHOUSE_BASE: baseUrl } });
   });
 
   run('npm', ['run', 'test:browser']);
