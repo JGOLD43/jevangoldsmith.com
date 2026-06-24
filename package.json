@@ -59,7 +59,7 @@
     "dotenv": "^17.4.2",
     "html-minifier-terser": "^7.2.0",
     "lightningcss": "^1.32.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.35.2"
   },
   "optionalDependencies": {
     "googleapis": "^171.4.0"
