@@ -62,23 +62,10 @@ jobs:
           PLAYWRIGHT_BASE=http://localhost:8766 npm run test:browser
           kill $SERVER_PID || true
 
-      - name: Lighthouse perf budget check
-        # Advisory only (continue-on-error): Lighthouse timing + total-bytes are
-        # noisy (external map tiles/images) and baseline-drift-prone, so this
-        # must NOT gate the deploy (deploy = needs this workflow to pass).
-        # Deterministic bundle-size regressions are still hard-gated by
-        # `perf:budget` (check-performance-budgets.js) during the build above.
-        # Refresh the baseline when intentionally heavier:
-        #   npm run perf:lighthouse -- --out=docs/perf-baseline.md
-        continue-on-error: true
-        # Tier 1+2 plan slice 1.2: report when any of the 8 baseline routes
-        # regresses past tolerance vs docs/perf-baseline.md.
-        run: |
-          npx http-server dist -p 8767 -s --cors -c-1 &
-          SERVER_PID=$!
-          sleep 3
-          LIGHTHOUSE_BASE=http://localhost:8767 LIGHTHOUSE_RUNS=2 npm run perf:check
-          kill $SERVER_PID || true
+      # Lighthouse baseline-comparison gate removed — it was noisy and
+      # baseline-drift-prone (failed on intentional/expected byte growth).
+      # Deterministic bundle-size regressions are still hard-gated by
+      # `perf:budget` (check-performance-budgets.js) during the build above.
 
       - name: Upload Playwright report on failure
         if: failure()

@@ -51,7 +51,16 @@ function mapShow(item) {
 }
 
 async function main() {
-    const { clientId, clientSecret, refreshToken } = readSpotifyEnv();
+    // No-op cleanly when Spotify secrets aren't configured, so the cron doesn't
+    // email a failure on every run until the secrets exist.
+    let creds;
+    try {
+        creds = readSpotifyEnv();
+    } catch (err) {
+        console.log(`Spotify not configured (${err.message}). Skipping.`);
+        process.exit(0);
+    }
+    const { clientId, clientSecret, refreshToken } = creds;
 
     let accessToken;
     try {
