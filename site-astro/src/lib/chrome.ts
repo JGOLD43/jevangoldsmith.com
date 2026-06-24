@@ -7,6 +7,7 @@
 // Body-class map. Pages not in this map get no body class. Layouts derive
 // this automatically when the page doesn't pass an explicit bodyClass prop.
 const BODY_CLASS_BY_FILE: Record<string, string> = {
+  'index.html': 'nav-compact',
   'adventures.html': 'nav-compact',
   'books.html': 'nav-compact',
   'challenges.html': 'nav-compact',
