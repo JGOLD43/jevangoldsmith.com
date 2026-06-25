@@ -14464,7 +14464,9 @@ body.nav-compact .navbar .work-mode-icon {
 }
 
 .hero-now-link {
-  color: var(--secondary-color);
+  /* Match the Follow button yellow (background: gold) rather than the
+     muted tan --secondary-color. */
+  color: gold;
   text-underline-offset: 3px;
   font-weight: 600;
   text-decoration: underline;
