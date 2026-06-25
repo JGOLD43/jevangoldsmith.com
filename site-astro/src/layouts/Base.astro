@@ -74,6 +74,11 @@ const {
   extraSchema,
 } = Astro.props as Props;
 
+// Compact nav is the site-wide default — every page uses the smaller navbar.
+// Merge it with whatever class the page already has (newsletter-page,
+// meet-page, shelf-experience, etc.), de-duping so it's never repeated.
+const _bodyClass = [...new Set(['nav-compact', ...bodyClass.split(/\s+/)].filter(Boolean))].join(' ');
+
 const siteName = SITE_NAME;
 
 // Speculation Rules (prerender/prefetch) emitted as a STATIC script so the
@@ -355,7 +360,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         hover, which gives near-instant navigation without intercepting
         the page lifecycle, so we rely on that instead. */}
   </head>
-  <body class={bodyClass}>
+  <body class={_bodyClass}>
     {/* Inlined icon sprite (hidden) so <use href="#icon-…"> resolves
         same-document and icons paint with the initial HTML — no external
         sprite.svg fetch that pops in after first paint on mobile. */}
