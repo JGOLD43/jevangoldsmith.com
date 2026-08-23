@@ -4046,20 +4046,20 @@ body.meet-page {
   color: #111;
   z-index: 1;
   border-radius: 4px;
-  padding: .3rem .5rem;
-  font-size: .7rem;
-  font-weight: 700;
-  line-height: 1;
+  padding: .4rem .75rem;
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: normal;
   position: absolute;
-  top: .5rem;
-  right: .5rem;
+  top: -.75rem;
+  right: -.75rem;
 }
 
-.category-tier-badge--s { background: #f3d36b; }
-.category-tier-badge--a { background: #b492e5; }
-.category-tier-badge--b { background: #78b6e8; }
-.category-tier-badge--c { background: #82dc7a; }
-.category-tier-badge--d { background: #f4f4f4; }
+.category-tier-badge--s { background-color: #f3d36b !important; }
+.category-tier-badge--a { background-color: #b492e5 !important; }
+.category-tier-badge--b { background-color: #78b6e8 !important; }
+.category-tier-badge--c { background-color: #82dc7a !important; }
+.category-tier-badge--d { background-color: #f4f4f4 !important; }
 
 .books-layout > .seo-related-section {
   grid-column: 2;
