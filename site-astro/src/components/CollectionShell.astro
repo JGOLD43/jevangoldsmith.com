@@ -185,10 +185,12 @@ const tasteOptions = config.sidebar.listOptions ?? [];
       <div class="header-content">
         {tasteOptions.length > 0 ? (
           <div class="taste-title-switcher" data-taste-switcher>
-            <TitleTag id="collection-title" data-default-title={config.main.title}><span data-collection-title-label>{config.main.title}</span></TitleTag>
-            <button class="taste-title-switcher-button" type="button" aria-label="Switch Taste collection" aria-expanded="false" aria-haspopup="menu" aria-controls="taste-title-switcher-menu">
-              <svg class="ico-stroke taste-title-switcher-chevron" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-chevronDown"></use></svg>
-            </button>
+            <TitleTag id="collection-title" data-default-title={config.main.title}>
+              <button class="taste-title-switcher-button" type="button" aria-expanded="false" aria-haspopup="menu" aria-controls="taste-title-switcher-menu">
+                <span data-collection-title-label>{config.main.title}</span>
+                <svg class="ico-stroke taste-title-switcher-chevron" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-chevronDown"></use></svg>
+              </button>
+            </TitleTag>
             <div class="taste-title-switcher-menu" id="taste-title-switcher-menu" role="menu" hidden>
               {tasteOptions.map((item) => {
                 const attrs = splitAttrs(item.attrs ?? {}, item.active ? 'taste-title-switcher-option active' : 'taste-title-switcher-option');

@@ -1144,22 +1144,15 @@ button[type="submit"]:hover {
 
 .taste-title-switcher {
   position: relative;
-  align-items: center;
-  gap: .45rem;
-  display: inline-flex;
+  display: inline-block;
 }
 
 .taste-title-switcher-button {
+  all: unset;
   cursor: pointer;
-  background: transparent;
-  border: 0;
-  margin: 0;
-  padding: 0;
-  flex: 0 0 1.15rem;
-  width: 1.15rem;
-  height: 1.15rem;
-  display: grid;
-  place-items: center;
+  align-items: center;
+  gap: .45rem;
+  display: inline-flex;
 }
 
 .taste-title-switcher-button:focus-visible {
@@ -1170,14 +1163,14 @@ button[type="submit"]:hover {
 .taste-title-switcher-chevron {
   color: var(--text-color);
   pointer-events: none;
-  width: 100%;
-  height: 100%;
-  transform: translateY(-.8rem);
+  flex: 0 0 1.15rem;
+  width: 1.15rem;
+  height: 1.15rem;
   transition: transform .2s ease;
 }
 
 .taste-title-switcher-button[aria-expanded="true"] .taste-title-switcher-chevron {
-  transform: translateY(-.8rem) rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .taste-title-switcher-menu {
