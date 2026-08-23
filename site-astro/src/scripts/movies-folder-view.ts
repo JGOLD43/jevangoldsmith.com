@@ -131,6 +131,35 @@ function setViewMode(mode: 'list' | 'grid') {
     });
 }
 
+function initMobileViewSwipe() {
+    const host = document.querySelector('.movies-main') as HTMLElement | null;
+    if (!host) return;
+
+    let startX = 0;
+    let startY = 0;
+    host.addEventListener('touchstart', (event) => {
+        const touch = event.touches[0];
+        if (!touch || event.touches.length !== 1) return;
+        startX = touch.clientX;
+        startY = touch.clientY;
+    }, { passive: true });
+
+    host.addEventListener('touchend', (event) => {
+        const touch = event.changedTouches[0];
+        if (!touch || !window.matchMedia('(max-width: 768px)').matches) return;
+        if (document.getElementById(MODAL_ID)?.classList.contains('active')) return;
+
+        const distanceX = touch.clientX - startX;
+        const distanceY = touch.clientY - startY;
+        const isHorizontalSwipe = Math.abs(distanceX) >= 72
+            && Math.abs(distanceX) > Math.abs(distanceY) * 1.35;
+        if (!isHorizontalSwipe) return;
+
+        // The list is the page to the left; the grid is the page to the right.
+        setViewMode(distanceX > 0 ? 'list' : 'grid');
+    }, { passive: true });
+}
+
 function openGenreModal(genre: string) {
     const list = (moviesRuntimeData as MovieLite[])
         .filter((m) => (m.genre || 'Uncategorized') === genre)
@@ -184,6 +213,7 @@ function closeGenreModal() {
 function init() {
     const list = document.getElementById(MOVIES_LIST_ID);
     if (!list) return;
+    initMobileViewSwipe();
 
     document.addEventListener('click', (event) => {
         const target = event.target as Element | null;
