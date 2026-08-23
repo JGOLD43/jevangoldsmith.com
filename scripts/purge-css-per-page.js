@@ -37,6 +37,11 @@ if (!fs.existsSync(SOURCE_CSS)) {
 }
 
 const css = fs.readFileSync(SOURCE_CSS, 'utf8');
+// The per-page filename is content-addressed, but a browser can retain an
+// older optimized slice while a CDN edge is catching up. Version every
+// generated stylesheet from the full source as well, so a CSS change always
+// gets a fresh request when the HTML revalidates.
+const cssVersion = crypto.createHash('sha256').update(css).digest('hex').slice(0, 12);
 
 // Classes that may appear at runtime (added by JS) — never remove rules
 // that reference these even if not in static HTML.
@@ -417,7 +422,7 @@ for (const { file, html, kept } of perPage) {
   // negligible for warm ones.
   const INLINE_CSS_THRESHOLD = 4096;
   const inlineCss = purged && purged.length <= INLINE_CSS_THRESHOLD;
-  const perPageHref = `/css/per-page/${outFile}`;
+  const perPageHref = `/css/per-page/${outFile}?v=${cssVersion}`;
   const linkExtra = !purged
     ? ''
     : inlineCss
@@ -430,7 +435,7 @@ for (const { file, html, kept } of perPage) {
   }
   const next = html.replace(
     /<link rel="stylesheet" href="\/css\/legacy-style\.css"([^>]*)>/g,
-    `<link rel="stylesheet" href="/css/${chromeFile}"$1>${linkExtra}`
+    `<link rel="stylesheet" href="/css/${chromeFile}?v=${cssVersion}"$1>${linkExtra}`
   );
   if (next !== html) {
     fs.writeFileSync(file, next);
