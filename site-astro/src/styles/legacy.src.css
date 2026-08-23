@@ -14944,7 +14944,8 @@ body.nav-compact .navbar .work-mode-icon {
     padding-right: 0;
   }
 
-  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-list-selector {
+  .movies-layout.collection-layout.mobile-list-view > .movies-sidebar.collection-sidebar.collapsed .sidebar-list-selector,
+  .movies-layout.collection-layout.mobile-list-view > .movies-sidebar.collection-sidebar.collapsed .sidebar-footer {
     display: none !important;
   }
 
