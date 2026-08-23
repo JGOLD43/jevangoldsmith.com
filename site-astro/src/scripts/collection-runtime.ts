@@ -61,9 +61,20 @@ function resolveActionButton(buttonOrEvent: RuntimeActionSource, selector: strin
 // layout gets `mobile-list-view`; CSS does the rest.
 let isMobileCollectionViewTransitioning = false;
 
+function setMovieSearchChromeVisibility(layout: HTMLElement, isSearchView: boolean) {
+    if (layout.id !== 'movies-layout') return;
+    layout.querySelectorAll<HTMLElement>(
+        ':scope > .movies-sidebar .sidebar-list-selector, :scope > .movies-sidebar .sidebar-footer, :scope > .movies-main .collection-header'
+    ).forEach((element) => {
+        if (isSearchView) element.style.setProperty('display', 'none', 'important');
+        else element.style.removeProperty('display');
+    });
+}
+
 function setCollectionView(layout: HTMLElement, view: string) {
     const isList = view === 'list';
     layout.classList.toggle('mobile-list-view', isList);
+    setMovieSearchChromeVisibility(layout, isList);
     layout.querySelectorAll('.collection-mobile-toggle [data-view]').forEach((btn) => {
         const el = btn as HTMLElement;
         const active = el.dataset.view === view;
