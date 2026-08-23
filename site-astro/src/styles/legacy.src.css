@@ -14859,6 +14859,16 @@ body.nav-compact .navbar .work-mode-icon {
   letter-spacing: .1em;
 }
 
+/* Movies uses this wrapper to collapse filters only on the mobile Search view.
+   Desktop keeps the existing always-visible filter controls. */
+.mobile-filter-dropdown > summary {
+  display: none;
+}
+
+.mobile-filter-dropdown:not([open]) > .mobile-filter-dropdown-content {
+  display: block;
+}
+
 /* The mobile Movies Search tab is an iOS-style glass layer: it occupies the
    entire space between the site navigation and tab bar while the Gallery stays
    visible (and softly blurred) beneath it. */
@@ -14896,9 +14906,9 @@ body.nav-compact .navbar .work-mode-icon {
       radial-gradient(90% 62% at 8% 0%, #dec57b24 0%, transparent 64%),
       radial-gradient(75% 54% at 100% 38%, #6d96ca24 0%, transparent 70%),
       #10121780;
-    border: 1px solid #ffffff28;
+    border: 0 !important;
     border-radius: 0;
-    box-shadow: inset 0 1px #ffffff30, 0 18px 48px #00000024;
+    box-shadow: none !important;
     margin: 0 !important;
   }
 
@@ -14907,9 +14917,9 @@ body.nav-compact .navbar .work-mode-icon {
       radial-gradient(85% 58% at 10% 0%, #ffe9aa8a 0%, transparent 65%),
       radial-gradient(75% 52% at 100% 34%, #b7d8ff75 0%, transparent 70%),
       #f5f8fb9c;
-    border: 1px solid #ffffffb8;
+    border: 0 !important;
     border-radius: 0;
-    box-shadow: inset 0 1px #ffffffd9, 0 18px 48px #4c58701f;
+    box-shadow: none !important;
     margin: 0 !important;
   }
 
@@ -14918,9 +14928,8 @@ body.nav-compact .navbar .work-mode-icon {
     opacity: .65;
   }
 
-  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-list-selector,
   .movies-layout.mobile-list-view > .movies-sidebar .sidebar-search,
-  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-filter-section,
+  .movies-layout.mobile-list-view > .movies-sidebar .mobile-filter-dropdown,
   .movies-layout.mobile-list-view > .movies-sidebar .sidebar-footer,
   .movies-layout.mobile-list-view > .movies-sidebar .sidebar-section {
     box-sizing: border-box;
@@ -14933,5 +14942,73 @@ body.nav-compact .navbar .work-mode-icon {
   .movies-layout.mobile-list-view > .movies-sidebar .sidebar-footer {
     padding-left: 0;
     padding-right: 0;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-list-selector {
+    display: none !important;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-search {
+    width: min(100% - 1.25rem, 680px);
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .search-input-wrapper.search-bubble {
+    min-height: 54px;
+    border-radius: 18px;
+    padding-left: .3rem;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .collection-search-input {
+    font-size: 1.05rem;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .mobile-filter-dropdown {
+    margin-top: .65rem;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .mobile-filter-dropdown > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 46px;
+    padding: 0 1rem;
+    border: 1px solid color-mix(in srgb, var(--border-color) 75%, transparent);
+    border-radius: 14px;
+    color: var(--text-primary);
+    font-weight: 700;
+    background: color-mix(in srgb, var(--background) 58%, transparent);
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .mobile-filter-dropdown:not([open]) > .mobile-filter-dropdown-content {
+    display: none;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .mobile-filter-dropdown > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .mobile-filter-dropdown > summary span {
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform .2s ease;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .mobile-filter-dropdown[open] > summary span {
+    transform: translateY(3px) rotate(225deg);
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .mobile-filter-dropdown-content {
+    padding: .5rem 0 0;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .mobile-filter-dropdown .sidebar-filter-section {
+    width: 100%;
+    margin: 0;
+    padding: .65rem 0;
   }
 }

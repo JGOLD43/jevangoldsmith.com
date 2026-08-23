@@ -92,8 +92,8 @@ const config = ({
     footerHidden: true,
     sections: MOVIE_SECTIONS.map((section) => {
       const genre = section.attrs?.['data-genre'];
-      if (!section.panelId || !genre || genre === 'all') return section;
-      const list = moviesByGenre[genre] || [];
+      if (!section.panelId || !genre) return section;
+      const list = genre === 'all' ? movies : (moviesByGenre[genre] || []);
       return {
         ...section,
         count: String(list.length),
@@ -131,7 +131,7 @@ const config = ({
   canonical={canonical}
 >
   <Fragment slot="sidebar-extra">
-    <SidebarRatingSliderFilters clearAction="clearAllFilters" preventDefaultOnClear sliderLabel="Filter by Times Watched" sliderIcon="🎬" sliderId="timeswatched" />
+    <SidebarRatingSliderFilters clearAction="clearAllFilters" preventDefaultOnClear sliderLabel="Filter by Times Watched" sliderIcon="🎬" sliderId="timeswatched" mobileDropdown />
   </Fragment>
   {recentMovies.length > 0 && (
     <Fragment slot="header-extra">

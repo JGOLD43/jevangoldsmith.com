@@ -58,7 +58,7 @@ export const PODCAST_SECTIONS: SectionItem[] = presets.podcast.map(([label, coun
 }));
 
 export const MOVIE_SECTIONS: SectionItem[] = [
-  buildAll(presets.movie.all, { 'data-action': 'toggleMovieGenre', 'data-action-args': 'all', 'data-action-eventobj': 'true', 'data-genre': 'all', class: 'active' }),
+  { ...buildAll(presets.movie.all, { 'data-action': 'toggleMovieGenre', 'data-action-args': 'all', 'data-action-eventobj': 'true', 'data-genre': 'all' }), panelId: 'genre-all', panelClass: 'genre-movies' } as SectionItem,
   ...presets.movie.categories.map(([label, key, icon]) => categorySection({
     label, key: key.toLowerCase().replace(/[^a-z0-9]+/g, ''), icon,
     attrs: { 'data-action': 'toggleMovieGenre', 'data-action-args': key, 'data-action-eventobj': 'true', 'data-genre': key },

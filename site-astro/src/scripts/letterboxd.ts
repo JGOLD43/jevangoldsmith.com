@@ -257,7 +257,7 @@ function buildCollectionController() {
         group: {
             allButtonSelector: '[data-genre="all"]',
             buttonSelector: '.sidebar-category',
-            panelForValue: (genre: string) => genre === 'all' ? null : document.getElementById(`genre-${normalizeGenreKey(genre)}`),
+            panelForValue: (genre: string) => document.getElementById(`genre-${normalizeGenreKey(genre)}`),
             panelSelector: '.genre-movies'
         },
         searchClearButtonId: 'movie-search-clear-btn',
