@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { slugify } from '../lib/slug';
+
+const movies = (await getCollection('movies') as CollectionEntry<'movies'>[]).map((entry) => entry.data);
+
+const tiers = [
+  { name: 'S', color: '#f3d36b', label: 'S tier — 5 stars', matches: (rating: number) => rating === 5 },
+  { name: 'A', color: '#b492e5', label: 'A tier — 4 to 4.5 stars', matches: (rating: number) => rating >= 4 && rating < 5 },
+  { name: 'B', color: '#78b6e8', label: 'B tier — 3 to 3.5 stars', matches: (rating: number) => rating >= 3 && rating < 4 },
+  { name: 'C', color: '#82dc7a', label: 'C tier — 2 to 2.5 stars', matches: (rating: number) => rating >= 2 && rating < 3 },
+  { name: 'D', color: '#f4f4f4', label: 'D tier — 1 to 1.5 stars', matches: (rating: number) => rating > 0 && rating < 2 }
+].map((tier) => ({
+  ...tier,
+  movies: movies
+    .filter((movie) => tier.matches(Number(movie.starCount)))
+    .sort((a, b) => a.title.localeCompare(b.title))
+}));
+---
+
+<Base
+  title="Movies by Rating | Jevan Goldsmith"
+  description="Movies Jevan Goldsmith has rated on Letterboxd, grouped by star rating."
+  canonical="https://jevangoldsmith.com/movies-by-rating.html"
+  bodyClass="nav-compact"
+>
+  <main class="rating-page">
+    <header class="rating-page-header">
+      <a class="rating-back-link" href="/movies.html">← Movie Lists</a>
+      <h1>Movies by Rating</h1>
+      <p>Films I’ve rated on Letterboxd, sorted from five stars down.</p>
+    </header>
+
+    <section class="tier-list" aria-label="Movies grouped by Letterboxd rating">
+      {tiers.map((tier) => (
+        <section class="tier-row" aria-label={tier.label}>
+          <div class="tier-label" style={`background:${tier.color}`}>
+            <span>{tier.name}</span>
+            <small>{tier.label.replace(/^. tier — /, '')}</small>
+          </div>
+          <div class="tier-posters">
+            {tier.movies.map((movie, index) => {
+              const slug = slugify(movie.title || '');
+              return (
+                <a class="tier-poster" href={slug ? `/movies/${slug}.html` : '/movies.html'} title={`${movie.title} — ${movie.rating || `${movie.starCount} stars`}`}>
+                  {movie.poster ? <img src={movie.poster} alt={movie.title} loading={index < 6 ? 'eager' : 'lazy'} decoding="async" /> : <span class="tier-poster-fallback">{movie.title}</span>}
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+    </section>
+  </main>
+</Base>
+
+<style>
+  .rating-page { max-width: 1120px; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+  .rating-page-header { margin-bottom: 1.5rem; }
+  .rating-back-link { display: inline-block; margin-bottom: 1rem; color: var(--text-light); font-size: .95rem; text-decoration: none; }
+  .rating-back-link:hover, .rating-back-link:focus-visible { color: var(--secondary-color); }
+  .rating-page h1 { margin: 0; }
+  .rating-page-header p { margin: .4rem 0 0; color: var(--text-light); }
+  .tier-list { border: 1px solid var(--border-color); overflow: hidden; }
+  .tier-row { min-height: 8.5rem; border-bottom: 1px solid var(--border-color); background: #090909; grid-template-columns: 5.5rem minmax(0, 1fr); display: grid; }
+  .tier-row:last-child { border-bottom: 0; }
+  .tier-label { color: #111; flex-direction: column; align-items: center; justify-content: center; gap: .1rem; text-align: center; display: flex; }
+  .tier-label span { font-size: 2.5rem; font-weight: 800; line-height: 1; }
+  .tier-label small { font-size: .7rem; font-weight: 700; line-height: 1.1; }
+  .tier-posters { gap: .7rem; padding: .75rem; grid-template-columns: repeat(auto-fill, minmax(3.75rem, 1fr)); align-content: center; display: grid; }
+  .tier-poster { background: #1b1b1b; border-radius: .35rem; color: #fff; aspect-ratio: 2 / 3; overflow: hidden; text-decoration: none; }
+  .tier-poster img { width: 100%; height: 100%; object-fit: cover; transition: transform .18s ease; display: block; }
+  .tier-poster:hover img, .tier-poster:focus-visible img { transform: scale(1.04); }
+  .tier-poster-fallback { align-items: center; height: 100%; padding: .4rem; font-size: .72rem; font-weight: 600; line-height: 1.15; text-align: center; display: flex; }
+  @media (min-width: 769px) {
+    .rating-page { padding: 3rem; }
+    .tier-row { grid-template-columns: 9rem minmax(0, 1fr); min-height: 11.75rem; }
+    .tier-label span { font-size: 3.5rem; }
+    .tier-label small { font-size: .8rem; }
+    .tier-posters { gap: 1rem; padding: 1rem; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); }
+  }
+</style>
