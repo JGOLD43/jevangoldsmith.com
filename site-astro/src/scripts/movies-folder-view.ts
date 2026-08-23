@@ -7,6 +7,7 @@
 import moviesRuntimeData from '../../../data/movies.json';
 import { onDomReady } from './dom-ready';
 import { flyCover } from './cover-flight';
+import { ratingTier } from '../lib/rating-tier';
 import { slugify } from '../lib/slug';
 import { trapFocus } from '../lib/focus-trap';
 
@@ -14,6 +15,7 @@ type MovieLite = {
     title?: string | null;
     poster?: string | null;
     genre?: string | null;
+    starCount?: number | null;
 };
 
 const MOVIES_LIST_ID = 'movies-container';
@@ -60,7 +62,10 @@ function setViewMode(mode: 'list' | 'grid') {
 }
 
 function openGenreModal(genre: string) {
-    const list = (moviesRuntimeData as MovieLite[]).filter((m) => (m.genre || 'Uncategorized') === genre);
+    const list = (moviesRuntimeData as MovieLite[])
+        .filter((m) => (m.genre || 'Uncategorized') === genre)
+        .sort((a, b) => Number(b.starCount || 0) - Number(a.starCount || 0)
+            || String(a.title || '').localeCompare(String(b.title || '')));
     const modal = document.getElementById(MODAL_ID);
     const title = document.getElementById(MODAL_TITLE_ID);
     const container = document.getElementById(MODAL_LIST_ID);
@@ -76,10 +81,17 @@ function openGenreModal(genre: string) {
         const img = clone.querySelector('img') as HTMLImageElement | null;
         if (!img) return;
         clone.dataset.slug = slug;
-        clone.setAttribute('aria-label', movie.title || '');
+        const tier = ratingTier(Number(movie.starCount || 0));
+        clone.setAttribute('aria-label', `${movie.title || ''}${tier ? ` — ${tier.label}` : ''}`);
         img.src = movie.poster;
         img.alt = movie.title || '';
         img.title = movie.title || '';
+        const badge = clone.querySelector('.category-tier-badge') as HTMLElement | null;
+        if (badge && tier) {
+            badge.textContent = tier.label;
+            badge.classList.add(`category-tier-badge--${tier.key}`);
+            badge.hidden = false;
+        }
         fragment.appendChild(clone);
     });
     container.replaceChildren(fragment);

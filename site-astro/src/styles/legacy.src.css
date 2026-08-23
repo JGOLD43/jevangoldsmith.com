@@ -4027,6 +4027,7 @@ body.meet-page {
 
 .category-expanded-book {
   cursor: pointer;
+  position: relative;
   transition: transform .2s;
 }
 
@@ -4040,6 +4041,25 @@ body.meet-page {
   border-radius: 4px;
   width: 100%;
 }
+
+.category-tier-badge {
+  color: #111;
+  z-index: 1;
+  border-radius: 4px;
+  padding: .3rem .5rem;
+  font-size: .7rem;
+  font-weight: 700;
+  line-height: 1;
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+}
+
+.category-tier-badge--s { background: #f3d36b; }
+.category-tier-badge--a { background: #b492e5; }
+.category-tier-badge--b { background: #78b6e8; }
+.category-tier-badge--c { background: #82dc7a; }
+.category-tier-badge--d { background: #f4f4f4; }
 
 .books-layout > .seo-related-section {
   grid-column: 2;
