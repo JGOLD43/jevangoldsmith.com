@@ -15016,8 +15016,8 @@ body.nav-compact .navbar .work-mode-icon {
 /* Keep the Search view focused on finding a film, including wider embedded
    mobile panes that do not match the handset media-query breakpoint. */
 .movies-layout.mobile-list-view > .movies-main .collection-header,
-.movies-layout.mobile-list-view > .movies-sidebar .sidebar-list-selector,
-.movies-layout.mobile-list-view > .movies-sidebar .sidebar-footer {
+.movies-layout.collection-layout.mobile-list-view > .movies-sidebar.collection-sidebar.collapsed .sidebar-list-selector,
+.movies-layout.collection-layout.mobile-list-view > .movies-sidebar.collection-sidebar.collapsed .sidebar-footer {
   display: none !important;
 }
 
