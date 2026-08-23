@@ -90,6 +90,7 @@ function openGenreModal(genre: string) {
         if (badge && tier) {
             badge.textContent = tier.label;
             badge.classList.add(`category-tier-badge--${tier.key}`);
+            badge.style.backgroundColor = tier.color;
             badge.hidden = false;
         }
         fragment.appendChild(clone);
