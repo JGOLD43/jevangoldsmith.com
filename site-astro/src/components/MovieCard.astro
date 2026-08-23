@@ -39,7 +39,6 @@ const tier = ratingTier(Number(starCount));
     </div>
     {runtimeStr && <div class="movie-runtime">{runtimeStr}</div>}
     {shortDescription && <p class="movie-description">{shortDescription}</p>}
-    {date && <p class="movie-date">Watched: {date}</p>}
   </div>
   <div class="js-zoom-detail" aria-hidden="true">
     <p class="zoom-detail-kicker">{genre || 'Film'}{year ? ` · ${year}` : ''}</p>
