@@ -15063,3 +15063,8 @@ body.nav-compact .navbar .work-mode-icon {
   width: 0;
   height: 0;
 }
+
+/* The compact sidebar's desktop hover tooltip sits off-screen in Search. */
+.movies-layout.mobile-list-view > .movies-sidebar .sidebar-category:hover::after {
+  display: none !important;
+}
