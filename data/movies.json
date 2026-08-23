@@ -23,7 +23,7 @@
   },
   {
     "title": "Mulholland Drive",
-    "date": "August 21, 2026",
+    "date": "August 22, 2026",
     "link": "https://letterboxd.com/contentwatch/film/mulholland-drive/",
     "rating": "★★★★",
     "starCount": 4,
@@ -34,7 +34,7 @@
   },
   {
     "title": "The Sixth Sense",
-    "date": "August 20, 2026",
+    "date": "August 21, 2026",
     "link": "https://letterboxd.com/contentwatch/film/the-sixth-sense/",
     "rating": "★★★★½",
     "starCount": 4.5,
@@ -100,7 +100,7 @@
   },
   {
     "title": "Moon",
-    "date": "June 22, 2026",
+    "date": "June 23, 2026",
     "link": "https://letterboxd.com/contentwatch/film/moon/",
     "rating": "★★",
     "starCount": 2,
@@ -133,7 +133,7 @@
   },
   {
     "title": "The King",
-    "date": "May 30, 2026",
+    "date": "May 29, 2026",
     "link": "https://letterboxd.com/contentwatch/film/the-king-2019/",
     "rating": "★★★½",
     "starCount": 3.5,
@@ -144,7 +144,7 @@
   },
   {
     "title": "Reservoir Dogs",
-    "date": "May 26, 2026",
+    "date": "May 25, 2026",
     "link": "https://letterboxd.com/contentwatch/film/reservoir-dogs/",
     "rating": "★★★½",
     "starCount": 3.5,
@@ -155,7 +155,7 @@
   },
   {
     "title": "A Million Ways to Die in the West",
-    "date": "May 25, 2026",
+    "date": "May 24, 2026",
     "link": "https://letterboxd.com/contentwatch/film/a-million-ways-to-die-in-the-west/",
     "rating": "★★★½",
     "starCount": 3.5,
@@ -166,7 +166,7 @@
   },
   {
     "title": "The Negotiator",
-    "date": "May 25, 2026",
+    "date": "May 24, 2026",
     "link": "https://letterboxd.com/contentwatch/film/the-negotiator/",
     "rating": "★★★★½",
     "starCount": 4.5,
@@ -188,7 +188,7 @@
   },
   {
     "title": "Syriana",
-    "date": "May 19, 2026",
+    "date": "May 20, 2026",
     "link": "https://letterboxd.com/contentwatch/film/syriana/",
     "rating": "★★★",
     "starCount": 3,
@@ -196,6 +196,25 @@
     "poster": "https://a.ltrbxd.com/resized/sm/upload/lg/nx/8t/jf/ArLpoafsdFhs5USOn2AUsEIImxI-0-600-0-900-crop.jpg?v=d6c027807b",
     "genre": "Uncategorized",
     "timesWatched": 1
+  },
+  {
+    "title": "Before Sunrise",
+    "date": "May 20, 2026",
+    "link": "https://letterboxd.com/contentwatch/film/before-sunrise/1/",
+    "rating": "★★★★★",
+    "starCount": 5,
+    "year": "1995",
+    "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/4/51974-before-sunrise-0-600-0-900-crop.jpg?v=006e8fedea",
+    "genre": "Romance",
+    "timesWatched": 1,
+    "tmdbId": 76,
+    "runtime": 101,
+    "tmdbGenres": [
+      "Drama",
+      "Romance"
+    ],
+    "overview": "An unexpected meeting on a train leads two travelers to spend an evening wandering through Vienna. As the night unfolds, they share stories and conversations about life and love, exploring new ideas while a quiet intimacy grows between them, knowing it may be their only night together.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/qA2TyqPldTtoTVY3LKrNIG5g6bH.jpg"
   },
   {
     "title": "The Darjeeling Limited",
@@ -221,7 +240,7 @@
   },
   {
     "title": "Project Hail Mary",
-    "date": "May 8, 2026",
+    "date": "May 9, 2026",
     "link": "https://letterboxd.com/contentwatch/film/project-hail-mary/",
     "rating": "★★★★★",
     "starCount": 5,
@@ -232,7 +251,7 @@
   },
   {
     "title": "The Dark Knight Rises",
-    "date": "May 8, 2026",
+    "date": "May 9, 2026",
     "link": "https://letterboxd.com/contentwatch/film/the-dark-knight-rises/",
     "rating": "★★½",
     "starCount": 2.5,
@@ -243,7 +262,7 @@
   },
   {
     "title": "The Dark Knight",
-    "date": "May 8, 2026",
+    "date": "May 9, 2026",
     "link": "https://letterboxd.com/contentwatch/film/the-dark-knight/",
     "rating": "★★★★½",
     "starCount": 4.5,
@@ -303,25 +322,6 @@
     ],
     "overview": "Nine years later, Jesse travels across Europe giving readings from a book he wrote about the night he spent in Vienna with Celine. After his reading in Paris, Celine finds him, and they spend part of the day together before Jesse has to again leave for a flight. They are both in relationships now, and Jesse has a son, but as their strong feelings for each other start to return, both confess a longing for more.",
     "backdrop": "https://image.tmdb.org/t/p/w1280/vMI8oOEQbhaCQnBFM9mXvJGyEKc.jpg"
-  },
-  {
-    "title": "Before Sunrise",
-    "date": "November 22, 2025",
-    "link": "https://letterboxd.com/contentwatch/film/before-sunrise/",
-    "rating": "★★★★★",
-    "starCount": 5,
-    "year": "1995",
-    "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/4/51974-before-sunrise-0-600-0-900-crop.jpg?v=006e8fedea",
-    "genre": "Romance",
-    "timesWatched": 1,
-    "tmdbId": 76,
-    "runtime": 101,
-    "tmdbGenres": [
-      "Drama",
-      "Romance"
-    ],
-    "overview": "An unexpected meeting on a train leads two travelers to spend an evening wandering through Vienna. As the night unfolds, they share stories and conversations about life and love, exploring new ideas while a quiet intimacy grows between them, knowing it may be their only night together.",
-    "backdrop": "https://image.tmdb.org/t/p/w1280/qA2TyqPldTtoTVY3LKrNIG5g6bH.jpg"
   },
   {
     "title": "Lawrence of Arabia",

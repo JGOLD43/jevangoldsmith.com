@@ -28,8 +28,6 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    outputs:
-      changed: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

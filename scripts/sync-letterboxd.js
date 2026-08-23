@@ -91,6 +91,7 @@ function parseXml(xml) {
     description: pluck(body, 'description'),
     link: pluck(body, 'link'),
     pubDate: pluck(body, 'pubDate'),
+    watchedDate: pluck(body, 'letterboxd:watchedDate'),
     filmTitle: pluck(body, 'letterboxd:filmTitle'),
     filmYear: pluck(body, 'letterboxd:filmYear'),
     categories: pluckAll(body, 'category')
@@ -101,6 +102,24 @@ function isFilmDiaryEntry(item) {
   // A Letterboxd profile RSS feed also contains list activity. Only diary
   // entries carry the film metadata and point to a /film/ URL.
   return Boolean(item.filmTitle && /\/film\//.test(item.link));
+}
+
+function movieKey(movie) {
+  return (movie.filmTitle || movie.title || '').toLowerCase().trim();
+}
+
+function latestDiaryEntries(entries) {
+  // Rewatches can produce several RSS records for the same film. Keep the
+  // newest one so an older diary entry cannot overwrite a newer rating.
+  const latestByFilm = new Map();
+  for (const entry of entries) {
+    const key = movieKey(entry);
+    const previous = latestByFilm.get(key);
+    if (!previous || Date.parse(entry.pubDate) > Date.parse(previous.pubDate)) {
+      latestByFilm.set(key, entry);
+    }
+  }
+  return Array.from(latestByFilm.values());
 }
 
 function extractStarRating(title) {
@@ -137,6 +156,16 @@ function formatPubDate(pubDate) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
+function formatWatchedDate(watchedDate) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(watchedDate)) return '';
+  return new Date(`${watchedDate}T00:00:00Z`).toLocaleDateString('en-US', {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
 function rssEntryToMovie(item) {
   const title = item.filmTitle || cleanTitle(item.title);
   const year = item.filmYear || extractYearFromTitle(item.title);
@@ -145,7 +174,7 @@ function rssEntryToMovie(item) {
   const genre = item.categories[0] || 'Uncategorized';
   return {
     title,
-    date: formatPubDate(item.pubDate),
+    date: formatWatchedDate(item.watchedDate) || formatPubDate(item.pubDate),
     link: item.link,
     rating: stars,
     starCount: count,
@@ -171,13 +200,33 @@ function mergeMovies(existing, fetched) {
     if (e && e.title) byTitle.set(e.title.toLowerCase().trim(), e);
   }
   let added = 0;
+  let updated = 0;
   for (const f of fetched) {
     const key = (f.title || '').toLowerCase().trim();
-    if (!key || byTitle.has(key)) continue;
+    if (!key) continue;
+    const current = byTitle.get(key);
+    if (current) {
+      // These values come from Letterboxd. Keep enrichment and personal notes
+      // on the existing record, while reflecting rating and other feed edits.
+      const feedFields = ['date', 'link', 'rating', 'starCount', 'year', 'poster'];
+      let changed = false;
+      for (const field of feedFields) {
+        if (current[field] !== f[field]) {
+          current[field] = f[field];
+          changed = true;
+        }
+      }
+      if ((!current.genre || current.genre === 'Uncategorized') && current.genre !== f.genre) {
+        current.genre = f.genre;
+        changed = true;
+      }
+      if (changed) updated += 1;
+      continue;
+    }
     byTitle.set(key, f);
     added += 1;
   }
-  return { merged: Array.from(byTitle.values()), added };
+  return { merged: Array.from(byTitle.values()), added, updated };
 }
 
 async function main() {
@@ -190,8 +239,7 @@ async function main() {
     process.exitCode = 1;
     return;
   }
-  const fetched = parseXml(xml)
-    .filter(isFilmDiaryEntry)
+  const fetched = latestDiaryEntries(parseXml(xml).filter(isFilmDiaryEntry))
     .map(rssEntryToMovie)
     .filter((m) => m.title);
   log(`fetched ${fetched.length} entries`);
@@ -199,15 +247,15 @@ async function main() {
   const existing = loadExisting();
   log(`existing data/movies.json: ${existing.length} entries`);
 
-  const { merged, added } = mergeMovies(existing, fetched);
-  log(`merge: +${added} new, ${merged.length} total`);
+  const { merged, added, updated } = mergeMovies(existing, fetched);
+  log(`merge: +${added} new, ${updated} updated, ${merged.length} total`);
 
   if (isDry) {
     log('dry run — no write.');
     return;
   }
 
-  if (added === 0) {
+  if (added === 0 && updated === 0) {
     log('nothing new to write.');
     return;
   }
@@ -230,4 +278,11 @@ if (require.main === module) {
   });
 }
 
-module.exports = { isFilmDiaryEntry, mergeMovies, parseXml, rssEntryToMovie };
+module.exports = {
+  isFilmDiaryEntry,
+  formatWatchedDate,
+  latestDiaryEntries,
+  mergeMovies,
+  parseXml,
+  rssEntryToMovie
+};
