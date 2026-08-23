@@ -21,13 +21,6 @@ const runtime = Number(movie.runtime) || 0;
 const review = movie.review ?? '';
 const shortDescription = movie.shortDescription ?? '';
 const runtimeStr = runtime ? formatRuntime(runtime) : '';
-const genreIcons: Record<string, string> = {
-  Action: '💥', Adventure: '🗺️', Animation: '🎨', Comedy: '😂',
-  Crime: '🔫', Documentary: '📹', Drama: '🎭', Fantasy: '🧙',
-  Horror: '👻', Mystery: '🔍', Romance: '💕', 'Sci-Fi': '🚀',
-  Thriller: '😱', Western: '🤠', Uncategorized: '🎬'
-};
-const genreIcon = (genre && genreIcons[genre]) || '🎬';
 const slug = slugify(title);
 const classes = ['movie-card', 'card-link', review ? 'has-review' : ''].filter(Boolean).join(' ');
 const tier = ratingTier(Number(starCount));
@@ -45,8 +38,6 @@ const tier = ratingTier(Number(starCount));
       {year && <span class="movie-year">{year}</span>}
     </div>
     {runtimeStr && <div class="movie-runtime">{runtimeStr}</div>}
-    {genre && <div class="movie-genre-badge">{genreIcon} {genre}</div>}
-    {rating && <div class="movie-rating">{starCount ? <span class="rating-number">{starCount}</span> : null}{rating}</div>}
     {shortDescription && <p class="movie-description">{shortDescription}</p>}
     {date && <p class="movie-date">Watched: {date}</p>}
   </div>
