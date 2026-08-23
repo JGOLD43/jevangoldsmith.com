@@ -179,7 +179,7 @@ function renderSidebar(genreGroups: AnyObj) {
         const container = document.getElementById(`genre-${key}`);
         if (countEl) countEl.textContent = String(movies.length);
         if (section) section.style.display = movies.length === 0 ? 'none' : 'block';
-        if (container && !container.children.length) {
+        if (container) {
             container.innerHTML = movies.map((movie: AnyObj) => {
                 const tier = ratingTier(Number(movie.starCount || 0));
                 const cover = movie.poster
