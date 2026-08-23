@@ -72,3 +72,15 @@ test('Letterboxd sync keeps the latest rewatch and refreshes feed-owned fields',
   assert.equal(merged[0].review, 'Personal note');
   assert.equal(merged[0].genre, 'Drama');
 });
+
+test('Letterboxd sync deduplicates HTML-encoded movie titles', () => {
+  const existing = [
+    { title: "Breakfast at Tiffany's", tmdbId: 164, overview: 'Enriched record' },
+    { title: 'Breakfast at Tiffany&#039;s', rating: '★★★★', starCount: 4 }
+  ];
+
+  const { merged, deduplicated } = mergeMovies(existing, []);
+  assert.equal(deduplicated, 1);
+  assert.equal(merged.length, 1);
+  assert.equal(merged[0].tmdbId, 164);
+});

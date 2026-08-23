@@ -104,8 +104,22 @@ function isFilmDiaryEntry(item) {
   return Boolean(item.filmTitle && /\/film\//.test(item.link));
 }
 
+function normalizeMovieTitle(value) {
+  return String(value || '')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#(?:x27|0*39);/gi, "'")
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
 function movieKey(movie) {
-  return (movie.filmTitle || movie.title || '').toLowerCase().trim();
+  return normalizeMovieTitle(movie.filmTitle || movie.title);
 }
 
 function latestDiaryEntries(entries) {
@@ -191,18 +205,29 @@ function loadExisting() {
   return Array.isArray(raw) ? raw : [];
 }
 
+function recordRichness(movie) {
+  return ['tmdbId', 'runtime', 'tmdbGenres', 'overview', 'backdrop', 'review', 'notes']
+    .reduce((score, field) => score + (movie[field] ? 1 : 0), 0);
+}
+
 function mergeMovies(existing, fetched) {
-  // Key: lowercased trimmed title (movies don't have a stable id).
+  // Key: normalized title (movies don't have a stable id). Normalizing HTML
+  // entities as well as punctuation avoids records such as "Tiffany's" and
+  // "Tiffany&#039;s" appearing as separate films.
   // Existing entries WIN — they may carry TMDB enrichment + custom reviews.
   // New entries from the feed get appended.
   const byTitle = new Map();
   for (const e of existing) {
-    if (e && e.title) byTitle.set(e.title.toLowerCase().trim(), e);
+    const key = movieKey(e);
+    if (!key) continue;
+    const current = byTitle.get(key);
+    if (!current || recordRichness(e) > recordRichness(current)) byTitle.set(key, e);
   }
+  const deduplicated = existing.length - byTitle.size;
   let added = 0;
   let updated = 0;
   for (const f of fetched) {
-    const key = (f.title || '').toLowerCase().trim();
+    const key = movieKey(f);
     if (!key) continue;
     const current = byTitle.get(key);
     if (current) {
@@ -226,7 +251,7 @@ function mergeMovies(existing, fetched) {
     byTitle.set(key, f);
     added += 1;
   }
-  return { merged: Array.from(byTitle.values()), added, updated };
+  return { merged: Array.from(byTitle.values()), added, updated, deduplicated };
 }
 
 async function main() {
@@ -247,15 +272,15 @@ async function main() {
   const existing = loadExisting();
   log(`existing data/movies.json: ${existing.length} entries`);
 
-  const { merged, added, updated } = mergeMovies(existing, fetched);
-  log(`merge: +${added} new, ${updated} updated, ${merged.length} total`);
+  const { merged, added, updated, deduplicated } = mergeMovies(existing, fetched);
+  log(`merge: +${added} new, ${updated} updated, ${deduplicated} duplicates removed, ${merged.length} total`);
 
   if (isDry) {
     log('dry run — no write.');
     return;
   }
 
-  if (added === 0 && updated === 0) {
+  if (added === 0 && updated === 0 && deduplicated === 0) {
     log('nothing new to write.');
     return;
   }

@@ -150,6 +150,29 @@ function slugify(s) {
     .replace(/-+/g, '-');
 }
 
+function normalizedTitleKey(value) {
+  return String(value || '')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#(?:x27|0*39);/gi, "'")
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function duplicateTitleKey(item, cfg) {
+  const title = pickFirst(item, cfg.titleFrom);
+  if (!title) return null;
+  // Books can share a title when they are different editions/biographies.
+  // Author keeps those distinct while still flagging a duplicated book entry.
+  const author = cfg.name === 'books' ? normalizedTitleKey(item.author) : '';
+  return `${normalizedTitleKey(title)}\u0000${author}`;
+}
+
 function resolveId(item, cfg) {
   const fromCfg = pickFirst(item, cfg.idFrom);
   if (fromCfg) return fromCfg;
@@ -216,6 +239,7 @@ function validateCollection(cfg, strict) {
   const warnings = [];
   const seenIds = new Map();
   const seenSlugs = new Map();
+  const seenTitles = new Map();
 
   for (let i = 0; i < arr.length; i += 1) {
     const item = arr[i];
@@ -249,6 +273,13 @@ function validateCollection(cfg, strict) {
     const title = pickFirst(item, cfg.titleFrom);
     if (!title) {
       errors.push(`${cfg.name}: published item id="${id}" missing title (looked at ${cfg.titleFrom.join(', ')})`);
+    } else {
+      const titleKey = duplicateTitleKey(item, cfg);
+      if (titleKey && seenTitles.has(titleKey)) {
+        errors.push(`${cfg.name}: duplicate title "${title}" at index ${i} (first at ${seenTitles.get(titleKey)})`);
+      } else if (titleKey) {
+        seenTitles.set(titleKey, i);
+      }
     }
 
     if (cfg.requiresDescription) {
