@@ -12853,13 +12853,18 @@ body.shelf-experience {
 }
 
 @media (width <= 768px) {
-  .movies-main.is-mobile-view-transitioning {
+  .collection-layout.is-mobile-view-transitioning {
     position: relative;
     overflow: clip;
   }
 
-  .movies-main.is-mobile-view-transitioning > .movies-grid,
-  .movies-main.is-mobile-view-transitioning > .category-grid-view {
+  .collection-layout.is-mobile-view-transitioning > .collection-sidebar,
+  .collection-layout.is-mobile-view-transitioning > .collection-main,
+  .collection-layout.is-mobile-view-transitioning > .books-main,
+  .collection-layout.is-mobile-view-transitioning > .movies-main,
+  .collection-layout.is-mobile-view-transitioning > .podcasts-main,
+  .collection-layout.is-mobile-view-transitioning > .essays-main,
+  .collection-layout.is-mobile-view-transitioning > .people-main {
     will-change: transform, opacity;
   }
 

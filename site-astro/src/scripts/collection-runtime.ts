@@ -59,9 +59,9 @@ function resolveActionButton(buttonOrEvent: RuntimeActionSource, selector: strin
 // Registered globally on module import so it fires even on collection pages
 // whose runtime instance never calls `init()` (books, movies, ...). The
 // layout gets `mobile-list-view`; CSS does the rest.
-function switchCollectionViewFromDom(view: string) {
-    const layout = document.querySelector('main.collection-layout') as HTMLElement | null;
-    if (!layout) return;
+let isMobileCollectionViewTransitioning = false;
+
+function setCollectionView(layout: HTMLElement, view: string) {
     const isList = view === 'list';
     layout.classList.toggle('mobile-list-view', isList);
     layout.querySelectorAll('.collection-mobile-toggle [data-view]').forEach((btn) => {
@@ -72,7 +72,91 @@ function switchCollectionViewFromDom(view: string) {
     });
 }
 
+function switchCollectionViewFromDom(view: string, shouldAnimate = true) {
+    const layout = document.querySelector('main.collection-layout') as HTMLElement | null;
+    if (!layout) return;
+    const isList = view === 'list';
+    if (layout.classList.contains('mobile-list-view') === isList || isMobileCollectionViewTransitioning) return;
+
+    const sidebar = layout.querySelector(':scope > .collection-sidebar') as HTMLElement | null;
+    const main = layout.querySelector(':scope > .collection-main, :scope > .books-main, :scope > .movies-main, :scope > .podcasts-main, :scope > .essays-main, :scope > .people-main') as HTMLElement | null;
+    const canAnimate = Boolean(
+        sidebar
+        && main
+        && shouldAnimate
+        && window.matchMedia('(max-width: 768px) and (prefers-reduced-motion: no-preference)').matches
+    );
+    if (!canAnimate || !sidebar || !main) {
+        setCollectionView(layout, view);
+        return;
+    }
+
+    const outgoing = isList ? main : sidebar;
+    const incoming = isList ? sidebar : main;
+    const direction = isList ? -1 : 1;
+    isMobileCollectionViewTransitioning = true;
+    incoming.style.display = 'block';
+    outgoing.style.display = 'block';
+    layout.classList.add('is-mobile-view-transitioning');
+    layout.style.minHeight = `${Math.max(outgoing.offsetHeight, incoming.offsetHeight)}px`;
+    outgoing.style.position = 'absolute';
+    outgoing.style.inset = '0 auto auto 0';
+    outgoing.style.width = '100%';
+    outgoing.style.pointerEvents = 'none';
+    setCollectionView(layout, view);
+
+    const options: KeyframeAnimationOptions = {
+        duration: 360,
+        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        fill: 'both'
+    };
+    const outgoingAnimation = outgoing.animate([
+        { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' },
+        { opacity: 0, transform: `translate3d(${-direction * 10}%, 0, 0) scale(0.965)` }
+    ], options);
+    const incomingAnimation = incoming.animate([
+        { opacity: 0, transform: `translate3d(${direction * 14}%, 0, 0) scale(0.96)` },
+        { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' }
+    ], options);
+    void Promise.all([
+        outgoingAnimation.finished.catch(() => undefined),
+        incomingAnimation.finished.catch(() => undefined)
+    ]).then(() => {
+        [outgoing, incoming].forEach((element) => {
+            element.style.display = '';
+            element.style.position = '';
+            element.style.inset = '';
+            element.style.width = '';
+            element.style.pointerEvents = '';
+            element.style.opacity = '';
+            element.style.transform = '';
+        });
+        layout.classList.remove('is-mobile-view-transitioning');
+        layout.style.minHeight = '';
+        isMobileCollectionViewTransitioning = false;
+    });
+}
+
 registerActions({ switchCollectionView: switchCollectionViewFromDom as ActionFn });
+
+let mobileSwipeStart: { x: number; y: number; layout: HTMLElement } | null = null;
+document.addEventListener('touchstart', (event) => {
+    const touch = event.touches[0];
+    const layout = (event.target as Element | null)?.closest?.('main.collection-layout') as HTMLElement | null;
+    if (!touch || event.touches.length !== 1 || !layout) return;
+    mobileSwipeStart = { x: touch.clientX, y: touch.clientY, layout };
+}, { passive: true });
+
+document.addEventListener('touchend', (event) => {
+    const touch = event.changedTouches[0];
+    const start = mobileSwipeStart;
+    mobileSwipeStart = null;
+    if (!touch || !start || !window.matchMedia('(max-width: 768px)').matches) return;
+    const distanceX = touch.clientX - start.x;
+    const distanceY = touch.clientY - start.y;
+    if (Math.abs(distanceX) < 72 || Math.abs(distanceX) <= Math.abs(distanceY) * 1.35) return;
+    switchCollectionViewFromDom(distanceX > 0 ? 'list' : 'grid');
+}, { passive: true });
 
 // Mobile UX: when the user taps a row inside a sidebar category panel
 // (book / movie / essay / podcast link), the matching grid card needs to
@@ -86,7 +170,7 @@ document.addEventListener('click', (event) => {
     if (!link) return;
     const layout = document.querySelector('main.collection-layout.mobile-list-view') as HTMLElement | null;
     if (!layout) return;
-    switchCollectionViewFromDom('grid');
+    switchCollectionViewFromDom('grid', false);
 }, true);
 
 export function createCollectionRuntime(config: CollectionRuntimeConfig) {
