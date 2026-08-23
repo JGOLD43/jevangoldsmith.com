@@ -14865,7 +14865,7 @@ body.nav-compact .navbar .work-mode-icon {
 @media (width <= 768px) {
   .movies-layout.mobile-list-view > .movies-main {
     filter: blur(3px) saturate(.78);
-    opacity: .42;
+    opacity: .6;
     pointer-events: none;
     display: block !important;
   }
@@ -14895,22 +14895,43 @@ body.nav-compact .navbar .work-mode-icon {
     background:
       radial-gradient(90% 62% at 8% 0%, #dec57b24 0%, transparent 64%),
       radial-gradient(75% 54% at 100% 38%, #6d96ca24 0%, transparent 70%),
-      #1012179e;
+      #10121780;
     border: 1px solid #ffffff28;
+    border-radius: 0;
     box-shadow: inset 0 1px #ffffff30, 0 18px 48px #00000024;
+    margin: 0 !important;
   }
 
   [data-theme="light"] .movies-layout.mobile-list-view > .movies-sidebar.collection-sidebar--taste {
     background:
       radial-gradient(85% 58% at 10% 0%, #ffe9aa8a 0%, transparent 65%),
       radial-gradient(75% 52% at 100% 34%, #b7d8ff75 0%, transparent 70%),
-      #f5f8fbbd;
+      #f5f8fb9c;
     border: 1px solid #ffffffb8;
+    border-radius: 0;
     box-shadow: inset 0 1px #ffffffd9, 0 18px 48px #4c58701f;
+    margin: 0 !important;
   }
 
   [data-theme="light"] .movies-layout.mobile-list-view > .movies-main {
     filter: blur(3px) saturate(.82);
-    opacity: .5;
+    opacity: .65;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-list-selector,
+  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-search,
+  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-filter-section,
+  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-footer,
+  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-section {
+    box-sizing: border-box;
+    width: min(100% - 2rem, 680px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-filter-section,
+  .movies-layout.mobile-list-view > .movies-sidebar .sidebar-footer {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
