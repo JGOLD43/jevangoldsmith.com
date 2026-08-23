@@ -1,0 +1,212 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { bookCoverUrl } from '../lib/book-card';
+import { slugify } from '../lib/slug';
+
+const books = await getCollection('books') as CollectionEntry<'books'>[];
+
+const tiers = [
+  { name: 'S', rating: 5, color: '#f3d36b', label: 'S tier — 5 stars' },
+  { name: 'A', rating: 4, color: '#b492e5', label: 'A tier — 4 stars' },
+  { name: 'B', rating: 3, color: '#78b6e8', label: 'B tier — 3 stars' },
+  { name: 'C', rating: 2, color: '#82dc7a', label: 'C tier — 2 stars' },
+  { name: 'D', rating: 1, color: '#f4f4f4', label: 'D tier — 1 star' }
+].map((tier) => ({
+  ...tier,
+  books: books
+    .filter((entry) => Number(entry.data.rating) === tier.rating)
+    .map((entry) => entry.data)
+    .sort((a, b) => a.title.localeCompare(b.title))
+}));
+---
+
+<Base
+  title="Books by Rating | Jevan Goldsmith"
+  description="Books Jevan Goldsmith has rated, grouped by star rating."
+  canonical="https://jevangoldsmith.com/books-by-rating.html"
+  bodyClass="nav-compact"
+>
+  <main class="rating-page">
+    <header class="rating-page-header">
+      <a class="rating-back-link" href="/books.html">← Bookshelf</a>
+      <h1>Books by Rating</h1>
+      <p>Books I’ve rated, sorted from five stars down.</p>
+    </header>
+
+    <section class="tier-list" aria-label="Books grouped by star rating">
+      {tiers.map((tier) => (
+        <section class="tier-row" aria-label={tier.label}>
+          <div class="tier-label" style={`background:${tier.color}`}>
+            <span>{tier.name}</span>
+            <small>{tier.rating} {tier.rating === 1 ? 'star' : 'stars'}</small>
+          </div>
+          <div class="tier-books">
+            {tier.books.map((book) => {
+              const slug = book.isbn || slugify(`${book.title}-${book.author}`);
+              const cover = bookCoverUrl(book, 'medium');
+              return (
+                <a class="tier-book" href={slug ? `/books/${slug}.html` : '/books.html'} title={`${book.title} by ${book.author}`}>
+                  {cover ? <img src={cover} alt={book.title} loading="eager" decoding="async" /> : <span class="tier-book-fallback">{book.title}</span>}
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+    </section>
+
+    <p class="rating-page-note">Only books with a star rating are shown.</p>
+  </main>
+</Base>
+
+<style>
+  .rating-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 2.5rem 1rem 4rem;
+  }
+
+  .rating-page-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .rating-back-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--text-light);
+    font-size: .95rem;
+    text-decoration: none;
+  }
+
+  .rating-back-link:hover,
+  .rating-back-link:focus-visible {
+    color: var(--secondary-color);
+  }
+
+  .rating-page h1 {
+    margin: 0;
+  }
+
+  .rating-page-header p {
+    margin: .4rem 0 0;
+    color: var(--text-light);
+  }
+
+  .tier-list {
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+  }
+
+  .tier-row {
+    min-height: 8.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: #090909;
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+  }
+
+  .tier-row:last-child {
+    border-bottom: 0;
+  }
+
+  .tier-label {
+    color: #111;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .1rem;
+    display: flex;
+  }
+
+  .tier-label span {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .tier-label small {
+    font-size: .7rem;
+    font-weight: 700;
+  }
+
+  .tier-books {
+    gap: .7rem;
+    padding: .75rem;
+    grid-template-columns: repeat(auto-fill, minmax(3.75rem, 1fr));
+    align-content: center;
+    display: grid;
+  }
+
+  .tier-book {
+    background: #1b1b1b;
+    border-radius: .35rem;
+    color: #fff;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    text-decoration: none;
+  }
+
+  .tier-book img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .tier-book:hover img,
+  .tier-book:focus-visible img {
+    transform: scale(1.04);
+  }
+
+  .tier-book img {
+    transition: transform .18s ease;
+  }
+
+  .tier-book-fallback {
+    align-items: center;
+    height: 100%;
+    padding: .4rem;
+    font-size: .72rem;
+    font-weight: 600;
+    line-height: 1.15;
+    text-align: center;
+    display: flex;
+  }
+
+  .rating-page-note {
+    margin: 1rem 0 0;
+    color: var(--text-light);
+    font-size: .9rem;
+  }
+
+  @media (min-width: 769px) {
+    .rating-page {
+      padding: 3rem;
+    }
+
+    .tier-row {
+      grid-template-columns: 9rem minmax(0, 1fr);
+      min-height: 11.75rem;
+    }
+
+    .tier-label span {
+      font-size: 3.5rem;
+    }
+
+    .tier-label small {
+      font-size: .8rem;
+    }
+
+    .tier-books {
+      gap: 1rem;
+      padding: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    }
+
+    .tier-book {
+      aspect-ratio: 2 / 3;
+    }
+  }
+</style>
