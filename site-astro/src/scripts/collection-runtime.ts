@@ -80,8 +80,9 @@ function setMovieSearchChromeVisibility(layout: HTMLElement, isSearchView: boole
             : 'radial-gradient(85% 58% at 10% 0%, #ffe9aa8a 0%, transparent 65%), radial-gradient(75% 52% at 100% 34%, #b7d8ff75 0%, transparent 70%), #f5f8fb9c';
         const styles: Record<string, string> = {
             position: 'fixed', 'z-index': '20', top: 'var(--nav-height, 70px)',
-            right: '0', bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))',
-            left: '0', width: '100%', height: 'auto', 'min-height': '0', margin: '0',
+            right: '0', bottom: 'auto', left: '0', width: '100%',
+            height: 'calc(100dvh - var(--nav-height, 70px) - 56px - env(safe-area-inset-bottom, 0px))',
+            'min-height': 'calc(100dvh - var(--nav-height, 70px) - 56px - env(safe-area-inset-bottom, 0px))', margin: '0',
             padding: '1rem 0 calc(1rem + env(safe-area-inset-bottom, 0px))',
             'overflow-x': 'hidden', 'overflow-y': 'auto',
             'backdrop-filter': 'blur(30px) saturate(155%)',
