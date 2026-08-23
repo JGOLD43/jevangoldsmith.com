@@ -10,6 +10,7 @@ import MovieCard from '../components/MovieCard.astro';
 import MovieStatsBody from '../components/MovieStatsBody.astro';
 import SidebarRatingSliderFilters from '../components/SidebarRatingSliderFilters.astro';
 import { MOVIE_SECTIONS, tasteListOptions } from '../lib/collection-sections';
+import { ratingTier } from '../lib/rating-tier';
 import { slugify } from '../lib/slug';
 
 const canonical = 'https://jevangoldsmith.com/movies.html';
@@ -97,18 +98,23 @@ const config = ({
       return {
         ...section,
         count: String(list.length),
-        panelLinks: list.map((movie) => ({
-          href: '#',
-          className: 'movie-link',
-          label: movie.title,
-          meta: movie.year ? String(movie.year) : '',
-          coverUrl: movie.poster ?? undefined,
-          attrs: {
-            'data-action': 'scrollToMovie',
-            'data-action-args': encodeURIComponent(movie.title),
-            'data-action-eventobj': 'true'
-          }
-        }))
+        panelLinks: list.map((movie) => {
+          const tier = ratingTier(Number(movie.starCount || 0));
+          return {
+            href: '#',
+            className: 'movie-link',
+            label: movie.title,
+            meta: movie.year ? String(movie.year) : '',
+            coverUrl: movie.poster ?? undefined,
+            badgeLabel: tier?.label,
+            badgeClass: tier ? `movie-search-tier-badge--${tier.key}` : undefined,
+            attrs: {
+              'data-action': 'scrollToMovie',
+              'data-action-args': encodeURIComponent(movie.title),
+              'data-action-eventobj': 'true'
+            }
+          };
+        })
       };
     })
   },

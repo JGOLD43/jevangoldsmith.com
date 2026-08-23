@@ -132,6 +132,7 @@ const tasteOptions = config.sidebar.listOptions ?? [];
                           <span class="book-link-title">{link.label}</span>
                           {link.meta && <span class={`book-link-author ${link.className}-year`}>{link.meta}</span>}
                         </span>
+                        {link.badgeLabel && <span class={`movie-search-tier-badge ${link.badgeClass ?? ''}`}>{link.badgeLabel}</span>}
                       </a>
                     );
                   })}

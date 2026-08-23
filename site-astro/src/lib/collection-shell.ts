@@ -19,6 +19,9 @@ export interface SectionItem {
     meta?: string;
     /** Optional thumbnail (e.g. book cover, movie poster) rendered left of the label. */
     coverUrl?: string;
+    /** Optional coloured rating badge for a sidebar result row. */
+    badgeLabel?: string;
+    badgeClass?: string;
     attrs?: Record<string, string>;
   }>;
   panelInnerHtml?: string;
