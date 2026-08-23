@@ -1,0 +1,101 @@
+---
+// Comparison is calculated at build time from a verified, committed public
+// shelf snapshot. Only books marked as read on this site participate.
+
+interface BookLite {
+  title?: string | null;
+  author?: string | null;
+  rating?: number | null;
+  read?: boolean | null;
+  isbn?: string | null;
+}
+interface ShelfBook { title: string; author?: string; }
+interface ShelfSource {
+  id: string;
+  personId: string;
+  personName: string;
+  sourceName: string;
+  sourceUrl: string;
+  verifiedAt: string;
+  bookCount: number;
+  books: ShelfBook[];
+}
+interface Props { books: BookLite[]; sources: ShelfSource[]; }
+
+const { books, sources } = Astro.props as Props;
+const normaliseTitle = (value: string) => value
+  .toLocaleLowerCase()
+  .normalize('NFKD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, ' ')
+  .trim();
+const readBooks = (books || []).filter((book) => book.read !== false && book.title);
+const comparisons = (sources || []).map((source) => {
+  const shelfTitles = new Set(source.books.map((book) => normaliseTitle(book.title)));
+  const sharedBooks = readBooks.filter((book) => shelfTitles.has(normaliseTitle(book.title || '')));
+  return {
+    source,
+    sharedBooks,
+    readShare: readBooks.length ? (sharedBooks.length / readBooks.length) * 100 : 0,
+    shelfShare: source.bookCount ? (sharedBooks.length / source.bookCount) * 100 : 0
+  };
+});
+---
+
+{comparisons.length ? comparisons.map(({ source, sharedBooks, readShare, shelfShare }) => (
+  <div class="bookshelf-comparison" data-bookshelf-source={source.id}>
+    <div class="bookshelf-comparison-intro">
+      <div>
+        <p class="bookshelf-comparison-eyebrow">Verified public shelf</p>
+        <h3>Compare bookshelves with {source.personName}</h3>
+        <p>{source.bookCount.toLocaleString()} books from {source.personName}'s public <a href={source.sourceUrl} target="_blank" rel="noreferrer">{source.sourceName} bookshelf</a>, checked {source.verifiedAt}.</p>
+      </div>
+      <a class="bookshelf-person-link" href={`/people/${source.personId}.html`}>View person</a>
+    </div>
+
+    <div class="stats-headline-grid bookshelf-comparison-metrics">
+      <div class="stats-headline-card"><div class="stats-headline-value">{sharedBooks.length}</div><div class="stats-headline-label">Shared reads</div></div>
+      <div class="stats-headline-card"><div class="stats-headline-value">{readShare.toFixed(0)}%</div><div class="stats-headline-label">Of your reads</div></div>
+      <div class="stats-headline-card"><div class="stats-headline-value">{shelfShare.toFixed(0)}%</div><div class="stats-headline-label">Of their shelf</div></div>
+    </div>
+
+    <section class="stats-section">
+      <h3 class="stats-section-title">Books you both have</h3>
+      <p class="bookshelf-match-note">Matched by normalized title, so different editions still count as the same book.</p>
+      {sharedBooks.length ? (
+        <ul class="bookshelf-match-list">
+          {sharedBooks.map((book) => (
+            <li>
+              {book.isbn ? <a href={`/books/${book.isbn}.html`}>{book.title}</a> : <span>{book.title}</span>}
+              {book.author && <span class="bookshelf-match-author">{book.author}</span>}
+              {typeof book.rating === 'number' && book.rating > 0 && <span class="bookshelf-match-rating" aria-label={`${book.rating} out of 5 stars`}>{'★'.repeat(Math.round(book.rating))}</span>}
+            </li>
+          ))}
+        </ul>
+      ) : <p class="stats-empty">No shared reads yet.</p>}
+    </section>
+
+    <p class="bookshelf-comparison-footnote">This page only compares people with a source that has been publicly verified.</p>
+  </div>
+)) : <p class="stats-empty">No public bookshelves have been verified yet.</p>}
+
+<style>
+  .bookshelf-comparison-intro { align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; display: flex; }
+  .bookshelf-comparison-eyebrow { color: var(--text-light); letter-spacing: .08em; text-transform: uppercase; margin: 0 0 .25rem; font-size: .7rem; font-weight: 700; }
+  .bookshelf-comparison h3 { margin: 0 0 .35rem; font-family: Chivo, sans-serif; font-size: 1.1rem; }
+  .bookshelf-comparison-intro p:not(.bookshelf-comparison-eyebrow) { color: var(--text-light); max-width: 46rem; margin: 0; font-size: .88rem; line-height: 1.5; }
+  .bookshelf-person-link { border: 1px solid var(--border-color); color: var(--text-color); border-radius: 999px; flex: none; padding: .3rem .65rem; font-size: .78rem; font-weight: 600; }
+  .bookshelf-person-link:hover { border-color: var(--secondary-color); color: var(--secondary-color); }
+  .bookshelf-comparison-metrics { margin-bottom: 1.25rem; }
+  .bookshelf-match-note, .bookshelf-comparison-footnote { color: var(--text-light); margin: -.25rem 0 .6rem; font-size: .78rem; line-height: 1.45; }
+  .bookshelf-match-list { border-top: 1px solid var(--border-color); margin: 0; padding: 0; list-style: none; }
+  .bookshelf-match-list li { border-bottom: 1px solid var(--border-color); grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: .75rem; padding: .55rem 0; display: grid; }
+  .bookshelf-match-list a, .bookshelf-match-list li > span:first-child { color: var(--text-color); font-size: .9rem; font-weight: 600; }
+  .bookshelf-match-author { color: var(--text-light); grid-column: 1; font-size: .78rem; }
+  .bookshelf-match-rating { color: #b8860b; grid-column: 2; grid-row: 1 / span 2; font-size: .75rem; white-space: nowrap; }
+  .bookshelf-comparison-footnote { margin: 1rem 0 0; }
+  @media (max-width: 600px) {
+    .bookshelf-comparison-intro { display: block; }
+    .bookshelf-person-link { margin-top: .75rem; display: inline-block; }
+  }
+</style>

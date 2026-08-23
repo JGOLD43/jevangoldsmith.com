@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "id": "andrew-wilkinson",
+      "personId": "andrew-wilkinson",
+      "personName": "Andrew Wilkinson",
+      "sourceName": "Never Enough",
+      "sourceUrl": "https://www.neverenough.com/bookshelf",
+      "parser": "never-enough-book-tiles"
+    }
+  ]
+}

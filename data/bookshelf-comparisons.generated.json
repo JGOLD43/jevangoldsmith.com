@@ -1,0 +1,975 @@
+{
+  "sources": [
+    {
+      "id": "andrew-wilkinson",
+      "personId": "andrew-wilkinson",
+      "personName": "Andrew Wilkinson",
+      "sourceName": "Never Enough",
+      "sourceUrl": "https://www.neverenough.com/bookshelf",
+      "verifiedAt": "2026-08-23",
+      "bookCount": 240,
+      "books": [
+        {
+          "title": "Lorne: The Man Who Invented Saturday Night Live",
+          "author": "Susan Morrison"
+        },
+        {
+          "title": "How to Know a Person",
+          "author": "David Brooks"
+        },
+        {
+          "title": "Living an Examined Life",
+          "author": "James Hollis"
+        },
+        {
+          "title": "The Billionaire Who Wasn't",
+          "author": "Conor O'Clery"
+        },
+        {
+          "title": "Civilized to Death",
+          "author": "Christopher Ryan"
+        },
+        {
+          "title": "The Coming Wave",
+          "author": "Mustafa Suleyman"
+        },
+        {
+          "title": "The Kid Stays in the Picture",
+          "author": "Robert Evans"
+        },
+        {
+          "title": "The Courage to Be Disliked",
+          "author": "Ichiro Kishimi and Fumitake Koga"
+        },
+        {
+          "title": "Rabbit at Rest",
+          "author": "John Updike"
+        },
+        {
+          "title": "The Course of Love",
+          "author": "Alain de Botton"
+        },
+        {
+          "title": "John & Paul: A Love Story in Songs",
+          "author": "Ian Leslie"
+        },
+        {
+          "title": "Nexus",
+          "author": "Yuval Noah Harari"
+        },
+        {
+          "title": "Shoe Dog",
+          "author": "Phil Knight"
+        },
+        {
+          "title": "Excellent Advice for Living",
+          "author": "Kevin Kelly"
+        },
+        {
+          "title": "I Regret Almost Everything",
+          "author": "Keith McNally"
+        },
+        {
+          "title": "Mistakes Were Made (But Not by Me)",
+          "author": "Carol Tavris and Elliot Aronson"
+        },
+        {
+          "title": "Same as Ever",
+          "author": "Morgan Housel"
+        },
+        {
+          "title": "Too Soon Old, Too Late Smart",
+          "author": "Gordon Livingston"
+        },
+        {
+          "title": "Abundance",
+          "author": "Ezra Klein and Derek Thompson"
+        },
+        {
+          "title": "How to Get Rich",
+          "author": "Felix Dennis"
+        },
+        {
+          "title": "Rabbit Is Rich",
+          "author": "John Updike"
+        },
+        {
+          "title": "The Hard Thing About Hard Things",
+          "author": "Ben Horowitz"
+        },
+        {
+          "title": "Wanting",
+          "author": "Luke Burgis"
+        },
+        {
+          "title": "Wellbeing",
+          "author": "Richard Layard and Jan-Emmanuel De Neve"
+        },
+        {
+          "title": "When the Going Was Good",
+          "author": "Graydon Carter"
+        },
+        {
+          "title": "Barbarian Days",
+          "author": "William Finnegan"
+        },
+        {
+          "title": "Demon Copperhead",
+          "author": "Barbara Kingsolver"
+        },
+        {
+          "title": "How to Be an Adult in Relationships",
+          "author": "David Richo"
+        },
+        {
+          "title": "Based on a True Story",
+          "author": "Norm Macdonald"
+        },
+        {
+          "title": "Getting Everything You Can Out of All You've Got",
+          "author": "Jay Abraham"
+        },
+        {
+          "title": "Selfish Reasons to Have More Kids",
+          "author": "Bryan Caplan"
+        },
+        {
+          "title": "A Gentleman in Moscow",
+          "author": "Amor Towles"
+        },
+        {
+          "title": "Enlightenment Now",
+          "author": "Steven Pinker"
+        },
+        {
+          "title": "Influence",
+          "author": "Robert B. Cialdini"
+        },
+        {
+          "title": "Fallen Leaves",
+          "author": "Will Durant"
+        },
+        {
+          "title": "The Algebra of Wealth",
+          "author": "Scott Galloway"
+        },
+        {
+          "title": "Status Anxiety",
+          "author": "Alain de Botton"
+        },
+        {
+          "title": "ADHD 2.0",
+          "author": "Edward M. Hallowell and John J. Ratey"
+        },
+        {
+          "title": "Titan: The Life of John D. Rockefeller, Sr.",
+          "author": "Ron Chernow"
+        },
+        {
+          "title": "You're Doing Great!",
+          "author": "Tom Papa"
+        },
+        {
+          "title": "Bad Blood",
+          "author": "John Carreyrou"
+        },
+        {
+          "title": "I Will Teach You to Be Rich",
+          "author": "Ramit Sethi"
+        },
+        {
+          "title": "The Fish That Ate the Whale",
+          "author": "Rich Cohen"
+        },
+        {
+          "title": "The Good Life",
+          "author": "Robert Waldinger and Marc Schulz"
+        },
+        {
+          "title": "The Path to Power",
+          "author": "Robert A. Caro"
+        },
+        {
+          "title": "The Tao of Charlie Munger",
+          "author": "David Clark"
+        },
+        {
+          "title": "The Optimist",
+          "author": "Keach Hagey"
+        },
+        {
+          "title": "Fire Weather",
+          "author": "John Vaillant"
+        },
+        {
+          "title": "The Art of Memoir",
+          "author": "Mary Karr"
+        },
+        {
+          "title": "The Invention of Air",
+          "author": "Steven Johnson"
+        },
+        {
+          "title": "The Lessons of History",
+          "author": "Will Durant and Ariel Durant"
+        },
+        {
+          "title": "From Strength to Strength",
+          "author": "Arthur C. Brooks"
+        },
+        {
+          "title": "Spare",
+          "author": "Prince Harry, The Duke of Sussex"
+        },
+        {
+          "title": "All the Light We Cannot See",
+          "author": "Anthony Doerr"
+        },
+        {
+          "title": "Recognizing Adult ADHD",
+          "author": "John Kruse"
+        },
+        {
+          "title": "Eating Animals",
+          "author": "Jonathan Safran Foer"
+        },
+        {
+          "title": "The Tender Bar",
+          "author": "J.R. Moehringer"
+        },
+        {
+          "title": "This Is How They Tell Me the World Ends",
+          "author": "Nicole Perlroth"
+        },
+        {
+          "title": "Buddha's Brain",
+          "author": "Rick Hanson"
+        },
+        {
+          "title": "Supremacy",
+          "author": "Parmy Olson"
+        },
+        {
+          "title": "Sutton",
+          "author": "J.R. Moehringer"
+        },
+        {
+          "title": "The Fall",
+          "author": "Michael Wolff"
+        },
+        {
+          "title": "The Fund",
+          "author": "Rob Copeland"
+        },
+        {
+          "title": "The NEW Comedy Bible",
+          "author": "Judy Carter"
+        },
+        {
+          "title": "Determined",
+          "author": "Robert M. Sapolsky"
+        },
+        {
+          "title": "Just Let Me Look at You",
+          "author": "Bill Gaston"
+        },
+        {
+          "title": "Sapiens",
+          "author": "Yuval Noah Harari"
+        },
+        {
+          "title": "The Big Leap",
+          "author": "Gay Hendricks"
+        },
+        {
+          "title": "Elon Musk",
+          "author": "Walter Isaacson"
+        },
+        {
+          "title": "The Snowball",
+          "author": "Alice Schroeder"
+        },
+        {
+          "title": "Amazon Unbound",
+          "author": "Brad Stone"
+        },
+        {
+          "title": "American Kingpin",
+          "author": "Nick Bilton"
+        },
+        {
+          "title": "Flights",
+          "author": "Olga Tokarczuk"
+        },
+        {
+          "title": "Getting Things Done",
+          "author": "David Allen"
+        },
+        {
+          "title": "Insomniac City",
+          "author": "Bill Hayes"
+        },
+        {
+          "title": "Lights Out",
+          "author": "Thomas Gryta and Ted Mann"
+        },
+        {
+          "title": "Losing the Signal",
+          "author": "Jacquie McNish and Sean Silcoff"
+        },
+        {
+          "title": "Made to Stick",
+          "author": "Chip Heath and Dan Heath"
+        },
+        {
+          "title": "Maverick",
+          "author": "Ricardo Semler"
+        },
+        {
+          "title": "Maybe You Should Talk to Someone",
+          "author": "Lori Gottlieb"
+        },
+        {
+          "title": "Money: Master the Game",
+          "author": "Tony Robbins"
+        },
+        {
+          "title": "My Dead Dad Was in ZZ Top",
+          "author": "Jon Glaser"
+        },
+        {
+          "title": "New Teeth",
+          "author": "Simon Rich"
+        },
+        {
+          "title": "Open",
+          "author": "Andre Agassi"
+        },
+        {
+          "title": "Outlive",
+          "author": "Peter Attia"
+        },
+        {
+          "title": "Rework",
+          "author": "Jason Fried and David Heinemeier Hansson"
+        },
+        {
+          "title": "Rock On",
+          "author": "Dan Kennedy"
+        },
+        {
+          "title": "Stop Fixing Yourself",
+          "author": "Anthony de Mello"
+        },
+        {
+          "title": "Stories Sell",
+          "author": "Matthew Dicks"
+        },
+        {
+          "title": "Storyworthy",
+          "author": "Matthew Dicks"
+        },
+        {
+          "title": "Stumbling on Happiness",
+          "author": "Daniel Gilbert"
+        },
+        {
+          "title": "Switch",
+          "author": "Chip Heath and Dan Heath"
+        },
+        {
+          "title": "Taking Charge of Adult ADHD",
+          "author": "Russell A. Barkley"
+        },
+        {
+          "title": "The Anxious Generation",
+          "author": "Jonathan Haidt"
+        },
+        {
+          "title": "The Deals of Warren Buffett",
+          "author": "Glen Arnold"
+        },
+        {
+          "title": "The Laws of Human Nature",
+          "author": "Robert Greene"
+        },
+        {
+          "title": "The Man Who Solved the Market",
+          "author": "Gregory Zuckerman"
+        },
+        {
+          "title": "The Outsiders",
+          "author": "William N. Thorndike"
+        },
+        {
+          "title": "The Psychology of Money",
+          "author": "Morgan Housel"
+        },
+        {
+          "title": "The Sweaty Startup",
+          "author": "Nick Huber"
+        },
+        {
+          "title": "Thinking, Fast and Slow",
+          "author": "Daniel Kahneman"
+        },
+        {
+          "title": "Triumphs of Experience",
+          "author": "George E. Vaillant"
+        },
+        {
+          "title": "Useful Not True",
+          "author": "Derek Sivers"
+        },
+        {
+          "title": "You're On Your Own",
+          "author": "Mark Nichols"
+        },
+        {
+          "title": "Everything Is F*cked",
+          "author": "Mark Manson"
+        },
+        {
+          "title": "Happy-Go-Lucky",
+          "author": "David Sedaris"
+        },
+        {
+          "title": "Neurodharma",
+          "author": "Rick Hanson"
+        },
+        {
+          "title": "Rabbit Redux",
+          "author": "John Updike"
+        },
+        {
+          "title": "Comedy Samurai",
+          "author": "Larry Charles"
+        },
+        {
+          "title": "Rules of Civility",
+          "author": "Amor Towles"
+        },
+        {
+          "title": "Ghosting the News",
+          "author": "Margaret Sullivan"
+        },
+        {
+          "title": "Steve Jobs",
+          "author": "Walter Isaacson"
+        },
+        {
+          "title": "The Last Days of Night",
+          "author": "Graham Moore"
+        },
+        {
+          "title": "At Home",
+          "author": "Bill Bryson"
+        },
+        {
+          "title": "The Book of Charlie",
+          "author": "David Von Drehle"
+        },
+        {
+          "title": "The Happiness Hypothesis",
+          "author": "Jonathan Haidt"
+        },
+        {
+          "title": "The Most Important Thing Illuminated",
+          "author": "Howard Marks"
+        },
+        {
+          "title": "Homo Deus",
+          "author": "Yuval Noah Harari"
+        },
+        {
+          "title": "Lost Connections",
+          "author": "Johann Hari"
+        },
+        {
+          "title": "Road to Surrender",
+          "author": "Evan Thomas"
+        },
+        {
+          "title": "Supercommunicators",
+          "author": "Charles Duhigg"
+        },
+        {
+          "title": "The Splendid and the Vile",
+          "author": "Erik Larson"
+        },
+        {
+          "title": "Bossypants",
+          "author": "Tina Fey"
+        },
+        {
+          "title": "Brain Energy",
+          "author": "Christopher M. Palmer"
+        },
+        {
+          "title": "The King of Madison Avenue",
+          "author": "Kenneth Roman"
+        },
+        {
+          "title": "Trust",
+          "author": "Hernan Diaz"
+        },
+        {
+          "title": "Behave",
+          "author": "Robert M. Sapolsky"
+        },
+        {
+          "title": "Benjamin Franklin",
+          "author": "Walter Isaacson"
+        },
+        {
+          "title": "Charlie Munger",
+          "author": "Tren Griffin"
+        },
+        {
+          "title": "Decisive",
+          "author": "Chip Heath and Dan Heath"
+        },
+        {
+          "title": "Give Smart",
+          "author": "Thomas J. Tierney, Joel L. Fleishman"
+        },
+        {
+          "title": "Men and Rubber",
+          "author": "Harvey S. Firestone"
+        },
+        {
+          "title": "Softwar",
+          "author": "Matthew Symonds"
+        },
+        {
+          "title": "Super Pumped",
+          "author": "Mike Isaac"
+        },
+        {
+          "title": "The Art of Travel",
+          "author": "Alain de Botton"
+        },
+        {
+          "title": "The Demon of Unrest",
+          "author": "Erik Larson"
+        },
+        {
+          "title": "Desi Arnaz",
+          "author": "Todd S Purdum"
+        },
+        {
+          "title": "Ritz and Escoffier",
+          "author": "Luke Barr"
+        },
+        {
+          "title": "Self-Consciousness",
+          "author": "John Updike"
+        },
+        {
+          "title": "The Body",
+          "author": "Bill Bryson"
+        },
+        {
+          "title": "The Overstory",
+          "author": "Richard Powers"
+        },
+        {
+          "title": "The Rational Optimist",
+          "author": "Matt Ridley"
+        },
+        {
+          "title": "The Wager",
+          "author": "David Grann"
+        },
+        {
+          "title": "A Path Appears",
+          "author": "Nicholas D. Kristof and Sheryl WuDunn"
+        },
+        {
+          "title": "Heroes of History",
+          "author": "Will Durant"
+        },
+        {
+          "title": "Nuclear War",
+          "author": "Annie Jacobsen"
+        },
+        {
+          "title": "The Everything Store",
+          "author": "Brad Stone"
+        },
+        {
+          "title": "Born a Crime",
+          "author": "Trevor Noah"
+        },
+        {
+          "title": "Confidence Game",
+          "author": "Christine S. Richard"
+        },
+        {
+          "title": "How Not to Die",
+          "author": "Michael Greger"
+        },
+        {
+          "title": "I'd Like to Play Alone, Please",
+          "author": "Tom Segura"
+        },
+        {
+          "title": "Kissinger",
+          "author": "Walter Isaacson"
+        },
+        {
+          "title": "Poor Charlie's Almanack",
+          "author": "Charles T. Munger"
+        },
+        {
+          "title": "Ready Player One",
+          "author": "Ernest Cline"
+        },
+        {
+          "title": "Seeking Wisdom",
+          "author": "Peter Bevelin"
+        },
+        {
+          "title": "The 2-Hour Cocktail Party",
+          "author": "Nick Gray"
+        },
+        {
+          "title": "The Dhandho Investor",
+          "author": "Mohnish Pabrai"
+        },
+        {
+          "title": "The E-Myth Revisited",
+          "author": "Michael E. Gerber"
+        },
+        {
+          "title": "The Singularity Is Nearer",
+          "author": "Ray Kurzweil"
+        },
+        {
+          "title": "Comedy Comedy Comedy Drama",
+          "author": "Bob Odenkirk"
+        },
+        {
+          "title": "Home Game",
+          "author": "Michael Lewis"
+        },
+        {
+          "title": "The Billionaire and the Mechanic",
+          "author": "Julian Guthrie"
+        },
+        {
+          "title": "The Friday Afternoon Club",
+          "author": "Griffin Dunne"
+        },
+        {
+          "title": "The Unaccountability Machine",
+          "author": "Dan Davies"
+        },
+        {
+          "title": "Unbroken",
+          "author": "Laura Hillenbrand"
+        },
+        {
+          "title": "Enemy of All Mankind",
+          "author": "Steven Johnson"
+        },
+        {
+          "title": "Gambling Man",
+          "author": "Lionel Barber"
+        },
+        {
+          "title": "Going Infinite",
+          "author": "Michael Lewis"
+        },
+        {
+          "title": "The Contrarian",
+          "author": "Max Chafkin"
+        },
+        {
+          "title": "What Matters Most",
+          "author": "James Hollis"
+        },
+        {
+          "title": "Four Seasons in Rome",
+          "author": "Anthony Doerr"
+        },
+        {
+          "title": "Licks of Love",
+          "author": "John Updike"
+        },
+        {
+          "title": "The Geography of Bliss",
+          "author": "Eric Weiner"
+        },
+        {
+          "title": "The Midnight Library",
+          "author": "Matt Haig"
+        },
+        {
+          "title": "The Pleasures and Sorrows of Work",
+          "author": "Alain de Botton"
+        },
+        {
+          "title": "The Power Law",
+          "author": "Sebastian Mallaby"
+        },
+        {
+          "title": "Be Ready When the Luck Happens",
+          "author": "Ina Garten"
+        },
+        {
+          "title": "Better in Every Sense",
+          "author": "Norman Farb and Zindel Segal"
+        },
+        {
+          "title": "Billionaire, Nerd, Savior, King",
+          "author": "Anupreeta Das"
+        },
+        {
+          "title": "Difficult Conversations",
+          "author": "Douglas Stone, Bruce Patton, and Sheila Heen"
+        },
+        {
+          "title": "Knife",
+          "author": "Salman Rushdie"
+        },
+        {
+          "title": "Life 3.0",
+          "author": "Max Tegmark"
+        },
+        {
+          "title": "Mortality",
+          "author": "Christopher Hitchens"
+        },
+        {
+          "title": "One Summer",
+          "author": "Bill Bryson"
+        },
+        {
+          "title": "Solve for Happy",
+          "author": "Mo Gawdat"
+        },
+        {
+          "title": "The 7 Habits of Highly Effective People",
+          "author": "Stephen R. Covey"
+        },
+        {
+          "title": "The Bond King",
+          "author": "Mary Childs"
+        },
+        {
+          "title": "A Guide to the Good Life",
+          "author": "William B. Irvine"
+        },
+        {
+          "title": "A Shot to Save the World",
+          "author": "Gregory Zuckerman"
+        },
+        {
+          "title": "Chip War",
+          "author": "Chris Miller"
+        },
+        {
+          "title": "David and Goliath",
+          "author": "Malcolm Gladwell"
+        },
+        {
+          "title": "Four Thousand Weeks",
+          "author": "Oliver Burkeman"
+        },
+        {
+          "title": "Independence Day",
+          "author": "Richard Ford"
+        },
+        {
+          "title": "Power and Prediction",
+          "author": "Ajay Agrawal, Joshua Gans, and Avi Goldfarb"
+        },
+        {
+          "title": "The End of the World Is Just the Beginning",
+          "author": "Peter Zeihan"
+        },
+        {
+          "title": "The Fat Lady Sang",
+          "author": "Robert Evans"
+        },
+        {
+          "title": "The Nazi Conspiracy",
+          "author": "Brad Meltzer and Josh Mensch"
+        },
+        {
+          "title": "The Seven Principles for Making Marriage Work",
+          "author": "John Gottman and Nan Silver"
+        },
+        {
+          "title": "The Upswing",
+          "author": "Robert D. Putnam"
+        },
+        {
+          "title": "What We Owe the Future",
+          "author": "William MacAskill"
+        },
+        {
+          "title": "Wired for Love",
+          "author": "Stan Tatkin and Harville Hendrix"
+        },
+        {
+          "title": "An Unfinished Love Story",
+          "author": "Doris Kearns Goodwin"
+        },
+        {
+          "title": "Bill Bryson's African Diary",
+          "author": "Bill Bryson"
+        },
+        {
+          "title": "Buffett: The Making of an American Capitalist",
+          "author": "Roger Lowenstein"
+        },
+        {
+          "title": "Cloud Cuckoo Land",
+          "author": "Anthony Doerr"
+        },
+        {
+          "title": "Endurance",
+          "author": "Alfred Lansing"
+        },
+        {
+          "title": "How to Live",
+          "author": "Sarah Bakewell"
+        },
+        {
+          "title": "Insanely Simple",
+          "author": "Ken Segall"
+        },
+        {
+          "title": "Losing Mum and Pup",
+          "author": "Christopher Buckley"
+        },
+        {
+          "title": "Revenge of the Tipping Point",
+          "author": "Malcolm Gladwell"
+        },
+        {
+          "title": "Secrets of Power Negotiating",
+          "author": "Roger Dawson"
+        },
+        {
+          "title": "Slow Productivity",
+          "author": "Cal Newport"
+        },
+        {
+          "title": "The Key Man",
+          "author": "Simon Clark and Will Louch"
+        },
+        {
+          "title": "The Lincoln Highway",
+          "author": "Amor Towles"
+        },
+        {
+          "title": "The Many Lives of Michael Bloomberg",
+          "author": "Eleanor Randolph"
+        },
+        {
+          "title": "Themes and Variations",
+          "author": "David Sedaris"
+        },
+        {
+          "title": "We're All in This Together...",
+          "author": "Tom Papa"
+        },
+        {
+          "title": "Where Good Ideas Come From",
+          "author": "Steven Johnson"
+        },
+        {
+          "title": "Although of Course You End Up Becoming Yourself",
+          "author": "David Lipsky"
+        },
+        {
+          "title": "Andrew Carnegie",
+          "author": "David Nasaw"
+        },
+        {
+          "title": "Attached",
+          "author": "Amir Levine and Rachel Heller"
+        },
+        {
+          "title": "Berkshire Hathaway Letters to Shareholders, 2016",
+          "author": "Warren Buffett"
+        },
+        {
+          "title": "Crossing the Chasm",
+          "author": "Geoffrey A. Moore"
+        },
+        {
+          "title": "Destiny of the Republic",
+          "author": "Candice Millard"
+        },
+        {
+          "title": "East of Eden",
+          "author": "John Steinbeck"
+        },
+        {
+          "title": "Ego Is the Enemy",
+          "author": "Ryan Holiday"
+        },
+        {
+          "title": "Flow",
+          "author": "Mihaly Csikszentmihalyi"
+        },
+        {
+          "title": "How to Write Funny",
+          "author": "Scott Dikkers"
+        },
+        {
+          "title": "Human Compatible",
+          "author": "Stuart Russell"
+        },
+        {
+          "title": "Loser Goes First",
+          "author": "Dan Kennedy"
+        },
+        {
+          "title": "Nonviolent Communication",
+          "author": "Marshall B. Rosenberg"
+        },
+        {
+          "title": "Right Here, Right Now",
+          "author": "Stephen J. Harper"
+        },
+        {
+          "title": "Scattered Minds",
+          "author": "Gabor Maté"
+        },
+        {
+          "title": "Succeeding With Adult ADHD",
+          "author": "Abigail L. Levrini"
+        },
+        {
+          "title": "The 4-Hour Workweek",
+          "author": "Timothy Ferriss"
+        },
+        {
+          "title": "The Education of a Value Investor",
+          "author": "Guy Spier"
+        },
+        {
+          "title": "The Mayo Clinic Guide to Stress-Free Living",
+          "author": "Amit Sood"
+        },
+        {
+          "title": "The News",
+          "author": "Alain de Botton"
+        },
+        {
+          "title": "The Smartest Guys in the Room",
+          "author": "Bethany McLean and Peter Elkind"
+        },
+        {
+          "title": "The Undoing Project",
+          "author": "Michael Lewis"
+        }
+      ]
+    }
+  ]
+}

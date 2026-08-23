@@ -13,6 +13,8 @@
     "build:fast": "node scripts/build.js --fast",
     "people:merge": "node scripts/merge-people.js",
     "books:generate": "node scripts/build-books-generated.js",
+    "bookshelves:sync": "node scripts/sync-public-bookshelves.js",
+    "bookshelves:check": "node scripts/sync-public-bookshelves.js --check",
     "new": "node scripts/new-entry.js",
     "new:essay": "node scripts/new-entry.js essay",
     "new:book": "node scripts/new-entry.js book",

@@ -5,6 +5,7 @@ import BookCard from '../components/BookCard.astro';
 import BookCategoryModal from '../components/BookCategoryModal.astro';
 import BookModal from '../components/BookModal.astro';
 import BookStatsBody from '../components/BookStatsBody.astro';
+import BookshelfComparison from '../components/BookshelfComparison.astro';
 import CollectionPage from '../components/CollectionPage.astro';
 import ContentVisibilityStyle from '../components/ContentVisibilityStyle.astro';
 import InlineJson from '../components/InlineJson.astro';
@@ -16,6 +17,7 @@ import { BOOK_SECTIONS, tasteListOptions } from '../lib/collection-sections';
 import { categoryDisplayNames } from '../scripts/books-state';
 import { slugify } from '../lib/slug';
 import booksRuntimeData from '../../../data/books.generated.json';
+import bookshelfComparisonData from '../../../data/bookshelf-comparisons.generated.json';
 
 // Books data is fetched at runtime from /data/books.generated.json.
 // books.ts adopts SSR'd cards in place and only re-renders for filter changes.
@@ -167,7 +169,16 @@ const config = ({
   </Fragment>
   <section id="book-stats-panel" class="book-stats-panel movie-stats-panel collapsed" aria-label="Reading stats" hidden>
     <div class="stats-body">
-      <BookStatsBody books={Array.isArray(booksRuntimeData) ? booksRuntimeData : []} />
+      <div class="book-stats-tabs" role="tablist" aria-label="Bookshelf stats views">
+        <button id="book-stats-tab" type="button" role="tab" aria-selected="true" aria-controls="book-stats-view" data-book-stats-tab="stats">Reading stats</button>
+        <button id="bookshelf-comparison-tab" type="button" role="tab" aria-selected="false" aria-controls="bookshelf-comparison-view" data-book-stats-tab="comparison">Compare bookshelves</button>
+      </div>
+      <div id="book-stats-view" role="tabpanel" aria-labelledby="book-stats-tab" data-book-stats-view="stats">
+        <BookStatsBody books={Array.isArray(booksRuntimeData) ? booksRuntimeData : []} />
+      </div>
+      <div id="bookshelf-comparison-view" role="tabpanel" aria-labelledby="bookshelf-comparison-tab" data-book-stats-view="comparison" hidden>
+        <BookshelfComparison books={Array.isArray(booksRuntimeData) ? booksRuntimeData : []} sources={bookshelfComparisonData.sources || []} />
+      </div>
     </div>
   </section>
   <div id="books-container" class="books-grid">
@@ -212,6 +223,29 @@ const config = ({
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+  }
+
+  .book-stats-tabs {
+    border-bottom: 1px solid var(--border-color);
+    gap: .25rem;
+    margin: 0 0 1.25rem;
+    display: flex;
+  }
+  .book-stats-tabs button {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    color: var(--text-light);
+    cursor: pointer;
+    background: transparent;
+    margin-bottom: -1px;
+    padding: .35rem .5rem .5rem;
+    font: inherit;
+    font-size: .82rem;
+    font-weight: 600;
+  }
+  .book-stats-tabs button[aria-selected="true"] {
+    border-bottom-color: var(--secondary-color);
+    color: var(--text-color);
   }
 
   /* While a book cover is flying to the detail page, fade out the page
