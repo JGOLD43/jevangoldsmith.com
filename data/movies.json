@@ -8,7 +8,16 @@
     "year": "2002",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/qr/28/nz/3f/xaYdxi1PBEAYvqknvAmMPK5Eff3-0-600-0-900-crop.jpg?v=22d7237ed9",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 170,
+    "runtime": 113,
+    "tmdbGenres": [
+      "Horror",
+      "Thriller",
+      "Science Fiction"
+    ],
+    "overview": "Twenty-eight days after a killer virus was accidentally unleashed from a British research facility, a small group of London survivors are caught in a desperate struggle to protect themselves from the infected. Carried by animals and humans, the virus turns those it infects into homicidal maniacs -- and it's absolutely impossible to contain.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/aJFwk1clMal1prxAvKAgHxKPAf.jpg"
   },
   {
     "title": "[REC]",
@@ -19,7 +28,15 @@
     "year": "2007",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/wc/8v/37/hl/cOW5Oc3vnjD2QgK68BUvm6GGLZ4-0-600-0-900-crop.jpg?v=afc2876405",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 8329,
+    "runtime": 78,
+    "tmdbGenres": [
+      "Horror",
+      "Mystery"
+    ],
+    "overview": "A television reporter and cameraman follow emergency workers into a dark apartment building and are quickly locked inside with something terrifying.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/xfrguTH6maYiGsC8FXiQ9N3lZXw.jpg"
   },
   {
     "title": "Mulholland Drive",
@@ -30,7 +47,16 @@
     "year": "2001",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/kv/7n/p8/tv/fMC8JBWx2VjsJ53JopAcFjqmlYv-0-600-0-900-crop.jpg?v=3d69c00608",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 1018,
+    "runtime": 147,
+    "tmdbGenres": [
+      "Thriller",
+      "Drama",
+      "Mystery"
+    ],
+    "overview": "Blonde Betty Elms has only just arrived in Hollywood to become a movie star when she meets an enigmatic brunette with amnesia. Meanwhile, as the two set off to solve the second woman's identity, filmmaker Adam Kesher runs into ominous trouble while casting his latest project.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/g9ClaS5EqU0Hk8WIbMNhld0Bk6f.jpg"
   },
   {
     "title": "The Sixth Sense",
@@ -41,7 +67,16 @@
     "year": "1999",
     "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/4/0/7/51407-the-sixth-sense-0-600-0-900-crop.jpg?v=ab482dfeb6",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 745,
+    "runtime": 107,
+    "tmdbGenres": [
+      "Mystery",
+      "Thriller",
+      "Drama"
+    ],
+    "overview": "Following an unexpected tragedy, child psychologist Malcolm Crowe meets a nine year old boy named Cole Sear, who is hiding a dark secret.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/6TjllWT3cGrPFyqDXurVZ3L8bBi.jpg"
   },
   {
     "title": "Sunshine",
@@ -52,7 +87,15 @@
     "year": "2007",
     "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/1/1/0/51110-sunshine-0-600-0-900-crop.jpg?v=c4ffc70fd4",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 1272,
+    "runtime": 108,
+    "tmdbGenres": [
+      "Science Fiction",
+      "Thriller"
+    ],
+    "overview": "Fifty years into the future, the sun is dying, and Earth is threatened by arctic temperatures. A team of astronauts is sent to revive the Sun — but the mission fails. Seven years later, a new team is sent to finish the mission as mankind’s last hope.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/5AIAnucJKZ3sHpm7r1ykFVIoUHK.jpg"
   },
   {
     "title": "Sorcerer",
@@ -63,7 +106,15 @@
     "year": "1977",
     "poster": "https://a.ltrbxd.com/resized/film-poster/2/5/6/5/0/25650-sorcerer-0-600-0-900-crop.jpg?v=8dd4d17006",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 38985,
+    "runtime": 122,
+    "tmdbGenres": [
+      "Thriller",
+      "Adventure"
+    ],
+    "overview": "Four men from different parts of the globe, all hiding from their pasts in the same remote South American town, agree to risk their lives transporting several cases of dynamite (which is so old that it is dripping unstable nitroglycerin) across dangerous jungle terrain.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/g7prwSflNODkHZI6792MYoU4qoh.jpg"
   },
   {
     "title": "Spider-Man: Brand New Day",
@@ -74,7 +125,16 @@
     "year": "2026",
     "poster": "https://a.ltrbxd.com/resized/film-poster/8/7/2/8/7/1/872871-spider-man-brand-new-day-0-600-0-900-crop.jpg?v=ebe6beb4fc",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 969681,
+    "runtime": 145,
+    "tmdbGenres": [
+      "Science Fiction",
+      "Action",
+      "Adventure"
+    ],
+    "overview": "Fighting crime full-time as Spider-Man in a world that doesn't remember him—and the pressure of seeing his old friends move on without him—sparks a change in Peter Parker he may not have the power to control. But that transformation might also be the only thing that can stop a shocking new threat to the city and those he loves - a powerful villain no one can even see.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/7iwUUcKURMT7aKfCwMy6YnGtchD.jpg"
   },
   {
     "title": "Evil Dead Burn",
@@ -85,7 +145,14 @@
     "year": "2026",
     "poster": "https://a.ltrbxd.com/resized/film-poster/1/0/9/7/0/2/2/1097022-evil-dead-burn-0-600-0-900-crop.jpg?v=398ff82d46",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 1212763,
+    "runtime": 110,
+    "tmdbGenres": [
+      "Horror"
+    ],
+    "overview": "After her husband's abrupt death, Alice seeks solace with his remaining family — descendants of a leading researcher on demonic possession. As her in-laws transform one by one into creatures that feed on fear, she comes to discover that the vows she took in life survive even in death.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/o0jkkpcN81QqSl8DMLScBCXyUH9.jpg"
   },
   {
     "title": "The Odyssey",
@@ -96,7 +163,16 @@
     "year": "2026",
     "poster": "https://a.ltrbxd.com/resized/film-poster/1/2/5/5/3/9/4/1255394-the-odyssey-2026-0-600-0-900-crop.jpg?v=1eed046d0c",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 1368337,
+    "runtime": 173,
+    "tmdbGenres": [
+      "Adventure",
+      "Action",
+      "Fantasy"
+    ],
+    "overview": "Odysseus, the legendary King of Ithaca, embarks on a long and perilous journey home following the Trojan War. Throughout his voyage, he is forced to confront the whims of gods, mythological monsters, and trials that stretch both his cunning and his humanity to the breaking point.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/RMXG8myu1aGlNUsRjtxzmpdMK0.jpg"
   },
   {
     "title": "Moon",
@@ -107,7 +183,15 @@
     "year": "2009",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/1z/15/kh/dw/ydmC5WsPEhMZKV7VwQ8jT8hQLlc-0-600-0-900-crop.jpg?v=4343a06e20",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 17431,
+    "runtime": 97,
+    "tmdbGenres": [
+      "Science Fiction",
+      "Drama"
+    ],
+    "overview": "With only three weeks left in his three-year contract, Sam Bell is eager to return to Earth. Stationed alone at a Moon-based facility with his computer assistant GERTY, an unexpected accident sets off a series of unsettling events that shake his isolation.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/mvUAo9ACgmLpS4Ofc2IwD4n7WCt.jpg"
   },
   {
     "title": "Requiem for a Dream",
@@ -118,7 +202,15 @@
     "year": "2000",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/lv/4b/f2/zj/muym4jTjdLx7E6as09d1wlC3sOB-0-600-0-900-crop.jpg?v=b4d5a4aa37",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 641,
+    "runtime": 102,
+    "tmdbGenres": [
+      "Crime",
+      "Drama"
+    ],
+    "overview": "The drug-induced utopias of four Coney Island residents are shattered when their addictions run deep.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/fAGYRJCujRBMw7TCuTp893eSG8e.jpg"
   },
   {
     "title": "Forever Young",
@@ -129,7 +221,18 @@
     "year": "1992",
     "poster": "https://a.ltrbxd.com/resized/film-poster/4/6/3/3/5/46335-forever-young-0-600-0-900-crop.jpg?v=478107aac7",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 10326,
+    "runtime": 102,
+    "tmdbGenres": [
+      "Adventure",
+      "Fantasy",
+      "Drama",
+      "Science Fiction",
+      "Romance"
+    ],
+    "overview": "A 1939 test pilot asks his best friend to use him as a guinea pig for a cryogenics experiment. Daniel McCormick wants to be frozen for a year so that he doesn't have to watch his love lying in a coma. The next thing Daniel knows is that he's been awoken in 1992.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/iCGgBNzTeh8Q3bh0Y8PJalL7r5R.jpg"
   },
   {
     "title": "The King",
@@ -140,7 +243,16 @@
     "year": "2019",
     "poster": "https://a.ltrbxd.com/resized/film-poster/4/3/4/7/5/3/434753-the-king-0-600-0-900-crop.jpg?v=0c5cfedd4a",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 504949,
+    "runtime": 140,
+    "tmdbGenres": [
+      "Drama",
+      "History",
+      "War"
+    ],
+    "overview": "England, 15th century. Hal, a capricious prince who lives among the populace far from court, is forced by circumstances to reluctantly accept the throne and become Henry V.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/nOqsmE2tdTDhq4bYawNrtwnpB9a.jpg"
   },
   {
     "title": "Reservoir Dogs",
@@ -151,7 +263,15 @@
     "year": "1992",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/u0/4o/op/yx/g7spS2Y4SZoQoC6Hn7zoqEqdYqR-0-600-0-900-crop.jpg?v=6d1aaa720c",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 500,
+    "runtime": 99,
+    "tmdbGenres": [
+      "Crime",
+      "Thriller"
+    ],
+    "overview": "A botched robbery indicates a police informant, and the pressure mounts in the aftermath at a warehouse. Crime begets violence as the survivors -- veteran Mr. White, newcomer Mr. Orange, psychopathic parolee Mr. Blonde, bickering weasel Mr. Pink and Nice Guy Eddie -- unravel.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/jwt159hXWA9Q5xpBo8hWb3zwLi7.jpg"
   },
   {
     "title": "A Million Ways to Die in the West",
@@ -162,7 +282,15 @@
     "year": "2014",
     "poster": "https://a.ltrbxd.com/resized/film-poster/1/3/5/7/5/1/135751-a-million-ways-to-die-in-the-west-0-600-0-900-crop.jpg?v=408b69486e",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 188161,
+    "runtime": 116,
+    "tmdbGenres": [
+      "Comedy",
+      "Western"
+    ],
+    "overview": "As a cowardly farmer begins to fall for the mysterious new woman in town, he must put his new-found courage to the test when her husband, a notorious gun-slinger, announces his arrival.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/5ZDM988DfYLFPBqy4CNvQ9AXnp4.jpg"
   },
   {
     "title": "The Negotiator",
@@ -173,7 +301,17 @@
     "year": "1998",
     "poster": "https://a.ltrbxd.com/resized/film-poster/4/6/9/7/0/46970-the-negotiator-0-600-0-900-crop.jpg?v=d90305bf54",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 9631,
+    "runtime": 140,
+    "tmdbGenres": [
+      "Action",
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "overview": "The police try to arrest expert hostage negotiator Danny Roman, who insists he's being framed for his partner's murder in what he believes is an elaborate conspiracy. Thinking there's evidence in the Internal Affairs offices that might clear him, he takes everyone in the office hostage and demands that another well-known negotiator be brought in to handle the situation and secretly investigate the conspiracy.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/y4TbQOC9DCzZop9HwKuX73rKbYO.jpg"
   },
   {
     "title": "Primal Fear",
@@ -184,7 +322,16 @@
     "year": "1996",
     "poster": "https://a.ltrbxd.com/resized/film-poster/5/0/9/4/2/50942-primal-fear-0-600-0-900-crop.jpg?v=8e664558ef",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 1592,
+    "runtime": 130,
+    "tmdbGenres": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "overview": "Defense attorney Martin Vail takes on jobs for money and prestige rather than any sense of the greater good. His latest case involves an altar boy, accused of brutally murdering the archbishop of Chicago. Vail finds himself up against his ex-pupil and ex-lover, but as the case progresses and the Church's dark secrets are revealed, Vail finds that what appeared a simple case takes on a darker, more dangerous aspect.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/dZM71rHXh3Oo3WZlw8YpMMsoVB5.jpg"
   },
   {
     "title": "Syriana",
@@ -195,7 +342,15 @@
     "year": "2005",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/lg/nx/8t/jf/ArLpoafsdFhs5USOn2AUsEIImxI-0-600-0-900-crop.jpg?v=d6c027807b",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 231,
+    "runtime": 128,
+    "tmdbGenres": [
+      "Drama",
+      "Thriller"
+    ],
+    "overview": "The Middle Eastern oil industry is the backdrop of this tense drama, which weaves together numerous story lines. Bennett Holiday is an American lawyer in charge of facilitating a dubious merger of oil companies, while Bryan Woodman, a Switzerland-based energy analyst, experiences both personal tragedy and opportunity during a visit with Arabian royalty. Meanwhile, veteran CIA agent Bob Barnes uncovers an assassination plot with unsettling origins.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/xSUsz5n5qtR9yEwmRxEmYvMLN7o.jpg"
   },
   {
     "title": "Before Sunrise",
@@ -225,7 +380,16 @@
     "year": "2007",
     "poster": "https://a.ltrbxd.com/resized/film-poster/4/9/2/6/8/49268-the-darjeeling-limited-0-600-0-900-crop.jpg?v=3e69deba27",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 4538,
+    "runtime": 91,
+    "tmdbGenres": [
+      "Adventure",
+      "Drama",
+      "Comedy"
+    ],
+    "overview": "Three American brothers who have not spoken to each other in a year set off on a train voyage across India with a plan to find themselves and bond with each other -- to become brothers again like they used to be. Their \"spiritual quest\", however, veers rapidly off-course (due to events involving over-the-counter pain killers, Indian cough syrup, and pepper spray).",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/hKJ513GbmTSmTXJU1uCXclh5Wkh.jpg"
   },
   {
     "title": "Joker",
@@ -236,7 +400,16 @@
     "year": "2019",
     "poster": "https://a.ltrbxd.com/resized/film-poster/4/0/6/7/7/5/406775-joker-0-600-0-900-crop.jpg?v=e4ea7f98cc",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 475557,
+    "runtime": 122,
+    "tmdbGenres": [
+      "Crime",
+      "Thriller",
+      "Drama"
+    ],
+    "overview": "During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/rlay2M5QYvi6igbGcFjq8jxeusY.jpg"
   },
   {
     "title": "Project Hail Mary",
@@ -247,7 +420,15 @@
     "year": "2026",
     "poster": "https://a.ltrbxd.com/resized/film-poster/6/1/1/2/8/8/611288-project-hail-mary-0-600-0-900-crop.jpg?v=ac31b6ec03",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 687163,
+    "runtime": 157,
+    "tmdbGenres": [
+      "Science Fiction",
+      "Adventure"
+    ],
+    "overview": "Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/8Tfys3mDZVp4tNoH2ktm06a0Tau.jpg"
   },
   {
     "title": "The Dark Knight Rises",
@@ -258,7 +439,17 @@
     "year": "2012",
     "poster": "https://a.ltrbxd.com/resized/film-poster/1/6/5/5/0/16550-the-dark-knight-rises-0-600-0-900-crop.jpg?v=a7db2d4314",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 49026,
+    "runtime": 165,
+    "tmdbGenres": [
+      "Action",
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "overview": "Following the death of District Attorney Harvey Dent, Batman assumes responsibility for Dent's crimes to protect the late attorney's reputation and is subsequently hunted by the Gotham City Police Department. Eight years later, Batman encounters the mysterious Selina Kyle and the villainous Bane, a new terrorist leader who overwhelms Gotham's finest. The Dark Knight resurfaces to protect a city that has branded him an enemy.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/y2DB71C4nyIdMrANijz8mzvQtk6.jpg"
   },
   {
     "title": "The Dark Knight",
@@ -269,7 +460,16 @@
     "year": "2008",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/78/y5/zg/ej/oefdD26aey8GPdx7Rm45PNncJdU-0-600-0-900-crop.jpg?v=2d0ce4be25",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 155,
+    "runtime": 152,
+    "tmdbGenres": [
+      "Action",
+      "Crime",
+      "Thriller"
+    ],
+    "overview": "Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent, Batman sets out to dismantle the remaining criminal organizations that plague the streets. The partnership proves to be effective, but they soon find themselves prey to a reign of chaos unleashed by a rising criminal mastermind known to the terrified citizens of Gotham as the Joker.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/9FE5eD92WfVCiivM9Pq9GVSrlWk.jpg"
   },
   {
     "title": "Paris, Texas",
@@ -280,7 +480,14 @@
     "year": "1984",
     "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/4/6/9/51469-paris-texas-0-600-0-900-crop.jpg?v=c8f2743612",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 655,
+    "runtime": 145,
+    "tmdbGenres": [
+      "Drama"
+    ],
+    "overview": "A man wanders out of the desert not knowing who he is. His brother finds him, and helps to pull his memory back of the life he led before he walked out on his family and disappeared four years earlier.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/fWrq3u16gaBJ6nYNWcR3XaOhQPq.jpg"
   },
   {
     "title": "What Dreams May Come",

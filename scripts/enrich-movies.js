@@ -66,14 +66,26 @@ async function findMovie(title, year, apiKey) {
         include_adult: 'false',
         language: 'en-US'
     }, apiKey);
-    if (search.results && search.results.length > 0) return search.results[0];
+    const selectBestMatch = (results) => {
+        if (!Array.isArray(results) || results.length === 0) return null;
+        const normalizeTitle = (value) => String(value || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '');
+        const titleKey = normalizeTitle(title);
+        const exactTitles = results.filter((result) => normalizeTitle(result.title) === titleKey);
+        const candidates = exactTitles.length > 0 ? exactTitles : results;
+        const matchingYear = year && candidates.find((result) => String(result.release_date || '').startsWith(String(year)));
+        return matchingYear || candidates[0];
+    };
+    const match = selectBestMatch(search.results);
+    if (match) return match;
     if (year) {
         const fallback = await tmdbGet('/search/movie', {
             query: title,
             include_adult: 'false',
             language: 'en-US'
         }, apiKey);
-        if (fallback.results && fallback.results.length > 0) return fallback.results[0];
+        return selectBestMatch(fallback.results);
     }
     return null;
 }
