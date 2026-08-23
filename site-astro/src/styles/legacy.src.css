@@ -15042,6 +15042,7 @@ body.nav-compact .navbar .work-mode-icon {
    than sitting on separate opaque grey panels. */
 .movies-layout.mobile-list-view > .movies-sidebar .search-input-wrapper.search-bubble,
 .movies-layout.mobile-list-view > .movies-sidebar .category-movies,
+.movies-layout.mobile-list-view > .movies-sidebar .genre-movies,
 .movies-layout.mobile-list-view > .movies-sidebar .movie-link,
 .movies-layout.mobile-list-view > .movies-sidebar .movie-link:hover,
 .movies-layout.mobile-list-view > .movies-sidebar .movie-link.active {
