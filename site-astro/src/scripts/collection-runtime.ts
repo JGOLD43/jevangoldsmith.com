@@ -63,6 +63,43 @@ let isMobileCollectionViewTransitioning = false;
 
 function setMovieSearchChromeVisibility(layout: HTMLElement, isSearchView: boolean) {
     if (layout.id !== 'movies-layout') return;
+    const sidebar = layout.querySelector<HTMLElement>(':scope > .movies-sidebar');
+    const main = layout.querySelector<HTMLElement>(':scope > .movies-main');
+    const surfaceProperties = [
+        'position', 'z-index', 'top', 'right', 'bottom', 'left', 'width',
+        'height', 'min-height', 'margin', 'padding', 'overflow-x', 'overflow-y',
+        'backdrop-filter', '-webkit-backdrop-filter', 'background', 'border',
+        'border-radius', 'box-shadow'
+    ];
+    const mainProperties = ['display', 'filter', 'opacity', 'pointer-events'];
+
+    if (isSearchView && sidebar) {
+        const isDark = document.documentElement.dataset.theme === 'dark';
+        const background = isDark
+            ? 'radial-gradient(90% 62% at 8% 0%, #dec57b24 0%, transparent 64%), radial-gradient(75% 54% at 100% 38%, #6d96ca24 0%, transparent 70%), #10121780'
+            : 'radial-gradient(85% 58% at 10% 0%, #ffe9aa8a 0%, transparent 65%), radial-gradient(75% 52% at 100% 34%, #b7d8ff75 0%, transparent 70%), #f5f8fb9c';
+        const styles: Record<string, string> = {
+            position: 'fixed', 'z-index': '20', top: 'var(--nav-height, 70px)',
+            right: '0', bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))',
+            left: '0', width: '100%', height: 'auto', 'min-height': '0', margin: '0',
+            padding: '1rem 0 calc(1rem + env(safe-area-inset-bottom, 0px))',
+            'overflow-x': 'hidden', 'overflow-y': 'auto',
+            'backdrop-filter': 'blur(30px) saturate(155%)',
+            '-webkit-backdrop-filter': 'blur(30px) saturate(155%)', background,
+            border: '0', 'border-radius': '0', 'box-shadow': 'none'
+        };
+        Object.entries(styles).forEach(([property, value]) => sidebar.style.setProperty(property, value, 'important'));
+        if (main) {
+            main.style.setProperty('display', 'block', 'important');
+            main.style.setProperty('filter', 'blur(3px) saturate(.78)', 'important');
+            main.style.setProperty('opacity', '.6', 'important');
+            main.style.setProperty('pointer-events', 'none', 'important');
+        }
+    } else {
+        surfaceProperties.forEach((property) => sidebar?.style.removeProperty(property));
+        mainProperties.forEach((property) => main?.style.removeProperty(property));
+    }
+
     layout.querySelectorAll<HTMLElement>(
         ':scope > .movies-sidebar .sidebar-list-selector, :scope > .movies-sidebar .sidebar-footer, :scope > .movies-main .collection-header'
     ).forEach((element) => {
