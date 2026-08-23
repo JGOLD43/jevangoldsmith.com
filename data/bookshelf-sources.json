@@ -7,6 +7,22 @@
       "sourceName": "Never Enough",
       "sourceUrl": "https://www.neverenough.com/bookshelf",
       "parser": "never-enough-book-tiles"
+    },
+    {
+      "id": "lex-fridman",
+      "personId": "lex-fridman",
+      "personName": "Lex Fridman",
+      "sourceName": "Lex Fridman's Reading List",
+      "sourceUrl": "https://lexfridman.com/reading-list/",
+      "parser": "strong-title-list"
+    },
+    {
+      "id": "ryan-holiday",
+      "personId": "ryan-holiday",
+      "personName": "Ryan Holiday",
+      "sourceName": "Books To Base Your Life On",
+      "sourceUrl": "https://ryanholiday.net/the-reading-list/",
+      "parser": "paragraph-title-list"
     }
   ]
 }

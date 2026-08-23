@@ -970,6 +970,322 @@
           "author": "Michael Lewis"
         }
       ]
+    },
+    {
+      "id": "lex-fridman",
+      "personId": "lex-fridman",
+      "personName": "Lex Fridman",
+      "sourceName": "Lex Fridman's Reading List",
+      "sourceUrl": "https://lexfridman.com/reading-list/",
+      "verifiedAt": "2026-08-23",
+      "bookCount": 61,
+      "books": [
+        {
+          "title": "1984",
+          "author": "George Orwell"
+        },
+        {
+          "title": "Hitchhiker’s Guide to the Galaxy",
+          "author": "Douglas Adams"
+        },
+        {
+          "title": "Brave New World",
+          "author": "Aldous Huxley"
+        },
+        {
+          "title": "The Stranger",
+          "author": "Camus"
+        },
+        {
+          "title": "Meditations",
+          "author": "Marcus Aurelius"
+        },
+        {
+          "title": "On the Road",
+          "author": "Jack Kerouac"
+        },
+        {
+          "title": "Seven Brief Lessons on Physics",
+          "author": "Carlo Rovelli"
+        },
+        {
+          "title": "The Art of War",
+          "author": "Sun Tzu"
+        },
+        {
+          "title": "Old Man and The Sea",
+          "author": "Hemingway"
+        },
+        {
+          "title": "2001: A Space Odyssey",
+          "author": "Arthur C Clarke"
+        },
+        {
+          "title": "Animal Farm",
+          "author": "George Orwell"
+        },
+        {
+          "title": "Man’s Search for Meaning",
+          "author": "Victor Frankel"
+        },
+        {
+          "title": "Sapiens",
+          "author": "Yuval Noah Harari"
+        },
+        {
+          "title": "Metamorphosis, Hunger Artist"
+        },
+        {
+          "title": "The Plague",
+          "author": "Camus"
+        },
+        {
+          "title": "Player of Games",
+          "author": "Ian Banks"
+        },
+        {
+          "title": "Fight Club",
+          "author": "Chuck Palahniuk"
+        },
+        {
+          "title": "The Little Prince",
+          "author": "Antoine de Saint-Exupéry"
+        },
+        {
+          "title": "Brothers Karamazov",
+          "author": "Dostoevsky"
+        },
+        {
+          "title": "Siddhartha",
+          "author": "Herman Hesse"
+        },
+        {
+          "title": "Dune",
+          "author": "Frank Herbert"
+        },
+        {
+          "title": "Frankenstein",
+          "author": "Mary Shelley"
+        },
+        {
+          "title": "Foundation",
+          "author": "Isaac Asimov"
+        },
+        {
+          "title": "The Dead",
+          "author": "James Joyce"
+        },
+        {
+          "title": "The Yellow Wallpaper",
+          "author": "Charlotte Perkins Gilman"
+        },
+        {
+          "title": "Ward No. 6",
+          "author": "Anton Chekhov"
+        },
+        {
+          "title": "Anthem",
+          "author": "Ayn Rand"
+        },
+        {
+          "title": "The Book of Five Rings",
+          "author": "Miyamoto Musashi"
+        },
+        {
+          "title": "The Four Agreements",
+          "author": "Don Miguel Ruiz"
+        },
+        {
+          "title": "Nightfall, Last Question",
+          "author": "Isaac Asimov"
+        },
+        {
+          "title": "The Little Trilogy",
+          "author": "Anton Chekhov"
+        },
+        {
+          "title": "The Nose, The Overcoat",
+          "author": "Gogol"
+        },
+        {
+          "title": "Heart of Darkness",
+          "author": "Joseph Conrad"
+        },
+        {
+          "title": "Notes from Underground",
+          "author": "Dostoevsky"
+        },
+        {
+          "title": "The Giver",
+          "author": "Lois Lowry"
+        },
+        {
+          "title": "The Prince",
+          "author": "Machiavelli"
+        },
+        {
+          "title": "Disgrace",
+          "author": "J. M. Coetzee"
+        },
+        {
+          "title": "Fahrenheit 451",
+          "author": "Ray Bradbury"
+        },
+        {
+          "title": "The Alchemist",
+          "author": "Paulo Coelho"
+        },
+        {
+          "title": "The Road",
+          "author": "Cormac McCarthy"
+        },
+        {
+          "title": "Where the Red Fern Grows",
+          "author": "Wilson Rawls"
+        },
+        {
+          "title": "A Good Man Is Hard to Find",
+          "author": "Flannery O’Connor"
+        },
+        {
+          "title": "Beyond Good and Evil",
+          "author": "Friedrich Nietzsche"
+        },
+        {
+          "title": "On Writing",
+          "author": "Stephen King"
+        },
+        {
+          "title": "Solaris",
+          "author": "Stanislaw Lem"
+        },
+        {
+          "title": "Childhood’s End",
+          "author": "Arthur C Clarke"
+        },
+        {
+          "title": "Do Androids Dream of Electric Sheep?",
+          "author": "Philip K Dick"
+        },
+        {
+          "title": "Flowers for Algernon",
+          "author": "Daniel Keyes"
+        },
+        {
+          "title": "I, Robot",
+          "author": "Isaac Asimov"
+        },
+        {
+          "title": "The Diary of a Young Girl",
+          "author": "Anne Frank"
+        },
+        {
+          "title": "Master and Margarita",
+          "author": "Mikhail Bulgakov"
+        },
+        {
+          "title": "Ender’s Game",
+          "author": "Orson Scott Card"
+        },
+        {
+          "title": "Surely You’re Joking, Mr. Feynman",
+          "author": "Richard Feynman"
+        },
+        {
+          "title": "Dead Souls",
+          "author": "Gogol"
+        },
+        {
+          "title": "12 Rules for Life",
+          "author": "Jordan Peterson"
+        },
+        {
+          "title": "Snow Crash",
+          "author": "Neal Stephenson"
+        },
+        {
+          "title": "The Moon Is a Harsh Mistress",
+          "author": "Robert Heinlein"
+        },
+        {
+          "title": "Three-Body Problem",
+          "author": "Cixin Liu"
+        },
+        {
+          "title": "Stranger in a Strange Land",
+          "author": "Robert Heinlein"
+        },
+        {
+          "title": "Godel, Escher, Bach",
+          "author": "Douglas R. Hofstadter"
+        },
+        {
+          "title": "The Idiot",
+          "author": "Dostoevsky"
+        }
+      ]
+    },
+    {
+      "id": "ryan-holiday",
+      "personId": "ryan-holiday",
+      "personName": "Ryan Holiday",
+      "sourceName": "Books To Base Your Life On",
+      "sourceUrl": "https://ryanholiday.net/the-reading-list/",
+      "verifiedAt": "2026-08-23",
+      "bookCount": 17,
+      "books": [
+        {
+          "title": "Letters from a Stoic"
+        },
+        {
+          "title": "Man’s Search for Meaning"
+        },
+        {
+          "title": "Fight Club"
+        },
+        {
+          "title": "What Makes Sammy Run? and The Harder They Fall"
+        },
+        {
+          "title": "The Apprenticeship of Duddy Kravitz"
+        },
+        {
+          "title": "Some other novels I like: Civil War Stories"
+        },
+        {
+          "title": "Rules for Radicals and Reveille for Radicals"
+        },
+        {
+          "title": "Of course you also need to read 33 Strategies of War by Robert Greene, The Book of Five Rings"
+        },
+        {
+          "title": "The Tiger: A True Story of Vengeance and Surviva l"
+        },
+        {
+          "title": "The River of Doubt: Theodore Roosevelt’s Darkest Journey"
+        },
+        {
+          "title": "Endurance: Shackleton’s Incredible Voyage"
+        },
+        {
+          "title": "Shadow Divers"
+        },
+        {
+          "title": "The Aeneid by Virgil (translated"
+        },
+        {
+          "title": "Candide"
+        },
+        {
+          "title": "Epigrams"
+        },
+        {
+          "title": "Hamlet"
+        },
+        {
+          "title": "Satires"
+        }
+      ]
     }
   ]
 }

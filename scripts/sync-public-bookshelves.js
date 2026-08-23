@@ -41,7 +41,16 @@ function decodeHtml(value) {
     .replace(/&amp;/g, '&')
     .replace(/&#x27;/g, "'")
     .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
+    .replace(/&#39;/g, "'")
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)));
+}
+
+function stripHtml(value) {
+  return decodeHtml(value.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ')).trim();
+}
+
+function uniqueBooks(books) {
+  return [...new Map(books.filter((book) => book.title).map((book) => [book.title.toLocaleLowerCase(), book])).values()];
 }
 
 function parseNeverEnoughBookTiles(html) {
@@ -57,11 +66,41 @@ function parseNeverEnoughBookTiles(html) {
     const author = (separator > 0 ? label.slice(separator + 4) : '').trim();
     if (title) books.push({ title, ...(author ? { author } : {}) });
   }
-  const unique = new Map(books.map((book) => [book.title.toLocaleLowerCase(), book]));
-  return [...unique.values()];
+  return uniqueBooks(books);
 }
 
-const parsers = { 'never-enough-book-tiles': parseNeverEnoughBookTiles };
+function parseStrongTitleList(html) {
+  const books = [];
+  const content = html.match(/<div class="entry-content">([\s\S]*?)(?:<\/div>\s*<!-- \.entry-content -->|<div id="comments")/i)?.[1] || html;
+  const pattern = /<strong[^>]*>([^<]{2,180})<\/strong>\s*(?:<\/[^>]+>\s*)*(?:by\s+([^<\n]{2,100}))?/gi;
+  for (const match of content.matchAll(pattern)) {
+    const title = stripHtml(match[1]);
+    const author = stripHtml(match[2] || '').replace(/[.\s]+$/, '');
+    if (title && !/^(reading list|motivation|finished reading|reading soon|shorter-term|longer-term|without additional)/i.test(title)) {
+      books.push({ title, ...(author ? { author } : {}) });
+    }
+  }
+  return uniqueBooks(books);
+}
+
+function parseParagraphTitleList(html) {
+  const books = [];
+  const content = html.match(/<div class="entry-content">([\s\S]*?)<\/div>/i)?.[1] || html;
+  for (const paragraph of content.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)) {
+    const text = stripHtml(paragraph[1]);
+    const match = text.match(/^(.{2,140}?)\s+by\s+([A-Z][^.]{1,100})(?:\.|$)/);
+    if (!match) continue;
+    const title = match[1].replace(/^(Books to Base Your Life On\s*)/i, '').trim();
+    if (title && !/^books?$/i.test(title)) books.push({ title });
+  }
+  return uniqueBooks(books);
+}
+
+const parsers = {
+  'never-enough-book-tiles': parseNeverEnoughBookTiles,
+  'strong-title-list': parseStrongTitleList,
+  'paragraph-title-list': parseParagraphTitleList
+};
 
 async function generate() {
   const config = JSON.parse(fs.readFileSync(CONFIG, 'utf8'));
@@ -76,7 +115,7 @@ async function generate() {
     }
     const parser = parsers[source.parser];
     if (!parser) throw new Error(`Source ${source.id} uses an unknown parser: ${source.parser}`);
-    const books = parser(await fetchText(source.sourceUrl));
+    const books = await parser(await fetchText(source.sourceUrl));
     if (!books.length) throw new Error(`Source ${source.id} returned no books; its public markup may have changed.`);
     sources.push({
       id: source.id,

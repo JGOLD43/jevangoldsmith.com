@@ -18,6 +18,7 @@ import { categoryDisplayNames } from '../scripts/books-state';
 import { slugify } from '../lib/slug';
 import booksRuntimeData from '../../../data/books.generated.json';
 import bookshelfComparisonData from '../../../data/bookshelf-comparisons.generated.json';
+import peopleProfileData from '../../../data/people.profiles.json';
 
 // Books data is fetched at runtime from /data/books.generated.json.
 // books.ts adopts SSR'd cards in place and only re-renders for filter changes.
@@ -177,7 +178,7 @@ const config = ({
         <BookStatsBody books={Array.isArray(booksRuntimeData) ? booksRuntimeData : []} />
       </div>
       <div id="bookshelf-comparison-view" role="tabpanel" aria-labelledby="bookshelf-comparison-tab" data-book-stats-view="comparison" hidden>
-        <BookshelfComparison books={Array.isArray(booksRuntimeData) ? booksRuntimeData : []} sources={bookshelfComparisonData.sources || []} />
+        <BookshelfComparison books={Array.isArray(booksRuntimeData) ? booksRuntimeData : []} sources={bookshelfComparisonData.sources || []} people={peopleProfileData.profiles || []} />
       </div>
     </div>
   </section>
