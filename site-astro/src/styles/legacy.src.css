@@ -15037,3 +15037,17 @@ body.nav-compact .navbar .work-mode-icon {
   padding: 0 .75rem !important;
   border-radius: 17px;
 }
+
+/* Let search controls and film results share the same glass layer rather
+   than sitting on separate opaque grey panels. */
+.movies-layout.mobile-list-view > .movies-sidebar .search-input-wrapper.search-bubble,
+.movies-layout.mobile-list-view > .movies-sidebar .category-movies,
+.movies-layout.mobile-list-view > .movies-sidebar .movie-link,
+.movies-layout.mobile-list-view > .movies-sidebar .movie-link:hover,
+.movies-layout.mobile-list-view > .movies-sidebar .movie-link.active {
+  background: transparent !important;
+}
+
+.movies-layout.mobile-list-view > .movies-sidebar .search-input-wrapper.search-bubble {
+  border-color: color-mix(in srgb, var(--text-color) 20%, transparent);
+}
