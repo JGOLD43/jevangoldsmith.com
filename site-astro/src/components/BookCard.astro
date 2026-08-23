@@ -1,6 +1,7 @@
 ---
 import type { Book } from '../content.config';
 import { bookCoverUrl } from '../lib/book-card';
+import { ratingTier } from '../lib/rating-tier';
 import { slugify } from '../lib/slug';
 
 interface Props {
@@ -16,10 +17,8 @@ const isbn = String(book.isbn ?? '');
 const review = String(book.review ?? '').trim();
 const shortDescription = String(book.shortDescription ?? '');
 const ratingValue = Number(book.rating ?? 0);
-const reReads = Number(book.reReads ?? 0);
 const isUnread = book.read === false;
 const hasRating = !isUnread && ratingValue > 0;
-const timesRead = reReads + 1;
 const stars = hasRating ? '★'.repeat(ratingValue) + '☆'.repeat(5 - ratingValue) : '';
 const detailBody = review || shortDescription;
 const detailLabel = review ? 'Review' : 'Notes';
@@ -30,9 +29,10 @@ const ratingLabel = isUnread ? 'Not yet read' : !hasRating ? 'Read' : '';
 const vtSlug = isbn || slugify(`${title}-${author}`);
 const href = vtSlug ? `/books/${vtSlug}.html` : '#';
 const classes = ['book-card', 'card-link', isUnread ? 'is-unread' : '', review ? 'has-review' : ''].filter(Boolean).join(' ');
+const tier = hasRating ? ratingTier(ratingValue) : null;
 ---
 <a class={classes} href={href} data-isbn={isbn || undefined} data-title={isbn ? undefined : title}>
-  {isUnread ? <div class="to-read-badge">📚 To Read</div> : timesRead > 1 ? <div class="times-read-badge">📖 {timesRead}x Read</div> : null}
+  {tier && <div class={`times-read-badge tier-badge tier-badge--${tier.key}`}>{tier.label}</div>}
   <div class="book-cover-wrapper">
     {coverUrl && (
       <img

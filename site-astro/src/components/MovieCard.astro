@@ -1,6 +1,7 @@
 ---
 import type { Movie as MovieRecord } from '../content.config';
 import { formatRuntime } from '../lib/dates';
+import { ratingTier } from '../lib/rating-tier';
 import { slugify } from '../lib/slug';
 
 interface Props {
@@ -16,7 +17,6 @@ const starCount = movie.starCount ?? 0;
 const year = movie.year != null ? String(movie.year) : '';
 const poster = movie.poster ?? '';
 const genre = movie.genre ?? '';
-const timesWatched = Number(movie.timesWatched) || 1;
 const runtime = Number(movie.runtime) || 0;
 const review = movie.review ?? '';
 const shortDescription = movie.shortDescription ?? '';
@@ -30,9 +30,10 @@ const genreIcons: Record<string, string> = {
 const genreIcon = (genre && genreIcons[genre]) || '🎬';
 const slug = slugify(title);
 const classes = ['movie-card', 'card-link', review ? 'has-review' : ''].filter(Boolean).join(' ');
+const tier = ratingTier(Number(starCount));
 ---
 <a class={classes} href={slug ? `/movies/${slug}.html` : '#'} data-movie-title={title}>
-  {timesWatched > 1 && <div class="times-read-badge movie-watch-badge">{timesWatched}x Watched</div>}
+  {tier && <div class={`times-read-badge tier-badge tier-badge--${tier.key}`}>{tier.label}</div>}
   <div class="movie-poster-wrapper">
     {poster
       ? <img src={poster} alt={title} class="movie-poster" width="150" height="230" loading="lazy" decoding="async" style={slug ? `view-transition-name: movie-poster-${slug}` : undefined} />

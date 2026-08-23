@@ -12452,6 +12452,19 @@ body.shelf-experience {
   background-color: #b91c1c;
 }
 
+/* Rating-tier badges share the collection-card badge position, but their
+   colours are fixed so they stay meaningful in both colour themes. */
+.times-read-badge.tier-badge {
+  color: #111;
+  background-color: #f4f4f4;
+}
+
+.times-read-badge.tier-badge--s { background-color: #f3d36b; }
+.times-read-badge.tier-badge--a { background-color: #b492e5; }
+.times-read-badge.tier-badge--b { background-color: #78b6e8; }
+.times-read-badge.tier-badge--c { background-color: #82dc7a; }
+.times-read-badge.tier-badge--d { background-color: #f4f4f4; }
+
 .movie-poster-wrapper {
   box-sizing: border-box;
   justify-content: center;
