@@ -61,6 +61,11 @@ function setViewMode(mode: 'list' | 'grid') {
     }
 }
 
+function syncMobileMovieView(event: Event) {
+    const detail = (event as CustomEvent<{ view?: string }>).detail;
+    setViewMode(detail?.view === 'collection' ? 'grid' : 'list');
+}
+
 function openGenreModal(genre: string) {
     const list = (moviesRuntimeData as MovieLite[])
         .filter((m) => (m.genre || 'Uncategorized') === genre)
@@ -114,6 +119,8 @@ function closeGenreModal() {
 function init() {
     const list = document.getElementById(MOVIES_LIST_ID);
     if (!list) return;
+
+    document.getElementById('movies-layout')?.addEventListener('collectionviewchange', syncMobileMovieView);
 
     document.addEventListener('click', (event) => {
         const target = event.target as Element | null;

@@ -110,22 +110,36 @@ function setMovieSearchChromeVisibility(layout: HTMLElement, isSearchView: boole
 }
 
 function setCollectionView(layout: HTMLElement, view: string) {
-    const isList = view === 'list';
-    layout.classList.toggle('mobile-list-view', isList);
-    setMovieSearchChromeVisibility(layout, isList);
+    // Older collection pages have a two-tab Search/Grid treatment where
+    // "list" is the search pane. Movies now has explicit Search/List/
+    // Collection tabs, so only Search should reveal that pane.
+    const hasExplicitCollection = Boolean(layout.querySelector('[data-view="collection"]'));
+    const isSearch = hasExplicitCollection ? view === 'search' : view === 'list';
+    layout.classList.toggle('mobile-list-view', isSearch);
+    setMovieSearchChromeVisibility(layout, isSearch);
     layout.querySelectorAll('.collection-mobile-toggle [data-view]').forEach((btn) => {
         const el = btn as HTMLElement;
         const active = el.dataset.view === view;
         el.classList.toggle('active', active);
         el.setAttribute('aria-selected', active ? 'true' : 'false');
     });
+    layout.dispatchEvent(new CustomEvent('collectionviewchange', {
+        bubbles: true,
+        detail: { view }
+    }));
 }
 
 function switchCollectionViewFromDom(view: string, shouldAnimate = true) {
     const layout = document.querySelector('main.collection-layout') as HTMLElement | null;
     if (!layout) return;
-    const isList = view === 'list';
-    if (layout.classList.contains('mobile-list-view') === isList || isMobileCollectionViewTransitioning) return;
+    const hasExplicitCollection = Boolean(layout.querySelector('[data-view="collection"]'));
+    const isSearch = hasExplicitCollection ? view === 'search' : view === 'list';
+    if (layout.classList.contains('mobile-list-view') === isSearch || isMobileCollectionViewTransitioning) {
+        // Search and List are distinct movie views even though only Search
+        // carries the mobile-list-view CSS class.
+        const active = layout.querySelector('.collection-mobile-toggle .mobile-view-btn.active') as HTMLElement | null;
+        if (active?.dataset.view === view) return;
+    }
 
     const sidebar = layout.querySelector(':scope > .collection-sidebar') as HTMLElement | null;
     const main = layout.querySelector(':scope > .collection-main, :scope > .books-main, :scope > .movies-main, :scope > .podcasts-main, :scope > .essays-main, :scope > .people-main') as HTMLElement | null;
@@ -140,9 +154,9 @@ function switchCollectionViewFromDom(view: string, shouldAnimate = true) {
         return;
     }
 
-    const outgoing = isList ? main : sidebar;
-    const incoming = isList ? sidebar : main;
-    const direction = isList ? -1 : 1;
+    const outgoing = isSearch ? main : sidebar;
+    const incoming = isSearch ? sidebar : main;
+    const direction = isSearch ? -1 : 1;
     isMobileCollectionViewTransitioning = true;
     incoming.style.display = 'block';
     outgoing.style.display = 'block';
@@ -204,7 +218,13 @@ document.addEventListener('touchend', (event) => {
     const distanceX = touch.clientX - start.x;
     const distanceY = touch.clientY - start.y;
     if (Math.abs(distanceX) < 72 || Math.abs(distanceX) <= Math.abs(distanceY) * 1.35) return;
-    switchCollectionViewFromDom(distanceX > 0 ? 'list' : 'grid');
+    const hasExplicitCollection = Boolean(start.layout.querySelector('[data-view="collection"]'));
+    const currentView = start.layout.querySelector('.collection-mobile-toggle .mobile-view-btn.active') as HTMLElement | null;
+    const current = currentView?.dataset.view;
+    const nextView = hasExplicitCollection
+        ? (distanceX > 0 ? (current === 'collection' ? 'list' : 'search') : (current === 'search' ? 'list' : 'collection'))
+        : (distanceX > 0 ? 'list' : 'grid');
+    switchCollectionViewFromDom(nextView);
 }, { passive: true });
 
 // Mobile UX: when the user taps a row inside a sidebar category panel

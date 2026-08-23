@@ -38,18 +38,25 @@ const sections = config.sidebar.sections ?? [];
 const TitleTag = (config.main.titleTag ?? 'h1') as keyof HTMLElementTagNameMap;
 const subtitleHtml = config.main.subtitleHtml ?? '';
 const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
+const mobileCollectionLabel = config.main.mobileCollectionLabel;
 const tasteOptions = config.sidebar.listOptions ?? [];
 ---
 <main class={config.layout.className} id={config.layout.id}>
   {TitleTag !== 'h1' && <h1 class="sr-only">{config.main.title}</h1>}
   <div class="collection-mobile-toggle" role="tablist" aria-label="Mobile view toggle">
-    <button type="button" class="mobile-view-btn" data-view="list" data-action="switchCollectionView" data-action-args="list" role="tab" aria-selected="false">
+    <button type="button" class="mobile-view-btn" data-view={mobileCollectionLabel ? 'search' : 'list'} data-action="switchCollectionView" data-action-args={mobileCollectionLabel ? 'search' : 'list'} role="tab" aria-selected="false">
       <svg class="ico-stroke" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-search"></use></svg>
       Search
     </button>
-    <button type="button" class="mobile-view-btn active" data-view="grid" data-action="switchCollectionView" data-action-args="grid" role="tab" aria-selected="true">
+    {mobileCollectionLabel && (
+      <button type="button" class="mobile-view-btn active" data-view="list" data-action="switchCollectionView" data-action-args="list" role="tab" aria-selected="true">
+        <svg class="ico-stroke" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-listView"></use></svg>
+        {mobileGridLabel}
+      </button>
+    )}
+    <button type="button" class:list={['mobile-view-btn', { active: !mobileCollectionLabel }]} data-view={mobileCollectionLabel ? 'collection' : 'grid'} data-action="switchCollectionView" data-action-args={mobileCollectionLabel ? 'collection' : 'grid'} role="tab" aria-selected={mobileCollectionLabel ? 'false' : 'true'}>
       <svg class="ico-stroke" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-gridView"></use></svg>
-      {mobileGridLabel}
+      {mobileCollectionLabel ?? mobileGridLabel}
     </button>
   </div>
 

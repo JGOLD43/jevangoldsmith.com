@@ -76,5 +76,7 @@ export interface CollectionConfig {
     /** Label for the second tab in the mobile list/grid toggle. Defaults
      * to `main.title`. Keep short — surfaces on phones only. */
     mobileGridLabel?: string;
+    /** Enables a third mobile tab for folder/category collections. */
+    mobileCollectionLabel?: string;
   };
 }
