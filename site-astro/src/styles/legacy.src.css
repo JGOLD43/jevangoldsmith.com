@@ -1133,7 +1133,7 @@ button[type="submit"]:hover {
   display: flex;
 }
 
-.collection-header .header-content h1, .collection-header .header-content h2, .collection-header .header-content .bookshelf-view-title {
+.collection-header .header-content h1, .collection-header .header-content .bookshelf-view-title {
   color: #000;
   margin-bottom: .5rem;
   font-family: Chivo, sans-serif;
@@ -1158,10 +1158,6 @@ button[type="submit"]:hover {
   font: inherit;
   line-height: inherit;
   display: inline-flex;
-}
-
-.taste-title-switcher-button:hover, .taste-title-switcher-button:focus-visible {
-  color: var(--secondary-color);
 }
 
 .taste-title-switcher-button:focus-visible {
