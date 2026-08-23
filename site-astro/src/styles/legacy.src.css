@@ -15068,3 +15068,28 @@ body.nav-compact .navbar .work-mode-icon {
 .movies-layout.mobile-list-view > .movies-sidebar .sidebar-category:hover::after {
   display: none !important;
 }
+
+.movies-layout.mobile-list-view > .movies-sidebar .movie-link {
+  position: relative;
+  padding-right: 5.75rem !important;
+}
+
+.movie-search-tier-badge {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  border-radius: .45rem;
+  padding: .3rem .55rem;
+  color: #111;
+  font-size: .72rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.movie-search-tier-badge--s { background: #f3d36b; }
+.movie-search-tier-badge--a { background: #b492e5; }
+.movie-search-tier-badge--b { background: #78b6e8; }
+.movie-search-tier-badge--c { background: #82dc7a; }
+.movie-search-tier-badge--d { background: #f4f4f4; }

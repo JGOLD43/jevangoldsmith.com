@@ -12,6 +12,7 @@ import { onDomReady } from './dom-ready';
 import { initCoverFlight } from './cover-flight';
 import { LOCAL_KEYS } from './storage-keys';
 import { URL_PARAMS } from './url-params';
+import { ratingTier } from '../lib/rating-tier';
 
 // Movie stats panel lives below-the-fold; lazy-import on first controls update.
 let renderMovieStatsPromise: Promise<(movies: AnyObj[]) => void> | null = null;
@@ -180,8 +181,12 @@ function renderSidebar(genreGroups: AnyObj) {
         if (section) section.style.display = movies.length === 0 ? 'none' : 'block';
         if (container && !container.children.length) {
             container.innerHTML = movies.map((movie: AnyObj) => {
+                const tier = ratingTier(Number(movie.starCount || 0));
                 const cover = movie.poster
                     ? `<img class="book-link-cover" src="${escapeAttr(movie.poster)}" alt="" loading="lazy" decoding="async" data-remove-on-error="true">`
+                    : '';
+                const tierBadge = tier
+                    ? `<span class="movie-search-tier-badge movie-search-tier-badge--${tier.key}" aria-label="${escapeAttr(tier.label)}">${escapeHtml(tier.label)}</span>`
                     : '';
                 return `
                 <a href="#" class="movie-link" data-action="scrollToMovie" data-action-args="${encodeURIComponent(movie.title)}" data-action-eventobj="true">
@@ -190,6 +195,7 @@ function renderSidebar(genreGroups: AnyObj) {
                         <span class="book-link-title">${escapeHtml(movie.title)}</span>
                         <span class="book-link-author movie-link-year">${escapeHtml(movie.year || '')}</span>
                     </span>
+                    ${tierBadge}
                 </a>`;
             }).join('');
         }
