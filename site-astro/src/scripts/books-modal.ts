@@ -1,4 +1,5 @@
 import { trapFocus } from '../lib/focus-trap';
+import { ratingTier } from '../lib/rating-tier';
 import { slugify } from '../lib/slug';
 import { categoryDisplayNames, getCoverUrl, state } from './books-state';
 import { getBooksByCategory } from './books-render';
@@ -65,7 +66,10 @@ export function closeBookModal() {
 }
 
 export function openCategoryModal(category: string) {
-    const books = getBooksByCategory()[category] || [];
+    const books = [...(getBooksByCategory()[category] || [])].sort((a, b) =>
+        Number(b.read === false ? 0 : b.rating || 0) - Number(a.read === false ? 0 : a.rating || 0)
+        || String(a.title || '').localeCompare(String(b.title || ''))
+    );
     const displayName = categoryDisplayNames[category] || category;
     const modal = document.getElementById('category-expanded-modal');
     const title = document.getElementById('category-expanded-title');
@@ -84,10 +88,17 @@ export function openCategoryModal(category: string) {
         const image = item?.querySelector('img') as HTMLImageElement | null;
         if (!item || !image) return;
         item.dataset.isbn = book.isbn || '';
-        item.setAttribute('aria-label', `${book.title || ''} by ${book.author || ''}`);
+        const tier = book.read === false ? null : ratingTier(Number(book.rating || 0));
+        item.setAttribute('aria-label', `${book.title || ''} by ${book.author || ''}${tier ? ` — ${tier.label}` : ''}`);
         image.src = coverUrl;
         image.alt = book.title || '';
         image.title = `${book.title || ''} by ${book.author || ''}`;
+        const badge = item.querySelector('.category-tier-badge') as HTMLElement | null;
+        if (badge && tier) {
+            badge.textContent = tier.label;
+            badge.style.backgroundColor = tier.color;
+            badge.hidden = false;
+        }
         fragment.appendChild(item);
     });
     list.replaceChildren(fragment);
