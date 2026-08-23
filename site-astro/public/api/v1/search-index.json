@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updatedAt": "2026-05-29T02:52:04.887Z",
+  "updatedAt": "2026-08-23T04:39:04.707Z",
   "guidance": "Static search/discovery index. Fetch candidate URLs from this file, then fetch canonical collection endpoints or HTML for detail.",
   "records": [
     {
@@ -4174,6 +4174,162 @@
         "Uncategorized"
       ],
       "searchText": "primal fear uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "mulholland-drive",
+      "title": "Mulholland Drive",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#mulholland-drive",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "mulholland drive uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "the-sixth-sense",
+      "title": "The Sixth Sense",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#the-sixth-sense",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "the sixth sense uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "sunshine",
+      "title": "Sunshine",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#sunshine",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "sunshine uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "sorcerer",
+      "title": "Sorcerer",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#sorcerer",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "sorcerer uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "spider-man-brand-new-day",
+      "title": "Spider-Man: Brand New Day",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#spider-man-brand-new-day",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "spider-man: brand new day uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "evil-dead-burn",
+      "title": "Evil Dead Burn",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#evil-dead-burn",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "evil dead burn uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "the-odyssey",
+      "title": "The Odyssey",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#the-odyssey",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "the odyssey uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "moon",
+      "title": "Moon",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#moon",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "moon uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "requiem-for-a-dream",
+      "title": "Requiem for a Dream",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#requiem-for-a-dream",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "requiem for a dream uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "forever-young",
+      "title": "Forever Young",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#forever-young",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "forever young uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "the-king",
+      "title": "The King",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#the-king",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "the king uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "28-days-later",
+      "title": "28 Days Later",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#28-days-later",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "28 days later uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "rec",
+      "title": "[REC]",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#rec",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "[rec] uncategorized uncategorized movies"
     }
   ]
 }

@@ -12,8 +12,8 @@
 //   npm run movies:sync -- --dry   # report what would change, write nothing
 //   npm run movies:sync -- --user=different-handle
 //
-// Idempotent: existing entries are preserved (TMDB enrichment, custom
-// reviews) and only new entries from the feed are appended.
+// Existing entries are preserved (TMDB enrichment, custom reviews) and only
+// new diary entries from the feed are appended.
 
 'use strict';
 
@@ -91,8 +91,16 @@ function parseXml(xml) {
     description: pluck(body, 'description'),
     link: pluck(body, 'link'),
     pubDate: pluck(body, 'pubDate'),
+    filmTitle: pluck(body, 'letterboxd:filmTitle'),
+    filmYear: pluck(body, 'letterboxd:filmYear'),
     categories: pluckAll(body, 'category')
   }));
+}
+
+function isFilmDiaryEntry(item) {
+  // A Letterboxd profile RSS feed also contains list activity. Only diary
+  // entries carry the film metadata and point to a /film/ URL.
+  return Boolean(item.filmTitle && /\/film\//.test(item.link));
 }
 
 function extractStarRating(title) {
@@ -130,8 +138,8 @@ function formatPubDate(pubDate) {
 }
 
 function rssEntryToMovie(item) {
-  const title = cleanTitle(item.title);
-  const year = extractYearFromTitle(item.title);
+  const title = item.filmTitle || cleanTitle(item.title);
+  const year = item.filmYear || extractYearFromTitle(item.title);
   const { stars, count } = extractStarRating(item.title);
   const poster = extractPosterFromDescription(item.description);
   const genre = item.categories[0] || 'Uncategorized';
@@ -179,9 +187,13 @@ async function main() {
   } catch (err) {
     warn(`fetch failed: ${err.message}`);
     warn('keeping existing data/movies.json unchanged.');
-    process.exit(0);
+    process.exitCode = 1;
+    return;
   }
-  const fetched = parseXml(xml).map(rssEntryToMovie).filter((m) => m.title);
+  const fetched = parseXml(xml)
+    .filter(isFilmDiaryEntry)
+    .map(rssEntryToMovie)
+    .filter((m) => m.title);
   log(`fetched ${fetched.length} entries`);
 
   const existing = loadExisting();
@@ -211,7 +223,11 @@ async function main() {
   log(`wrote ${path.relative(ROOT, MOVIES_PATH)}`);
 }
 
-main().catch((err) => {
-  warn(`fatal: ${err.stack || err.message}`);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    warn(`fatal: ${err.stack || err.message}`);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = { isFilmDiaryEntry, mergeMovies, parseXml, rssEntryToMovie };

@@ -10,6 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
   # The notify-on-failure job calls _cron-failure-issue.yml which
   # needs issues:write to file the failure ticket. Reusable
@@ -27,6 +28,8 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -43,9 +46,11 @@ jobs:
       - name: Validate content before commit
         run: npm run content:validate
       - name: Commit if changed
+        id: commit
         run: |
           if git diff --quiet -- data/movies.json; then
             echo "No changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "github-actions[bot]"
@@ -53,6 +58,14 @@ jobs:
           git add data/movies.json
           git commit -m "chore: sync Letterboxd RSS into data/movies.json"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Deploy synced movies
+        if: steps.commit.outputs.changed == 'true'
+        # Commits made with GITHUB_TOKEN do not trigger the test workflow, so
+        # explicitly dispatch the existing deploy workflow after validation.
+        run: gh workflow run deploy-pages.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}
 
   notify-on-failure:
     needs: sync
