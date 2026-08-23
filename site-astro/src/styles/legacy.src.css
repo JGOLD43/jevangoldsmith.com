@@ -15052,3 +15052,14 @@ body.nav-compact .navbar .work-mode-icon {
 .movies-layout.mobile-list-view > .movies-sidebar .search-input-wrapper.search-bubble {
   border-color: color-mix(in srgb, var(--text-color) 20%, transparent);
 }
+
+/* Keep the search pane scrollable without showing a hover scrollbar. */
+.movies-layout.mobile-list-view > .movies-sidebar {
+  scrollbar-width: none !important;
+}
+
+.movies-layout.mobile-list-view > .movies-sidebar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
