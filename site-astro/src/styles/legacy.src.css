@@ -1133,13 +1133,79 @@ button[type="submit"]:hover {
   display: flex;
 }
 
-.collection-header .header-content h1, .collection-header .header-content .bookshelf-view-title {
+.collection-header .header-content h1, .collection-header .header-content h2, .collection-header .header-content .bookshelf-view-title {
   color: #000;
   margin-bottom: .5rem;
   font-family: Chivo, sans-serif;
   font-size: clamp(2.5rem, 5vw, 3rem);
   font-weight: 600;
   line-height: 1.1;
+}
+
+.taste-title-switcher {
+  position: relative;
+}
+
+.taste-title-switcher-button {
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  align-items: center;
+  gap: .35rem;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  line-height: inherit;
+  display: inline-flex;
+}
+
+.taste-title-switcher-button:hover, .taste-title-switcher-button:focus-visible {
+  color: var(--secondary-color);
+}
+
+.taste-title-switcher-button:focus-visible {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 4px;
+}
+
+.taste-title-switcher-chevron {
+  width: .72em;
+  height: .72em;
+  transition: transform .2s ease;
+}
+
+.taste-title-switcher-button[aria-expanded="true"] .taste-title-switcher-chevron {
+  transform: rotate(180deg);
+}
+
+.taste-title-switcher-menu {
+  z-index: 20;
+  min-width: 12rem;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color);
+  border-radius: .5rem;
+  box-shadow: 0 10px 24px #0002;
+  padding: .35rem;
+  position: absolute;
+  top: calc(100% + .45rem);
+  left: 0;
+}
+
+.taste-title-switcher-option {
+  color: var(--text-color);
+  border-radius: .3rem;
+  padding: .55rem .7rem;
+  font-family: Chivo, sans-serif;
+  font-size: .95rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: block;
+}
+
+.taste-title-switcher-option:hover, .taste-title-switcher-option:focus-visible, .taste-title-switcher-option.active {
+  color: var(--secondary-color);
+  background: var(--background-alt);
 }
 
 .collection-header .header-content p, .collection-header .header-subtitle-link {

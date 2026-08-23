@@ -7,7 +7,7 @@ import PeopleModal from '../components/PeopleModal.astro';
 import PersonCard from '../components/PersonCard.astro';
 import PeopleSourceFilter from '../components/PeopleSourceFilter.astro';
 import PeopleStatsBody from '../components/PeopleStatsBody.astro';
-import { PEOPLE_SECTIONS } from '../lib/collection-sections';
+import { PEOPLE_SECTIONS, tasteListOptions } from '../lib/collection-sections';
 
 const canonical = 'https://jevangoldsmith.com/people.html';
 
@@ -42,6 +42,9 @@ const config = ({
     id: 'people-sidebar',
     className: 'people-sidebar collection-sidebar collapsed',
     collapseAction: 'togglePeopleSidebar',
+    listAction: 'toggleListDropdown',
+    currentListName: 'People',
+    listOptions: tasteListOptions('people'),
     search: {
       inputId: 'people-search',
       inputClass: 'collection-search-input',

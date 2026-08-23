@@ -59,11 +59,12 @@
     ]
   },
   "tasteList": [
-    ["books.html", "Books", "books"],
+    ["books.html", "Bookshelf", "books"],
     ["movies.html", "Movies", "movies"],
     ["podcasts.html", "Podcasts", "podcasts"],
-    ["products.html", "Products", "products"],
-    ["people.html", "People of History", "people"]
+    ["people.html", "People", "people"],
+    ["products.html", "The Shelf", "products"],
+    ["cool-shit.html", "Interests", "interests"]
   ],
   "taskMeta": {
     "project": {

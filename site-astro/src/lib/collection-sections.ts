@@ -88,8 +88,8 @@ export const PEOPLE_SECTIONS: SectionItem[] = [
   } as SectionItem))
 ];
 
-// === Shared "taste list" dropdown (books/movies/podcasts/products/people) ===
-function tasteListOptions(active: string): ListOption[] {
+// === Shared Taste navigation (collection sidebar + title switcher) ===
+export function tasteListOptions(active: string): ListOption[] {
   return presets.tasteList.map(([href, label, key]) => ({ href, label, active: active === key }));
 }
 
@@ -275,5 +275,3 @@ export const ESSAY_LIST_OPTIONS: ListOption[] = [
   { href: 'movies.html', label: 'Movies' },
   { href: 'podcasts.html', label: 'Podcasts' }
 ];
-
-export { tasteListOptions };

@@ -38,6 +38,7 @@ const sections = config.sidebar.sections ?? [];
 const TitleTag = (config.main.titleTag ?? 'h1') as keyof HTMLElementTagNameMap;
 const subtitleHtml = config.main.subtitleHtml ?? '';
 const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
+const tasteOptions = config.sidebar.listOptions ?? [];
 ---
 <main class={config.layout.className} id={config.layout.id}>
   {TitleTag !== 'h1' && <h1 class="sr-only">{config.main.title}</h1>}
@@ -60,7 +61,7 @@ const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
       <span class="sidebar-browse-label">Browse</span>
     </div>
 
-    {config.sidebar.listOptions && config.sidebar.listOptions.length > 0 && (
+    {tasteOptions.length > 0 && (
       <div class="sidebar-list-selector">
         <div class="list-dropdown" id="list-dropdown">
           <button class="list-dropdown-btn" data-action={config.sidebar.listAction}>
@@ -68,7 +69,7 @@ const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
             <svg class="ico-stroke ico-12" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-chevronDown"></use></svg>
           </button>
           <div class="list-dropdown-menu" id="list-dropdown-menu">
-            {config.sidebar.listOptions.map((item) => {
+            {tasteOptions.map((item) => {
               const attrs = splitAttrs(item.attrs ?? {}, item.active ? 'list-option active' : 'list-option');
               return <a href={item.href} class={attrs.class} {...attrs.attrs}>{item.label}</a>;
             })}
@@ -182,7 +183,22 @@ const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
   <div class={config.main.className}>
     <header class="main-header collection-header">
       <div class="header-content">
-        <TitleTag id="collection-title" data-default-title={config.main.title}>{config.main.title}</TitleTag>
+        {tasteOptions.length > 0 ? (
+          <div class="taste-title-switcher" data-taste-switcher>
+            <TitleTag id="collection-title" data-default-title={config.main.title}>
+              <button class="taste-title-switcher-button" type="button" aria-expanded="false" aria-haspopup="menu" aria-controls="taste-title-switcher-menu">
+                <span data-collection-title-label>{config.main.title}</span>
+                <svg class="ico-stroke taste-title-switcher-chevron" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-chevronDown"></use></svg>
+              </button>
+            </TitleTag>
+            <div class="taste-title-switcher-menu" id="taste-title-switcher-menu" role="menu" hidden>
+              {tasteOptions.map((item) => {
+                const attrs = splitAttrs(item.attrs ?? {}, item.active ? 'taste-title-switcher-option active' : 'taste-title-switcher-option');
+                return <a href={item.href} class={attrs.class} role="menuitem" {...attrs.attrs}>{item.label}</a>;
+              })}
+            </div>
+          </div>
+        ) : <TitleTag id="collection-title" data-default-title={config.main.title}>{config.main.title}</TitleTag>}
         {subtitleHtml ? <Fragment set:html={subtitleHtml} /> : config.main.subtitleText ? <p class="header-subtitle">{config.main.subtitleText}</p> : null}
       </div>
       <slot name="header-extra" />
@@ -208,3 +224,32 @@ const mobileGridLabel = config.main.mobileGridLabel ?? config.main.title;
   </div>
   <slot name="after-main" />
 </main>
+
+<script>
+  document.querySelectorAll('[data-taste-switcher]').forEach((switcher) => {
+    const button = switcher.querySelector<HTMLButtonElement>('.taste-title-switcher-button');
+    const menu = switcher.querySelector<HTMLElement>('.taste-title-switcher-menu');
+    if (!button || !menu) return;
+
+    const setOpen = (open: boolean) => {
+      button.setAttribute('aria-expanded', String(open));
+      menu.hidden = !open;
+    };
+
+    button.addEventListener('click', () => setOpen(menu.hidden));
+    button.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowDown') return;
+      event.preventDefault();
+      setOpen(true);
+      menu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+    });
+    switcher.addEventListener('keydown', (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setOpen(false);
+      button.focus();
+    });
+    document.addEventListener('click', (event) => {
+      if (!switcher.contains(event.target as Node)) setOpen(false);
+    });
+  });
+</script>

@@ -238,7 +238,8 @@ export function updateBookCount(count: number, categoryName?: string) {
     if (titleElement) {
         const fullName = categoryName && categoryName !== 'all' ? CATEGORY_NAME_BY_KEY[categoryName] : '';
         const display = fullName ? (categoryDisplayNames[fullName] ?? fullName) : '';
-        titleElement.textContent = display || titleElement.dataset.defaultTitle || titleElement.textContent || '';
+        const titleLabel = titleElement.querySelector<HTMLElement>('[data-collection-title-label]') ?? titleElement;
+        titleLabel.textContent = display || titleElement.dataset.defaultTitle || titleLabel.textContent || '';
     }
 }
 
