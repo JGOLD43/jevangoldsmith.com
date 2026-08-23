@@ -12934,6 +12934,34 @@ body.shelf-experience {
     padding: 1rem 0 !important;
   }
 
+  /* Mobile search becomes a single, dark liquid-glass sheet rather than a
+     conventional sidebar. The tint and edge highlights keep it legible over
+     the page while giving the Search tab the depth of an iOS surface. */
+  [data-theme="dark"] .movies-layout.mobile-list-view {
+    background:
+      radial-gradient(100% 60% at 12% 0%, #d8bd7c20 0%, transparent 62%),
+      radial-gradient(75% 45% at 100% 34%, #6a8fc71c 0%, transparent 68%),
+      #0d0e10;
+  }
+
+  [data-theme="dark"] .movies-layout.mobile-list-view > .movies-sidebar.collection-sidebar--taste {
+    background:
+      linear-gradient(145deg, #ffffff1c 0%, #ffffff0b 44%, #aebfd80d 100%);
+    border: 1px solid #ffffff24;
+    border-radius: 22px;
+    box-shadow: inset 0 1px #ffffff24, 0 18px 48px #00000038;
+    -webkit-backdrop-filter: blur(28px) saturate(150%);
+    backdrop-filter: blur(28px) saturate(150%);
+    margin: .75rem;
+    width: calc(100% - 1.5rem) !important;
+    padding: .5rem 0 calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  [data-theme="dark"] .movies-layout.mobile-list-view > .movies-sidebar .sidebar-filter-section,
+  [data-theme="dark"] .movies-layout.mobile-list-view > .movies-sidebar .sidebar-footer {
+    border-color: #ffffff2e;
+  }
+
   .collection-layout.mobile-list-view > .collection-sidebar .sidebar-header {
     display: none;
   }
