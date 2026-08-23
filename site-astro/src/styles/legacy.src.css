@@ -1182,11 +1182,12 @@ button[type="submit"]:hover {
   pointer-events: none;
   width: 100%;
   height: 100%;
+  transform: translateY(-1rem);
   transition: transform .2s ease;
 }
 
 .taste-title-switcher-button[aria-expanded="true"] .taste-title-switcher-chevron {
-  transform: rotate(180deg);
+  transform: translateY(-1rem) rotate(180deg);
 }
 
 .taste-title-switcher-menu {
