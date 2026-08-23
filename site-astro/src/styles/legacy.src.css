@@ -12853,6 +12853,16 @@ body.shelf-experience {
 }
 
 @media (width <= 768px) {
+  .movies-main.is-mobile-view-transitioning {
+    position: relative;
+    overflow: clip;
+  }
+
+  .movies-main.is-mobile-view-transitioning > .movies-grid,
+  .movies-main.is-mobile-view-transitioning > .category-grid-view {
+    will-change: transform, opacity;
+  }
+
   .collection-mobile-toggle {
     background: var(--background);
     border-bottom: 1px solid var(--border-color);

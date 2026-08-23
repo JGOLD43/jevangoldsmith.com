@@ -43,22 +43,92 @@ const MOVIE_FLIGHT_CFG = {
 
 let releaseGenreModalFocus: (() => void) | null = null;
 let currentMode: 'list' | 'grid' = 'list';
+let isViewTransitioning = false;
+
+function updateViewToggle(mode: 'list' | 'grid') {
+    const btn = document.getElementById(TOGGLE_ID);
+    if (!btn) return;
+    btn.dataset.currentMode = mode;
+    const nextLabel = mode === 'list' ? 'Switch to genre grid view' : 'Switch to list view';
+    btn.setAttribute('aria-label', nextLabel);
+    btn.setAttribute('title', nextLabel);
+}
+
+function setElementVisible(element: HTMLElement, visible: boolean, isGrid: boolean) {
+    element.style.display = visible ? (isGrid ? 'block' : '') : 'none';
+}
 
 function setViewMode(mode: 'list' | 'grid') {
-    currentMode = mode;
-    const list = document.getElementById(MOVIES_LIST_ID);
-    const grid = document.getElementById(GRID_VIEW_ID);
+    if (mode === currentMode || isViewTransitioning) return;
+    const list = document.getElementById(MOVIES_LIST_ID) as HTMLElement | null;
+    const grid = document.getElementById(GRID_VIEW_ID) as HTMLElement | null;
     const sidebar = document.getElementById('movies-sidebar');
-    if (list) list.style.display = mode === 'grid' ? 'none' : '';
-    if (grid) grid.style.display = mode === 'grid' ? 'block' : 'none';
+    const previousMode = currentMode;
+    currentMode = mode;
     if (sidebar) sidebar.style.display = mode === 'grid' ? 'none' : '';
-    const btn = document.getElementById(TOGGLE_ID);
-    if (btn) {
-        btn.dataset.currentMode = mode;
-        const nextLabel = mode === 'list' ? 'Switch to genre grid view' : 'Switch to list view';
-        btn.setAttribute('aria-label', nextLabel);
-        btn.setAttribute('title', nextLabel);
+    updateViewToggle(mode);
+
+    const canAnimate = Boolean(
+        list
+        && grid
+        && window.matchMedia('(max-width: 768px) and (prefers-reduced-motion: no-preference)').matches
+    );
+    if (!canAnimate || !list || !grid) {
+        setElementVisible(list, mode === 'list', false);
+        setElementVisible(grid, mode === 'grid', true);
+        return;
     }
+
+    const outgoing = previousMode === 'list' ? list : grid;
+    const incoming = mode === 'list' ? list : grid;
+    const enteringGrid = mode === 'grid';
+    const direction = enteringGrid ? 1 : -1;
+    const transitionHost = outgoing.closest('.movies-main') as HTMLElement | null;
+
+    isViewTransitioning = true;
+    setElementVisible(incoming, true, enteringGrid);
+    if (transitionHost) {
+        transitionHost.classList.add('is-mobile-view-transitioning');
+        transitionHost.style.minHeight = `${Math.max(outgoing.offsetHeight, incoming.offsetHeight)}px`;
+    }
+    outgoing.style.position = 'absolute';
+    outgoing.style.inset = '0 auto auto 0';
+    outgoing.style.width = '100%';
+    outgoing.style.pointerEvents = 'none';
+
+    const animationOptions: KeyframeAnimationOptions = {
+        duration: 360,
+        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        fill: 'both'
+    };
+    const outgoingAnimation = outgoing.animate([
+        { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' },
+        { opacity: 0, transform: `translate3d(${-direction * 10}%, 0, 0) scale(0.965)` }
+    ], animationOptions);
+    const incomingAnimation = incoming.animate([
+        { opacity: 0, transform: `translate3d(${direction * 14}%, 0, 0) scale(0.96)` },
+        { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' }
+    ], animationOptions);
+
+    void Promise.all([
+        outgoingAnimation.finished.catch(() => undefined),
+        incomingAnimation.finished.catch(() => undefined)
+    ]).then(() => {
+        setElementVisible(outgoing, false, outgoing === grid);
+        outgoing.style.position = '';
+        outgoing.style.inset = '';
+        outgoing.style.width = '';
+        outgoing.style.pointerEvents = '';
+        outgoing.style.opacity = '';
+        outgoing.style.transform = '';
+        incoming.style.opacity = '';
+        incoming.style.transform = '';
+        if (transitionHost) {
+            transitionHost.classList.remove('is-mobile-view-transitioning');
+            transitionHost.style.minHeight = '';
+        }
+        isViewTransitioning = false;
+    });
 }
 
 function openGenreModal(genre: string) {
