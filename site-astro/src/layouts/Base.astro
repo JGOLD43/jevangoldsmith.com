@@ -168,6 +168,21 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         } catch (_) { /* private mode / SSR can't read storage */ }
       })();
     </script>
+    {/* The native app starts the site with ?private-companion=1. Remember that
+        flag only for this browser tab so the private app navigation survives
+        normal same-origin page loads without appearing to public visitors. */}
+    <script is:inline>
+      (() => {
+        try {
+          const key = 'jg-private-companion';
+          const appEntry = new URLSearchParams(location.search).get('private-companion') === '1';
+          if (appEntry) sessionStorage.setItem(key, '1');
+          if (appEntry || sessionStorage.getItem(key) === '1') {
+            document.documentElement.setAttribute('data-private-companion', 'true');
+          }
+        } catch (_) { /* storage-disabled browsers simply keep the public UI */ }
+      })();
+    </script>
     <meta name="theme-color" content="#F5F3ED" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
@@ -309,6 +324,56 @@ if (seoSlug === 'index' || seoSlug === 'search') {
       }
       .site-footer-back:hover { color: var(--secondary-color); }
 
+      /* Full-screen Android app navigation. It is opt-in per browser tab and
+         therefore never appears on the ordinary public website. */
+      .private-companion-nav { display: none; }
+      html[data-private-companion="true"] .private-companion-nav {
+        --private-companion-height: 58px;
+        z-index: 10002;
+        position: sticky;
+        top: 0;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        height: var(--private-companion-height);
+        padding: 4px max(6px, env(safe-area-inset-right)) 3px max(6px, env(safe-area-inset-left));
+        border-bottom: 1px solid rgba(17, 17, 17, 0.2);
+        background: rgba(32, 138, 239, 0.97);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.16);
+        backdrop-filter: blur(16px) saturate(150%);
+      }
+      html[data-private-companion="true"] .private-companion-nav a {
+        min-width: 0;
+        color: rgba(255, 255, 255, 0.78);
+        text-decoration: none;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1px;
+        font-family: Chivo, -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 0.61rem;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: 0.01em;
+      }
+      html[data-private-companion="true"] .private-companion-nav a[aria-current="page"] {
+        color: #111;
+        background: #ffd91a;
+      }
+      html[data-private-companion="true"] .private-companion-nav svg {
+        width: 21px;
+        height: 21px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      html[data-private-companion="true"] .navbar {
+        top: 58px;
+      }
+
       /* Dark theme: keep the original near-black footer chrome. */
       [data-theme="dark"] .site-footer {
         color: #fff;
@@ -368,6 +433,28 @@ if (seoSlug === 'index' || seoSlug === 'search') {
     {/* Skip-to-content link: first focusable element. Off-screen until
         focused via Tab. WCAG 2.4.1 (Bypass Blocks). */}
     <a href="#main" class="skip-to-content">Skip to content</a>
+    <nav class="private-companion-nav" aria-label="Private Companion">
+      <a href="/?private-companion=1" aria-current="page">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>
+        <span>Site</span>
+      </a>
+      <a href="privatecompanionapp:///vault">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/><circle cx="12" cy="13" r="1.5"/></svg>
+        <span>Vault</span>
+      </a>
+      <a href="privatecompanionapp:///website">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5V7l8-3 8 3v12.5"/><path d="M8 10h8M8 14h8M8 18h5"/></svg>
+        <span>Studio</span>
+      </a>
+      <a href="privatecompanionapp:///ai">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="5"/><path d="m5.6 5.6 2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>
+        <span>AI</span>
+      </a>
+      <a href="privatecompanionapp:///settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>
+        <span>Settings</span>
+      </a>
+    </nav>
     {!noChrome && (
       <nav class="navbar">
         <div class="container">
