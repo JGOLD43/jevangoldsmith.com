@@ -55,6 +55,21 @@ async function check() {
       failures.push(`${route}: HTTP ${res.status}`);
       continue;
     }
+    const body = await res.text();
+    const stylesheetHrefs = [...body.matchAll(/<link\b[^>]*>/gi)]
+      .map((match) => match[0])
+      .filter((tag) => /\brel=["'][^"']*\bstylesheet\b[^"']*["']/i.test(tag))
+      .map((tag) => tag.match(/\bhref=["']([^"']+)["']/i)?.[1])
+      .filter((href) => href?.startsWith('/'));
+    for (const href of stylesheetHrefs) {
+      const assetUrl = new URL(href, url).toString();
+      try {
+        const assetRes = await fetchWithTimeout(assetUrl);
+        if (!assetRes.ok) failures.push(`${route}: stylesheet ${href} returned HTTP ${assetRes.status}`);
+      } catch (err) {
+        failures.push(`${route}: stylesheet ${href} fetch error: ${err.message}`);
+      }
+    }
     console.log(`OK  ${route} (${res.status})`);
   }
 

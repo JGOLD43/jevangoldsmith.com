@@ -27,9 +27,10 @@ const targets = [
     'images/.DS_Store',
     'data/sources',
     'data/remote-assets.generated.json',
-    // After purge-css runs, every page links chrome.HASH.css + inlines its
-    // per-page slice. The original 187KB legacy-style.css is unreferenced.
-    'css/legacy-style.css',
+    // Keep legacy-style.css as a deployment-safe fallback. The normal build
+    // rewrites pages to chrome.HASH.css + a per-page slice, but retaining the
+    // source stylesheet prevents an unrewritten page from shipping without
+    // any CSS if a post-processing or partial-deploy step is skipped.
     // Build-time-only data files. Imported by lib/chrome.ts, lib/seo.ts,
     // collection-sections.ts at build; never fetched at runtime. The
     // canonical externally-advertised copies live under /api/v1/.
