@@ -1,0 +1,66 @@
+name: jgold-publish-sync
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jgold-publish-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out trusted website source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          path: website
+
+      - name: Check out private untrusted inbox as data only
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: JGOLD43/jgold-publishing-inbox
+          ssh-key: ${{ secrets.JGOLD_INBOX_DEPLOY_KEY }}
+          persist-credentials: false
+          path: inbox
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+
+      - name: Install trusted dependencies
+        working-directory: website
+        run: npm ci
+
+      - name: Validate and apply allowlisted public manifests
+        working-directory: website
+        run: node scripts/sync-jgold-publications.js --inbox=../inbox/submissions
+
+      - name: Validate resulting public content
+        working-directory: website
+        run: npm run content:validate
+
+      - name: Run publication security tests
+        working-directory: website
+        run: node --test tests/unit/jgold-publishing.test.js
+
+      - name: Commit trusted data changes
+        working-directory: website
+        run: |
+          if git diff --quiet -- data .jgold-publication-state.json; then
+            echo "No new approved publications"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data .jgold-publication-state.json
+          git commit -m "content: sync approved JGOLD publications"
+          git push origin HEAD:main
