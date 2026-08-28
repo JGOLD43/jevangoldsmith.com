@@ -50,6 +50,19 @@ Do not deploy source-only folders:
 - `scripts/`
 - `css/src/`
 
+## JGOLD Android OTA
+
+For JavaScript, styling, and bundled-asset changes to the installed app:
+
+```bash
+npm run release:app -- "Describe the update"
+```
+
+This command verifies the app, exports Android only, publishes to preview,
+promotes the exact update group to production, and confirms the production
+assignment. Do not run an all-platform Expo update: the app contains native-only
+reader modules that are intentionally unavailable to the web exporter.
+
 ## Live Verification
 
 After deploy, verify the public domain is serving the generated GitHub Pages output:
