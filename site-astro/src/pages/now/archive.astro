@@ -16,6 +16,14 @@ function pinOffset(lat: number, lng: number, zoom: number) {
 }
 
 const entries = history.map((e) => ({ ...e, pin: pinOffset(e.location.lat, e.location.lng, e.location.zoom) }));
+const mapPoints = entries.map((entry, index) => ({
+  id: entry.id,
+  label: entry.location.label,
+  lat: entry.location.lat,
+  lng: entry.location.lng,
+  date: entry.lastUpdated,
+  current: index === 0,
+}));
 ---
 <Base
   title="Now archive — every past update"
@@ -23,19 +31,45 @@ const entries = history.map((e) => ({ ...e, pin: pinOffset(e.location.lat, e.loc
   canonical={canonical}
   pageType="AboutPage"
 >
+  <Fragment slot="head">
+    <link rel="preload" as="script" href="/vendor/leaflet/leaflet.js" />
+    <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" />
+    <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin />
+  </Fragment>
 <main class="now-archive-page">
   <header class="now-archive-header">
     <p class="now-archive-eyebrow"><a href="/now.html">← Now</a></p>
-    <h1 class="now-archive-title">Now — the archive</h1>
-    <p class="now-archive-intro">Every past Now update, kept on the record. The most recent is current; each older one is frozen exactly as it was when it changed.</p>
+    <h1 class="now-archive-title">Everywhere “now” has been</h1>
+    <p class="now-archive-intro">A geographic timeline of what I was doing and where I was doing it. Hover a pin for its timestamp; select it to open the full update.</p>
   </header>
 
   {entries.length === 0 ? (
     <p class="now-archive-empty">No updates archived yet.</p>
   ) : (
-    <ol class="now-archive-list">
+    <section class="now-history-map-card" aria-labelledby="now-map-heading">
+      <div class="now-history-map-header">
+        <div>
+          <p class="now-history-kicker">Location history</p>
+          <h2 id="now-map-heading">{entries.length} {entries.length === 1 ? 'update' : 'updates'} on the map</h2>
+        </div>
+        <div class="now-map-filters" role="group" aria-label="Filter map updates">
+          <button class="is-active" type="button" data-map-filter="all">All</button>
+          <button type="button" data-map-filter="past">Past</button>
+          <button type="button" data-map-filter="current">Latest</button>
+        </div>
+      </div>
+      <div id="now-history-map" class="now-history-map" data-points={JSON.stringify(mapPoints)} aria-label="Map of Now update locations"></div>
+      <p id="now-map-empty" class="now-map-empty" hidden>No past pins yet. The next update will begin the trail.</p>
+      <p class="now-map-instruction">Hover or focus a pin to see when the update was published.</p>
+    </section>
+
+    <div class="now-timeline-heading">
+      <p class="now-history-kicker">Full timeline</p>
+      <h2>Read every update</h2>
+    </div>
+    <ol class="now-archive-list" id="now-update-list">
       {entries.map((entry, i) => (
-        <li>
+        <li id={`update-${entry.id}`}>
           <details class="now-archive-entry" open={i === 0}>
             <summary class="now-archive-summary">
               <span class="now-archive-date">{entry.lastUpdated}</span>
@@ -69,7 +103,7 @@ const entries = history.map((e) => ({ ...e, pin: pinOffset(e.location.lat, e.loc
 
 <style is:global>
   .now-archive-page {
-    max-width: 760px;
+    max-width: 920px;
     margin: 0 auto;
     padding: 4rem 1.5rem 6rem;
   }
@@ -79,12 +113,27 @@ const entries = history.map((e) => ({ ...e, pin: pinOffset(e.location.lat, e.loc
   .now-archive-eyebrow a:hover { text-decoration: underline; }
   .now-archive-title {
     font-family: Chivo, Georgia, serif;
-    font-size: 2.5rem;
+    font-size: clamp(2.4rem, 7vw, 4.5rem);
     font-weight: 700;
     margin: 0 0 0.75rem;
     color: var(--primary-color);
   }
   .now-archive-intro { font-size: 1.05rem; line-height: 1.6; color: var(--text-light); margin: 0; max-width: 60ch; }
+
+  .now-history-map-card { overflow: hidden; margin-bottom: 3.25rem; border: 1px solid var(--border-color); border-radius: 20px; background: var(--background-alt); box-shadow: 0 18px 44px rgba(12, 24, 34, 0.08); }
+  .now-history-map-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.2rem; }
+  .now-history-kicker { margin: 0 0 0.2rem; color: var(--secondary-color); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
+  .now-history-map-header h2, .now-timeline-heading h2 { margin: 0; color: var(--primary-color); font-family: Chivo, Georgia, serif; font-size: 1.25rem; }
+  .now-map-filters { display: flex; gap: 0.35rem; padding: 0.25rem; border: 1px solid var(--border-color); border-radius: 999px; background: var(--background-color); }
+  .now-map-filters button { appearance: none; border: 0; border-radius: 999px; padding: 0.45rem 0.7rem; color: var(--text-light); background: transparent; font: inherit; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+  .now-map-filters button.is-active { color: #17222b; background: var(--secondary-color); }
+  .now-history-map { width: 100%; height: 390px; border-block: 1px solid var(--border-color); background: #d8e0d6; z-index: 0; }
+  .now-map-instruction, .now-map-empty { margin: 0; padding: 0.75rem 1.2rem; color: var(--text-light); font-size: 0.78rem; line-height: 1.5; }
+  .now-map-empty { color: var(--primary-color); font-weight: 600; }
+  .now-timeline-heading { margin-bottom: 1rem; }
+  .now-history-marker { border: 2px solid #17222b; border-radius: 50%; background: #ffd700; box-shadow: 0 2px 10px rgba(0,0,0,.4); }
+  .now-history-marker.is-current { box-shadow: 0 0 0 6px rgba(255,215,0,.3), 0 2px 10px rgba(0,0,0,.4); }
+  .now-history-tooltip { padding: 0.15rem 0.2rem; border: 0; border-radius: 8px; box-shadow: 0 8px 22px rgba(0,0,0,.2); color: #17222b; font-family: Chivo, sans-serif; font-weight: 700; }
 
   .now-archive-list { list-style: none; margin: 0; padding: 0; }
   .now-archive-list > li { border-top: 1px solid var(--border-color); }
@@ -185,6 +234,68 @@ const entries = history.map((e) => ({ ...e, pin: pinOffset(e.location.lat, e.loc
     .now-archive-title { font-size: 2rem; }
     .now-archive-entry-body { grid-template-columns: 1fr; gap: 1.25rem; }
     .now-archive-map { max-width: 220px; }
+    .now-history-map-header { align-items: flex-start; flex-direction: column; }
+    .now-history-map { height: 310px; }
   }
 </style>
+
+<script>
+  type NowPoint = { id: string; label: string; lat: number; lng: number; date: string; current: boolean };
+  type LeafletMarker = { addTo: (map: unknown) => LeafletMarker; bindTooltip: (html: string, options: object) => LeafletMarker; bindPopup: (html: string) => LeafletMarker; openTooltip: () => void; closeTooltip: () => void; on: (event: string, callback: () => void) => void; remove: () => void; getLatLng: () => unknown };
+  type LeafletApi = { map: (element: HTMLElement, options: object) => { fitBounds: (bounds: unknown, options: object) => void; setView: (coords: number[], zoom: number) => void }; tileLayer: (url: string, options: object) => { addTo: (map: unknown) => void }; divIcon: (options: object) => unknown; marker: (coords: number[], options: object) => LeafletMarker; latLngBounds: (coords: unknown[]) => unknown };
+
+  const mapElement = document.getElementById('now-history-map') as HTMLElement | null;
+  if (mapElement) {
+    const loadLeaflet = () => new Promise<LeafletApi>((resolve, reject) => {
+      const existing = (window as typeof window & { L?: LeafletApi }).L;
+      if (existing) return resolve(existing);
+      const script = document.createElement('script');
+      script.src = '/vendor/leaflet/leaflet.js';
+      script.onload = () => resolve((window as typeof window & { L: LeafletApi }).L);
+      script.onerror = () => reject(new Error('Could not load map'));
+      document.head.appendChild(script);
+    });
+
+    void loadLeaflet().then((L) => {
+      const points = JSON.parse(mapElement.dataset.points || '[]') as NowPoint[];
+      const map = L.map(mapElement, { scrollWheelZoom: false, zoomControl: true, attributionControl: true });
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: 'Tiles © Esri',
+      }).addTo(map);
+
+      const records = points.map((point) => {
+        const size = point.current ? 18 : 14;
+        const icon = L.divIcon({ className: `now-history-marker${point.current ? ' is-current' : ''}`, iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+        const marker = L.marker([point.lat, point.lng], { icon, keyboard: true, title: `${point.date} — ${point.label}` })
+          .addTo(map)
+          .bindTooltip(`<span>${point.date}</span><br><small>${point.label}</small>`, { direction: 'top', offset: [0, -8], className: 'now-history-tooltip' })
+          .bindPopup(`<strong>${point.date}</strong><br>${point.label}<br><a href="#update-${point.id}">Read this update →</a>`);
+        marker.on('mouseover', () => marker.openTooltip());
+        marker.on('mouseout', () => marker.closeTooltip());
+        return { point, marker };
+      });
+
+      const empty = document.getElementById('now-map-empty');
+      const fit = (visible: typeof records) => {
+        if (empty) empty.hidden = visible.length > 0;
+        if (visible.length === 0) return;
+        if (visible.length === 1) map.setView([visible[0].point.lat, visible[0].point.lng], 8);
+        else map.fitBounds(L.latLngBounds(visible.map(({ marker }) => marker.getLatLng())), { padding: [42, 42], maxZoom: 8 });
+      };
+      fit(records);
+
+      document.querySelectorAll<HTMLButtonElement>('[data-map-filter]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const filter = button.dataset.mapFilter;
+          document.querySelectorAll('[data-map-filter]').forEach((candidate) => candidate.classList.toggle('is-active', candidate === button));
+          const visible = records.filter(({ point }) => filter === 'all' || (filter === 'current' ? point.current : !point.current));
+          records.forEach(({ marker }) => marker.remove());
+          visible.forEach(({ marker }) => marker.addTo(map));
+          fit(visible);
+        });
+      });
+    }).catch(() => mapElement.classList.add('is-unavailable'));
+  }
+</script>
 </Base>

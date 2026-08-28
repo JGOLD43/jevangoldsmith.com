@@ -83,6 +83,15 @@ function validateBook(book) {
   };
 }
 
+function validateNowLocation(location) {
+  ownKeys(location, ['label', 'lat', 'lng', 'zoom'], 'manifest.nowLocation');
+  const label = boundedString(location.label, 'manifest.nowLocation.label', 160, { empty: false });
+  if (!Number.isFinite(location.lat) || location.lat < -90 || location.lat > 90) throw new Error('manifest.nowLocation.lat is invalid');
+  if (!Number.isFinite(location.lng) || location.lng < -180 || location.lng > 180) throw new Error('manifest.nowLocation.lng is invalid');
+  if (!Number.isInteger(location.zoom) || location.zoom < 2 || location.zoom > 18) throw new Error('manifest.nowLocation.zoom is invalid');
+  return { label, lat: location.lat, lng: location.lng, zoom: location.zoom };
+}
+
 function validateManifest(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new Error('manifest must be an object');
   if (!TYPES.has(raw.type)) throw new Error('manifest.type is not allowed');
@@ -93,8 +102,9 @@ function validateManifest(raw) {
     return { version: 1, id: identifier(raw.id, 'manifest.id'), type: 'book', sourceId: nullableIdentifier(raw.sourceId, 'manifest.sourceId'), operation: raw.operation, book: validateBook(raw.book) };
   }
   if (!CONTENT_TYPES.has(raw.type)) throw new Error('manifest.type is not a content type');
-  ownKeys(raw, ['version', 'id', 'type', 'title', 'summary', 'body', 'sourceId', 'operation'], 'content manifest');
-  return {
+  const contentKeys = ['version', 'id', 'type', 'title', 'summary', 'body', 'sourceId', 'operation'];
+  ownKeys(raw, raw.type === 'now' ? [...contentKeys, 'nowLocation'] : contentKeys, 'content manifest');
+  const manifest = {
     version: 1,
     id: identifier(raw.id, 'manifest.id'),
     type: raw.type,
@@ -104,6 +114,7 @@ function validateManifest(raw) {
     sourceId: nullableIdentifier(raw.sourceId, 'manifest.sourceId'),
     operation: raw.operation,
   };
+  return raw.type === 'now' ? { ...manifest, nowLocation: validateNowLocation(raw.nowLocation) } : manifest;
 }
 
 function validateEnvelope(raw) {
@@ -147,7 +158,12 @@ function applyPublicFields(existing, manifest, publicId, timestamp) {
     case 'quote':
       return { ...existing, id: publicId, slug: existing.slug || publicId, text: manifest.body || manifest.title, author: manifest.summary || existing.author || 'Jevan Goldsmith', status: 'available', category: existing.category || 'ideas', topics: Array.isArray(existing.topics) ? existing.topics : [], tags: Array.isArray(existing.tags) ? existing.tags : [] };
     case 'now':
-      return { ...existing, lastUpdated: timestamp.slice(0, 10), sections: [{ title: manifest.title, body: paragraphs(manifest.body) }] };
+      return {
+        ...existing,
+        lastUpdated: new Date(timestamp).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'Australia/Brisbane' }),
+        location: manifest.nowLocation,
+        sections: [{ title: manifest.title, body: paragraphs(manifest.body) }],
+      };
     default:
       throw new Error('Unsupported manifest type');
   }
