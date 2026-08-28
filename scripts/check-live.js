@@ -22,8 +22,8 @@ const ROUTES = [
   '/robots.txt'
 ];
 
-// GitHub Pages is the deploy target. It doesn't honor firebase.json's
-// header config (firebase.json is local-emulator only). Security headers
+// GitHub Pages is the deploy target. It cannot set repository-defined
+// response headers. Security policy
 // (CSP, HSTS, X-Content-Type-Options) only land when something else
 // (Firebase, Cloudflare in front, custom origin) serves the site, so we
 // don't gate on them here. Add the check back when one of those is in

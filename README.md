@@ -4,9 +4,8 @@ Static personal website for `jevangoldsmith.com`, deployed to **GitHub Pages**
 (see `.github/workflows/deploy-pages.yml`). The public experience is organized
 as a living archive, with the newsletter as the recurring audience thread.
 
-> Serving note: GitHub Pages serves no custom response headers, so the security
-> headers in `firebase.json` apply only to the local Firebase emulator, not the
-> live site. The live Content-Security-Policy ships as a per-page
+> Serving note: GitHub Pages serves no custom response headers. The live
+> Content-Security-Policy ships as a per-page
 > `<meta http-equiv>` tag injected by `scripts/update-csp-hashes.js`.
 > `X-Frame-Options`, `X-Content-Type-Options` and HSTS cannot be set via meta
 > and are therefore unavailable until the site is fronted by a header-capable
@@ -14,7 +13,7 @@ as a living archive, with the newsletter as the recurring audience thread.
 
 As of the Astro migration (May 2026), the build is **Astro 6 + per-page legacy
 CSS purge**. `npm run build` invokes Astro under the hood and writes generated
-HTML / CSS / JS to `dist/`, which Firebase Hosting serves.
+HTML / CSS / JS to `dist/`, which GitHub Pages serves.
 
 ## Start Here
 
@@ -39,10 +38,7 @@ engineering and release docs. Historical plans live under `docs/archive/`.
 ├── scripts/
 │   ├── sync/               # External sync helpers
 │   └── *.js                # Enrichment + sync scripts (Letterboxd, Spotify, TMDB)
-├── admin/                  # Admin source, excluded from public Hosting deploys
-├── dist/                   # Generated Firebase Hosting output; ignored
-├── firebase.json           # Firebase Hosting and Firestore config
-└── firestore.rules         # Firestore access rules
+└── dist/                   # Generated GitHub Pages output; ignored
 ```
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the current architecture.
@@ -69,12 +65,6 @@ npm run check:parity:capture
 ```
 
 Historical migration notes live under `docs/archive/`.
-
-Verify live Firebase output (without requiring custom domain cutover):
-
-```bash
-npm run check:live:firebase
-```
 
 Enrich `data/movies.json` with TMDB metadata (runtime, genres, overview,
 backdrop). Idempotent — only fetches entries missing `runtime`/`tmdbId`. Reads
@@ -105,20 +95,14 @@ artifacts stay ignored.
 
 GitHub Pages serves the built `dist/` directory. On every push to `main`,
 `.github/workflows/deploy-pages.yml` runs `npm run build:fast` and publishes
-`dist/` via `actions/deploy-pages`. The `firebase.json` config is retained only
-for the local Hosting emulator (`npm run serve`) and as the source of truth for
-the CSP that `update-csp-hashes.js` mirrors into per-page `<meta>` tags.
-
-`admin/**` is not part of the Astro build, so it never enters `dist/` and is
-not published.
+`dist/` via `actions/deploy-pages`. Local preview uses the repository's small
+zero-dependency static server (`npm run serve`), while
+`update-csp-hashes.js` injects a per-page `<meta>` policy for GitHub Pages.
 
 Relevant files:
 
-- `firebase.json`
 - `data/site.config.json`
 - `dist/`
-- `firestore.rules`
-- `.firebaserc`
 - `CNAME`
 
 ## Content Model

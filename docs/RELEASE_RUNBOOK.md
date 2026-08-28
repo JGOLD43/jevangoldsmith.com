@@ -17,7 +17,7 @@ npm run check
 - JS syntax check
 - content validation
 - generated local link validation
-- Firebase deploy-surface validation
+- GitHub Pages deploy-surface validation
 - performance budget validation
 - documentation spine validation
 
@@ -40,7 +40,7 @@ Smoke test at least:
 
 ## Deploy Surface
 
-Firebase Hosting serves `dist/`.
+GitHub Pages serves `dist/` through `.github/workflows/deploy-pages.yml`.
 
 Do not deploy source-only folders:
 
@@ -52,31 +52,14 @@ Do not deploy source-only folders:
 
 ## Live Verification
 
-After deploy, verify the public domain is serving the generated Firebase output:
+After deploy, verify the public domain is serving the generated GitHub Pages output:
 
 ```bash
 npm run check:live
 ```
 
 The live check validates production `robots.txt`, `sitemap.xml`, `llms.txt`,
-static API JSON, security headers, and high-value pages. If it reports GitHub
-Pages, stale robots content, or missing `/api/v1/` JSON, DNS or deploy output is
-not aligned with this repo.
-
-If custom-domain routing is intentionally not switched yet, verify the Firebase
-default URL directly:
-
-```bash
-npm run check:live:firebase
-```
-
-To verify the Firebase default URL before the custom domain points at Firebase:
-
-```bash
-LIVE_BASE_URL=https://jevan-goldsmith-website.web.app \
-LIVE_CANONICAL_BASE_URL=https://jevangoldsmith.com \
-npm run check:live
-```
+static API JSON, and high-value pages on `jevangoldsmith.com`.
 
 ## Rollback
 

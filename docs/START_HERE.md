@@ -8,7 +8,7 @@ Purpose: `single entry point for understanding and safely changing this website`
 
 This repository is the static personal website for `jevangoldsmith.com`.
 
-The public runtime is intentionally simple: Firebase Hosting serves generated
+The public runtime is intentionally simple: GitHub Pages serves generated
 HTML, CSS, JavaScript, JSON, images, and vendor assets from `dist/`. There is no
 active server-side API surface.
 
@@ -49,8 +49,6 @@ shell launch issue seen in some sandboxed environments.
 - Preserve current behavior unless the user explicitly asks for product behavior
   to change.
 - Do not hand-edit `dist/`.
-- Do not deploy `admin/` publicly until admin writes move behind a
-  server-enforced API.
 - Prefer templates, data, and reusable components over repeated page edits.
 - Any refactor touching HTML/CSS/JS structure must keep `npm run check` green.
 

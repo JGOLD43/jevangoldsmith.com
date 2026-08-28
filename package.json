@@ -7,7 +7,7 @@
     "dev": "node scripts/generate-icon-sprite.js --public-out=site-astro/public/sprite.svg && node scripts/build-adventures-runtime.js && node scripts/build-now-map.js && node scripts/build-now-archive.js && npm run --prefix site-astro dev",
     "dev:full": "node scripts/generate-icon-sprite.js --public-out=site-astro/public/sprite.svg && node scripts/build-adventures-runtime.js && node scripts/build-now-map.js && node scripts/build-now-archive.js && (node scripts/watch-assets.js & npm run --prefix site-astro dev)",
     "watch:assets": "node scripts/watch-assets.js",
-    "serve": "npx firebase-tools emulators:start --only hosting",
+    "serve": "node scripts/serve-dist.js",
     "prepare": "git config core.hooksPath .githooks || true",
     "build": "node scripts/build.js",
     "build:fast": "node scripts/build.js --fast",

@@ -6,15 +6,11 @@ const { ROOT, distDir } = require('./_lib/paths');
 const { walk: walkAll } = require('./_lib/walk');
 
 const DIST = distDir();
-const FIREBASE = path.join(ROOT, 'firebase.json');
 const walk = (dir) => walkAll(dir).filter((p) => p.endsWith('.html'));
 
 function hashContent(value) {
   return `'sha256-${crypto.createHash('sha256').update(value.trim()).digest('base64')}'`;
 }
-
-const scriptHashes = new Set();
-const styleHashes = new Set();
 
 // True data-only <script> types that CSP does NOT govern: application/json and
 // application/ld+json (JSON-LD). These don't need a script-src hash and hashing
@@ -23,9 +19,7 @@ const styleHashes = new Set();
 // gets them blocked once the CSP is actually enforced (via the <meta> tag).
 const NON_EXECUTABLE_TYPES = /application\/(?:json|ld\+json)/i;
 
-// Per-file inline hashes — used to inject a tight <meta> CSP into each page
-// (see injectMetaCsp). The aggregate Sets above feed the firebase.json header
-// for the local emulator / any future header-capable proxy.
+// Per-file inline hashes are used to inject a tight <meta> CSP into each page.
 function hashesFor(html) {
   const scripts = new Set();
   const styles = new Set();
@@ -49,17 +43,6 @@ for (const file of htmlFiles) {
   const html = fs.readFileSync(file, 'utf8');
   const { scripts, styles } = hashesFor(html);
   fileHashes.set(file, { html, scripts, styles });
-  scripts.forEach((h) => scriptHashes.add(h));
-  styles.forEach((h) => styleHashes.add(h));
-}
-
-const firebase = JSON.parse(fs.readFileSync(FIREBASE, 'utf8'));
-const headers = firebase.hosting?.headers ?? [];
-const catchAll = headers.find((entry) => entry.source === '**');
-const cspHeader = catchAll?.headers?.find((entry) => entry.key === 'Content-Security-Policy');
-
-if (!cspHeader) {
-  throw new Error('Missing catch-all Content-Security-Policy header in firebase.json');
 }
 
 // If RUM_ENDPOINT was set at build time, extract its origin and add it to
@@ -88,7 +71,7 @@ function buildPolicy(scripts, styles) {
   // site uses inline style attributes throughout, so a hashed style-src blocks
   // them and breaks layout (e.g. style="display:none"). 'unsafe-inline' for
   // styles is the standard, low-risk concession on a static site; script-src
-  // stays locked down. (styles arg kept for the firebase.json aggregate only.)
+  // stays locked down.
   void styles;
   return [
     "default-src 'self'",
@@ -103,10 +86,6 @@ function buildPolicy(scripts, styles) {
     "form-action 'self' mailto: https://formsubmit.co"
   ].join('; ');
 }
-
-// Aggregate policy → firebase.json (local emulator / future proxy).
-cspHeader.value = buildPolicy(scriptHashes, styleHashes);
-fs.writeFileSync(FIREBASE, `${JSON.stringify(firebase, null, 2)}\n`);
 
 // Per-page enforcing CSP via <meta> — the only way to ship CSP on GitHub
 // Pages, which serves no custom headers. Each page carries only its own
@@ -154,4 +133,4 @@ for (const [file, { html, scripts, styles }] of fileHashes) {
   if (out !== html) { fs.writeFileSync(file, out); injected++; }
 }
 
-console.log(`[csp] firebase.json: ${scriptHashes.size} script + ${styleHashes.size} style hash(es); injected <meta> CSP into ${injected}/${htmlFiles.length} pages`);
+console.log(`[csp] injected per-page meta policies into ${injected}/${htmlFiles.length} pages`);

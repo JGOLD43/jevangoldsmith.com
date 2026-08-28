@@ -1,6 +1,6 @@
 // Tiny static-file server. Replaces the `http-server` devDep for verify.js
 // and any local QA against `dist/`. ~30 LOC, zero deps, supports the URL
-// shapes Firebase Hosting serves (`/foo` → `foo.html`, `/foo/` → `foo/index.html`).
+// shapes GitHub Pages serves (`/foo` → `foo.html`, `/foo/` → `foo/index.html`).
 const fs = require('node:fs');
 const http = require('node:http');
 const path = require('node:path');
