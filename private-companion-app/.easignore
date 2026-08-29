@@ -1,0 +1,12 @@
+# Historical install artifacts are not part of the Android source build.
+node_modules/
+.expo/
+android/
+ios/
+artifacts/
+dist/
+dist-webview-check/
+dist-webview-fix-check/
+output/
+*.apk
+*.aab

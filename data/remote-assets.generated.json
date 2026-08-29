@@ -1055,6 +1055,22 @@
       }
     }
   },
+  "https://covers.openlibrary.org/b/isbn/9780897501859-L.jpg": {
+    "formats": {
+      "240": {
+        "avif": "images/generated/remote/a5543202c17df2-240.avif",
+        "jpg": "images/generated/remote/a5543202c17df2-240.jpg"
+      },
+      "360": {
+        "avif": "images/generated/remote/a5543202c17df2-360.avif",
+        "jpg": "images/generated/remote/a5543202c17df2-360.jpg"
+      },
+      "480": {
+        "avif": "images/generated/remote/a5543202c17df2-480.avif",
+        "jpg": "images/generated/remote/a5543202c17df2-480.jpg"
+      }
+    }
+  },
   "https://covers.openlibrary.org/b/isbn/9780939173457-L.jpg": {
     "formats": {
       "240": {

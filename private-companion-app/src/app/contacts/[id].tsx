@@ -1,0 +1,53 @@
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { SymbolView } from 'expo-symbols';
+import { useCallback, useMemo, useState } from 'react';
+import { Alert, Linking, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { Button } from '@/components/ui';
+import { Fonts, type AppColors } from '@/constants/theme';
+import type { RelationshipInteraction } from '@/domain/models';
+import { useTheme } from '@/hooks/use-theme';
+import { listRelationshipInteractions } from '@/storage/repository';
+import { useApp } from '@/state/app-context';
+
+const dateTime = new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+
+function initials(name: string) { return name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase() || '?'; }
+
+export default function ContactDetailScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
+  const colors = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+  const { contacts, deleteContact, logContactInteraction } = useApp();
+  const contact = contacts.find((candidate) => candidate.id === id);
+  const [interactions, setInteractions] = useState<RelationshipInteraction[]>([]);
+  const [summary, setSummary] = useState('');
+  const [saving, setSaving] = useState(false);
+  const reloadInteractions = useCallback(() => {
+    if (id) void listRelationshipInteractions(id).then(setInteractions).catch(() => setInteractions([]));
+  }, [id]);
+  useFocusEffect(reloadInteractions);
+  if (!contact) return <SafeAreaView edges={['top']} style={styles.safe}><View style={styles.missing}><Text style={styles.missingTitle}>This person is no longer here.</Text><Button label="Back to people" onPress={() => router.replace('/contacts')} /></View></SafeAreaView>;
+  const log = async () => { setSaving(true); await logContactInteraction(contact.id, summary); setSummary(''); setSaving(false); reloadInteractions(); };
+  const deleteThis = () => Alert.alert(`Remove ${contact.name}?`, 'This permanently removes their notes and conversation history from this phone.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Remove', style: 'destructive', onPress: async () => { await deleteContact(contact.id); router.replace('/contacts'); } }]);
+  const next = contact.nextFollowUpAt ? dateTime.format(new Date(contact.nextFollowUpAt)) : 'Not scheduled';
+  const openWebsite = () => { if (contact.website) void Linking.openURL(contact.website.match(/^https?:\/\//) ? contact.website : `https://${contact.website}`); };
+  return <SafeAreaView edges={['top']} style={styles.safe}><ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
+    <View style={styles.topRow}><Pressable onPress={() => router.back()} accessibilityLabel="Back to people" accessibilityRole="button" style={styles.back}><SymbolView name={{ ios: 'chevron.left', android: 'arrow_back' }} size={21} tintColor={colors.action} /><Text style={styles.backText}>People</Text></Pressable><View style={styles.topActions}><Pressable onPress={() => router.push(`/contacts/edit?id=${contact.id}`)} accessibilityLabel={`Edit ${contact.name}`} accessibilityRole="button" style={styles.topAction}><SymbolView name={{ ios: 'pencil', android: 'edit' }} size={18} tintColor={colors.action} /><Text style={styles.topActionText}>Edit</Text></Pressable><Pressable onPress={deleteThis} accessibilityLabel={`Remove ${contact.name}`} accessibilityRole="button" style={styles.topAction}><SymbolView name={{ ios: 'trash', android: 'delete' }} size={18} tintColor={colors.danger} /></Pressable></View></View>
+    <View style={styles.profile}><View style={styles.avatar}><Text style={styles.avatarText}>{initials(contact.name)}</Text></View><View style={styles.profileCopy}><Text style={styles.name}>{contact.name}</Text><Text style={styles.work}>{[contact.role, contact.company].filter(Boolean).join(' · ') || 'A person worth remembering'}</Text>{contact.location ? <Text style={styles.location}>{contact.location}</Text> : null}</View></View>
+    {(contact.email || contact.phone || contact.website) ? <View style={styles.quickActions}>{contact.email ? <Pressable accessibilityRole="button" onPress={() => void Linking.openURL(`mailto:${contact.email}`)} style={styles.quickAction}><SymbolView name={{ ios: 'envelope', android: 'email' }} size={17} tintColor={colors.action} /><Text style={styles.quickLabel}>Email</Text></Pressable> : null}{contact.phone ? <Pressable accessibilityRole="button" onPress={() => void Linking.openURL(`tel:${contact.phone}`)} style={styles.quickAction}><SymbolView name={{ ios: 'phone', android: 'call' }} size={17} tintColor={colors.action} /><Text style={styles.quickLabel}>Call</Text></Pressable> : null}{contact.website ? <Pressable accessibilityRole="button" onPress={openWebsite} style={styles.quickAction}><SymbolView name={{ ios: 'link', android: 'link' }} size={17} tintColor={colors.action} /><Text style={styles.quickLabel}>Open link</Text></Pressable> : null}</View> : null}
+    <View style={styles.rhythm}><View><Text style={styles.rhythmLabel}>NEXT FOLLOW-UP</Text><Text style={styles.rhythmValue}>{next}</Text></View><View style={styles.cadence}><Text style={styles.cadenceValue}>{contact.cadenceDays}</Text><Text style={styles.cadenceLabel}>DAY RHYTHM</Text></View></View>
+    {contact.tags.length ? <View style={styles.tags}>{contact.tags.map((tag) => <View key={tag} style={styles.tag}><Text style={styles.tagText}>{tag}</Text></View>)}</View> : null}
+    <View style={styles.section}><Text style={styles.sectionTitle}>Log a conversation</Text><TextInput value={summary} onChangeText={setSummary} multiline textAlignVertical="top" placeholder="What did you talk about? What should you remember?" placeholderTextColor={colors.textSecondary} style={styles.input} /><Button label="Save conversation" onPress={log} busy={saving} disabled={!summary.trim() || saving} /></View>
+    {contact.notes ? <View style={styles.section}><Text style={styles.sectionTitle}>What matters</Text><Text style={styles.notes}>{contact.notes}</Text></View> : null}
+    <View style={styles.section}><Text style={styles.sectionTitle}>Relationship history</Text>{interactions.length ? interactions.map((interaction) => <View key={interaction.id} style={styles.interaction}><View style={styles.timelineDot} /><View style={styles.interactionCopy}><Text style={styles.interactionDate}>{dateTime.format(new Date(interaction.occurredAt))}</Text><Text style={styles.interactionSummary}>{interaction.summary}</Text></View></View>) : <Text style={styles.empty}>No conversations logged yet. Add one after your next call, coffee, or message.</Text>}</View>
+  </ScrollView></SafeAreaView>;
+}
+
+function createStyles(colors: AppColors) { return StyleSheet.create({
+  quickActions: { flexDirection: 'row', gap: 8 }, quickAction: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 13, paddingVertical: 10, borderRadius: 9, backgroundColor: colors.backgroundElement, borderWidth: 1, borderColor: colors.line }, quickLabel: { color: colors.action, fontFamily: Fonts.bold, fontSize: 13 },
+  topActions: { flexDirection: 'row', alignItems: 'center', gap: 12 }, topAction: { flexDirection: 'row', alignItems: 'center', gap: 4, padding: 5 }, topActionText: { color: colors.action, fontFamily: Fonts.bold, fontSize: 14 },
+  safe: { flex: 1, backgroundColor: colors.background }, content: { padding: 20, paddingBottom: 120, gap: 20, width: '100%', maxWidth: 760, alignSelf: 'center' }, topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }, back: { flexDirection: 'row', gap: 4, alignItems: 'center' }, backText: { color: colors.action, fontFamily: Fonts.bold, fontSize: 15 }, profile: { flexDirection: 'row', alignItems: 'center', gap: 14 }, avatar: { width: 66, height: 66, borderRadius: 33, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.accentSoft }, avatarText: { color: colors.action, fontFamily: Fonts.bold, fontSize: 22 }, profileCopy: { flex: 1, gap: 2 }, name: { color: colors.text, fontFamily: Fonts.bold, fontSize: 29, lineHeight: 35 }, work: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 15 }, location: { color: colors.accent, fontFamily: Fonts.semibold, fontSize: 13 }, rhythm: { flexDirection: 'row', justifyContent: 'space-between', padding: 17, backgroundColor: colors.action, borderRadius: 12 }, rhythmLabel: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 11, letterSpacing: 1 }, rhythmValue: { color: colors.onAction, fontFamily: Fonts.bold, fontSize: 20, marginTop: 2 }, cadence: { alignItems: 'flex-end' }, cadenceValue: { color: colors.onAction, fontFamily: Fonts.bold, fontSize: 25, lineHeight: 25 }, cadenceLabel: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 10, letterSpacing: .8, marginTop: 3 }, tags: { flexDirection: 'row', gap: 7, flexWrap: 'wrap', marginTop: -8 }, tag: { backgroundColor: colors.accentSoft, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 6 }, tagText: { color: colors.action, fontFamily: Fonts.bold, fontSize: 12 }, section: { gap: 10, paddingTop: 2 }, sectionTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 19 }, input: { minHeight: 114, color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.line, borderWidth: 1, borderRadius: 10, padding: 12, fontFamily: Fonts.sans, fontSize: 15 }, notes: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 15, lineHeight: 23, backgroundColor: colors.backgroundElement, borderWidth: 1, borderColor: colors.line, borderRadius: 10, padding: 14 }, interaction: { flexDirection: 'row', gap: 12, paddingVertical: 10, borderBottomColor: colors.line, borderBottomWidth: StyleSheet.hairlineWidth }, timelineDot: { width: 10, height: 10, borderRadius: 5, marginTop: 5, backgroundColor: colors.accent }, interactionCopy: { flex: 1, gap: 3 }, interactionDate: { color: colors.textSecondary, fontFamily: Fonts.semibold, fontSize: 12 }, interactionSummary: { color: colors.text, fontFamily: Fonts.sans, fontSize: 15, lineHeight: 22 }, empty: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 14, lineHeight: 21 }, missing: { flex: 1, padding: 24, gap: 16, justifyContent: 'center' }, missingTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 22, textAlign: 'center' },
+}); }

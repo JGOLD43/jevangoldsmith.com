@@ -280,7 +280,7 @@
         },
         {
           "author": "Bruce Lee",
-          "coverImage": "https://covers.openlibrary.org/b/isbn/9780897501859-L.jpg",
+          "coverImage": "images/generated/remote/a5543202c17df2-240.jpg",
           "href": "/books/9780897501859.html",
           "label": "Bruce Lee: Wisdom for the Way (2009)",
           "title": "Bruce Lee: Wisdom for the Way"
@@ -291,7 +291,7 @@
     {
       "bio": "Céline is a fictional character from the Before trilogy whose conversations with Jesse turn ordinary time into a serious inquiry into love, choice, memory, and identity.",
       "category": "creators",
-      "image": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/0/51970-before-sunset-0-600-0-900-crop.jpg?v=718e2923ff",
+      "image": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/4/51974-before-sunrise-0-600-0-900-crop.jpg?v=006e8fedea",
       "lesson": "Meet life with candor and curiosity",
       "name": "Céline",
       "profileHref": "",
@@ -302,21 +302,21 @@
       "books": [],
       "movies": [
         {
-          "coverImage": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/0/51970-before-sunset-0-600-0-900-crop.jpg?v=718e2923ff",
-          "href": "movies.html?movie=Before%20Sunset",
-          "label": "Before Sunset (2004)",
-          "title": "Before Sunset",
-          "year": "2004"
-        },
-        {
           "coverImage": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/4/51974-before-sunrise-0-600-0-900-crop.jpg?v=006e8fedea",
           "href": "movies.html?movie=Before%20Sunrise",
           "label": "Before Sunrise (1995)",
           "title": "Before Sunrise",
           "year": "1995"
+        },
+        {
+          "coverImage": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/0/51970-before-sunset-0-600-0-900-crop.jpg?v=718e2923ff",
+          "href": "movies.html?movie=Before%20Sunset",
+          "label": "Before Sunset (2004)",
+          "title": "Before Sunset",
+          "year": "2004"
         }
       ],
-      "searchText": "Céline Fictional Character, Before Sunrise Meet life with candor and curiosity fiction fictional character Before Sunset (2004) Before Sunrise (1995)"
+      "searchText": "Céline Fictional Character, Before Sunrise Meet life with candor and curiosity fiction fictional character Before Sunrise (1995) Before Sunset (2004)"
     },
     {
       "bio": "Learn from the life behind the work",
@@ -410,8 +410,8 @@
     },
     {
       "bio": "Jesse Wallace is a fictional traveler and writer from the Before trilogy, useful as a study in romantic attention, restlessness, and the stories people tell to make sense of their lives.",
-      "category": "creators",
-      "image": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/0/51970-before-sunset-0-600-0-900-crop.jpg?v=718e2923ff",
+      "category": "writers",
+      "image": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/4/51974-before-sunrise-0-600-0-900-crop.jpg?v=006e8fedea",
       "lesson": "Stay awake to the rare conversation in front of you",
       "name": "Jesse Wallace",
       "profileHref": "",
@@ -422,21 +422,21 @@
       "books": [],
       "movies": [
         {
-          "coverImage": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/0/51970-before-sunset-0-600-0-900-crop.jpg?v=718e2923ff",
-          "href": "movies.html?movie=Before%20Sunset",
-          "label": "Before Sunset (2004)",
-          "title": "Before Sunset",
-          "year": "2004"
-        },
-        {
           "coverImage": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/4/51974-before-sunrise-0-600-0-900-crop.jpg?v=006e8fedea",
           "href": "movies.html?movie=Before%20Sunrise",
           "label": "Before Sunrise (1995)",
           "title": "Before Sunrise",
           "year": "1995"
+        },
+        {
+          "coverImage": "https://a.ltrbxd.com/resized/film-poster/5/1/9/7/0/51970-before-sunset-0-600-0-900-crop.jpg?v=718e2923ff",
+          "href": "movies.html?movie=Before%20Sunset",
+          "label": "Before Sunset (2004)",
+          "title": "Before Sunset",
+          "year": "2004"
         }
       ],
-      "searchText": "Jesse Wallace Fictional Writer, Before Sunrise Stay awake to the rare conversation in front of you fiction fictional character Before Sunset (2004) Before Sunrise (1995)"
+      "searchText": "Jesse Wallace Fictional Writer, Before Sunrise Stay awake to the rare conversation in front of you fiction fictional character Before Sunrise (1995) Before Sunset (2004)"
     },
     {
       "bio": "Keith J. Cunningham is an entrepreneur and business teacher focused on judgment, financial discipline, and asking better questions before acting.",

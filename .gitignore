@@ -30,6 +30,7 @@ playwright-report/
 .playwright-cli/
 .playwright-mcp/
 tests/visual-diff/
+output/
 # Root-level debug screenshots (live in tests/ if needed long-term)
 /*.png
 /*.jpeg

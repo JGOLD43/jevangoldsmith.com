@@ -1,0 +1,123 @@
+{
+  "expo": {
+    "name": "JGOLD",
+    "slug": "private-companion-app",
+    "version": "1.5.3",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0,
+      "requestHeaders": {
+        "expo-channel-name": "production"
+      },
+      "url": "https://u.expo.dev/eea043e0-b61b-4cf7-8134-5f82ab54a35a"
+    },
+    "orientation": "portrait",
+    "icon": "./assets/images/jgold-icon.png",
+    "scheme": "privatecompanionapp",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "icon": "./assets/images/jgold-icon.png",
+      "bundleIdentifier": "com.jevangoldsmith.privatecompanion",
+      "supportsTablet": false,
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "infoPlist": {
+        "UIFileSharingEnabled": false,
+        "LSSupportsOpeningDocumentsInPlace": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FFD91A",
+        "foregroundImage": "./assets/images/jgold-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.jevangoldsmith.privatecompanion",
+      "intentFilters": [
+        {
+          "action": "SEND",
+          "category": [
+            "DEFAULT"
+          ],
+          "data": [
+            {
+              "mimeType": "text/html"
+            },
+            {
+              "mimeType": "application/xhtml+xml"
+            }
+          ]
+        }
+      ],
+      "versionCode": 16,
+      "allowBackup": false,
+      "softwareKeyboardLayoutMode": "resize",
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ]
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/jgold-icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FFD91A",
+          "image": "./assets/images/jgold-icon-foreground.png",
+          "imageWidth": 180
+        }
+      ],
+      [
+        "expo-sqlite",
+        {
+          "useSQLCipher": true
+        }
+      ],
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": "Use Face ID to protect your JGOLD vault."
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Use Face ID to unlock your JGOLD vault."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Choose a photo to copy into your encrypted private vault.",
+          "cameraPermission": "Take a photo directly into your encrypted private vault.",
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "defaultChannel": "relationship-reminders"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "eea043e0-b61b-4cf7-8134-5f82ab54a35a"
+      }
+    },
+    "owner": "jgold43"
+  }
+}

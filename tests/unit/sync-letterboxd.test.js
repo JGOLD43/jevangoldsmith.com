@@ -1,5 +1,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const {
   isFilmDiaryEntry,
@@ -83,4 +85,9 @@ test('Letterboxd sync deduplicates HTML-encoded movie titles', () => {
   assert.equal(deduplicated, 1);
   assert.equal(merged.length, 1);
   assert.equal(merged[0].tmdbId, 164);
+});
+
+test('Letterboxd sync checks for new diary entries throughout the day', () => {
+  const workflow = fs.readFileSync(path.join(__dirname, '../../.github/workflows/letterboxd-sync.yml'), 'utf8');
+  assert.match(workflow, /cron: '\*\/30 \* \* \* \*'/);
 });
