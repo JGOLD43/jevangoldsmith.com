@@ -60,7 +60,7 @@
     "@biomejs/biome": "^2.4.12",
     "dotenv": "^17.4.2",
     "html-minifier-terser": "^7.2.0",
-    "lightningcss": "^1.32.0",
+    "lightningcss": "^1.33.0",
     "sharp": "^0.34.5"
   },
   "optionalDependencies": {
