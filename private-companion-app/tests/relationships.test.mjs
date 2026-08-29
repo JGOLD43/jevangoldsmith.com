@@ -18,6 +18,7 @@ test('People is a private on-device relationship workspace with follow-ups and c
 
   assert.match(database, /CREATE TABLE IF NOT EXISTS relationship_contacts/);
   assert.match(database, /CREATE TABLE IF NOT EXISTS relationship_interactions/);
+  assert.ok(database.indexOf("ALTER TABLE relationship_contacts ADD COLUMN device_contact_id") < database.indexOf("CREATE UNIQUE INDEX IF NOT EXISTS relationship_contacts_device_unique"), 'legacy databases add the sync column before its index');
   assert.match(database, /REFERENCES relationship_contacts\(id\) ON DELETE CASCADE/);
   assert.match(repository, /addRelationshipInteraction/);
   assert.match(repository, /nextFollowUpAt/);

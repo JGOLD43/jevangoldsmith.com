@@ -103,8 +103,6 @@ async function createDatabase(): Promise<SQLiteDatabase> {
     );
     CREATE INDEX IF NOT EXISTS relationship_contacts_follow_up_index
       ON relationship_contacts(next_follow_up_at, updated_at DESC);
-    CREATE UNIQUE INDEX IF NOT EXISTS relationship_contacts_device_unique
-      ON relationship_contacts(device_contact_id) WHERE device_contact_id IS NOT NULL;
 
     CREATE TABLE IF NOT EXISTS relationship_interactions (
       id TEXT PRIMARY KEY NOT NULL,
