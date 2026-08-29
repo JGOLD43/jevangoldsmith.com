@@ -3,7 +3,7 @@ import test from 'node:test';
 
 import { normalizePublicBook, publicBookId, toPublicBookFields } from '../src/services/public-books.ts';
 import { parseKindleImport, parseKindleNotebookHtml } from '../src/services/kindle-import.ts';
-import { comparableBookTitle, findBestKindleBookMatch, isEpubCfi } from '../src/services/book-matching.ts';
+import { comparableBookTitle, findBestKindleBookMatch, isEpubCfi, relatedBookTitles } from '../src/services/book-matching.ts';
 
 test('website books normalize into metadata-only local records', () => {
   const book = normalizePublicBook({ title: 'Example', author: 'Author', isbn: '978-1-2', rating: 5, read: true, coverImage: 'images/example-360.jpg', coverImageMedium: 'images/example-240.jpg' });
@@ -93,6 +93,7 @@ test('Kindle edition titles match the attached local book before metadata copies
   const metadata = { ...base, id: 'metadata', title: 'A Useful Book', format: 'metadata', encryptedFileUri: null };
   const attached = { ...base, id: 'attached', title: 'A Useful Book', format: 'epub', encryptedFileUri: 'encrypted://book' };
   assert.equal(comparableBookTitle('A Useful Book - Kindle Edition'), 'a useful book');
+  assert.equal(relatedBookTitles('The Art of Doing Science and Engineering', 'The Art of Doing Science and Engineering: Learning to Learn'), true);
   assert.equal(findBestKindleBookMatch({ title: 'A Useful Book', sourceTitle: 'A Useful Book - Kindle Edition', author: 'Ada Reader' }, [metadata, attached])?.id, 'attached');
 });
 
@@ -110,7 +111,7 @@ test('book details surface imported highlights before collection and publishing 
 
 test('highlight repair consolidates only compatible duplicate book identities', async () => {
   const repository = await import('node:fs/promises').then((fs) => fs.readFile(new URL('../src/storage/books-repository.ts', import.meta.url), 'utf8'));
-  assert.match(repository, /authors\.size > 1 \|\| isbns\.size > 1/);
+  assert.match(repository, /authorsConflict \|\| isbns\.size > 1/);
   assert.match(repository, /UPDATE reading_sessions SET book_id/);
   assert.match(repository, /INSERT OR IGNORE INTO book_collection_members/);
   assert.match(repository, /DELETE FROM books WHERE id/);

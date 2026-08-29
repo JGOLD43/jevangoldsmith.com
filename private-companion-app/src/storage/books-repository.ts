@@ -2,7 +2,7 @@ import * as Crypto from 'expo-crypto';
 
 import type { Book, BookAnnotation, BookCollection, NewBook } from '@/domain/models';
 import type { KindleImportDocument } from '@/services/kindle-import';
-import { comparableBookTitle, findBestKindleBookMatch } from '@/services/book-matching';
+import { comparableBookTitle, findBestKindleBookMatch, relatedBookTitles } from '@/services/book-matching';
 
 import { removeEncryptedBook } from './book-files';
 import { getDatabase } from './database';
@@ -254,7 +254,7 @@ export async function repairImportedHighlightAssignments(): Promise<number> {
   const mergedIds = new Set<string>();
   const normalizedIdentity = (value: string) => value.toLocaleLowerCase().replace(/[^a-z0-9]+/g, '').trim();
   const compatible = (left: Book, right: Book) => {
-    if (comparableBookTitle(left.title) !== comparableBookTitle(right.title)) return false;
+    if (!relatedBookTitles(left.title, right.title)) return false;
     const leftAuthor = normalizedIdentity(left.author);
     const rightAuthor = normalizedIdentity(right.author);
     if (leftAuthor && rightAuthor && leftAuthor !== rightAuthor) return false;
@@ -270,9 +270,10 @@ export async function repairImportedHighlightAssignments(): Promise<number> {
       const source = mapBook(sourceRow);
       const candidates = books.filter((candidate) => !mergedIds.has(candidate.id) && compatible(source, candidate));
       if (candidates.length < 2) continue;
-      const authors = new Set(candidates.map((item) => normalizedIdentity(item.author)).filter(Boolean));
+      const authors = [...new Set(candidates.map((item) => normalizedIdentity(item.author)).filter(Boolean))];
       const isbns = new Set(candidates.map((item) => normalizedIdentity(item.isbn)).filter(Boolean));
-      if (authors.size > 1 || isbns.size > 1) continue;
+      const authorsConflict = authors.some((left) => authors.some((right) => left !== right && !left.includes(right) && !right.includes(left)));
+      if (authorsConflict || isbns.size > 1) continue;
       const target = [...candidates].sort((left, right) => canonicalScore(right) - canonicalScore(left)
         || left.addedAt.localeCompare(right.addedAt))[0];
       for (const duplicateBook of candidates) {

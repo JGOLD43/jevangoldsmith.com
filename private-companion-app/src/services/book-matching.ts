@@ -15,6 +15,16 @@ function comparableAuthor(value: string): string {
   return value.toLocaleLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
+export function relatedBookTitles(left: string, right: string): boolean {
+  const a = comparableBookTitle(left); const b = comparableBookTitle(right);
+  if (!a || !b) return false;
+  if (a === b || a.startsWith(`${b} `) || b.startsWith(`${a} `)) return true;
+  const leftTokens = new Set(a.split(' ').filter((token) => token.length > 2));
+  const rightTokens = new Set(b.split(' ').filter((token) => token.length > 2));
+  const overlap = [...leftTokens].filter((token) => rightTokens.has(token)).length / Math.max(leftTokens.size, rightTokens.size);
+  return overlap >= 0.8;
+}
+
 function normalizedIsbn(value: string | undefined): string {
   return (value ?? '').replace(/[^0-9x]/gi, '').toLocaleLowerCase();
 }
@@ -26,7 +36,7 @@ export function findBestKindleBookMatch(imported: KindleImportBook, books: Book[
   const candidates = books.filter((book) => {
     const bookIsbn = normalizedIsbn(book.isbn);
     if (isbn && bookIsbn === isbn) return true;
-    if (!titleKeys.has(comparableBookTitle(book.title))) return false;
+    if (![...titleKeys].some((title) => relatedBookTitles(title, book.title))) return false;
     const bookAuthor = comparableAuthor(book.author);
     return !author || !bookAuthor || author === bookAuthor;
   });
