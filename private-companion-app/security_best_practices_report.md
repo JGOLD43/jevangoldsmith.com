@@ -10,7 +10,7 @@ No known high- or critical-severity production dependency advisory was reported 
 
 ### High — development authentication bypass available in production
 
-Resolved in `src/state/app-context.tsx` around lines 258–285 and `src/app/settings.tsx`. Production now clears any saved bypass preference, refuses changes to it, and does not render the control. Biometric authentication remains mandatory when enrolled.
+The hardened production-only block was implemented, then intentionally reverted at the phone owner's explicit request. The app exposes a clearly labelled local “Skip fingerprint while developing” switch with a warning that anyone holding the unlocked phone can open JGOLD. This is an accepted residual risk, not an unnoticed gap.
 
 ### Medium — unnecessary Android permissions inherited from native packages
 

@@ -258,11 +258,6 @@ export function AppProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     let active = true;
 
-    if (!__DEV__) {
-      void saveDeveloperAccessEnabled(false);
-      setDeveloperAccessEnabledState(false);
-      return () => { active = false; };
-    }
     void loadDeveloperAccessEnabled().then(async (enabled) => {
       if (!active) return;
       setDeveloperAccessEnabledState(enabled);
@@ -278,7 +273,6 @@ export function AppProvider({ children }: PropsWithChildren) {
   }, [reload]);
 
   const setDeveloperAccessEnabled = useCallback(async (enabled: boolean) => {
-    if (!__DEV__) return;
     await saveDeveloperAccessEnabled(enabled);
     setDeveloperAccessEnabledState(enabled);
     if (enabled) setLocked(false);

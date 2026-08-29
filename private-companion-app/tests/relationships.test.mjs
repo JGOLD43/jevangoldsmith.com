@@ -34,6 +34,7 @@ test('People is a private on-device relationship workspace with follow-ups and c
   assert.match(phoneSync, /two-way/);
   assert.match(phoneSync, /deviceContactId/);
   assert.match(phoneSync, /addContactsChangeListener|Contact/);
+  assert.match(phoneSync, /LegacyContacts\.getContactsAsync/);
   assert.match(map, /CONTACT ATLAS/);
   assert.match(map, /never sent to a map service/);
   assert.match(people, /Recently contacted/);

@@ -122,7 +122,7 @@ export default function ContactsScreen() {
     setImporting(true);
     try {
       const result = await syncContacts('two-way', true);
-      if (!result) return;
+      if (!result) { Alert.alert('Could not sync contacts', 'JGOLD could not read the phone address book. Check Contacts permission in Android Settings and try again.'); return; }
       Alert.alert('Phone contacts synced', `${result.imported} added, ${result.updated} refreshed and ${result.exported} added to your phone. Future changes sync automatically.`);
     } catch (cause) {
       Alert.alert('Could not import contacts', cause instanceof Error ? cause.message : 'Please try again.');

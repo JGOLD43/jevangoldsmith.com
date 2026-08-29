@@ -279,7 +279,7 @@ export default function SettingsScreen() {
           <Text style={styles.sectionFooter}>Compatible updates arrive automatically without a cable. The updater never reads or uploads private vault data.</Text>
         </View>
 
-        {__DEV__ ? <View style={styles.section}>
+        <View style={styles.section}>
           <SectionLabel>Developer Access</SectionLabel>
           <SettingsGroup>
             <SettingsRow
@@ -292,7 +292,7 @@ export default function SettingsScreen() {
             />
           </SettingsGroup>
           <Text style={styles.sectionFooter}>Keep this off unless the app is connected for development or design checks.</Text>
-        </View> : null}
+        </View>
 
         <View style={styles.section}>
           <SectionLabel>About</SectionLabel>

@@ -8,6 +8,7 @@ import {
   type ExistingAddress,
   type ExistingDate,
 } from 'expo-contacts';
+import * as LegacyContacts from 'expo-contacts/legacy';
 import * as SecureStore from 'expo-secure-store';
 
 import type { NewRelationshipContact, RelationshipContact } from '@/domain/models';
@@ -91,6 +92,35 @@ function inputFromDevice(person: DeviceContact, existing?: RelationshipContact):
   };
 }
 
+function inputFromLegacy(person: LegacyContacts.ExistingContact, existing?: RelationshipContact): NewRelationshipContact | null {
+  const name = clean(person.name) || [person.firstName, person.middleName, person.lastName].map(clean).filter(Boolean).join(' ');
+  if (!name) return null;
+  const address = person.addresses?.[0];
+  const location = address ? [address.street, address.city, address.region, address.postalCode, address.country].map(clean).filter(Boolean).join(', ') : existing?.location ?? '';
+  const coordinates = approximateContactCoordinates(location);
+  return {
+    name,
+    company: clean(person.company),
+    role: clean(person.jobTitle),
+    email: clean(person.emails?.[0]?.email),
+    phone: clean(person.phoneNumbers?.[0]?.number),
+    website: clean(person.urlAddresses?.[0]?.url),
+    location,
+    latitude: existing?.latitude ?? coordinates?.latitude ?? null,
+    longitude: existing?.longitude ?? coordinates?.longitude ?? null,
+    birthday: formattedBirthday(person.birthday) || existing?.birthday || '',
+    imageUri: clean(person.image?.uri) || existing?.imageUri || '',
+    favorite: Boolean(person.isFavorite),
+    deviceContactId: person.id,
+    tags: existing?.tags ?? [],
+    notes: existing?.notes ?? '',
+    cadenceDays: existing?.cadenceDays ?? 30,
+    nextFollowUpAt: existing?.nextFollowUpAt ?? null,
+    firstMetAt: existing?.firstMetAt ?? null,
+    firstMetPlace: existing?.firstMetPlace ?? '',
+  };
+}
+
 function splitName(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   return { givenName: parts.slice(0, -1).join(' ') || parts[0] || '', familyName: parts.length > 1 ? parts.at(-1) ?? '' : '' };
@@ -117,16 +147,32 @@ export async function pushRelationshipContactToPhone(contact: RelationshipContac
   if (await getPhoneSyncMode() !== 'two-way' || !await ensurePermission(false)) return contact;
   const names = splitName(contact.name);
   if (!contact.deviceContactId) {
-    const created = await Contact.create({
-      ...names,
-      company: contact.company || undefined,
-      jobTitle: contact.role || undefined,
-      isFavourite: contact.favorite,
-      emails: contact.email ? [{ label: 'main', address: contact.email }] : [],
-      phones: contact.phone ? [{ label: 'mobile', number: contact.phone }] : [],
-      urlAddresses: contact.website ? [{ label: 'homepage', url: contact.website }] : [],
-    });
-    return updateRelationshipContact(contact.id, { ...contact, deviceContactId: created.id });
+    try {
+      const created = await Contact.create({
+        ...names,
+        company: contact.company || undefined,
+        jobTitle: contact.role || undefined,
+        isFavourite: contact.favorite,
+        emails: contact.email ? [{ label: 'main', address: contact.email }] : [],
+        phones: contact.phone ? [{ label: 'mobile', number: contact.phone }] : [],
+        urlAddresses: contact.website ? [{ label: 'homepage', url: contact.website }] : [],
+      });
+      return updateRelationshipContact(contact.id, { ...contact, deviceContactId: created.id });
+    } catch {
+      const id = await LegacyContacts.addContactAsync({
+        contactType: LegacyContacts.ContactTypes.Person,
+        name: contact.name,
+        firstName: names.givenName,
+        lastName: names.familyName,
+        company: contact.company,
+        jobTitle: contact.role,
+        isFavorite: contact.favorite,
+        emails: contact.email ? [{ label: 'main', email: contact.email }] : [],
+        phoneNumbers: contact.phone ? [{ label: 'mobile', number: contact.phone }] : [],
+        urlAddresses: contact.website ? [{ label: 'homepage', url: contact.website }] : [],
+      });
+      return updateRelationshipContact(contact.id, { ...contact, deviceContactId: id });
+    }
   }
 
   const device = new Contact(contact.deviceContactId);
@@ -149,7 +195,12 @@ export async function pushRelationshipContactToPhone(contact: RelationshipContac
 export async function syncPhoneContacts(mode: Exclude<PhoneSyncMode, 'off'>, request = false): Promise<PhoneSyncResult> {
   if (!await ensurePermission(request)) throw new Error('Contacts permission is required to sync your phone address book.');
   await setPhoneSyncMode(mode);
-  const deviceContacts = await Contact.getAllDetails(FIELDS, { sortOrder: ContactsSortOrder.UserDefault });
+  let deviceContacts: DeviceContact[] = [];
+  try {
+    deviceContacts = await Contact.getAllDetails(FIELDS, { sortOrder: ContactsSortOrder.UserDefault });
+  } catch {
+    // Installed builds from before Expo's class API use the compatible legacy bridge.
+  }
   let local = await listRelationshipContacts();
   const byDeviceId = new Map(local.filter((item) => item.deviceContactId).map((item) => [item.deviceContactId, item]));
   const byEmail = new Map(local.filter((item) => item.email).map((item) => [emailKey(item.email), item]));
@@ -177,6 +228,40 @@ export async function syncPhoneContacts(mode: Exclude<PhoneSyncMode, 'off'>, req
       const next = await addRelationshipContact(input);
       byDeviceId.set(person.id, next);
       imported += 1;
+    }
+  }
+
+  if (!deviceContacts.length) {
+    const response = await LegacyContacts.getContactsAsync({ fields: [
+      LegacyContacts.Fields.Name,
+      LegacyContacts.Fields.Emails,
+      LegacyContacts.Fields.PhoneNumbers,
+      LegacyContacts.Fields.Company,
+      LegacyContacts.Fields.JobTitle,
+      LegacyContacts.Fields.Addresses,
+      LegacyContacts.Fields.UrlAddresses,
+      LegacyContacts.Fields.Birthday,
+      LegacyContacts.Fields.Image,
+      LegacyContacts.Fields.IsFavorite,
+    ] });
+    for (const person of response.data) {
+      const email = clean(person.emails?.[0]?.email);
+      const phone = clean(person.phoneNumbers?.[0]?.number);
+      const existing = byDeviceId.get(person.id)
+        ?? (email ? byEmail.get(emailKey(email)) : undefined)
+        ?? (phone ? byPhone.get(phoneKey(phone)) : undefined)
+        ?? (!email && !phone ? byName.get(nameKey(person.name)) : undefined);
+      const input = inputFromLegacy(person, existing);
+      if (!input) continue;
+      if (existing) {
+        const next = await updateRelationshipContact(existing.id, input);
+        byDeviceId.set(person.id, next);
+        updated += 1;
+      } else {
+        const next = await addRelationshipContact(input);
+        byDeviceId.set(person.id, next);
+        imported += 1;
+      }
     }
   }
 
