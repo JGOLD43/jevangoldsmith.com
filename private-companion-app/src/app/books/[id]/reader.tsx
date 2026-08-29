@@ -25,8 +25,22 @@ import { useApp } from '@/state/app-context';
 import { useBooks } from '@/state/books-context';
 import { prepareBookForReading, removePreparedBook } from '@/storage/book-files';
 import { useEpubFileSystem } from '@/storage/epub-file-system';
+import { isEpubCfi } from '@/services/book-matching';
 
 type Selection = { text: string; locator: string };
+
+function AnnotationList({ annotations, onOpen }: { annotations: BookAnnotation[]; onOpen?: (locator: string) => void }) {
+  const colors = useTheme();
+  const styles = stylesForTools(colors);
+  return <FlatList data={annotations.filter((item) => item.kind !== 'bookmark')} keyExtractor={(item) => item.id}
+    renderItem={({ item }) => <Pressable disabled={!onOpen || !isEpubCfi(item.locator)} style={styles.toolRow}
+      onPress={() => onOpen?.(item.locator)}>
+      <Text style={styles.toolTitle}>{item.selectedText || item.note || 'Saved note'}</Text>
+      {item.note && item.selectedText ? <Text style={styles.annotationNote}>{item.note}</Text> : null}
+      <Text style={styles.annotationLocation}>{item.locator || 'Imported highlight'}</Text>
+    </Pressable>}
+    ListEmptyComponent={<Text style={styles.empty}>No highlights or notes saved for this book.</Text>} />;
+}
 
 function AnnotationComposer({ selection, visible, onDismiss, onSave }: {
   selection: Selection | null; visible: boolean; onDismiss: () => void;
@@ -87,10 +101,11 @@ function EpubContent({ book, uri, annotations }: { book: Book; uri: string; anno
   const [selection, setSelection] = useState<Selection | null>(null);
   const [noteOpen, setNoteOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
+  const [toolView, setToolView] = useState<'contents' | 'highlights'>('contents');
   const [searchQuery, setSearchQuery] = useState('');
   const [fontSize, setFontSize] = useState(100);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const initialAnnotations = useMemo<Annotation[]>(() => annotations.filter((item) => item.kind === 'highlight').map((item) => ({
+  const initialAnnotations = useMemo<Annotation[]>(() => annotations.filter((item) => item.kind === 'highlight' && isEpubCfi(item.locator)).map((item) => ({
     type: 'highlight', cfiRange: item.locator, cfiRangeText: item.selectedText, sectionIndex: 0,
     data: { id: item.id }, styles: { color: item.color, opacity: 0.35 },
   })), [annotations]);
@@ -182,27 +197,37 @@ function EpubContent({ book, uri, annotations }: { book: Book; uri: string; anno
             <Button label={reader.flow === 'paginated' ? 'Scroll' : 'Pages'} variant="quiet" onPress={() => reader.changeFlow(reader.flow === 'paginated' ? 'scrolled-doc' : 'paginated')} />
             <Button label="Bookmark" variant="quiet" onPress={() => { void bookmark(); }} />
           </View>
-          <TextInput value={searchQuery} onChangeText={(value) => { setSearchQuery(value); if (value.trim()) reader.search(value.trim()); else reader.clearSearchResults(); }}
-            placeholder="Search inside this book" placeholderTextColor={colors.textSecondary} style={stylesForTools(colors).search} />
-          <Text style={stylesForTools(colors).sectionLabel}>{searchQuery.trim() ? 'Search results' : 'Table of contents'}</Text>
-          <FlatList data={toolItems} keyExtractor={(item) => item.key}
-            renderItem={({ item }) => <Pressable style={stylesForTools(colors).toolRow} onPress={() => {
-              reader.goToLocation(item.locator); setToolsOpen(false);
-            }}><Text style={stylesForTools(colors).toolTitle}>{item.label}</Text></Pressable>}
-            ListEmptyComponent={<Text style={stylesForTools(colors).empty}>Nothing found.</Text>} />
+          <View style={stylesForTools(colors).switcher}>
+            <Button label="Contents" variant={toolView === 'contents' ? 'primary' : 'secondary'} onPress={() => setToolView('contents')} />
+            <Button label={`Highlights & notes (${annotations.filter((item) => item.kind !== 'bookmark').length})`}
+              variant={toolView === 'highlights' ? 'primary' : 'secondary'} onPress={() => setToolView('highlights')} />
+          </View>
+          {toolView === 'highlights' ? <AnnotationList annotations={annotations} onOpen={(locator) => {
+            reader.goToLocation(locator); setToolsOpen(false);
+          }} /> : <>
+            <TextInput value={searchQuery} onChangeText={(value) => { setSearchQuery(value); if (value.trim()) reader.search(value.trim()); else reader.clearSearchResults(); }}
+              placeholder="Search inside this book" placeholderTextColor={colors.textSecondary} style={stylesForTools(colors).search} />
+            <Text style={stylesForTools(colors).sectionLabel}>{searchQuery.trim() ? 'Search results' : 'Table of contents'}</Text>
+            <FlatList data={toolItems} keyExtractor={(item) => item.key}
+              renderItem={({ item }) => <Pressable style={stylesForTools(colors).toolRow} onPress={() => {
+                reader.goToLocation(item.locator); setToolsOpen(false);
+              }}><Text style={stylesForTools(colors).toolTitle}>{item.label}</Text></Pressable>}
+              ListEmptyComponent={<Text style={stylesForTools(colors).empty}>Nothing found.</Text>} />
+          </>}
         </SafeAreaView>
       </Modal>
     </ReaderChrome>
   );
 }
 
-function PdfContent({ book, uri }: { book: Book; uri: string }) {
+function PdfContent({ book, uri, annotations }: { book: Book; uri: string; annotations: BookAnnotation[] }) {
   const router = useRouter();
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { addAnnotation, savePosition } = useBooks();
   const [page, setPage] = useState(book.currentPage ?? 1);
   const [pages, setPages] = useState(book.totalPages ?? 1);
+  const [toolsOpen, setToolsOpen] = useState(false);
   const progress = pages > 0 ? page / pages : 0;
 
   const bookmark = async () => {
@@ -210,12 +235,19 @@ function PdfContent({ book, uri }: { book: Book; uri: string }) {
     Alert.alert('Bookmark saved', `Page ${page} was saved privately.`);
   };
   return (
-    <ReaderChrome title={book.title} progress={progress} onBack={() => router.back()} onTools={bookmark} toolsLabel="Bookmark">
+    <ReaderChrome title={book.title} progress={progress} onBack={() => router.back()} onTools={() => setToolsOpen(true)}>
       <Pdf source={{ uri, cache: false }} page={book.currentPage ?? 1} style={styles.pdf} horizontal enablePaging
         fitPolicy={2} enableAnnotationRendering enableDoubleTapZoom trustAllCerts={false}
         onLoadComplete={(count) => setPages(count)}
         onPageChanged={(nextPage, count) => { setPage(nextPage); setPages(count); void savePosition(book.id, { progress: nextPage / count, currentPage: nextPage, totalPages: count, locator: `page:${nextPage}` }); }}
         onError={(error) => Alert.alert('Could not display PDF', error.message)} />
+      <Modal visible={toolsOpen} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setToolsOpen(false)}>
+        <SafeAreaView style={stylesForTools(colors).safe}>
+          <View style={stylesForTools(colors).header}><Text style={stylesForTools(colors).title}>Highlights & notes</Text><Pressable onPress={() => setToolsOpen(false)}><Text style={stylesForTools(colors).close}>Done</Text></Pressable></View>
+          <View style={stylesForTools(colors).controls}><Button label={`Bookmark page ${page}`} onPress={() => { void bookmark(); }} /></View>
+          <AnnotationList annotations={annotations} />
+        </SafeAreaView>
+      </Modal>
     </ReaderChrome>
   );
 }
@@ -245,7 +277,7 @@ export default function BookReaderScreen() {
 
   if (!book || error) return <SafeAreaView style={styles.errorScreen}><Text style={styles.errorTitle}>Reader unavailable</Text><Text style={styles.errorBody}>{error ?? 'Book not found.'}</Text><Button label="Back" onPress={() => router.back()} /></SafeAreaView>;
   if (!uri) return <View style={styles.loading}><ActivityIndicator color={colors.accent} /><Text style={styles.loadingText}>Unlocking book locally…</Text></View>;
-  if (book.format === 'pdf') return <PdfContent book={book} uri={uri} />;
+  if (book.format === 'pdf') return <PdfContent book={book} uri={uri} annotations={annotations} />;
   return <ReaderProvider><EpubContent book={book} uri={uri} annotations={annotations} /></ReaderProvider>;
 }
 
@@ -260,11 +292,14 @@ function stylesForTools(colors: AppColors) {
     title: { color: colors.text, fontFamily: Fonts.bold, fontSize: 25 },
     close: { color: colors.accent, fontFamily: Fonts.bold, fontSize: 15 },
     controls: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8, padding: 16 },
+    switcher: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 16, paddingBottom: 12 },
     fontValue: { color: colors.text, fontFamily: Fonts.bold, fontSize: 13 },
     search: { marginHorizontal: 16, height: 50, borderRadius: 8, borderCurve: 'continuous', borderWidth: 1, borderColor: colors.line, backgroundColor: colors.backgroundElement, color: colors.text, paddingHorizontal: 14, fontFamily: Fonts.sans, fontSize: 15 },
     sectionLabel: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.8, padding: 16, paddingBottom: 6 },
     toolRow: { paddingHorizontal: 18, paddingVertical: 15, borderBottomWidth: 1, borderBottomColor: colors.line },
     toolTitle: { color: colors.text, fontFamily: Fonts.semibold, fontSize: 15, lineHeight: 21 },
+    annotationNote: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 14, lineHeight: 20, marginTop: 6 },
+    annotationLocation: { color: colors.accent, fontFamily: Fonts.bold, fontSize: 11, marginTop: 7 },
     empty: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 14, padding: 24, textAlign: 'center' },
   });
 }

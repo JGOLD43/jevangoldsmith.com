@@ -2,6 +2,7 @@ import * as Crypto from 'expo-crypto';
 
 import type { Book, BookAnnotation, BookCollection, NewBook } from '@/domain/models';
 import type { KindleImportDocument } from '@/services/kindle-import';
+import { comparableBookTitle, findBestKindleBookMatch } from '@/services/book-matching';
 
 import { removeEncryptedBook } from './book-files';
 import { getDatabase } from './database';
@@ -171,20 +172,14 @@ export type KindleImportResult = {
   collectionsAdded: number;
 };
 
-function comparableTitle(value: string): string {
-  return value.toLocaleLowerCase().replace(/&amp;/g, ' and ').replace(/[^a-z0-9]+/g, ' ').trim();
-}
-
 export async function importKindleLibrary(input: KindleImportDocument): Promise<KindleImportResult> {
   const database = await getDatabase();
   const existingBooks = await listBooks();
-  const byTitle = new Map(existingBooks.map((book) => [comparableTitle(book.title), book]));
   const result: KindleImportResult = { booksAdded: 0, booksMatched: 0, highlightsAdded: 0, booksRepaired: 0, collectionsAdded: 0 };
 
   await database.withTransactionAsync(async () => {
     for (const imported of input.books) {
-      const key = comparableTitle(imported.sourceTitle ?? imported.title);
-      let book = byTitle.get(key);
+      let book = findBestKindleBookMatch(imported, existingBooks);
       if (!book) {
         book = await addBook({
           title: imported.title,
@@ -197,7 +192,7 @@ export async function importKindleLibrary(input: KindleImportDocument): Promise<
           isPublic: false,
           category: imported.category ?? imported.collections?.[0] ?? 'Kindle',
         });
-        byTitle.set(key, book);
+        existingBooks.push(book);
         result.booksAdded += 1;
       } else {
         result.booksMatched += 1;
@@ -246,6 +241,45 @@ export async function importKindleLibrary(input: KindleImportDocument): Promise<
     }
   });
   return result;
+}
+
+export async function repairImportedHighlightAssignments(): Promise<number> {
+  const database = await getDatabase();
+  const rows = await database.getAllAsync<BookRow & { highlight_count: number }>(`SELECT books.*,
+    COUNT(book_annotations.id) AS highlight_count FROM books
+    LEFT JOIN book_annotations ON book_annotations.book_id=books.id AND book_annotations.kind IN ('highlight', 'note')
+    GROUP BY books.id`);
+  const books = rows.map(mapBook);
+  let repaired = 0;
+  await database.withTransactionAsync(async () => {
+    for (const sourceRow of rows) {
+      if (sourceRow.format !== 'metadata' || sourceRow.highlight_count < 1) continue;
+      const source = mapBook(sourceRow);
+      const title = comparableBookTitle(source.title);
+      const candidates = books.filter((candidate) => candidate.id !== source.id && candidate.encryptedFileUri
+        && comparableBookTitle(candidate.title) === title
+        && (!source.isbn || !candidate.isbn || source.isbn.replace(/\W/g, '') === candidate.isbn.replace(/\W/g, ''))
+        && (!source.author || !candidate.author || source.author.toLocaleLowerCase().trim() === candidate.author.toLocaleLowerCase().trim()));
+      if (candidates.length !== 1) continue;
+      const target = candidates[0];
+      const annotations = await database.getAllAsync<AnnotationRow>('SELECT * FROM book_annotations WHERE book_id=?', source.id);
+      for (const annotation of annotations) {
+        const duplicate = await database.getFirstAsync<{ id: string }>(`SELECT id FROM book_annotations
+          WHERE book_id=? AND kind=? AND locator=? AND selected_text=? AND note=? LIMIT 1`, target.id,
+        annotation.kind, annotation.locator, annotation.selected_text, annotation.note);
+        if (!duplicate) {
+          await database.runAsync('UPDATE book_annotations SET book_id=?, updated_at=? WHERE id=?',
+            target.id, new Date().toISOString(), annotation.id);
+        } else {
+          await database.runAsync('DELETE FROM book_annotations WHERE id=? AND book_id=?', annotation.id, source.id);
+        }
+        repaired += 1;
+      }
+      await database.runAsync(`INSERT OR IGNORE INTO book_collection_members (collection_id, book_id)
+        SELECT collection_id, ? FROM book_collection_members WHERE book_id=?`, target.id, source.id);
+    }
+  });
+  return repaired;
 }
 
 export async function removeBookAnnotation(annotationId: string): Promise<void> {

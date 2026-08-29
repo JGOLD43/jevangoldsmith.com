@@ -25,6 +25,7 @@ import {
   importKindleLibrary,
   removeBook,
   removeBookAnnotation,
+  repairImportedHighlightAssignments,
   saveReadingPosition,
   setBookInCollection,
   syncPublicBooks,
@@ -80,6 +81,7 @@ export function BooksProvider({ children }: PropsWithChildren) {
 
   const refresh = useCallback(async () => {
     try {
+      await repairImportedHighlightAssignments();
       const [nextBooks, nextCollections, nextMemberships, nextStats] = await Promise.all([
         listBooks(), listBookCollections(), listBookCollectionMemberships(), getLibraryReadingStats(),
       ]);

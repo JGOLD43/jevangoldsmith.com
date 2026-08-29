@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import { normalizePublicBook, publicBookId, toPublicBookFields } from '../src/services/public-books.ts';
 import { parseKindleImport, parseKindleNotebookHtml } from '../src/services/kindle-import.ts';
+import { comparableBookTitle, findBestKindleBookMatch, isEpubCfi } from '../src/services/book-matching.ts';
 
 test('website books normalize into metadata-only local records', () => {
   const book = normalizePublicBook({ title: 'Example', author: 'Author', isbn: '978-1-2', rating: 5, read: true, coverImage: 'images/example-360.jpg', coverImageMedium: 'images/example-240.jpg' });
@@ -83,6 +84,20 @@ test('Kindle import stays local and idempotently checks annotations', async () =
   assert.match(repository, /importKindleLibrary/);
   assert.match(repository, /selected_text=\? AND note=\?/);
   assert.match(repository, /book_collection_members/);
-  assert.match(repository, /imported\.sourceTitle \?\? imported\.title/);
+  assert.match(repository, /findBestKindleBookMatch/);
   assert.doesNotMatch(repository, /fetch\(|publishManifest/);
+});
+
+test('Kindle edition titles match the attached local book before metadata copies', () => {
+  const base = { publicId: null, author: 'Ada Reader', isbn: '', year: '', rating: 0, reReads: 0, category: '', summary: '', review: '', coverUri: null, originalFileName: null, fileHash: null, readingStatus: 'reading', progress: 0, locator: null, totalPages: null, currentPage: null, isPublic: false, addedAt: '', updatedAt: '', lastOpenedAt: null };
+  const metadata = { ...base, id: 'metadata', title: 'A Useful Book', format: 'metadata', encryptedFileUri: null };
+  const attached = { ...base, id: 'attached', title: 'A Useful Book', format: 'epub', encryptedFileUri: 'encrypted://book' };
+  assert.equal(comparableBookTitle('A Useful Book - Kindle Edition'), 'a useful book');
+  assert.equal(findBestKindleBookMatch({ title: 'A Useful Book', sourceTitle: 'A Useful Book - Kindle Edition', author: 'Ada Reader' }, [metadata, attached])?.id, 'attached');
+});
+
+test('only real EPUB CFIs are rendered inline while imported locations stay listable', () => {
+  assert.equal(isEpubCfi('epubcfi(/6/4!/4/2/1:0)'), true);
+  assert.equal(isEpubCfi('Page 12'), false);
+  assert.equal(isEpubCfi('Location 44-45'), false);
 });
