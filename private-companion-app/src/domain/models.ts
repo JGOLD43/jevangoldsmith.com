@@ -49,6 +49,7 @@ export type NewLifeItem = Pick<LifeItem, 'area' | 'title' | 'note' | 'progress' 
 
 export type RelationshipContact = {
   id: string;
+  deviceContactId: string | null;
   name: string;
   company: string;
   role: string;
@@ -56,6 +57,13 @@ export type RelationshipContact = {
   phone: string;
   website: string;
   location: string;
+  latitude: number | null;
+  longitude: number | null;
+  birthday: string;
+  imageUri: string;
+  favorite: boolean;
+  firstMetAt: string | null;
+  firstMetPlace: string;
   tags: string[];
   notes: string;
   cadenceDays: number;
@@ -67,7 +75,9 @@ export type RelationshipContact = {
 
 export type NewRelationshipContact = Pick<RelationshipContact,
   'name' | 'company' | 'role' | 'email' | 'phone' | 'website' | 'location' | 'tags' | 'notes' | 'cadenceDays' | 'nextFollowUpAt'
->;
+> & Partial<Pick<RelationshipContact,
+  'deviceContactId' | 'latitude' | 'longitude' | 'birthday' | 'imageUri' | 'favorite' | 'firstMetAt' | 'firstMetPlace'
+>>;
 
 export type RelationshipInteraction = {
   id: string;

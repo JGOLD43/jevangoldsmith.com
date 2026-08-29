@@ -58,6 +58,7 @@ export default function WebsiteScreen() {
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { drafts, createDraft, editDraft, setDraftStatus } = useApp();
   const [composerOpen, setComposerOpen] = useState(false);
+  const [createMenuOpen, setCreateMenuOpen] = useState(false);
   const [composerInitial, setComposerInitial] = useState<NewPublicDraft | null>(null);
   const [editingDraftId, setEditingDraftId] = useState<string | null>(null);
   const [publishingId, setPublishingId] = useState<string | null>(null);
@@ -99,6 +100,7 @@ export default function WebsiteScreen() {
   const submittedCount = publicationJobs.filter((job) => job.status === 'submitted').length;
 
   const openCreate = (definition: CreateDefinition) => {
+    setCreateMenuOpen(false);
     if (definition.type === 'essay') {
       router.push('/essays/new');
       return;
@@ -161,7 +163,7 @@ export default function WebsiteScreen() {
         <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.header}>
             <View style={styles.headerCopy}><Text style={styles.eyebrow}>PUBLISHING CONTROL</Text><Text style={styles.title}>Studio</Text><Text style={styles.intro}>Create, review and publish changes to your website.</Text></View>
-            <Pressable accessibilityLabel="Create tracked essay" accessibilityRole="button" onPress={() => router.push('/essays/new')} style={({ pressed }) => [styles.addButton, pressed && styles.pressed]}><SymbolView name={{ ios: 'plus', android: 'add' }} size={27} tintColor={colors.onAction} /></Pressable>
+            <Pressable accessibilityLabel="Add website change" accessibilityRole="button" onPress={() => setCreateMenuOpen(true)} style={({ pressed }) => [styles.addButton, pressed && styles.pressed]}><SymbolView name={{ ios: 'plus', android: 'add' }} size={27} tintColor={colors.onAction} /></Pressable>
           </View>
 
           <View style={styles.statusBar}>
@@ -174,11 +176,6 @@ export default function WebsiteScreen() {
             <View style={styles.metric}><Text style={styles.metricValue}>{activeDrafts.length}</Text><Text style={styles.metricLabel}>In queue</Text></View>
             <View style={styles.metric}><Text style={styles.metricValue}>{pendingDeliveryCount}</Text><Text style={styles.metricLabel}>Delivery</Text></View>
             <View style={styles.metric}><Text style={styles.metricValue}>{submittedCount}</Text><Text style={styles.metricLabel}>Submitted</Text></View>
-          </View>
-
-          <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Create</Text><Text style={styles.sectionDetail}>Private until published</Text></View>
-          <View style={styles.createGrid}>
-            {CREATE_TYPES.map((definition) => <Pressable key={definition.type} accessibilityRole="button" onPress={() => openCreate(definition)} style={({ pressed }) => [styles.createCard, pressed && styles.pressed]}><View style={styles.createIcon}><SymbolView name={definition.icon} size={21} tintColor={colors.accent} /></View><Text style={styles.createTitle}>{definition.label}</Text><Text style={styles.createDetail}>{definition.detail}</Text></Pressable>)}
           </View>
 
           <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Publishing queue</Text><Text style={styles.sectionDetail}>{activeDrafts.length ? `${activeDrafts.length} waiting` : 'Clear'}</Text></View>
@@ -195,6 +192,15 @@ export default function WebsiteScreen() {
       </SafeAreaView>
 
       <DraftComposer visible={composerOpen} initial={composerInitial} lockedType onDismiss={() => { setComposerOpen(false); setEditingDraftId(null); }} onSave={saveComposer} />
+
+      <Modal visible={createMenuOpen} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setCreateMenuOpen(false)}>
+        <SafeAreaView style={styles.safe}>
+          <View style={styles.modalHeader}><Pressable accessibilityRole="button" accessibilityLabel="Close create menu" onPress={() => setCreateMenuOpen(false)} style={styles.modalClose}><SymbolView name={{ ios: 'xmark', android: 'close' }} size={23} tintColor={colors.text} /></Pressable><View style={styles.modalCopy}><Text style={styles.modalEyebrow}>PRIVATE UNTIL PUBLISHED</Text><Text style={styles.modalTitle}>What do you want to create?</Text></View></View>
+          <ScrollView contentContainerStyle={styles.createSheet}>
+            {CREATE_TYPES.map((definition) => <Pressable key={definition.type} accessibilityRole="button" onPress={() => openCreate(definition)} style={({ pressed }) => [styles.createRow, pressed && styles.pressed]}><View style={styles.createIcon}><SymbolView name={definition.icon} size={22} tintColor={colors.accent} /></View><View style={styles.createCopy}><Text style={styles.createTitle}>{definition.label}</Text><Text style={styles.createDetail}>{definition.detail}</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={18} tintColor={colors.textSecondary} /></Pressable>)}
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
 
       <Modal visible={Boolean(liveCollection)} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setLiveCollection(null)}>
         <SafeAreaView style={styles.safe}>
@@ -213,7 +219,7 @@ function createStyles(colors: AppColors) {
     statusBar: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderWidth: 1, borderColor: colors.line, borderRadius: 16, backgroundColor: colors.backgroundElement }, connectionDot: { width: 9, height: 9, borderRadius: 5, backgroundColor: colors.success }, connectionDotOff: { backgroundColor: colors.accent }, statusCopy: { flex: 1, gap: 2 }, statusTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 13 }, statusBody: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 10, lineHeight: 15 }, statusAction: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 12, backgroundColor: colors.backgroundSelected },
     metrics: { flexDirection: 'row', gap: 8 }, metric: { flex: 1, minHeight: 74, justifyContent: 'space-between', padding: 12, borderWidth: 1, borderColor: colors.line, borderRadius: 13, backgroundColor: colors.backgroundElement }, metricValue: { color: colors.text, fontFamily: Fonts.bold, fontSize: 22 }, metricLabel: { color: colors.textSecondary, fontFamily: Fonts.semibold, fontSize: 9, textTransform: 'uppercase' },
     sectionHeading: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, marginTop: 3 }, sectionTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 20 }, sectionDetail: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 10 },
-    createGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 9 }, createCard: { width: '31%', flexGrow: 1, minHeight: 105, justifyContent: 'space-between', padding: 13, borderWidth: 1, borderColor: colors.line, borderRadius: 15, backgroundColor: colors.backgroundElement }, createIcon: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: colors.accentSoft }, createTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 12, marginTop: 6 }, createDetail: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 9 },
+    createSheet: { padding: 20, gap: 10 }, createRow: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 13, padding: 14, borderWidth: 1, borderColor: colors.line, borderRadius: 15, backgroundColor: colors.backgroundElement }, createIcon: { width: 42, height: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 12, backgroundColor: colors.accentSoft }, createCopy: { flex: 1, gap: 3 }, createTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 15 }, createDetail: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 11 },
     draftCard: { padding: 15, gap: 11, borderWidth: 1, borderColor: colors.line, borderRadius: 16, backgroundColor: colors.backgroundElement }, draftTop: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 }, draftIcon: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: colors.accentSoft }, draftCopy: { flex: 1, gap: 2 }, draftType: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 8, letterSpacing: 0.7, textTransform: 'uppercase' }, draftTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 16, lineHeight: 20 }, statusPill: { paddingHorizontal: 8, paddingVertical: 5, borderRadius: 8, backgroundColor: colors.backgroundSelected }, readyPill: { backgroundColor: colors.accentSoft }, statusText: { color: colors.textSecondary, fontFamily: Fonts.bold, fontSize: 8, textTransform: 'uppercase' }, draftSummary: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 11, lineHeight: 16 }, draftMeta: { flexDirection: 'row', justifyContent: 'space-between', gap: 10 }, draftDate: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 9 }, draftLength: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 9 }, draftActions: { flexDirection: 'row', gap: 8 }, secondaryButton: { flex: 1, minHeight: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: colors.line }, secondaryButtonText: { color: colors.text, fontFamily: Fonts.bold, fontSize: 12 }, publishButton: { flex: 1.4, minHeight: 42, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderRadius: 10, backgroundColor: colors.action }, publishButtonText: { color: colors.onAction, fontFamily: Fonts.bold, fontSize: 12 },
     emptyQueue: { minHeight: 88, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 15, borderWidth: 1, borderColor: colors.line, borderRadius: 16, backgroundColor: colors.backgroundElement }, emptyIcon: { width: 41, height: 41, alignItems: 'center', justifyContent: 'center', borderRadius: 13, backgroundColor: colors.backgroundSelected }, emptyCopy: { flex: 1, gap: 3 }, emptyTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 14 }, emptyBody: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 10, lineHeight: 15 },
     existingRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, existingButton: { width: '47%', flexGrow: 1, minHeight: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 13, borderRadius: 11, backgroundColor: colors.backgroundElement, borderWidth: 1, borderColor: colors.line }, existingText: { color: colors.text, fontFamily: Fonts.bold, fontSize: 11 },

@@ -1,5 +1,6 @@
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as ScreenCapture from 'expo-screen-capture';
+import { addContactsChangeListener } from 'expo-contacts';
 import {
   createContext,
   type PropsWithChildren,
@@ -28,6 +29,13 @@ import type {
 } from '@/domain/models';
 import { createAiContext, createPublicDraftFromVault } from '@/domain/privacy';
 import { askFrontierModel } from '@/services/ai';
+import {
+  getPhoneSyncMode,
+  pushRelationshipContactToPhone,
+  syncPhoneContacts as syncPhoneContactsService,
+  type PhoneSyncMode,
+  type PhoneSyncResult,
+} from '@/services/phone-contact-sync';
 import {
   removeRelationshipReminder,
   syncAllRelationshipReminders,
@@ -77,6 +85,7 @@ type AppContextValue = {
   essays: EssayDocument[];
   lifeItems: LifeItem[];
   contacts: RelationshipContact[];
+  phoneSyncMode: PhoneSyncMode;
   screenshotsAllowed: boolean;
   developerAccessEnabled: boolean;
   unlock: () => Promise<void>;
@@ -101,6 +110,7 @@ type AppContextValue = {
   editContact: (id: string, input: NewRelationshipContact) => Promise<RelationshipContact | null>;
   deleteContact: (id: string) => Promise<void>;
   logContactInteraction: (id: string, summary: string) => Promise<void>;
+  syncContacts: (mode?: Exclude<PhoneSyncMode, 'off'>, requestPermission?: boolean) => Promise<PhoneSyncResult | null>;
   setScreenshotsAllowed: (allowed: boolean) => Promise<void>;
   setDeveloperAccessEnabled: (enabled: boolean) => Promise<void>;
   dismissError: () => void;
@@ -123,6 +133,7 @@ export function AppProvider({ children }: PropsWithChildren) {
   const [essays, setEssays] = useState<EssayDocument[]>([]);
   const [lifeItems, setLifeItems] = useState<LifeItem[]>([]);
   const [contacts, setContacts] = useState<RelationshipContact[]>([]);
+  const [phoneSyncMode, setPhoneSyncModeState] = useState<PhoneSyncMode>('off');
   const [screenshotsAllowed, setScreenshotsAllowedState] = useState(false);
   const [developerAccessEnabled, setDeveloperAccessEnabledState] = useState(false);
   const backgroundedAtRef = useRef<number | null>(null);
@@ -218,9 +229,40 @@ export function AppProvider({ children }: PropsWithChildren) {
     void syncAllRelationshipReminders(nextContacts).catch(() => undefined);
   }, []);
 
+  const syncContacts = useCallback(async (mode: Exclude<PhoneSyncMode, 'off'> = 'two-way', requestPermission = true) => {
+    try {
+      const result = await syncPhoneContactsService(mode, requestPermission);
+      setPhoneSyncModeState(mode);
+      await reload();
+      return result;
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Could not sync phone contacts.');
+      return null;
+    }
+  }, [reload]);
+
+  useEffect(() => {
+    let active = true;
+    void getPhoneSyncMode().then((mode) => { if (active) setPhoneSyncModeState(mode); });
+    return () => { active = false; };
+  }, []);
+
+  useEffect(() => {
+    if (locked || phoneSyncMode === 'off') return;
+    const refresh = () => { void syncContacts(phoneSyncMode, false); };
+    const subscription = addContactsChangeListener(refresh);
+    refresh();
+    return () => subscription.remove();
+  }, [locked, phoneSyncMode, syncContacts]);
+
   useEffect(() => {
     let active = true;
 
+    if (!__DEV__) {
+      void saveDeveloperAccessEnabled(false);
+      setDeveloperAccessEnabledState(false);
+      return () => { active = false; };
+    }
     void loadDeveloperAccessEnabled().then(async (enabled) => {
       if (!active) return;
       setDeveloperAccessEnabledState(enabled);
@@ -236,6 +278,7 @@ export function AppProvider({ children }: PropsWithChildren) {
   }, [reload]);
 
   const setDeveloperAccessEnabled = useCallback(async (enabled: boolean) => {
+    if (!__DEV__) return;
     await saveDeveloperAccessEnabled(enabled);
     setDeveloperAccessEnabledState(enabled);
     if (enabled) setLocked(false);
@@ -409,9 +452,10 @@ export function AppProvider({ children }: PropsWithChildren) {
   const createContact = useCallback(async (input: NewRelationshipContact) => {
     try {
       const contact = await addRelationshipContact(input);
-      setContacts((current) => [contact, ...current]);
-      void syncRelationshipReminder(contact, true).catch(() => undefined);
-      return contact;
+      const synced = await pushRelationshipContactToPhone(contact).catch(() => contact);
+      setContacts((current) => [synced, ...current]);
+      void syncRelationshipReminder(synced, true).catch(() => undefined);
+      return synced;
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Could not save this person.');
       return null;
@@ -421,9 +465,10 @@ export function AppProvider({ children }: PropsWithChildren) {
   const editContact = useCallback(async (contactId: string, input: NewRelationshipContact) => {
     try {
       const contact = await updateRelationshipContact(contactId, input);
-      setContacts((current) => current.map((candidate) => candidate.id === contactId ? contact : candidate));
-      void syncRelationshipReminder(contact, true).catch(() => undefined);
-      return contact;
+      const synced = await pushRelationshipContactToPhone(contact).catch(() => contact);
+      setContacts((current) => current.map((candidate) => candidate.id === contactId ? synced : candidate));
+      void syncRelationshipReminder(synced, true).catch(() => undefined);
+      return synced;
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Could not update this person.');
       return null;
@@ -483,6 +528,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     essays,
     lifeItems,
     contacts,
+    phoneSyncMode,
     screenshotsAllowed,
     developerAccessEnabled,
     unlock,
@@ -507,6 +553,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     editContact,
     deleteContact,
     logContactInteraction,
+    syncContacts,
     setScreenshotsAllowed,
     setDeveloperAccessEnabled,
     dismissError: () => setError(null),
@@ -520,6 +567,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     essays,
     lifeItems,
     contacts,
+    phoneSyncMode,
     screenshotsAllowed,
     developerAccessEnabled,
     unlock,
@@ -544,6 +592,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     editContact,
     deleteContact,
     logContactInteraction,
+    syncContacts,
     setScreenshotsAllowed,
     setDeveloperAccessEnabled,
   ]);

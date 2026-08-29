@@ -5,13 +5,11 @@ import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BookCover } from '@/components/book-cover';
-import { VaultComposer } from '@/components/composers';
 import { LifeItemComposer } from '@/components/life-item-composer';
 import { LIFE_AREAS, lifeAreaDefinition, type LifeAreaDefinition } from '@/constants/life-areas';
 import { Fonts, type AppColors } from '@/constants/theme';
-import type { Book, LifeArea, LifeItem, NewLifeItem, NewVaultItem } from '@/domain/models';
+import type { Book, LifeArea, LifeItem, NewLifeItem } from '@/domain/models';
 import { useTheme } from '@/hooks/use-theme';
-import { hasPublishingConnection } from '@/services/publishing';
 import { formatReadingTime } from '@/storage/reading-analytics';
 import { useApp } from '@/state/app-context';
 import { useBooks } from '@/state/books-context';
@@ -78,17 +76,13 @@ export default function HomeScreen() {
   const router = useRouter();
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const { lifeItems, drafts, createVaultItem, createLifeItem, editLifeItem, deleteLifeItem } = useApp();
+  const { lifeItems, drafts, contacts, createLifeItem, editLifeItem, deleteLifeItem } = useApp();
   const { books, readingStats, importBook } = useBooks();
   const { dashboard: learningDashboard } = useLearning();
   const [selectedArea, setSelectedArea] = useState<LifeArea>('goal');
   const [editingItem, setEditingItem] = useState<LifeItem | null>(null);
   const [lifeComposerOpen, setLifeComposerOpen] = useState(false);
-  const [vaultComposerOpen, setVaultComposerOpen] = useState(false);
-  const [publishingConnected, setPublishingConnected] = useState(false);
   const [importingBook, setImportingBook] = useState(false);
-
-  useFocusEffect(useCallback(() => { void hasPublishingConnection().then(setPublishingConnected); }, []));
 
   const definition = lifeAreaDefinition(selectedArea);
   const selectedItems = useMemo(() => lifeItems
@@ -99,6 +93,7 @@ export default function HomeScreen() {
   const averageProgress = lifeItems.length ? Math.round(lifeItems.reduce((total, item) => total + item.progress, 0) / lifeItems.length) : 0;
   const activeDrafts = drafts.filter((draft) => draft.status !== 'published');
   const recentlyOpenedBooks = books.filter((book) => book.lastOpenedAt).sort((left, right) => (right.lastOpenedAt ?? '').localeCompare(left.lastOpenedAt ?? '')).slice(0, 3);
+  const dueContacts = contacts.filter((contact) => contact.nextFollowUpAt && new Date(contact.nextFollowUpAt).getTime() <= Date.now() + 86_400_000);
 
   const openNewItem = useCallback((area = selectedArea) => { setSelectedArea(area); setEditingItem(null); setLifeComposerOpen(true); }, [selectedArea]);
   const openItem = useCallback((item: LifeItem) => { setEditingItem(item); setLifeComposerOpen(true); }, []);
@@ -129,45 +124,15 @@ export default function HomeScreen() {
       <SafeAreaView edges={['top']} style={styles.safe}>
         <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.content}>
           <View style={styles.header}>
-            <View style={styles.headerCopy}><Text style={styles.date}>{DATE_FORMATTER.format(new Date())}</Text><Text style={styles.greeting}>Your life, at a glance.</Text></View>
-            <View style={styles.headerActions}>
-              <Pressable accessibilityLabel="Settings" accessibilityRole="button" onPress={() => router.push('/settings')} style={({ pressed }) => [styles.settingsButton, pressed && styles.pressed]}><SymbolView name={{ ios: 'gearshape', android: 'settings' }} size={21} tintColor={colors.textSecondary} /></Pressable>
-              <Pressable accessibilityLabel="Add something" accessibilityRole="button" onPress={() => openNewItem()} style={({ pressed }) => [styles.addButton, pressed && styles.pressed]}><SymbolView name={{ ios: 'plus', android: 'add' }} size={27} tintColor={colors.onAction} /></Pressable>
-            </View>
+            <View style={styles.headerCopy}><Text style={styles.date}>{DATE_FORMATTER.format(new Date())}</Text><Text style={styles.greeting}>What matters today</Text><Text style={styles.feedIntro}>A focused feed of relationships, work and learning that deserve your attention.</Text></View>
+            <Pressable accessibilityLabel="Settings" accessibilityRole="button" onPress={() => router.push('/settings')} style={({ pressed }) => [styles.settingsButton, pressed && styles.pressed]}><SymbolView name={{ ios: 'gearshape', android: 'settings' }} size={21} tintColor={colors.textSecondary} /></Pressable>
           </View>
 
-          <View style={styles.hero}>
-            <View style={styles.heroTop}>
-              <View style={styles.heroCopy}>
-                <Text style={styles.heroEyebrow}>PERSONAL COMMAND CENTRE</Text>
-                <Text style={styles.heroTitle}>{activeItems ? `${activeItems} things are in motion` : 'Make room for what matters'}</Text>
-                <Text style={styles.heroBody}>{lifeItems.length ? `${completedItems} completed · ${averageProgress}% overall progress` : 'Goals, adventures, learning and plans—kept privately on this phone.'}</Text>
-              </View>
-              <View style={styles.momentum}><Text style={styles.momentumValue}>{averageProgress}</Text><Text style={styles.momentumUnit}>%</Text></View>
-            </View>
-            <View style={styles.heroTrack}><View style={[styles.heroFill, { width: `${averageProgress}%` }]} /></View>
-            <View style={styles.heroMetrics}>
-              <Pressable onPress={() => router.push('/insights?kind=books')} style={styles.heroMetric}><Text style={styles.heroMetricValue}>{readingStats.currentStreak}d</Text><Text style={styles.heroMetricLabel}>Reading streak</Text></Pressable>
-              <View style={styles.heroDivider} />
-              <Pressable onPress={() => router.push('/website')} style={styles.heroMetric}><Text style={styles.heroMetricValue}>{activeDrafts.length}</Text><Text style={styles.heroMetricLabel}>Drafts moving</Text></Pressable>
-              <View style={styles.heroDivider} />
-              <View style={styles.heroMetric}><Text style={styles.heroMetricValue}>{completedItems}</Text><Text style={styles.heroMetricLabel}>Done</Text></View>
-            </View>
-          </View>
-
-          <Pressable accessibilityRole="button" onPress={() => router.push('/learning')} style={({ pressed }) => [styles.learningCard, pressed && styles.pressed]}>
-            <View style={styles.learningTop}>
-              <View style={styles.learningIcon}><SymbolView name={{ ios: 'bolt.fill', android: 'bolt' }} size={22} tintColor={colors.accent} /></View>
-              <View style={styles.learningCopy}><Text style={styles.learningEyebrow}>LEARNING · ADAPTIVE MEMORY</Text><Text style={styles.learningTitle}>Build memory that transfers</Text></View>
-              <SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={19} tintColor={colors.textSecondary} />
-            </View>
-            <Text style={styles.learningBody}>Turn highlights into prerequisite maps, retrieve at the right time, and prove each ability through independent practice.</Text>
-            <View style={styles.learningMetrics}>
-              <Text style={styles.learningMetric}><Text style={styles.learningMetricStrong}>{learningDashboard?.dueReviews ?? 0}</Text> due</Text>
-              <Text style={styles.learningMetric}><Text style={styles.learningMetricStrong}>{learningDashboard?.todayMinutes ?? 0}m</Text> today</Text>
-              <Text style={styles.learningMetric}><Text style={styles.learningMetricStrong}>{learningDashboard?.reliableSkills ?? 0}</Text> reliable</Text>
-            </View>
-          </Pressable>
+          <View style={styles.sectionHeader}><Text style={styles.sectionTitle}>Today</Text><Text style={styles.sectionDetail}>{dueContacts.length + activeDrafts.length + (learningDashboard?.dueReviews ?? 0)} items</Text></View>
+          {dueContacts.length ? <Pressable accessibilityRole="button" onPress={() => router.push('/contacts')} style={({ pressed }) => [styles.feedCard, pressed && styles.pressed]}><View style={[styles.feedIcon, { backgroundColor: colors.accentSoft }]}><SymbolView name={{ ios: 'person.2.fill', android: 'groups' }} size={22} tintColor={colors.accent} /></View><View style={styles.feedCopy}><Text style={styles.feedEyebrow}>PEOPLE · DUE</Text><Text style={styles.feedTitle}>{dueContacts.length === 1 ? dueContacts[0].name : `${dueContacts.length} people to reconnect with`}</Text><Text style={styles.feedBody}>{dueContacts.length === 1 ? 'Open their context before reaching out.' : 'Your relationship agenda is ready.'}</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={18} tintColor={colors.textSecondary} /></Pressable> : null}
+          {(learningDashboard?.dueReviews ?? 0) > 0 ? <Pressable accessibilityRole="button" onPress={() => router.push('/learning')} style={({ pressed }) => [styles.feedCard, pressed && styles.pressed]}><View style={styles.feedIcon}><SymbolView name={{ ios: 'bolt.fill', android: 'bolt' }} size={22} tintColor={colors.accent} /></View><View style={styles.feedCopy}><Text style={styles.feedEyebrow}>LEARNING · READY</Text><Text style={styles.feedTitle}>{learningDashboard?.dueReviews} reviews are due</Text><Text style={styles.feedBody}>A short retrieval session will keep the material alive.</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={18} tintColor={colors.textSecondary} /></Pressable> : null}
+          {activeDrafts.length ? <Pressable accessibilityRole="button" onPress={() => router.push('/website')} style={({ pressed }) => [styles.feedCard, pressed && styles.pressed]}><View style={styles.feedIcon}><SymbolView name={{ ios: 'doc.text.fill', android: 'description' }} size={22} tintColor={colors.accent} /></View><View style={styles.feedCopy}><Text style={styles.feedEyebrow}>STUDIO · QUEUED</Text><Text style={styles.feedTitle}>{activeDrafts.length} website {activeDrafts.length === 1 ? 'change' : 'changes'} waiting</Text><Text style={styles.feedBody}>Review the next draft when you are ready to publish.</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={18} tintColor={colors.textSecondary} /></Pressable> : null}
+          {!dueContacts.length && !activeDrafts.length && !(learningDashboard?.dueReviews ?? 0) ? <View style={styles.caughtUp}><SymbolView name={{ ios: 'checkmark.circle.fill', android: 'check_circle' }} size={28} tintColor={colors.success} /><View style={styles.feedCopy}><Text style={styles.feedTitle}>You’re clear for today</Text><Text style={styles.feedBody}>Nothing urgent is competing for your attention.</Text></View></View> : null}
 
           <View style={styles.sectionHeader}><Text style={styles.sectionTitle}>Your world</Text><Text style={styles.sectionDetail}>Private to this phone</Text></View>
           <ScrollView accessibilityRole="tablist" horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.areaTabs}>
@@ -202,14 +167,6 @@ export default function HomeScreen() {
             <View style={styles.miniMetric}><Text style={styles.miniValue}>{readingStats.highlightCount}</Text><Text style={styles.miniLabel}>Highlights</Text></View>
           </View>
 
-          <View style={styles.sectionHeader}><Text style={styles.sectionTitle}>Capture</Text><Text style={styles.sectionDetail}>Get it out of your head</Text></View>
-          <View style={styles.captureGrid}>
-            <Pressable onPress={() => setVaultComposerOpen(true)} style={({ pressed }) => [styles.captureCard, styles.captureCardAccent, pressed && styles.pressed]}><SymbolView name={{ ios: 'square.and.pencil', android: 'edit_note' }} size={25} tintColor={colors.onAction} /><Text style={[styles.captureTitle, styles.captureTitleAccent]}>Private note</Text><Text style={[styles.captureBody, styles.captureBodyAccent]}>Thought or photo</Text></Pressable>
-            <Pressable onPress={() => router.push('/website')} style={({ pressed }) => [styles.captureCard, pressed && styles.pressed]}><SymbolView name={{ ios: 'doc.badge.plus', android: 'post_add' }} size={25} tintColor={colors.accent} /><Text style={styles.captureTitle}>Website draft</Text><Text style={styles.captureBody}>Open Studio</Text></Pressable>
-            <Pressable disabled={importingBook} onPress={() => { void startBookImport(); }} style={({ pressed }) => [styles.captureCard, pressed && styles.pressed]}><SymbolView name={{ ios: 'book.badge.plus', android: 'library_add' }} size={25} tintColor={colors.accent} /><Text style={styles.captureTitle}>Import book</Text><Text style={styles.captureBody}>{importingBook ? 'Opening files…' : 'EPUB or PDF'}</Text></Pressable>
-            <Pressable onPress={() => router.push('/website')} style={({ pressed }) => [styles.captureCard, pressed && styles.pressed]}><SymbolView name={{ ios: 'slider.horizontal.3', android: 'tune' }} size={25} tintColor={colors.accent} /><Text style={styles.captureTitle}>Studio</Text><Text style={styles.captureBody}>{publishingConnected ? 'Ready to publish' : 'Connect publishing'}</Text></Pressable>
-          </View>
-
           <Pressable accessibilityRole="button" onPress={() => router.push('/ai')} style={({ pressed }) => [styles.sitePulse, pressed && styles.pressed]}>
             <View style={styles.liveDot} /><View style={styles.siteCopy}><Text style={styles.siteEyebrow}>YOUR PUBLIC SITE</Text><Text style={styles.siteTitle}>Open the live website</Text></View><SymbolView name={{ ios: 'arrow.up.right', android: 'north_east' }} size={20} tintColor={colors.accent} />
           </Pressable>
@@ -217,7 +174,6 @@ export default function HomeScreen() {
       </SafeAreaView>
 
       <LifeItemComposer visible={lifeComposerOpen} initialArea={selectedArea} item={editingItem} onDismiss={() => setLifeComposerOpen(false)} onSave={saveLifeItem} onDelete={async (item) => { await deleteLifeItem(item.id); }} />
-      <VaultComposer visible={vaultComposerOpen} onDismiss={() => setVaultComposerOpen(false)} onSave={async (input: NewVaultItem) => { await createVaultItem(input); }} />
     </>
   );
 }
@@ -227,7 +183,7 @@ function createStyles(colors: AppColors) {
     safe: { flex: 1, backgroundColor: colors.background },
     content: { paddingHorizontal: 20, paddingTop: 18, paddingBottom: 120, gap: 20, width: '100%', maxWidth: 760, alignSelf: 'center' },
     header: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 16 }, headerCopy: { flex: 1, gap: 4 }, headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    date: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase' }, greeting: { color: colors.text, fontFamily: Fonts.bold, fontSize: 30, lineHeight: 36 },
+    date: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase' }, greeting: { color: colors.text, fontFamily: Fonts.bold, fontSize: 30, lineHeight: 36 }, feedIntro: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 12, lineHeight: 18, marginTop: 2 },
     addButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center', borderRadius: 24, backgroundColor: colors.action }, settingsButton: { width: 42, height: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 21, backgroundColor: colors.backgroundSelected },
     hero: { overflow: 'hidden', borderRadius: 22, borderCurve: 'continuous', backgroundColor: colors.backgroundElement, borderWidth: 1, borderColor: colors.line, padding: 20, gap: 18 },
     heroTop: { flexDirection: 'row', alignItems: 'flex-start', gap: 14 }, heroCopy: { flex: 1, gap: 7 },
@@ -237,6 +193,7 @@ function createStyles(colors: AppColors) {
     heroMetrics: { flexDirection: 'row', alignItems: 'center' }, heroMetric: { flex: 1, gap: 2 }, heroMetricValue: { color: colors.text, fontFamily: Fonts.bold, fontSize: 18 }, heroMetricLabel: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 9, textTransform: 'uppercase', letterSpacing: 0.3 }, heroDivider: { width: 1, height: 28, backgroundColor: colors.line, marginHorizontal: 12 },
     learningCard: { borderRadius: 20, borderWidth: 1, borderColor: colors.accent, backgroundColor: colors.backgroundElement, padding: 17, gap: 12 }, learningTop: { flexDirection: 'row', alignItems: 'center', gap: 12 }, learningIcon: { width: 43, height: 43, borderRadius: 13, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.accentSoft }, learningCopy: { flex: 1, minWidth: 0, gap: 3 }, learningEyebrow: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 8, letterSpacing: .9 }, learningTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 16 }, learningBody: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 11, lineHeight: 17 }, learningMetrics: { flexDirection: 'row', gap: 17, paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.line }, learningMetric: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 10 }, learningMetricStrong: { color: colors.text, fontFamily: Fonts.bold },
     sectionHeader: { minHeight: 28, flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, marginTop: 2 }, sectionTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 20 }, sectionDetail: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 11 }, sectionLink: { color: colors.accent, fontFamily: Fonts.bold, fontSize: 12 },
+    feedCard: { minHeight: 92, flexDirection: 'row', alignItems: 'center', gap: 13, padding: 15, borderRadius: 17, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.backgroundElement }, feedIcon: { width: 46, height: 46, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.backgroundSelected }, feedCopy: { flex: 1, minWidth: 0, gap: 3 }, feedEyebrow: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 8, letterSpacing: .8 }, feedTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 15, lineHeight: 19 }, feedBody: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 11, lineHeight: 16 }, caughtUp: { minHeight: 78, flexDirection: 'row', alignItems: 'center', gap: 13, padding: 15, borderRadius: 17, backgroundColor: colors.backgroundElement },
     areaTabs: { gap: 10, paddingRight: 20 }, areaTab: { width: 104, minHeight: 104, padding: 12, gap: 7, borderWidth: 1, borderColor: colors.line, borderRadius: 16, borderCurve: 'continuous', backgroundColor: colors.backgroundElement }, areaTabSelected: { borderColor: colors.accent, backgroundColor: colors.accentSoft }, areaIcon: { width: 36, height: 36, borderRadius: 11, alignItems: 'center', justifyContent: 'center' }, areaTabLabel: { color: colors.textSecondary, fontFamily: Fonts.bold, fontSize: 11 }, areaTabLabelSelected: { color: colors.text }, areaTabCount: { position: 'absolute', right: 12, top: 15, color: colors.textSecondary, fontFamily: Fonts.bold, fontSize: 11 },
     areaPanel: { borderWidth: 1, borderColor: colors.line, borderRadius: 18, borderCurve: 'continuous', backgroundColor: colors.backgroundElement, padding: 16, gap: 4 }, areaHeading: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, paddingBottom: 13 }, areaHeadingCopy: { flex: 1, gap: 3 }, areaTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 18 }, areaDescription: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 11, lineHeight: 16 }, areaAdd: { width: 38, height: 38, alignItems: 'center', justifyContent: 'center', borderRadius: 12 },
     lifeRow: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 11, borderTopWidth: 1, borderTopColor: colors.line, paddingVertical: 12 }, lifeEdit: { flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 9 }, check: { width: 24, height: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: colors.textSecondary, borderRadius: 8 }, lifeCopy: { flex: 1, minWidth: 0, gap: 5 }, lifeTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 }, lifeTitle: { flex: 1, color: colors.text, fontFamily: Fonts.bold, fontSize: 14 }, lifeTitleComplete: { color: colors.textSecondary, textDecorationLine: 'line-through' }, lifeProgress: { fontFamily: Fonts.bold, fontSize: 10 }, lifeNote: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 11 }, progressTrack: { height: 3, overflow: 'hidden', borderRadius: 2, backgroundColor: colors.backgroundSelected }, progressFill: { height: 3, borderRadius: 2 }, targetRow: { flexDirection: 'row', alignItems: 'center', gap: 4 }, target: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 9 },

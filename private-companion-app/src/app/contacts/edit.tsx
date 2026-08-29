@@ -23,6 +23,9 @@ export default function EditContactScreen() {
   const [phone, setPhone] = useState(contact?.phone ?? '');
   const [website, setWebsite] = useState(contact?.website ?? '');
   const [location, setLocation] = useState(contact?.location ?? '');
+  const [birthday, setBirthday] = useState(contact?.birthday ?? '');
+  const [firstMetPlace, setFirstMetPlace] = useState(contact?.firstMetPlace ?? '');
+  const [favorite, setFavorite] = useState(contact?.favorite ?? false);
   const [tags, setTags] = useState(contact?.tags.join(', ') ?? '');
   const [notes, setNotes] = useState(contact?.notes ?? '');
   const [cadence, setCadence] = useState(String(contact?.cadenceDays ?? 30));
@@ -32,7 +35,7 @@ export default function EditContactScreen() {
   const save = async () => {
     if (!name.trim()) return;
     setSaving(true);
-    const input: NewRelationshipContact = { name, company, role, email, phone, website, location, tags: tags.split(','), notes, cadenceDays: Number(cadence) || 30, nextFollowUpAt };
+    const input: NewRelationshipContact = { name, company, role, email, phone, website, location, birthday, firstMetPlace, favorite, tags: tags.split(','), notes, cadenceDays: Number(cadence) || 30, nextFollowUpAt };
     const result = await editContact(contact.id, input);
     setSaving(false);
     if (result) router.replace(`/contacts/${contact.id}`);
@@ -42,6 +45,7 @@ export default function EditContactScreen() {
     <Text style={styles.label}>Work</Text><View style={styles.row}><TextInput value={company} onChangeText={setCompany} placeholder="Company" placeholderTextColor={colors.textSecondary} style={[styles.input, styles.flex]} /><TextInput value={role} onChangeText={setRole} placeholder="Role" placeholderTextColor={colors.textSecondary} style={[styles.input, styles.flex]} /></View>
     <Text style={styles.label}>Contact details</Text><TextInput value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" placeholder="Email" placeholderTextColor={colors.textSecondary} style={styles.input} /><View style={styles.row}><TextInput value={phone} onChangeText={setPhone} keyboardType="phone-pad" placeholder="Phone" placeholderTextColor={colors.textSecondary} style={[styles.input, styles.flex]} /><TextInput value={website} onChangeText={setWebsite} autoCapitalize="none" placeholder="Website / LinkedIn" placeholderTextColor={colors.textSecondary} style={[styles.input, styles.flex]} /></View>
     <Text style={styles.label}>Location</Text><TextInput value={location} onChangeText={setLocation} placeholder="City or timezone" placeholderTextColor={colors.textSecondary} style={styles.input} />
+    <Text style={styles.label}>Relationship details</Text><View style={styles.row}><TextInput value={birthday} onChangeText={setBirthday} placeholder="Birthday (YYYY-MM-DD)" placeholderTextColor={colors.textSecondary} style={[styles.input, styles.flex]} /><TextInput value={firstMetPlace} onChangeText={setFirstMetPlace} placeholder="Where you met" placeholderTextColor={colors.textSecondary} style={[styles.input, styles.flex]} /></View><Chip label={favorite ? '★ Favorite' : '☆ Add to favorites'} selected={favorite} onPress={() => setFavorite((value) => !value)} />
     <Text style={styles.label}>Groups</Text><TextInput value={tags} onChangeText={setTags} placeholder="Friend, investor, school…" placeholderTextColor={colors.textSecondary} style={styles.input} />
     <Text style={styles.label}>Keep-in-touch rhythm</Text><View style={styles.row}><TextInput value={cadence} onChangeText={setCadence} keyboardType="number-pad" placeholder="30" placeholderTextColor={colors.textSecondary} style={[styles.input, styles.cadence]} /><Text style={styles.hint}>days after a conversation</Text></View>
     <Text style={styles.label}>Next follow-up</Text><View style={styles.chips}><Chip label="Today" selected={Boolean(nextFollowUpAt) && new Date(nextFollowUpAt).getTime() < Date.now() + 2 * 86_400_000} onPress={() => setNextFollowUpAt(new Date().toISOString())} /><Chip label="In 1 week" onPress={() => setNextFollowUpAt(new Date(Date.now() + 7 * 86_400_000).toISOString())} /><Chip label="In 1 month" onPress={() => setNextFollowUpAt(new Date(Date.now() + 30 * 86_400_000).toISOString())} /><Chip label="None" selected={!nextFollowUpAt} onPress={() => setNextFollowUpAt('')} /></View>

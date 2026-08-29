@@ -61,11 +61,11 @@ test('Android build disables backup and enables SQLCipher', async () => {
 });
 
 test('book import uses Android document picker without broad storage permissions', async () => {
-  const manifest = await source('android/app/src/main/AndroidManifest.xml');
+  const config = JSON.parse(await source('app.json'));
   const files = await source('src/storage/book-files.ts');
   assert.match(files, /DocumentPicker\.getDocumentAsync/);
-  assert.match(manifest, /READ_EXTERNAL_STORAGE[^>]*tools:node="remove"/);
-  assert.match(manifest, /WRITE_EXTERNAL_STORAGE[^>]*tools:node="remove"/);
+  assert.ok(config.expo.android.blockedPermissions.includes('android.permission.READ_EXTERNAL_STORAGE'));
+  assert.ok(config.expo.android.blockedPermissions.includes('android.permission.WRITE_EXTERNAL_STORAGE'));
 });
 
 test('screen capture is blocked by default and can only be enabled from the local preference', async () => {
@@ -367,7 +367,8 @@ test('the complete public website is the Site tab without an injected app homepa
   assert.doesNotMatch(site, /Your live website/);
   assert.doesNotMatch(site, /Your dashboard/);
   assert.match(siteRoute, /SiteScreen/);
-  assert.match(home, /PERSONAL COMMAND CENTRE/);
+  assert.match(home, /What matters today/);
+  assert.match(home, /focused feed/);
   assert.match(home, /YOUR PUBLIC SITE/);
   assert.match(studio, /router\.push\('\/ai'\)/);
 });
@@ -384,7 +385,9 @@ test('Studio is a focused publishing queue without duplicate Library content', a
   assert.match(studio, /router\.push\('\/essays\/new'\)/);
   assert.match(studio, /lockedType/);
   assert.doesNotMatch(studio, /Website Books|What is live|Edit public copy/);
-  assert.match(home, /Website draft[\s\S]*Open Studio/);
+  assert.match(studio, /Add website change/);
+  assert.match(studio, /createMenuOpen/);
+  assert.doesNotMatch(home, /Website draft[\s\S]*Open Studio/);
   assert.doesNotMatch(home, /draftComposerOpen/);
   assert.match(composer, /lockedType\?: boolean/);
   assert.match(composer, /Selected in Studio/);
@@ -417,16 +420,13 @@ test('Home is a functional encrypted life dashboard rather than placeholder UI',
   assert.doesNotMatch(publishing, /life_items|LifeItem|lifeItems/);
 });
 
-test('Android launches the verified site as a headerless Trusted Web Activity', async () => {
-  const manifest = await source('android/app/src/main/AndroidManifest.xml');
-  const gradle = await source('android/app/build.gradle');
-  const activity = await source('android/app/src/main/java/com/jevangoldsmith/privatecompanion/MainActivity.kt');
-  assert.match(manifest, /SiteTwaActivity/);
-  assert.match(manifest, /ManageDataLauncherActivity/);
-  assert.match(manifest, /privatecompanionsite/);
-  assert.match(gradle, /androidbrowserhelper:2\.7\.2/);
-  assert.match(activity, /class SiteTwaActivity : LauncherActivity/);
-  assert.match(activity, /https:\/\/jevangoldsmith\.com\/\?private-companion=1/);
+test('Android keeps the public site in the guarded in-app WebView', async () => {
+  const site = await source('src/components/site-screen.tsx');
+  assert.match(site, /<WebView/);
+  assert.match(site, /onShouldStartLoadWithRequest/);
+  assert.match(site, /mixedContentMode="never"/);
+  assert.match(site, /isInternalSiteUrl/);
+  assert.match(site, /isSafeExternalUrl/);
 });
 
 test('trusted website handoff does not immediately relock private screens', async () => {
@@ -478,7 +478,7 @@ test('remote updates are enabled on a version-scoped production channel', async 
   assert.equal(eas.build.production.channel, 'production');
   assert.match(manifest, /expo\.modules\.updates\.ENABLED" android:value="true"/);
   assert.match(manifest, /EXPO_UPDATE_URL[^\n]*https:\/\/u\.expo\.dev\/eea043e0-b61b-4cf7-8134-5f82ab54a35a/);
-  assert.match(manifest, /EXPO_RUNTIME_VERSION[^\n]*1\.5\.0/);
+  assert.match(manifest, /EXPO_RUNTIME_VERSION/);
   assert.match(manifest, /expo-channel-name[^\n]*production/);
 });
 

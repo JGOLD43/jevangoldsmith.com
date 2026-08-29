@@ -78,6 +78,7 @@ async function createDatabase(): Promise<SQLiteDatabase> {
 
     CREATE TABLE IF NOT EXISTS relationship_contacts (
       id TEXT PRIMARY KEY NOT NULL,
+      device_contact_id TEXT,
       name TEXT NOT NULL,
       company TEXT NOT NULL DEFAULT '',
       role TEXT NOT NULL DEFAULT '',
@@ -85,6 +86,13 @@ async function createDatabase(): Promise<SQLiteDatabase> {
       phone TEXT NOT NULL DEFAULT '',
       website TEXT NOT NULL DEFAULT '',
       location TEXT NOT NULL DEFAULT '',
+      latitude REAL,
+      longitude REAL,
+      birthday TEXT NOT NULL DEFAULT '',
+      image_uri TEXT NOT NULL DEFAULT '',
+      favorite INTEGER NOT NULL DEFAULT 0 CHECK(favorite IN (0, 1)),
+      first_met_at TEXT,
+      first_met_place TEXT NOT NULL DEFAULT '',
       tags_json TEXT NOT NULL DEFAULT '[]',
       notes TEXT NOT NULL DEFAULT '',
       cadence_days INTEGER NOT NULL DEFAULT 30 CHECK(cadence_days BETWEEN 1 AND 3650),
@@ -95,6 +103,8 @@ async function createDatabase(): Promise<SQLiteDatabase> {
     );
     CREATE INDEX IF NOT EXISTS relationship_contacts_follow_up_index
       ON relationship_contacts(next_follow_up_at, updated_at DESC);
+    CREATE UNIQUE INDEX IF NOT EXISTS relationship_contacts_device_unique
+      ON relationship_contacts(device_contact_id) WHERE device_contact_id IS NOT NULL;
 
     CREATE TABLE IF NOT EXISTS relationship_interactions (
       id TEXT PRIMARY KEY NOT NULL,
@@ -250,6 +260,15 @@ async function createDatabase(): Promise<SQLiteDatabase> {
   if (!relationshipColumnNames.has('email')) await database.execAsync("ALTER TABLE relationship_contacts ADD COLUMN email TEXT NOT NULL DEFAULT '';");
   if (!relationshipColumnNames.has('phone')) await database.execAsync("ALTER TABLE relationship_contacts ADD COLUMN phone TEXT NOT NULL DEFAULT '';");
   if (!relationshipColumnNames.has('website')) await database.execAsync("ALTER TABLE relationship_contacts ADD COLUMN website TEXT NOT NULL DEFAULT '';");
+  if (!relationshipColumnNames.has('device_contact_id')) await database.execAsync('ALTER TABLE relationship_contacts ADD COLUMN device_contact_id TEXT;');
+  if (!relationshipColumnNames.has('latitude')) await database.execAsync('ALTER TABLE relationship_contacts ADD COLUMN latitude REAL;');
+  if (!relationshipColumnNames.has('longitude')) await database.execAsync('ALTER TABLE relationship_contacts ADD COLUMN longitude REAL;');
+  if (!relationshipColumnNames.has('birthday')) await database.execAsync("ALTER TABLE relationship_contacts ADD COLUMN birthday TEXT NOT NULL DEFAULT '';");
+  if (!relationshipColumnNames.has('image_uri')) await database.execAsync("ALTER TABLE relationship_contacts ADD COLUMN image_uri TEXT NOT NULL DEFAULT '';");
+  if (!relationshipColumnNames.has('favorite')) await database.execAsync('ALTER TABLE relationship_contacts ADD COLUMN favorite INTEGER NOT NULL DEFAULT 0;');
+  if (!relationshipColumnNames.has('first_met_at')) await database.execAsync('ALTER TABLE relationship_contacts ADD COLUMN first_met_at TEXT;');
+  if (!relationshipColumnNames.has('first_met_place')) await database.execAsync("ALTER TABLE relationship_contacts ADD COLUMN first_met_place TEXT NOT NULL DEFAULT '';");
+  await database.execAsync('CREATE UNIQUE INDEX IF NOT EXISTS relationship_contacts_device_unique ON relationship_contacts(device_contact_id) WHERE device_contact_id IS NOT NULL;');
   await runLearningMigrations(database);
   return database;
 }

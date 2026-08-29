@@ -12,6 +12,8 @@ test('People is a private on-device relationship workspace with follow-ups and c
   const people = await source('src/app/contacts/index.tsx');
   const profile = await source('src/app/contacts/[id].tsx');
   const reminders = await source('src/services/relationship-reminders.ts');
+  const phoneSync = await source('src/services/phone-contact-sync.ts');
+  const map = await source('src/app/contacts/map.tsx');
   const appConfig = await source('app.json');
 
   assert.match(database, /CREATE TABLE IF NOT EXISTS relationship_contacts/);
@@ -26,9 +28,13 @@ test('People is a private on-device relationship workspace with follow-ups and c
   assert.match(people, /Keep in touch/);
   assert.match(people, /Agenda/);
   assert.match(people, /Smart views/);
-  assert.match(people, /Import from phone/);
-  assert.match(people, /existingEmails/);
-  assert.match(people, /nextFollowUpAt: null/);
+  assert.match(people, /Phone sync is on/);
+  assert.match(people, /Open contact map/);
+  assert.match(phoneSync, /two-way/);
+  assert.match(phoneSync, /deviceContactId/);
+  assert.match(phoneSync, /addContactsChangeListener|Contact/);
+  assert.match(map, /CONTACT ATLAS/);
+  assert.match(map, /never sent to a map service/);
   assert.match(people, /Recently contacted/);
   assert.match(reminders, /scheduleNotificationAsync/);
   assert.match(reminders, /relationshipContactId/);

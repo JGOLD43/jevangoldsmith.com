@@ -17,6 +17,11 @@
 - Android `FLAG_SECURE` protection blocks screenshots, screen recordings, and Recents previews while the app is mounted.
 - No analytics, advertising, session replay, or remote crash SDK is installed.
 - Over-the-air updates are version-scoped application bundles; the updater has no vault repository, database, attachment, finance, or photo access path.
+- Production builds cannot enable the local developer authentication bypass; any saved development preference is cleared at launch.
+- Android explicitly removes microphone, overlay, and broad external-storage permissions. Contacts permission remains narrowly enabled for the user-initiated address-book sync.
+- Phone contact sync stores the opt-in in Android SecureStore. Ordinary address-book fields can sync in both directions, while private notes, groups, cadence, and conversation history never leave JGOLD's encrypted database.
+- Contact-map placement is calculated offline from coarse city centres; addresses are not sent to a geocoding or map provider.
+- The in-app website admits only the first-party HTTPS hosts. External navigation is restricted to HTTP(S), email, and telephone protocols.
 
 ## Required before storing irreplaceable data
 

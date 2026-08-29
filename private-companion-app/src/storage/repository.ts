@@ -69,6 +69,7 @@ type LifeItemRow = {
 
 type RelationshipContactRow = {
   id: string;
+  device_contact_id: string | null;
   name: string;
   company: string;
   role: string;
@@ -76,6 +77,13 @@ type RelationshipContactRow = {
   phone: string;
   website: string;
   location: string;
+  latitude: number | null;
+  longitude: number | null;
+  birthday: string;
+  image_uri: string;
+  favorite: number;
+  first_met_at: string | null;
+  first_met_place: string;
   tags_json: string;
   notes: string;
   cadence_days: number;
@@ -175,6 +183,7 @@ function mapRelationshipContact(row: RelationshipContactRow): RelationshipContac
   } catch { /* Keep corrupted historical tags from blocking the private workspace. */ }
   return {
     id: row.id,
+    deviceContactId: row.device_contact_id,
     name: row.name,
     company: row.company,
     role: row.role,
@@ -182,6 +191,13 @@ function mapRelationshipContact(row: RelationshipContactRow): RelationshipContac
     phone: row.phone,
     website: row.website,
     location: row.location,
+    latitude: row.latitude,
+    longitude: row.longitude,
+    birthday: row.birthday,
+    imageUri: row.image_uri,
+    favorite: Boolean(row.favorite),
+    firstMetAt: row.first_met_at,
+    firstMetPlace: row.first_met_place,
     tags,
     notes: row.notes,
     cadenceDays: row.cadence_days,
@@ -394,16 +410,19 @@ export async function addRelationshipContact(input: NewRelationshipContact): Pro
   const database = await getDatabase();
   const now = new Date().toISOString();
   const contact: RelationshipContact = {
-    id: id(), name: input.name.trim(), company: input.company.trim(), role: input.role.trim(), email: input.email.trim(), phone: input.phone.trim(), website: input.website.trim(), location: input.location.trim(),
+    id: id(), deviceContactId: input.deviceContactId ?? null,
+    name: input.name.trim(), company: input.company.trim(), role: input.role.trim(), email: input.email.trim(), phone: input.phone.trim(), website: input.website.trim(), location: input.location.trim(),
+    latitude: input.latitude ?? null, longitude: input.longitude ?? null, birthday: input.birthday?.trim() ?? '', imageUri: input.imageUri?.trim() ?? '', favorite: input.favorite ?? false,
+    firstMetAt: input.firstMetAt ?? null, firstMetPlace: input.firstMetPlace?.trim() ?? '',
     tags: input.tags.map((tag) => tag.trim()).filter(Boolean), notes: input.notes.trim(),
     cadenceDays: Math.max(1, Math.min(3650, Math.round(input.cadenceDays || 30))),
     lastContactedAt: null, nextFollowUpAt: input.nextFollowUpAt || null, createdAt: now, updatedAt: now,
   };
   await database.runAsync(
     `INSERT INTO relationship_contacts
-      (id, name, company, role, email, phone, website, location, tags_json, notes, cadence_days, last_contacted_at, next_follow_up_at, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    contact.id, contact.name, contact.company, contact.role, contact.email, contact.phone, contact.website, contact.location, JSON.stringify(contact.tags), contact.notes,
+      (id, device_contact_id, name, company, role, email, phone, website, location, latitude, longitude, birthday, image_uri, favorite, first_met_at, first_met_place, tags_json, notes, cadence_days, last_contacted_at, next_follow_up_at, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    contact.id, contact.deviceContactId, contact.name, contact.company, contact.role, contact.email, contact.phone, contact.website, contact.location, contact.latitude, contact.longitude, contact.birthday, contact.imageUri, contact.favorite ? 1 : 0, contact.firstMetAt, contact.firstMetPlace, JSON.stringify(contact.tags), contact.notes,
     contact.cadenceDays, contact.lastContactedAt, contact.nextFollowUpAt, contact.createdAt, contact.updatedAt,
   );
   return contact;
@@ -417,11 +436,24 @@ export async function updateRelationshipContact(contactId: string, input: NewRel
   const tags = input.tags.map((tag) => tag.trim()).filter(Boolean);
   const cadenceDays = Math.max(1, Math.min(3650, Math.round(input.cadenceDays || 30)));
   const nextFollowUpAt = input.nextFollowUpAt || null;
+  const next: RelationshipContactRow = {
+    ...existing,
+    device_contact_id: input.deviceContactId === undefined ? existing.device_contact_id : input.deviceContactId,
+    name: input.name.trim(), company: input.company.trim(), role: input.role.trim(), email: input.email.trim(), phone: input.phone.trim(), website: input.website.trim(), location: input.location.trim(),
+    latitude: input.latitude === undefined ? existing.latitude : input.latitude,
+    longitude: input.longitude === undefined ? existing.longitude : input.longitude,
+    birthday: input.birthday === undefined ? existing.birthday : input.birthday.trim(),
+    image_uri: input.imageUri === undefined ? existing.image_uri : input.imageUri.trim(),
+    favorite: input.favorite === undefined ? existing.favorite : input.favorite ? 1 : 0,
+    first_met_at: input.firstMetAt === undefined ? existing.first_met_at : input.firstMetAt,
+    first_met_place: input.firstMetPlace === undefined ? existing.first_met_place : input.firstMetPlace.trim(),
+    tags_json: JSON.stringify(tags), notes: input.notes.trim(), cadence_days: cadenceDays, next_follow_up_at: nextFollowUpAt, updated_at: now,
+  };
   await database.runAsync(
-    `UPDATE relationship_contacts SET name=?, company=?, role=?, email=?, phone=?, website=?, location=?, tags_json=?, notes=?, cadence_days=?, next_follow_up_at=?, updated_at=? WHERE id=?`,
-    input.name.trim(), input.company.trim(), input.role.trim(), input.email.trim(), input.phone.trim(), input.website.trim(), input.location.trim(), JSON.stringify(tags), input.notes.trim(), cadenceDays, nextFollowUpAt, now, contactId,
+    `UPDATE relationship_contacts SET device_contact_id=?, name=?, company=?, role=?, email=?, phone=?, website=?, location=?, latitude=?, longitude=?, birthday=?, image_uri=?, favorite=?, first_met_at=?, first_met_place=?, tags_json=?, notes=?, cadence_days=?, next_follow_up_at=?, updated_at=? WHERE id=?`,
+    next.device_contact_id, next.name, next.company, next.role, next.email, next.phone, next.website, next.location, next.latitude, next.longitude, next.birthday, next.image_uri, next.favorite, next.first_met_at, next.first_met_place, next.tags_json, next.notes, next.cadence_days, next.next_follow_up_at, next.updated_at, contactId,
   );
-  return mapRelationshipContact({ ...existing, name: input.name.trim(), company: input.company.trim(), role: input.role.trim(), email: input.email.trim(), phone: input.phone.trim(), website: input.website.trim(), location: input.location.trim(), tags_json: JSON.stringify(tags), notes: input.notes.trim(), cadence_days: cadenceDays, next_follow_up_at: nextFollowUpAt, updated_at: now });
+  return mapRelationshipContact(next);
 }
 
 export async function removeRelationshipContact(contactId: string): Promise<void> {
