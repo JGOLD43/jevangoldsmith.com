@@ -101,3 +101,9 @@ test('only real EPUB CFIs are rendered inline while imported locations stay list
   assert.equal(isEpubCfi('Page 12'), false);
   assert.equal(isEpubCfi('Location 44-45'), false);
 });
+
+test('book details surface imported highlights before collection and publishing controls', async () => {
+  const detail = await import('node:fs/promises').then((fs) => fs.readFile(new URL('../src/app/books/[id].tsx', import.meta.url), 'utf8'));
+  assert.ok(detail.indexOf('title="Highlights & notes"') < detail.indexOf('title="Collections"'));
+  assert.match(detail, /View all \$\{annotations\.length\} highlights & notes/);
+});

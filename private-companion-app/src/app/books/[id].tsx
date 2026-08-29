@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -133,6 +133,7 @@ export default function BookDetailScreen() {
   const [publishing, setPublishing] = useState(false);
   const [newCollection, setNewCollection] = useState('');
   const [readingStats, setReadingStats] = useState<BookReadingStats | null>(null);
+  const listRef = useRef<FlatList<BookAnnotation>>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -194,6 +195,15 @@ export default function BookDetailScreen() {
         <Insight value={String(readingStats?.sessionCount ?? 0)} label="sessions" />
         <Insight value={String((readingStats?.highlightCount ?? 0) + (readingStats?.noteCount ?? 0))} label="highlights & notes" />
       </View>
+      <SectionHeading title="Highlights & notes" detail={`${annotations.length} private`} />
+      {annotations.length ? <>
+        {annotations.slice(0, 2).map((item) => <Card key={item.id} style={styles.annotationPreview}>
+          <Text style={styles.cardLabel}>{item.kind} · {item.locator || 'imported'} · private</Text>
+          <Text numberOfLines={4} style={styles.quote}>“{item.selectedText || item.note}”</Text>
+        </Card>)}
+        {annotations.length > 2 ? <Button label={`View all ${annotations.length} highlights & notes`}
+          variant="secondary" onPress={() => listRef.current?.scrollToIndex({ index: 0, animated: true, viewPosition: 0 })} /> : null}
+      </> : <Text style={styles.emptyCompact}>No highlights or notes saved for this book.</Text>}
       <SectionHeading title="Collections" detail="Private on this phone" />
       <View style={styles.chips}>{collections.map((collection) => <Chip key={collection.id} label={collection.name} selected={collectionIds.includes(collection.id)} onPress={async () => {
         const included = !collectionIds.includes(collection.id); await toggleCollection(book.id, collection.id, included);
@@ -202,13 +212,13 @@ export default function BookDetailScreen() {
       <View style={styles.collectionInput}><TextInput value={newCollection} onChangeText={setNewCollection} placeholder="New collection" placeholderTextColor={colors.textSecondary} style={[styles.input, styles.flex]} /><Button label="Add" variant="quiet" disabled={!newCollection.trim()} onPress={async () => { const collection = await createCollection(newCollection); await toggleCollection(book.id, collection.id, true); setCollectionIds((current) => [...new Set([...current, collection.id])]); setNewCollection(''); }} /></View>
       <SectionHeading title="Website" detail={book.isPublic ? 'Currently public' : 'Private only'} />
       <Card style={styles.websiteCard}><Text style={styles.body}>Preview the exact metadata and review that will be sent. Once approved, JGOLD submits it automatically or safely queues it until publishing is connected. The book file, progress, highlights and notes cannot enter this path.</Text><Button label={book.isPublic ? 'Update website listing' : 'Show on website'} onPress={() => setPreviewOpen(true)} /></Card>
-      <SectionHeading title="Notes and highlights" detail={`${annotations.length} private`} />
+      {annotations.length ? <SectionHeading title="All highlights & notes" detail={`${annotations.length} private`} /> : null}
     </View>
   );
 
   return (
     <SafeAreaView edges={['top']} style={styles.safe}>
-      <FlatList data={annotations} keyExtractor={(item) => item.id} ListHeaderComponent={header}
+      <FlatList ref={listRef} data={annotations} keyExtractor={(item) => item.id} ListHeaderComponent={header}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => <Card style={styles.annotation}><Text style={styles.cardLabel}>{item.kind} · private</Text>{item.selectedText ? <Text style={styles.quote}>“{item.selectedText}”</Text> : null}{item.note ? <Text style={styles.body}>{item.note}</Text> : null}<Button label="Delete" variant="danger" onPress={() => Alert.alert('Delete private note?', 'This cannot be undone.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Delete', style: 'destructive', onPress: async () => { await deleteAnnotation(item.id); setAnnotations((current) => current.filter((entry) => entry.id !== item.id)); } }])} /></Card>}
         ListEmptyComponent={<Text style={styles.empty}>Highlights, bookmarks and private notes from the reader will appear here.</Text>}
@@ -241,8 +251,9 @@ function createStyles(colors: AppColors) {
     body: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 15, lineHeight: 23 }, cardLabel: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.8 },
     chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, collectionInput: { flexDirection: 'row', gap: 8 }, flex: { flex: 1 },
     input: { minHeight: 48, backgroundColor: colors.backgroundElement, borderColor: colors.line, borderWidth: 1, borderRadius: 8, borderCurve: 'continuous', paddingHorizontal: 13, color: colors.text, fontFamily: Fonts.sans, fontSize: 15 },
-    websiteCard: { backgroundColor: colors.accentSoft }, annotation: { marginHorizontal: 0 }, quote: { color: colors.text, fontFamily: Fonts.medium, fontSize: 15, lineHeight: 23, fontStyle: 'italic' },
+    websiteCard: { backgroundColor: colors.accentSoft }, annotation: { marginHorizontal: 0 }, annotationPreview: { marginHorizontal: 0, backgroundColor: colors.backgroundSelected }, quote: { color: colors.text, fontFamily: Fonts.medium, fontSize: 15, lineHeight: 23, fontStyle: 'italic' },
     empty: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 14, lineHeight: 21, paddingVertical: 24, textAlign: 'center' },
+    emptyCompact: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 14, lineHeight: 21 },
     modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomWidth: 1, borderBottomColor: colors.line }, modalTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 25 }, close: { color: colors.accent, fontFamily: Fonts.bold, fontSize: 15 },
     form: { padding: 20, paddingBottom: 60, gap: 14 }, field: { gap: 6 }, label: { color: colors.text, fontFamily: Fonts.bold, fontSize: 12 }, textArea: { minHeight: 120, paddingTop: 13 }, twoFields: { flexDirection: 'row', gap: 10 }, smallField: { width: 92 },
     switchRow: { flexDirection: 'row', alignItems: 'center', gap: 14 }, helper: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 12, lineHeight: 18 },
