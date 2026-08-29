@@ -107,3 +107,11 @@ test('book details surface imported highlights before collection and publishing 
   assert.ok(detail.indexOf('title="Highlights & notes"') < detail.indexOf('title="Collections"'));
   assert.match(detail, /View all \$\{annotations\.length\} highlights & notes/);
 });
+
+test('highlight repair consolidates only compatible duplicate book identities', async () => {
+  const repository = await import('node:fs/promises').then((fs) => fs.readFile(new URL('../src/storage/books-repository.ts', import.meta.url), 'utf8'));
+  assert.match(repository, /authors\.size > 1 \|\| isbns\.size > 1/);
+  assert.match(repository, /UPDATE reading_sessions SET book_id/);
+  assert.match(repository, /INSERT OR IGNORE INTO book_collection_members/);
+  assert.match(repository, /DELETE FROM books WHERE id/);
+});

@@ -251,32 +251,62 @@ export async function repairImportedHighlightAssignments(): Promise<number> {
     GROUP BY books.id`);
   const books = rows.map(mapBook);
   let repaired = 0;
+  const mergedIds = new Set<string>();
+  const normalizedIdentity = (value: string) => value.toLocaleLowerCase().replace(/[^a-z0-9]+/g, '').trim();
+  const compatible = (left: Book, right: Book) => {
+    if (comparableBookTitle(left.title) !== comparableBookTitle(right.title)) return false;
+    const leftAuthor = normalizedIdentity(left.author);
+    const rightAuthor = normalizedIdentity(right.author);
+    if (leftAuthor && rightAuthor && leftAuthor !== rightAuthor) return false;
+    const leftIsbn = normalizedIdentity(left.isbn);
+    const rightIsbn = normalizedIdentity(right.isbn);
+    return !leftIsbn || !rightIsbn || leftIsbn === rightIsbn;
+  };
+  const canonicalScore = (book: Book) => (book.encryptedFileUri ? 1000 : 0) + (book.publicId ? 500 : 0)
+    + (book.isPublic ? 200 : 0) + (book.coverUri ? 20 : 0) + (book.summary ? 10 : 0) + (book.review ? 10 : 0);
   await database.withTransactionAsync(async () => {
     for (const sourceRow of rows) {
-      if (sourceRow.format !== 'metadata' || sourceRow.highlight_count < 1) continue;
+      if (sourceRow.highlight_count < 1 || mergedIds.has(sourceRow.id)) continue;
       const source = mapBook(sourceRow);
-      const title = comparableBookTitle(source.title);
-      const candidates = books.filter((candidate) => candidate.id !== source.id && candidate.encryptedFileUri
-        && comparableBookTitle(candidate.title) === title
-        && (!source.isbn || !candidate.isbn || source.isbn.replace(/\W/g, '') === candidate.isbn.replace(/\W/g, ''))
-        && (!source.author || !candidate.author || source.author.toLocaleLowerCase().trim() === candidate.author.toLocaleLowerCase().trim()));
-      if (candidates.length !== 1) continue;
-      const target = candidates[0];
-      const annotations = await database.getAllAsync<AnnotationRow>('SELECT * FROM book_annotations WHERE book_id=?', source.id);
-      for (const annotation of annotations) {
-        const duplicate = await database.getFirstAsync<{ id: string }>(`SELECT id FROM book_annotations
-          WHERE book_id=? AND kind=? AND locator=? AND selected_text=? AND note=? LIMIT 1`, target.id,
-        annotation.kind, annotation.locator, annotation.selected_text, annotation.note);
-        if (!duplicate) {
-          await database.runAsync('UPDATE book_annotations SET book_id=?, updated_at=? WHERE id=?',
-            target.id, new Date().toISOString(), annotation.id);
-        } else {
-          await database.runAsync('DELETE FROM book_annotations WHERE id=? AND book_id=?', annotation.id, source.id);
+      const candidates = books.filter((candidate) => !mergedIds.has(candidate.id) && compatible(source, candidate));
+      if (candidates.length < 2) continue;
+      const authors = new Set(candidates.map((item) => normalizedIdentity(item.author)).filter(Boolean));
+      const isbns = new Set(candidates.map((item) => normalizedIdentity(item.isbn)).filter(Boolean));
+      if (authors.size > 1 || isbns.size > 1) continue;
+      const target = [...candidates].sort((left, right) => canonicalScore(right) - canonicalScore(left)
+        || left.addedAt.localeCompare(right.addedAt))[0];
+      for (const duplicateBook of candidates) {
+        if (duplicateBook.id === target.id) continue;
+        const annotations = await database.getAllAsync<AnnotationRow>('SELECT * FROM book_annotations WHERE book_id=?', duplicateBook.id);
+        for (const annotation of annotations) {
+          const duplicate = await database.getFirstAsync<{ id: string }>(`SELECT id FROM book_annotations
+            WHERE book_id=? AND kind=? AND locator=? AND selected_text=? AND note=? LIMIT 1`, target.id,
+          annotation.kind, annotation.locator, annotation.selected_text, annotation.note);
+          if (!duplicate) {
+            await database.runAsync('UPDATE book_annotations SET book_id=?, updated_at=? WHERE id=?',
+              target.id, new Date().toISOString(), annotation.id);
+          } else {
+            await database.runAsync('DELETE FROM book_annotations WHERE id=? AND book_id=?', annotation.id, duplicateBook.id);
+          }
+          repaired += 1;
         }
-        repaired += 1;
+        await database.runAsync(`INSERT OR IGNORE INTO book_collection_members (collection_id, book_id)
+          SELECT collection_id, ? FROM book_collection_members WHERE book_id=?`, target.id, duplicateBook.id);
+        await database.runAsync('UPDATE reading_sessions SET book_id=? WHERE book_id=?', target.id, duplicateBook.id);
+        await database.runAsync(`UPDATE books SET
+          author=CASE WHEN author='' THEN ? ELSE author END, isbn=CASE WHEN isbn='' THEN ? ELSE isbn END,
+          year=CASE WHEN year='' THEN ? ELSE year END, category=CASE WHEN category='' THEN ? ELSE category END,
+          summary=CASE WHEN summary='' THEN ? ELSE summary END, review=CASE WHEN review='' THEN ? ELSE review END,
+          cover_uri=COALESCE(cover_uri, ?), rating=MAX(rating, ?), re_reads=MAX(re_reads, ?),
+          progress=MAX(progress, ?), reading_status=CASE WHEN reading_status='finished' OR ?='finished' THEN 'finished'
+            WHEN reading_status='reading' OR ?='reading' THEN 'reading' ELSE 'unread' END,
+          updated_at=? WHERE id=?`, duplicateBook.author, duplicateBook.isbn, duplicateBook.year,
+        duplicateBook.category, duplicateBook.summary, duplicateBook.review, duplicateBook.coverUri,
+        duplicateBook.rating, duplicateBook.reReads, duplicateBook.progress, duplicateBook.readingStatus,
+        duplicateBook.readingStatus, new Date().toISOString(), target.id);
+        await database.runAsync('DELETE FROM books WHERE id=?', duplicateBook.id);
+        mergedIds.add(duplicateBook.id);
       }
-      await database.runAsync(`INSERT OR IGNORE INTO book_collection_members (collection_id, book_id)
-        SELECT collection_id, ? FROM book_collection_members WHERE book_id=?`, target.id, source.id);
     }
   });
   return repaired;
