@@ -5,9 +5,11 @@
 //     fallback. HTML references deploy-hashed assets, so serving an older
 //     document during a release can otherwise pair it with assets that no
 //     longer exist and leave a partially rendered page.
-//   - /_astro, /css/chrome.*, /css/per-page, /fonts, /images/generated:
-//     cache-first (these files are immutable; URL changes on every
-//     deploy via build hash).
+//   - Stylesheets: network-first, with a cached fallback. Some legacy and
+//     per-page stylesheet URLs are rebuilt in place, so cache-first could
+//     combine current movie markup with a previous release's layout rules.
+//   - /_astro, /fonts, /images/generated: cache-first (these files are
+//     immutable; URL changes on every deploy via build hash).
 //   - /api/v1/people-modal.json, /data/books.generated.json,
 //     /data/popular-routes/*: stale-while-revalidate. Update on next
 //     navigation rather than blocking on network.
@@ -73,8 +75,6 @@ self.addEventListener('activate', (event) => {
 
 function isImmutableAsset(pathname) {
   return pathname.startsWith('/_astro/')
-    || /^\/css\/chrome\.[a-f0-9]+\.css$/.test(pathname)
-    || pathname.startsWith('/css/per-page/')
     || pathname.startsWith('/fonts/')
     || pathname.startsWith('/images/generated/')
     || pathname === '/sprite.svg';
@@ -89,6 +89,10 @@ function isHtml(request) {
 function isData(pathname) {
   return pathname.startsWith('/api/v1/')
     || pathname.startsWith('/data/');
+}
+
+function isStylesheet(pathname) {
+  return pathname.startsWith('/css/') && pathname.endsWith('.css');
 }
 
 async function staleWhileRevalidate(request, cacheName) {
@@ -144,6 +148,10 @@ self.addEventListener('fetch', (event) => {
 
   if (isHtml(request)) {
     event.respondWith(networkFirst(request, HTML_CACHE));
+    return;
+  }
+  if (isStylesheet(url.pathname)) {
+    event.respondWith(networkFirst(request, ASSET_CACHE));
     return;
   }
   if (isImmutableAsset(url.pathname)) {
