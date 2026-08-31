@@ -6,20 +6,23 @@ test('movies page renders SSR cards immediately', async ({ page }) => {
   expect(await page.locator('.movie-card').count()).toBeGreaterThanOrEqual(6);
 });
 
-test('movies SSR\'d cards are not wiped by hydration', async ({ page }) => {
+test('movies retain one valid grid item per SSR card after hydration', async ({ page }) => {
   await page.goto('/movies.html');
-  const initialIds = await page.evaluate(() =>
-    Array.from(document.querySelectorAll('.movie-card'))
-      .map((c) => c.getAttribute('data-id'))
+  const initialTitles = await page.locator('#movies-container > .movie-card').evaluateAll((cards) =>
+    cards.map((card) => card.getAttribute('data-movie-title'))
   );
-  expect(initialIds.length).toBeGreaterThanOrEqual(6);
+  expect(initialTitles.length).toBeGreaterThanOrEqual(6);
   await page.waitForLoadState('networkidle');
-  const afterIds = await page.evaluate(() =>
-    Array.from(document.querySelectorAll('.movie-card'))
-      .map((c) => c.getAttribute('data-id'))
-  );
-  // SSR'd ids survive (count may grow if Letterboxd RSS adds entries).
-  for (const id of initialIds) {
-    expect(afterIds).toContain(id);
-  }
+  const hydrated = await page.evaluate(() => {
+    const grid = document.getElementById('movies-container');
+    const cards = Array.from(grid?.querySelectorAll(':scope > .movie-card') ?? []);
+    return {
+      cardCount: cards.length,
+      childCount: grid?.children.length ?? 0,
+      nestedLinks: cards.some((card) => card.querySelector('a a') !== null)
+    };
+  });
+  expect(hydrated.cardCount).toBe(initialTitles.length);
+  expect(hydrated.childCount).toBe(initialTitles.length);
+  expect(hydrated.nestedLinks).toBe(false);
 });

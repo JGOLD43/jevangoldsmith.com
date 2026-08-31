@@ -46,6 +46,6 @@ const tier = ratingTier(Number(starCount));
     {rating && <p class="zoom-detail-lead"><span aria-hidden="true">{rating}</span>{starCount ? <span class="sr-only">{starCount} out of 5 stars</span> : null}</p>}
     {review && <p class="zoom-detail-line"><span>Review —</span> {review}</p>}
     {date && <p class="zoom-detail-line"><span>Watched —</span> {date}</p>}
-    {link && link !== '#' && <a class="zoom-detail-link" href={link} target="_blank" rel="noopener noreferrer">Letterboxd</a>}
+    {link && link !== '#' && <span class="zoom-detail-link">Letterboxd</span>}
   </div>
 </a>
