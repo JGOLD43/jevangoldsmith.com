@@ -1,11 +1,10 @@
 // Service Worker for jevangoldsmith.com.
 //
 // Strategy:
-//   - HTML pages: stale-while-revalidate. Serve from cache instantly,
-//     refresh in background. Repeat-visit FCP collapses to ~0ms — the
-//     browser hands cached HTML to the parser before the network even
-//     starts. Combined with prerender (Speculation Rules) on hover this
-//     makes navigation feel native-app-instant.
+//   - HTML pages: network-first, with the cached page as an offline
+//     fallback. HTML references deploy-hashed assets, so serving an older
+//     document during a release can otherwise pair it with assets that no
+//     longer exist and leave a partially rendered page.
 //   - /_astro, /css/chrome.*, /css/per-page, /fonts, /images/generated:
 //     cache-first (these files are immutable; URL changes on every
 //     deploy via build hash).
@@ -102,6 +101,19 @@ async function staleWhileRevalidate(request, cacheName) {
   return cached || fetchPromise;
 }
 
+async function networkFirst(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  try {
+    const response = await fetch(request);
+    if (response.ok) cache.put(request, response.clone());
+    return response;
+  } catch {
+    const cached = await cache.match(request);
+    if (cached) return cached;
+    throw new Error(`Unable to load ${request.url}`);
+  }
+}
+
 async function cacheFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
@@ -131,7 +143,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (isHtml(request)) {
-    event.respondWith(staleWhileRevalidate(request, HTML_CACHE));
+    event.respondWith(networkFirst(request, HTML_CACHE));
     return;
   }
   if (isImmutableAsset(url.pathname)) {
