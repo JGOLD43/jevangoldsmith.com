@@ -4404,6 +4404,14 @@ body.meet-page {
   display: block;
 }
 
+/* Tier chips are absolutely positioned. Their movie row must establish the
+   containing block on desktop as well as the mobile search pane; otherwise
+   the chip is positioned against the sidebar and can land over its footer. */
+.movie-link {
+  position: relative;
+  padding-right: 5.75rem;
+}
+
 .book-link:hover, .movie-link:hover {
   border-left-color: var(--taste-accent);
   background: #e7e5e4;

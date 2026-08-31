@@ -26,3 +26,28 @@ test('movies retain one valid grid item per SSR card after hydration', async ({ 
   expect(hydrated.childCount).toBe(initialTitles.length);
   expect(hydrated.nestedLinks).toBe(false);
 });
+
+test('movie tier badges stay inside their sidebar movie rows', async ({ page }) => {
+  await page.goto('/movies.html');
+  await page.waitForLoadState('networkidle');
+  await page.locator('.sidebar-collapse-btn').click();
+
+  const placement = await page.locator('.movie-link:has(.movie-search-tier-badge)').first().evaluate((link) => {
+    const badge = link.querySelector<HTMLElement>('.movie-search-tier-badge');
+    const linkRect = link.getBoundingClientRect();
+    const badgeRect = badge?.getBoundingClientRect();
+    return {
+      position: getComputedStyle(link).position,
+      isOffsetParent: badge?.offsetParent === link,
+      badgeTop: badgeRect?.top,
+      badgeBottom: badgeRect?.bottom,
+      linkTop: linkRect.top,
+      linkBottom: linkRect.bottom
+    };
+  });
+
+  expect(placement.position).toBe('relative');
+  expect(placement.isOffsetParent).toBe(true);
+  expect(placement.badgeTop).toBeGreaterThanOrEqual(placement.linkTop);
+  expect(placement.badgeBottom).toBeLessThanOrEqual(placement.linkBottom);
+});
