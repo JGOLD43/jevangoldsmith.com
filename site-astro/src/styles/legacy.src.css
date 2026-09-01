@@ -3651,6 +3651,7 @@ body.meet-page {
   cursor: grab;
   user-select: none;
   touch-action: pan-y;
+  align-self: flex-start;
   gap: 1rem;
   width: max-content;
   animation: 20s linear infinite scrollCarousel;
@@ -3697,7 +3698,7 @@ body.meet-page {
   }
 
   to {
-    transform: translate(-50%);
+    transform: translateX(calc(-50% - .5rem));
   }
 }
 
