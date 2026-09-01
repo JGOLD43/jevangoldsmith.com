@@ -3851,7 +3851,7 @@ body.meet-page {
   font-weight: 600;
 }
 
-.books-layout.grid-view-active {
+.books-layout.grid-view-active, .movies-layout.grid-view-active {
   grid-template-columns: 1fr;
 }
 

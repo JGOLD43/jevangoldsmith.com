@@ -21,6 +21,33 @@ test('movies load the first desktop row of cover images eagerly', async ({ page 
   expect(loading[6]).toEqual({ loading: 'lazy', fetchPriority: null });
 });
 
+test('movie collections mode uses the full desktop content width', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/movies.html');
+  await page.locator('#movies-view-toggle').click();
+
+  const gridLayout = await page.evaluate(() => {
+    const layout = document.getElementById('movies-layout');
+    const main = document.querySelector<HTMLElement>('.movies-main');
+    const grid = document.getElementById('movies-genre-grid');
+    const cards = Array.from(grid?.querySelectorAll<HTMLElement>('.category-card') ?? []);
+    return {
+      layoutClass: layout?.className ?? '',
+      layoutColumns: layout ? getComputedStyle(layout).gridTemplateColumns : '',
+      mainWidth: main?.getBoundingClientRect().width ?? 0,
+      gridWidth: grid?.getBoundingClientRect().width ?? 0,
+      cardWidths: cards.map((card) => card.getBoundingClientRect().width)
+    };
+  });
+
+  expect(gridLayout.layoutClass).toContain('grid-view-active');
+  expect(gridLayout.layoutColumns.trim().split(/\s+/)).toHaveLength(1);
+  expect(gridLayout.mainWidth).toBeGreaterThan(1200);
+  expect(gridLayout.gridWidth).toBeGreaterThan(1100);
+  expect(gridLayout.cardWidths).toHaveLength(3);
+  expect(Math.min(...gridLayout.cardWidths)).toBeGreaterThan(300);
+});
+
 test('movies retain one valid grid item per SSR card after hydration', async ({ page }) => {
   await page.goto('/movies.html');
   const initialTitles = await page.locator('#movies-container > .movie-card').evaluateAll((cards) =>

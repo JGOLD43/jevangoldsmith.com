@@ -49,9 +49,15 @@ function setViewMode(mode: 'list' | 'grid') {
     const list = document.getElementById(MOVIES_LIST_ID);
     const grid = document.getElementById(GRID_VIEW_ID);
     const sidebar = document.getElementById('movies-sidebar');
+    const layout = document.getElementById('movies-layout');
     if (list) list.style.display = mode === 'grid' ? 'none' : '';
     if (grid) grid.style.display = mode === 'grid' ? 'block' : 'none';
     if (sidebar) sidebar.style.display = mode === 'grid' ? 'none' : '';
+    if (layout) {
+        layout.classList.toggle('grid-view-active', mode === 'grid');
+        if (mode === 'grid') layout.classList.remove('sidebar-collapsed');
+        else if (sidebar?.classList.contains('collapsed')) layout.classList.add('sidebar-collapsed');
+    }
     const btn = document.getElementById(TOGGLE_ID);
     if (btn) {
         btn.dataset.currentMode = mode;
