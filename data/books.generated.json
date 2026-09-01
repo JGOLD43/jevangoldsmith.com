@@ -467,11 +467,11 @@
     "rating": 0,
     "reReads": 0,
     "category": "Autobiographies",
+    "coverImage": "images/generated/remote/11a54d97515480-360.jpg",
     "shortDescription": "",
     "review": null,
     "read": false,
-    "coverImage": "https://covers.openlibrary.org/b/isbn/9781953953209-L.jpg",
-    "coverImageMedium": "https://covers.openlibrary.org/b/isbn/9781953953209-L.jpg"
+    "coverImageMedium": "images/generated/remote/11a54d97515480-240.jpg"
   },
   {
     "title": "Bruce Lee: Wisdom for the Way",

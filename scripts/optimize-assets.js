@@ -167,6 +167,11 @@ function collectRemoteMediaUrls() {
     const booksRaw = JSON.parse(fs.readFileSync(booksPath, 'utf8'));
     const books = Array.isArray(booksRaw) ? booksRaw : booksRaw.books;
     for (const book of books) {
+      const explicitCover = typeof book.coverImage === 'string' ? book.coverImage.trim() : '';
+      if (/^https:\/\//i.test(explicitCover)) {
+        urls.add(explicitCover);
+        continue;
+      }
       const isbn = String(book.isbn || '').replace(/[^0-9X]/gi, '');
       if (isbn) urls.add(`https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`);
     }
@@ -233,7 +238,7 @@ async function generateRemoteAssetSet() {
 
   for (const url of urls) {
     const id = hash(url);
-    const isCover = /covers\.openlibrary\.org/i.test(url);
+    const isCover = /covers\.openlibrary\.org|assets\.unsw\.press\/media\/images/i.test(url);
     const widths = isCover ? coverWidths : remoteWidths;
     const source = path.join(sourceRemoteDir, `${id}.source`);
 

@@ -1,4 +1,20 @@
 {
+  "https://assets.unsw.press/media/images/9781953953209.width-1000.jpg": {
+    "formats": {
+      "240": {
+        "avif": "images/generated/remote/11a54d97515480-240.avif",
+        "jpg": "images/generated/remote/11a54d97515480-240.jpg"
+      },
+      "360": {
+        "avif": "images/generated/remote/11a54d97515480-360.avif",
+        "jpg": "images/generated/remote/11a54d97515480-360.jpg"
+      },
+      "480": {
+        "avif": "images/generated/remote/11a54d97515480-480.avif",
+        "jpg": "images/generated/remote/11a54d97515480-480.jpg"
+      }
+    }
+  },
   "https://covers.openlibrary.org/b/isbn/0205370713-L.jpg": {
     "formats": {
       "240": {
