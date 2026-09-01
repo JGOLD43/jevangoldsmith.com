@@ -6,6 +6,21 @@ test('movies page renders SSR cards immediately', async ({ page }) => {
   expect(await page.locator('.movie-card').count()).toBeGreaterThanOrEqual(6);
 });
 
+test('movies load the first desktop row of cover images eagerly', async ({ page }) => {
+  await page.goto('/movies.html');
+  const loading = await page.locator('.movies-grid .movie-poster').evaluateAll((images) =>
+    images.slice(0, 7).map((image) => ({
+      loading: image.getAttribute('loading'),
+      fetchPriority: image.getAttribute('fetchpriority')
+    }))
+  );
+
+  expect(loading.slice(0, 6)).toEqual(
+    Array.from({ length: 6 }, () => ({ loading: 'eager', fetchPriority: 'high' }))
+  );
+  expect(loading[6]).toEqual({ loading: 'lazy', fetchPriority: null });
+});
+
 test('movies retain one valid grid item per SSR card after hydration', async ({ page }) => {
   await page.goto('/movies.html');
   const initialTitles = await page.locator('#movies-container > .movie-card').evaluateAll((cards) =>

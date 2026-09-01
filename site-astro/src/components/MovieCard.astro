@@ -6,9 +6,10 @@ import { slugify } from '../lib/slug';
 
 interface Props {
   movie: Partial<MovieRecord>;
+  eager?: boolean;
 }
 
-const { movie } = Astro.props;
+const { movie, eager = false } = Astro.props;
 const title = movie.title ?? '';
 const date = movie.date ?? '';
 const link = movie.link ?? '';
@@ -29,7 +30,7 @@ const tier = ratingTier(Number(starCount));
   {tier && <div class={`times-read-badge tier-badge tier-badge--${tier.key}`}>{tier.label}</div>}
   <div class="movie-poster-wrapper">
     {poster
-      ? <img src={poster} alt={title} class="movie-poster" width="150" height="230" loading="lazy" decoding="async" style={slug ? `view-transition-name: movie-poster-${slug}` : undefined} />
+      ? <img src={poster} alt={title} class="movie-poster" width="150" height="230" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} decoding="async" style={slug ? `view-transition-name: movie-poster-${slug}` : undefined} />
       : <div class="movie-poster-placeholder">{title}</div>}
   </div>
   <div class="movie-info">

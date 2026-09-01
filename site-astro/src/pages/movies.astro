@@ -172,7 +172,7 @@ const config = ({
     </div>
   </section>
   <div id="movies-container" class="movies-grid">
-    {movies.map((m) => <MovieCard movie={m} />)}
+    {movies.map((m, i) => <MovieCard movie={m} eager={i < 6} />)}
   </div>
   <div class="category-grid-view" id="movies-genre-grid-view" style="display: none;">
     <div class="category-grid" id="movies-genre-grid">
