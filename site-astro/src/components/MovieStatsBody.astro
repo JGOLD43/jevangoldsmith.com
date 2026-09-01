@@ -19,9 +19,6 @@ const hoursEntries = Object.entries(stats.hoursByGenre).sort((a, b) => b[1] - a[
 const hoursMax = hoursEntries[0]?.[1] || 0;
 const decadeEntries = Object.entries(stats.filmsByDecade).sort((a, b) => a[0].localeCompare(b[0]));
 const decadeMax = decadeEntries.reduce((m, [, v]) => Math.max(m, v), 0);
-const ratingEntries = [5, 4, 3, 2, 1].map((r) => [r, stats.filmsByRating[r] || 0] as [number, number]);
-const ratingTotal = ratingEntries.reduce((acc, [, v]) => acc + v, 0);
-const ratingMax = ratingEntries.reduce((m, [, v]) => Math.max(m, v), 0);
 const extremeCards: Array<[string, RuntimeMovieStatsMovie | null]> = [
   ['Longest film', stats.longest],
   ['Shortest film', stats.shortest]
@@ -57,53 +54,47 @@ const extremeCards: Array<[string, RuntimeMovieStatsMovie | null]> = [
       ))}
     </div>
 
-    {hoursEntries.length > 0 && (
-      <section class="stats-section">
-        <h3 class="stats-section-title">Hours by genre</h3>
-        {hoursEntries.map(([genre, mins]) => {
-          const pct = hoursMax > 0 ? Math.max(2, Math.round((mins / hoursMax) * 100)) : 0;
-          return <div class="stats-bar-row"><span class="stats-bar-label">{genre}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{fmtHours(mins)}</span></div>;
-        })}
-      </section>
-    )}
+    <div class="stats-detail-grid">
+      {hoursEntries.length > 0 && (
+        <section class="stats-section">
+          <h3 class="stats-section-title">Hours by genre</h3>
+          {hoursEntries.slice(0, 5).map(([genre, mins]) => {
+            const pct = hoursMax > 0 ? Math.max(2, Math.round((mins / hoursMax) * 100)) : 0;
+            return <div class="stats-bar-row"><span class="stats-bar-label">{genre}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{fmtHours(mins)}</span></div>;
+          })}
+        </section>
+      )}
 
-    {decadeEntries.length > 0 && (
-      <section class="stats-section">
-        <h3 class="stats-section-title">Films by decade</h3>
-        {decadeEntries.map(([decade, count]) => {
-          const pct = decadeMax > 0 ? Math.max(2, Math.round((count / decadeMax) * 100)) : 0;
-          return <div class="stats-bar-row"><span class="stats-bar-label">{decade}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{count}</span></div>;
-        })}
-      </section>
-    )}
+      {decadeEntries.length > 0 && (
+        <section class="stats-section">
+          <h3 class="stats-section-title">Films by decade</h3>
+          {decadeEntries.slice(-6).map(([decade, count]) => {
+            const pct = decadeMax > 0 ? Math.max(2, Math.round((count / decadeMax) * 100)) : 0;
+            return <div class="stats-bar-row"><span class="stats-bar-label">{decade}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{count}</span></div>;
+          })}
+        </section>
+      )}
+    </div>
 
-    {ratingTotal > 0 && (
-      <section class="stats-section">
-        <h3 class="stats-section-title">Films by rating</h3>
-        {ratingEntries.map(([rating, count]) => {
-          const pct = ratingMax > 0 ? Math.max(2, Math.round((count / ratingMax) * 100)) : 0;
-          return <div class="stats-bar-row"><span class="stats-bar-label">{'★'.repeat(rating)}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{count}</span></div>;
-        })}
-      </section>
-    )}
+    <div class="stats-detail-grid">
+      {stats.avgRatingByGenre.length > 0 && (
+        <section class="stats-section">
+          <h3 class="stats-section-title">Best-rated genres</h3>
+          {stats.avgRatingByGenre.slice(0, 5).map(({ genre, avg, count }) => {
+            const pct = Math.max(2, Math.round((avg / 5) * 100));
+            return <div class="stats-bar-row"><span class="stats-bar-label">{genre}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{avg.toFixed(1)}★ <span class="stats-bar-aside">({count})</span></span></div>;
+          })}
+        </section>
+      )}
 
-    {stats.avgRatingByGenre.length > 0 && (
-      <section class="stats-section">
-        <h3 class="stats-section-title">Avg rating by genre</h3>
-        {stats.avgRatingByGenre.map(({ genre, avg, count }) => {
-          const pct = Math.max(2, Math.round((avg / 5) * 100));
-          return <div class="stats-bar-row"><span class="stats-bar-label">{genre}</span><span class="stats-bar-track"><span class="stats-bar-fill" style={`width: ${pct}%`}></span></span><span class="stats-bar-value">{avg.toFixed(2)}★ <span class="stats-bar-aside">({count})</span></span></div>;
-        })}
-      </section>
-    )}
-
-    {stats.mostRewatched.length > 0 && (
-      <section class="stats-section">
-        <h3 class="stats-section-title">Most rewatched</h3>
-        <ul class="stats-rewatch-list">
-          {stats.mostRewatched.map((movie) => <li><span class="stats-rewatch-count">{watchCount(movie)}×</span><span class="stats-rewatch-title">{movie.title}</span><span class="stats-rewatch-year">{movie.year || ''}</span></li>)}
-        </ul>
-      </section>
-    )}
+      {stats.mostRewatched.length > 0 && (
+        <section class="stats-section">
+          <h3 class="stats-section-title">Most rewatched</h3>
+          <ul class="stats-rewatch-list">
+            {stats.mostRewatched.map((movie) => <li><span class="stats-rewatch-count">{watchCount(movie)}×</span><span class="stats-rewatch-title">{movie.title}</span><span class="stats-rewatch-year">{movie.year || ''}</span></li>)}
+          </ul>
+        </section>
+      )}
+    </div>
   </>
 )}
