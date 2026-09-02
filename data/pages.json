@@ -1,47 +1,5 @@
 [
   {
-    "path": "about.html",
-    "url": "/about.html",
-    "title": "About Jevan Goldsmith",
-    "description": "A short introduction to Jevan Goldsmith, the archive he is building, and the themes behind his work.",
-    "intent": "about",
-    "topics": [
-      "personal-systems",
-      "better-thinking"
-    ],
-    "index": true,
-    "schemaType": "AboutPage",
-    "primaryKeyword": "about",
-    "secondaryKeywords": [
-      "Personal Systems",
-      "Better Thinking",
-      "Essays",
-      "Newsletter | Jevan Goldsmith",
-      "How I Read: A Practical Reading Philosophy",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-    ],
-    "audience": "People trying to understand Jevan Goldsmith and his operating context",
-    "searchIntent": "understand",
-    "contentDepth": "supporting",
-    "relatedPages": [
-      "essays.html",
-      "newsletter.html",
-      "reading-philosophy.html",
-      "index.html",
-      "free-resources.html",
-      "weekly-review-template.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "section": "explore",
-    "generatedFrom": "_src/pages",
-    "journeyStage": "trust",
-    "primaryCta": "contact",
-    "secondaryCtas": [
-      "newsletter"
-    ],
-    "ctaOptional": false
-  },
-  {
     "path": "adventure-austin-adventure.html",
     "url": "/adventure-austin-adventure.html",
     "title": "Austin Adventure: Live Music, BBQ & City Notes",
@@ -672,48 +630,6 @@
     "ctaOptional": false
   },
   {
-    "path": "health.html",
-    "url": "/health.html",
-    "title": "Health, Performance &amp; Energy Systems",
-    "description": "Health and performance notes from Jevan Goldsmith on energy, recovery, habits, training, and better work.",
-    "intent": "health-performance",
-    "topics": [
-      "health-performance",
-      "personal-systems"
-    ],
-    "index": true,
-    "schemaType": "CollectionPage",
-    "primaryKeyword": "health performance",
-    "secondaryKeywords": [
-      "Health & Performance",
-      "Personal Systems",
-      "Essays",
-      "Newsletter | Jevan Goldsmith",
-      "How I Read: A Practical Reading Philosophy",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-    ],
-    "audience": "People trying to understand Jevan Goldsmith and his operating context",
-    "searchIntent": "explore",
-    "contentDepth": "archive",
-    "relatedPages": [
-      "essays.html",
-      "newsletter.html",
-      "reading-philosophy.html",
-      "index.html",
-      "products.html",
-      "free-resources.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "section": "explore",
-    "generatedFrom": "_src/pages",
-    "journeyStage": "trust",
-    "primaryCta": "contact",
-    "secondaryCtas": [
-      "newsletter"
-    ],
-    "ctaOptional": false
-  },
-  {
     "path": "index.html",
     "url": "/",
     "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
@@ -803,48 +719,6 @@
     "secondaryCtas": [
       "free-resources",
       "contact"
-    ],
-    "ctaOptional": false
-  },
-  {
-    "path": "living-manifesto.html",
-    "url": "/living-manifesto.html",
-    "title": "Living Manifesto: Principles, Standards & Long-Horizon Bets",
-    "description": "Jevan Goldsmith's living manifesto: principles, standards, and long-horizon bets for time, work, relationships, and better decisions.",
-    "intent": "manifesto",
-    "topics": [
-      "personal-systems",
-      "better-thinking"
-    ],
-    "index": true,
-    "schemaType": "Article",
-    "primaryKeyword": "manifesto",
-    "secondaryKeywords": [
-      "Personal Systems",
-      "Better Thinking",
-      "Essays",
-      "Newsletter | Jevan Goldsmith",
-      "How I Read: A Practical Reading Philosophy",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-    ],
-    "audience": "People trying to understand Jevan Goldsmith and his operating context",
-    "searchIntent": "learn",
-    "contentDepth": "supporting",
-    "relatedPages": [
-      "essays.html",
-      "newsletter.html",
-      "reading-philosophy.html",
-      "index.html",
-      "free-resources.html",
-      "weekly-review-template.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "section": "explore",
-    "generatedFrom": "_src/pages",
-    "journeyStage": "trust",
-    "primaryCta": "contact",
-    "secondaryCtas": [
-      "newsletter"
     ],
     "ctaOptional": false
   },
@@ -995,7 +869,6 @@
     "relatedPages": [
       "essays.html",
       "newsletter.html",
-      "about.html",
       "contact.html",
       "index.html"
     ],
@@ -2920,7 +2793,6 @@
     "searchIntent": "explore",
     "contentDepth": "pillar",
     "relatedPages": [
-      "health.html",
       "books.html",
       "essays.html",
       "newsletter.html",

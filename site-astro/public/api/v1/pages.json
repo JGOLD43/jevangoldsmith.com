@@ -1,36 +1,5 @@
 [
   {
-    "id": "about",
-    "title": "About Jevan Goldsmith",
-    "description": "A short introduction to Jevan Goldsmith, the archive he is building, and the themes behind his work.",
-    "index": true,
-    "section": "explore",
-    "primaryKeyword": "about",
-    "secondaryKeywords": [
-      "Personal Systems",
-      "Better Thinking",
-      "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-      "How I Read: A Practical Reading Philosophy",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-    ],
-    "audience": "People trying to understand Jevan Goldsmith and his operating context",
-    "searchIntent": "understand",
-    "contentDepth": "supporting",
-    "relatedPages": [
-      "essays.html",
-      "field-notes.html",
-      "reading-philosophy.html",
-      "index.html",
-      "free-resources.html",
-      "weekly-review-template.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "url": "https://jevangoldsmith.com/about.html",
-    "htmlPath": "about.html",
-    "source": "_src/pages"
-  },
-  {
     "id": "adventure-austin-adventure",
     "title": "Austin Adventure: Live Music, BBQ & City Notes",
     "description": "Notes and photos from Jevan Goldsmith's Austin trip through music, food, neighborhoods, and local energy.",
@@ -555,37 +524,6 @@
     "source": "_src/pages"
   },
   {
-    "id": "health",
-    "title": "Health, Performance &amp; Energy Systems",
-    "description": "Health and performance notes from Jevan Goldsmith on energy, recovery, habits, training, and better work.",
-    "index": true,
-    "section": "explore",
-    "primaryKeyword": "health performance",
-    "secondaryKeywords": [
-      "Health & Performance",
-      "Personal Systems",
-      "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-      "How I Read: A Practical Reading Philosophy",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-    ],
-    "audience": "People trying to understand Jevan Goldsmith and his operating context",
-    "searchIntent": "explore",
-    "contentDepth": "archive",
-    "relatedPages": [
-      "essays.html",
-      "field-notes.html",
-      "reading-philosophy.html",
-      "index.html",
-      "products.html",
-      "free-resources.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "url": "https://jevangoldsmith.com/health.html",
-    "htmlPath": "health.html",
-    "source": "_src/pages"
-  },
-  {
     "id": "important-or-not",
     "title": "Important or Not: Decision Notes &amp; Priority Filters",
     "description": "A decision-making page about separating what matters from noise, urgency, and attractive distractions.",
@@ -678,37 +616,6 @@
     "lastReviewed": "2026-04-22",
     "url": "https://jevangoldsmith.com/lesson-logger.html",
     "htmlPath": "lesson-logger.html",
-    "source": "_src/pages"
-  },
-  {
-    "id": "living-manifesto",
-    "title": "Living Manifesto: Principles, Standards & Long-Horizon Bets",
-    "description": "Jevan Goldsmith's living manifesto: principles, standards, and long-horizon bets for time, work, relationships, and better decisions.",
-    "index": true,
-    "section": "explore",
-    "primaryKeyword": "manifesto",
-    "secondaryKeywords": [
-      "Personal Systems",
-      "Better Thinking",
-      "Essays",
-      "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-      "How I Read: A Practical Reading Philosophy",
-      "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-    ],
-    "audience": "People trying to understand Jevan Goldsmith and his operating context",
-    "searchIntent": "learn",
-    "contentDepth": "supporting",
-    "relatedPages": [
-      "essays.html",
-      "field-notes.html",
-      "reading-philosophy.html",
-      "index.html",
-      "free-resources.html",
-      "weekly-review-template.html"
-    ],
-    "lastReviewed": "2026-04-22",
-    "url": "https://jevangoldsmith.com/living-manifesto.html",
-    "htmlPath": "living-manifesto.html",
     "source": "_src/pages"
   },
   {
@@ -2276,7 +2183,6 @@
     "searchIntent": "explore",
     "contentDepth": "pillar",
     "relatedPages": [
-      "health.html",
       "books.html",
       "essays.html",
       "field-notes.html",

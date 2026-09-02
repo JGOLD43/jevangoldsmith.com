@@ -143,7 +143,6 @@ const categoryCounts = Object.fromEntries(
                 {!p.image && p.icon && <span class="shelf-object-icon">{p.icon}</span>}
               </span>
             </span>
-            {p.badge && <span class="shelf-badge">{p.badge}</span>}
             <span class="shelf-object-name">{p.title}</span>
             {(p.verdict || p.shortDescription) && (
               <span class="shelf-object-verdict">{p.verdict ?? p.shortDescription}</span>
@@ -281,10 +280,18 @@ const categoryCounts = Object.fromEntries(
     opacity: 0.55;
   }
 
+  .shelf-page .shelf-object-stage {
+    margin-bottom: -36px;
+  }
+
   @media (max-width: 760px) {
     .shelf-page .shelf-topbar {
       margin: -24px -12px 24px;
       padding: 14px 16px;
+    }
+
+    .shelf-page .shelf-object-stage {
+      margin-bottom: 0;
     }
   }
 </style>

@@ -1679,25 +1679,6 @@
     },
     {
       "type": "page",
-      "id": "about",
-      "title": "About Jevan Goldsmith",
-      "summary": "A short introduction to Jevan Goldsmith, the archive he is building, and the themes behind his work.",
-      "section": "explore",
-      "url": "https://jevangoldsmith.com/about.html",
-      "tags": [
-        "explore",
-        "about",
-        "Personal Systems",
-        "Better Thinking",
-        "Essays",
-        "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-        "How I Read: A Practical Reading Philosophy",
-        "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-      ],
-      "searchText": "about jevan goldsmith a short introduction to jevan goldsmith, the archive he is building, and the themes behind his work. explore page explore about personal systems better thinking essays field notes newsletter | useful ideas, books, tools & experiments how i read: a practical reading philosophy jevan goldsmith - finance, real estate development, writing & tech"
-    },
-    {
-      "type": "page",
       "id": "adventures",
       "title": "Adventures, Travel Notes & Places Worth Remembering",
       "summary": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored.",
@@ -2226,25 +2207,6 @@
     },
     {
       "type": "page",
-      "id": "health",
-      "title": "Health, Performance &amp; Energy Systems",
-      "summary": "Health and performance notes from Jevan Goldsmith on energy, recovery, habits, training, and better work.",
-      "section": "explore",
-      "url": "https://jevangoldsmith.com/health.html",
-      "tags": [
-        "explore",
-        "health performance",
-        "Health & Performance",
-        "Personal Systems",
-        "Essays",
-        "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-        "How I Read: A Practical Reading Philosophy",
-        "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-      ],
-      "searchText": "health, performance &amp; energy systems health and performance notes from jevan goldsmith on energy, recovery, habits, training, and better work. explore page explore health performance health & performance personal systems essays field notes newsletter | useful ideas, books, tools & experiments how i read: a practical reading philosophy jevan goldsmith - finance, real estate development, writing & tech"
-    },
-    {
-      "type": "page",
       "id": "people-philosophy",
       "title": "How I Approach People: A Relationship Philosophy",
       "summary": "How Jevan Goldsmith thinks about friendships, partnerships, and the relationships that compound over a lifetime versus the ones that quietly drain you.",
@@ -2452,25 +2414,6 @@
         "Books"
       ],
       "searchText": "lex fridman - people a living archive of field notes, books, tools, resources, projects, and practical ideas from jevan goldsmith. taste page taste people/lex fridman taste tools & objects the shelf: tools, objects & gear that earned their place cool shit movies books"
-    },
-    {
-      "type": "page",
-      "id": "living-manifesto",
-      "title": "Living Manifesto: Principles, Standards & Long-Horizon Bets",
-      "summary": "Jevan Goldsmith's living manifesto: principles, standards, and long-horizon bets for time, work, relationships, and better decisions.",
-      "section": "explore",
-      "url": "https://jevangoldsmith.com/living-manifesto.html",
-      "tags": [
-        "explore",
-        "manifesto",
-        "Personal Systems",
-        "Better Thinking",
-        "Essays",
-        "Field Notes Newsletter | Useful Ideas, Books, Tools & Experiments",
-        "How I Read: A Practical Reading Philosophy",
-        "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech"
-      ],
-      "searchText": "living manifesto: principles, standards & long-horizon bets jevan goldsmith's living manifesto: principles, standards, and long-horizon bets for time, work, relationships, and better decisions. explore page explore manifesto personal systems better thinking essays field notes newsletter | useful ideas, books, tools & experiments how i read: a practical reading philosophy jevan goldsmith - finance, real estate development, writing & tech"
     },
     {
       "type": "page",

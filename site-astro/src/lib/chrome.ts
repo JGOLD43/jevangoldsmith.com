@@ -15,7 +15,6 @@ const BODY_CLASS_BY_FILE: Record<string, string> = {
   'essays.html': 'nav-compact',
   'field-notes.html': 'newsletter-page',
   'newsletter.html': 'newsletter-page',
-  'health.html': 'nav-compact',
   'meet.html': 'meet-page',
   'movies.html': 'nav-compact',
   'people.html': 'nav-compact',

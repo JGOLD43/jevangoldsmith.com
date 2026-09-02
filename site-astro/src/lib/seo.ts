@@ -56,7 +56,6 @@ const PERSON_REF = {
 // canonical Person graph lives on the home page.
 const FULL_PERSON_PAGES = new Set([
   'index.html',
-  'about.html',
   'contact.html',
   'meet.html'
 ]);
