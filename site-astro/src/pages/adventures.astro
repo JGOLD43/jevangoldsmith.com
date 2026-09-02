@@ -404,10 +404,18 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
 <script is:inline>
   (() => {
     const fit = () => {
+      const split = document.querySelector('.adventures-page-split');
+      const useCollapsedDesktopSize = window.matchMedia('(min-width: 769px)').matches
+        && split?.classList.contains('sidebar-collapsed');
       document.querySelectorAll('.adventures-compact-list .adventure-compact-card').forEach((card) => {
         const info = card.querySelector('.adventure-compact-info');
         const img = card.querySelector('.adventure-compact-image');
         if (!info || !img) return;
+        if (useCollapsedDesktopSize) {
+          img.style.removeProperty('width');
+          img.style.removeProperty('height');
+          return;
+        }
         const h = Math.round(info.getBoundingClientRect().height);
         if (h > 0) {
           img.style.width = h + 'px';

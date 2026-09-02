@@ -58,11 +58,17 @@ function setViewMode(mode: 'list' | 'grid') {
     const list = document.getElementById(LIST_ID);
     const grid = document.getElementById(GRID_VIEW_ID);
     const sidebar = document.getElementById('podcasts-sidebar');
+    const layout = document.getElementById('podcasts-layout');
     const spotifyRecent = document.getElementById('spotify-recent-section');
     const spotifyShows = document.getElementById('spotify-shows-section');
     if (list) list.style.display = mode === 'grid' ? 'none' : '';
     if (grid) grid.style.display = mode === 'grid' ? 'block' : 'none';
     if (sidebar) sidebar.style.display = mode === 'grid' ? 'none' : '';
+    if (layout) {
+        layout.classList.toggle('grid-view-active', mode === 'grid');
+        if (mode === 'grid') layout.classList.remove('sidebar-collapsed');
+        else if (sidebar?.classList.contains('collapsed')) layout.classList.add('sidebar-collapsed');
+    }
     // Hide the Spotify sections in grid view too — the folder grid
     // owns the whole page.
     if (spotifyRecent) spotifyRecent.style.display = mode === 'grid' ? 'none' : '';

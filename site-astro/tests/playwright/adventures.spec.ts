@@ -53,3 +53,24 @@ test('adventures sidebar toggle works', async ({ page }) => {
     expect(afterCollapsed).not.toBe(initialCollapsed);
   }
 });
+
+test('adventures thumbnails return to their compact size after closing the sidebar', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.addInitScript(() => localStorage.setItem('adventures-sidebar-collapsed', '1'));
+  await page.goto('/adventures.html');
+
+  const split = page.locator('.adventures-page-split');
+  const toggle = page.locator('#adventures-sidebar-toggle');
+  const firstThumbnail = page.locator('.adventure-compact-image').first();
+
+  await expect(split).toHaveClass(/sidebar-collapsed/);
+  await expect.poll(async () => Math.round((await firstThumbnail.boundingBox())?.width ?? 0)).toBe(72);
+
+  await toggle.click();
+  await expect(split).not.toHaveClass(/sidebar-collapsed/);
+  await expect.poll(async () => Math.round((await firstThumbnail.boundingBox())?.width ?? 0)).toBeGreaterThan(72);
+
+  await toggle.click();
+  await expect(split).toHaveClass(/sidebar-collapsed/);
+  await expect.poll(async () => Math.round((await firstThumbnail.boundingBox())?.width ?? 0)).toBe(72);
+});

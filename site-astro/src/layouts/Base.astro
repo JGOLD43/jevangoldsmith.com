@@ -26,9 +26,13 @@ const _triggerFilesByLabel: Record<string, Set<string>> = {
 const _explicitTriggerLabel = Object.keys(_triggerFilesByLabel).find((label) =>
   _triggerFilesByLabel[label]?.has(_activeHref),
 );
-const _isTriggerActive = (label: string) => _explicitTriggerLabel
-  ? label === _explicitTriggerLabel
-  : _triggerByLabel[label] === _activeSection;
+const _standaloneNavFiles = new Set(['index.html', 'now.html']);
+const _isTriggerActive = (label: string) => {
+  if (_standaloneNavFiles.has(_activeHref)) return false;
+  return _explicitTriggerLabel
+    ? label === _explicitTriggerLabel
+    : _triggerByLabel[label] === _activeSection;
+};
 const _tickerQuotes = (quotes as { tickerQuotes?: string[] }).tickerQuotes ?? [];
 const _ticker = _tickerQuotes.length >= 5
   ? (() => {
