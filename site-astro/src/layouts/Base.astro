@@ -20,7 +20,15 @@ for (const p of (pages as Array<{ path?: string; section?: string }>) ?? []) {
 }
 const _activeSection = _sectionByFile[_navFile] ?? '';
 const _triggerByLabel: Record<string, string> = { Explore: 'explore', Taste: 'taste' };
-const _isTriggerActive = (label: string) => _triggerByLabel[label] === _activeSection;
+const _triggerFilesByLabel: Record<string, Set<string>> = {
+  Explore: new Set(['adventures.html', 'free-resources.html']),
+};
+const _explicitTriggerLabel = Object.keys(_triggerFilesByLabel).find((label) =>
+  _triggerFilesByLabel[label]?.has(_activeHref),
+);
+const _isTriggerActive = (label: string) => _explicitTriggerLabel
+  ? label === _explicitTriggerLabel
+  : _triggerByLabel[label] === _activeSection;
 const _tickerQuotes = (quotes as { tickerQuotes?: string[] }).tickerQuotes ?? [];
 const _ticker = _tickerQuotes.length >= 5
   ? (() => {
@@ -484,6 +492,8 @@ if (seoSlug === 'index' || seoSlug === 'search') {
                   <div class="dropdown-column">
                     <a href="/newsletter.html" class:list={['newsletter.html' === _activeHref ? 'active' : '']}>Newsletter</a>
                     <a href="/essays.html" class:list={['essays.html' === _activeHref ? 'active' : '']}>Essays</a>
+                    <a href="/adventures.html" class:list={['adventures.html' === _activeHref ? 'active' : '']}>Trips</a>
+                    <a href="/free-resources.html" class:list={['free-resources.html' === _activeHref ? 'active' : '']}>Resources</a>
                   </div>
                 </div>
               </div>
@@ -527,7 +537,6 @@ if (seoSlug === 'index' || seoSlug === 'search') {
                 </div>
               </div>
             </li>
-            <li><a href="/adventures.html" class:list={['adventures.html' === _activeHref ? 'active' : '']}>Trips</a></li>
             <li class="nav-dropdown">
               <a href="#" aria-haspopup="true" aria-expanded="false" class="dropdown-trigger">Ventures</a>
               <div class="dropdown-menu dropdown-menu-wide">
@@ -536,9 +545,6 @@ if (seoSlug === 'index' || seoSlug === 'search') {
                   <div class="dropdown-column">
                     <a href="/projects.html" class:list={['projects.html' === _activeHref ? 'active' : '']}>Projects</a>
                     <a href="/challenges.html" class:list={['challenges.html' === _activeHref ? 'active' : '']}>Challenges</a>
-                  </div>
-                  <div class="dropdown-column">
-                    <a href="/free-resources.html" class:list={['free-resources.html' === _activeHref ? 'active' : '']}>Resources</a>
                     <a href="/lesson-logger.html" class:list={['lesson-logger.html' === _activeHref ? 'active' : '']}>Lesson Log</a>
                   </div>
                 </div>
