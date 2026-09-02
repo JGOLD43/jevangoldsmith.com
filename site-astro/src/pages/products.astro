@@ -280,8 +280,38 @@ const categoryCounts = Object.fromEntries(
     opacity: 0.55;
   }
 
+  body.zoom-open .shelf-page .shelf-filter {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .shelf-page .shelf-object-stage {
     margin-bottom: -36px;
+  }
+
+  @media (min-width: 761px) {
+    .shelf-page .shelf-grid.is-zoomed .shelf-item.is-zoom-target .shelf-object-name {
+      font-size: 0.72rem;
+      line-height: 1.2;
+    }
+
+    .shelf-page .shelf-grid.is-zoomed .shelf-item.is-zoom-target .shelf-object-detail {
+      gap: 0.42rem;
+      width: clamp(190px, 15vw, 230px);
+      height: clamp(120px, 17vw, 245px);
+      font-size: 0.56rem;
+      line-height: 1.4;
+    }
+
+    .shelf-page .shelf-grid.is-zoomed .shelf-item.is-zoom-target .shelf-object-detail-brand {
+      font-size: 0.5rem;
+    }
+
+    .shelf-page .shelf-grid.is-zoomed .shelf-item.is-zoom-target .shelf-object-detail-verdict {
+      margin-bottom: 0.2rem;
+      font-size: 0.72rem;
+      line-height: 1.25;
+    }
   }
 
   @media (max-width: 760px) {
