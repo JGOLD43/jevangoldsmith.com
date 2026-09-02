@@ -86,7 +86,7 @@ function renderBarSection(title: string, rows: Array<[string, string, number]>) 
 function renderHoursByGenreBars(stats: ComputedMovieStats) {
     const entries = Object.entries(stats.hoursByGenre).sort((a, b) => b[1] - a[1]);
     const max = entries[0]?.[1] || 0;
-    return renderBarSection('Hours by genre', entries.map(([genre, mins]) => [
+    return renderBarSection('Hours by genre', entries.slice(0, 5).map(([genre, mins]) => [
         genre,
         fmtHours(mins),
         max > 0 ? Math.max(2, Math.round((mins / max) * 100)) : 0
@@ -96,20 +96,8 @@ function renderHoursByGenreBars(stats: ComputedMovieStats) {
 function renderFilmsByDecade(stats: ComputedMovieStats) {
     const entries = Object.entries(stats.filmsByDecade).sort((a, b) => a[0].localeCompare(b[0]));
     const max = entries.reduce((m, [, v]) => Math.max(m, v), 0);
-    return renderBarSection('Films by decade', entries.map(([decade, count]) => [
+    return renderBarSection('Films by decade', entries.slice(-6).map(([decade, count]) => [
         decade,
-        String(count),
-        max > 0 ? Math.max(2, Math.round((count / max) * 100)) : 0
-    ]));
-}
-
-function renderRatingHistogram(stats: ComputedMovieStats) {
-    const entries = [5, 4, 3, 2, 1].map((rating) => [rating, stats.filmsByRating[rating] || 0] as [number, number]);
-    const total = entries.reduce((acc, [, count]) => acc + count, 0);
-    if (total === 0) return null;
-    const max = entries.reduce((m, [, count]) => Math.max(m, count), 0);
-    return renderBarSection('Films by rating', entries.map(([rating, count]) => [
-        '★'.repeat(rating),
         String(count),
         max > 0 ? Math.max(2, Math.round((count / max) * 100)) : 0
     ]));
@@ -118,17 +106,25 @@ function renderRatingHistogram(stats: ComputedMovieStats) {
 function renderAvgRatingByGenre(stats: ComputedMovieStats) {
     if (!stats.avgRatingByGenre.length) return null;
     const section = el('section', 'stats-section');
-    section.appendChild(el('h3', 'stats-section-title', 'Avg rating by genre'));
-    for (const { genre, avg, count } of stats.avgRatingByGenre) {
+    section.appendChild(el('h3', 'stats-section-title', 'Best-rated genres'));
+    for (const { genre, avg, count } of stats.avgRatingByGenre.slice(0, 5)) {
         const row = barRow(genre, '', Math.max(2, Math.round((avg / 5) * 100)));
         const value = row.querySelector('.stats-bar-value');
         if (value) {
-            value.textContent = `${avg.toFixed(2)}★ `;
+            value.textContent = `${avg.toFixed(1)}★ `;
             value.appendChild(el('span', 'stats-bar-aside', `(${count})`));
         }
         section.appendChild(row);
     }
     return section;
+}
+
+function renderDetailGrid(...sections: Array<HTMLElement | null>) {
+    const visible = sections.filter((section): section is HTMLElement => Boolean(section));
+    if (visible.length === 0) return null;
+    const grid = el('div', 'stats-detail-grid');
+    grid.append(...visible);
+    return grid;
 }
 
 function renderMostRewatched(stats: ComputedMovieStats) {
@@ -181,12 +177,9 @@ function render(movies: RuntimeMovieStatsMovie[]) {
     const nodes = [
         renderHeadline(stats),
         renderExtremes(stats),
-        renderHoursByGenreBars(stats),
-        renderFilmsByDecade(stats),
-        renderRatingHistogram(stats),
-        renderAvgRatingByGenre(stats),
-        renderMostRewatched(stats)
-    ].filter((node): node is HTMLElement => Boolean(node));
+        renderDetailGrid(renderHoursByGenreBars(stats), renderFilmsByDecade(stats)),
+        renderDetailGrid(renderAvgRatingByGenre(stats), renderMostRewatched(stats))
+    ].filter((node): node is HTMLDivElement => Boolean(node));
     body.replaceChildren(...nodes);
 }
 

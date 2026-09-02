@@ -93,3 +93,19 @@ test('movie tier badges stay inside their sidebar movie rows', async ({ page }) 
   expect(placement.badgeTop).toBeGreaterThanOrEqual(placement.linkTop);
   expect(placement.badgeBottom).toBeLessThanOrEqual(placement.linkBottom);
 });
+
+test('filtered movie stats retain the compact redesigned layout', async ({ page }) => {
+  await page.goto('/movies.html');
+  await page.locator('#movie-search').evaluate((input: HTMLInputElement) => {
+    input.value = 'dark';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await page.locator('.stats-toggle').click();
+
+  const panel = page.locator('#movie-stats-panel');
+  await expect(panel).toBeVisible();
+  await expect(panel.getByText('Films by rating')).toHaveCount(0);
+  await expect(panel.getByText('Best-rated genres')).toHaveCount(1);
+  await expect(panel.locator('.stats-detail-grid')).toHaveCount(2);
+  expect(await panel.locator('.stats-section').count()).toBeLessThanOrEqual(4);
+});
