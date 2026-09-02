@@ -227,26 +227,30 @@ const config = ({
   }
 
   .book-stats-tabs {
-    border-bottom: 1px solid var(--border-color);
-    gap: .25rem;
+    border: 1px solid var(--border-color);
+    background: var(--background-alt);
+    border-radius: 999px;
+    gap: .15rem;
+    width: fit-content;
     margin: 0 0 1.25rem;
+    padding: .2rem;
     display: flex;
   }
   .book-stats-tabs button {
     border: 0;
-    border-bottom: 2px solid transparent;
+    border-radius: 999px;
     color: var(--text-light);
     cursor: pointer;
     background: transparent;
-    margin-bottom: -1px;
-    padding: .35rem .5rem .5rem;
+    padding: .38rem .7rem;
     font: inherit;
-    font-size: .82rem;
-    font-weight: 600;
+    font-size: .78rem;
+    font-weight: 700;
   }
   .book-stats-tabs button[aria-selected="true"] {
-    border-bottom-color: var(--secondary-color);
+    background: var(--background-color);
     color: var(--text-color);
+    box-shadow: 0 1px 4px #0000001f, inset 0 0 0 1px color-mix(in srgb, var(--secondary-color) 55%, var(--border-color));
   }
 
   /* While a book cover is flying to the detail page, fade out the page
@@ -449,4 +453,5 @@ const config = ({
 <script>
   import '../scripts/books.ts';
   import '../scripts/book-stats.ts';
+  import '../scripts/bookshelf-lists.ts';
 </script>

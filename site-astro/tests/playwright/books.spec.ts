@@ -44,3 +44,40 @@ test('books page has no console errors', async ({ page }) => {
   );
   expect(scriptErrors).toEqual([]);
 });
+
+test('compare shelves separates read, queued, and new books', async ({ page }) => {
+  await page.goto('/books.html', { waitUntil: 'domcontentloaded' });
+  await page.locator('.book-stats-toggle').click();
+  await page.locator('#bookshelf-comparison-tab').click();
+
+  const comparison = page.locator('[data-bookshelf-source]:visible');
+  await expect(comparison).toHaveCount(1);
+  await expect(comparison.getByText('Read by you', { exact: true })).toBeVisible();
+  await expect(comparison.getByText('Already to read', { exact: true })).toBeVisible();
+  await expect(comparison.getByText('New discoveries', { exact: true })).toBeVisible();
+
+  const switcher = page.locator('[data-bookshelf-switch]').nth(1);
+  const sourceId = await switcher.getAttribute('data-bookshelf-switch');
+  await switcher.click();
+  await expect(page.locator('[data-bookshelf-source]:visible')).toHaveAttribute('data-bookshelf-source', sourceId || '');
+});
+
+test('reading-list builder saves named to-read lists on the device', async ({ page }) => {
+  await page.goto('/books.html', { waitUntil: 'domcontentloaded' });
+  await page.evaluate(() => localStorage.removeItem('jgold-reading-lists-v1'));
+  await page.locator('.book-stats-toggle').click();
+  await page.locator('#bookshelf-comparison-tab').click();
+
+  const builder = page.locator('[data-bookshelf-source]:visible [data-list-builder]');
+  await builder.locator('.bookshelf-pick').nth(0).click();
+  await builder.locator('.bookshelf-pick').nth(1).click();
+  await builder.locator('[data-list-name]').fill('Next from Andrew');
+  await builder.locator('[data-save-list]').click();
+
+  const saved = page.locator('.saved-list-card').first();
+  await expect(saved.getByRole('heading', { name: 'Next from Andrew' })).toBeVisible();
+  await expect(saved).toContainText('2 books');
+
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.saved-list-card').first().getByRole('heading', { name: 'Next from Andrew' })).toBeVisible();
+});
