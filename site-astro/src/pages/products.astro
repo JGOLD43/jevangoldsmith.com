@@ -233,10 +233,17 @@ const categoryCounts = Object.fromEntries(
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
-    margin-left: -8px;
+    justify-content: normal;
+    max-width: none;
+    margin: 0 0 0 -8px;
   }
 
   .shelf-page .shelf-filter button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 7px;
+    min-height: auto;
     padding: 4px 8px;
     border: 0;
     border-radius: 0;
@@ -244,7 +251,10 @@ const categoryCounts = Object.fromEntries(
     color: #8a8a8a;
     font-family: inherit;
     font-size: 12px;
+    font-weight: 600;
     letter-spacing: 0.04em;
+    text-transform: none;
+    white-space: nowrap;
   }
 
   .shelf-page .shelf-filter button:hover,
@@ -273,13 +283,8 @@ const categoryCounts = Object.fromEntries(
 
   @media (max-width: 760px) {
     .shelf-page .shelf-topbar {
-      align-items: flex-start;
       margin: -24px -12px 24px;
       padding: 14px 16px;
-    }
-
-    .shelf-page .shelf-filter {
-      margin-left: -8px;
     }
   }
 </style>
