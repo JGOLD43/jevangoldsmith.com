@@ -66,6 +66,12 @@ type ProductsData = {
 const productsData = raw as ProductsData;
 const products = productsData.products ?? [];
 const categories = productsData.productCategories ?? [];
+const categoryCounts = Object.fromEntries(
+  categories.map((category) => [
+    category.id,
+    products.filter((product) => (product.category ?? '').toLowerCase() === category.id).length,
+  ]),
+);
 ---
 <Base
   title="The Shelf: Tools, Objects &amp; Gear That Earned Their Place | Jevan Goldsmith"
@@ -76,12 +82,15 @@ const categories = productsData.productCategories ?? [];
   <main class="shelf-page">
     <h1 class="sr-only">The Shelf: Tools, Objects &amp; Gear That Earned Their Place</h1>
 
-    <div class="shelf-filter" data-shelf-filter aria-label="Shelf filters">
-      <button type="button" class="active" data-shelf-category="all">All</button>
-      {categories.map((c) => (
-        <button type="button" data-shelf-category={c.id}>{c.title}</button>
-      ))}
-    </div>
+    <header class="shelf-topbar">
+      <div class="shelf-brand">the shelf<span class="shelf-count">{products.length} items</span></div>
+      <nav class="shelf-filter" data-shelf-filter aria-label="Shelf filters">
+        <button type="button" class="active" data-shelf-category="all">all<span class="count">{products.length}</span></button>
+        {categories.map((c) => (
+          <button type="button" data-shelf-category={c.id}>{c.title.toLowerCase()}<span class="count">{categoryCounts[c.id]}</span></button>
+        ))}
+      </nav>
+    </header>
 
     <section class="shelf-grid" aria-label="Objects on the shelf">
       {products.map((p, i) => {
@@ -179,6 +188,101 @@ const categories = productsData.productCategories ?? [];
 
   </main>
 </Base>
+
+<style is:global>
+  .shelf-page {
+    padding-top: 0;
+  }
+
+  .shelf-page .shelf-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin: 0 -20px 28px;
+    padding: 18px 32px;
+    border-bottom: 1px solid #2a2a2a;
+    background: #0f0f0f;
+    color: #f0f0f0;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    flex-wrap: wrap;
+  }
+
+  .shelf-page .shelf-brand {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .shelf-page .shelf-count {
+    margin-left: 8px;
+    color: #8a8a8a;
+    font-weight: 400;
+  }
+
+  .shelf-page .shelf-count::before {
+    content: '/ ';
+  }
+
+  .shelf-page .shelf-filter {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-left: -8px;
+  }
+
+  .shelf-page .shelf-filter button {
+    padding: 4px 8px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #8a8a8a;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  .shelf-page .shelf-filter button:hover,
+  .shelf-page .shelf-filter button.active {
+    color: #f0f0f0;
+  }
+
+  .shelf-page .shelf-filter button.active {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  .shelf-page .shelf-filter button .count {
+    margin-left: 4px;
+    padding: 0;
+    background: transparent;
+    color: #8a8a8a;
+    font-size: 11px;
+  }
+
+  .shelf-page .shelf-filter button.active .count {
+    color: #f0f0f0;
+    opacity: 0.55;
+  }
+
+  @media (max-width: 760px) {
+    .shelf-page .shelf-topbar {
+      align-items: flex-start;
+      margin: -24px -12px 24px;
+      padding: 14px 16px;
+    }
+
+    .shelf-page .shelf-filter {
+      margin-left: -8px;
+    }
+  }
+</style>
 
 <script>
   import '../scripts/shelf.ts';
