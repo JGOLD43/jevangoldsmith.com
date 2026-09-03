@@ -285,6 +285,14 @@ const categoryCounts = Object.fromEntries(
     pointer-events: auto;
   }
 
+  /* The zoomed grid is transformed visually and therefore does not push the
+     footer down in document flow. Keep the footer's space (so scrollY cannot
+     jump) but hide its contents while a Shelf item owns the viewport. */
+  body.shelf-experience.zoom-open .site-footer {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
   .shelf-page .shelf-object-stage {
     margin-bottom: -36px;
   }
