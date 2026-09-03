@@ -31,6 +31,7 @@ interface Product {
   id: string;
   slug?: string;
   title: string;
+  objectType?: string;
   brand?: string;
   type?: string;
   category?: string;
@@ -66,6 +67,7 @@ type ProductsData = {
 const productsData = raw as ProductsData;
 const products = productsData.products ?? [];
 const categories = productsData.productCategories ?? [];
+const categoryLabels = Object.fromEntries(categories.map((category) => [category.id, category.title]));
 const categoryCounts = Object.fromEntries(
   categories.map((category) => [
     category.id,
@@ -95,6 +97,9 @@ const categoryCounts = Object.fromEntries(
     <section class="shelf-grid" aria-label="Objects on the shelf">
       {products.map((p, i) => {
         const asset = productImageAsset(p.slug ?? p.id, p.image);
+        const generalLabel = p.objectType?.trim()
+          || categoryLabels[(p.category ?? '').toLowerCase()]
+          || 'Object';
         return (
         <article
           class="shelf-item"
@@ -143,7 +148,8 @@ const categoryCounts = Object.fromEntries(
                 {!p.image && p.icon && <span class="shelf-object-icon">{p.icon}</span>}
               </span>
             </span>
-            <span class="shelf-object-name">{p.title}</span>
+            <span class="shelf-object-name shelf-object-name--general">{generalLabel}</span>
+            <span class="shelf-object-name shelf-object-name--specific">{p.title}</span>
             {(p.verdict || p.shortDescription) && (
               <span class="shelf-object-verdict">{p.verdict ?? p.shortDescription}</span>
             )}
@@ -297,7 +303,24 @@ const categoryCounts = Object.fromEntries(
     margin-bottom: -36px;
   }
 
+  .shelf-page .shelf-object-name--specific {
+    display: none;
+  }
+
+  .shelf-page .shelf-grid.is-zoomed .shelf-item.is-zoom-target .shelf-object-name--general {
+    display: none;
+  }
+
+  .shelf-page .shelf-grid.is-zoomed .shelf-item.is-zoom-target .shelf-object-name--specific {
+    display: block;
+  }
+
   @media (min-width: 761px) {
+    .shelf-page .shelf-object-detail {
+      top: 50%;
+      transform: translate(14px, -50%);
+    }
+
     .shelf-page .shelf-grid.is-zoomed .shelf-item.is-zoom-target .shelf-object-name {
       font-size: 0.72rem;
       line-height: 1.2;
@@ -309,6 +332,7 @@ const categoryCounts = Object.fromEntries(
       height: clamp(120px, 17vw, 245px);
       font-size: 0.56rem;
       line-height: 1.4;
+      transform: translate(0, -50%);
     }
 
     .shelf-page .shelf-grid.is-zoomed .shelf-item.is-zoom-target .shelf-object-detail-brand {

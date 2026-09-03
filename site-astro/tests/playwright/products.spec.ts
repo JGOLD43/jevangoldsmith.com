@@ -33,13 +33,22 @@ test('Shelf navigation matches the Interests navigation layout', async ({ page }
 test('opening a Shelf item near the footer keeps its scroll position and background', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/products.html');
+
+  const cards = page.locator('[data-shelf-card]');
+  await expect(cards.locator('.shelf-object-name--general')).toHaveText(['Laptop', 'Phone', 'Camera', 'Boots']);
+  expect(await cards.locator('.shelf-object-name--specific').evaluateAll((labels) =>
+    labels.every((label) => getComputedStyle(label).display === 'none'),
+  )).toBe(true);
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
 
   const scrollBeforeOpen = await page.evaluate(() => window.scrollY);
-  await page.getByRole('button', { name: 'Craftsman Boots' }).click();
+  await page.getByRole('button', { name: 'Boots' }).click();
 
   await expect(page.locator('body')).toHaveClass(/zoom-open/);
   await expect(page.locator('.site-footer')).toHaveCSS('visibility', 'hidden');
+  await expect(page.locator('.shelf-item.is-zoom-target .shelf-object-name--general')).toBeHidden();
+  await expect(page.locator('.shelf-item.is-zoom-target .shelf-object-name--specific')).toHaveText('Craftsman Boots');
+  await expect(page.locator('.shelf-item.is-zoom-target .shelf-object-name--specific')).toBeVisible();
   expect(await page.evaluate(() => window.scrollY)).toBe(scrollBeforeOpen);
 
   const expandedBounds = await page.locator('.shelf-item.is-zoom-target').evaluate((item) => {
@@ -58,4 +67,21 @@ test('opening a Shelf item near the footer keeps its scroll position and backgro
   expect(expandedBounds.detailTop).toBeGreaterThanOrEqual(0);
   expect(expandedBounds.imageBottom).toBeLessThanOrEqual(expandedBounds.viewportHeight);
   expect(expandedBounds.detailBottom).toBeLessThanOrEqual(expandedBounds.viewportHeight);
+});
+
+test('expanded Shelf details are vertically centred with the selected object', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1200 });
+  await page.goto('/products.html');
+  await page.getByRole('button', { name: 'Camera' }).click();
+
+  const centres = await page.locator('.shelf-item.is-zoom-target').evaluate((item) => {
+    const stage = item.querySelector('.shelf-object-stage')?.getBoundingClientRect();
+    const detail = item.querySelector('.shelf-object-detail')?.getBoundingClientRect();
+    return {
+      stage: stage ? (stage.top + stage.bottom) / 2 : -1,
+      detail: detail ? (detail.top + detail.bottom) / 2 : -1,
+    };
+  });
+
+  expect(Math.abs(centres.stage - centres.detail)).toBeLessThan(20);
 });
