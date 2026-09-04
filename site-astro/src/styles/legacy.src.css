@@ -581,6 +581,23 @@ body.nav-compact .navbar .theme-toggle-icon {
   min-width: 140px;
 }
 
+.dropdown-links-grid {
+  gap: .25rem .75rem;
+  display: grid;
+}
+
+.dropdown-links-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dropdown-links-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dropdown-links-grid a {
+  text-align: center;
+}
+
 .dropdown-column .dropdown-header {
   text-align: left;
   border-bottom: 1px solid #eee;
@@ -7873,6 +7890,10 @@ body.meet-page {
     padding: .75rem .5rem !important;
   }
 
+  .dropdown-links-grid a {
+    padding: .75rem .5rem !important;
+  }
+
   .nav-dropdown.mobile-dropdown-open .dropdown-menu-icons, .nav-dropdown.mobile-dropdown-open:hover .dropdown-menu-icons {
     flex-direction: row;
     justify-content: space-around;
@@ -7954,6 +7975,13 @@ body.meet-page {
 
   .snapshot-card.visible {
     transform: translate(-50%) translateY(5px);
+  }
+}
+
+@media (width <= 480px) {
+  .dropdown-links-grid--two,
+  .dropdown-links-grid--three {
+    grid-template-columns: 1fr;
   }
 }
 
