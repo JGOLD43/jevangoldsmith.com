@@ -59,7 +59,7 @@ const heroAlt = p.imageAlt || p.title;
         {links.length > 0 && (
           <div class="detail-link-row">
             {links.map((l: any) => (
-              <a class="detail-link-pill" href={l.url} target={l.url?.startsWith('http') ? '_blank' : undefined} rel={l.url?.startsWith('http') ? 'noopener noreferrer' : undefined}>
+              <a class="detail-link-pill" href={typeof l.url === 'string' && /^[a-z0-9-]+\.html(?:[?#]|$)/i.test(l.url) ? `/${l.url}` : l.url} target={l.url?.startsWith('http') ? '_blank' : undefined} rel={l.url?.startsWith('http') ? 'noopener noreferrer' : undefined}>
                 {l.label}
               </a>
             ))}

@@ -180,36 +180,6 @@ function initCarousel() {
     window.addEventListener('pagehide', () => window.clearInterval(intervalId), { once: true });
 }
 
-function animateValue(element: Element, start: number, end: number, duration: number, suffix: string) {
-    let startTimestamp: number | null = null;
-    const step = (timestamp: number) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        const value = Math.floor(progress * (end - start) + start);
-        element.textContent = value.toLocaleString() + suffix;
-        if (progress < 1) window.requestAnimationFrame(step);
-    };
-    window.requestAnimationFrame(step);
-}
-
-function initStats() {
-    const stats = document.querySelectorAll('.stat-number');
-    if (stats.length === 0) return;
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (!entry.isIntersecting || entry.target.classList.contains('animated')) return;
-            entry.target.classList.add('animated');
-            const text = entry.target.textContent || '';
-            const match = text.match(/(\d+)/);
-            if (!match) return;
-            animateValue(entry.target, 0, parseInt(match[1], 10), 2000, text.replace(match[1], ''));
-        });
-    }, { threshold: 0.5 });
-
-    stats.forEach((stat) => observer.observe(stat));
-}
-
 function initSideNav() {
     const sideNav = document.getElementById('side-nav');
     const dots = Array.from(document.querySelectorAll('.side-nav-dot'));
@@ -251,7 +221,6 @@ function initSideNav() {
 function initHome() {
     initSnapshot();
     initCarousel();
-    initStats();
     initSideNav();
 }
 
