@@ -1,3 +1,4 @@
+import { bodyText } from '@/domain/studio-document.cjs';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SymbolView, type SymbolViewProps } from 'expo-symbols';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
@@ -46,7 +47,7 @@ const DraftCard = memo(function DraftCard({ draft, publishing, onEdit, onPublish
       </View>
       {draft.summary ? <Text numberOfLines={2} style={styles.draftSummary}>{draft.summary}</Text> : null}
       <Text style={styles.draftSummary}>{delivery}</Text>
-      <View style={styles.draftMeta}><Text style={styles.draftDate}>Updated {new Date(draft.updatedAt).toLocaleDateString()}</Text><Text style={styles.draftLength}>{draft.body.length.toLocaleString()} characters</Text></View>
+      <View style={styles.draftMeta}><Text style={styles.draftDate}>Updated {new Date(draft.updatedAt).toLocaleDateString()}</Text><Text style={styles.draftLength}>{bodyText(draft.body).length.toLocaleString()} characters</Text></View>
       <View style={styles.draftActions}>
         <Pressable accessibilityRole="button" disabled={publishing} onPress={() => onDelete(draft)} style={styles.secondaryButton}><Text style={styles.secondaryButtonText}>Remove</Text></Pressable>
         <Pressable accessibilityRole="button" disabled={publishing} onPress={() => onEdit(draft)} style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}><Text style={styles.secondaryButtonText}>Edit</Text></Pressable>

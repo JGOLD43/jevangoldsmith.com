@@ -60,6 +60,7 @@ export function createAiContext(prompt: string, draft?: PublicDraft): PublicAiCo
 
 export function createPublishManifest(draft: PublicDraft): PublishManifest {
   const document = readDocument(draft.body);
+  if (document && !canPublish(draft)) throw new Error('Add a title, writing or media, and any required location before publishing.');
   const common: ContentPublishManifestBase = {
     version: 1,
     id: draft.id,

@@ -1,3 +1,4 @@
+import { bodyText } from '@/domain/studio-document.cjs';
 import * as Crypto from 'expo-crypto';
 
 import type {
@@ -273,7 +274,7 @@ export async function addEssayDocument(input: NewEssayDocument): Promise<EssayDo
       `INSERT INTO essay_revisions
         (id, essay_id, sequence, title, summary, body, character_count, change_size, reason, created_at)
         VALUES (?, ?, 1, ?, ?, ?, ?, ?, 'created', ?)`,
-      id(), essay.id, essay.title, essay.summary, essay.body, essay.body.length, essay.body.length, now,
+      id(), essay.id, essay.title, essay.summary, essay.body, bodyText(essay.body).length, bodyText(essay.body).length, now,
     );
   });
   return essay;
@@ -318,7 +319,7 @@ export async function saveEssayDocument(
         (id, essay_id, sequence, title, summary, body, character_count, change_size, reason, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       id(), essayId, (latest?.sequence ?? 0) + 1, next.title, next.summary, next.body,
-      next.body.length, next.body.length - existing.body.length, reason, now,
+      bodyText(next.body).length, bodyText(next.body).length - bodyText(existing.body).length, reason, now,
     );
   });
   return next;
