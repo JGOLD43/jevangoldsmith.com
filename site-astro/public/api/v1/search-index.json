@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updatedAt": "2026-08-23T04:39:04.707Z",
+  "updatedAt": "2026-09-04T23:47:07.334Z",
   "guidance": "Static search/discovery index. Fetch candidate URLs from this file, then fetch canonical collection endpoints or HTML for detail.",
   "records": [
     {
@@ -4273,6 +4273,66 @@
         "Uncategorized"
       ],
       "searchText": "[rec] uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "the-long-walk",
+      "title": "The Long Walk",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#the-long-walk",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "the long walk uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "tusk",
+      "title": "Tusk",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#tusk",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "tusk uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "the-sadness",
+      "title": "The Sadness",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#the-sadness",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "the sadness uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "insidious-the-last-key",
+      "title": "Insidious: The Last Key",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#insidious-the-last-key",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "insidious: the last key uncategorized uncategorized movies"
+    },
+    {
+      "type": "movies",
+      "id": "mysterious-skin",
+      "title": "Mysterious Skin",
+      "summary": "",
+      "section": "movies",
+      "url": "https://jevangoldsmith.com/movies.html#mysterious-skin",
+      "tags": [
+        "Uncategorized"
+      ],
+      "searchText": "mysterious skin uncategorized uncategorized movies"
     }
   ]
 }

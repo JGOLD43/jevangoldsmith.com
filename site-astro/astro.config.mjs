@@ -1,8 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Astro is the canonical build. Output goes to ../dist/ which Firebase
-// Hosting serves.
+// Astro builds ../dist/ for the GitHub Pages release workflow.
 export default defineConfig({
   site: 'https://jevangoldsmith.com',
   output: 'static',
@@ -43,12 +42,17 @@ export default defineConfig({
       // Match legacy URL form so external backlinks + Search Console don't
       // see a URL change.
       serialize(item) {
+        if (item.url === 'https://jevangoldsmith.com') item.url += '/';
         if (!item.url.endsWith('/') && !/\.[a-z]+$/.test(item.url)) {
           item.url = `${item.url}.html`;
         }
         return item;
       },
-      filter: (page) => ![
+      filter: (page) => !new URL(page).pathname.startsWith('/adventure-') && ![
+        '/speeches',
+        '/speeches.html',
+        '/field-notes',
+        '/field-notes.html',
         '/data-smoke',
         '/data-smoke.html'
       ].some((suffix) => page.endsWith(suffix))

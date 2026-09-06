@@ -282,7 +282,7 @@
   {
     "path": "adventures.html",
     "url": "/adventures.html",
-    "title": "Adventures, Travel Notes & Places Worth Remembering",
+    "title": "Travel Adventures, Maps & Notes | Jevan Goldsmith",
     "description": "Travel notes, maps, photos, and reflections from places Jevan Goldsmith has explored.",
     "intent": "adventures",
     "topics": [
@@ -324,7 +324,7 @@
   {
     "path": "books.html",
     "url": "/books.html",
-    "title": "Books I Recommend &amp; Notes From My Reading System",
+    "title": "Book Recommendations & Reading Notes | Jevan Goldsmith",
     "description": "A living bookshelf of books Jevan Goldsmith recommends, rereads, and uses to shape decisions, taste, work, and personal systems.",
     "intent": "books-reading",
     "topics": [
@@ -368,7 +368,7 @@
   {
     "path": "challenges.html",
     "url": "/challenges.html",
-    "title": "Challenges, Constraints & Personal Experiments",
+    "title": "Personal Challenges & Experiments | Jevan Goldsmith",
     "description": "A record of challenges, constraints, and experiments Jevan Goldsmith uses to test ideas in real life.",
     "intent": "challenges",
     "topics": [
@@ -451,7 +451,7 @@
   {
     "path": "cool-shit.html",
     "url": "/cool-shit.html",
-    "title": "Cool Shit: Objects, Ideas & Useful Finds",
+    "title": "Interesting Finds, Objects & Ideas | Jevan Goldsmith",
     "description": "A taste archive of interesting objects, tools, ideas, links, and finds that earned Jevan Goldsmith's attention.",
     "intent": "taste-archive",
     "topics": [
@@ -493,7 +493,7 @@
   {
     "path": "essays.html",
     "url": "/essays.html",
-    "title": "Essays on Thinking, Business, Culture &amp; Personal Systems",
+    "title": "Essays on Thinking, Business & Culture | Jevan Goldsmith",
     "description": "Longer essays from Jevan Goldsmith on attention, business, culture, decisions, money, meaning, and useful systems.",
     "intent": "essays",
     "topics": [
@@ -538,7 +538,7 @@
   {
     "path": "newsletter.html",
     "url": "/newsletter.html",
-    "title": "Newsletter | Jevan Goldsmith",
+    "title": "Monthly Newsletter & Ideas | Jevan Goldsmith",
     "description": "Exclusive, newsletter-only content once a month. No spam, no nonsense.",
     "intent": "newsletter",
     "topics": [
@@ -585,7 +585,7 @@
   {
     "path": "free-resources.html",
     "url": "/free-resources.html",
-    "title": "Useful Resources for Thinking, Building & Learning",
+    "title": "Free Templates & Learning Resources | Jevan Goldsmith",
     "description": "Templates, guides, and practical tools from Jevan Goldsmith for reflection, better thinking, reading, and useful work.",
     "intent": "useful-resources",
     "topics": [
@@ -632,7 +632,7 @@
   {
     "path": "index.html",
     "url": "/",
-    "title": "Jevan Goldsmith - Finance, Real Estate Development, Writing & Tech",
+    "title": "Jevan Goldsmith | Projects, Writing & Real Estate",
     "description": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas.",
     "intent": "personal-home",
     "topics": [
@@ -682,7 +682,7 @@
   {
     "path": "lesson-logger.html",
     "url": "/lesson-logger.html",
-    "title": "Lesson Logger: Capture Lessons Before They Vanish",
+    "title": "Lesson Log: Capture & Review Lessons | Jevan Goldsmith",
     "description": "A simple lesson-logging page for turning mistakes, wins, and observations into reusable judgment.",
     "intent": "lesson-logger",
     "topics": [
@@ -765,7 +765,7 @@
   {
     "path": "movie-philosophy.html",
     "url": "/movie-philosophy.html",
-    "title": "How I Choose What to Watch: A Film Philosophy",
+    "title": "How I Choose Films: My Film Philosophy | Jevan Goldsmith",
     "description": "How Jevan Goldsmith picks films, what he looks for in great cinema, and why movies are a fast way to live a life that is not your own.",
     "intent": "philosophy",
     "topics": [
@@ -807,7 +807,7 @@
   {
     "path": "movies.html",
     "url": "/movies.html",
-    "title": "Movie Reviews, Watchlist &amp; Taste Notes",
+    "title": "Movie Reviews, Ratings & Watchlist | Jevan Goldsmith",
     "description": "A film archive of movies Jevan Goldsmith has watched, rated, revisited, and used to sharpen taste.",
     "intent": "movies",
     "topics": [
@@ -849,7 +849,7 @@
   {
     "path": "now.html",
     "url": "/now.html",
-    "title": "Now \u2014 What Jevan Goldsmith is up to",
+    "title": "Now: Current Work, Reading & Life | Jevan Goldsmith",
     "description": "A snapshot of what I'm working on, reading, and thinking about right now. Updated occasionally.",
     "intent": "now",
     "topics": [
@@ -885,7 +885,7 @@
   {
     "path": "people-philosophy.html",
     "url": "/people-philosophy.html",
-    "title": "How I Approach People: A Relationship Philosophy",
+    "title": "My Philosophy on People & Relationships | Jevan Goldsmith",
     "description": "How Jevan Goldsmith thinks about friendships, partnerships, and the relationships that compound over a lifetime versus the ones that quietly drain you.",
     "intent": "philosophy",
     "topics": [
@@ -925,7 +925,7 @@
   {
     "path": "people.html",
     "url": "/people.html",
-    "title": "People of History",
+    "title": "Historical Figures & Influential People | Jevan Goldsmith",
     "description": "A people-of-history archive of thinkers, builders, writers, and creators who shaped Jevan Goldsmith's taste and judgment.",
     "intent": "people of history",
     "topics": [
@@ -1135,7 +1135,7 @@
   {
     "path": "people/baltasar-gracian.html",
     "url": "/people/baltasar-gracian.html",
-    "title": "Baltasar Graci\u00e1n - People",
+    "title": "Baltasar Gracián - People",
     "description": "A living archive of essays, books, tools, resources, projects, and practical ideas from Jevan Goldsmith.",
     "intent": "taste",
     "topics": [
@@ -2227,7 +2227,7 @@
   {
     "path": "podcasts.html",
     "url": "/podcasts.html",
-    "title": "Podcasts, Conversations &amp; Audio Notes",
+    "title": "Podcast Recommendations & Notes | Jevan Goldsmith",
     "description": "A podcast archive of conversations, shows, and audio ideas Jevan Goldsmith returns to.",
     "intent": "podcasts",
     "topics": [
@@ -2311,7 +2311,7 @@
   {
     "path": "products.html",
     "url": "/products.html",
-    "title": "The Shelf: Tools, Objects & Gear That Earned Their Place",
+    "title": "Recommended Tools, Gear & Objects | Jevan Goldsmith",
     "description": "A personal archive of objects Jevan Goldsmith actually uses, why they stayed, and what they replaced.",
     "intent": "tools-objects",
     "topics": [
@@ -2358,7 +2358,7 @@
   {
     "path": "projects.html",
     "url": "/projects.html",
-    "title": "Projects Jevan Goldsmith Is Building & Exploring",
+    "title": "Projects & Build Logs | Jevan Goldsmith",
     "description": "A build log of projects Jevan Goldsmith is creating, testing, and turning into useful systems.",
     "intent": "projects",
     "topics": [
@@ -2932,7 +2932,7 @@
   {
     "path": "weekly-review-template.html",
     "url": "/weekly-review-template.html",
-    "title": "Weekly Review Template for Reflection, Planning & Better Decisions",
+    "title": "Weekly Review Template | Jevan Goldsmith",
     "description": "A simple weekly review template for reviewing lessons, decisions, energy, priorities, and next actions.",
     "intent": "weekly-review-template",
     "topics": [

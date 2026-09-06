@@ -5,7 +5,6 @@ import pages from '../../../data/pages.json';
 import quotes from '../../public/data/quotes.json';
 import { bodyClassFor, currentPageFromUrl } from '../lib/chrome';
 import { type BreadcrumbStep, DEFAULT_OG_IMAGE, type ExtraSchema, type PageType, SITE_NAME } from '../lib/seo';
-import { nowMapThumbUrl } from '../lib/now-location';
 import { inlineSprite } from '../lib/icon-sprite';
 
 // Site-wide navbar — inlined here (was components/Nav.astro). Active marker:
@@ -127,25 +126,10 @@ const speculationRules = {
 const rawPath = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
 const seoSlug = rawPath === '' ? 'index' : rawPath.replace(/\.html$/, '').split('/').pop()!;
 
-// Whether to fire a low-priority preload for the homepage portrait.
-// Triggers on every non-home page so by the time the user taps the
-// logo home-link the image is in the HTTP cache and renders
-// instantly. fetchpriority="low" keeps it out of the way of the
-// current page's LCP.
-const _preloadHomePortrait = seoSlug !== 'index';
-
-// Warm the /now satellite-tile cache from every page that isn't
-// /now, so tap-to-now shows the image instantly. The tile is now a
-// local same-origin asset (/images/now-map.jpg), so a plain preload
-// is enough — no preconnect / crossorigin.
-const _preloadNowMap = seoSlug !== 'now';
-const _nowMapThumbUrl = _preloadNowMap ? nowMapThumbUrl() : '';
-
 // per-page preconnect hints for cross-origin image hosts. One
 // DNS+TLS round-trip up front beats paying it on every <img> request.
 const preconnectOrigins: string[] = [];
 if (seoSlug === 'movies') preconnectOrigins.push('https://a.ltrbxd.com');
-if (seoSlug === 'videos') preconnectOrigins.push('https://i.ytimg.com');
 // Note: /adventures used to preconnect to images.unsplash.com, but the
 // build pipeline now self-hosts every Unsplash hero (assets:optimize +
 // html-normalize rewrite to /images/generated/remote/...). The browser
@@ -159,8 +143,7 @@ const dnsPrefetchOrigins: string[] = [];
 if (seoSlug === 'index' || seoSlug === 'search') {
   // unsplash + openlibrary are self-hosted post-build, so no DNS to prime.
   dnsPrefetchOrigins.push(
-    'https://a.ltrbxd.com',
-    'https://i.ytimg.com'
+    'https://a.ltrbxd.com'
   );
 }
 ---
@@ -208,33 +191,6 @@ if (seoSlug === 'index' || seoSlug === 'search') {
         static-weight files (60KB total) with a single ~33KB variable
         file — net first-visit font bytes ~−27KB. */}
     <link rel="preload" href="/fonts/chivo/chivo-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
-    {_preloadNowMap && (
-      <>
-        <link rel="preload" as="image" href={_nowMapThumbUrl} fetchpriority="low" />
-      </>
-    )}
-    {_preloadHomePortrait && (
-      <>
-        <link
-          rel="preload"
-          as="image"
-          type="image/avif"
-          href="/images/generated/profile/profile-520.avif"
-          imagesrcset="/images/generated/profile/profile-360.avif 360w, /images/generated/profile/profile-520.avif 520w, /images/generated/profile/profile-720.avif 720w, /images/generated/profile/profile-960.avif 960w"
-          imagesizes="(max-width: 768px) 82vw, 42vw"
-          fetchpriority="low"
-        />
-        <link
-          rel="preload"
-          as="image"
-          type="image/jpeg"
-          href="/images/generated/profile/profile-520.jpg"
-          imagesrcset="/images/generated/profile/profile-360.jpg 360w, /images/generated/profile/profile-520.jpg 520w, /images/generated/profile/profile-720.jpg 720w, /images/generated/profile/profile-960.jpg 960w"
-          imagesizes="(max-width: 768px) 82vw, 42vw"
-          fetchpriority="low"
-        />
-      </>
-    )}
     {preconnectOrigins.map((origin) => (
       <link rel="preconnect" href={origin} crossorigin />
     ))}

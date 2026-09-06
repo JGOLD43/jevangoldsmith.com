@@ -26,7 +26,7 @@ const mapPoints = entries.map((entry, index) => ({
 }));
 ---
 <Base
-  title="Now archive — every past update"
+  title="Now Archive: Past Life & Work Updates | Jevan Goldsmith"
   description="A complete record of every Now update: where Jevan was, and what he was working on, reading, and thinking about at the time."
   canonical={canonical}
   pageType="AboutPage"
@@ -89,7 +89,7 @@ const mapPoints = entries.map((entry, index) => ({
                 {entry.sections.map((s) => (
                   <section class="now-archive-section">
                     <h2 class="now-archive-section-title">{s.title}</h2>
-                    <div class="now-archive-section-text" set:html={s.body} />
+                    <div class="now-archive-section-text" set:html={s.body.replace(/href=(["'])([a-z0-9-]+\.html(?:[?#][^"']*)?)\1/gi, 'href=$1/$2$1')} />
                   </section>
                 ))}
               </div>
