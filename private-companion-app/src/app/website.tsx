@@ -1,7 +1,7 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SymbolView, type SymbolViewProps } from 'expo-symbols';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { DraftComposer } from '@/components/composers';
@@ -9,7 +9,7 @@ import { Fonts, type AppColors } from '@/constants/theme';
 import type { DraftType, NewPublicDraft, PublicationJob, PublicDraft } from '@/domain/models';
 import { canPublish, createPublishManifest } from '@/domain/privacy';
 import { useTheme } from '@/hooks/use-theme';
-import { queueAndAttemptPublication, retryPendingPublications } from '@/services/publication-outbox';
+import { queueAndAttemptPublication, refreshPublicationJobs, retryPendingPublications } from '@/services/publication-outbox';
 import { hasPublishingConnection } from '@/services/publishing';
 import { collectionLabels, draftFromSiteItem, loadSiteCollection, type SiteCollection, type SiteItem } from '@/services/public-site';
 import { useApp } from '@/state/app-context';
@@ -25,10 +25,12 @@ const CREATE_TYPES: CreateDefinition[] = [
   { type: 'now', label: 'Now update', detail: 'Current focus', icon: { ios: 'clock.fill', android: 'schedule' } },
 ];
 
-const LIVE_COLLECTIONS: SiteCollection[] = ['adventure', 'project', 'product', 'quote'];
+const LIVE_COLLECTIONS: SiteCollection[] = ['essay', 'now', 'adventure', 'project', 'challenge', 'product', 'quote'];
 
-const DraftCard = memo(function DraftCard({ draft, publishing, onEdit, onPublish }: {
+const DraftCard = memo(function DraftCard({ draft, publishing, onEdit, onPublish, onDelete, delivery }: {
   draft: PublicDraft;
+  delivery: string;
+  onDelete: (draft: PublicDraft) => void;
   publishing: boolean;
   onEdit: (draft: PublicDraft) => void;
   onPublish: (draft: PublicDraft) => void;
@@ -40,12 +42,14 @@ const DraftCard = memo(function DraftCard({ draft, publishing, onEdit, onPublish
       <View style={styles.draftTop}>
         <View style={styles.draftIcon}><SymbolView name={{ ios: 'doc.text.fill', android: 'description' }} size={19} tintColor={colors.accent} /></View>
         <View style={styles.draftCopy}><Text style={styles.draftType}>{draft.operation} · {draft.type}</Text><Text numberOfLines={2} style={styles.draftTitle}>{draft.title || 'Untitled change'}</Text></View>
-        <View style={[styles.statusPill, draft.status === 'ready' && styles.readyPill]}><Text style={styles.statusText}>{draft.status}</Text></View>
+        <View style={[styles.statusPill, draft.status === 'ready' && styles.readyPill]}><Text style={styles.statusText}>Draft</Text></View>
       </View>
       {draft.summary ? <Text numberOfLines={2} style={styles.draftSummary}>{draft.summary}</Text> : null}
+      <Text style={styles.draftSummary}>{delivery}</Text>
       <View style={styles.draftMeta}><Text style={styles.draftDate}>Updated {new Date(draft.updatedAt).toLocaleDateString()}</Text><Text style={styles.draftLength}>{draft.body.length.toLocaleString()} characters</Text></View>
       <View style={styles.draftActions}>
-        <Pressable accessibilityRole="button" onPress={() => onEdit(draft)} style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}><Text style={styles.secondaryButtonText}>Edit</Text></Pressable>
+        <Pressable accessibilityRole="button" disabled={publishing} onPress={() => onDelete(draft)} style={styles.secondaryButton}><Text style={styles.secondaryButtonText}>Remove</Text></Pressable>
+        <Pressable accessibilityRole="button" disabled={publishing} onPress={() => onEdit(draft)} style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}><Text style={styles.secondaryButtonText}>Edit</Text></Pressable>
         <Pressable accessibilityRole="button" disabled={publishing} onPress={() => onPublish(draft)} style={({ pressed }) => [styles.publishButton, pressed && styles.pressed]}>{publishing ? <ActivityIndicator color={colors.onAction} /> : <><Text style={styles.publishButtonText}>Publish</Text><SymbolView name={{ ios: 'arrow.up', android: 'publish' }} size={16} tintColor={colors.onAction} /></>}</Pressable>
       </View>
     </View>
@@ -56,7 +60,7 @@ export default function WebsiteScreen() {
   const router = useRouter();
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const { drafts, createDraft, editDraft, setDraftStatus } = useApp();
+  const { drafts, createDraft, editDraft, deleteDraft } = useApp();
   const [composerOpen, setComposerOpen] = useState(false);
   const [createMenuOpen, setCreateMenuOpen] = useState(false);
   const [composerInitial, setComposerInitial] = useState<NewPublicDraft | null>(null);
@@ -67,21 +71,20 @@ export default function WebsiteScreen() {
   const [liveCollection, setLiveCollection] = useState<SiteCollection | null>(null);
   const [liveItems, setLiveItems] = useState<SiteItem[]>([]);
   const [loadingLive, setLoadingLive] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [queueError, setQueueError] = useState('');
   const [liveError, setLiveError] = useState<string | null>(null);
 
-  useFocusEffect(useCallback(() => {
-    let active = true;
-    void (async () => {
-      const activeConnection = await hasPublishingConnection();
-      if (active) setConnected(activeConnection);
-      const jobs = await retryPendingPublications();
-      for (const job of jobs) {
-        if (job.status === 'submitted' && job.itemType !== 'book') await setDraftStatus(job.localId, 'published');
-      }
-      if (active) setPublicationJobs(jobs);
-    })();
-    return () => { active = false; };
-  }, [setDraftStatus]));
+  const refreshQueue = useCallback(async (retry = false) => {
+    setRefreshing(true);
+    setQueueError('');
+    try {
+      setConnected(await hasPublishingConnection());
+      setPublicationJobs(await (retry ? retryPendingPublications() : refreshPublicationJobs()));
+    } catch (error) { setQueueError(error instanceof Error ? error.message : 'Could not refresh publishing.'); }
+    finally { setRefreshing(false); }
+  }, []);
+  useFocusEffect(useCallback(() => { void refreshQueue(); }, [refreshQueue]));
 
   useEffect(() => {
     if (!liveCollection) return;
@@ -95,16 +98,23 @@ export default function WebsiteScreen() {
     return () => { active = false; };
   }, [liveCollection]);
 
-  const activeDrafts = useMemo(() => drafts.filter((draft) => draft.status !== 'published'), [drafts]);
+  const matchingJob = (draft: PublicDraft) => publicationJobs.find((job) => {
+    if (job.localId !== draft.id) return false;
+    try { return job.manifestJson === JSON.stringify(createPublishManifest(draft)); } catch { return false; }
+  });
+  const activeDrafts = drafts.filter((draft) => matchingJob(draft)?.delivery !== 'live');
+  const deliveryText = (job?: PublicationJob) => !job ? 'Saved on this phone. Tap Publish to send it to your website.'
+    : job.delivery === 'live' ? 'Live on your website'
+    : job.delivery === 'rejected' ? `Needs changes: ${job.error}`
+    : job.status === 'failed' ? `Could not send: ${job.error}`
+    : job.status === 'queued' ? job.error || 'Waiting to send. Connect publishing in Settings.'
+    : job.error || 'Sent to the private inbox. Waiting for website checks and deployment; GitHub scheduling can take a few hours.';
+
   const pendingDeliveryCount = publicationJobs.filter((job) => job.status !== 'submitted').length;
   const submittedCount = publicationJobs.filter((job) => job.status === 'submitted').length;
 
   const openCreate = (definition: CreateDefinition) => {
     setCreateMenuOpen(false);
-    if (definition.type === 'essay') {
-      router.push('/essays/new');
-      return;
-    }
     setEditingDraftId(null);
     setComposerInitial({ type: definition.type, title: '', summary: '', body: '', sourceId: null, operation: 'create' });
     setComposerOpen(true);
@@ -112,8 +122,9 @@ export default function WebsiteScreen() {
 
   const openLiveEdit = (item: SiteItem) => {
     setLiveCollection(null);
-    setEditingDraftId(null);
-    setComposerInitial(draftFromSiteItem(item));
+    const existing = drafts.find((draft) => draft.type === item.type && draft.sourceId === item.id && matchingJob(draft)?.delivery !== 'live');
+    setEditingDraftId(existing?.id ?? null);
+    setComposerInitial(existing ?? draftFromSiteItem(item));
     setComposerOpen(true);
   };
 
@@ -125,14 +136,14 @@ export default function WebsiteScreen() {
 
   const saveComposer = async (input: NewPublicDraft) => {
     if (editingDraftId) await editDraft(editingDraftId, { ...input, nowLocation: input.nowLocation ?? null });
-    else await createDraft(input);
+    else if (!(await createDraft(input))) throw new Error('The draft could not be saved. Your writing is still in the editor.');
     setEditingDraftId(null);
     Alert.alert('Saved to the queue', 'Nothing has been published. Review it here when you are ready.');
   };
 
   const publish = useCallback(async (draft: PublicDraft) => {
     if (!canPublish(draft)) {
-      Alert.alert('More writing needed', 'Add a title and body before publishing.');
+      Alert.alert('More information needed', draft.type === 'now' ? 'Add a heading, writing and a complete location before publishing.' : 'Add a title and body before publishing.');
       return;
     }
     setPublishingId(draft.id);
@@ -140,8 +151,7 @@ export default function WebsiteScreen() {
       const job = await queueAndAttemptPublication(createPublishManifest(draft), draft.id);
       setPublicationJobs((current) => [job, ...current.filter((candidate) => candidate.id !== job.id)]);
       if (job.status === 'submitted') {
-        await setDraftStatus(draft.id, 'published');
-        Alert.alert('Website update submitted', 'The source commit was created. GitHub will test and deploy it automatically.');
+        Alert.alert('Sent to the publishing inbox', 'Your change is waiting for website checks and deployment. Studio will show Live once the website confirms it.');
       } else if (job.status === 'queued') {
         setConnected(false);
         Alert.alert('Queued safely', 'Connect publishing in Settings and JGOLD will submit this approved public copy automatically.', [
@@ -155,12 +165,12 @@ export default function WebsiteScreen() {
     } finally {
       setPublishingId(null);
     }
-  }, [router, setDraftStatus]);
+  }, [router]);
 
   return (
     <>
       <SafeAreaView edges={['top']} style={styles.safe}>
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView contentContainerStyle={styles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { void refreshQueue(); }} />}>
           <View style={styles.header}>
             <View style={styles.headerCopy}><Text style={styles.eyebrow}>PUBLISHING CONTROL</Text><Text style={styles.title}>Studio</Text><Text style={styles.intro}>Create, review and publish changes to your website.</Text></View>
             <Pressable accessibilityLabel="Add website change" accessibilityRole="button" onPress={() => setCreateMenuOpen(true)} style={({ pressed }) => [styles.addButton, pressed && styles.pressed]}><SymbolView name={{ ios: 'plus', android: 'add' }} size={27} tintColor={colors.onAction} /></Pressable>
@@ -173,21 +183,29 @@ export default function WebsiteScreen() {
           </View>
 
           <View style={styles.metrics}>
-            <View style={styles.metric}><Text style={styles.metricValue}>{activeDrafts.length}</Text><Text style={styles.metricLabel}>In queue</Text></View>
+            <View style={styles.metric}><Text style={styles.metricValue}>{activeDrafts.length}</Text><Text style={styles.metricLabel}>Drafts</Text></View>
             <View style={styles.metric}><Text style={styles.metricValue}>{pendingDeliveryCount}</Text><Text style={styles.metricLabel}>Delivery</Text></View>
             <View style={styles.metric}><Text style={styles.metricValue}>{submittedCount}</Text><Text style={styles.metricLabel}>Submitted</Text></View>
           </View>
 
-          <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Publishing queue</Text><Text style={styles.sectionDetail}>{activeDrafts.length ? `${activeDrafts.length} waiting` : 'Clear'}</Text></View>
-          {activeDrafts.length ? activeDrafts.map((draft) => <DraftCard key={draft.id} draft={draft} publishing={publishingId === draft.id} onEdit={openDraftEdit} onPublish={(item) => { void publish(item); }} />) : (
+          <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Drafts to publish</Text><Text style={styles.sectionDetail}>{activeDrafts.length ? `${activeDrafts.length} waiting` : 'Clear'}</Text></View>
+          {activeDrafts.length ? activeDrafts.map((draft) => <DraftCard key={draft.id} draft={draft} delivery={deliveryText(matchingJob(draft))} onDelete={(item) => Alert.alert('Remove this draft?', 'This removes the local draft and any unsent approval. A copy already sent to the inbox cannot be recalled here.', [{ text: 'Keep', style: 'cancel' }, { text: 'Remove', style: 'destructive', onPress: () => { void deleteDraft(item.id).then(() => refreshQueue()).catch((error) => Alert.alert('Could not remove draft', String(error))); } }])} publishing={publishingId === draft.id || refreshing} onEdit={openDraftEdit} onPublish={(item) => { void publish(item); }} />) : (
             <View style={styles.emptyQueue}><View style={styles.emptyIcon}><SymbolView name={{ ios: 'checkmark', android: 'check' }} size={23} tintColor={colors.success} /></View><View style={styles.emptyCopy}><Text style={styles.emptyTitle}>Nothing waiting to publish</Text><Text style={styles.emptyBody}>New website changes and public-intent essays will appear here.</Text></View></View>
           )}
 
-          <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Edit existing</Text><Text style={styles.sectionDetail}>Load only when needed</Text></View>
+          {queueError ? <Text style={styles.error}>{queueError}</Text> : null}
+          <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Delivery status</Text><Pressable disabled={refreshing} onPress={() => { void refreshQueue(true); }}><Text style={styles.sectionDetail}>{refreshing ? 'Checking…' : 'Refresh / retry'}</Text></Pressable></View>
+          {publicationJobs.map((job) => <View key={job.id} style={styles.draftCard}>
+            <Text style={styles.draftTitle}>{(() => { try { const manifest = JSON.parse(job.manifestJson); return manifest.title || manifest.book?.title || job.itemType; } catch { return job.itemType; } })()}</Text>
+            <Text style={styles.draftSummary}>{deliveryText(job)}</Text>
+            {job.delivery === 'live' ? <Pressable onPress={() => { router.push('/ai'); }}><Text style={styles.secondaryButtonText}>Open website ↗</Text></Pressable> : null}
+          </View>)}
+
+          <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Edit existing</Text><Text style={styles.sectionDetail}>Current website content</Text></View>
           <View style={styles.existingRow}>
             {LIVE_COLLECTIONS.map((collection) => <Pressable key={collection} accessibilityRole="button" onPress={() => setLiveCollection(collection)} style={({ pressed }) => [styles.existingButton, pressed && styles.pressed]}><Text style={styles.existingText}>{collectionLabels[collection]}</Text><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={15} tintColor={colors.textSecondary} /></Pressable>)}
           </View>
-          <Pressable accessibilityRole="button" onPress={() => router.push('/books')} style={({ pressed }) => [styles.libraryNote, pressed && styles.pressed]}><SymbolView name={{ ios: 'books.vertical.fill', android: 'library_books' }} size={19} tintColor={colors.accent} /><View style={styles.libraryCopy}><Text style={styles.libraryTitle}>Books and essays live in Library</Text><Text style={styles.libraryBody}>Manage the source content there; only approved changes return to this publishing queue.</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={17} tintColor={colors.textSecondary} /></Pressable>
+          <Pressable accessibilityRole="button" onPress={() => router.push('/books')} style={({ pressed }) => [styles.libraryNote, pressed && styles.pressed]}><SymbolView name={{ ios: 'books.vertical.fill', android: 'library_books' }} size={19} tintColor={colors.accent} /><View style={styles.libraryCopy}><Text style={styles.libraryTitle}>Books and private writing</Text><Text style={styles.libraryBody}>Use Library for books and private essay revisions. Public website stories can be edited above.</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={17} tintColor={colors.textSecondary} /></Pressable>
         </ScrollView>
       </SafeAreaView>
 

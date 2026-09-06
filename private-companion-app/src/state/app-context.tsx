@@ -46,6 +46,7 @@ import {
   addEssayDocument,
   addLifeItem,
   addPublicDraft,
+  deletePublicDraft,
   addVaultItem,
   clearAiMessages,
   listAiMessages,
@@ -97,6 +98,7 @@ type AppContextValue = {
   createDraft: (input: NewPublicDraft) => Promise<PublicDraft | null>;
   createDraftFromVault: (item: VaultItem) => Promise<void>;
   editDraft: (id: string, input: Pick<PublicDraft, 'title' | 'summary' | 'body' | 'nowLocation'>) => Promise<void>;
+  deleteDraft: (id: string) => Promise<void>;
   setDraftStatus: (id: string, status: PublicDraft['status']) => Promise<void>;
   sendAiMessage: (prompt: string, draft?: PublicDraft) => Promise<void>;
   clearChat: () => Promise<void>;
@@ -334,6 +336,11 @@ export function AppProvider({ children }: PropsWithChildren) {
     }
   }, []);
 
+  const deleteDraft = useCallback(async (draftId: string) => {
+    await deletePublicDraft(draftId);
+    setDrafts((current) => current.filter((draft) => draft.id !== draftId));
+  }, []);
+
   const createDraftFromVault = useCallback(async (item: VaultItem) => {
     const publicCopy = createPublicDraftFromVault(item);
     await createDraft(publicCopy);
@@ -360,6 +367,7 @@ export function AppProvider({ children }: PropsWithChildren) {
         : draft));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Could not update the draft.');
+      throw cause;
     }
   }, []);
 
@@ -534,6 +542,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     createDraft,
     createDraftFromVault,
     editDraft,
+    deleteDraft,
     setDraftStatus,
     sendAiMessage,
     clearChat,
@@ -573,6 +582,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     createDraft,
     createDraftFromVault,
     editDraft,
+    deleteDraft,
     setDraftStatus,
     sendAiMessage,
     clearChat,

@@ -59,13 +59,13 @@ export async function listPublicationJobs(): Promise<PublicationJob[]> {
 export async function updatePublicationJob(
   id: string,
   status: PublicationJobStatus,
-  options: { error?: string; commitUrl?: string | null } = {},
+  options: { error?: string; commitUrl?: string | null; expectedManifest?: string } = {},
 ): Promise<PublicationJob> {
   const database = await getDatabase();
   const updatedAt = new Date().toISOString();
   await database.runAsync(
-    'UPDATE publication_jobs SET status=?, error=?, commit_url=?, updated_at=? WHERE id=?',
-    status, options.error ?? '', options.commitUrl ?? null, updatedAt, id,
+    'UPDATE publication_jobs SET status=?, error=?, commit_url=?, updated_at=? WHERE id=? AND (? IS NULL OR manifest_json=?)',
+    status, options.error ?? '', options.commitUrl ?? null, updatedAt, id, options.expectedManifest ?? null, options.expectedManifest ?? null,
   );
   const saved = await database.getFirstAsync<PublicationRow>('SELECT * FROM publication_jobs WHERE id=?', id);
   if (!saved) throw new Error('Publication job not found.');

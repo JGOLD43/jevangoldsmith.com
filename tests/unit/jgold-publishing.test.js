@@ -7,6 +7,110 @@ const path = require('node:path');
 const test = require('node:test');
 
 const { escapeHtml, syncInbox, validateEnvelope } = require('../../scripts/sync-jgold-publications');
+const { buildStudioApi } = require('../../scripts/lib/studio-api');
+const { readDocument, renderDocument, validateDocument } = require('../../private-companion-app/src/domain/studio-document.cjs');
+const crypto = require('node:crypto');
+
+function fixture() {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'jgold-studio-'));
+  fs.mkdirSync(path.join(root, 'data'));
+  fs.mkdirSync(path.join(root, 'inbox', 'submissions'), { recursive: true });
+  fs.mkdirSync(path.join(root, 'inbox', 'media'));
+  for (const [file, key] of Object.entries({ essays: 'essays', adventures: 'adventures', projects: 'projects', challenges: 'challenges', products: 'products', quotes: 'fullQuotes' })) {
+    fs.writeFileSync(path.join(root, 'data', `${file}.json`), JSON.stringify({ [key]: [] }));
+  }
+  fs.writeFileSync(path.join(root, 'data', 'now.json'), JSON.stringify({ lastUpdated: 'August 25, 2026', location: { label: 'Old place', lat: 1, lng: 2, zoom: 10 }, sections: [{ title: 'Previous', body: '<p>Keep me</p>' }] }));
+  return { root, inboxPath: path.join(root, 'inbox', 'submissions') };
+}
+
+test('Studio reads current source data and excludes unpublished and private entries', () => {
+  const options = fixture();
+  fs.writeFileSync(path.join(options.root, 'data', 'projects.json'), JSON.stringify({ projects: [
+    { id: 'current', title: 'Current website project', status: 'active' },
+    { id: 'old', title: 'Unpublished placeholder', status: 'draft' },
+    { id: 'private', title: 'Private', status: 'active', visibility: 'private' },
+  ] }));
+  syncInbox(options);
+  const api = buildStudioApi(options.root);
+  assert.deepEqual(api.collections.project.map((item) => item.id), ['current']);
+  assert.equal(api.collections.now[0].nowLocation.label, 'Old place');
+  assert.match(api.collections.now[0].content, /Keep me/);
+});
+
+test('formatted text and media survive publication and re-editing, without executable HTML', () => {
+  const options = fixture();
+  const bytes = Buffer.from([137,80,78,71,13,10,26,10,0]);
+  const name = `${crypto.createHash('sha256').update(bytes).digest('hex')}.png`;
+  fs.writeFileSync(path.join(options.root, 'inbox', 'media', name), bytes);
+  const document = { version: 1, blocks: [
+    { type: 'text', style: 'heading', font: 'serif', text: '<script>alert(1)</script>' },
+    { type: 'image', src: `/media/studio/${name}`, caption: 'A "photo"' },
+    { type: 'text', style: 'quote', font: 'mono', text: 'Final thought' },
+  ] };
+  const submission = envelope({ manifest: { ...envelope().manifest, document } });
+  fs.writeFileSync(path.join(options.inboxPath, 'job-123.json'), JSON.stringify(submission));
+  assert.deepEqual(syncInbox(options), { accepted: 1, rejected: 0, skipped: 0 });
+  const api = buildStudioApi(options.root);
+  assert.deepEqual(readDocument(api.collections.essay[0].content), document);
+  assert.equal(api.receipts['job-123'].status, 'accepted');
+  assert.deepEqual(fs.readFileSync(path.join(options.root, 'site-astro/public/media/studio', name)), bytes);
+  const html = renderDocument(document);
+  assert.match(html, /font-family:Georgia/);
+  assert.match(html, /font-family:monospace/);
+  assert.match(html, /&lt;script&gt;/);
+  assert.doesNotMatch(html, /<script>/);
+});
+
+test('Studio rejects unsafe URLs, local files, traversal, extra fields and CSS injection', () => {
+  for (const src of ['file:///private/book.pdf', 'javascript:alert(1)', 'http://external.example/x.png', '/media/studio/../../secret']) {
+    assert.throws(() => validateDocument({ version: 1, blocks: [{ type: 'image', src, caption: '' }] }));
+  }
+  assert.throws(() => validateDocument({ version: 1, blocks: [{ type: 'text', text: 'x', font: 'serif;color:red', style: 'paragraph' }] }));
+  assert.throws(() => validateDocument({ version: 1, blocks: [], privateNotes: 'no' }));
+});
+
+test('missing media yields a readable rejected receipt and does not change live content', () => {
+  const options = fixture();
+  const document = { version: 1, blocks: [{ type: 'video', src: `/media/studio/${'a'.repeat(64)}.mp4`, caption: 'Video' }] };
+  fs.writeFileSync(path.join(options.inboxPath, 'job-123.json'), JSON.stringify(envelope({ manifest: { ...envelope().manifest, document } })));
+  assert.deepEqual(syncInbox(options), { accepted: 0, rejected: 1, skipped: 0 });
+  const api = buildStudioApi(options.root);
+  assert.equal(api.collections.essay.length, 0);
+  assert.equal(api.receipts['job-123'].status, 'rejected');
+  assert.match(api.receipts['job-123'].reason, /media file is missing/);
+});
+
+test('Now replacement preserves the previous same-day text and location', () => {
+  const options = fixture();
+  const submission = envelope({ manifest: { ...envelope().manifest, type: 'now', nowLocation: { label: 'New place', lat: -20, lng: 140, zoom: 8 } } });
+  fs.writeFileSync(path.join(options.inboxPath, 'job-123.json'), JSON.stringify(submission));
+  syncInbox(options);
+  const history = JSON.parse(fs.readFileSync(path.join(options.root, 'data/now-history.json')));
+  assert.equal(history[0].location.label, 'Old place');
+  assert.equal(history[0].sections[0].body, '<p>Keep me</p>');
+  const current = JSON.parse(fs.readFileSync(path.join(options.root, 'data/now.json')));
+  assert.equal(current.location.label, 'New place');
+});
+
+test('editing a deleted item cannot resurrect a stale placeholder', () => {
+  const options = fixture();
+  const submission = envelope({ manifest: { ...envelope().manifest, sourceId: 'deleted', operation: 'update' } });
+  fs.writeFileSync(path.join(options.inboxPath, 'job-123.json'), JSON.stringify(submission));
+  assert.equal(syncInbox(options).rejected, 1);
+  assert.equal(buildStudioApi(options.root).collections.essay.length, 0);
+});
+
+test('multiple edits in one batch are applied in chronological order', () => {
+  const options = fixture();
+  for (const [name, createdAt, body, operation] of [
+    ['z-first', '2026-08-25T00:00:00Z', 'Earlier', 'create'],
+    ['a-last', '2026-08-25T00:01:00Z', 'Latest', 'update'],
+  ]) {
+    fs.writeFileSync(path.join(options.inboxPath, `${name}.json`), JSON.stringify(envelope({ jobId: name, createdAt, manifest: { ...envelope().manifest, sourceId: 'same-story', operation, body } })));
+  }
+  assert.equal(syncInbox(options).accepted, 2);
+  assert.equal(buildStudioApi(options.root).collections.essay[0].content, 'Latest');
+});
 
 function envelope(overrides = {}) {
   return {

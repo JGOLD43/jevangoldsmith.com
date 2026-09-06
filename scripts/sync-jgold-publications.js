@@ -5,6 +5,8 @@ const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 
+const { validateDocument, renderDocument } = require('../private-companion-app/src/domain/studio-document.cjs');
+
 const REPO_ROOT = path.resolve(__dirname, '..');
 const STATE_PATH = path.join(REPO_ROOT, '.jgold-publication-state.json');
 const MAX_FILE_BYTES = 300_000;
@@ -103,6 +105,7 @@ function validateManifest(raw) {
   }
   if (!CONTENT_TYPES.has(raw.type)) throw new Error('manifest.type is not a content type');
   const contentKeys = ['version', 'id', 'type', 'title', 'summary', 'body', 'sourceId', 'operation'];
+  if (Object.hasOwn(raw, 'document')) contentKeys.push('document');
   ownKeys(raw, raw.type === 'now' ? [...contentKeys, 'nowLocation'] : contentKeys, 'content manifest');
   const manifest = {
     version: 1,
@@ -111,6 +114,7 @@ function validateManifest(raw) {
     title: boundedString(raw.title, 'manifest.title', 240, { empty: false }),
     summary: boundedString(raw.summary, 'manifest.summary', 2_000),
     body: boundedString(raw.body, 'manifest.body', 200_000, { empty: false }),
+    ...(Object.hasOwn(raw, 'document') ? { document: validateDocument(raw.document) } : {}),
     sourceId: nullableIdentifier(raw.sourceId, 'manifest.sourceId'),
     operation: raw.operation,
   };
@@ -144,17 +148,19 @@ function applyPublicFields(existing, manifest, publicId, timestamp) {
   if (manifest.type === 'book') {
     return { ...existing, title: manifest.book.title, author: manifest.book.author, isbn: manifest.book.isbn, year: manifest.book.year, rating: manifest.book.rating, reReads: manifest.book.reReads, category: manifest.book.category, shortDescription: manifest.book.summary, review: manifest.book.review || null, read: manifest.book.read };
   }
+  const html = manifest.document ? renderDocument(manifest.document) : paragraphs(manifest.body);
+  existing = { ...existing, studioDocument: manifest.document || null, studioBody: manifest.body };
   switch (manifest.type) {
     case 'essay':
-      return { ...existing, id: publicId, title: manifest.title, subtitle: manifest.summary, author: 'Jevan Goldsmith', date: String(existing.date || timestamp.slice(0, 10)), category: existing.category || 'Ideas', status: 'published', content: paragraphs(manifest.body), featuredImage: existing.featuredImage ?? null, media: Array.isArray(existing.media) ? existing.media : [], createdAt: existing.createdAt || timestamp, updatedAt: timestamp };
+      return { ...existing, id: publicId, title: manifest.title, subtitle: manifest.summary, author: 'Jevan Goldsmith', date: String(existing.date || timestamp.slice(0, 10)), category: existing.category || 'Ideas', status: 'published', content: html, featuredImage: existing.featuredImage ?? null, media: Array.isArray(existing.media) ? existing.media : [], createdAt: existing.createdAt || timestamp, updatedAt: timestamp };
     case 'adventure':
-      return { ...existing, id: publicId, title: manifest.title, subtitle: manifest.summary, shortDescription: manifest.summary, content: paragraphs(manifest.body), status: 'published', location: existing.location || '', region: existing.region || '', startDate: existing.startDate || timestamp.slice(0, 10), endDate: existing.endDate || '', duration: existing.duration || '', heroImage: existing.heroImage || '', highlights: Array.isArray(existing.highlights) ? existing.highlights : [], gallery: Array.isArray(existing.gallery) ? existing.gallery : [], tags: Array.isArray(existing.tags) ? existing.tags : [] };
+      return { ...existing, id: publicId, title: manifest.title, subtitle: manifest.summary, shortDescription: manifest.summary, content: html, status: 'published', location: existing.location || '', region: existing.region || '', startDate: existing.startDate || timestamp.slice(0, 10), endDate: existing.endDate || '', duration: existing.duration || '', heroImage: existing.heroImage || '', highlights: Array.isArray(existing.highlights) ? existing.highlights : [], gallery: Array.isArray(existing.gallery) ? existing.gallery : [], tags: Array.isArray(existing.tags) ? existing.tags : [] };
     case 'project':
-      return { ...existing, id: publicId, slug: existing.slug || publicId, title: manifest.title, shortDescription: manifest.summary, description: manifest.body, status: existing.status === 'draft' ? 'active' : existing.status || 'active', category: existing.category || 'building' };
+      return { ...existing, id: publicId, slug: existing.slug || publicId, title: manifest.title, shortDescription: manifest.summary, description: manifest.body, studioHtml: html, status: existing.status === 'draft' ? 'active' : existing.status || 'active', category: existing.category || 'building' };
     case 'challenge':
-      return { ...existing, id: publicId, slug: existing.slug || publicId, title: manifest.title, shortDescription: manifest.summary || manifest.body, status: existing.status === 'draft' ? 'active' : existing.status || 'active', category: existing.category || 'personal', timeframe: existing.timeframe || 'In progress' };
+      return { ...existing, id: publicId, slug: existing.slug || publicId, title: manifest.title, shortDescription: manifest.summary || manifest.body, studioHtml: html, status: existing.status === 'draft' ? 'active' : existing.status || 'active', category: existing.category || 'personal', timeframe: existing.timeframe || 'In progress' };
     case 'product':
-      return { ...existing, id: publicId, slug: existing.slug || publicId, title: manifest.title, shortDescription: manifest.summary, description: manifest.body, status: existing.status === 'draft' ? 'available' : existing.status || 'available', category: existing.category || 'tech', type: existing.type || 'recommendation' };
+      return { ...existing, id: publicId, slug: existing.slug || publicId, title: manifest.title, shortDescription: manifest.summary, description: manifest.body, studioHtml: html, status: existing.status === 'draft' ? 'available' : existing.status || 'available', category: existing.category || 'tech', type: existing.type || 'recommendation' };
     case 'quote':
       return { ...existing, id: publicId, slug: existing.slug || publicId, text: manifest.body || manifest.title, author: manifest.summary || existing.author || 'Jevan Goldsmith', status: 'available', category: existing.category || 'ideas', topics: Array.isArray(existing.topics) ? existing.topics : [], tags: Array.isArray(existing.tags) ? existing.tags : [] };
     case 'now':
@@ -162,7 +168,7 @@ function applyPublicFields(existing, manifest, publicId, timestamp) {
         ...existing,
         lastUpdated: new Date(timestamp).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'Australia/Brisbane' }),
         location: manifest.nowLocation,
-        sections: [{ title: manifest.title, body: paragraphs(manifest.body) }],
+        sections: [{ title: manifest.title, body: html }],
       };
     default:
       throw new Error('Unsupported manifest type');
@@ -175,12 +181,31 @@ function applyManifest(manifest, timestamp, root = REPO_ROOT) {
   const document = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const publicId = manifest.sourceId || (manifest.type === 'book' ? (manifest.book.isbn || slugify(`${manifest.book.title}-${manifest.book.author}`)) : slugify(manifest.title));
   if (!target.key) {
+    if (document.lastUpdated && Array.isArray(document.sections) && document.sections.length) {
+      const historyPath = path.join(root, 'data', 'now-history.json');
+      const history = fs.existsSync(historyPath) ? JSON.parse(fs.readFileSync(historyPath, 'utf8')) : [];
+      const same = history.some((entry) => entry.lastUpdated === document.lastUpdated && JSON.stringify(entry.sections) === JSON.stringify(document.sections) && JSON.stringify(entry.location) === JSON.stringify(document.location));
+      if (!same) {
+        const previousId = `now-${crypto.createHash('sha256').update(JSON.stringify(document)).digest('hex').slice(0, 16)}`;
+        const mapSource = path.join(root, 'site-astro/public/images/now-map.jpg');
+        let map = null;
+        if (fs.existsSync(mapSource)) {
+          const archive = path.join(root, 'site-astro/public/images/now-archive');
+          fs.mkdirSync(archive, { recursive: true });
+          fs.copyFileSync(mapSource, path.join(archive, `${previousId}.jpg`));
+          map = `/images/now-archive/${previousId}.jpg`;
+        }
+        history.unshift({ ...document, id: previousId, map, archivedAt: timestamp });
+        writeJsonAtomic(historyPath, history);
+      }
+    }
     Object.assign(document, applyPublicFields(document, manifest, publicId, timestamp));
     writeJsonAtomic(filePath, document);
     return publicId;
   }
   const records = Array.isArray(document[target.key]) ? [...document[target.key]] : [];
   const index = records.findIndex((record) => record.id === publicId || record.slug === publicId || (manifest.type === 'book' && ((manifest.book.isbn && record.isbn === manifest.book.isbn) || (record.title === manifest.book.title && record.author === manifest.book.author))));
+  if (manifest.operation === 'update' && index < 0) throw new Error('This item no longer exists on the website. Create a new draft instead.');
   const next = applyPublicFields(index >= 0 ? records[index] : {}, manifest, publicId, timestamp);
   if (index >= 0) records[index] = next;
   else records.unshift(next);
@@ -190,11 +215,42 @@ function applyManifest(manifest, timestamp, root = REPO_ROOT) {
   return publicId;
 }
 
+
+function copyManifestMedia(manifest, submissionsPath, root) {
+  const media = manifest.document?.blocks.filter((block) => block.type !== 'text' && block.src.startsWith('/media/studio/')) || [];
+  let total = 0;
+  const copies = media.map((block) => {
+    const name = path.basename(block.src);
+    const source = path.join(submissionsPath, '..', 'media', name);
+    if (!fs.existsSync(source) || fs.lstatSync(source).isSymbolicLink() || !fs.statSync(source).isFile() || fs.statSync(source).size > 20 * 1024 * 1024) throw new Error('A media file is missing or exceeds 20 MB.');
+    const bytes = fs.readFileSync(source);
+    total += bytes.length;
+    if (total > 100 * 1024 * 1024) throw new Error('Keep each story below 100 MB of media.');
+    if (crypto.createHash('sha256').update(bytes).digest('hex') !== name.split('.')[0]) throw new Error('Media checksum does not match.');
+    const ext = path.extname(name);
+    const valid = ext === '.jpg' ? bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255
+      : ext === '.png' ? bytes.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10]))
+      : ext === '.webp' ? bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP'
+      : ext === '.mp4' ? bytes.toString('ascii', 4, 8) === 'ftyp'
+      : ext === '.webm' && bytes.subarray(0, 4).equals(Buffer.from([26,69,223,163]));
+    if (!valid) throw new Error('Unsupported or damaged media file.');
+    return { name, bytes };
+  });
+  for (const { name, bytes } of copies) {
+    const directory = path.join(root, 'site-astro', 'public', 'media', 'studio');
+    fs.mkdirSync(directory, { recursive: true });
+    fs.writeFileSync(path.join(directory, name), bytes);
+  }
+}
+
 function syncInbox({ inboxPath, root = REPO_ROOT, statePath = path.join(root, '.jgold-publication-state.json') }) {
   const submissionsPath = path.resolve(inboxPath);
   if (!fs.existsSync(submissionsPath)) return { accepted: 0, rejected: 0, skipped: 0 };
   const state = readState(statePath);
-  const files = fs.readdirSync(submissionsPath, { withFileTypes: true }).filter((entry) => entry.isFile() && /^[A-Za-z0-9._:-]+\.json$/.test(entry.name)).map((entry) => entry.name).sort();
+  const files = fs.readdirSync(submissionsPath, { withFileTypes: true }).filter((entry) => entry.isFile() && /^[A-Za-z0-9._:-]+\.json$/.test(entry.name)).map((entry) => entry.name).sort((a, b) => {
+    const date = (name) => { try { return String(JSON.parse(fs.readFileSync(path.join(submissionsPath, name), 'utf8')).createdAt || ''); } catch { return ''; } };
+    return date(a).localeCompare(date(b)) || a.localeCompare(b);
+  });
   const knownHashes = new Set(Object.values(state.receipts).map((receipt) => receipt && receipt.hash).filter(Boolean));
   const result = { accepted: 0, rejected: 0, skipped: 0 };
   let attempted = 0;
@@ -211,6 +267,7 @@ function syncInbox({ inboxPath, root = REPO_ROOT, statePath = path.join(root, '.
     attempted += 1;
     if (stat.size > MAX_FILE_BYTES) {
       state.receipts[`oversize:${hash}`] = { status: 'rejected', hash, reason: 'submission file is too large', processedAt: new Date().toISOString() };
+      if (!state.receipts[name.slice(0, -5)]) state.receipts[name.slice(0, -5)] = { status: 'rejected', hash, reason: 'This story is too large. Split it into shorter posts.', processedAt: new Date().toISOString() };
       knownHashes.add(hash);
       result.rejected += 1;
       continue;
@@ -223,11 +280,18 @@ function syncInbox({ inboxPath, root = REPO_ROOT, statePath = path.join(root, '.
         result.skipped += 1;
         continue;
       }
+      const prior = Object.values(state.receipts).filter((receipt) => receipt.status === 'accepted' && receipt.type === envelope.manifest.type && receipt.manifestId === envelope.manifest.id).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))[0];
+      if (prior?.createdAt && prior.createdAt > envelope.createdAt) throw new Error('A newer version of this draft has already been published.');
+      // Renaming and re-sending a create draft updates its first public copy.
+      if (prior && !envelope.manifest.sourceId) envelope.manifest.sourceId = prior.publicId;
+      copyManifestMedia(envelope.manifest, submissionsPath, root);
       const publicId = applyManifest(envelope.manifest, envelope.createdAt, root);
-      state.receipts[envelope.jobId] = { status: 'accepted', hash, type: envelope.manifest.type, publicId, processedAt: new Date().toISOString() };
+      state.receipts[envelope.jobId] = { status: 'accepted', hash, type: envelope.manifest.type, manifestId: envelope.manifest.id, createdAt: envelope.createdAt, publicId, processedAt: new Date().toISOString() };
       knownHashes.add(hash);
       result.accepted += 1;
     } catch (error) {
+      const rejectedId = name.slice(0, -5);
+      if (!state.receipts[rejectedId]) state.receipts[rejectedId] = { status: 'rejected', hash, reason: String(error instanceof Error ? error.message : error).slice(0, 300), processedAt: new Date().toISOString() };
       state.receipts[`rejected:${hash}`] = { status: 'rejected', hash, reason: String(error instanceof Error ? error.message : error).slice(0, 300), processedAt: new Date().toISOString() };
       knownHashes.add(hash);
       result.rejected += 1;

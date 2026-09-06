@@ -1,3 +1,4 @@
+import { bodyText } from '@/domain/studio-document.cjs';
 import * as Linking from 'expo-linking';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
@@ -254,7 +255,7 @@ export default function BooksScreen() {
       tier: null,
       isReading: false,
       visibility: essay.visibility,
-      excerpt: essay.summary || essay.body,
+      excerpt: essay.summary || bodyText(essay.body),
     })),
     ...publicEssays.filter((essay) => !essays.some((local) => local.sourceId === essay.id)).map((essay) => ({
       id: `public:${essay.id}`,
@@ -268,7 +269,7 @@ export default function BooksScreen() {
       tier: null,
       isReading: false,
       visibility: 'public' as const,
-      excerpt: essay.summary || essay.body,
+      excerpt: essay.summary || bodyText(essay.body),
     })),
   ], [essays, publicEssays]);
 

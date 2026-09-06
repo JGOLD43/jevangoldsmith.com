@@ -1,8 +1,9 @@
-import type { DraftType, NewPublicDraft } from '@/domain/models';
+import { readDocument, writeDocument, legacyDocument, bodyText } from '@/domain/studio-document.cjs';
+import type { DraftType, NewPublicDraft, NowLocation } from '@/domain/models';
 
 export const SITE_BASE_URL = 'https://jevangoldsmith.com';
 
-export type SiteCollection = Exclude<DraftType, 'challenge' | 'now'>;
+export type SiteCollection = DraftType;
 
 export type SiteItem = {
   id: string;
@@ -10,6 +11,7 @@ export type SiteItem = {
   title: string;
   summary: string;
   body: string;
+  editorBody?: string;
   image: string | null;
   meta: string;
   date: string;
@@ -18,11 +20,14 @@ export type SiteItem = {
   updatedAt: string;
   status: string;
   canonicalUrl: string | null;
+  nowLocation?: NowLocation;
 };
 
 type ApiCollection = { items?: Record<string, unknown>[] };
 
 const endpoint: Record<SiteCollection, string> = {
+  now: 'now',
+  challenge: 'challenges',
   essay: 'essays',
   adventure: 'adventures',
   project: 'projects',
@@ -31,6 +36,8 @@ const endpoint: Record<SiteCollection, string> = {
 };
 
 export const collectionLabels: Record<SiteCollection, string> = {
+  now: 'Now update',
+  challenge: 'Challenges',
   essay: 'Essays',
   adventure: 'Trips',
   project: 'Projects',
@@ -47,10 +54,11 @@ function text(value: unknown): string {
 export function plainText(html: string): string {
   return html
     .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<\/(p|h[1-6]|blockquote)>/gi, '\n\n')
     .replace(/<li>/gi, '• ')
     .replace(/<[^>]+>/g, '')
     .replace(/&nbsp;/g, ' ')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
@@ -67,10 +75,12 @@ export function absoluteSiteUrl(value: unknown): string | null {
 
 function normalizeItem(type: SiteCollection, raw: Record<string, unknown>): SiteItem {
   const quote = type === 'quote';
-  const body = quote ? text(raw.text) : plainText(text(raw.content) || text(raw.description));
-  const title = quote ? text(raw.text) : text(raw.title);
+  const sourceBody = text(raw.content) || text(raw.description) || text(raw.text);
+  const editorBody = readDocument(sourceBody) ? sourceBody : writeDocument(legacyDocument(sourceBody));
+  const body = bodyText(editorBody);
+  const title = text(raw.title) || text(raw.text);
   const summary = quote
-    ? text(raw.author)
+    ? text(raw.summary) || text(raw.author)
     : text(raw.summary) || text(raw.subtitle) || text(raw.shortDescription) || text(raw.description);
   const image = absoluteSiteUrl(raw.featuredImage || raw.heroImage || raw.image);
   const meta = quote
@@ -80,11 +90,13 @@ function normalizeItem(type: SiteCollection, raw: Record<string, unknown>): Site
         .join(' • ');
 
   return {
+    nowLocation: raw.nowLocation as NowLocation | undefined,
     id: text(raw.id) || text(raw.slug),
     type,
     title,
     summary,
     body,
+    editorBody,
     image,
     meta,
     date: text(raw.date || raw.startDate),
@@ -96,11 +108,20 @@ function normalizeItem(type: SiteCollection, raw: Record<string, unknown>): Site
   };
 }
 
+export type StudioReceipt = { status: 'accepted' | 'rejected'; publicId: string | null; reason: string; processedAt: string };
+export type StudioSnapshot = { version: number; collections: Record<SiteCollection, Record<string, unknown>[]>; receipts: Record<string, StudioReceipt> };
+
+export async function loadStudioSnapshot(): Promise<StudioSnapshot> {
+  const response = await fetch(`${SITE_BASE_URL}/api/v1/studio.json?refresh=${Date.now()}`, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
+  if (!response.ok) throw new Error(`Could not refresh Studio (${response.status}). Your saved drafts are safe.`);
+  const payload = await response.json() as StudioSnapshot;
+  if (payload.version !== 1 || !payload.collections || !payload.receipts) throw new Error('The website returned an invalid Studio response. Try refreshing.');
+  return payload;
+}
+
 export async function loadSiteCollection(type: SiteCollection): Promise<SiteItem[]> {
-  const response = await fetch(`${SITE_BASE_URL}/api/v1/${endpoint[type]}.json`);
-  if (!response.ok) throw new Error(`Could not load ${collectionLabels[type]} (${response.status}).`);
-  const payload = (await response.json()) as ApiCollection;
-  return (payload.items ?? []).map((item) => normalizeItem(type, item)).filter((item) => item.id && item.title);
+  const payload = await loadStudioSnapshot();
+  return (payload.collections[type] ?? []).map((item) => normalizeItem(type, item)).filter((item) => item.id && item.title);
 }
 
 export type SiteHomeData = {
@@ -111,7 +132,8 @@ export type SiteHomeData = {
 };
 
 export async function loadSiteHome(): Promise<SiteHomeData> {
-  const results = await Promise.all(editableCollections.map(async (type) => [type, await loadSiteCollection(type)] as const));
+  const snapshot = await loadStudioSnapshot();
+  const results = editableCollections.map((type) => [type, (snapshot.collections[type] || []).map((item) => normalizeItem(type, item))] as const);
   const byType = Object.fromEntries(results) as Record<SiteCollection, SiteItem[]>;
   const newest = (items: SiteItem[]) => [...items].sort((a, b) => b.date.localeCompare(a.date))[0] ?? null;
   return {
@@ -127,8 +149,9 @@ export function draftFromSiteItem(item: SiteItem): NewPublicDraft {
     type: item.type,
     title: item.title,
     summary: item.summary,
-    body: item.body || item.title,
+    body: item.editorBody || item.body || item.title,
     sourceId: item.id,
     operation: 'update',
+    nowLocation: item.nowLocation ?? null,
   };
 }

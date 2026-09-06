@@ -121,6 +121,7 @@ const lookupCategoryMeta = (map: Record<string, CategoryMeta>, category: string,
 interface TaskRecord {
   id: string; slug?: string; title: string;
   shortDescription?: string; description?: string;
+  studioHtml?: string;
   status?: string; category?: string; visibility?: string;
   tags?: string[];
   image?: string; imageAlt?: string;

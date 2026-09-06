@@ -19,7 +19,7 @@ import { AppProvider } from '@/state/app-context';
 import { BooksProvider } from '@/state/books-context';
 import { LearningProvider } from '@/state/learning-context';
 import { AppThemeProvider, useAppTheme } from '@/state/theme-context';
-import { retryPendingPublications } from '@/services/publication-outbox';
+import { refreshPublicationJobs } from '@/services/publication-outbox';
 import { checkForRemoteUpdate } from '@/services/remote-updates';
 
 function AutomaticRemoteUpdates() {
@@ -61,7 +61,7 @@ function AutomaticRemoteUpdates() {
 
 function AutomaticPublicSync() {
   useEffect(() => {
-    const sync = () => { void retryPendingPublications(); };
+    const sync = () => { void refreshPublicationJobs().catch(() => undefined); };
     sync();
     const interval = setInterval(sync, 60_000);
     const subscription = AppState.addEventListener('change', (state) => {

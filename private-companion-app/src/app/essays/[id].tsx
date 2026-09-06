@@ -1,9 +1,11 @@
+import { bodyText } from '@/domain/studio-document.cjs';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, BackHandler, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { StudioEditor } from '@/components/studio-editor';
 import { Fonts, type AppColors } from '@/constants/theme';
 import type { EssayDocument, EssayRevision, EssayVisibility, NewEssayDocument } from '@/domain/models';
 import { createPublishManifest } from '@/domain/privacy';
@@ -136,7 +138,7 @@ export default function EssayEditorScreen() {
       sourceId: publicEssay.id,
       title: publicEssay.title,
       summary: publicEssay.summary,
-      body: publicEssay.body,
+      body: publicEssay.editorBody || publicEssay.body,
       collectionName: publicEssay.category,
       visibility: 'public',
     });
@@ -160,7 +162,7 @@ export default function EssayEditorScreen() {
       if (!draft) return;
       const job = await queueAndAttemptPublication(createPublishManifest(draft), draft.id);
       if (job.status === 'submitted') {
-        await setDraftStatus(draft.id, 'published');
+        await setDraftStatus(draft.id, 'ready');
         Alert.alert('Website update submitted', 'The approved essay was committed and will deploy automatically. Your revision history remains only on this phone.');
       } else if (job.status === 'queued') {
         Alert.alert('Queued in Studio', 'The approved public copy will submit automatically after publishing is connected.', [
@@ -220,9 +222,9 @@ export default function EssayEditorScreen() {
           <TextInput autoFocus={isNew} value={title} onChangeText={setTitle} multiline placeholder="Essay title" placeholderTextColor={colors.textSecondary} style={styles.titleInput} />
           <TextInput value={summary} onChangeText={setSummary} multiline placeholder="Short summary or central idea…" placeholderTextColor={colors.textSecondary} style={styles.summaryInput} />
           <View style={styles.writingMeta}><Text style={styles.writingMetaText}>{body.length.toLocaleString()} characters</Text><Text style={styles.writingMetaText}>{Math.max(1, Math.ceil(body.trim().split(/\s+/).filter(Boolean).length / 200))} min read</Text></View>
-          <TextInput value={body} onChangeText={setBody} multiline textAlignVertical="top" placeholder="Start writing…" placeholderTextColor={colors.textSecondary} style={styles.bodyInput} />
+          <StudioEditor value={body} onChange={setBody} />
 
-          {visibility === 'public' ? <Pressable accessibilityRole="button" disabled={!title.trim() || !body.trim() || publishing} onPress={() => Alert.alert('Publish this essay?', 'Only the title, summary and essay text will be submitted. Your complete revision timeline stays on this phone.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Publish', onPress: () => { void publishToWebsite(); } }])} style={[styles.primaryButton, (!title.trim() || !body.trim() || publishing) && styles.disabled]}><Text style={styles.primaryButtonText}>{publishing ? 'Submitting…' : 'Publish to website'}</Text></Pressable> : null}
+          {visibility === 'public' ? <Pressable accessibilityRole="button" disabled={!title.trim() || !body.trim() || publishing} onPress={() => Alert.alert('Publish this essay?', 'Only the title, summary, essay text and selected Studio media will be submitted. Your complete revision timeline stays on this phone.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Publish', onPress: () => { void publishToWebsite(); } }])} style={[styles.primaryButton, (!title.trim() || !body.trim() || publishing) && styles.disabled]}><Text style={styles.primaryButtonText}>{publishing ? 'Submitting…' : 'Publish to website'}</Text></Pressable> : null}
 
           {localEssay ? <View style={styles.timeline}>
             <View style={styles.timelineHeader}><View><Text style={styles.timelineTitle}>Writing timeline</Text><Text style={styles.timelineSubtitle}>Complete encrypted revision history</Text></View><Text style={styles.versionCount}>{revisions.length} versions</Text></View>
@@ -244,7 +246,7 @@ export default function EssayEditorScreen() {
           <Text style={styles.versionTitle}>{selectedRevision.title}</Text>
           {selectedRevision.summary ? <Text style={styles.versionSummary}>{selectedRevision.summary}</Text> : null}
           <View style={styles.publicMeta}><Text style={styles.metaPill}>{revisionLabel(selectedRevision.reason)}</Text><Text style={styles.metaText}>{selectedRevision.characterCount.toLocaleString()} characters</Text></View>
-          <Text style={styles.publicBody}>{selectedRevision.body || 'This version did not contain body text yet.'}</Text>
+          <Text style={styles.publicBody}>{bodyText(selectedRevision.body) || 'This version did not contain body text yet.'}</Text>
           <Pressable accessibilityRole="button" onPress={() => { setTitle(selectedRevision.title); setSummary(selectedRevision.summary); setBody(selectedRevision.body); setSelectedRevision(null); }} style={styles.primaryButton}><Text style={styles.primaryButtonText}>Restore this version as a new edit</Text></Pressable>
           <Text style={styles.helper}>Restoring never deletes later history. It creates another timestamped version.</Text>
         </ScrollView> : null}

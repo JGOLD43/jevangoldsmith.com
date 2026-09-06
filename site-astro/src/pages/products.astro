@@ -39,6 +39,7 @@ interface Product {
   price?: string | number;
   shortDescription?: string;
   description?: string;
+  studioHtml?: string;
   rating?: number;
   badge?: string;
   image?: string;
@@ -162,6 +163,7 @@ const categoryCounts = Object.fromEntries(
             )}
             <button type="button" class="shelf-object-detail-more" data-shelf-detail-more aria-expanded="false">See further description</button>
             <div class="shelf-object-detail-extra">
+              {p.studioHtml && <div set:html={p.studioHtml} />}
               {p.whyItStayed && (
                 <p class="shelf-object-detail-line"><strong>Why it stayed:</strong> {p.whyItStayed}</p>
               )}

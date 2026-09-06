@@ -16,6 +16,7 @@
 // current coords) and BEFORE astro:build (archive.astro imports the history).
 
 const fs = require('node:fs');
+const crypto = require('node:crypto');
 const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -51,7 +52,10 @@ function main() {
   const now = JSON.parse(fs.readFileSync(NOW, 'utf8'));
   const history = fs.existsSync(HISTORY) ? JSON.parse(fs.readFileSync(HISTORY, 'utf8')) : [];
 
-  const slug = slugify(now.lastUpdated);
+  const sameContent = (entry) => entry.lastUpdated === now.lastUpdated && JSON.stringify(entry.sections) === JSON.stringify(now.sections) && JSON.stringify(entry.location) === JSON.stringify(now.location);
+  const fingerprint = crypto.createHash('sha256').update(JSON.stringify([now.sections, now.location])).digest('hex').slice(0, 10);
+  const matching = history.find(sameContent);
+  const slug = matching?.id || `${slugify(now.lastUpdated)}-${fingerprint}`;
   const entry = {
     id: slug,
     lastUpdated: now.lastUpdated,
@@ -61,7 +65,7 @@ function main() {
   };
 
   const newest = history[0];
-  if (newest && newest.lastUpdated === now.lastUpdated) {
+  if (newest && sameContent(newest)) {
     // Same update, edited — refresh in place (preserve original archivedAt).
     entry.archivedAt = newest.archivedAt;
     history[0] = entry;

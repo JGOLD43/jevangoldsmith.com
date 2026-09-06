@@ -1,0 +1,12 @@
+export type StudioTextBlock = { type: 'text'; text: string; font: 'sans' | 'serif' | 'mono'; style: 'paragraph' | 'heading' | 'quote' };
+export type StudioMediaBlock = { type: 'image' | 'video'; src: string; caption: string };
+export type StudioBlock = StudioTextBlock | StudioMediaBlock;
+export type StudioDocument = { version: 1; blocks: StudioBlock[] };
+export const PREFIX: string;
+export function readDocument(body: string): StudioDocument | null;
+export function writeDocument(document: StudioDocument): string;
+export function documentText(document: StudioDocument): string;
+export function validateDocument(document: unknown): StudioDocument;
+export function renderDocument(document: StudioDocument): string;
+export function legacyDocument(html: string): StudioDocument;
+export function bodyText(body: string): string;

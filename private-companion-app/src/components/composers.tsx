@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { StudioEditor } from '@/components/studio-editor';
 import { Button, Chip } from '@/components/ui';
 import { Fonts, type AppColors } from '@/constants/theme';
 import type { DraftType, NewPublicDraft, NewVaultItem, NowLocation, VaultKind } from '@/domain/models';
@@ -210,9 +211,9 @@ export function DraftComposer({
   const nowLocation = useMemo<NowLocation | null>(() => {
     const lat = Number(latitude);
     const lng = Number(longitude);
-    if (!locationLabel.trim() || !Number.isFinite(lat) || !Number.isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
-    return { label: locationLabel.trim(), lat, lng, zoom: 10 };
-  }, [latitude, locationLabel, longitude]);
+    if (!latitude.trim() || !longitude.trim() || !locationLabel.trim() || !Number.isFinite(lat) || !Number.isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+    return { label: locationLabel.trim(), lat, lng, zoom: initial?.nowLocation?.zoom ?? 10 };
+  }, [latitude, locationLabel, longitude, initial?.nowLocation?.zoom]);
   const previewUrl = useMemo(() => mapTileUrl(nowLocation), [nowLocation]);
   const isNow = type === 'now';
   const canSave = title.trim().length > 0 && (!isNow || (body.trim().length > 0 && nowLocation !== null));
@@ -220,6 +221,7 @@ export function DraftComposer({
   const save = async () => {
     if (!title.trim()) return;
     setSaving(true);
+    try {
     await onSave({
       type,
       title,
@@ -229,11 +231,9 @@ export function DraftComposer({
       operation: initial?.operation ?? 'create',
       nowLocation: isNow ? nowLocation : null,
     });
-    setSaving(false);
-    setTitle('');
-    setSummary('');
-    setBody('');
     onDismiss();
+    } catch (error) { Alert.alert('Could not save', error instanceof Error ? error.message : 'Your draft is still here. Try again.'); }
+    finally { setSaving(false); }
   };
 
   return (
@@ -273,15 +273,7 @@ export function DraftComposer({
         </>
       ) : null}
       <Text style={styles.label}>{isNow ? 'What is happening' : 'Draft'}</Text>
-      <TextInput
-        value={body}
-        onChangeText={setBody}
-        placeholder={isNow ? 'Write a clear snapshot of what you are doing, thinking about, or working toward…' : 'Write the public version here…'}
-        placeholderTextColor={colors.textSecondary}
-        multiline
-        textAlignVertical="top"
-        style={[styles.input, isNow ? styles.nowTextArea : styles.largeTextArea]}
-      />
+      <StudioEditor value={body} onChange={setBody} />
       {isNow ? (
         <View style={styles.locationCard}>
           <View style={styles.locationHeader}>

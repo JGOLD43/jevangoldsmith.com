@@ -68,5 +68,6 @@ const heroAlt = p.imageAlt || p.title;
       </div>
     </header>
 
+    {p.studioHtml && <section class="detail-story" set:html={p.studioHtml} />}
   </main>
 </Base>

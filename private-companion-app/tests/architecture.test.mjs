@@ -253,14 +253,14 @@ test('approved public copies use an encrypted retryable outbox without private f
   assert.doesNotMatch(outbox, /VaultItem|vault_items|BookAnnotation|reading_sessions/);
   assert.match(book, /queueAndAttemptPublication/);
   assert.match(book, /toPublicBookFields\(book\)/);
-  assert.match(essay, /Only the title, summary and essay text will be submitted/);
+  assert.match(essay, /Only the title, summary, essay text and selected Studio media will be submitted/);
   assert.match(settings, /retryPendingPublications/);
 });
 
 test('approved publications retry automatically while the unlocked app is active', async () => {
   const layout = await source('src/app/_layout.tsx');
   assert.match(layout, /AutomaticPublicSync/);
-  assert.match(layout, /retryPendingPublications/);
+  assert.match(layout, /refreshPublicationJobs/);
   assert.match(layout, /setInterval\(sync, 60_000\)/);
   assert.match(layout, /state === 'active'/);
 });
@@ -378,11 +378,11 @@ test('Studio is a focused publishing queue without duplicate Library content', a
   const home = await source('src/app/index.tsx');
   const composer = await source('src/components/composers.tsx');
 
-  assert.match(studio, /Publishing queue/);
+  assert.match(studio, /Drafts to publish/);
   assert.match(studio, /Edit existing/);
   assert.match(studio, /activeDrafts/);
   assert.match(studio, /<FlatList/);
-  assert.match(studio, /router\.push\('\/essays\/new'\)/);
+  assert.match(studio, /'essay', 'now', 'adventure'/);
   assert.match(studio, /lockedType/);
   assert.doesNotMatch(studio, /Website Books|What is live|Edit public copy/);
   assert.match(studio, /Add website change/);

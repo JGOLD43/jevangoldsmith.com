@@ -570,11 +570,20 @@ export async function addPublicDraft(input: NewPublicDraft): Promise<PublicDraft
   return draft;
 }
 
+export async function deletePublicDraft(draftId: string): Promise<void> {
+  const database = await getDatabase();
+  await database.withTransactionAsync(async () => {
+    await database.runAsync("DELETE FROM publication_jobs WHERE local_id = ? AND item_type != 'book' AND status != 'submitted'", draftId);
+    await database.runAsync('DELETE FROM public_drafts WHERE id = ?', draftId);
+  });
+}
+
 export async function updatePublicDraft(
   draftId: string,
   input: Pick<PublicDraft, 'title' | 'summary' | 'body' | 'nowLocation'>,
 ): Promise<void> {
   const database = await getDatabase();
+  await database.runAsync("DELETE FROM publication_jobs WHERE local_id = ? AND item_type != 'book' AND status != 'submitted'", draftId);
   await database.runAsync(
     'UPDATE public_drafts SET title = ?, summary = ?, body = ?, now_location_label = ?, now_location_lat = ?, now_location_lng = ?, now_location_zoom = ?, status = ?, updated_at = ? WHERE id = ?',
     input.title.trim(),

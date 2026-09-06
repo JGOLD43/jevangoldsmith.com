@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: jgold-publish-sync
@@ -44,6 +45,14 @@ jobs:
         working-directory: website
         run: node scripts/sync-jgold-publications.js --inbox=../inbox/submissions
 
+      - name: Preserve Now map and history
+        working-directory: website
+        run: |
+          if ! git diff --quiet -- data/now.json; then
+            node scripts/build-now-map.js
+            node scripts/build-now-archive.js
+          fi
+
       - name: Validate resulting public content
         working-directory: website
         run: npm run content:validate
@@ -54,13 +63,20 @@ jobs:
 
       - name: Commit trusted data changes
         working-directory: website
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          if git diff --quiet -- data .jgold-publication-state.json; then
+          if git diff --quiet -- data .jgold-publication-state.json && [ -z "$(git ls-files --others --exclude-standard site-astro/public/media/studio)" ]; then
             echo "No new approved publications"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data .jgold-publication-state.json
+          git add data .jgold-publication-state.json site-astro/public/images/now-map.jpg
+          if [ -d site-astro/public/images/now-archive ]; then git add site-astro/public/images/now-archive; fi
+          if [ -d site-astro/public/media/studio ]; then git add site-astro/public/media/studio; fi
           git commit -m "content: sync approved JGOLD publications"
           git push origin HEAD:main
+          # GITHUB_TOKEN pushes do not trigger push workflows. Explicitly start
+          # the same test gate that a normal main push uses, then deploy-pages.
+          gh workflow run test.yml --ref main

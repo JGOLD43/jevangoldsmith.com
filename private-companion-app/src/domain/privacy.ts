@@ -1,3 +1,4 @@
+import { readDocument, documentText, type StudioDocument } from './studio-document.cjs';
 import type { NowLocation, PublicBookFields, PublicDraft, VaultItem } from './models';
 
 export type PublicAiContext = {
@@ -12,6 +13,7 @@ type ContentPublishManifestBase = {
   title: string;
   summary: string;
   body: string;
+  document?: StudioDocument;
   sourceId: string | null;
   operation: PublicDraft['operation'];
 };
@@ -52,29 +54,33 @@ export function createAiContext(prompt: string, draft?: PublicDraft): PublicAiCo
   return {
     source: 'public-draft',
     title: draft.title,
-    content: `${prompt.trim()}\n\nPublic draft:\n${draft.title}\n${draft.summary}\n${draft.body}`.trim(),
+    content: `${prompt.trim()}\n\nPublic draft:\n${draft.title}\n${draft.summary}\n${readDocument(draft.body) ? documentText(readDocument(draft.body)!) : draft.body}`.trim(),
   };
 }
 
 export function createPublishManifest(draft: PublicDraft): PublishManifest {
+  const document = readDocument(draft.body);
   const common: ContentPublishManifestBase = {
     version: 1,
     id: draft.id,
     title: draft.title.trim(),
     summary: draft.summary.trim(),
-    body: draft.body.trim(),
+    body: document ? documentText(document) || draft.title.trim() : draft.body.trim(),
+    ...(document ? { document } : {}),
     sourceId: draft.sourceId,
     operation: draft.operation,
   };
   if (draft.type === 'now') {
     if (!draft.nowLocation) throw new Error('Choose a location before publishing this Now update.');
-    return { version: 1, id: common.id, type: 'now', title: common.title, summary: common.summary, body: common.body, sourceId: common.sourceId, operation: common.operation, nowLocation: draft.nowLocation };
+    return { version: 1, id: common.id, type: 'now', title: common.title, summary: common.summary, body: common.body, sourceId: common.sourceId, operation: common.operation, nowLocation: draft.nowLocation, ...(document ? { document } : {}) };
   }
-  return { version: 1, id: common.id, type: draft.type, title: common.title, summary: common.summary, body: common.body, sourceId: common.sourceId, operation: common.operation };
+  return { version: 1, id: common.id, type: draft.type, title: common.title, summary: common.summary, body: common.body, sourceId: common.sourceId, operation: common.operation, ...(document ? { document } : {}) };
 }
 
 export function canPublish(draft: PublicDraft): boolean {
-  return draft.title.trim().length > 0 && draft.body.trim().length > 0 && (draft.type !== 'now' || Boolean(draft.nowLocation));
+  let hasContent = Boolean(draft.body.trim());
+  try { const document = readDocument(draft.body); if (document) hasContent = document.blocks.some((block) => block.type === 'text' ? Boolean(block.text.trim()) : Boolean(block.src)); } catch { return false; }
+  return draft.title.trim().length > 0 && hasContent && (draft.type !== 'now' || Boolean(draft.nowLocation));
 }
 
 export function createBookPublishManifest(id: string, sourceId: string | null, book: PublicBookFields): BookPublishManifest {

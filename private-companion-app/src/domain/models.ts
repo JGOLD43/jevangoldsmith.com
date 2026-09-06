@@ -105,6 +105,7 @@ export type DraftOperation = 'create' | 'update';
 export type PublicationJobStatus = 'queued' | 'submitted' | 'failed';
 
 export type PublicationJob = {
+  delivery?: 'live' | 'rejected';
   id: string;
   itemType: DraftType | 'book';
   localId: string;
