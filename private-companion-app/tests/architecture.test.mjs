@@ -367,8 +367,10 @@ test('the complete public website is the Site tab without an injected app homepa
   assert.doesNotMatch(site, /Your live website/);
   assert.doesNotMatch(site, /Your dashboard/);
   assert.match(siteRoute, /SiteScreen/);
-  assert.match(home, /What matters today/);
-  assert.match(home, /focused feed/);
+  assert.doesNotMatch(home, /What matters today|focused feed/);
+  assert.match(home, /Minutes today/);
+  assert.match(home, /Highlights today/);
+  assert.match(home, /Minutes · 7 days/);
   assert.match(home, /YOUR PUBLIC SITE/);
   assert.match(studio, /router\.push\('\/ai'\)/);
 });

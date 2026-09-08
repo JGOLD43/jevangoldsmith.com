@@ -1,7 +1,7 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, AppState, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BookCover } from '@/components/book-cover';
@@ -12,12 +12,14 @@ import type { Book, LifeArea, LifeItem, NewLifeItem, PublicationJob } from '@/do
 import { createPublishManifest } from '@/domain/privacy';
 import { refreshPublicationJobs } from '@/services/publication-outbox';
 import { useTheme } from '@/hooks/use-theme';
-import { formatReadingTime } from '@/storage/reading-analytics';
+import { readingMinutes, type HomeReadingStats } from '@/domain/home-reading';
+import { getHomeReadingStats } from '@/storage/home-reading';
 import { useApp } from '@/state/app-context';
 import { useBooks } from '@/state/books-context';
 import { useLearning } from '@/state/learning-context';
 
-const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'long' });
+const WEEKDAY_FORMATTER = new Intl.DateTimeFormat(undefined, { weekday: 'long' });
 
 const AreaTab = memo(function AreaTab({ definition, count, selected, onPress }: {
   definition: LifeAreaDefinition;
@@ -85,6 +87,28 @@ export default function HomeScreen() {
   const [editingItem, setEditingItem] = useState<LifeItem | null>(null);
   const [lifeComposerOpen, setLifeComposerOpen] = useState(false);
   const [importingBook, setImportingBook] = useState(false);
+  const [homeReading, setHomeReading] = useState<HomeReadingStats | null>(null);
+  const [readingError, setReadingError] = useState(false);
+  const [today, setToday] = useState(() => new Date());
+  useFocusEffect(useCallback(() => {
+    let active = true;
+    let refreshing = false;
+    const refresh = async () => {
+      if (refreshing || AppState.currentState !== 'active') return;
+      refreshing = true;
+      const now = new Date();
+      setToday(now);
+      try {
+        const stats = await getHomeReadingStats(now);
+        if (active) { setHomeReading(stats); setReadingError(false); }
+      } catch { if (active) setReadingError(true); }
+      finally { refreshing = false; }
+    };
+    void refresh();
+    const timer = setInterval(() => { void refresh(); }, 15000);
+    const subscription = AppState.addEventListener('change', (state) => { if (state === 'active') void refresh(); });
+    return () => { active = false; clearInterval(timer); subscription.remove(); };
+  }, [readingStats]));
 
   const definition = lifeAreaDefinition(selectedArea);
   const selectedItems = useMemo(() => lifeItems
@@ -138,9 +162,16 @@ export default function HomeScreen() {
       <SafeAreaView edges={['top']} style={styles.safe}>
         <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.content}>
           <View style={styles.header}>
-            <View style={styles.headerCopy}><Text style={styles.date}>{DATE_FORMATTER.format(new Date())}</Text><Text style={styles.greeting}>What matters today</Text><Text style={styles.feedIntro}>A focused feed of relationships, work and learning that deserve your attention.</Text></View>
+            <View style={styles.headerCopy}><Text style={styles.date}>{WEEKDAY_FORMATTER.format(today)}</Text><Text style={styles.greeting}>{DATE_FORMATTER.format(today)}</Text></View>
             <Pressable accessibilityLabel="Settings" accessibilityRole="button" onPress={() => router.push('/settings')} style={({ pressed }) => [styles.settingsButton, pressed && styles.pressed]}><SymbolView name={{ ios: 'gearshape', android: 'settings' }} size={21} tintColor={colors.textSecondary} /></Pressable>
           </View>
+
+          <View accessibilityLabel="Reading activity" style={styles.readingStrip}>
+            <View style={styles.miniMetric}><Text style={styles.miniValue}>{homeReading && !readingError ? readingMinutes(homeReading.todaySeconds) : '—'}</Text><Text style={styles.miniLabel}>Minutes today</Text></View>
+            <View style={styles.miniMetric}><Text style={styles.miniValue}>{homeReading && !readingError ? homeReading.todayHighlights.toLocaleString() : '—'}</Text><Text style={styles.miniLabel}>Highlights today</Text></View>
+            <View style={styles.miniMetric}><Text style={styles.miniValue}>{homeReading && !readingError ? readingMinutes(homeReading.lastSevenDaysSeconds) : '—'}</Text><Text style={styles.miniLabel}>Minutes · 7 days</Text></View>
+          </View>
+          {readingError ? <Text style={styles.sectionDetail}>Reading activity couldn't refresh. Retrying automatically.</Text> : null}
 
           <View style={styles.sectionHeader}><Text style={styles.sectionTitle}>Today</Text><Text style={styles.sectionDetail}>{dueContacts.length + activeDrafts.length + (learningDashboard?.dueReviews ?? 0)} items</Text></View>
           {dueContacts.length ? <Pressable accessibilityRole="button" onPress={() => router.push('/contacts')} style={({ pressed }) => [styles.feedCard, pressed && styles.pressed]}><View style={[styles.feedIcon, { backgroundColor: colors.accentSoft }]}><SymbolView name={{ ios: 'person.2.fill', android: 'groups' }} size={22} tintColor={colors.accent} /></View><View style={styles.feedCopy}><Text style={styles.feedEyebrow}>PEOPLE · DUE</Text><Text style={styles.feedTitle}>{dueContacts.length === 1 ? dueContacts[0].name : `${dueContacts.length} people to reconnect with`}</Text><Text style={styles.feedBody}>{dueContacts.length === 1 ? 'Open their context before reaching out.' : 'Your relationship agenda is ready.'}</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={18} tintColor={colors.textSecondary} /></Pressable> : null}
@@ -175,11 +206,7 @@ export default function HomeScreen() {
               <Text style={styles.sectionLink}>{importingBook ? 'Opening…' : books.length ? 'Browse' : 'Import'}</Text>
             </Pressable>
           )}
-          <View style={styles.readingStrip}>
-            <View style={styles.miniMetric}><Text style={styles.miniValue}>{formatReadingTime(readingStats.todaySeconds)}</Text><Text style={styles.miniLabel}>Today</Text></View>
-            <View style={styles.miniMetric}><Text style={styles.miniValue}>{formatReadingTime(readingStats.lastSevenDaysSeconds)}</Text><Text style={styles.miniLabel}>7 days</Text></View>
-            <View style={styles.miniMetric}><Text style={styles.miniValue}>{readingStats.highlightCount}</Text><Text style={styles.miniLabel}>Highlights</Text></View>
-          </View>
+
 
           <Pressable accessibilityRole="button" onPress={() => router.push('/ai')} style={({ pressed }) => [styles.sitePulse, pressed && styles.pressed]}>
             <View style={styles.liveDot} /><View style={styles.siteCopy}><Text style={styles.siteEyebrow}>YOUR PUBLIC SITE</Text><Text style={styles.siteTitle}>Open the live website</Text></View><SymbolView name={{ ios: 'arrow.up.right', android: 'north_east' }} size={20} tintColor={colors.accent} />
@@ -197,7 +224,7 @@ function createStyles(colors: AppColors) {
     safe: { flex: 1, backgroundColor: colors.background },
     content: { paddingHorizontal: 20, paddingTop: 18, paddingBottom: 120, gap: 20, width: '100%', maxWidth: 760, alignSelf: 'center' },
     header: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 16 }, headerCopy: { flex: 1, gap: 4 }, headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    date: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase' }, greeting: { color: colors.text, fontFamily: Fonts.bold, fontSize: 30, lineHeight: 36 }, feedIntro: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 12, lineHeight: 18, marginTop: 2 },
+    date: { color: colors.accent, fontFamily: Fonts.extraBold, fontSize: 12, letterSpacing: 2, textTransform: 'uppercase' }, greeting: { color: colors.text, fontFamily: Fonts.bold, fontSize: 34, lineHeight: 42 },
     addButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center', borderRadius: 24, backgroundColor: colors.action }, settingsButton: { width: 42, height: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 21, backgroundColor: colors.backgroundSelected },
     hero: { overflow: 'hidden', borderRadius: 22, borderCurve: 'continuous', backgroundColor: colors.backgroundElement, borderWidth: 1, borderColor: colors.line, padding: 20, gap: 18 },
     heroTop: { flexDirection: 'row', alignItems: 'flex-start', gap: 14 }, heroCopy: { flex: 1, gap: 7 },
@@ -213,7 +240,7 @@ function createStyles(colors: AppColors) {
     lifeRow: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 11, borderTopWidth: 1, borderTopColor: colors.line, paddingVertical: 12 }, lifeEdit: { flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 9 }, check: { width: 24, height: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: colors.textSecondary, borderRadius: 8 }, lifeCopy: { flex: 1, minWidth: 0, gap: 5 }, lifeTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 }, lifeTitle: { flex: 1, color: colors.text, fontFamily: Fonts.bold, fontSize: 14 }, lifeTitleComplete: { color: colors.textSecondary, textDecorationLine: 'line-through' }, lifeProgress: { fontFamily: Fonts.bold, fontSize: 10 }, lifeNote: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 11 }, progressTrack: { height: 3, overflow: 'hidden', borderRadius: 2, backgroundColor: colors.backgroundSelected }, progressFill: { height: 3, borderRadius: 2 }, targetRow: { flexDirection: 'row', alignItems: 'center', gap: 4 }, target: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 9 },
     emptyArea: { minHeight: 84, flexDirection: 'row', alignItems: 'center', gap: 12, borderTopWidth: 1, borderTopColor: colors.line, paddingTop: 14 }, emptyIcon: { width: 43, height: 43, borderRadius: 13, alignItems: 'center', justifyContent: 'center' }, emptyCopy: { flex: 1, gap: 3 }, emptyTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 14 }, emptyBody: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 11, lineHeight: 16 },
     booksRow: { gap: 12, paddingRight: 20 }, bookCard: { width: 250, minHeight: 132, flexDirection: 'row', gap: 12, padding: 12, borderWidth: 1, borderColor: colors.line, borderRadius: 16, backgroundColor: colors.backgroundElement }, bookCover: { width: 72, height: 108, aspectRatio: undefined, borderRadius: 6 }, bookCopy: { flex: 1, minWidth: 0, justifyContent: 'center', gap: 6 }, bookTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 14, lineHeight: 18 }, bookAuthor: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 10 }, bookProgressRow: { flexDirection: 'row', alignItems: 'center', gap: 7, marginTop: 3 }, bookProgressTrack: { flex: 1, height: 3, overflow: 'hidden', borderRadius: 2, backgroundColor: colors.backgroundSelected }, bookProgressFill: { height: 3, backgroundColor: colors.accent }, bookProgressText: { color: colors.textSecondary, fontFamily: Fonts.bold, fontSize: 9 },
-    readingEmpty: { minHeight: 78, flexDirection: 'row', alignItems: 'center', gap: 13, borderWidth: 1, borderColor: colors.line, borderRadius: 16, backgroundColor: colors.backgroundElement, padding: 15 }, readingStrip: { flexDirection: 'row', paddingVertical: 12, borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.line }, miniMetric: { flex: 1, alignItems: 'center', gap: 2 }, miniValue: { color: colors.text, fontFamily: Fonts.bold, fontSize: 14 }, miniLabel: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 9, textTransform: 'uppercase' },
+    readingEmpty: { minHeight: 78, flexDirection: 'row', alignItems: 'center', gap: 13, borderWidth: 1, borderColor: colors.line, borderRadius: 16, backgroundColor: colors.backgroundElement, padding: 15 }, readingStrip: { flexDirection: 'row', paddingVertical: 20, borderRadius: 18, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.backgroundElement }, miniMetric: { flex: 1, alignItems: 'center', gap: 6, paddingHorizontal: 4 }, miniValue: { color: colors.text, fontFamily: Fonts.bold, fontSize: 28, fontVariant: ['tabular-nums'] }, miniLabel: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 10, textAlign: 'center' },
     captureGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 }, captureCard: { width: '48%', flexGrow: 1, minHeight: 112, justifyContent: 'space-between', padding: 15, borderWidth: 1, borderColor: colors.line, borderRadius: 16, borderCurve: 'continuous', backgroundColor: colors.backgroundElement }, captureCardAccent: { borderColor: colors.action, backgroundColor: colors.action }, captureTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 14, marginTop: 9 }, captureTitleAccent: { color: colors.onAction }, captureBody: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 10 }, captureBodyAccent: { color: colors.onAction, opacity: 0.7 },
     sitePulse: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 16, borderWidth: 1, borderColor: colors.line, borderRadius: 16, backgroundColor: colors.backgroundElement }, liveDot: { width: 9, height: 9, borderRadius: 5, backgroundColor: colors.success }, siteCopy: { flex: 1, gap: 2 }, siteEyebrow: { color: colors.textSecondary, fontFamily: Fonts.extraBold, fontSize: 8, letterSpacing: 0.8 }, siteTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 15 },
     pressed: { opacity: 0.72, transform: [{ scale: 0.988 }] },
