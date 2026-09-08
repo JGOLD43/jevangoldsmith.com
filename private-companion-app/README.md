@@ -14,7 +14,7 @@ A private, phone-first JGOLD app for jevangoldsmith.com. The Site tab mirrors th
 - Live public content from the website's JSON feeds
 - Browse and edit essays, trips, projects, products, and quotes
 - New public drafts for essays, adventures, projects, challenges, products, quotes, and Now
-- Direct GitHub publishing from anywhere using a repository-limited token in Android SecureStore
+- Direct Studio publishing with GitHub device sign-in and automatically renewed credentials in Android SecureStore
 - Automatic GitHub test and Pages deployment after a public commit
 - Private-item to independent-public-draft workflow
 - Frontier AI chat and public-draft context selection
@@ -88,12 +88,13 @@ Native Android changes, permissions, Expo SDK upgrades, and new native dependenc
 
 ## Connect website publishing
 
-Open **Settings → Website connection → Create restricted token**. In GitHub, create a fine-grained personal access token with:
+Open **Settings → Publishing inbox → Sign in with GitHub**. Enter the displayed code on GitHub, sign in as `JGOLD43`, approve **JGOLD Studio Publishing**, and return to JGOLD. Approved queued changes retry automatically after connection.
 
-- Repository access: only `JGOLD43/jevangoldsmith.com`
-- Repository permissions: Contents, read and write
+The private GitHub App `jgold-studio-publishing` is installed only on `JGOLD43/jgold-publishing-inbox`, with Contents read/write and mandatory Metadata read access. The public client ID is configured in `src/services/github-oauth.ts`; no client secret or private key is bundled. Device-flow access and refresh credentials stay in Android SecureStore, rotate automatically, and are removed by Disconnect publishing. GitHub may require sign-in again after revocation or six months without renewal.
 
-Copy the token into the app and tap **Connect and verify**. The token is stored in Android SecureStore on this phone. Publishing reads the targeted `data/*.json` file, applies the public draft, commits it to `main`, and lets the existing GitHub test/deployment workflow validate and publish the site.
+The app submits approved manifests and selected media to the private inbox. The website's `jgold-publish-sync` workflow validates them and applies allowlisted site data, then starts the test/deployment gate. Studio distinguishes a submitted change from a publication confirmed by a receipt served on the live website. GitHub scheduling and deployment can take several minutes.
+
+Connection verification on 2026-09-08 covered real device authorization, automatic refresh, private inbox access, and a temporary write outside the submissions directory followed by cleanup. No test story was published.
 
 ## Connect frontier AI
 

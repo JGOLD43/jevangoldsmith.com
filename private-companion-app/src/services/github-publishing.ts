@@ -5,7 +5,7 @@ import { validateDocument } from '@/domain/studio-document.cjs';
 import { studioMediaDirectory } from './studio-media';
 
 import type { PublishManifest } from '@/domain/privacy';
-import { getPublishingCredentials } from '@/storage/publishing-credentials';
+import { getPublishingCredentials, hasPublishingCredentials } from '@/storage/publishing-credentials';
 
 const API_VERSION = '2022-11-28';
 
@@ -14,7 +14,7 @@ function safePathPart(value: string): string {
 }
 
 export async function githubPublishingConfigured(): Promise<boolean> {
-  return Boolean(await getPublishingCredentials());
+  return hasPublishingCredentials();
 }
 
 export async function verifyGithubPublishingAccess(): Promise<boolean> {
@@ -107,7 +107,7 @@ export async function publishManifestToGithub(manifest: PublishManifest): Promis
   });
   if (!response.ok) {
     const detail = (await response.json().catch(() => null)) as { message?: string } | null;
-    throw new Error([401, 403, 404].includes(response.status) ? 'Publishing cannot access the private inbox. In Settings, reconnect with an unexpired token for jgold-publishing-inbox with Contents read/write access.' : detail?.message || `Publishing inbox submission failed (${response.status}).`);
+    throw new Error([401, 403, 404].includes(response.status) ? 'Publishing cannot access the private inbox. In Settings, sign in again to reconnect your publishing inbox.' : detail?.message || `Publishing inbox submission failed (${response.status}).`);
   }
   const result = (await response.json()) as { content?: { html_url?: string }; commit?: { html_url?: string } };
   return { status: 'ready', commitUrl: result.content?.html_url ?? result.commit?.html_url };

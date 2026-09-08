@@ -2,17 +2,18 @@ import release from '@/constants/release.json';
 import Constants from 'expo-constants';
 import { SymbolView } from 'expo-symbols';
 import { type ComponentProps, type ReactNode, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Image, Linking, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, AppState, Image, Linking, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui';
 import { Fonts, type AppColors } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { isAiConfigured } from '@/services/ai';
-import { githubPublishingConfigured, verifyGithubPublishingAccess } from '@/services/github-publishing';
+import { githubPublishingConfigured } from '@/services/github-publishing';
 import { retryPendingPublications } from '@/services/publication-outbox';
 import { applyDownloadedUpdate, checkForRemoteUpdate, remoteUpdatesEnabled } from '@/services/remote-updates';
-import { removePublishingToken, savePublishingToken } from '@/storage/publishing-credentials';
+import { getPendingAuthorization, removePublishingToken, savePendingAuthorization, savePublishingSession } from '@/storage/publishing-credentials';
+import { beginDeviceAuthorization, pollDeviceAuthorization, type DeviceAuthorization } from '@/services/github-oauth';
 import { useApp } from '@/state/app-context';
 
 type SymbolName = ComponentProps<typeof SymbolView>['name'];
@@ -80,7 +81,8 @@ export default function SettingsScreen() {
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { lock, screenshotsAllowed, setScreenshotsAllowed, developerAccessEnabled, setDeveloperAccessEnabled } = useApp();
-  const [token, setToken] = useState('');
+  const [authorization, setAuthorization] = useState<DeviceAuthorization | null>(null);
+  const [connectionError, setConnectionError] = useState('');
   const [connected, setConnected] = useState(false);
   const [publishingExpanded, setPublishingExpanded] = useState(false);
   const [securityExpanded, setSecurityExpanded] = useState(false);
@@ -89,31 +91,73 @@ export default function SettingsScreen() {
   const [changingScreenshotSetting, setChangingScreenshotSetting] = useState(false);
   const [changingDeveloperAccess, setChangingDeveloperAccess] = useState(false);
 
-  useEffect(() => { void githubPublishingConfigured().then(setConnected); }, []);
+  useEffect(() => {
+    void githubPublishingConfigured().then(setConnected).catch(() => setConnectionError('Could not read the publishing connection. Try reopening Settings.'));
+    void getPendingAuthorization().then((device) => { if (device) { setAuthorization(device); setPublishingExpanded(true); } }).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!authorization || connectionError) return;
+    let stopped = false;
+    let timer: ReturnType<typeof setTimeout>;
+    const poll = async () => {
+      if (AppState.currentState !== 'active') { timer = setTimeout(poll, 1000); return; }
+      try {
+        const result = await pollDeviceAuthorization(authorization);
+        if (stopped) return;
+        if (!result.session) {
+          const next = { ...authorization, interval: result.interval };
+          await savePendingAuthorization(next);
+          if (!stopped) setAuthorization(next);
+          return;
+        }
+        // Keep an issued credential encrypted until verification succeeds, so a
+        // temporary network failure or app lock does not lose the approval.
+        await savePendingAuthorization({ ...authorization, session: result.session });
+        if (stopped) return;
+        await savePublishingSession(result.session);
+        if (stopped) return;
+        setAuthorization(null);
+        setConnected(true);
+        setConnectionError('');
+        setPublishingExpanded(false);
+        try {
+          const jobs = await retryPendingPublications();
+          const failed = jobs.filter((job) => job.status === 'failed').length;
+          Alert.alert('Publishing connected', failed
+            ? 'Your connection is ready. Open Studio to review the changes that still need attention.'
+            : 'Your approved queue has been sent. Studio will confirm when the website is live.');
+        } catch {
+          Alert.alert('Publishing connected', 'Your connection is ready. Open Studio and retry your approved queue when you are online.');
+        }
+      } catch (cause) {
+        if (!stopped) setConnectionError(cause instanceof Error ? cause.message : 'Could not finish connecting. Please try again.');
+      }
+    };
+    timer = setTimeout(poll, authorization.interval * 1000);
+    return () => { stopped = true; clearTimeout(timer); };
+  }, [authorization, connectionError]);
 
   const connect = async () => {
     setSaving(true);
+    setAuthorization(null);
+    setConnectionError('');
     try {
-      await savePublishingToken(token);
-      await verifyGithubPublishingAccess();
-      setToken('');
-      setConnected(true);
-      setPublishingExpanded(false);
-      const jobs = await retryPendingPublications();
-      const failed = jobs.filter((job) => job.status === 'failed').length;
-      Alert.alert('Website connected', failed
-        ? `JGOLD is connected. ${failed} approved ${failed === 1 ? 'change still needs' : 'changes still need'} attention in Studio.`
-        : 'JGOLD is connected and any queued approved changes have been processed.');
+      const device = await beginDeviceAuthorization();
+      await savePendingAuthorization(device);
+      setAuthorization(device);
     } catch (cause) {
-      await removePublishingToken();
-      setConnected(false);
-      Alert.alert('Connection failed', cause instanceof Error ? cause.message : 'Check the token and try again.');
-    } finally {
-      setSaving(false);
-    }
+      setConnectionError(cause instanceof Error ? cause.message : 'Could not start GitHub sign-in. Please try again.');
+    } finally { setSaving(false); }
   };
 
-  const disconnect = () => Alert.alert('Disconnect website publishing?', 'This removes the GitHub token from this phone. Your website and drafts are unchanged.', [
+  const resumeConnection = async () => {
+    const device = await getPendingAuthorization();
+    if (device) { setAuthorization(device); setConnectionError(''); }
+    else await connect();
+  };
+
+  const disconnect = () => Alert.alert('Disconnect website publishing?', 'This removes the publishing connection from this phone. Your website and drafts are unchanged.', [
     { text: 'Cancel', style: 'cancel' },
     { text: 'Disconnect', style: 'destructive', onPress: async () => { await removePublishingToken(); setConnected(false); setPublishingExpanded(false); } },
   ]);
@@ -203,7 +247,7 @@ export default function SettingsScreen() {
             <SettingsRow
               icon={{ ios: 'arrow.up.doc.fill', android: 'upload_file' }}
               title="Publishing inbox"
-              detail={connected ? 'Approved changes publish securely' : 'Connect GitHub to publish approved changes'}
+              detail={connected ? 'Approved changes publish securely' : 'Sign in once to enable publishing'}
               trailing={<Status tone={connected ? 'success' : 'warning'}>{connected ? 'Connected' : 'Not connected'}</Status>}
               onPress={() => setPublishingExpanded((value) => !value)}
               last={!publishingExpanded}
@@ -218,12 +262,20 @@ export default function SettingsScreen() {
                   </>
                 ) : (
                   <>
-                    <Text style={styles.panelTitle}>Connect publishing</Text>
-                    <Text style={styles.inputLabel}>Fine-grained GitHub token</Text>
-                    <TextInput value={token} onChangeText={setToken} autoCapitalize="none" autoCorrect={false} secureTextEntry placeholder="github_pat_…" placeholderTextColor={colors.textSecondary} style={styles.input} />
-                    <Button label="Create restricted token" variant="secondary" onPress={() => Linking.openURL('https://github.com/settings/personal-access-tokens/new?name=JGOLD%20Publishing%20Inbox&description=Samsung%20JGOLD%20approved%20public%20manifests%20only&target_name=JGOLD43&expires_in=90&contents=write')} />
-                    <Button label="Connect and verify" onPress={connect} busy={saving} disabled={!token.trim() || saving} />
-                    <Text style={styles.panelFootnote}>Restrict the token to JGOLD43/jgold-publishing-inbox with Contents read/write access. It cannot modify your website code.</Text>
+                    <Text style={styles.panelTitle}>Connect your website</Text>
+                    <Text style={styles.panelCopy}>Sign in as JGOLD43 and approve JGOLD Studio Publishing. Your connection renews automatically.</Text>
+                    {authorization ? (
+                      <>
+                        <Text style={styles.inputLabel}>Enter this code on GitHub</Text>
+                        <Text selectable style={[styles.panelTitle, { fontSize: 28, letterSpacing: 3 }]}>{authorization.userCode}</Text>
+                        <Button label="Open GitHub to approve" onPress={() => { void Linking.openURL('https://github.com/login/device').catch(() => setConnectionError('Open github.com/login/device in your browser and enter the code above.')); }} />
+                        <Text style={styles.panelFootnote}>Return to JGOLD after approving. Your approved queue will retry automatically.</Text>
+                        {!connectionError ? <ActivityIndicator color={colors.accent} accessibilityLabel="Waiting for GitHub approval" /> : null}
+                        <Button label="Get a new code" variant="secondary" onPress={connect} busy={saving} disabled={saving} />
+                      </>
+                    ) : <Button label="Sign in with GitHub" onPress={connect} busy={saving} disabled={saving} />}
+                    {connectionError ? <><Text accessibilityRole="alert" style={styles.panelCopy}>{connectionError}</Text><Button label="Try again" variant="secondary" onPress={() => { void resumeConnection().catch(() => setConnectionError('Please try again.')); }} /></> : null}
+                    <Text style={styles.panelFootnote}>Access is limited to your private publishing inbox. Only content you approve in Studio is submitted.</Text>
                   </>
                 )}
               </View>
