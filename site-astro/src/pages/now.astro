@@ -377,7 +377,7 @@ const sections = NOW_SECTIONS;
     const prefetchDoc = async () => {
       if (prefetchedDoc) return;
       try {
-        const res = await fetch(link.href, { credentials: 'same-origin' });
+        const res = await fetch(link.href, { credentials: 'same-origin', cache: 'no-cache' });
         if (!res.ok) return;
         prefetchedDoc = new DOMParser().parseFromString(await res.text(), 'text/html');
       } catch { /* ignore */ }

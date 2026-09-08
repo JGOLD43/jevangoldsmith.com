@@ -131,9 +131,13 @@ export function SiteScreen() {
 
   const handleNavigationRequest = useCallback((request: ShouldStartLoadRequest) => {
     if (isInternalSiteUrl(request.url)) {
-      if (request.url !== 'about:blank' && request.isTopFrame !== false) {
-        const fresh = freshSiteUrl(request.url, navigationRevision.current);
-        if (fresh !== request.url) { setSourceUrl(fresh); return false; }
+      if (request.url !== 'about:blank' && request.isTopFrame !== false && !new URL(request.url).searchParams.has('jg_refresh')) {
+        // A page can change its route without changing WebView's source prop.
+        // Always give a new link its own revision so returning to Now still
+        // navigates after the map's in-page transition. Keep history URLs intact.
+        navigationRevision.current = String(Math.max(Date.now(), Number(navigationRevision.current) + 1));
+        setSourceUrl(freshSiteUrl(request.url, navigationRevision.current));
+        return false;
       }
       return true;
     }
