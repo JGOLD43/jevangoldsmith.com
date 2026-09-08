@@ -1,7 +1,7 @@
 {
   "baseVersion": "1.5.3",
-  "revision": 5,
-  "label": "1.5.3-update.5",
-  "releasedAt": "2026-09-08T06:13:54.545Z",
-  "notes": "Reliable return from the map to the latest Now update"
+  "revision": 6,
+  "label": "1.5.3-update.6",
+  "releasedAt": "2026-09-08T06:33:01.234Z",
+  "notes": "Simpler Home with live daily reading and highlight totals"
 }
