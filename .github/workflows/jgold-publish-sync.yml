@@ -35,11 +35,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: website/package-lock.json
+          cache-dependency-path: |
+            website/package-lock.json
+            website/site-astro/package-lock.json
 
       - name: Install trusted dependencies
         working-directory: website
-        run: npm ci
+        run: |
+          npm ci
+          npm ci --prefix site-astro
 
       - name: Validate and apply allowlisted public manifests
         working-directory: website
