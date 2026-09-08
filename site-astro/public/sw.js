@@ -108,7 +108,7 @@ async function staleWhileRevalidate(request, cacheName) {
 async function networkFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
   try {
-    const response = await fetch(request);
+    const response = await fetch(request, { cache: 'no-cache' });
     if (response.ok) cache.put(request, response.clone());
     return response;
   } catch {
@@ -156,6 +156,10 @@ self.addEventListener('fetch', (event) => {
   }
   if (isImmutableAsset(url.pathname)) {
     event.respondWith(cacheFirst(request, ASSET_CACHE));
+    return;
+  }
+  if (['/api/v1/studio.json', '/api/v1/release.json'].includes(url.pathname)) {
+    event.respondWith(networkFirst(request, DATA_CACHE));
     return;
   }
   if (isData(url.pathname)) {

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { stripTypeScriptTypes } from 'node:module';
 import test from 'node:test';
+import { publicationPageUrl } from '../src/services/site-navigation.ts';
 
 // Exercise the production service with an in-memory DB and network boundary;
 // native Expo modules are unavailable in Node's test runner.
@@ -9,6 +10,7 @@ function outbox({ status = 'queued', connected = true, receipt, fail = false } =
   let job = { id: 'job', localId: 'draft', itemType: 'essay', status, error: '', manifestJson: JSON.stringify({ type: 'essay', id: 'draft', title: 'Starting a business' }) };
   let submissions = 0;
   const dependencies = {
+    publicationPageUrl,
     listPublicationJobs: async () => [job],
     queuePublicationJob: async () => job,
     updatePublicationJob: async (id, next, options) => (job = { ...job, status: next, error: options.error || '' }),

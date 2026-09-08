@@ -2,7 +2,7 @@ import { bodyText } from '@/domain/studio-document.cjs';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SymbolView, type SymbolViewProps } from 'expo-symbols';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Modal, Pressable, RefreshControl, ScrollView, AppState, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { DraftComposer } from '@/components/composers';
@@ -85,7 +85,13 @@ export default function WebsiteScreen() {
     } catch (error) { setQueueError(error instanceof Error ? error.message : 'Could not refresh publishing.'); }
     finally { setRefreshing(false); }
   }, []);
-  useFocusEffect(useCallback(() => { void refreshQueue(); }, [refreshQueue]));
+  const hasPendingPublication = publicationJobs.some((job) => job.status === 'queued' || (job.status === 'submitted' && job.delivery !== 'live' && job.delivery !== 'rejected'));
+  useFocusEffect(useCallback(() => {
+    void refreshQueue();
+    if (!hasPendingPublication) return;
+    const timer = setInterval(() => { if (AppState.currentState === 'active') void refreshQueue(); }, 10000);
+    return () => clearInterval(timer);
+  }, [refreshQueue, hasPendingPublication]));
 
   useEffect(() => {
     if (!liveCollection) return;
@@ -109,7 +115,7 @@ export default function WebsiteScreen() {
     : job.delivery === 'rejected' ? `Needs changes: ${job.error}`
     : job.status === 'failed' ? `Could not send: ${job.error}`
     : job.status === 'queued' ? job.error || 'Waiting to send. Connect publishing in Settings.'
-    : job.error || 'Sent to the private inbox. Waiting for website checks and deployment; GitHub scheduling can take a few hours.';
+    : job.error || 'Publishing your website… Progress updates automatically. You can keep writing.';
 
   const pendingDeliveryCount = publicationJobs.filter((job) => job.status !== 'submitted').length;
   const submittedCount = publicationJobs.filter((job) => job.status === 'submitted').length;
@@ -152,7 +158,7 @@ export default function WebsiteScreen() {
       const job = await queueAndAttemptPublication(createPublishManifest(draft), draft.id);
       setPublicationJobs((current) => [job, ...current.filter((candidate) => candidate.id !== job.id)]);
       if (job.status === 'submitted') {
-        Alert.alert('Sent to the publishing inbox', 'Your change is waiting for website checks and deployment. Studio will show Live once the website confirms it.');
+        // Keep progress inline so publishing needs no extra confirmation tap.
       } else if (job.status === 'queued') {
         setConnected(false);
         Alert.alert('Queued safely', 'Connect publishing in Settings and JGOLD will submit this approved public copy automatically.', [
@@ -190,7 +196,7 @@ export default function WebsiteScreen() {
           </View>
 
           <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Drafts to publish</Text><Text style={styles.sectionDetail}>{activeDrafts.length ? `${activeDrafts.length} waiting` : 'Clear'}</Text></View>
-          {activeDrafts.length ? activeDrafts.map((draft) => <DraftCard key={draft.id} draft={draft} delivery={deliveryText(matchingJob(draft))} onDelete={(item) => Alert.alert('Remove this draft?', 'This removes the local draft and any unsent approval. A copy already sent to the inbox cannot be recalled here.', [{ text: 'Keep', style: 'cancel' }, { text: 'Remove', style: 'destructive', onPress: () => { void deleteDraft(item.id).then(() => refreshQueue()).catch((error) => Alert.alert('Could not remove draft', String(error))); } }])} publishing={publishingId === draft.id || refreshing} onEdit={openDraftEdit} onPublish={(item) => { void publish(item); }} />) : (
+          {activeDrafts.length ? activeDrafts.map((draft) => <DraftCard key={draft.id} draft={draft} delivery={deliveryText(matchingJob(draft))} onDelete={(item) => Alert.alert('Remove this draft?', 'This removes the local draft and any unsent approval. A copy already sent to the inbox cannot be recalled here.', [{ text: 'Keep', style: 'cancel' }, { text: 'Remove', style: 'destructive', onPress: () => { void deleteDraft(item.id).then(() => refreshQueue()).catch((error) => Alert.alert('Could not remove draft', String(error))); } }])} publishing={publishingId === draft.id} onEdit={openDraftEdit} onPublish={(item) => { void publish(item); }} />) : (
             <View style={styles.emptyQueue}><View style={styles.emptyIcon}><SymbolView name={{ ios: 'checkmark', android: 'check' }} size={23} tintColor={colors.success} /></View><View style={styles.emptyCopy}><Text style={styles.emptyTitle}>Nothing waiting to publish</Text><Text style={styles.emptyBody}>New website changes and public-intent essays will appear here.</Text></View></View>
           )}
 
@@ -199,7 +205,7 @@ export default function WebsiteScreen() {
           {publicationJobs.map((job) => <View key={job.id} style={styles.draftCard}>
             <Text style={styles.draftTitle}>{(() => { try { const manifest = JSON.parse(job.manifestJson); return manifest.title || manifest.book?.title || job.itemType; } catch { return job.itemType; } })()}</Text>
             <Text style={styles.draftSummary}>{deliveryText(job)}</Text>
-            {job.delivery === 'live' ? <Pressable onPress={() => { router.push('/ai'); }}><Text style={styles.secondaryButtonText}>Open website ↗</Text></Pressable> : null}
+            {job.delivery === 'live' ? <Pressable onPress={() => { router.push({ pathname: '/ai', params: { url: job.publicUrl || 'https://jevangoldsmith.com/', refresh: String(Date.now()) } }); }}><Text style={styles.secondaryButtonText}>View published page ↗</Text></Pressable> : null}
           </View>)}
 
           <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Edit existing</Text><Text style={styles.sectionDetail}>Current website content</Text></View>

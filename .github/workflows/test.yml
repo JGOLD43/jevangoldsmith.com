@@ -2,6 +2,12 @@ name: test
 
 on:
   workflow_dispatch:
+    inputs:
+      content_base:
+        description: Previously tested revision before a Studio content commit
+        required: false
+        default: ""
+        type: string
   pull_request:
     branches: [main]
   push:
@@ -10,6 +16,10 @@ on:
 # Phase 4 slice 4.3: every PR runs lint + astro check + build + smoke +
 # Playwright behavioral + visual diff. Failures block merge.
 
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -17,6 +27,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -26,6 +38,13 @@ jobs:
             package-lock.json
             site-astro/package-lock.json
 
+      - name: Choose validation path
+        id: validation
+        env:
+          CONTENT_BASE: ${{ inputs.content_base }}
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/publication-fast-path.js
+
       - name: Install root dependencies
         run: npm ci
 
@@ -33,19 +52,34 @@ jobs:
         run: npm ci --prefix site-astro
 
       - name: Install Playwright browsers
+        if: steps.validation.outputs.focused != 'true'
         run: npx --prefix site-astro playwright install --with-deps chromium
 
       - name: Lint
+        if: steps.validation.outputs.focused != 'true'
         run: npm run lint
 
       - name: Unit tests
+        if: steps.validation.outputs.focused != 'true'
         run: npm run test:unit
 
       - name: Astro type check
+        if: steps.validation.outputs.focused != 'true'
         run: npm run --prefix site-astro astro check
+
+      - name: Validate publication content
+        if: steps.validation.outputs.focused == 'true'
+        run: |
+          npm run content:validate
+          node --test tests/unit/jgold-publishing.test.js tests/unit/publication-fast-path.test.js
+
+      - name: Generate merged data files
+        run: npm run people:merge
 
       - name: Build
         run: npm run build:fast
+        env:
+          RUM_ENDPOINT: ${{ secrets.RUM_ENDPOINT }}
 
       - name: Smoke harness against dist
         run: |
@@ -56,12 +90,30 @@ jobs:
           kill $SERVER_PID || true
 
       - name: Playwright behavioral + visual smoke
+        if: steps.validation.outputs.focused != 'true'
         run: |
           npx http-server dist -p 8766 -s --cors -c-1 &
           SERVER_PID=$!
           sleep 3
           PLAYWRIGHT_BASE=http://localhost:8766 npm run test:browser
           kill $SERVER_PID || true
+
+      - name: Record the tested build
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p dist/api/v1
+          node -e 'require("fs").writeFileSync("dist/api/v1/release.json", JSON.stringify({sha:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,builtAt:new Date().toISOString()}))'
+          touch dist/.nojekyll
+          cp CNAME dist/CNAME
+
+      - name: Preserve the exact tested site for deployment
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tested-site
+          path: dist
+          include-hidden-files: true
+          retention-days: 3
 
       # Lighthouse baseline-comparison gate removed — it was noisy and
       # baseline-drift-prone (failed on intentional/expected byte growth).

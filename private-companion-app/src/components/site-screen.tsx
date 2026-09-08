@@ -1,4 +1,4 @@
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import * as Linking from 'expo-linking';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { BackHandler, StyleSheet, Text, View } from 'react-native';
@@ -9,7 +9,7 @@ import type { ShouldStartLoadRequest, WebViewMessageEvent, WebViewNavigation } f
 import { Button } from '@/components/ui';
 import { Fonts, type AppColors, type ThemeMode } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { isInternalSiteUrl, isSafeExternalUrl } from '@/services/site-navigation';
+import { freshSiteUrl, isInternalSiteUrl, isSafeExternalUrl } from '@/services/site-navigation';
 import { useAppTheme } from '@/state/theme-context';
 
 const SITE_URL = 'https://jevangoldsmith.com/';
@@ -97,12 +97,17 @@ const NATIVE_SHELL_SCRIPT = `
 `;
 
 export function SiteScreen() {
+  const params = useLocalSearchParams<{ url?: string; refresh?: string }>();
   const insets = useSafeAreaInsets();
   const colors = useTheme();
   const { setThemeMode } = useAppTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const webViewRef = useRef<WebView>(null);
   const canGoBackRef = useRef(false);
+  const currentUrlRef = useRef(SITE_URL);
+  const navigationRevision = useRef(String(Date.now()));
+  const consumedRequest = useRef('');
+  const [sourceUrl, setSourceUrl] = useState(() => freshSiteUrl(SITE_URL, navigationRevision.current));
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -112,7 +117,8 @@ export function SiteScreen() {
     setError(null);
     setLoading(true);
     setProgress(0);
-    webViewRef.current?.reload();
+    navigationRevision.current = String(Date.now());
+    setSourceUrl(freshSiteUrl(currentUrlRef.current, navigationRevision.current));
   }, []);
 
   const recoverRenderer = useCallback(() => {
@@ -124,7 +130,13 @@ export function SiteScreen() {
   }, []);
 
   const handleNavigationRequest = useCallback((request: ShouldStartLoadRequest) => {
-    if (isInternalSiteUrl(request.url)) return true;
+    if (isInternalSiteUrl(request.url)) {
+      if (request.url !== 'about:blank' && request.isTopFrame !== false) {
+        const fresh = freshSiteUrl(request.url, navigationRevision.current);
+        if (fresh !== request.url) { setSourceUrl(fresh); return false; }
+      }
+      return true;
+    }
 
     if (isSafeExternalUrl(request.url)) {
       void Linking.openURL(request.url).catch(() => {
@@ -136,6 +148,7 @@ export function SiteScreen() {
 
   const handleNavigationState = useCallback((navigation: WebViewNavigation) => {
     canGoBackRef.current = navigation.canGoBack;
+    if (navigation.url !== 'about:blank' && isInternalSiteUrl(navigation.url)) currentUrlRef.current = navigation.url;
   }, []);
 
   const handleMessage = useCallback((event: WebViewMessageEvent) => {
@@ -151,13 +164,20 @@ export function SiteScreen() {
 
   useFocusEffect(
     useCallback(() => {
+      const requestKey = `${params.url || ''}:${params.refresh || ''}`;
+      if (params.url && requestKey !== consumedRequest.current && params.url !== 'about:blank' && isInternalSiteUrl(params.url)) {
+        currentUrlRef.current = params.url;
+        consumedRequest.current = requestKey;
+      }
+      navigationRevision.current = String(Date.now());
+      setSourceUrl(freshSiteUrl(currentUrlRef.current, navigationRevision.current));
       const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
         if (!canGoBackRef.current) return false;
         webViewRef.current?.goBack();
         return true;
       });
       return () => subscription.remove();
-    }, []),
+    }, [params.url, params.refresh]),
   );
 
   return (
@@ -168,7 +188,7 @@ export function SiteScreen() {
             key={webViewKey}
             ref={webViewRef}
             style={styles.webView}
-            source={{ uri: SITE_URL }}
+            source={{ uri: sourceUrl, headers: { 'Cache-Control': 'no-cache' } }}
             originWhitelist={['*']}
             onShouldStartLoadWithRequest={handleNavigationRequest}
             onNavigationStateChange={handleNavigationState}
@@ -206,7 +226,7 @@ export function SiteScreen() {
             allowsFullscreenVideo
             allowsInlineMediaPlayback
             allowsBackForwardNavigationGestures
-            applicationNameForUserAgent="JGOLD/1.5.0"
+            applicationNameForUserAgent="JGOLD/1.5.3"
             overScrollMode="content"
             webviewDebuggingEnabled={__DEV__}
           />

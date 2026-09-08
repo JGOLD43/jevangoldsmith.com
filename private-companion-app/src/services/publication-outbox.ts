@@ -2,6 +2,7 @@ import type { PublicationJob } from '@/domain/models';
 import type { PublishManifest } from '@/domain/privacy';
 import { listPublicationJobs, queuePublicationJob, updatePublicationJob } from '@/storage/publication-repository';
 
+import { publicationPageUrl } from './site-navigation';
 import { loadStudioSnapshot } from './public-site';
 import { publicationJobId } from './github-publishing';
 import { hasPublishingConnection, publishManifest } from './publishing';
@@ -41,7 +42,7 @@ async function refresh(retryFailed: boolean): Promise<PublicationJob[]> {
   for (const job of jobs) {
     const receipt = snapshot?.receipts[await publicationJobId(JSON.parse(job.manifestJson) as PublishManifest)];
     if (receipt?.status === 'accepted') {
-      results.push({ ...job, status: 'submitted', delivery: 'live', error: '' });
+      results.push({ ...job, status: 'submitted', delivery: 'live', publicUrl: publicationPageUrl(job.itemType, receipt.publicId), error: '' });
     } else if (receipt?.status === 'rejected') {
       results.push({ ...job, delivery: 'rejected', error: receipt.reason || 'The website rejected this change. Edit it before trying again.' });
     } else if (job.status === 'queued' || (retryFailed && job.status === 'failed')) {

@@ -30,3 +30,14 @@ test('only safe external link protocols can leave the Site tab', () => {
   assert.equal(isSafeExternalUrl('file:///data/local/private.txt'), false);
   assert.equal(isSafeExternalUrl('not a URL'), false);
 });
+
+test('fresh page links retain anchors and filters while replacing stale revisions', async () => {
+  const { freshSiteUrl, publicationPageUrl } = await import('../src/services/site-navigation.ts');
+  const url = new URL(freshSiteUrl('https://jevangoldsmith.com/now.html?filter=a&jg_refresh=old#top', 'new'));
+  assert.equal(url.searchParams.get('filter'), 'a');
+  assert.equal(url.searchParams.get('jg_refresh'), 'new');
+  assert.equal(url.hash, '#top');
+  assert.equal(publicationPageUrl('now', 'starting-a-business'), 'https://jevangoldsmith.com/now.html');
+  assert.throws(() => freshSiteUrl('https://evil.example/', 'new'), /Invalid/);
+  assert.throws(() => freshSiteUrl('file:///private', 'new'), /Invalid/);
+});

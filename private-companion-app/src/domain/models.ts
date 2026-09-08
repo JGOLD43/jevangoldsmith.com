@@ -106,6 +106,7 @@ export type PublicationJobStatus = 'queued' | 'submitted' | 'failed';
 
 export type PublicationJob = {
   delivery?: 'live' | 'rejected';
+  publicUrl?: string;
   id: string;
   itemType: DraftType | 'book';
   localId: string;

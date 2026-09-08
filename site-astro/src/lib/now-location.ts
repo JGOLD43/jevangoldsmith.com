@@ -40,7 +40,7 @@ function tileCoords(lat: number, lng: number, zoom: number) {
 // Local, same-origin satellite tile — paints with the page, no third-party
 // round-trip, so the label + pin are never stranded over an empty box.
 export function nowMapThumbUrl() {
-    return '/images/now-map.jpg';
+    return `/images/now-map.jpg?v=${encodeURIComponent([NOW_LAST_UPDATED, NOW_LAT, NOW_LNG, NOW_MAP_ZOOM].join('_'))}`;
 }
 
 // The remote source for the local tile (used by build-now-map.js).

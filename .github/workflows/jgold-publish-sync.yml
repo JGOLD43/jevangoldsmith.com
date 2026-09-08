@@ -2,7 +2,7 @@ name: jgold-publish-sync
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '17 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -79,8 +79,9 @@ jobs:
           git add data .jgold-publication-state.json images/now-map.jpg images/now-map.jpg.meta
           if [ -d images/now-archive ]; then git add images/now-archive; fi
           if [ -d site-astro/public/media/studio ]; then git add site-astro/public/media/studio; fi
+          content_base=$(git rev-parse HEAD)
           git commit -m "content: sync approved JGOLD publications"
           git push origin HEAD:main
           # GITHUB_TOKEN pushes do not trigger push workflows. Explicitly start
           # the same test gate that a normal main push uses, then deploy-pages.
-          gh workflow run test.yml --ref main
+          gh workflow run test.yml --ref main -f content_base="$content_base"

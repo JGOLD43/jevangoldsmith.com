@@ -126,3 +126,9 @@ npm run config:check
 ```
 
 `npm run verify` runs all three.
+
+### Immediate publication and fresh pages
+
+The private inbox runs `publish-website.yml` on submission changes and immediately dispatches the public repository's publishing workflow. Its encrypted `JGOLD_WEBSITE_TRIGGER` secret is a server-only fine-grained credential restricted to Actions write on `JGOLD43/jevangoldsmith.com`; it has no content-write permission and never goes to the phone. The hourly sync is a recovery fallback.
+
+Content-only commits qualify for focused validation only when their base revision already passed the main test workflow. Code changes retain the full checks. Pages deploys the exact tested artifact and verifies its revision on the custom domain. Studio checks pending delivery automatically and opens a refreshed publication page once the deployed receipt is available.

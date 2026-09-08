@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -23,40 +24,50 @@ concurrency:
 jobs:
   build:
     # Only deploy when the gating test run passed (or on manual dispatch).
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository && (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Download the exact successful test build
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@v4
+        with:
+          name: tested-site
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Verify build identity and reject obsolete deployments
+        if: github.event_name == 'workflow_run'
+        env:
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
+          EXPECTED_RUN: ${{ github.event.workflow_run.id }}
+        run: |
+          node -e 'const r=require("./dist/api/v1/release.json"); if(r.sha!==process.env.EXPECTED_SHA || String(r.runId)!==process.env.EXPECTED_RUN) throw new Error("Tested artifact identity mismatch")'
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$EXPECTED_SHA"
 
       - uses: actions/setup-node@v4
+        if: github.event_name == 'workflow_dispatch'
         with:
           node-version: 22
           cache: npm
 
-      - run: npm ci
-
-      - run: npm ci --prefix site-astro
-
-      - name: Generate merged data files
-        run: npm run people:merge
-
-      # Use build:fast — skips snap:routes + assets:optimize. The optimize
-      # step requires ffmpeg + network reach to Openlibrary, neither of
-      # which is reliable on CI. Pre-optimized image variants are already
-      # committed in images/generated/, so the dist output has everything
-      # it needs. When you add new source images locally, run
-      # `npm run assets:optimize` and commit the new variants.
-      #
-      # RUM_ENDPOINT: when set as a repository secret, rum.ts is bundled
-      # into the build and ships error+CWV beacons to it. Without the
-      # secret, the module is tree-shaken — bundle cost stays zero.
-      - run: npm run build:fast
+      - name: Build emergency manual deployment
+        if: github.event_name == 'workflow_dispatch'
         env:
           RUM_ENDPOINT: ${{ secrets.RUM_ENDPOINT }}
-
-      - name: Add Pages-required files to dist
         run: |
+          npm ci
+          npm ci --prefix site-astro
+          npm run people:merge
+          npm run build:fast
+          mkdir -p dist/api/v1
+          node -e 'require("fs").writeFileSync("dist/api/v1/release.json", JSON.stringify({sha:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,builtAt:new Date().toISOString()}))'
           touch dist/.nojekyll
           cp CNAME dist/CNAME
 
@@ -85,9 +96,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      # Wait briefly for the CDN cache layer to pick up the new artifact.
-      - name: Settle
-        run: sleep 30
+      - name: Confirm the expected release on the custom domain
+        run: node scripts/verify-published-release.js
+        env:
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
       - name: Live verification
         run: node scripts/check-live.js
         env:
