@@ -1,7 +1,7 @@
 {
   "baseVersion": "1.5.5",
-  "revision": 2,
-  "label": "1.5.5-update.2",
-  "releasedAt": "2026-09-08T08:26:40.510Z",
-  "notes": "Copywriting, ad creation and AI skill trees with direct-practice time and evidence tracking"
+  "revision": 3,
+  "label": "1.5.5-update.3",
+  "releasedAt": "2026-09-08T08:45:09.271Z",
+  "notes": "Fix missing Library skill curricula and encrypted practice saving"
 }

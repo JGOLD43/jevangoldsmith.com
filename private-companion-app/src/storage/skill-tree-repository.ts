@@ -8,6 +8,7 @@ import { emptySkillProgress, skillNodeDepth, skillNodeStatus, validatePrerequisi
 import { UPSKILLING_SEED_NODES, UPSKILLING_TREE_TITLE } from '@/learning/upskilling-seed';
 import type { AttemptResult, SkillDimension, SkillPracticeEvidence, SkillSourceReference, SkillTree, SkillTreeAnalytics, SkillTreeDetail, SkillTreeNode, SkillTreeProgress, SkillTreeSummary } from '@/learning/types';
 import { getDatabase } from './database';
+import { withVaultTransaction } from './vault-transaction';
 
 type TreeRow = { id: string; title: string; description: string; created_at: string; updated_at: string };
 type NodeRow = { id: string; tree_id: string; title: string; description: string; practice_prompt: string; success_criteria: string; prerequisites_json: string; dimension: SkillDimension; source_references_json: string; inference_confidence: number; created_at: string; updated_at: string };
@@ -77,7 +78,7 @@ export async function recordSkillTreeAttempt(treeId: string, nodeId: string, res
   const retentionBefore = estimateRetention(node.progress, evidence.practicedAt ? new Date(evidence.practicedAt) : new Date());
   const next = applyAdaptiveEvidence(node.progress, evidence);
   const database = await getDatabase();
-  await database.withExclusiveTransactionAsync(async (transaction) => {
+  await withVaultTransaction(async (transaction) => {
     await transaction.runAsync('UPDATE skill_tree_progress SET strength = ?, clean_attempts = ?, helped_attempts = ?, misses = ?, last_practiced_at = ?, stability_days = ?, difficulty = ?, due_at = ?, retention_estimate = ?, dimension_scores_json = ? WHERE node_id = ?', next.strength, next.cleanAttempts, next.helpedAttempts, next.misses, next.lastPracticedAt, next.stabilityDays, next.difficulty, next.dueAt, next.retentionEstimate, JSON.stringify(next.dimensionScores), nodeId);
     await transaction.runAsync('INSERT INTO skill_tree_attempts (id, tree_id, node_id, result, dimension, response_ms, hint_count, transfer_context, strength_before, strength_after, retention_before, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', Crypto.randomUUID(), treeId, nodeId, result, evidence.dimension, Math.max(0, Math.round(evidence.responseMs)), Math.max(0, Math.round(evidence.hintCount)), evidence.transferContext ? 1 : 0, node.progress.strength, next.strength, retentionBefore, next.lastPracticedAt);
     await transaction.runAsync('UPDATE skill_trees SET updated_at = ? WHERE id = ?', next.lastPracticedAt, treeId);
@@ -158,7 +159,7 @@ async function ensureCoreSkillTree(seed: CoreSkillTreeSeed): Promise<string> {
   }
   if (pending.length) {
     const now = new Date().toISOString();
-    await database.withExclusiveTransactionAsync(async (transaction) => {
+    await withVaultTransaction(async (transaction) => {
       for (const item of pending) {
         await transaction.runAsync('INSERT INTO skill_tree_nodes (id, tree_id, title, description, practice_prompt, success_criteria, prerequisites_json, dimension, source_references_json, inference_confidence, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', item.id, tree.id, item.spec.title, item.spec.description, item.spec.practicePrompt, item.spec.successCriteria, JSON.stringify(item.prerequisites), item.spec.dimension, '[]', 0.9, now, now);
         await transaction.runAsync('INSERT INTO skill_tree_progress (node_id) VALUES (?)', item.id);
@@ -171,7 +172,7 @@ async function ensureCoreSkillTree(seed: CoreSkillTreeSeed): Promise<string> {
 
 export async function ensureCoreSkillTrees(): Promise<string[]> {
   const ids: string[] = [await ensureUpskillingSkillTree()];
-  for (const seed of [...CORE_SKILL_TREE_SEEDS, ...FOCUSED_SKILL_TREE_SEEDS, ...PRIORITY_CURRICULA]) ids.push(await ensureCoreSkillTree(seed));
+  for (const seed of [...PRIORITY_CURRICULA, ...CORE_SKILL_TREE_SEEDS, ...FOCUSED_SKILL_TREE_SEEDS]) ids.push(await ensureCoreSkillTree(seed));
   return ids;
 }
 

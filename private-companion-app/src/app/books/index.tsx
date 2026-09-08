@@ -19,6 +19,7 @@ import { useApp } from '@/state/app-context';
 import { useBooks } from '@/state/books-context';
 import { useLearning } from '@/state/learning-context';
 import { formatReadingTime } from '@/storage/reading-analytics';
+import { PRIORITY_CURRICULA } from '@/learning/priority-curricula';
 import { ensureCoreSkillTrees, listSkillTrees } from '@/storage/skill-tree-repository';
 
 type MediaKind = 'books' | 'movies' | 'essays' | 'skills';
@@ -168,6 +169,7 @@ export default function BooksScreen() {
   const [importing, setImporting] = useState(false);
   const [skillTrees, setSkillTrees] = useState<SkillTreeSummary[]>([]);
   const [skillsLoading, setSkillsLoading] = useState(false);
+  const [skillError, setSkillError] = useState<string | null>(null);
   const [groupMode, setGroupMode] = useState<'collections' | 'tiers'>('collections');
 
   const reloadMovies = useCallback(async () => {
@@ -198,7 +200,10 @@ export default function BooksScreen() {
 
   const reloadSkillTrees = useCallback(async () => {
     setSkillsLoading(true);
-    try { await ensureCoreSkillTrees(); setSkillTrees(await listSkillTrees()); } finally { setSkillsLoading(false); }
+    setSkillError(null);
+    try { await ensureCoreSkillTrees(); setSkillTrees(await listSkillTrees()); }
+    catch (cause) { setSkillError(cause instanceof Error ? cause.message : 'Could not load skill curricula.'); }
+    finally { setSkillsLoading(false); }
   }, []);
 
   useFocusEffect(useCallback(() => {
@@ -324,7 +329,7 @@ export default function BooksScreen() {
   const filteredSkillTrees = useMemo(() => {
     const needle = query.trim().toLowerCase();
     const trees = needle ? skillTrees.filter((tree) => `${tree.title} ${tree.description}`.toLowerCase().includes(needle)) : skillTrees;
-    return [...trees].sort((left, right) => ascending ? left.title.localeCompare(right.title) : right.title.localeCompare(left.title));
+    return [...trees].sort((left, right) => Number(PRIORITY_CURRICULA.some(seed => seed.title === right.title)) - Number(PRIORITY_CURRICULA.some(seed => seed.title === left.title)) || (ascending ? left.title.localeCompare(right.title) : right.title.localeCompare(left.title)));
   }, [ascending, query, skillTrees]);
 
   const skillStats = useMemo(() => ({
@@ -389,7 +394,7 @@ export default function BooksScreen() {
     }
   };
 
-  const activeError = mediaKind === 'books' ? error : mediaKind === 'movies' ? movieError : mediaKind === 'essays' ? essayError : null;
+  const activeError = mediaKind === 'books' ? error : mediaKind === 'movies' ? movieError : mediaKind === 'essays' ? essayError : skillError;
   const header = (
     <View style={styles.header}>
       <View style={styles.titleRow}>
@@ -464,7 +469,7 @@ export default function BooksScreen() {
           <View style={styles.insight}><Text style={styles.insightValue}>{skillStats.trees}</Text><Text style={styles.insightLabel}>Trees</Text></View><View style={styles.insight}><Text style={styles.insightValue}>{skillStats.abilities}</Text><Text style={styles.insightLabel}>Abilities</Text></View><View style={styles.insight}><Text style={styles.insightValue}>{skillStats.reliable}</Text><Text style={styles.insightLabel}>Reliable</Text></View><View style={styles.insight}><Text style={styles.insightValue}>{skillStats.ready}</Text><Text style={styles.insightLabel}>Ready</Text></View>
         </View><Text style={styles.essayHistoryNote}>Build from prerequisites, then practise until each ability is dependable.</Text></View>
       ) : null}
-      {activeError ? <Pressable onPress={mediaKind === 'books' ? dismissError : mediaKind === 'movies' ? () => setMovieError(null) : () => setEssayError(null)} style={styles.error}><Text style={styles.errorText}>{activeError} · Tap to dismiss</Text></Pressable> : null}
+      {activeError ? <Pressable onPress={mediaKind === 'skills' ? () => { void reloadSkillTrees(); } : mediaKind === 'books' ? dismissError : mediaKind === 'movies' ? () => setMovieError(null) : () => setEssayError(null)} style={styles.error}><Text style={styles.errorText}>{activeError} · {mediaKind === 'skills' ? 'Tap to retry' : 'Tap to dismiss'}</Text></Pressable> : null}
     </View>
   );
 
@@ -476,7 +481,7 @@ export default function BooksScreen() {
   return (
     <SafeAreaView edges={['top']} style={styles.safeArea}>
       {screenLoading ? <ActivityIndicator color={colors.accent} style={styles.loader} /> : mediaKind === 'skills' ? (
-        <FlatList key="skills" data={filteredSkillTrees} keyExtractor={(item) => item.id} renderItem={({ item }) => <SkillTreeCard title={item.title} description={item.description || 'A custom progression from foundations to confident practice.'} nodeCount={item.nodeCount} reliableCount={item.reliableCount} readyCount={item.readyCount} onPress={() => router.push({ pathname: '/skills/[id]', params: { id: item.id } })} />} ListHeaderComponent={<>{header}<SkillTreeCard builtIn title="French conversation" description="Speak sooner through real-world phrases, retrieval and milestone practice." nodeCount={FRENCH_SKILLS.length} reliableCount={learningDashboard?.reliableSkills ?? 0} readyCount={learningDashboard?.dueReviews ?? 0} onPress={() => router.push('/learning')} /></>} ListEmptyComponent={<View style={styles.skillEmpty}><Text style={styles.skillEmptyTitle}>Build your first skill tree</Text><Text style={styles.skillEmptyCopy}>Tap + to map foundations, prerequisites and advanced abilities.</Text></View>} contentContainerStyle={styles.content} refreshControl={refreshControl} />
+        <FlatList key="skills" data={filteredSkillTrees} keyExtractor={(item) => item.id} renderItem={({ item }) => <SkillTreeCard title={item.title} description={item.description || 'A custom progression from foundations to confident practice.'} nodeCount={item.nodeCount} reliableCount={item.reliableCount} readyCount={item.readyCount} onPress={() => router.push({ pathname: '/skills/[id]', params: { id: item.id } })} />} ListHeaderComponent={<>{header}</>} ListFooterComponent={<SkillTreeCard builtIn title="French conversation" description="Speak sooner through real-world phrases, retrieval and milestone practice." nodeCount={FRENCH_SKILLS.length} reliableCount={learningDashboard?.reliableSkills ?? 0} readyCount={learningDashboard?.dueReviews ?? 0} onPress={() => router.push('/learning/tree')} />} ListEmptyComponent={<View style={styles.skillEmpty}><Text style={styles.skillEmptyTitle}>{skillError ? "Curricula could not load" : query.trim() ? "No matching skill trees" : "Preparing your curricula"}</Text><Text style={styles.skillEmptyCopy}>{skillError ? "Tap the error above to retry. Your saved progress has not been removed." : query.trim() ? "Clear the search to see all curricula." : "Pull down to retry loading your built-in skill trees."}</Text></View>} contentContainerStyle={styles.content} refreshControl={refreshControl} />
       ) : activeGroup ? (
         <FlatList key={`${mediaKind}-items`} data={visibleItems} keyExtractor={(item) => `${item.kind}:${item.id}`} numColumns={mediaKind === 'essays' ? 1 : 2} columnWrapperStyle={mediaKind === 'essays' ? undefined : styles.itemColumns} renderItem={({ item }) => item.kind === 'essays' ? <EssayDocumentCard item={item} onPress={openItem} /> : <MediaCard item={item} onPress={openItem} />} ListHeaderComponent={header} ListEmptyComponent={<Text style={styles.empty}>Nothing matches this search.</Text>} contentContainerStyle={styles.content} refreshControl={refreshControl} />
       ) : (
