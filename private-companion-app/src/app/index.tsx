@@ -5,6 +5,7 @@ import { Alert, AppState, Pressable, ScrollView, StyleSheet, Text, View } from '
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BookCover } from '@/components/book-cover';
+import { LifeCalendar } from '@/components/life-calendar';
 import { LifeItemComposer } from '@/components/life-item-composer';
 import { LIFE_AREAS, lifeAreaDefinition, type LifeAreaDefinition } from '@/constants/life-areas';
 import { Fonts, type AppColors } from '@/constants/theme';
@@ -172,6 +173,8 @@ export default function HomeScreen() {
             <View style={styles.miniMetric}><Text style={styles.miniValue}>{homeReading && !readingError ? readingMinutes(homeReading.lastSevenDaysSeconds) : '—'}</Text><Text style={styles.miniLabel}>Minutes · 7 days</Text></View>
           </View>
           {readingError ? <Text style={styles.sectionDetail}>Reading activity couldn't refresh. Retrying automatically.</Text> : null}
+
+          <LifeCalendar />
 
           <View style={styles.sectionHeader}><Text style={styles.sectionTitle}>Today</Text><Text style={styles.sectionDetail}>{dueContacts.length + activeDrafts.length + (learningDashboard?.dueReviews ?? 0)} items</Text></View>
           {dueContacts.length ? <Pressable accessibilityRole="button" onPress={() => router.push('/contacts')} style={({ pressed }) => [styles.feedCard, pressed && styles.pressed]}><View style={[styles.feedIcon, { backgroundColor: colors.accentSoft }]}><SymbolView name={{ ios: 'person.2.fill', android: 'groups' }} size={22} tintColor={colors.accent} /></View><View style={styles.feedCopy}><Text style={styles.feedEyebrow}>PEOPLE · DUE</Text><Text style={styles.feedTitle}>{dueContacts.length === 1 ? dueContacts[0].name : `${dueContacts.length} people to reconnect with`}</Text><Text style={styles.feedBody}>{dueContacts.length === 1 ? 'Open their context before reaching out.' : 'Your relationship agenda is ready.'}</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={18} tintColor={colors.textSecondary} /></Pressable> : null}

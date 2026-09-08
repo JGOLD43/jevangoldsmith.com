@@ -2,7 +2,7 @@
   "expo": {
     "name": "JGOLD",
     "slug": "private-companion-app",
-    "version": "1.5.3",
+    "version": "1.5.4",
     "runtimeVersion": {
       "policy": "appVersion"
     },
@@ -53,7 +53,7 @@
           ]
         }
       ],
-      "versionCode": 16,
+      "versionCode": 17,
       "allowBackup": false,
       "softwareKeyboardLayoutMode": "resize",
       "permissions": [
@@ -111,6 +111,12 @@
         "expo-notifications",
         {
           "defaultChannel": "relationship-reminders"
+        }
+      ],
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "Allow JGOLD to show your calendars and create time blocks for your goals."
         }
       ]
     ],

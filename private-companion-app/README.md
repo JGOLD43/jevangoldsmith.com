@@ -132,3 +132,13 @@ npm run config:check
 The private inbox runs `publish-website.yml` on submission changes and immediately dispatches the public repository's publishing workflow. Its encrypted `JGOLD_WEBSITE_TRIGGER` secret is a server-only fine-grained credential restricted to Actions write on `JGOLD43/jevangoldsmith.com`; it has no content-write permission and never goes to the phone. The hourly sync is a recovery fallback.
 
 Content-only commits qualify for focused validation only when their base revision already passed the main test workflow. Code changes retain the full checks. The test workflow calls deploy-pages directly after validation, avoiding another event handoff. Pages deploys the exact tested artifact and verifies its revision on the custom domain. Studio checks pending delivery automatically and opens a refreshed publication page once the deployed receipt is available.
+
+### Home calendar and time intentions (1.5.4)
+
+Home reads the calendars selected from Android’s calendar provider. Choose a Google-account calendar for new blocks; Android/Google account sync carries those events to Google Calendar. JGOLD does not claim cloud delivery from a successful local write. Calendar permission and an account with Calendar sync enabled are required. Calendar selection is explicit, including separate read and write choices.
+
+Time blocks link to Goals, Fucket List, Learning, Interests or Trips using an opaque goal marker in the event notes. Titles and times follow the selected calendar’s sharing settings. Weekly targets, personal reasons, consequences and completion confirmations stay in the encrypted local vault. Refresh on Home focus, phone resume, manual refresh and once per minute reflects device calendar changes.
+
+Weekly totals merge overlapping timed intervals and exclude all-day events. Scheduled minutes are distinct from confirmed activity; “I did this” confirms the full elapsed block. Each recurring occurrence has its own confirmation. Missing calendar entries are not evidence of inactivity. The optional Sunday 6 pm notification invites a review without exposing private reasons; personalised encouragement appears on Home using the user’s own notes.
+
+The Calendar native module requires Android version 1.5.4 / versionCode 17. Install this signed native upgrade before sending compatible OTA updates. Never uninstall or clear the vault to replace the app. Use Android-only exports and the production release command for subsequent updates.

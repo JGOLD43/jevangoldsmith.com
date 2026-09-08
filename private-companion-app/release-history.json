@@ -1,5 +1,16 @@
 [
   {
+    "baseVersion": "1.5.4",
+    "revision": 1,
+    "label": "1.5.4-update.1",
+    "releasedAt": "2026-09-08T06:47:53.007Z",
+    "notes": "Home calendar, Google time blocks and gentle weekly goal check-ins",
+    "previewGroup": "c8d986e0-d8d9-4865-a407-a880a742760f",
+    "productionGroup": "76008c64-b90a-4065-a232-fdcd3636ebb7",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
     "baseVersion": "1.5.3",
     "revision": 6,
     "label": "1.5.3-update.6",
