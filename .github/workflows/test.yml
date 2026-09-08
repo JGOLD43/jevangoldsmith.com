@@ -127,3 +127,16 @@ jobs:
           name: playwright-report
           path: site-astro/playwright-report/
           retention-days: 7
+
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy-pages.yml
+    with:
+      tested_sha: ${{ github.sha }}
+      tested_run: ${{ format('{0}', github.run_id) }}
