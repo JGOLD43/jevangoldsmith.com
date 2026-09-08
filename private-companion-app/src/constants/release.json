@@ -1,7 +1,7 @@
 {
   "baseVersion": "1.5.3",
-  "revision": 1,
-  "label": "1.5.3-update.1",
-  "releasedAt": "2026-09-08T05:00:31.885Z",
-  "notes": "Studio fixes, rich media editing and visible release versions"
+  "revision": 2,
+  "label": "1.5.3-update.2",
+  "releasedAt": "2026-09-08T05:18:36.001Z",
+  "notes": "GitHub sign-in for Studio publishing with automatic connection renewal"
 }

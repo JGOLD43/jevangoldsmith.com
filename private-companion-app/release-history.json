@@ -1,6 +1,17 @@
 [
   {
     "baseVersion": "1.5.3",
+    "revision": 2,
+    "label": "1.5.3-update.2",
+    "releasedAt": "2026-09-08T05:18:36.001Z",
+    "notes": "GitHub sign-in for Studio publishing with automatic connection renewal",
+    "previewGroup": "08d02cb4-9f48-489f-85b5-1ac49d0466fd",
+    "productionGroup": "3e924de2-d41c-40a3-8b01-bf6a8b428eef",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.3",
     "revision": 1,
     "label": "1.5.3-update.1",
     "releasedAt": "2026-09-08T05:00:31.885Z",
