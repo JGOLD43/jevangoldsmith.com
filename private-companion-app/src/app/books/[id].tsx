@@ -15,6 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BookCover } from '@/components/book-cover';
+import { BookCompanion } from '@/components/book-companion';
 import { Button, Card, Chip, SectionHeading } from '@/components/ui';
 import { Fonts, type AppColors } from '@/constants/theme';
 import type { Book, BookAnnotation, BookReadingStats, PublicBookFields } from '@/domain/models';
@@ -184,6 +185,7 @@ export default function BookDetailScreen() {
           <Text style={styles.localNote}>{book.encryptedFileUri ? `${book.format.toUpperCase()} encrypted locally · ${Math.round(book.progress * 100)}% read` : 'Website metadata only · no readable file attached'}</Text>
         </View>
       </View>
+      <BookCompanion key={book.id} book={book} />
       {book.summary ? <Text style={styles.body}>{book.summary}</Text> : null}
       {book.review ? <Card><Text style={styles.cardLabel}>YOUR PUBLIC REVIEW</Text><Text style={styles.body}>{book.review}</Text></Card> : null}
       <SectionHeading title="Reading insights" detail="Private on this phone" />
