@@ -35,7 +35,7 @@ export default function EditContactScreen() {
   const save = async () => {
     if (!name.trim()) return;
     setSaving(true);
-    const input: NewRelationshipContact = { name, company, role, email, phone, website, location, birthday, firstMetPlace, favorite, tags: tags.split(','), notes, cadenceDays: Number(cadence) || 30, nextFollowUpAt };
+    const input: NewRelationshipContact = { ...(contact && contact.location !== location.trim() ? { latitude: null, longitude: null } : {}), name, company, role, email, phone, website, location, birthday, firstMetPlace, favorite, tags: tags.split(','), notes, cadenceDays: Number(cadence) || 30, nextFollowUpAt };
     const result = await editContact(contact.id, input);
     setSaving(false);
     if (result) router.replace(`/contacts/${contact.id}`);

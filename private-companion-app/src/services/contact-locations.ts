@@ -44,14 +44,16 @@ const PLACES: Place[] = [
 export function approximateContactCoordinates(location: string) {
   const normalized = location.trim().toLocaleLowerCase();
   if (!normalized) return null;
-  const place = PLACES.find((candidate) => candidate.keys.some((key) => normalized.includes(key)));
+  const place = PLACES.find((candidate) => candidate.keys.some((key) => new RegExp(`(^|[^\\p{L}])${key}($|[^\\p{L}])`, 'u').test(normalized)));
   return place ? { latitude: place.latitude, longitude: place.longitude } : null;
 }
 
 export function mappableContact(contact: RelationshipContact) {
-  if (contact.latitude !== null && contact.longitude !== null) {
-    return { contact, latitude: contact.latitude, longitude: contact.longitude };
-  }
   const coordinates = approximateContactCoordinates(contact.location);
-  return coordinates ? { contact, ...coordinates } : null;
+  if (coordinates) return { contact, ...coordinates };
+  if (typeof contact.latitude === 'number' && Number.isFinite(contact.latitude) && Math.abs(contact.latitude) <= 90 &&
+      typeof contact.longitude === 'number' && Number.isFinite(contact.longitude) && Math.abs(contact.longitude) <= 180) {
+    return { contact, latitude: Math.round(contact.latitude * 100) / 100, longitude: Math.round(contact.longitude * 100) / 100 };
+  }
+  return null;
 }

@@ -1,6 +1,17 @@
 [
   {
     "baseVersion": "1.5.5",
+    "revision": 5,
+    "label": "1.5.5-update.5",
+    "releasedAt": "2026-09-08T11:06:54.608Z",
+    "notes": "Add interactive Contact Atlas satellite map with saved-city markers and contact details",
+    "previewGroup": "3c528440-ef7f-4a57-b46c-8d5590e264bd",
+    "productionGroup": "ba167985-432e-408f-ac42-bd310ec25bb5",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.5",
     "revision": 4,
     "label": "1.5.5-update.4",
     "releasedAt": "2026-09-08T11:02:41.578Z",
