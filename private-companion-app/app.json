@@ -2,7 +2,7 @@
   "expo": {
     "name": "JGOLD",
     "slug": "private-companion-app",
-    "version": "1.5.4",
+    "version": "1.5.5",
     "runtimeVersion": {
       "policy": "appVersion"
     },
@@ -53,7 +53,7 @@
           ]
         }
       ],
-      "versionCode": 17,
+      "versionCode": 18,
       "allowBackup": false,
       "softwareKeyboardLayoutMode": "resize",
       "permissions": [
@@ -118,7 +118,8 @@
         {
           "calendarPermission": "Allow JGOLD to show your calendars and create time blocks for your goals."
         }
-      ]
+      ],
+      "./plugins/with-jgold-widget.cjs"
     ],
     "experiments": {
       "typedRoutes": true,
