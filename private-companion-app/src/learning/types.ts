@@ -80,6 +80,9 @@ export type LearningCard = {
   reverseEnabled: boolean;
   archived: boolean;
   source: 'curriculum' | 'personal';
+  bookId?: string | null;
+  sourceLabel?: string;
+  promptKind?: 'recall' | 'explain' | 'compare' | 'apply';
 };
 
 export type LearningCardState = {

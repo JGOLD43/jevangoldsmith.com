@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter, type Href } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -57,6 +57,8 @@ export default function LearningScreen() {
   const header = <View style={styles.header}>
     <View style={styles.topbar}><Pressable accessibilityLabel="Back" hitSlop={12} onPress={() => router.back()} style={styles.back}><SymbolView name={{ ios: 'chevron.left', android: 'arrow_back' }} size={24} tintColor={colors.text} /></Pressable><View><Text style={styles.eyebrow}>LEARNING SYSTEM</Text><Text style={styles.title}>Build memory that transfers.</Text></View></View>
     <Text style={styles.intro}>Your reading becomes a prerequisite map. Practice targets the weakest ready ability, then measures recall, independence, speed and real-world transfer.</Text>
+
+    <Pressable accessibilityRole="button" onPress={() => router.push('/learning/cards' as Href)} style={styles.sourceRow}><View style={styles.sourceCopy}><Text style={styles.sourceTitle}>Flashcards</Text><Text style={styles.sourceBody}>Create topic decks from your reading. Recall, reveal, review — or shuffle through your cards.</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={20} tintColor={colors.accent} /></Pressable>
 
     <View style={styles.memoryBand}>
       <View style={styles.memoryLead}><Text style={styles.memoryValue}>{retained}%</Text><Text style={styles.memoryLabel}>estimated retention</Text></View>

@@ -39,7 +39,7 @@ function TabButton({ bottomInset, icon, isFocused, label, onPress }: TabButtonPr
 export default function AppTabs() {
   const pathname = usePathname();
   const router = useRouter();
-  const immersive = pathname.endsWith('/reader') || pathname === '/learning/session' || pathname.endsWith('/practice');
+  const immersive = pathname.endsWith('/reader') || pathname === '/learning/session' || pathname === '/learning/cards/study' || pathname.endsWith('/practice');
   const insets = useSafeAreaInsets();
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);

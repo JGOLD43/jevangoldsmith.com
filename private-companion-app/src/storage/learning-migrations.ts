@@ -61,6 +61,11 @@ export async function runLearningMigrations(database: SQLiteDatabase): Promise<v
   `);
   await database.runAsync('INSERT OR IGNORE INTO schema_migrations (id, applied_at) VALUES (?, ?)', 'learning-v1', new Date().toISOString());
   await database.runAsync('INSERT OR IGNORE INTO schema_migrations (id, applied_at) VALUES (?, ?)', 'skill-trees-v1', new Date().toISOString());
+  const cardColumns = new Set((await database.getAllAsync<{ name: string }>('PRAGMA table_info(learning_cards)')).map(column => column.name));
+  if (!cardColumns.has('book_id')) await database.execAsync('ALTER TABLE learning_cards ADD COLUMN book_id TEXT;');
+  if (!cardColumns.has('source_label')) await database.execAsync("ALTER TABLE learning_cards ADD COLUMN source_label TEXT NOT NULL DEFAULT '';");
+  if (!cardColumns.has('prompt_kind')) await database.execAsync("ALTER TABLE learning_cards ADD COLUMN prompt_kind TEXT NOT NULL DEFAULT 'recall';");
+  await database.runAsync('INSERT OR IGNORE INTO schema_migrations (id, applied_at) VALUES (?, ?)', 'flashcards-v1', new Date().toISOString());
   const applied = await database.getFirstAsync<{ id: string }>('SELECT id FROM schema_migrations WHERE id = ?', 'skill-trees-v2');
   if (applied) return;
   const nodeColumns = new Set((await database.getAllAsync<{ name: string }>('PRAGMA table_info(skill_tree_nodes)')).map((column) => column.name));

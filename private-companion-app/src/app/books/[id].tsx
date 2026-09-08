@@ -15,6 +15,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BookCover } from '@/components/book-cover';
+import { FlashcardEditor } from '@/components/flashcard-editor';
+import type { CardInput } from '@/learning/flashcards';
 import { BookCompanion } from '@/components/book-companion';
 import { Button, Card, Chip, SectionHeading } from '@/components/ui';
 import { Fonts, type AppColors } from '@/constants/theme';
@@ -127,6 +129,7 @@ export default function BookDetailScreen() {
   const { books, collections, editBook, importBook, deleteBook, annotationsFor, deleteAnnotation,
     collectionIdsFor, toggleCollection, createCollection } = useBooks();
   const book = books.find((item) => item.id === id);
+  const [flashcard, setFlashcard] = useState<CardInput | undefined>();
   const [annotations, setAnnotations] = useState<BookAnnotation[]>([]);
   const [collectionIds, setCollectionIds] = useState<string[]>([]);
   const [editorOpen, setEditorOpen] = useState(false);
@@ -146,6 +149,8 @@ export default function BookDetailScreen() {
   if (!book) {
     return <SafeAreaView style={styles.safe}><Text style={styles.empty}>Book not found.</Text></SafeAreaView>;
   }
+
+  const makeFlashcard = (item: BookAnnotation) => setFlashcard({ deckName: book.title, front: '', back: '', note: [item.selectedText, item.note].filter(Boolean).join('\n\n'), bookId: book.id, sourceLabel: `${book.title}${book.author ? ` — ${book.author}` : ''}`, promptKind: 'recall', reverseEnabled: false });
 
   const attach = async () => {
     try { await importBook(book.id); } catch (cause) { Alert.alert('Could not attach file', cause instanceof Error ? cause.message : 'Please try again.'); }
@@ -202,6 +207,7 @@ export default function BookDetailScreen() {
         {annotations.slice(0, 2).map((item) => <Card key={item.id} style={styles.annotationPreview}>
           <Text style={styles.cardLabel}>{item.kind} · {item.locator || 'imported'} · private</Text>
           <Text numberOfLines={4} style={styles.quote}>“{item.selectedText || item.note}”</Text>
+          <Button label="Make flashcard" variant="secondary" onPress={() => makeFlashcard(item)} />
         </Card>)}
         {annotations.length > 2 ? <Button label={`View all ${annotations.length} highlights & notes`}
           variant="secondary" onPress={() => listRef.current?.scrollToIndex({ index: 0, animated: true, viewPosition: 0 })} /> : null}
@@ -220,9 +226,10 @@ export default function BookDetailScreen() {
 
   return (
     <SafeAreaView edges={['top']} style={styles.safe}>
+      <FlashcardEditor visible={!!flashcard} initial={flashcard} onClose={() => setFlashcard(undefined)} onSaved={() => Alert.alert('Flashcard saved', 'Find it in Learning → Flashcards.')} />
       <FlatList ref={listRef} data={annotations} keyExtractor={(item) => item.id} ListHeaderComponent={header}
         contentContainerStyle={styles.listContent}
-        renderItem={({ item }) => <Card style={styles.annotation}><Text style={styles.cardLabel}>{item.kind} · private</Text>{item.selectedText ? <Text style={styles.quote}>“{item.selectedText}”</Text> : null}{item.note ? <Text style={styles.body}>{item.note}</Text> : null}<Button label="Delete" variant="danger" onPress={() => Alert.alert('Delete private note?', 'This cannot be undone.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Delete', style: 'destructive', onPress: async () => { await deleteAnnotation(item.id); setAnnotations((current) => current.filter((entry) => entry.id !== item.id)); } }])} /></Card>}
+        renderItem={({ item }) => <Card style={styles.annotation}><Text style={styles.cardLabel}>{item.kind} · private</Text>{item.selectedText ? <Text style={styles.quote}>“{item.selectedText}”</Text> : null}{item.note ? <Text style={styles.body}>{item.note}</Text> : null}<Button label="Make flashcard" onPress={() => makeFlashcard(item)} /><Button label="Delete" variant="danger" onPress={() => Alert.alert('Delete private note?', 'This cannot be undone.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Delete', style: 'destructive', onPress: async () => { await deleteAnnotation(item.id); setAnnotations((current) => current.filter((entry) => entry.id !== item.id)); } }])} /></Card>}
         ListEmptyComponent={<Text style={styles.empty}>Highlights, bookmarks and private notes from the reader will appear here.</Text>}
         ListFooterComponent={<Button label="Delete book" variant="danger" onPress={() => Alert.alert('Delete book?', 'The encrypted file, progress, notes and highlights will be removed from this phone. The website is unchanged.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Delete', style: 'destructive', onPress: async () => { await deleteBook(book.id); router.back(); } }])} />}
       />
