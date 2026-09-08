@@ -1,6 +1,17 @@
 [
   {
     "baseVersion": "1.5.5",
+    "revision": 4,
+    "label": "1.5.5-update.4",
+    "releasedAt": "2026-09-08T11:02:41.578Z",
+    "notes": "Redesign mobile skill trees with branching maps, clean blue UI and concise lesson screens",
+    "previewGroup": "55a508a3-8854-4eef-93c5-2668f0d32a60",
+    "productionGroup": "a44fc71a-aa52-430a-90e1-237426a35389",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.5",
     "revision": 3,
     "label": "1.5.5-update.3",
     "releasedAt": "2026-09-08T08:45:09.271Z",

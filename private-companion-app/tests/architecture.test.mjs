@@ -175,9 +175,10 @@ test('custom skill trees are encrypted, prerequisite-aware and directly practice
   assert.match(repository, /recordSkillTreeAttempt/);
   assert.match(library, /French conversation/);
   assert.match(library, /Create a skill tree/);
-  assert.match(editor, /SkillTreeMap/);
+  assert.match(editor, /SkillTreeOverview/);
+  assert.match(await source('src/components/skill-tree-overview.tsx'), /SkillTreeMap/);
   assert.match(map, /FOUNDATIONS/);
-  assert.match(map, /BranchConnector/);
+  assert.match(map, /layoutSkillTree/);
   assert.match(editor, /Prerequisites/);
   assert.match(practice, /How did that go/);
 });

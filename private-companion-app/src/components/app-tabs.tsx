@@ -1,4 +1,6 @@
 import { Slot, type Href, usePathname, useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { SkillColors } from '@/constants/skill-theme';
 import { SymbolView, type SymbolViewProps } from 'expo-symbols';
 import { useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -8,6 +10,7 @@ import { Fonts, type AppColors } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 type TabButtonProps = {
+  colors: AppColors;
   bottomInset: number;
   icon: SymbolViewProps['name'];
   isFocused: boolean;
@@ -15,10 +18,9 @@ type TabButtonProps = {
   onPress: () => void;
 };
 
-function TabButton({ bottomInset, icon, isFocused, label, onPress }: TabButtonProps) {
-  const colors = useTheme();
+function TabButton({ bottomInset, icon, isFocused, label, onPress, colors }: TabButtonProps) {
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const color = isFocused ? colors.text : colors.textSecondary;
+  const color = isFocused ? (colors === SkillColors ? colors.accent : colors.text) : colors.textSecondary;
 
   return (
     <Pressable
@@ -41,21 +43,24 @@ export default function AppTabs() {
   const router = useRouter();
   const immersive = pathname.endsWith('/reader') || pathname === '/learning/session' || pathname === '/learning/cards/study' || pathname.endsWith('/practice');
   const insets = useSafeAreaInsets();
-  const colors = useTheme();
+  const theme = useTheme();
+  const skillMode = pathname.startsWith('/skills');
+  const colors = skillMode ? SkillColors : theme;
   const styles = useMemo(() => createStyles(colors), [colors]);
 
   const go = (href: Href) => router.navigate(href);
 
   return (
     <View style={styles.container}>
+      {skillMode ? <StatusBar style="dark" /> : null}
       <View style={styles.slot}><Slot /></View>
       {!immersive ? (
         <View style={[styles.nav, { height: 80 + insets.bottom }]}> 
-          <TabButton bottomInset={insets.bottom} isFocused={pathname === '/' || pathname.startsWith('/learning')} label="Home" icon={{ ios: 'house', android: 'home' }} onPress={() => go('/')} />
-          <TabButton bottomInset={insets.bottom} isFocused={pathname.startsWith('/contacts')} label="People" icon={{ ios: 'person.2.fill', android: 'group' }} onPress={() => go('/contacts')} />
-          <TabButton bottomInset={insets.bottom} isFocused={pathname.startsWith('/books') || pathname.startsWith('/movies') || pathname.startsWith('/essays') || pathname.startsWith('/skills') || pathname === '/insights'} label="Library" icon={{ ios: 'books.vertical.fill', android: 'library_books' }} onPress={() => go('/books')} />
-          <TabButton bottomInset={insets.bottom} isFocused={pathname === '/website'} label="Studio" icon={{ ios: 'square.and.pencil', android: 'edit_note' }} onPress={() => go('/website')} />
-          <TabButton bottomInset={insets.bottom} isFocused={pathname === '/ai'} label="Site" icon={{ ios: 'globe', android: 'language' }} onPress={() => go('/ai')} />
+          <TabButton colors={colors} bottomInset={insets.bottom} isFocused={pathname === '/' || pathname.startsWith('/learning')} label="Home" icon={{ ios: 'house', android: 'home' }} onPress={() => go('/')} />
+          <TabButton colors={colors} bottomInset={insets.bottom} isFocused={pathname.startsWith('/contacts')} label="People" icon={{ ios: 'person.2.fill', android: 'group' }} onPress={() => go('/contacts')} />
+          <TabButton colors={colors} bottomInset={insets.bottom} isFocused={pathname.startsWith('/books') || pathname.startsWith('/movies') || pathname.startsWith('/essays') || pathname.startsWith('/skills') || pathname === '/insights'} label="Library" icon={{ ios: 'books.vertical.fill', android: 'library_books' }} onPress={() => go('/books')} />
+          <TabButton colors={colors} bottomInset={insets.bottom} isFocused={pathname === '/website'} label="Studio" icon={{ ios: 'square.and.pencil', android: 'edit_note' }} onPress={() => go('/website')} />
+          <TabButton colors={colors} bottomInset={insets.bottom} isFocused={pathname === '/ai'} label="Site" icon={{ ios: 'globe', android: 'language' }} onPress={() => go('/ai')} />
         </View>
       ) : null}
     </View>
