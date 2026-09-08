@@ -188,3 +188,23 @@ test('sync is idempotent and never executes inbox code', () => {
   assert.match(essays[0].content, /&lt;script&gt;/);
   assert.doesNotMatch(essays[0].content, /<script>/);
 });
+
+test('publication commit stages Now images through their tracked paths, not public symlinks', () => {
+  const { execFileSync } = require('node:child_process');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'jgold-stage-'));
+  try {
+    fs.mkdirSync(path.join(root, 'data'));
+    fs.mkdirSync(path.join(root, 'images', 'now-archive'), { recursive: true });
+    fs.mkdirSync(path.join(root, 'site-astro', 'public'), { recursive: true });
+    fs.symlinkSync('../../images', path.join(root, 'site-astro', 'public', 'images'));
+    for (const file of ['data/now.json', '.jgold-publication-state.json', 'images/now-map.jpg', 'images/now-map.jpg.meta', 'images/now-archive/previous.jpg']) fs.writeFileSync(path.join(root, file), 'fixture');
+    execFileSync('git', ['init', '-q', root]);
+    const workflow = fs.readFileSync(path.join(__dirname, '../../.github/workflows/jgold-publish-sync.yml'), 'utf8');
+    const stageLines = workflow.split('\n').filter((line) => line.trim().startsWith('git add ') || line.includes('then git add'));
+    execFileSync('bash', ['-e', '-c', stageLines.join('\n')], { cwd: root });
+    const staged = execFileSync('git', ['diff', '--cached', '--name-only'], { cwd: root, encoding: 'utf8' });
+    assert.match(staged, /images\/now-map.jpg.meta/);
+    assert.match(staged, /images\/now-archive\/previous.jpg/);
+    assert.match(staged, /data\/now.json/);
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
