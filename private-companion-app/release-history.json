@@ -1,6 +1,17 @@
 [
   {
     "baseVersion": "1.5.4",
+    "revision": 2,
+    "label": "1.5.4-update.2",
+    "releasedAt": "2026-09-08T06:56:32.020Z",
+    "notes": "Link existing calendar events and log time spent without scheduling",
+    "previewGroup": "f98c731d-ed3b-412f-bdb6-5eb43b6c8bcd",
+    "productionGroup": "e7f736a5-7d48-4838-be1a-49b4fabb42f9",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.4",
     "revision": 1,
     "label": "1.5.4-update.1",
     "releasedAt": "2026-09-08T06:47:53.007Z",

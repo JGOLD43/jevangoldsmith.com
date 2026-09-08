@@ -1,7 +1,7 @@
 {
   "baseVersion": "1.5.4",
-  "revision": 1,
-  "label": "1.5.4-update.1",
-  "releasedAt": "2026-09-08T06:47:53.007Z",
-  "notes": "Home calendar, Google time blocks and gentle weekly goal check-ins"
+  "revision": 2,
+  "label": "1.5.4-update.2",
+  "releasedAt": "2026-09-08T06:56:32.020Z",
+  "notes": "Link existing calendar events and log time spent without scheduling"
 }

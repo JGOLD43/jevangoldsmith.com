@@ -83,3 +83,9 @@ test('calendar refresh reflects moved events and ignores cancelled events', asyn
   assert.equal(events.length, 1); assert.equal(events[0].lifeItemId, 'goal'); assert.equal(events[0].start, '2026-09-09T19:00:00.000Z');
   assert.deepEqual(await service.calendarEvents([], new Date(), new Date()), []);
 });
+
+test('a private link follows an event when its time changes', async () => {
+  const { eventLinkKey } = await import('../src/domain/life-calendar.ts');
+  assert.equal(eventLinkKey({ id: 'same', calendarId: 'google', start: 'before' }), eventLinkKey({ id: 'same', calendarId: 'google', start: 'after' }));
+  assert.notEqual(eventLinkKey({ id: 'same', calendarId: 'work' }), eventLinkKey({ id: 'same', calendarId: 'personal' }));
+});

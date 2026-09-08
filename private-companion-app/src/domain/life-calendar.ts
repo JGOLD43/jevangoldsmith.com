@@ -1,13 +1,14 @@
 export type TimeEvent = { id: string; calendarId: string; title: string; start: string; end: string; allDay: boolean; lifeItemId?: string };
 export type TimeIntention = { weeklyMinutes: number; why: string; cost: string };
 export type TimeConfirmation = { lifeItemId: string; start: string; end: string };
-export type CalendarPreferences = { calendarIds: string[]; writeCalendarId: string; intentions: Record<string, TimeIntention>; confirmations: Record<string, TimeConfirmation> };
+export type CalendarPreferences = { calendarIds: string[]; writeCalendarId: string; links?: Record<string, string>; intentions: Record<string, TimeIntention>; confirmations: Record<string, TimeConfirmation> };
 export const EMPTY_CALENDAR: CalendarPreferences = { calendarIds: [], writeCalendarId: '', intentions: {}, confirmations: {} };
 export function weekStart(date: Date) {
   const start = new Date(date); start.setHours(0, 0, 0, 0); start.setDate(start.getDate() - (start.getDay() + 6) % 7); return start;
 }
 export function addDays(date: Date, days: number) { const result = new Date(date); result.setDate(result.getDate() + days); return result; }
 export function dayKey(date: Date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; }
+export function eventLinkKey(event: Pick<TimeEvent, 'calendarId' | 'id'>) { return `${event.calendarId}/${event.id}`; }
 export function occurrenceKey(event: TimeEvent) { return `${event.calendarId}/${event.id}/${event.start}`; }
 export function linkedItem(notes?: string | null) { const match = notes?.match(/\[JGOLD goal:([^\]\r\n]+)\]/); if (!match) return undefined; try { return decodeURIComponent(match[1]); } catch { return undefined; } }
 // Union intervals: overlapping events must never create extra hours in the day.

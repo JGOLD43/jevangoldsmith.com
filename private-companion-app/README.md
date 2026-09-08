@@ -139,6 +139,8 @@ Home reads the calendars selected from Android’s calendar provider. Choose a G
 
 Time blocks link to Goals, Fucket List, Learning, Interests or Trips using an opaque goal marker in the event notes. Titles and times follow the selected calendar’s sharing settings. Weekly targets, personal reasons, consequences and completion confirmations stay in the encrypted local vault. Refresh on Home focus, phone resume, manual refresh and once per minute reflects device calendar changes.
 
+Existing calendar events can also be linked privately to list items, including repeated occurrences. Unscheduled past activity can be logged and removed on its selected day.
+
 Weekly totals merge overlapping timed intervals and exclude all-day events. Scheduled minutes are distinct from confirmed activity; “I did this” confirms the full elapsed block. Each recurring occurrence has its own confirmation. Missing calendar entries are not evidence of inactivity. The optional Sunday 6 pm notification invites a review without exposing private reasons; personalised encouragement appears on Home using the user’s own notes.
 
 The Calendar native module requires Android version 1.5.4 / versionCode 17. Install this signed native upgrade before sending compatible OTA updates. Never uninstall or clear the vault to replace the app. Use Android-only exports and the production release command for subsequent updates.
