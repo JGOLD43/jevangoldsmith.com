@@ -1,6 +1,17 @@
 [
   {
     "baseVersion": "1.5.4",
+    "revision": 3,
+    "label": "1.5.4-update.3",
+    "releasedAt": "2026-09-08T07:12:06.197Z",
+    "notes": "Add 24 offline Adler-style companion essays to Who Am I books",
+    "previewGroup": "037311d0-e815-4bf7-8a57-a25b379beffe",
+    "productionGroup": "64a58def-1240-4726-833a-70f95f996831",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.4",
     "revision": 2,
     "label": "1.5.4-update.2",
     "releasedAt": "2026-09-08T06:56:32.020Z",
