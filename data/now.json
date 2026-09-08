@@ -9,9 +9,19 @@
   "sections": [
     {
       "title": "Starting a business",
-      "body": "<p>Petfood factory</p>"
+      "body": "<p style=\"font-family:Arial, sans-serif;white-space:pre-wrap\">Petfood factory</p>"
     }
   ],
-  "studioDocument": null,
+  "studioDocument": {
+    "version": 1,
+    "blocks": [
+      {
+        "type": "text",
+        "text": "Petfood factory",
+        "font": "sans",
+        "style": "paragraph"
+      }
+    ]
+  },
   "studioBody": "Petfood factory"
 }

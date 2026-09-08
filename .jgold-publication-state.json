@@ -9,6 +9,15 @@
       "createdAt": "2026-09-08T05:31:29.102Z",
       "publicId": "starting-a-business",
       "processedAt": "2026-09-08T05:34:34.955Z"
+    },
+    "now-f62732f6-3402-4061-aa0a-a4e5d5a12a70-bd4bc0359bde59b04fd20a6b": {
+      "status": "accepted",
+      "hash": "c3edc592e4ebdfaa9169794fe4264633b847da790e5863aca0a442faaac09c6f",
+      "type": "now",
+      "manifestId": "f62732f6-3402-4061-aa0a-a4e5d5a12a70",
+      "createdAt": "2026-09-08T06:08:16.594Z",
+      "publicId": "now",
+      "processedAt": "2026-09-08T06:09:03.181Z"
     }
   }
 }
