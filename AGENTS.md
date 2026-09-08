@@ -16,6 +16,8 @@ These rules apply to every agent working in this repository, including a fresh c
 - Always export OTA releases with `--platform android`. Do not use Expo's default `all` platform export; `react-native-pdf` is native-only and makes the unrelated web export fail.
 - Run `npm run verify` in `private-companion-app` before release.
 - Prefer the repository command `npm run release:app -- "Release message"`, which publishes Android to preview, promotes the exact update group to production, and verifies the production assignment.
+- Every remote release must increment `private-companion-app/src/constants/release.json`, show its version and release date in Settings, and record the production group in `private-companion-app/release-history.json`. Use `npm run release:app` to do this automatically. Commit the generated release metadata after publishing.
+- Keep the installed native app version/runtime unchanged for compatible OTA updates; use the incrementing Update number for these releases. Increment `expo.version`, package version and Android versionCode together only when distributing a new native build.
 - An app release is not complete until Expo lists the new group on the production branch. The installed app downloads it on launch and applies it automatically.
 
 ## Website publishing from the app

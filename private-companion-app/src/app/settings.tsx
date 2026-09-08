@@ -1,3 +1,4 @@
+import release from '@/constants/release.json';
 import Constants from 'expo-constants';
 import { SymbolView } from 'expo-symbols';
 import { type ComponentProps, type ReactNode, useEffect, useMemo, useState } from 'react';
@@ -178,7 +179,8 @@ export default function SettingsScreen() {
     ]);
   };
 
-  const appVersion = Constants.expoConfig?.version ?? '1.5.0';
+  const appVersion = Constants.expoConfig?.version ?? release.baseVersion;
+  const releaseLabel = `${appVersion}${release.revision ? ` · Update ${release.revision}` : ''}`;
 
   return (
     <SafeAreaView edges={['top']} style={styles.safeArea}>
@@ -191,7 +193,7 @@ export default function SettingsScreen() {
             <Text style={styles.profileTitle}>JGOLD</Text>
             <Text style={styles.profileDetail}>Personal workspace</Text>
           </View>
-          <Text style={styles.versionBadge}>v{appVersion}</Text>
+          <Text style={styles.versionBadge}>v{releaseLabel}</Text>
         </View>
 
         <View style={styles.section}>
@@ -270,13 +272,13 @@ export default function SettingsScreen() {
             <SettingsRow
               icon={{ ios: 'arrow.triangle.2.circlepath', android: 'system_update' }}
               title="Software Update"
-              detail={remoteUpdatesEnabled() ? 'Compatible updates install automatically' : 'Updates require a signed build'}
+              detail={remoteUpdatesEnabled() ? `Installed: ${releaseLabel}` : 'Updates require a signed build'}
               trailing={checkingForUpdate ? <ActivityIndicator color={colors.accent} /> : <Status>{remoteUpdatesEnabled() ? 'Automatic' : 'Build only'}</Status>}
               onPress={() => { if (!checkingForUpdate) void checkForUpdate(); }}
               last
             />
           </SettingsGroup>
-          <Text style={styles.sectionFooter}>Compatible updates arrive automatically without a cable. The updater never reads or uploads private vault data.</Text>
+          <Text style={styles.sectionFooter}>{release.notes}{release.releasedAt ? ` · Released ${new Date(release.releasedAt).toLocaleDateString()}` : ''}. Compatible updates arrive automatically without a cable.</Text>
         </View>
 
         <View style={styles.section}>

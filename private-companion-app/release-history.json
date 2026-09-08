@@ -1,0 +1,13 @@
+[
+  {
+    "baseVersion": "1.5.3",
+    "revision": 1,
+    "label": "1.5.3-update.1",
+    "releasedAt": "2026-09-08T05:00:31.885Z",
+    "notes": "Studio fixes, rich media editing and visible release versions",
+    "previewGroup": "fc9efb80-bfa1-4c68-9e6c-214f95ad88fa",
+    "productionGroup": "6e3daed1-f986-44ce-abc0-56c30fdd8a5f",
+    "platform": "android",
+    "channel": "production"
+  }
+]
