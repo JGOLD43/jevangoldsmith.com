@@ -1,6 +1,17 @@
 [
   {
     "baseVersion": "1.5.4",
+    "revision": 4,
+    "label": "1.5.4-update.4",
+    "releasedAt": "2026-09-08T07:54:22.282Z",
+    "notes": "Topic flashcards, book highlights and spaced retrieval practice",
+    "previewGroup": "d2ef3c88-835f-44c1-bf49-0b65ecd62d07",
+    "productionGroup": "57e1cf2f-a172-42d7-b629-9ccc7f55f3b2",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.4",
     "revision": 3,
     "label": "1.5.4-update.3",
     "releasedAt": "2026-09-08T07:12:06.197Z",
