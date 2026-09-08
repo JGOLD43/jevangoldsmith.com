@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import remoteAssets from '../../../data/remote-assets.generated.json';
 import Base from '../layouts/Base.astro';
+import { NOW_LAT, NOW_LNG, NOW_LOCATION_LABEL, NOW_LAST_UPDATED } from '../lib/now-location';
 
 interface RemoteAssetEntry {
   widths?: number[];
@@ -142,10 +143,10 @@ const carouselAdventures: CarouselAdventure[] = adventures.map((adventure: any) 
         desktop before paint so the side-by-side layout is preserved. */}
     <div
       class="adventures-page-split sidebar-collapsed map-view"
-      data-now-lat="-19.5765"
-      data-now-lng="147.4035"
-      data-now-place="Ayr, QLD"
-      data-now-date="May 12, 2026"
+      data-now-lat={NOW_LAT}
+      data-now-lng={NOW_LNG}
+      data-now-place={NOW_LOCATION_LABEL}
+      data-now-date={NOW_LAST_UPDATED}
     >
       <div class="adventures-mobile-toggle">
         <button class="mobile-view-btn" data-view="list" data-action="switchMobileView" data-action-args="list">

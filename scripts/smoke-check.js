@@ -12,6 +12,8 @@
 
 'use strict';
 
+const now = require('../data/now.json');
+
 const DEFAULT_BASE = process.env.BASE_URL || 'http://localhost:4321';
 
 // Astro dev server serves /books, dist/ serves /books.html. We try the
@@ -59,7 +61,7 @@ const CHECKS = [
   },
   {
     url: '/adventures',
-    must: ['id="adventures-container"', 'id="adventure-count"', 'adventures-page-split']
+    must: ['id="adventures-container"', 'id="adventure-count"', 'adventures-page-split', `data-now-lat="${now.location.lat}"`, `data-now-lng="${now.location.lng}"`]
   },
   {
     url: '/quotes',

@@ -117,8 +117,8 @@ export default function WebsiteScreen() {
     : job.status === 'queued' ? job.error || 'Waiting to send. Connect publishing in Settings.'
     : job.error || 'Publishing your website… Progress updates automatically. You can keep writing.';
 
-  const pendingDeliveryCount = publicationJobs.filter((job) => job.status !== 'submitted').length;
-  const submittedCount = publicationJobs.filter((job) => job.status === 'submitted').length;
+  const pendingDeliveryCount = publicationJobs.filter((job) => job.delivery !== 'live').length;
+  const submittedCount = publicationJobs.filter((job) => job.delivery === 'live').length;
 
   const openCreate = (definition: CreateDefinition) => {
     setCreateMenuOpen(false);
@@ -192,7 +192,7 @@ export default function WebsiteScreen() {
           <View style={styles.metrics}>
             <View style={styles.metric}><Text style={styles.metricValue}>{activeDrafts.length}</Text><Text style={styles.metricLabel}>Drafts</Text></View>
             <View style={styles.metric}><Text style={styles.metricValue}>{pendingDeliveryCount}</Text><Text style={styles.metricLabel}>Delivery</Text></View>
-            <View style={styles.metric}><Text style={styles.metricValue}>{submittedCount}</Text><Text style={styles.metricLabel}>Submitted</Text></View>
+            <View style={styles.metric}><Text style={styles.metricValue}>{submittedCount}</Text><Text style={styles.metricLabel}>Live</Text></View>
           </View>
 
           <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Drafts to publish</Text><Text style={styles.sectionDetail}>{activeDrafts.length ? `${activeDrafts.length} waiting` : 'Clear'}</Text></View>

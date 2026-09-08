@@ -1,6 +1,17 @@
 [
   {
     "baseVersion": "1.5.3",
+    "revision": 4,
+    "label": "1.5.3-update.4",
+    "releasedAt": "2026-09-08T06:00:01.635Z",
+    "notes": "Consistent live status across Home and Studio",
+    "previewGroup": "40406fce-6055-4bb7-943a-12980925472d",
+    "productionGroup": "7cfa37be-6de8-4c79-bfa2-667d20a207a5",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.3",
     "revision": 3,
     "label": "1.5.3-update.3",
     "releasedAt": "2026-09-08T05:56:04.638Z",

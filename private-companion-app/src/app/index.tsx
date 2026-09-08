@@ -8,7 +8,9 @@ import { BookCover } from '@/components/book-cover';
 import { LifeItemComposer } from '@/components/life-item-composer';
 import { LIFE_AREAS, lifeAreaDefinition, type LifeAreaDefinition } from '@/constants/life-areas';
 import { Fonts, type AppColors } from '@/constants/theme';
-import type { Book, LifeArea, LifeItem, NewLifeItem } from '@/domain/models';
+import type { Book, LifeArea, LifeItem, NewLifeItem, PublicationJob } from '@/domain/models';
+import { createPublishManifest } from '@/domain/privacy';
+import { refreshPublicationJobs } from '@/services/publication-outbox';
 import { useTheme } from '@/hooks/use-theme';
 import { formatReadingTime } from '@/storage/reading-analytics';
 import { useApp } from '@/state/app-context';
@@ -91,7 +93,19 @@ export default function HomeScreen() {
   const completedItems = lifeItems.filter((item) => item.progress === 100).length;
   const activeItems = lifeItems.length - completedItems;
   const averageProgress = lifeItems.length ? Math.round(lifeItems.reduce((total, item) => total + item.progress, 0) / lifeItems.length) : 0;
-  const activeDrafts = drafts.filter((draft) => draft.status !== 'published');
+  const [publicationJobs, setPublicationJobs] = useState<PublicationJob[]>([]);
+  useFocusEffect(useCallback(() => {
+    let active = true;
+    void refreshPublicationJobs().then((jobs) => { if (active) setPublicationJobs(jobs); }).catch(() => {});
+    return () => { active = false; };
+  }, []));
+  const activeDrafts = drafts.filter((draft) => {
+    if (draft.status === 'published') return false;
+    try {
+      const manifest = JSON.stringify(createPublishManifest(draft));
+      return !publicationJobs.some((job) => job.localId === draft.id && job.manifestJson === manifest && job.delivery === 'live');
+    } catch { return true; }
+  });
   const recentlyOpenedBooks = books.filter((book) => book.lastOpenedAt).sort((left, right) => (right.lastOpenedAt ?? '').localeCompare(left.lastOpenedAt ?? '')).slice(0, 3);
   const dueContacts = contacts.filter((contact) => contact.nextFollowUpAt && new Date(contact.nextFollowUpAt).getTime() <= Date.now() + 86_400_000);
 

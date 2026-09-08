@@ -1,3 +1,4 @@
+import { escapeHtml } from '../lib/html-escape';
 import { tryReadString, tryWrite } from '../lib/storage';
 import { registerActions } from './action-dispatcher';
 import {
@@ -501,7 +502,7 @@ function placeNowMarkerAndFocus() {
             riseOnHover: true,
             zIndexOffset: 9999
         });
-        const popup = `<div class="now-popup-card"><div class="now-popup-place">${now.place}</div>${now.date ? `<div class="now-popup-date">${now.date}</div>` : ''}<a href="/now.html" class="now-popup-btn">Now update</a></div>`;
+        const popup = `<div class="now-popup-card"><div class="now-popup-place">${escapeHtml(now.place)}</div>${now.date ? `<div class="now-popup-date">${escapeHtml(now.date)}</div>` : ''}<a href="/now.html" class="now-popup-btn">Now update</a></div>`;
         marker.bindPopup(popup, {
             closeButton: false,
             // Only one popup open at a time across the whole map.
