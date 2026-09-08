@@ -1,4 +1,14 @@
 {
   "schemaVersion": 1,
-  "receipts": {}
+  "receipts": {
+    "now-ec806820-a673-4222-948e-14bf4d22ac7c-b185cdbc0cf03790713cb416": {
+      "status": "accepted",
+      "hash": "64208d28219d660626b50e855fa851929dc4d07cf721ced85ad315090da7e4b4",
+      "type": "now",
+      "manifestId": "ec806820-a673-4222-948e-14bf4d22ac7c",
+      "createdAt": "2026-09-08T05:31:29.102Z",
+      "publicId": "starting-a-business",
+      "processedAt": "2026-09-08T05:34:34.955Z"
+    }
+  }
 }

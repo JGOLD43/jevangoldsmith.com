@@ -1,5 +1,23 @@
 [
   {
+    "id": "2026-09-08-16b8c93e94",
+    "lastUpdated": "September 8, 2026",
+    "location": {
+      "label": "Forest Glen",
+      "lat": -26.6731,
+      "lng": 153.0011,
+      "zoom": 10
+    },
+    "sections": [
+      {
+        "title": "Starting a business",
+        "body": "<p>Petfood factory</p>"
+      }
+    ],
+    "map": "/images/now-archive/now-map-2026-09-08-16b8c93e94.jpg",
+    "archivedAt": "2026-09-08T05:34:35.455Z"
+  },
+  {
     "id": "2026-05-12",
     "lastUpdated": "May 12, 2026",
     "location": {
