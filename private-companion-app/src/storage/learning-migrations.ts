@@ -66,6 +66,10 @@ export async function runLearningMigrations(database: SQLiteDatabase): Promise<v
   if (!cardColumns.has('source_label')) await database.execAsync("ALTER TABLE learning_cards ADD COLUMN source_label TEXT NOT NULL DEFAULT '';");
   if (!cardColumns.has('prompt_kind')) await database.execAsync("ALTER TABLE learning_cards ADD COLUMN prompt_kind TEXT NOT NULL DEFAULT 'recall';");
   await database.runAsync('INSERT OR IGNORE INTO schema_migrations (id, applied_at) VALUES (?, ?)', 'flashcards-v1', new Date().toISOString());
+  if (!cardColumns.has('source_key')) await database.execAsync('ALTER TABLE learning_cards ADD COLUMN source_key TEXT;');
+  await database.execAsync('CREATE UNIQUE INDEX IF NOT EXISTS learning_cards_source_key ON learning_cards(source_key) WHERE source_key IS NOT NULL;');
+  const reviewColumns = new Set((await database.getAllAsync<{ name: string }>('PRAGMA table_info(learning_card_reviews)')).map(column => column.name));
+  if (!reviewColumns.has('rating')) await database.execAsync('ALTER TABLE learning_card_reviews ADD COLUMN rating TEXT;');
   const applied = await database.getFirstAsync<{ id: string }>('SELECT id FROM schema_migrations WHERE id = ?', 'skill-trees-v2');
   if (applied) return;
   const nodeColumns = new Set((await database.getAllAsync<{ name: string }>('PRAGMA table_info(skill_tree_nodes)')).map((column) => column.name));

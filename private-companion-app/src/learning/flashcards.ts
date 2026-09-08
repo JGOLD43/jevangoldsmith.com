@@ -6,12 +6,12 @@ export const CARD_KINDS: { key: CardKind; label: string; hint: string }[] = [
   { key: 'compare', label: 'Compare', hint: 'Distinguish two ideas that are easy to confuse.' },
   { key: 'apply', label: 'Apply', hint: 'Describe a situation. Ask which idea to use and why.' },
 ];
-export type CardInput = Pick<LearningCard, 'deckName' | 'front' | 'back'> & Partial<Pick<LearningCard, 'note' | 'tags' | 'reverseEnabled' | 'bookId' | 'sourceLabel' | 'promptKind'>>;
+export type CardInput = Pick<LearningCard, 'deckName' | 'front' | 'back'> & Partial<Pick<LearningCard, 'note' | 'tags' | 'reverseEnabled' | 'bookId' | 'sourceLabel' | 'sourceKey' | 'promptKind'>>;
 export function validateCard(input: CardInput) {
   const deckName = input.deckName.trim(), front = input.front.trim(), back = input.back.trim();
   if (!deckName || !front || !back) throw new Error('Add a topic, a question and an answer before saving.');
   if (deckName.length > 120 || front.length > 4000 || back.length > 12000 || (input.note?.length ?? 0) > 16000) throw new Error('Keep the topic under 120 characters, question under 4,000 and answer under 12,000.');
-  return { ...input, deckName, front, back, note: input.note?.trim() ?? '', tags: [...new Set((input.tags ?? []).map(t => t.trim()).filter(Boolean))], reverseEnabled: input.reverseEnabled ?? false, promptKind: input.promptKind ?? 'recall', bookId: input.bookId ?? null, sourceLabel: input.sourceLabel ?? '' };
+  return { ...input, deckName, front, back, note: input.note?.trim() ?? '', tags: [...new Set((input.tags ?? []).map(t => t.trim()).filter(Boolean))], reverseEnabled: input.reverseEnabled ?? false, promptKind: input.promptKind ?? 'recall', bookId: input.bookId ?? null, sourceLabel: input.sourceLabel ?? '', sourceKey: input.sourceKey ?? null };
 }
 export function shuffled<T>(items: readonly T[], random = Math.random): T[] {
   const result = [...items];
@@ -25,8 +25,8 @@ export function selectReviewCards(cards: ReviewCard[], mode: 'due' | 'cram', lim
     ...interleave(cards.filter(c => c.state.reviewCount > 0)),
     ...interleave(cards.filter(c => c.state.reviewCount === 0)),
   ];
-  const seen = new Set<string>();
-  return ordered.filter(card => { if (seen.has(card.id)) return false; seen.add(card.id); return true; }).slice(0, limit);
+  const seen = new Set<string>(); let newCards = 0;
+  return ordered.filter(card => { if (seen.has(card.id)) return false; seen.add(card.id); if (mode === 'due' && card.state.reviewCount === 0 && ++newCards > 10) return false; return true; }).slice(0, limit);
 }
 function interleave(cards: ReviewCard[]) {
   const decks = new Map<string, ReviewCard[]>();

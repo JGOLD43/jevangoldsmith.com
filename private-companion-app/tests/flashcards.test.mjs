@@ -83,3 +83,56 @@ test('upskilling starter deck is opt-in and repeated import preserves edited car
   await starters.addUpskillingFlashcards(); assert.equal(sql.prepare('SELECT COUNT(*) n FROM learning_cards').get().n, count);
   assert.equal(sql.prepare("SELECT back FROM learning_cards WHERE id='upskilling-card-define-performance'").get().back, 'My answer'); sql.close();
 });
+
+test('four ratings graduate learning, preserve difficult cards and space easy cards further', () => {
+  const start = emptyCardState('rating', 'forward');
+  const ratings = ['again','hard','good','easy'].map(r => scheduleCardReview(start, r));
+  assert.deepEqual(ratings.map(s => s.intervalDays), [10/1440,30/1440,1,4]);
+  const mature = { ...start, intervalDays: 10, stability: 10, reviewCount: 5 };
+  assert.ok(scheduleCardReview(mature,'hard').intervalDays < scheduleCardReview(mature,'good').intervalDays);
+  assert.ok(scheduleCardReview(mature,'good').intervalDays < scheduleCardReview(mature,'easy').intervalDays);
+  const lapse = scheduleCardReview(mature,'again');
+  assert.equal(scheduleCardReview(lapse,'good').intervalDays,1);
+});
+test('catch-up caps new cards while preserving due reviews', () => {
+  const cards = Array.from({length:30},(_,i)=>row(`new-${i}`,'One',0));
+  cards.push(row('due','Two',3));
+  const queue = selectReviewCards(cards,'due');
+  assert.equal(queue[0].id,'due'); assert.equal(queue.length,11);
+});
+test('source tests are extractive, hide all answer occurrences and reject missing or whole-text answers', async () => {
+  const { makeReadingTest, answerSuggestions, sourceHasTest } = await import('../src/learning/reading-tests.ts');
+  const source = { id:'annotation:a', bookId:'b', label:'Economics · page 2', group:'Decisions', text:'Opportunity cost is the value of the next best alternative. Opportunity cost matters.', note:'My note' };
+  const draft = makeReadingTest(source,'Opportunity cost');
+  assert.ok(!draft.front.includes('Opportunity cost')); assert.equal(draft.back,'Opportunity cost');
+  assert.ok(draft.note.includes(source.text)); assert.equal(draft.bookId,'b');
+  assert.ok(answerSuggestions(source.text).every(s=>source.text.includes(s)));
+  assert.ok(sourceHasTest(source.id,[draft.sourceKey])); assert.ok(!sourceHasTest('annotation:ab',[draft.sourceKey]));
+  assert.throws(()=>makeReadingTest(source,'made up')); assert.throws(()=>makeReadingTest(source,source.text));
+});
+test('source import is deduplicated and rating is recorded with the review', async () => {
+  const { sql, api }=database(); await migrations.runLearningMigrations(api); const repo=repository(api);
+  const input={deckName:'Group',front:'Question',back:'Answer',sourceKey:'annotation:a|Answer'};
+  await repo.createLearningCard(input); await assert.rejects(repo.createLearningCard(input),/already saved/);
+  const [card]=await repo.buildCardReviewQueue('due'); await repo.reviewLearningCard(card,'hard',1234);
+  assert.equal(sql.prepare('SELECT rating FROM learning_card_reviews').get().rating,'hard');
+  const dashboard=await repo.getCardDashboard(); assert.equal(dashboard.deckCounts[0].learning,1);
+  assert.equal(dashboard.deckCounts[0].newCount,0); sql.close();
+});
+test('question drafts extract definitions and causes without inventing answers', async () => {
+  const { questionFromPassage, makeReadingTest }=await import('../src/learning/reading-tests.ts');
+  const source={id:'s',bookId:null,label:'A passage',group:'Learning',text:'Spaced practice is reviewing material across separate sessions.',note:''};
+  const definition=questionFromPassage(source); assert.equal(definition.front,'What is Spaced practice?'); assert.ok(source.text.includes(definition.back));
+  const cause=questionFromPassage({...source,text:'Retrieval is useful because it exposes gaps in recall.'}); assert.ok(cause.front.includes('Retrieval is useful')); assert.equal(cause.back,'it exposes gaps in recall.');
+  assert.equal(questionFromPassage({...source,text:'Recall the last thing you studied.'}),null);
+  assert.throws(()=>makeReadingTest(source,source.text.slice(0,-1)),/context/);
+});
+test('reading catch-up joins actual highlights, note-only sources and book collections', async () => {
+  const { sql, api }=database();
+  sql.exec(`CREATE TABLE books(id TEXT,title TEXT,author TEXT); CREATE TABLE book_annotations(id TEXT,book_id TEXT,kind TEXT,selected_text TEXT,note TEXT,locator TEXT,created_at TEXT); CREATE TABLE book_collections(id TEXT,name TEXT); CREATE TABLE book_collection_members(book_id TEXT,collection_id TEXT);
+    INSERT INTO books VALUES('b','Book','Author'); INSERT INTO book_collections VALUES('c','Ideas'); INSERT INTO book_collection_members VALUES('b','c');
+    INSERT INTO book_annotations VALUES('a','b','highlight','Actual excerpt','Private note','Page 3','2026-09-08'),('n','b','note','','Note-only passage','','2026-09-07'),('x','b','bookmark','','','','2026-09-06');`);
+  const repo=load('../src/storage/reading-tests-repository.ts',{getDatabase:async()=>api}); const result=await repo.listStudySources();
+  assert.equal(result.sources.length,2); assert.equal(result.sources[0].text,'Actual excerpt'); assert.deepEqual(result.sources[0].collectionIds,['c']);
+  assert.ok(result.sources[0].label.includes('Page 3')); assert.equal(result.sources[1].text,'Note-only passage'); assert.equal(result.sources[1].note,''); sql.close();
+});

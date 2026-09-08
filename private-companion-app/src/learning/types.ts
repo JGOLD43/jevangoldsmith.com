@@ -82,6 +82,7 @@ export type LearningCard = {
   source: 'curriculum' | 'personal';
   bookId?: string | null;
   sourceLabel?: string;
+  sourceKey?: string | null;
   promptKind?: 'recall' | 'explain' | 'compare' | 'apply';
 };
 
@@ -111,7 +112,7 @@ export type CardDashboard = {
   totalCount: number;
   reviewedToday: number;
   retentionPercent: number;
-  deckCounts: { name: string; total: number; due: number }[];
+  deckCounts: { name: string; total: number; due: number; newCount: number; learning: number }[];
 };
 
 export type SkillTree = {

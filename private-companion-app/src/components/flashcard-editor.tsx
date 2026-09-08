@@ -6,7 +6,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { CARD_KINDS, type CardInput, type CardKind } from '@/learning/flashcards';
 import { createLearningCard, updateLearningCard } from '@/storage/learning-cards-repository';
 
-export function FlashcardEditor({ visible, initial, cardId, topics = [], onClose, onSaved }: { visible: boolean; initial?: CardInput; cardId?: string; topics?: string[]; onClose: () => void; onSaved: () => void }) {
+export function FlashcardEditor({ visible, initial, cardId, topics = [], onClose, onSaved }: { visible: boolean; initial?: CardInput; cardId?: string; topics?: string[]; onClose: () => void; onSaved: (saved?: CardInput) => void }) {
   const colors = useTheme();
   const saveLock = useRef(false);
   const [topic, setTopic] = useState(''), [front, setFront] = useState(''), [back, setBack] = useState(''), [note, setNote] = useState(''), [tags, setTags] = useState('');
@@ -15,7 +15,7 @@ export function FlashcardEditor({ visible, initial, cardId, topics = [], onClose
   const styles = useMemo(() => StyleSheet.create({ screen: { flex: 1, backgroundColor: colors.background }, content: { padding: 20, gap: 16, paddingBottom: 60 }, row: { flexDirection: 'row', alignItems: 'center', gap: 12 }, wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, title: { flex: 1, color: colors.text, fontFamily: Fonts.bold, fontSize: 23 }, text: { color: colors.text, fontFamily: Fonts.sans, fontSize: 14 }, muted: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 12, lineHeight: 18 }, input: { color: colors.text, fontFamily: Fonts.sans, fontSize: 16, borderWidth: 1, borderColor: colors.line, borderRadius: 12, padding: 14, minHeight: 50, backgroundColor: colors.backgroundElement }, multiline: { minHeight: 100, textAlignVertical: 'top' }, button: { padding: 13, minHeight: 46, borderRadius: 12, backgroundColor: colors.backgroundSelected }, primary: { backgroundColor: colors.action }, onPrimary: { color: colors.onAction, fontFamily: Fonts.bold, fontSize: 15, textAlign: 'center' } }), [colors]);
   async function save() {
     if (saveLock.current) return; saveLock.current = true; setSaving(true);
-    try { const input = { ...initial, deckName: topic, front, back, note, tags: tags.split(','), promptKind: kind, reverseEnabled: reverse }; if (cardId) await updateLearningCard(cardId, input); else await createLearningCard(input); onSaved(); onClose(); }
+    try { const input = { ...initial, deckName: topic, front, back, note, tags: tags.split(','), promptKind: kind, reverseEnabled: reverse }; if (cardId) await updateLearningCard(cardId, input); else await createLearningCard(input); onSaved(input); onClose(); }
     catch (error) { Alert.alert('Could not save card', error instanceof Error ? error.message : 'Please try again.'); }
     finally { saveLock.current = false; setSaving(false); }
   }

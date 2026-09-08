@@ -15,8 +15,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BookCover } from '@/components/book-cover';
-import { FlashcardEditor } from '@/components/flashcard-editor';
-import type { CardInput } from '@/learning/flashcards';
 import { BookCompanion } from '@/components/book-companion';
 import { Button, Card, Chip, SectionHeading } from '@/components/ui';
 import { Fonts, type AppColors } from '@/constants/theme';
@@ -129,7 +127,6 @@ export default function BookDetailScreen() {
   const { books, collections, editBook, importBook, deleteBook, annotationsFor, deleteAnnotation,
     collectionIdsFor, toggleCollection, createCollection } = useBooks();
   const book = books.find((item) => item.id === id);
-  const [flashcard, setFlashcard] = useState<CardInput | undefined>();
   const [annotations, setAnnotations] = useState<BookAnnotation[]>([]);
   const [collectionIds, setCollectionIds] = useState<string[]>([]);
   const [editorOpen, setEditorOpen] = useState(false);
@@ -150,7 +147,7 @@ export default function BookDetailScreen() {
     return <SafeAreaView style={styles.safe}><Text style={styles.empty}>Book not found.</Text></SafeAreaView>;
   }
 
-  const makeFlashcard = (item: BookAnnotation) => setFlashcard({ deckName: book.title, front: '', back: '', note: [item.selectedText, item.note].filter(Boolean).join('\n\n'), bookId: book.id, sourceLabel: `${book.title}${book.author ? ` — ${book.author}` : ''}`, promptKind: 'recall', reverseEnabled: false });
+  const makeFlashcard = (item: BookAnnotation) => router.push({ pathname: '/learning/cards/reading', params: { annotation: item.id, book: book.id } });
 
   const attach = async () => {
     try { await importBook(book.id); } catch (cause) { Alert.alert('Could not attach file', cause instanceof Error ? cause.message : 'Please try again.'); }
@@ -226,7 +223,6 @@ export default function BookDetailScreen() {
 
   return (
     <SafeAreaView edges={['top']} style={styles.safe}>
-      <FlashcardEditor visible={!!flashcard} initial={flashcard} onClose={() => setFlashcard(undefined)} onSaved={() => Alert.alert('Flashcard saved', 'Find it in Learning → Flashcards.')} />
       <FlatList ref={listRef} data={annotations} keyExtractor={(item) => item.id} ListHeaderComponent={header}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => <Card style={styles.annotation}><Text style={styles.cardLabel}>{item.kind} · private</Text>{item.selectedText ? <Text style={styles.quote}>“{item.selectedText}”</Text> : null}{item.note ? <Text style={styles.body}>{item.note}</Text> : null}<Button label="Make flashcard" onPress={() => makeFlashcard(item)} /><Button label="Delete" variant="danger" onPress={() => Alert.alert('Delete private note?', 'This cannot be undone.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Delete', style: 'destructive', onPress: async () => { await deleteAnnotation(item.id); setAnnotations((current) => current.filter((entry) => entry.id !== item.id)); } }])} /></Card>}

@@ -1,17 +1,17 @@
 import * as Crypto from 'expo-crypto';
 
 import { localDayBounds, selectReviewCards, validateCard, type CardInput } from '@/learning/flashcards';
-import { emptyCardState, scheduleCardReview } from '@/learning/card-scheduler';
+import { emptyCardState, scheduleCardReview, type CardRating } from '@/learning/card-scheduler';
 import { FRENCH_SKILLS, FRENCH_SKILL_STAGES } from '@/learning/french-seed';
 import type { CardDashboard, LearningCard, LearningCardDirection, LearningCardState, ReviewCard } from '@/learning/types';
 
 import { getDatabase } from './database';
 
-type CardRow = { id: string; skill_id: string | null; deck_name: string; front: string; back: string; note: string; tags_json: string; reverse_enabled: number; archived: number; source: LearningCard['source']; book_id?: string | null; source_label?: string; prompt_kind?: LearningCard['promptKind'] };
+type CardRow = { id: string; skill_id: string | null; deck_name: string; front: string; back: string; note: string; tags_json: string; reverse_enabled: number; archived: number; source: LearningCard['source']; book_id?: string | null; source_label?: string; source_key?: string | null; prompt_kind?: LearningCard['promptKind'] };
 type CardStateRow = { card_id: string; direction: LearningCardDirection; stability: number; difficulty: number; due_at: string; interval_days: number; review_count: number; lapse_count: number; last_reviewed_at: string | null };
 
 function mapCard(row: CardRow): LearningCard {
-  return { id: row.id, skillId: row.skill_id, deckName: row.deck_name, front: row.front, back: row.back, note: row.note, tags: JSON.parse(row.tags_json) as string[], reverseEnabled: row.reverse_enabled === 1, archived: row.archived === 1, source: row.source, bookId: row.book_id ?? null, sourceLabel: row.source_label ?? '', promptKind: row.prompt_kind ?? 'recall' };
+  return { id: row.id, skillId: row.skill_id, deckName: row.deck_name, front: row.front, back: row.back, note: row.note, tags: JSON.parse(row.tags_json) as string[], reverseEnabled: row.reverse_enabled === 1, archived: row.archived === 1, source: row.source, bookId: row.book_id ?? null, sourceLabel: row.source_label ?? '', sourceKey: row.source_key ?? null, promptKind: row.prompt_kind ?? 'recall' };
 }
 
 function mapState(row: CardStateRow): LearningCardState {
@@ -45,12 +45,12 @@ export async function listLearningCards(includeArchived = false): Promise<Learni
 
 export async function getCardDashboard(): Promise<CardDashboard> {
   const database = await getDatabase(); const now = new Date().toISOString(); const today = localDayBounds(new Date(now));
-  const cards = await database.getAllAsync<{ deck_name: string; card_id: string; review_count: number; due_at: string }>(`SELECT c.deck_name, s.card_id, s.review_count, s.due_at FROM learning_cards c JOIN learning_card_states s ON s.card_id=c.id WHERE c.archived=0 AND (s.direction='forward' OR c.reverse_enabled=1)`);
+  const cards = await database.getAllAsync<{ deck_name: string; card_id: string; review_count: number; due_at: string; interval_days: number }>(`SELECT c.deck_name, s.card_id, s.review_count, s.due_at, s.interval_days FROM learning_cards c JOIN learning_card_states s ON s.card_id=c.id WHERE c.archived=0 AND (s.direction='forward' OR c.reverse_enabled=1)`);
   const reviewStats = await database.getFirstAsync<{ total: number; remembered: number }>('SELECT COUNT(*) total, COALESCE(SUM(remembered), 0) remembered FROM learning_card_reviews WHERE created_at>=? AND created_at<?', today.start, today.end);
-  const decks = new Map<string, { total: Set<string>; due: number }>();
-  for (const row of cards) { const deck = decks.get(row.deck_name) ?? { total: new Set(), due: 0 }; deck.total.add(row.card_id); if (row.review_count > 0 && row.due_at <= now) deck.due += 1; decks.set(row.deck_name, deck); }
+  const decks = new Map<string, { total: Set<string>; due: number; newCards: Set<string>; learning: Set<string> }>();
+  for (const row of cards) { const deck = decks.get(row.deck_name) ?? { total: new Set(), due: 0, newCards: new Set<string>(), learning: new Set<string>() }; deck.total.add(row.card_id); if (row.review_count === 0) deck.newCards.add(row.card_id); else if (row.interval_days < 1) deck.learning.add(row.card_id); if (row.review_count > 0 && row.due_at <= now) deck.due += 1; decks.set(row.deck_name, deck); }
   const learned = new Set(cards.filter((row) => row.review_count > 0).map((row) => row.card_id)).size;
-  return { dueCount: cards.filter((row) => row.review_count > 0 && row.due_at <= now).length, newCount: new Set(cards.filter((row) => row.review_count === 0).map((row) => row.card_id)).size, learnedCount: learned, totalCount: new Set(cards.map((row) => row.card_id)).size, reviewedToday: reviewStats?.total ?? 0, retentionPercent: reviewStats?.total ? Math.round((reviewStats.remembered / reviewStats.total) * 100) : 0, deckCounts: [...decks].map(([name, value]) => ({ name, total: value.total.size, due: value.due })) };
+  return { dueCount: cards.filter((row) => row.review_count > 0 && row.due_at <= now).length, newCount: new Set(cards.filter((row) => row.review_count === 0).map((row) => row.card_id)).size, learnedCount: learned, totalCount: new Set(cards.map((row) => row.card_id)).size, reviewedToday: reviewStats?.total ?? 0, retentionPercent: reviewStats?.total ? Math.round((reviewStats.remembered / reviewStats.total) * 100) : 0, deckCounts: [...decks].map(([name, value]) => ({ name, total: value.total.size, due: value.due, newCount: value.newCards.size, learning: value.learning.size })) };
 }
 
 export async function buildCardReviewQueue(mode: 'due' | 'cram', deckName?: string, limit = 24): Promise<ReviewCard[]> {
@@ -63,15 +63,15 @@ export async function buildCardReviewQueue(mode: 'due' | 'cram', deckName?: stri
   return selectReviewCards(rows.map((row) => { const card = mapCard(row); const state = mapState(row); return { ...card, direction: row.direction, prompt: row.direction === 'forward' ? card.front : card.back, answer: row.direction === 'forward' ? card.back : card.front, state }; }), mode, limit);
 }
 
-export async function reviewLearningCard(card: ReviewCard, remembered: boolean, responseMs: number): Promise<LearningCardState> {
+export async function reviewLearningCard(card: ReviewCard, rating: CardRating | boolean, responseMs: number): Promise<LearningCardState> {
   const database = await getDatabase(); const now = new Date(); let next: LearningCardState;
   await database.withTransactionAsync(async () => {
     const current = await database.getFirstAsync<CardStateRow>('SELECT s.* FROM learning_card_states s JOIN learning_cards c ON c.id=s.card_id WHERE s.card_id=? AND s.direction=? AND c.archived=0', card.id, card.direction);
     if (!current) throw new Error('This card was removed or archived. Start a fresh review.');
     const state = mapState(current);
-    next = scheduleCardReview(state, remembered, now);
+    next = scheduleCardReview(state, rating, now);
     await database.runAsync(`UPDATE learning_card_states SET stability=?, difficulty=?, due_at=?, interval_days=?, review_count=?, lapse_count=?, last_reviewed_at=? WHERE card_id=? AND direction=?`, next.stability, next.difficulty, next.dueAt, next.intervalDays, next.reviewCount, next.lapseCount, next.lastReviewedAt, next.cardId, next.direction);
-    await database.runAsync(`INSERT INTO learning_card_reviews (id, card_id, direction, remembered, response_ms, previous_interval_days, next_interval_days, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, Crypto.randomUUID(), card.id, card.direction, remembered ? 1 : 0, Math.max(0, Math.round(responseMs)), state.intervalDays, next.intervalDays, now.toISOString());
+    await database.runAsync(`INSERT INTO learning_card_reviews (id, card_id, direction, remembered, response_ms, previous_interval_days, next_interval_days, created_at, rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, Crypto.randomUUID(), card.id, card.direction, rating !== false && rating !== 'again' ? 1 : 0, Math.max(0, Math.round(responseMs)), state.intervalDays, next.intervalDays, now.toISOString(), typeof rating === 'boolean' ? (rating ? 'good' : 'again') : rating);
   });
   return next!;
 }
@@ -79,7 +79,8 @@ export async function reviewLearningCard(card: ReviewCard, remembered: boolean, 
 export async function createLearningCard(input: CardInput): Promise<LearningCard> {
   const value = validateCard(input); const database = await getDatabase(); const now = new Date().toISOString(); const id = Crypto.randomUUID();
   await database.withTransactionAsync(async () => {
-    await database.runAsync(`INSERT INTO learning_cards (id, skill_id, deck_name, front, back, note, tags_json, reverse_enabled, archived, source, created_at, updated_at, book_id, source_label, prompt_kind) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, 0, 'personal', ?, ?, ?, ?, ?)`, id, value.deckName, value.front, value.back, value.note, JSON.stringify(value.tags), value.reverseEnabled ? 1 : 0, now, now, value.bookId, value.sourceLabel, value.promptKind);
+    if (value.sourceKey && await database.getFirstAsync('SELECT id FROM learning_cards WHERE source_key=?', value.sourceKey)) throw new Error('This test is already saved. Find it in your group or archived cards.');
+    await database.runAsync(`INSERT INTO learning_cards (id, skill_id, deck_name, front, back, note, tags_json, reverse_enabled, archived, source, created_at, updated_at, book_id, source_label, prompt_kind, source_key) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, 0, 'personal', ?, ?, ?, ?, ?, ?)`, id, value.deckName, value.front, value.back, value.note, JSON.stringify(value.tags), value.reverseEnabled ? 1 : 0, now, now, value.bookId, value.sourceLabel, value.promptKind, value.sourceKey);
     for (const direction of ['forward', 'reverse'] as const) {
       const state = emptyCardState(id, direction);
       await database.runAsync(`INSERT INTO learning_card_states (card_id, direction, stability, difficulty, due_at, interval_days, review_count, lapse_count) VALUES (?, ?, ?, ?, ?, 0, 0, 0)`, id, direction, state.stability, state.difficulty, state.dueAt);
