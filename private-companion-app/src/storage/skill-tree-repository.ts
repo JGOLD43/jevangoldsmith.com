@@ -2,6 +2,7 @@ import * as Crypto from 'expo-crypto';
 
 import { applyAdaptiveEvidence, emptyDimensionScores, estimateRetention } from '@/learning/adaptive-skill-engine';
 import { CORE_SKILL_TREE_SEEDS, type CoreSkillTreeSeed } from '@/learning/core-skill-seeds';
+import { PRIORITY_CURRICULA } from '@/learning/priority-curricula';
 import { FOCUSED_SKILL_TREE_SEEDS } from '@/learning/focused-skill-seeds';
 import { emptySkillProgress, skillNodeDepth, skillNodeStatus, validatePrerequisites } from '@/learning/skill-tree-engine';
 import { UPSKILLING_SEED_NODES, UPSKILLING_TREE_TITLE } from '@/learning/upskilling-seed';
@@ -170,11 +171,15 @@ async function ensureCoreSkillTree(seed: CoreSkillTreeSeed): Promise<string> {
 
 export async function ensureCoreSkillTrees(): Promise<string[]> {
   const ids: string[] = [await ensureUpskillingSkillTree()];
-  for (const seed of [...CORE_SKILL_TREE_SEEDS, ...FOCUSED_SKILL_TREE_SEEDS]) ids.push(await ensureCoreSkillTree(seed));
+  for (const seed of [...CORE_SKILL_TREE_SEEDS, ...FOCUSED_SKILL_TREE_SEEDS, ...PRIORITY_CURRICULA]) ids.push(await ensureCoreSkillTree(seed));
   return ids;
 }
 
 export async function deleteSkillTree(id: string): Promise<void> {
   const database = await getDatabase();
   await database.runAsync('DELETE FROM skill_trees WHERE id = ?', id);
+}
+
+export async function ensurePriorityCurricula(): Promise<void> {
+  for (const seed of PRIORITY_CURRICULA) await ensureCoreSkillTree(seed);
 }

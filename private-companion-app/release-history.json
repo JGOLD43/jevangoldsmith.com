@@ -1,5 +1,16 @@
 [
   {
+    "baseVersion": "1.5.5",
+    "revision": 2,
+    "label": "1.5.5-update.2",
+    "releasedAt": "2026-09-08T08:26:40.510Z",
+    "notes": "Copywriting, ad creation and AI skill trees with direct-practice time and evidence tracking",
+    "previewGroup": "7c5efae9-9ed9-46f5-83d5-6b401b8df025",
+    "productionGroup": "2ce722d8-2728-4036-8ac3-8ee5aa02fe1e",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
     "baseVersion": "1.5.4",
     "revision": 4,
     "label": "1.5.4-update.4",

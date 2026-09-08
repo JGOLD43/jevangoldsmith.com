@@ -1,9 +1,11 @@
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useCallback, useMemo, useState } from 'react';
-import { Alert, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Linking, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { CURRICULUM_RESOURCES } from '@/learning/priority-curricula';
+import { getPracticeTime } from '@/storage/practice-time-repository';
 import { Fonts, type AppColors } from '@/constants/theme';
 import { SkillTreeMap } from '@/components/skill-tree-map';
 import { useTheme } from '@/hooks/use-theme';
@@ -19,6 +21,7 @@ export default function SkillTreeScreen() {
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const isNew = id === 'new';
+  const [time, setTime] = useState<Awaited<ReturnType<typeof getPracticeTime>> | null>(null);
   const [tree, setTree] = useState<SkillTreeDetail | null>(null);
   const [analytics, setAnalytics] = useState<SkillTreeAnalytics | null>(null);
   const [title, setTitle] = useState('');
@@ -30,7 +33,7 @@ export default function SkillTreeScreen() {
   const reload = useCallback(async () => {
     if (!id || isNew) return;
     const [nextTree, nextAnalytics] = await Promise.all([getSkillTree(id), getSkillTreeAnalytics(id)]);
-    setTree(nextTree); setAnalytics(nextAnalytics);
+    setTree(nextTree); setAnalytics(nextAnalytics); setTime(await getPracticeTime(id));
   }, [id, isNew]);
   useFocusEffect(useCallback(() => { void reload(); }, [reload]));
 
@@ -44,7 +47,7 @@ export default function SkillTreeScreen() {
   };
 
   const practice = useCallback((node?: SkillTreeNodeView) => {
-    const target = node ?? tree?.nodes.find((item) => item.status === 'practising' || item.status === 'ready');
+    const target = node ??  (tree ? chooseNextSkill(tree.nodes) : null);
     if (!tree || !target) return;
     setSelected(null);
     router.push({ pathname: '/skills/[id]/practice', params: { id: tree.id, node: target.id } });
@@ -85,11 +88,15 @@ export default function SkillTreeScreen() {
           <View><Text style={styles.summaryValue}>{analytics?.dueCount ?? tree.nodes.length}</Text><Text style={styles.summaryLabel}>Due</Text></View>
         </View>
         <View style={styles.growthCard}><View><Text style={styles.growthValue}>+{analytics?.growthLast30Days ?? 0}</Text><Text style={styles.growthLabel}>strength gained · 30 days</Text></View><View style={styles.growthRight}><Text style={styles.growthValue}>{analytics?.independentRate ?? 0}%</Text><Text style={styles.growthLabel}>independent</Text></View></View>
+        <View style={styles.growthCard}><Text style={styles.growthValue}>{((time?.totalMs ?? 0) / 60_000).toFixed(1)} min direct practice</Text><Text style={styles.growthLabel}>{((time?.studyMs ?? 0) / 60_000).toFixed(1)} min study</Text></View>
+        {next ? <Text style={styles.intro}>Next: {next.title}</Text> : null}
         <View style={styles.actions}>
           <Pressable accessibilityRole="button" disabled={!next} onPress={() => practice()} style={[styles.primaryButton, styles.actionButton, !next && styles.disabled]}><SymbolView name={{ ios: 'play.fill', android: 'play_arrow' }} size={18} tintColor={colors.onAction} /><Text style={styles.primaryButtonText}>{next ? 'Practice next' : 'All caught up'}</Text></Pressable>
           <Pressable accessibilityRole="button" onPress={() => setEditorOpen(true)} style={[styles.secondaryButton, styles.actionButton]}><SymbolView name={{ ios: 'plus', android: 'add' }} size={19} tintColor={colors.accent} /><Text style={styles.secondaryButtonText}>Add ability</Text></Pressable>
         </View>
+        {CURRICULUM_RESOURCES[tree.title] ? <View style={styles.formCard}><Text style={styles.label}>Curriculum guide & reading order</Text><Text style={styles.detailCopy}>Start at the first unlocked ability. Read just enough to attempt its exercise, then close the source and produce your own work. Repeat on another day and a changed brief. Self-ratings guide the map; ask a capable reviewer to challenge your rubric.</Text>{CURRICULUM_RESOURCES[tree.title].map(resource => <Pressable accessibilityRole="link" key={resource.url} onPress={() => { void Linking.openURL(resource.url).catch(() => Alert.alert('Could not open resource', resource.url)); }}><Text style={styles.backText}>{resource.title} ↗</Text><Text style={styles.detailCopy}>{resource.when}</Text></Pressable>)}<Pressable accessibilityRole="link" onPress={() => { void Linking.openURL('https://www.justinmath.com/advice-on-upskilling/').catch(() => Alert.alert('Could not open reading')); }}><Text style={styles.backText}>Justin Skycak — Advice on Upskilling ↗</Text></Pressable></View> : null}
         {tree.nodes.length === 0 ? <View style={styles.emptyCard}><Text style={styles.emptyTitle}>Start with the foundation</Text><Text style={styles.emptyCopy}>Add the simplest ability someone needs before everything else. Then build upward.</Text></View> : <SkillTreeMap nodes={tree.nodes} onSelect={setSelected} />}
+        <View style={styles.formCard}><Text style={styles.label}>Recent time & evidence</Text>{time?.recent.length ? time.recent.map((log, index) => <View key={`${log.created_at}-${index}`}><Text style={styles.sourceName}>{log.title} · {(log.duration_ms / 60_000).toFixed(1)} min {log.kind} · {new Date(log.created_at).toLocaleDateString()}</Text><Text style={styles.detailCopy}>{log.note}</Text></View>) : <Text style={styles.detailCopy}>Your saved practice and study sessions will appear here.</Text>}</View>
       </ScrollView>
       <AddAbilityModal visible={editorOpen} tree={tree} onClose={() => setEditorOpen(false)} onSaved={reload} />
       <NodeModal node={selected} tree={tree} onClose={() => setSelected(null)} onPractice={practice} />

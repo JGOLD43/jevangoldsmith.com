@@ -70,6 +70,18 @@ export async function runLearningMigrations(database: SQLiteDatabase): Promise<v
   await database.execAsync('CREATE UNIQUE INDEX IF NOT EXISTS learning_cards_source_key ON learning_cards(source_key) WHERE source_key IS NOT NULL;');
   const reviewColumns = new Set((await database.getAllAsync<{ name: string }>('PRAGMA table_info(learning_card_reviews)')).map(column => column.name));
   if (!reviewColumns.has('rating')) await database.execAsync('ALTER TABLE learning_card_reviews ADD COLUMN rating TEXT;');
+  await database.execAsync(`
+    CREATE TABLE IF NOT EXISTS skill_practice_time (
+      id TEXT PRIMARY KEY NOT NULL,
+      tree_id TEXT NOT NULL REFERENCES skill_trees(id) ON DELETE CASCADE,
+      node_id TEXT NOT NULL REFERENCES skill_tree_nodes(id) ON DELETE CASCADE,
+      kind TEXT NOT NULL CHECK(kind IN ('practice', 'study')),
+      duration_ms INTEGER NOT NULL CHECK(duration_ms > 0 AND duration_ms <= 43200000),
+      note TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS skill_practice_time_tree ON skill_practice_time(tree_id, created_at DESC);
+  `);
   const applied = await database.getFirstAsync<{ id: string }>('SELECT id FROM schema_migrations WHERE id = ?', 'skill-trees-v2');
   if (applied) return;
   const nodeColumns = new Set((await database.getAllAsync<{ name: string }>('PRAGMA table_info(skill_tree_nodes)')).map((column) => column.name));

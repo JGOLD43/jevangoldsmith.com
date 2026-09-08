@@ -5,12 +5,14 @@ import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from '
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ActivityHeatmap } from '@/components/activity-heatmap';
+import { PRIORITY_CURRICULA } from '@/learning/priority-curricula';
+import { getPracticeTime } from '@/storage/practice-time-repository';
 import { Fonts, type AppColors } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import type { SkillTreeAnalytics, SkillTreeSummary } from '@/learning/types';
 import { useBooks } from '@/state/books-context';
 import { useLearning } from '@/state/learning-context';
-import { ensureUpskillingSkillTree, getSkillTreeAnalytics, listSkillTrees } from '@/storage/skill-tree-repository';
+import { ensurePriorityCurricula, ensureUpskillingSkillTree, getSkillTreeAnalytics, listSkillTrees } from '@/storage/skill-tree-repository';
 
 const DURATIONS = [10, 20, 30] as const;
 
@@ -35,13 +37,19 @@ export default function LearningScreen() {
   const [analytics, setAnalytics] = useState<Record<string, SkillTreeAnalytics>>({});
   const [loadingTrees, setLoadingTrees] = useState(true);
   const [upskillingId, setUpskillingId] = useState('');
+  const [focusTitle, setFocusTitle] = useState('Copywriting');
+  const [time, setTime] = useState<Awaited<ReturnType<typeof getPracticeTime>> | null>(null);
+  const [error, setError] = useState('');
 
   const reload = useCallback(async () => {
     setLoadingTrees(true);
+    try {
+    await ensurePriorityCurricula();
     const id = await ensureUpskillingSkillTree();
     const nextTrees = await listSkillTrees();
     const entries = await Promise.all(nextTrees.map(async (tree) => [tree.id, await getSkillTreeAnalytics(tree.id)] as const));
-    setUpskillingId(id); setTrees(nextTrees); setAnalytics(Object.fromEntries(entries)); setLoadingTrees(false);
+    setUpskillingId(id); setTrees(nextTrees.sort((a, b) => Number(PRIORITY_CURRICULA.some(seed => seed.title === b.title)) - Number(PRIORITY_CURRICULA.some(seed => seed.title === a.title)))); setAnalytics(Object.fromEntries(entries)); setTime(await getPracticeTime()); setError('');
+    } catch (cause) { setError(cause instanceof Error ? cause.message : 'Could not load learning.'); } finally { setLoadingTrees(false); }
   }, []);
   useFocusEffect(useCallback(() => { void reload(); }, [reload]));
 
@@ -52,24 +60,26 @@ export default function LearningScreen() {
   const weightedNodes = trees.reduce((sum, tree) => sum + tree.nodeCount, 0);
   const retained = weightedNodes ? Math.round(trees.reduce((sum, tree) => sum + (analytics[tree.id]?.estimatedRetention ?? 0) * tree.nodeCount, 0) / weightedNodes) : 0;
   const highlightedBooks = books.filter((book) => book.readingStatus !== 'unread').length;
-  const upskilling = trees.find((tree) => tree.id === upskillingId);
+  const upskilling = trees.find((tree) => tree.title === focusTitle) ?? trees.find(tree => tree.id === upskillingId);
+  const focusId = upskilling?.id;
 
   const header = <View style={styles.header}>
-    <View style={styles.topbar}><Pressable accessibilityLabel="Back" hitSlop={12} onPress={() => router.back()} style={styles.back}><SymbolView name={{ ios: 'chevron.left', android: 'arrow_back' }} size={24} tintColor={colors.text} /></Pressable><View><Text style={styles.eyebrow}>LEARNING SYSTEM</Text><Text style={styles.title}>Build memory that transfers.</Text></View></View>
-    <Text style={styles.intro}>Your reading becomes a prerequisite map. Practice targets the weakest ready ability, then measures recall, independence, speed and real-world transfer.</Text>
+    <View style={styles.topbar}><Pressable accessibilityLabel="Back" hitSlop={12} onPress={() => router.back()} style={styles.back}><SymbolView name={{ ios: 'chevron.left', android: 'arrow_back' }} size={24} tintColor={colors.text} /></Pressable><View><Text style={styles.eyebrow}>LEARNING SYSTEM</Text><Text style={styles.title}>Build skills by doing.</Text></View></View>
+    <Text style={styles.intro}>Choose one track. Do a short exercise, save your time and work, then correct one weakness. Aim for 20 minutes today; 10 is enough to start.</Text>
 
     <Pressable accessibilityRole="button" onPress={() => router.push('/learning/cards' as Href)} style={styles.sourceRow}><View style={styles.sourceCopy}><Text style={styles.sourceTitle}>Flashcards</Text><Text style={styles.sourceBody}>Create topic decks from your reading. Recall, reveal, review — or shuffle through your cards.</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={20} tintColor={colors.accent} /></Pressable>
 
+    {error ? <Pressable onPress={() => { void reload(); }}><Text style={styles.intro}>{error} · Tap to retry</Text></Pressable> : null}
     <View style={styles.memoryBand}>
-      <View style={styles.memoryLead}><Text style={styles.memoryValue}>{retained}%</Text><Text style={styles.memoryLabel}>estimated retention</Text></View>
-      <View style={styles.memoryDivider} />
-      <View style={styles.memoryStat}><Text style={styles.statValue}>{totalDue}</Text><Text style={styles.statLabel}>Due now</Text></View>
-      <View style={styles.memoryStat}><Text style={styles.statValue}>{totalReliable}</Text><Text style={styles.statLabel}>Reliable</Text></View>
-      <View style={styles.memoryStat}><Text style={styles.statValue}>{totalAbilities}</Text><Text style={styles.statLabel}>Abilities</Text></View>
+      <View style={styles.memoryLead}><Text style={styles.memoryValue}>{((time?.todayMs ?? 0) / 60_000).toFixed(1)}</Text><Text style={styles.memoryLabel}>practice minutes today</Text></View>
+      <View style={styles.memoryStat}><Text style={styles.statValue}>{((time?.weekMs ?? 0) / 60_000).toFixed(0)}</Text><Text style={styles.statLabel}>Last 7 days</Text></View>
+      <View style={styles.memoryStat}><Text style={styles.statValue}>{((time?.totalMs ?? 0) / 3_600_000).toFixed(1)}h</Text><Text style={styles.statLabel}>Total practice</Text></View>
     </View>
+    <Text style={styles.sectionBody}>{((time?.studyMs ?? 0) / 60_000).toFixed(0)} minutes reading / study recorded separately. French sessions have their own tracker below.</Text>
+    <View style={styles.durationRow}>{PRIORITY_CURRICULA.map(seed => <Pressable key={seed.key} accessibilityRole="button" accessibilityState={{ selected: focusTitle === seed.title }} onPress={() => setFocusTitle(seed.title)} style={[styles.duration, focusTitle === seed.title && styles.durationSelected]}><Text style={[styles.durationText, focusTitle === seed.title && styles.durationTextSelected]}>{seed.title === 'AI foundations & papers' ? 'AI' : seed.title}</Text></Pressable>)}</View>
 
-    <View style={styles.todaySection}><Text style={styles.sectionEyebrow}>TODAY'S FRONTIER</Text><Text style={styles.sectionTitle}>{upskilling?.title ?? 'Learning how to learn'}</Text><Text style={styles.sectionBody}>{upskilling?.description ?? 'The next practice will stay at the edge of what you can do independently.'}</Text>
-      <Pressable disabled={!upskillingId} accessibilityRole="button" onPress={() => openTree(upskillingId)} style={({ pressed }) => [styles.primary, pressed && styles.pressed, !upskillingId && styles.disabled]}><Text style={styles.primaryText}>Practice the next ability</Text><SymbolView name={{ ios: 'arrow.right', android: 'arrow_forward' }} size={19} tintColor={colors.onAction} /></Pressable>
+    <View style={styles.todaySection}><Text style={styles.sectionEyebrow}>YOUR NEXT REPETITION</Text><Text style={styles.sectionTitle}>{upskilling?.title ?? 'Learning how to learn'}</Text><Text style={styles.sectionBody}>{upskilling?.description ?? 'The next practice will stay at the edge of what you can do independently.'}</Text>
+      <Pressable disabled={!focusId} accessibilityRole="button" onPress={() => { if (focusId) openTree(focusId); }} style={({ pressed }) => [styles.primary, pressed && styles.pressed, !focusId && styles.disabled]}><Text style={styles.primaryText}>Open practice & curriculum</Text><SymbolView name={{ ios: 'arrow.right', android: 'arrow_forward' }} size={19} tintColor={colors.onAction} /></Pressable>
     </View>
 
     <View style={styles.pipeline}>
@@ -86,9 +96,9 @@ export default function LearningScreen() {
 
   const footer = <View style={styles.footer}>
     <View style={styles.frenchSection}><View><Text style={styles.sectionEyebrow}>LANGUAGE PRACTICE</Text><Text style={styles.sectionTitle}>French conversation</Text><Text style={styles.sectionBody}>{dashboard?.nextMilestone?.realLifeTest ?? 'Retrieval, correction and live speaking tasks.'}</Text></View><View style={styles.durationRow}>{DURATIONS.map((duration) => <Pressable key={duration} onPress={() => setMinutes(duration)} style={[styles.duration, minutes === duration && styles.durationSelected]}><Text style={[styles.durationText, minutes === duration && styles.durationTextSelected]}>{duration}m</Text></Pressable>)}</View><Pressable accessibilityRole="button" onPress={() => router.push(`/learning/session?minutes=${minutes}`)} style={({ pressed }) => [styles.secondary, pressed && styles.pressed]}><Text style={styles.secondaryText}>Start speaking practice</Text><SymbolView name={{ ios: 'waveform', android: 'graphic_eq' }} size={19} tintColor={colors.accent} /></Pressable><Pressable onPress={() => router.push('/learning/tree')} style={styles.textLink}><Text style={styles.textLinkLabel}>Open French prerequisite map</Text></Pressable></View>
-    <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Practice history</Text><Text style={styles.sectionAside}>52 weeks</Text></View>
-    <View style={styles.heatmap}><ActivityHeatmap activity={dashboard?.recentActivity ?? []} formatValue={(value, count) => `${value} minutes across ${count} sessions`} /></View>
-    <Text style={styles.privacy}>Memory estimates are modelled from your encrypted on-device practice evidence. They are not a claim that memory can be measured directly.</Text>
+    <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Direct practice history</Text><Text style={styles.sectionAside}>52 weeks</Text></View>
+    <View style={styles.heatmap}><ActivityHeatmap activity={time?.activity ?? []} formatValue={(value, count) => `${value.toFixed(1)} minutes across ${count} sessions`} /></View>
+    <Text style={styles.privacy}>Time and evidence stay on your device. Skill progress uses your self-assessments; it is not an independently verified measure of competence.</Text>
   </View>;
 
   return <SafeAreaView edges={['top']} style={styles.safe}>

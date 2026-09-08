@@ -1,7 +1,7 @@
 {
-  "baseVersion": "1.5.4",
-  "revision": 4,
-  "label": "1.5.4-update.4",
-  "releasedAt": "2026-09-08T07:54:22.282Z",
-  "notes": "Topic flashcards, book highlights and spaced retrieval practice"
+  "baseVersion": "1.5.5",
+  "revision": 2,
+  "label": "1.5.5-update.2",
+  "releasedAt": "2026-09-08T08:26:40.510Z",
+  "notes": "Copywriting, ad creation and AI skill trees with direct-practice time and evidence tracking"
 }
