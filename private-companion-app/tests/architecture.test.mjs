@@ -133,10 +133,10 @@ test('the Vault tab is replaced by the on-device book library', async () => {
   assert.match(tabs, /android:\s*'library_books'/);
   assert.match(tabs, /onPress=\{\(\) => go\('\/books'\)\}/);
   assert.doesNotMatch(tabs, /label="Vault"/);
-  assert.match(library, /numColumns=\{3\}/);
+  assert.match(library, /numColumns=\{2\}/);
   assert.match(library, /coverMosaic/);
   assert.match(library, /`Search \$\{mediaKind\}`/);
-  assert.match(library, /readingStats\.highlightCount/);
+  assert.match(library, /readingStats\.todaySeconds/);
   assert.match(home, /Continue reading/);
 });
 
@@ -147,8 +147,8 @@ test('Library switches between books, website movies, essays and skill trees', a
 
   assert.match(library, /type MediaKind = 'books' \| 'movies' \| 'essays' \| 'skills'/);
   assert.match(library, /accessibilityRole="tablist"/);
-  assert.match(library, /kind === 'books' \? 'Books' : kind === 'movies' \? 'Movies' : kind === 'essays' \? 'Essays' : 'Skills'/);
-  assert.match(library, /movieStats\.hours/);
+  assert.match(library, /\['books', 'movies', 'essays', 'skills'\]/);
+  assert.match(library, /movieStats\.watches/);
   assert.match(library, /CollectionTile group=\{item\} mediaKind=\{mediaKind\}/);
   assert.match(library, /EssayDocumentCard/);
   assert.match(library, /numColumns=\{mediaKind === 'essays' \? 1 : 2\}/);
@@ -274,8 +274,8 @@ test('Library opens detailed local reading and website watching insights', async
   const tabs = await source('src/components/app-tabs.tsx');
 
   assert.match(library, /pathname:\s*'\/insights'/);
-  assert.match(library, /Reading insights/);
-  assert.match(library, /Watching insights/);
+  assert.match(library, /mediaKind === 'books' \? 'reading' : 'watching'/);
+  assert.match(library, /readingStats\.lastSevenDaysSeconds/);
   assert.match(insights, /Watching Insights/);
   assert.match(insights, /Reading Insights/);
   assert.match(insights, /Weeks in a row/);

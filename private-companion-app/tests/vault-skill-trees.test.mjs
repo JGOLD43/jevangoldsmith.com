@@ -9,6 +9,7 @@ import * as adaptive from '../src/learning/adaptive-skill-engine.ts';
 import * as engine from '../src/learning/skill-tree-engine.ts';
 import * as core from '../src/learning/core-skill-seeds.ts';
 import * as focused from '../src/learning/focused-skill-seeds.ts';
+import * as marketing from '../src/learning/marketing-curricula.ts';
 import * as priority from '../src/learning/priority-curricula.ts';
 import * as upskill from '../src/learning/upskilling-seed.ts';
 
@@ -42,7 +43,7 @@ function setup() {
     },
   }, 'withVaultTransaction');
   const repository = load('../src/storage/skill-tree-repository.ts', {
-    ...adaptive, ...engine, ...core, ...focused, ...priority, ...upskill,
+    ...adaptive, ...engine, ...core, ...focused, ...priority, ...marketing, ...upskill,
     Crypto: { randomUUID }, getDatabase: async () => primary, withVaultTransaction,
   }, 'ensureCoreSkillTrees, listSkillTrees, getSkillTree, recordSkillTreeAttempt');
   return { db, primary, repository, withVaultTransaction, counts: () => ({ keyed, closed }) };
@@ -55,7 +56,7 @@ test('Library creates every curriculum with keyed transactions and preserves pra
     db.exec('CREATE TABLE books(id TEXT, title TEXT, updated_at TEXT)');
     await repository.ensureCoreSkillTrees();
     const trees = await repository.listSkillTrees();
-    for (const spec of priority.PRIORITY_CURRICULA) {
+    for (const spec of [...priority.PRIORITY_CURRICULA, ...marketing.MARKETING_CURRICULA]) {
       const tree = trees.find(tree => tree.title === spec.title);
       assert.equal(tree?.nodeCount, spec.nodes.length, spec.title);
     }

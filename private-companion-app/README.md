@@ -152,3 +152,11 @@ Open **Learning → Flashcards → Study my reading**. Saved book highlights and
 Put related books in the same learning group when saving. The group dashboard shows new, learning and due counts. Sessions prioritise due work, introduce at most ten new cards, and mix groups when no group is selected. Reveal the answer and original source only after trying recall, then choose **Again / Hard / Good / Easy**; each shows the next review interval. Missed-answer practice and shuffle do not change the saved schedule. The interval scheduler is a transparent local heuristic, not Anki FSRS or Math Academy’s algorithm.
 
 Existing cards and review history are preserved. Duplicate source tests are blocked, including archived cards; edit or restore the existing card instead. Cards, excerpts and review history stay in the encrypted vault. Book and annotation deletion leaves the saved excerpt on its study card; deleting an archived card removes its review history too.
+
+### Library browsing (1.5.5 Update 6)
+
+Library uses compact Books / Movies / Essays / Skills tabs and search, a single reading-time summary linked to full Insights, and two-column collection cover stacks. Rating tiers remain available via **By rating**; A–Z controls change collection or item order. Search matches titles, authors and collection names. Opening a collection-name match clears that query so the collection opens with its items visible.
+
+Use **+ → Import a book** for EPUB/PDF or **+ → Import Kindle history** for library files and Kindle notebook exports. Both use the existing encrypted import flow. The compact Library accent respects the selected light/dark mode. Missing cover URLs fall back to a title cover.
+
+The Skills tab also offers a **Marketing** filter, ordered from foundations through advanced disciplines. Its 17 specialist curricula, plus existing Copywriting and Ad creation, retain existing practice records. Preparation guidance and sources appear in each tree’s Resources tab. See `content/curricula/marketing-practice-curriculum.md` for scope and practice guidance.

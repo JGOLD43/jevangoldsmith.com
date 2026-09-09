@@ -2,6 +2,7 @@ import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SkillColors as c, SkillFonts as f } from '@/constants/skill-theme';
+import { MARKETING_RESOURCES, MARKETING_PREPARATION } from '@/learning/marketing-curricula';
 import { CURRICULUM_RESOURCES } from '@/learning/priority-curricula';
 import type { SkillTreeAnalytics, SkillTreeDetail, SkillTreeNodeView } from '@/learning/types';
 import type { getPracticeTime } from '@/storage/practice-time-repository';
@@ -14,7 +15,8 @@ export function SkillTreeOverview({ tree, analytics, time, next, onBack, onAdd, 
   const [tab, setTab] = useState<'Tree' | 'Resources' | 'Activity'>('Tree');
   const reliable = tree.nodes.filter(node => node.status === 'reliable' || node.status === 'mastered').length;
   const percent = tree.nodes.length ? Math.round(reliable / tree.nodes.length * 100) : 0;
-  const resources = CURRICULUM_RESOURCES[tree.title] ?? [];
+  const resources = MARKETING_RESOURCES[tree.title] ?? CURRICULUM_RESOURCES[tree.title] ?? [];
+  const preparation = MARKETING_PREPARATION[tree.title] ?? [];
   const menu = () => Alert.alert('Manage this skill tree', tree.title, [{ text: 'Add an ability', onPress: onAdd }, { text: 'Delete tree', style: 'destructive', onPress: onDelete }, { text: 'Cancel', style: 'cancel' }]);
   return <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
     <View style={s.nav}><Pressable accessibilityRole="button" accessibilityLabel="Back to skill library" onPress={onBack} style={s.back}><SymbolView name={{ ios: 'arrow.left', android: 'arrow_back' }} size={20} tintColor={c.text} /><Text style={s.backText}>Skills</Text></Pressable><Pressable accessibilityRole="button" accessibilityLabel="Manage skill tree" onPress={menu} style={s.menu}><SymbolView name={{ ios: 'ellipsis', android: 'more_horiz' }} size={22} tintColor={c.textSecondary} /></Pressable></View>
@@ -30,6 +32,7 @@ export function SkillTreeOverview({ tree, analytics, time, next, onBack, onAdd, 
       
     </> : tab === 'Resources' ? <View style={s.panel}>
       
+      {preparation.length ? <Text style={s.body}>Preparation: {preparation.join(" · ")}</Text> : null}
       {resources.map((resource, index) => <Pressable key={resource.url} accessibilityRole="link" onPress={() => open(resource.url)} style={({ pressed }) => [s.resource, pressed && s.pressed]}><Text style={s.resourceNumber}>{String(index + 1).padStart(2, '0')}</Text><View style={s.resourceCopy}><Text style={s.resourceTitle}>{resource.title}</Text><Text style={s.body}>{resource.when}</Text></View><SymbolView name={{ ios: 'arrow.up.right', android: 'north_east' }} size={18} tintColor={c.accent} /></Pressable>)}
       {!resources.length ? <Text style={s.body}>No resources added.</Text> : null}
       <Pressable accessibilityRole="link" onPress={() => open('https://www.justinmath.com/advice-on-upskilling/')} style={s.method}><Text style={s.resourceTitle}>Advice on Upskilling · Justin Skycak ↗</Text></Pressable>

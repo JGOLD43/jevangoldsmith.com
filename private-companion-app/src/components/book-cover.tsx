@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { StyleSheet, Text, View, type ImageStyle } from 'react-native';
 
 import { Fonts, type AppColors } from '@/constants/theme';
@@ -18,24 +18,26 @@ function fallbackPalette(title: string) {
   return FALLBACK_PALETTES[hash % FALLBACK_PALETTES.length];
 }
 
-export const BookCover = memo(function BookCover({ title, author, uri, style }: {
+export const BookCover = memo(function BookCover({ title, author, uri, style, compact = false }: {
   title: string;
   author: string;
   uri: string | null;
   style?: ImageStyle;
+  compact?: boolean;
 }) {
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
-  if (uri) {
-    return <Image source={uri} contentFit="cover" cachePolicy="memory-disk" recyclingKey={uri} transition={160} style={[styles.cover, style]} />;
+  const [failedUri, setFailedUri] = useState<string | null>(null);
+  if (uri && uri !== failedUri) {
+    return <Image source={uri} onError={() => setFailedUri(uri)} contentFit="cover" cachePolicy="memory-disk" recyclingKey={uri} transition={160} style={[styles.cover, style]} />;
   }
   const palette = fallbackPalette(title);
   return (
-    <View style={[styles.cover, styles.fallback, { backgroundColor: palette.background }, style]}>
+    <View style={[styles.cover, styles.fallback, compact && { padding: 7 }, { backgroundColor: palette.background }, style]}>
       <View style={[styles.rule, { backgroundColor: palette.accent }]} />
-      <Text style={[styles.edition, { color: palette.accent }]}>PRIVATE EDITION</Text>
-      <Text numberOfLines={6} style={[styles.title, { color: palette.ink }]}>{title}</Text>
-      <Text numberOfLines={2} style={[styles.author, { color: palette.ink }]}>{author || 'JGOLD archive'}</Text>
+      {!compact ? <Text style={[styles.edition, { color: palette.accent }]}>PRIVATE EDITION</Text> : null}
+      <Text numberOfLines={6} style={[styles.title, compact && { fontSize: 10, lineHeight: 13 }, { color: palette.ink }]}>{title}</Text>
+      <Text numberOfLines={2} style={[styles.author, compact && { fontSize: 7 }, { color: palette.ink }]}>{author || 'JGOLD archive'}</Text>
     </View>
   );
 });

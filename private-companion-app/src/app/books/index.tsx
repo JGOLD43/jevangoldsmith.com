@@ -3,14 +3,14 @@ import * as Linking from 'expo-linking';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, BackHandler, FlatList, Modal, Pressable, RefreshControl, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BookCover } from '@/components/book-cover';
 import { Fonts, type AppColors } from '@/constants/theme';
 import type { Movie } from '@/domain/models';
 import { RATING_TIERS, ratingTier, type RatingTier } from '@/domain/rating-tier';
-import { useTheme } from '@/hooks/use-theme';
+import { useLibraryTheme as useTheme } from '@/hooks/use-library-theme';
 import { FRENCH_SKILLS } from '@/learning/french-seed';
 import type { SkillTreeSummary } from '@/learning/types';
 import { loadPublicMovies } from '@/services/public-movies';
@@ -19,6 +19,7 @@ import { useApp } from '@/state/app-context';
 import { useBooks } from '@/state/books-context';
 import { useLearning } from '@/state/learning-context';
 import { formatReadingTime } from '@/storage/reading-analytics';
+import { MARKETING_TREE_ORDER } from '@/learning/marketing-curricula';
 import { PRIORITY_CURRICULA } from '@/learning/priority-curricula';
 import { ensureCoreSkillTrees, listSkillTrees } from '@/storage/skill-tree-repository';
 
@@ -110,22 +111,21 @@ const EssayDocumentCard = memo(function EssayDocumentCard({ item, onPress }: { i
 const CollectionTile = memo(function CollectionTile({ group, mediaKind, onPress }: { group: CollectionGroup; mediaKind: LibraryMediaKind; onPress: (key: string) => void }) {
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const covers = group.items.slice(0, 4);
-  const noun = mediaKind;
+  const covers = group.items.slice(0, 3);
+  const noun = group.items.length === 1 ? mediaKind.slice(0, -1) : mediaKind;
   return (
     <Pressable accessibilityLabel={`${group.name}, ${group.items.length} ${noun}`} accessibilityRole="button" onPress={() => onPress(group.key)} style={({ pressed }) => [styles.collection, pressed && styles.pressed]}>
       <View style={styles.coverMosaic}>
         {group.tier ? <View style={[styles.collectionTierBadge, { backgroundColor: group.tier.color }]}><Text style={styles.collectionTierText}>{group.tier.label}</Text></View> : null}
-        {[0, 1, 2, 3].map((index) => {
-          const item = covers[index];
-          return <View key={item?.id ?? `empty-${index}`} style={styles.miniCoverSlot}>{item ? mediaKind === 'essays' ? (
+        {covers.map((item, index) => {
+          return <View key={item.id} style={[styles.miniCoverSlot, covers.length === 1 ? styles.coverSolo : index === 0 ? styles.coverLeft : index === 1 ? styles.coverCentre : styles.coverRight]}>{item ? mediaKind === 'essays' ? (
             <View style={styles.miniEssay}><SymbolView name={{ ios: 'doc.text.fill', android: 'article' }} size={17} tintColor={colors.accent} /><Text style={styles.miniEssayInitial}>{item.title.slice(0, 1).toUpperCase()}</Text><Text style={styles.miniEssayStatus}>{item.visibility === 'private' ? 'PRI' : 'PUB'}</Text></View>
-          ) : <BookCover title={item.title} author={item.subtitle} uri={compactCoverUri(item.coverUri)} style={styles.miniCover} /> : null}</View>;
+          ) : <BookCover title={item.title} author={item.subtitle} uri={compactCoverUri(item.coverUri)} compact style={styles.miniCover} /> : null}</View>;
         })}
       </View>
       <View style={styles.collectionMeta}>
         <Text numberOfLines={2} style={[styles.collectionName, mediaKind === 'essays' && styles.essayCollectionName]}>{group.name}</Text>
-        <Text style={styles.collectionCount}>{group.items.length}</Text>
+        <Text style={styles.collectionCount}>{group.items.length} {noun}</Text>
       </View>
     </Pressable>
   );
@@ -167,9 +167,11 @@ export default function BooksScreen() {
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
   const [ascending, setAscending] = useState(true);
   const [importing, setImporting] = useState(false);
+  const [addMenuOpen, setAddMenuOpen] = useState(false);
   const [skillTrees, setSkillTrees] = useState<SkillTreeSummary[]>([]);
   const [skillsLoading, setSkillsLoading] = useState(false);
   const [skillError, setSkillError] = useState<string | null>(null);
+  const [skillGroup, setSkillGroup] = useState<'all' | 'marketing'>('all');
   const [groupMode, setGroupMode] = useState<'collections' | 'tiers'>('collections');
 
   const reloadMovies = useCallback(async () => {
@@ -319,38 +321,41 @@ export default function BooksScreen() {
     return { watches, hours: Math.round(minutes / 60), rated: movies.filter((movie) => movie.starCount > 0).length, rewatches: Math.max(0, watches - movies.length) };
   }, [movies]);
 
-  const essayStats = useMemo(() => ({
-    total: essayItems.length,
-    privateCount: essayItems.filter((item) => item.visibility === 'private').length,
-    publicCount: essayItems.filter((item) => item.visibility === 'public').length,
-    collections: new Set(essayItems.flatMap((item) => item.tags)).size,
-  }), [essayItems]);
-
   const filteredSkillTrees = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    const trees = needle ? skillTrees.filter((tree) => `${tree.title} ${tree.description}`.toLowerCase().includes(needle)) : skillTrees;
+    const groupedTrees = skillGroup === 'marketing' ? skillTrees.filter(tree => MARKETING_TREE_ORDER.includes(tree.title)) : skillTrees;
+    const trees = needle ? groupedTrees.filter((tree) => `${tree.title} ${tree.description}`.toLowerCase().includes(needle)) : groupedTrees;
+    if (skillGroup === 'marketing') return [...trees].sort((left, right) => MARKETING_TREE_ORDER.indexOf(left.title) - MARKETING_TREE_ORDER.indexOf(right.title));
     return [...trees].sort((left, right) => Number(PRIORITY_CURRICULA.some(seed => seed.title === right.title)) - Number(PRIORITY_CURRICULA.some(seed => seed.title === left.title)) || (ascending ? left.title.localeCompare(right.title) : right.title.localeCompare(left.title)));
-  }, [ascending, query, skillTrees]);
-
-  const skillStats = useMemo(() => ({
-    trees: skillTrees.length + 1,
-    abilities: skillTrees.reduce((sum, tree) => sum + tree.nodeCount, FRENCH_SKILLS.length),
-    reliable: skillTrees.reduce((sum, tree) => sum + tree.reliableCount, learningDashboard?.reliableSkills ?? 0),
-    ready: skillTrees.reduce((sum, tree) => sum + tree.readyCount, learningDashboard?.dueReviews ?? 0),
-  }), [learningDashboard, skillTrees]);
+  }, [ascending, query, skillTrees, skillGroup]);
 
   const chooseMedia = useCallback((next: MediaKind) => {
     setMediaKind(next);
+    setSkillGroup('all');
     setSelectedCollection(null);
     setQuery('');
     setGroupMode('collections');
   }, []);
+
+  useFocusEffect(useCallback(() => {
+    if (!selectedCollection) return;
+    const back = BackHandler.addEventListener('hardwareBackPress', () => {
+      setSelectedCollection(null); setQuery(''); return true;
+    });
+    return () => back.remove();
+  }, [selectedCollection]));
 
   const chooseGroupMode = useCallback((next: 'collections' | 'tiers') => {
     setGroupMode(next);
     setSelectedCollection(null);
     setQuery('');
   }, []);
+
+  const openCollection = useCallback((key: string) => {
+    setSelectedCollection(key);
+    const group = allGroups.find(item => item.key === key);
+    if (group?.name.toLowerCase().includes(query.trim().toLowerCase())) setQuery('');
+  }, [allGroups, query]);
 
   const openItem = useCallback((item: LibraryItem) => {
     if (item.kind === 'books') router.push(`/books/${item.id}`);
@@ -399,76 +404,35 @@ export default function BooksScreen() {
     <View style={styles.header}>
       <View style={styles.titleRow}>
         <View style={styles.titleCopy}>
-          {activeGroup ? <Pressable accessibilityRole="button" onPress={() => { setSelectedCollection(null); setQuery(''); }}><Text style={styles.back}>‹ {groupMode === 'tiers' ? 'Tiers' : 'Collections'}</Text></Pressable> : null}
-          <Text numberOfLines={1} style={styles.title}>{activeGroup?.name ?? 'Library'}</Text>
+          {activeGroup ? <Pressable accessibilityRole="button" hitSlop={8} onPress={() => { setSelectedCollection(null); setQuery(''); }}><Text style={styles.back}>‹ {groupMode === 'tiers' ? 'Tiers' : 'Collections'}</Text></Pressable> : null}
+          <Text numberOfLines={2} style={styles.title}>{activeGroup?.name ?? 'Library'}</Text>
         </View>
-        <Pressable accessibilityLabel={mediaKind === 'books' ? 'Import a book' : mediaKind === 'movies' ? 'Add a movie on Letterboxd' : mediaKind === 'skills' ? 'Create a skill tree' : `Create an essay${activeGroup ? ` in ${activeGroup.name}` : ''}`} accessibilityRole="button" disabled={importing} onPress={() => { void primaryAction(); }} style={styles.headerButton}>
-          {importing ? <ActivityIndicator color={colors.text} /> : <Text style={styles.plus}>+</Text>}
-        </Pressable>
-        <Pressable accessibilityLabel={ascending ? 'Sort descending' : 'Sort ascending'} accessibilityRole="button" onPress={() => setAscending((value) => !value)} style={styles.headerButton}>
-          <SymbolView name={{ ios: 'arrow.up.arrow.down', android: 'swap_vert' }} size={27} tintColor={colors.text} />
+        <Pressable accessibilityLabel={mediaKind === 'books' ? 'Add to Library' : mediaKind === 'movies' ? 'Add a movie on Letterboxd' : mediaKind === 'skills' ? 'Create a skill tree' : 'Create an essay'} accessibilityRole="button" disabled={importing} onPress={() => { if (mediaKind === 'books') setAddMenuOpen(true); else void primaryAction(); }} style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}>
+          {importing ? <ActivityIndicator color={colors.accent} /> : <Text style={styles.plus}>+</Text>}
         </Pressable>
       </View>
 
       <View accessibilityRole="tablist" style={styles.mediaSwitch}>
-        {(['books', 'movies', 'essays', 'skills'] as const).map((kind) => {
-          const selected = mediaKind === kind;
-          const icon = kind === 'books' ? { ios: 'books.vertical.fill', android: 'library_books' } as const : kind === 'movies' ? { ios: 'film.fill', android: 'movie' } as const : kind === 'essays' ? { ios: 'doc.text.fill', android: 'article' } as const : { ios: 'point.3.connected.trianglepath.dotted', android: 'account_tree' } as const;
-          return (
-            <Pressable key={kind} accessibilityRole="tab" accessibilityState={{ selected }} onPress={() => chooseMedia(kind)} style={[styles.mediaSwitchButton, selected && styles.mediaSwitchButtonSelected]}>
-              <SymbolView name={icon} size={17} tintColor={selected ? colors.onAction : colors.textSecondary} />
-              <Text style={[styles.mediaSwitchText, selected && styles.mediaSwitchTextSelected]}>{kind === 'books' ? 'Books' : kind === 'movies' ? 'Movies' : kind === 'essays' ? 'Essays' : 'Skills'}</Text>
-            </Pressable>
-          );
-        })}
+        {(['books', 'movies', 'essays', 'skills'] as const).map(kind => <Pressable key={kind} accessibilityRole="tab" accessibilityState={{ selected: mediaKind === kind }} onPress={() => chooseMedia(kind)} style={[styles.mediaSwitchButton, mediaKind === kind && styles.mediaSwitchButtonSelected]}><Text style={[styles.mediaSwitchText, mediaKind === kind && styles.mediaSwitchTextSelected]}>{kind[0].toUpperCase() + kind.slice(1)}</Text></Pressable>)}
       </View>
 
       <View style={styles.searchShell}>
-        <SymbolView name={{ ios: 'magnifyingglass', android: 'search' }} size={23} tintColor={colors.textSecondary} />
-        <TextInput value={query} onChangeText={setQuery} placeholder={activeGroup ? `Search ${activeGroup.name}` : `Search ${mediaKind}`} placeholderTextColor={colors.textSecondary} style={styles.search} />
+        <SymbolView name={{ ios: 'magnifyingglass', android: 'search' }} size={19} tintColor={colors.textSecondary} />
+        <TextInput accessibilityLabel={activeGroup ? `Search ${activeGroup.name}` : `Search ${mediaKind}`} value={query} onChangeText={setQuery} autoCorrect={false} returnKeyType="search" placeholder={activeGroup ? 'Search this collection' : `Search ${mediaKind}`} placeholderTextColor={colors.textSecondary} style={styles.search} />
+        {query ? <Pressable accessibilityRole="button" accessibilityLabel="Clear search" hitSlop={8} onPress={() => setQuery('')} style={styles.clearSearch}><Text style={styles.clearSearchText}>×</Text></Pressable> : null}
       </View>
 
-      {!activeGroup && (mediaKind === 'books' || mediaKind === 'movies') ? (
-        <><Pressable
-          accessibilityLabel={`Open ${mediaKind === 'books' ? 'reading' : 'watching'} insights`}
-          accessibilityRole="button"
-          onPress={() => router.push({ pathname: '/insights', params: { kind: mediaKind } })}
-          style={({ pressed }) => [styles.insightsPanel, pressed && styles.pressed]}>
-          <View style={styles.insights}>
-            {mediaKind === 'books' ? <>
-              <View style={styles.insight}><Text style={styles.insightValue}>{formatReadingTime(readingStats.todaySeconds)}</Text><Text style={styles.insightLabel}>Today</Text></View>
-              <View style={styles.insight}><Text style={styles.insightValue}>{readingStats.currentStreak}d</Text><Text style={styles.insightLabel}>Streak</Text></View>
-              <View style={styles.insight}><Text style={styles.insightValue}>{formatReadingTime(readingStats.lastSevenDaysSeconds)}</Text><Text style={styles.insightLabel}>7 days</Text></View>
-              <View style={styles.insight}><Text style={styles.insightValue}>{readingStats.highlightCount}</Text><Text style={styles.insightLabel}>Highlights</Text></View>
-            </> : <>
-              <View style={styles.insight}><Text style={styles.insightValue}>{movieStats.watches}</Text><Text style={styles.insightLabel}>Watched</Text></View>
-              <View style={styles.insight}><Text style={styles.insightValue}>{movieStats.rated}</Text><Text style={styles.insightLabel}>Rated</Text></View>
-              <View style={styles.insight}><Text style={styles.insightValue}>{movieStats.hours}h</Text><Text style={styles.insightLabel}>Watch time</Text></View>
-              <View style={styles.insight}><Text style={styles.insightValue}>{movieStats.rewatches}</Text><Text style={styles.insightLabel}>Rewatches</Text></View>
-            </>}
-          </View>
-          <View style={styles.insightsLink}>
-            <Text style={styles.insightsLinkText}>{mediaKind === 'books' ? 'Reading insights' : 'Watching insights'}</Text>
-            <SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={16} tintColor={colors.accent} />
-          </View>
-        </Pressable><View accessibilityRole="tablist" style={styles.groupSwitch}>
-          {(['collections', 'tiers'] as const).map((mode) => <Pressable key={mode} accessibilityRole="tab" accessibilityState={{ selected: groupMode === mode }} onPress={() => chooseGroupMode(mode)} style={[styles.groupSwitchButton, groupMode === mode && styles.groupSwitchButtonSelected]}><SymbolView name={mode === 'collections' ? { ios: 'square.grid.2x2', android: 'grid_view' } : { ios: 'list.number', android: 'format_list_numbered' }} size={16} tintColor={groupMode === mode ? colors.onAction : colors.textSecondary} /><Text style={[styles.groupSwitchText, groupMode === mode && styles.groupSwitchTextSelected]}>{mode === 'collections' ? 'Collections' : 'Tiers'}</Text></Pressable>)}
-        </View><Pressable accessibilityLabel="Import Kindle books and highlights" accessibilityRole="button" disabled={importing} onPress={() => { void importKindleHistory(); }} style={({ pressed }) => [styles.kindleImport, pressed && styles.pressed]}><SymbolView name={{ ios: 'highlighter', android: 'ink_highlighter' }} size={18} tintColor={colors.accent} /><View style={styles.kindleImportCopy}><Text style={styles.kindleImportTitle}>Import Kindle history</Text><Text style={styles.kindleImportDetail}>Choose a full JGOLD library file or one Kindle notebook HTML export.</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={16} tintColor={colors.textSecondary} /></Pressable></>
-      ) : !activeGroup && mediaKind === 'essays' ? (
-        <View style={styles.insightsPanel}>
-          <View style={styles.insights}>
-            <View style={styles.insight}><Text style={styles.insightValue}>{essayStats.total}</Text><Text style={styles.insightLabel}>Essays</Text></View>
-            <View style={styles.insight}><Text style={styles.insightValue}>{essayStats.privateCount}</Text><Text style={styles.insightLabel}>Private</Text></View>
-            <View style={styles.insight}><Text style={styles.insightValue}>{essayStats.publicCount}</Text><Text style={styles.insightLabel}>Public</Text></View>
-            <View style={styles.insight}><Text style={styles.insightValue}>{essayStats.collections}</Text><Text style={styles.insightLabel}>Collections</Text></View>
-          </View>
-          <Text style={styles.essayHistoryNote}>Every local edit is timestamped in its writing history.</Text>
-        </View>
-      ) : !activeGroup && mediaKind === 'skills' ? (
-        <View style={styles.insightsPanel}><View style={styles.insights}>
-          <View style={styles.insight}><Text style={styles.insightValue}>{skillStats.trees}</Text><Text style={styles.insightLabel}>Trees</Text></View><View style={styles.insight}><Text style={styles.insightValue}>{skillStats.abilities}</Text><Text style={styles.insightLabel}>Abilities</Text></View><View style={styles.insight}><Text style={styles.insightValue}>{skillStats.reliable}</Text><Text style={styles.insightLabel}>Reliable</Text></View><View style={styles.insight}><Text style={styles.insightValue}>{skillStats.ready}</Text><Text style={styles.insightLabel}>Ready</Text></View>
-        </View><Text style={styles.essayHistoryNote}>Build from prerequisites, then practise until each ability is dependable.</Text></View>
-      ) : null}
+      {!activeGroup && (mediaKind === 'books' || mediaKind === 'movies') ? <Pressable accessibilityLabel={`Open ${mediaKind === 'books' ? 'reading' : 'watching'} insights`} accessibilityRole="button" onPress={() => router.push({ pathname: '/insights', params: { kind: mediaKind } })} style={({ pressed }) => [styles.readingSummary, pressed && styles.pressed]}>
+        <Text style={styles.summaryText}>{mediaKind === 'books' ? <><Text style={styles.summaryValue}>{formatReadingTime(readingStats.todaySeconds)}</Text> today<Text>   ·   </Text><Text style={styles.summaryValue}>{formatReadingTime(readingStats.lastSevenDaysSeconds)}</Text> last 7 days</> : <><Text style={styles.summaryValue}>{movieStats.watches}</Text> watched<Text>   ·   </Text><Text style={styles.summaryValue}>{movieStats.rated}</Text> rated</>}</Text>
+        <SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={16} tintColor={colors.textSecondary} />
+      </Pressable> : null}
+
+      {mediaKind === 'skills' ? <View style={styles.skillFilters}>{(['all', 'marketing'] as const).map(group => <Pressable key={group} accessibilityRole="button" accessibilityState={{ selected: skillGroup === group }} onPress={() => setSkillGroup(group)} style={[styles.skillFilter, skillGroup === group && styles.skillFilterSelected]}><Text style={[styles.toolbarText, skillGroup === group && { color: colors.accent }]}>{group === 'all' ? 'All skills' : 'Marketing'}</Text></Pressable>)}</View> : null}
+      <View style={styles.browseToolbar}>
+        <Text style={styles.sectionTitle}>{activeGroup ? `${visibleItems.length} ${visibleItems.length === 1 ? mediaKind.slice(0, -1) : mediaKind}` : mediaKind === 'skills' ? 'Skill trees' : groupMode === 'tiers' ? 'By rating' : 'Collections'}</Text>
+        {!activeGroup && (mediaKind === 'books' || mediaKind === 'movies') ? <Pressable accessibilityRole="button" accessibilityLabel={groupMode === 'collections' ? 'Browse by rating tiers' : 'Browse collections'} onPress={() => chooseGroupMode(groupMode === 'collections' ? 'tiers' : 'collections')} style={styles.toolbarButton}><Text style={styles.toolbarText}>{groupMode === 'collections' ? 'By rating' : 'Collections'}</Text></Pressable> : null}
+        {(groupMode !== 'tiers' || activeGroup) && !(mediaKind === 'skills' && skillGroup === 'marketing') ? <Pressable accessibilityLabel={ascending ? 'Sort descending' : 'Sort ascending'} accessibilityRole="button" onPress={() => setAscending(value => !value)} style={styles.toolbarButton}><Text style={styles.toolbarText}>{ascending ? 'A–Z' : 'Z–A'}</Text><SymbolView name={{ ios: 'arrow.up.arrow.down', android: 'swap_vert' }} size={15} tintColor={colors.textSecondary} /></Pressable> : null}
+      </View>
       {activeError ? <Pressable onPress={mediaKind === 'skills' ? () => { void reloadSkillTrees(); } : mediaKind === 'books' ? dismissError : mediaKind === 'movies' ? () => setMovieError(null) : () => setEssayError(null)} style={styles.error}><Text style={styles.errorText}>{activeError} · {mediaKind === 'skills' ? 'Tap to retry' : 'Tap to dismiss'}</Text></Pressable> : null}
     </View>
   );
@@ -480,67 +444,84 @@ export default function BooksScreen() {
 
   return (
     <SafeAreaView edges={['top']} style={styles.safeArea}>
-      {screenLoading ? <ActivityIndicator color={colors.accent} style={styles.loader} /> : mediaKind === 'skills' ? (
-        <FlatList key="skills" data={filteredSkillTrees} keyExtractor={(item) => item.id} renderItem={({ item }) => <SkillTreeCard title={item.title} description={item.description || 'A custom progression from foundations to confident practice.'} nodeCount={item.nodeCount} reliableCount={item.reliableCount} readyCount={item.readyCount} onPress={() => router.push({ pathname: '/skills/[id]', params: { id: item.id } })} />} ListHeaderComponent={<>{header}</>} ListFooterComponent={<SkillTreeCard builtIn title="French conversation" description="Speak sooner through real-world phrases, retrieval and milestone practice." nodeCount={FRENCH_SKILLS.length} reliableCount={learningDashboard?.reliableSkills ?? 0} readyCount={learningDashboard?.dueReviews ?? 0} onPress={() => router.push('/learning/tree')} />} ListEmptyComponent={<View style={styles.skillEmpty}><Text style={styles.skillEmptyTitle}>{skillError ? "Curricula could not load" : query.trim() ? "No matching skill trees" : "Preparing your curricula"}</Text><Text style={styles.skillEmptyCopy}>{skillError ? "Tap the error above to retry. Your saved progress has not been removed." : query.trim() ? "Clear the search to see all curricula." : "Pull down to retry loading your built-in skill trees."}</Text></View>} contentContainerStyle={styles.content} refreshControl={refreshControl} />
+      {mediaKind === 'skills' ? (
+        <FlatList key="skills" data={filteredSkillTrees} keyExtractor={(item) => item.id} renderItem={({ item }) => <SkillTreeCard title={item.title} description={item.description || 'A custom progression from foundations to confident practice.'} nodeCount={item.nodeCount} reliableCount={item.reliableCount} readyCount={item.readyCount} onPress={() => router.push({ pathname: '/skills/[id]', params: { id: item.id } })} />} ListHeaderComponent={<>{header}</>} ListFooterComponent={skillGroup === 'all' && (!query.trim() || 'French conversation'.toLowerCase().includes(query.trim().toLowerCase())) ? <SkillTreeCard builtIn title="French conversation" description="Speak sooner through real-world phrases, retrieval and milestone practice." nodeCount={FRENCH_SKILLS.length} reliableCount={learningDashboard?.reliableSkills ?? 0} readyCount={learningDashboard?.dueReviews ?? 0} onPress={() => router.push('/learning/tree')} /> : null} ListEmptyComponent={<View style={styles.skillEmpty}><Text style={styles.skillEmptyTitle}>{skillError ? "Curricula could not load" : query.trim() ? "No matching skill trees" : "Preparing your curricula"}</Text><Text style={styles.skillEmptyCopy}>{skillError ? "Tap the error above to retry. Your saved progress has not been removed." : query.trim() ? "Clear the search to see all curricula." : "Pull down to retry loading your built-in skill trees."}</Text></View>} keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content} refreshControl={refreshControl} />
       ) : activeGroup ? (
-        <FlatList key={`${mediaKind}-items`} data={visibleItems} keyExtractor={(item) => `${item.kind}:${item.id}`} numColumns={mediaKind === 'essays' ? 1 : 2} columnWrapperStyle={mediaKind === 'essays' ? undefined : styles.itemColumns} renderItem={({ item }) => item.kind === 'essays' ? <EssayDocumentCard item={item} onPress={openItem} /> : <MediaCard item={item} onPress={openItem} />} ListHeaderComponent={header} ListEmptyComponent={<Text style={styles.empty}>Nothing matches this search.</Text>} contentContainerStyle={styles.content} refreshControl={refreshControl} />
+        <FlatList key={`${mediaKind}-items`} data={visibleItems} keyExtractor={(item) => `${item.kind}:${item.id}`} numColumns={mediaKind === 'essays' ? 1 : 2} columnWrapperStyle={mediaKind === 'essays' ? undefined : styles.itemColumns} renderItem={({ item }) => item.kind === 'essays' ? <EssayDocumentCard item={item} onPress={openItem} /> : <MediaCard item={item} onPress={openItem} />} ListHeaderComponent={header} ListEmptyComponent={<Text style={styles.empty}>Nothing matches this search.</Text>} keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content} refreshControl={refreshControl} />
       ) : (
-        <FlatList key={`${mediaKind}-collections`} data={visibleGroups} keyExtractor={(item) => item.key} numColumns={3} columnWrapperStyle={styles.collectionColumns} renderItem={({ item }) => <CollectionTile group={item} mediaKind={mediaKind} onPress={setSelectedCollection} />} ListHeaderComponent={header} ListEmptyComponent={<Text style={styles.empty}>{emptyMessage}</Text>} contentContainerStyle={styles.content} refreshControl={refreshControl} />
+        <FlatList key={`${mediaKind}-collections`} data={visibleGroups} keyExtractor={(item) => item.key} numColumns={2} columnWrapperStyle={styles.collectionColumns} renderItem={({ item }) => <CollectionTile group={item} mediaKind={mediaKind} onPress={openCollection} />} ListHeaderComponent={header} ListEmptyComponent={screenLoading ? <ActivityIndicator color={colors.accent} style={styles.loader} /> : <Text style={styles.empty}>{query.trim() ? 'No matches. Try another title, author or collection.' : emptyMessage}</Text>} keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content} refreshControl={refreshControl} />
       )}
+      <Modal visible={addMenuOpen} transparent animationType="slide" onRequestClose={() => setAddMenuOpen(false)}>
+        <View style={styles.sheetBackdrop}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Close add menu" onPress={() => setAddMenuOpen(false)} style={StyleSheet.absoluteFill} />
+          <SafeAreaView edges={['bottom']} style={styles.sheet}>
+            <View style={styles.sheetHandle} />
+            <View style={styles.titleRow}><Text style={[styles.sectionTitle, { flex: 1 }]}>Add to Library</Text><Pressable accessibilityRole="button" onPress={() => setAddMenuOpen(false)} style={styles.toolbarButton}><Text style={styles.toolbarText}>Done</Text></Pressable></View>
+            <Pressable accessibilityRole="button" onPress={() => { setAddMenuOpen(false); void primaryAction(); }} style={styles.sheetOption}><SymbolView name={{ ios: 'book', android: 'book' }} size={24} tintColor={colors.accent} /><View style={styles.sheetCopy}><Text style={styles.sheetOptionTitle}>Import a book</Text><Text style={styles.sheetOptionDetail}>EPUB or PDF</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={18} tintColor={colors.textSecondary} /></Pressable>
+            <Pressable accessibilityRole="button" onPress={() => { setAddMenuOpen(false); void importKindleHistory(); }} style={styles.sheetOption}><SymbolView name={{ ios: 'highlighter', android: 'ink_highlighter' }} size={24} tintColor={colors.accent} /><View style={styles.sheetCopy}><Text style={styles.sheetOptionTitle}>Import Kindle history</Text><Text style={styles.sheetOptionDetail}>Books, collections and highlights</Text></View><SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={18} tintColor={colors.textSecondary} /></Pressable>
+          </SafeAreaView>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
 
 function createStyles(colors: AppColors) {
   return StyleSheet.create({
+    skillFilters: { flexDirection: 'row', gap: 8 },
+    skillFilter: { paddingHorizontal: 16, minHeight: 44, justifyContent: 'center', borderRadius: 12 },
+    skillFilterSelected: { backgroundColor: colors.accentSoft },
+    coverLeft: { left: '6%', transform: [{ rotate: '-9deg' }] },
+    coverCentre: { left: '28%', bottom: 19, zIndex: 2 },
+    coverRight: { left: '50%', transform: [{ rotate: '9deg' }] },
+    coverSolo: { left: '28%', bottom: 19 },
+    clearSearch: { minWidth: 30, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
+    clearSearchText: { fontSize: 24, color: colors.textSecondary },
+    readingSummary: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 38, paddingHorizontal: 2, gap: 12 },
+    summaryText: { flex: 1, color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 12, lineHeight: 19 },
+    summaryValue: { color: colors.text, fontFamily: Fonts.semibold },
+    browseToolbar: { flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 44 },
+    sectionTitle: { flex: 1, color: colors.text, fontFamily: Fonts.semibold, fontSize: 20, lineHeight: 26 },
+    toolbarButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 3, minHeight: 44, paddingHorizontal: 7 },
+    toolbarText: { color: colors.textSecondary, fontFamily: Fonts.medium, fontSize: 12 },
+    sheetBackdrop: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.45)' },
+    sheet: { backgroundColor: colors.backgroundElement, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 24, paddingTop: 10, paddingBottom: 24, width: '100%', maxWidth: 760, alignSelf: 'center' },
+    sheetHandle: { height: 4, width: 36, borderRadius: 2, backgroundColor: colors.line, alignSelf: 'center', marginBottom: 8 },
+    sheetOption: { flexDirection: 'row', alignItems: 'center', gap: 16, minHeight: 82, borderBottomWidth: 1, borderBottomColor: colors.line },
+    sheetCopy: { flex: 1, gap: 4 },
+    sheetOptionTitle: { color: colors.text, fontFamily: Fonts.semibold, fontSize: 17 },
+    sheetOptionDetail: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 13 },
     safeArea: { flex: 1, backgroundColor: colors.background },
-    loader: { flex: 1 },
-    content: { paddingHorizontal: 18, paddingTop: 14, paddingBottom: 120, width: '100%', maxWidth: 760, alignSelf: 'center' },
-    header: { gap: 15, marginBottom: 25 },
+    loader: { padding: 32 },
+    content: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 110, width: '100%', maxWidth: 760, alignSelf: 'center' },
+    header: { gap: 12, marginBottom: 12 },
     titleRow: { minHeight: 54, flexDirection: 'row', alignItems: 'center', gap: 3 },
     titleCopy: { flex: 1, minWidth: 0 },
     title: { color: colors.text, fontFamily: Fonts.bold, fontSize: 31, lineHeight: 38 },
     back: { color: colors.accent, fontFamily: Fonts.bold, fontSize: 13, lineHeight: 19, marginBottom: 1 },
-    headerButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center', borderRadius: 24 },
-    plus: { color: colors.text, fontFamily: Fonts.sans, fontSize: 42, lineHeight: 44, fontWeight: '300' },
-    mediaSwitch: { flexDirection: 'row', padding: 4, gap: 4, borderRadius: 14, borderCurve: 'continuous', backgroundColor: colors.backgroundSelected },
-    mediaSwitchButton: { flex: 1, minHeight: 42, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7, borderRadius: 11, borderCurve: 'continuous' },
-    mediaSwitchButtonSelected: { backgroundColor: colors.action },
-    mediaSwitchText: { color: colors.textSecondary, fontFamily: Fonts.bold, fontSize: 14 },
-    mediaSwitchTextSelected: { color: colors.onAction },
-    searchShell: { height: 56, flexDirection: 'row', alignItems: 'center', gap: 10, borderRadius: 24, borderCurve: 'continuous', borderWidth: 1.5, borderColor: colors.textSecondary, backgroundColor: colors.backgroundElement, paddingHorizontal: 15 },
-    search: { flex: 1, height: '100%', color: colors.text, fontFamily: Fonts.sans, fontSize: 16, paddingVertical: 0 },
-    insightsPanel: { borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.line, paddingTop: 11, paddingBottom: 8 },
-    insights: { flexDirection: 'row' },
-    insight: { flex: 1, alignItems: 'center', gap: 2 },
-    insightValue: { color: colors.text, fontFamily: Fonts.bold, fontSize: 14 },
-    insightLabel: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 9, textTransform: 'uppercase', letterSpacing: 0.5 },
-    insightsLink: { minHeight: 28, marginTop: 6, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2 },
-    insightsLinkText: { color: colors.accent, fontFamily: Fonts.bold, fontSize: 11 },
-    groupSwitch: { flexDirection: 'row', gap: 4, padding: 4, borderRadius: 13, borderCurve: 'continuous', backgroundColor: colors.backgroundSelected },
-    groupSwitchButton: { flex: 1, minHeight: 39, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7, borderRadius: 10, borderCurve: 'continuous' },
-    groupSwitchButtonSelected: { backgroundColor: colors.action },
-    groupSwitchText: { color: colors.textSecondary, fontFamily: Fonts.bold, fontSize: 12 },
-    groupSwitchTextSelected: { color: colors.onAction },
-    kindleImport: { minHeight: 58, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 10, borderWidth: 1, borderColor: colors.line, borderRadius: 14, borderCurve: 'continuous', backgroundColor: colors.backgroundElement },
-    kindleImportCopy: { flex: 1, minWidth: 0 },
-    kindleImportTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 13 },
-    kindleImportDetail: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 10, lineHeight: 14, marginTop: 2 },
-    essayHistoryNote: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 10, lineHeight: 15, textAlign: 'center', marginTop: 9 },
+    headerButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', borderRadius: 22, backgroundColor: colors.backgroundElement },
+    plus: { color: colors.text, fontFamily: Fonts.sans, fontSize: 29, lineHeight: 34 },
+    mediaSwitch: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: colors.line },
+    mediaSwitchButton: { flex: 1, minHeight: 44, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderBottomColor: 'transparent' },
+    mediaSwitchButtonSelected: { borderBottomColor: colors.accent },
+    mediaSwitchText: { color: colors.textSecondary, fontFamily: Fonts.medium, fontSize: 14 },
+    mediaSwitchTextSelected: { color: colors.text, fontFamily: Fonts.bold },
+    searchShell: { minHeight: 46, flexDirection: 'row', alignItems: 'center', gap: 9, borderRadius: 12, backgroundColor: colors.backgroundElement, paddingHorizontal: 13 },
+    search: { flex: 1, minWidth: 0, minHeight: 46, color: colors.text, fontFamily: Fonts.sans, fontSize: 15, paddingVertical: 8 },
     error: { backgroundColor: colors.dangerSoft, borderRadius: 8, borderCurve: 'continuous', padding: 12 },
     errorText: { color: colors.danger, fontFamily: Fonts.semibold, fontSize: 12 },
-    collectionColumns: { gap: 13, marginBottom: 16 },
-    collection: { flex: 1, maxWidth: '31.5%', minWidth: 0, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.backgroundElement, padding: 7, minHeight: 184 },
-    coverMosaic: { height: 126, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignContent: 'space-between', overflow: 'hidden' },
+    collectionColumns: { gap: 14, marginBottom: 22 },
+    collection: { flex: 1, maxWidth: '48%', minWidth: 0 },
+    coverMosaic: { height: 150, position: 'relative', overflow: 'hidden', borderRadius: 16, backgroundColor: colors.backgroundElement },
     collectionTierBadge: { position: 'absolute', zIndex: 2, top: 5, right: 5, paddingHorizontal: 7, paddingVertical: 4, borderRadius: 7, borderCurve: 'continuous' },
     collectionTierText: { color: '#111111', fontFamily: Fonts.extraBold, fontSize: 8, letterSpacing: 0.25 },
-    miniCoverSlot: { width: '47%', height: 60, backgroundColor: colors.backgroundSelected, overflow: 'hidden' },
-    miniCover: { width: '100%', height: '100%', aspectRatio: undefined, borderRadius: 0 },
+    miniCoverSlot: { position: 'absolute', width: '44%', height: 108, bottom: 15, overflow: 'hidden', borderRadius: 4, boxShadow: '0 4px 9px rgba(0,0,0,0.18)' },
+    miniCover: { width: '100%', height: '100%', aspectRatio: undefined, borderRadius: 4 },
     miniEssay: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 1, backgroundColor: colors.accentSoft },
     miniEssayInitial: { color: colors.text, fontFamily: Fonts.bold, fontSize: 13 },
     miniEssayStatus: { color: colors.textSecondary, fontFamily: Fonts.extraBold, fontSize: 6, letterSpacing: 0.4 },
-    collectionMeta: { minHeight: 44, flexDirection: 'row', alignItems: 'flex-end', gap: 4, paddingTop: 7 },
-    collectionName: { flex: 1, color: colors.text, fontFamily: Fonts.sans, fontSize: 13, lineHeight: 17 },
+    collectionMeta: { gap: 4, paddingTop: 11 },
+    collectionName: { color: colors.text, fontFamily: Fonts.semibold, fontSize: 15, lineHeight: 21 },
     essayCollectionName: { fontFamily: Fonts.semibold, fontSize: 11, lineHeight: 15 },
     collectionCount: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 12 },
     itemColumns: { gap: 15 },
@@ -554,7 +535,7 @@ function createStyles(colors: AppColors) {
     visibilityBadge: { overflow: 'hidden', paddingHorizontal: 7, paddingVertical: 4, borderRadius: 8, fontFamily: Fonts.extraBold, fontSize: 8, letterSpacing: 0.5, textTransform: 'uppercase' },
     privateBadge: { color: colors.accent, backgroundColor: colors.accentSoft },
     publicBadge: { color: colors.success, backgroundColor: colors.backgroundSelected },
-    pressed: { opacity: 0.68, transform: [{ scale: 0.985 }] },
+    pressed: { opacity: 0.76, transform: [{ scale: 0.985 }] },
     mediaTitle: { color: colors.text, fontFamily: Fonts.bold, fontSize: 15, lineHeight: 19, marginTop: 3 },
     mediaSubtitle: { color: colors.textSecondary, fontFamily: Fonts.sans, fontSize: 12 },
     essayDocument: { width: '100%', marginBottom: 14, padding: 18, gap: 11, borderWidth: 1, borderColor: colors.line, borderRadius: 18, borderCurve: 'continuous', backgroundColor: colors.backgroundElement },
