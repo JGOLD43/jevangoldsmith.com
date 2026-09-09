@@ -1,6 +1,17 @@
 [
   {
     "baseVersion": "1.5.5",
+    "revision": 6,
+    "label": "1.5.5-update.6",
+    "releasedAt": "2026-09-09T04:28:47.371Z",
+    "notes": "Redesign Library with compact browsing, cover stacks and organised marketing curricula",
+    "previewGroup": "018c584d-978c-4229-a336-96668a4a9062",
+    "productionGroup": "cab4f416-f96c-4b7a-ad62-e740778be169",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.5",
     "revision": 5,
     "label": "1.5.5-update.5",
     "releasedAt": "2026-09-08T11:06:54.608Z",
