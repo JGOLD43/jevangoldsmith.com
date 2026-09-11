@@ -145,7 +145,7 @@ const config = ({
     </Fragment>
   )}
   <Fragment slot="sidebar-extra">
-    <SidebarRatingSliderFilters clearAction="clear-star-filter" sliderLabel="Filter by Times Read" sliderIcon="📖" sliderId="timesread" />
+    <SidebarRatingSliderFilters clearAction="clear-star-filter" sliderLabel="Filter by Times Read" sliderIcon="📖" sliderId="timesread" mobileDropdown />
   </Fragment>
   <Fragment slot="header-extra">
     <div class="recent-books-carousel">
@@ -361,92 +361,6 @@ const config = ({
     body.is-book-launching .books-sidebar {
       transition: none;
     }
-  }
-
-  /* --- Sidebar layout polish (filter sections + active state) --- */
-  .books-sidebar .sidebar-search { margin: 14px 0 6px; }
-
-  .books-sidebar .sidebar-filter-section { padding: 10px 24px 14px; }
-  .books-sidebar .sidebar-filter-section + .sidebar-filter-section { padding-top: 4px; }
-
-  .books-sidebar .filter-header {
-    margin-bottom: 8px;
-    align-items: baseline;
-  }
-  .books-sidebar .filter-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #8a8a8a;
-  }
-  .books-sidebar .show-all-link {
-    font-size: 0.7rem;
-    letter-spacing: 0.04em;
-    color: #888;
-    transition: color .15s ease;
-  }
-  .books-sidebar .show-all-link:hover { color: var(--secondary-color); }
-
-  .books-sidebar .star-rating-filter { padding: 2px 0; }
-  .books-sidebar .star-filter-container { gap: 4px; }
-  .books-sidebar .filter-star {
-    font-size: 1.05rem;
-    line-height: 1;
-    transition: color .15s ease, transform .15s ease;
-  }
-  .books-sidebar .filter-star:hover { transform: scale(1.1); }
-
-  /* Soft divider above the category list (replaces the harsh white line) */
-  .books-sidebar .sidebar-list-container,
-  .books-sidebar .sidebar-categories {
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding-top: 6px;
-  }
-
-  /* Light-mode active category — guarantee high contrast.
-     Previously, when an active category had its panel expanded,
-     some cascade combinations dropped the active background to a
-     light gray with near-invisible text. Lock the active state
-     to solid black bg + white text with !important so no later
-     rule can wash it out. */
-  .books-sidebar .sidebar-category.active {
-    background: #111 !important;
-    color: #fff !important;
-  }
-  .books-sidebar .sidebar-category.active .category-name {
-    color: #fff !important;
-  }
-  .books-sidebar .sidebar-category.active .category-icon svg {
-    stroke: #fff !important;
-  }
-  .books-sidebar .sidebar-category.active .category-count {
-    background: rgba(255, 255, 255, 0.18) !important;
-    color: #fff !important;
-  }
-
-  /* --- Dark-mode-friendly selected category --- */
-  [data-theme="dark"] .books-sidebar .sidebar-category {
-    border-left: 3px solid transparent;
-  }
-  [data-theme="dark"] .books-sidebar .sidebar-category.active {
-    background: rgba(212, 184, 122, 0.12);
-    color: var(--secondary-color);
-    border-left-color: var(--secondary-color);
-    font-weight: 600;
-  }
-  [data-theme="dark"] .books-sidebar .sidebar-category.active .category-name {
-    color: var(--secondary-color);
-  }
-  [data-theme="dark"] .books-sidebar .sidebar-category.active .category-icon svg {
-    stroke: var(--secondary-color);
-  }
-  [data-theme="dark"] .books-sidebar .sidebar-category.active .category-count {
-    background: rgba(212, 184, 122, 0.18);
-    color: var(--secondary-color);
-  }
-  [data-theme="dark"] .books-sidebar .sidebar-category:hover:not(.active) {
-    background: rgba(255, 255, 255, 0.04);
   }
 </style>
 

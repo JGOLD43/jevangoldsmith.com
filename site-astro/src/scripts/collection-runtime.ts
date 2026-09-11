@@ -61,52 +61,41 @@ function resolveActionButton(buttonOrEvent: RuntimeActionSource, selector: strin
 // layout gets `mobile-list-view`; CSS does the rest.
 let isMobileCollectionViewTransitioning = false;
 
-function setMovieSearchChromeVisibility(layout: HTMLElement, isSearchView: boolean) {
-    if (layout.id !== 'movies-layout') return;
-    const sidebar = layout.querySelector<HTMLElement>(':scope > .movies-sidebar');
-    const main = layout.querySelector<HTMLElement>(':scope > .movies-main');
-    const surfaceProperties = [
-        'position', 'z-index', 'top', 'right', 'bottom', 'left', 'width',
-        'height', 'min-height', 'margin', 'padding', 'overflow-x', 'overflow-y',
-        'backdrop-filter', '-webkit-backdrop-filter', 'background', 'border',
-        'border-radius', 'box-shadow'
-    ];
-    const mainProperties = ['display', 'filter', 'opacity', 'pointer-events'];
+const glassSearchLayouts = new Set(['books-layout', 'movies-layout', 'people-layout', 'podcasts-layout']);
+const observedSearchLayouts = new WeakSet<HTMLElement>();
 
-    if (isSearchView && sidebar) {
-        const isDark = document.documentElement.dataset.theme === 'dark';
-        const background = isDark
-            ? 'radial-gradient(90% 62% at 8% 0%, #dec57b24 0%, transparent 64%), radial-gradient(75% 54% at 100% 38%, #6d96ca24 0%, transparent 70%), #10121780'
-            : 'radial-gradient(85% 58% at 10% 0%, #ffe9aa8a 0%, transparent 65%), radial-gradient(75% 52% at 100% 34%, #b7d8ff75 0%, transparent 70%), #f5f8fb9c';
-        const styles: Record<string, string> = {
-            position: 'fixed', 'z-index': '20', top: 'var(--nav-height, 70px)',
-            right: '0', bottom: 'auto', left: '0', width: '100%',
-            height: 'calc(100dvh - var(--nav-height, 70px) - 56px - env(safe-area-inset-bottom, 0px))',
-            'min-height': 'calc(100dvh - var(--nav-height, 70px) - 56px - env(safe-area-inset-bottom, 0px))', margin: '0',
-            padding: '1rem 0 calc(1rem + env(safe-area-inset-bottom, 0px))',
-            'overflow-x': 'hidden', 'overflow-y': 'auto',
-            'backdrop-filter': 'blur(30px) saturate(155%)',
-            '-webkit-backdrop-filter': 'blur(30px) saturate(155%)', background,
-            border: '0', 'border-radius': '0', 'box-shadow': 'none'
-        };
-        Object.entries(styles).forEach(([property, value]) => sidebar.style.setProperty(property, value, 'important'));
-        if (main) {
-            main.style.setProperty('display', 'block', 'important');
-            main.style.setProperty('filter', 'blur(3px) saturate(.78)', 'important');
-            main.style.setProperty('opacity', '.6', 'important');
-            main.style.setProperty('pointer-events', 'none', 'important');
-        }
-    } else {
-        surfaceProperties.forEach((property) => sidebar?.style.removeProperty(property));
-        mainProperties.forEach((property) => main?.style.removeProperty(property));
+function syncCollectionSearchSurface(layout: HTMLElement) {
+    if (!glassSearchLayouts.has(layout.id)) return;
+    const main = layout.querySelector<HTMLElement>(':scope > .collection-main');
+    const tabs = layout.querySelector<HTMLElement>('.collection-mobile-toggle');
+    const isOpen = layout.classList.contains('mobile-list-view')
+        && window.matchMedia('(max-width: 768px)').matches;
+    layout.classList.toggle('collection-search-open', isOpen);
+    if (main) main.inert = isOpen;
+    if (!isOpen || !tabs) {
+        layout.style.removeProperty('--collection-search-top');
+        layout.style.removeProperty('--collection-search-bottom');
+        return;
     }
 
-    layout.querySelectorAll<HTMLElement>(
-        ':scope > .movies-sidebar .sidebar-list-selector, :scope > .movies-sidebar .sidebar-footer, :scope > .movies-main .collection-header'
-    ).forEach((element) => {
-        if (isSearchView) element.style.setProperty('display', 'none', 'important');
-        else element.style.removeProperty('display');
-    });
+    // Measure the rendered bars, including borders and safe-area padding.
+    // A guessed 56px tab height left a visible seam under the glass layer.
+    const navBottom = document.querySelector('.navbar')?.getBoundingClientRect().bottom ?? 0;
+    layout.style.setProperty('--collection-search-top', `${Math.max(0, navBottom)}px`);
+    layout.style.setProperty('--collection-search-bottom', `${Math.max(0, window.innerHeight - tabs.getBoundingClientRect().top)}px`);
+}
+
+function observeCollectionSearchSurface(layout: HTMLElement) {
+    if (!glassSearchLayouts.has(layout.id) || observedSearchLayouts.has(layout)) return;
+    observedSearchLayouts.add(layout);
+    const sync = () => syncCollectionSearchSurface(layout);
+    window.addEventListener('resize', sync);
+    window.visualViewport?.addEventListener('resize', sync);
+    const observer = new ResizeObserver(sync);
+    const navbar = document.querySelector('.navbar');
+    const tabs = layout.querySelector('.collection-mobile-toggle');
+    if (navbar) observer.observe(navbar);
+    if (tabs) observer.observe(tabs);
 }
 
 function setCollectionView(layout: HTMLElement, view: string) {
@@ -116,7 +105,8 @@ function setCollectionView(layout: HTMLElement, view: string) {
     const hasExplicitCollection = Boolean(layout.querySelector('[data-view="collection"]'));
     const isSearch = hasExplicitCollection ? view === 'search' : view === 'list';
     layout.classList.toggle('mobile-list-view', isSearch);
-    setMovieSearchChromeVisibility(layout, isSearch);
+    observeCollectionSearchSurface(layout);
+    syncCollectionSearchSurface(layout);
     layout.querySelectorAll('.collection-mobile-toggle [data-view]').forEach((btn) => {
         const el = btn as HTMLElement;
         const active = el.dataset.view === view;
@@ -139,6 +129,13 @@ function switchCollectionViewFromDom(view: string, shouldAnimate = true) {
         // carries the mobile-list-view CSS class.
         const active = layout.querySelector('.collection-mobile-toggle .mobile-view-btn.active') as HTMLElement | null;
         if (active?.dataset.view === view) return;
+    }
+
+    // The search sheet stays attached to the viewport. Sliding/scaling the
+    // whole pane exposed unblurred edges and left filled animations behind.
+    if (glassSearchLayouts.has(layout.id)) {
+        setCollectionView(layout, view);
+        return;
     }
 
     const sidebar = layout.querySelector(':scope > .collection-sidebar') as HTMLElement | null;

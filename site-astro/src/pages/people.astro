@@ -40,7 +40,7 @@ const config = ({
   layout: { id: 'people-layout', className: 'people-layout collection-layout sidebar-collapsed' },
   sidebar: {
     id: 'people-sidebar',
-    className: 'people-sidebar collection-sidebar collapsed',
+    className: 'people-sidebar collection-sidebar collection-sidebar--taste collapsed',
     collapseAction: 'togglePeopleSidebar',
     listAction: 'toggleListDropdown',
     currentListName: 'People',
@@ -54,7 +54,7 @@ const config = ({
       searchAction: 'filterPeople',
       searchUsesValue: true,
       searchEvent: 'input',
-      wrapperClass: 'search-bubble'
+      wrapperClass: 'search-input-wrapper search-bubble'
     },
     sections: PEOPLE_SECTIONS
   },
@@ -81,7 +81,12 @@ const config = ({
         opens instantly. */}
     <link rel="prefetch" href="/api/v1/people-modal.json" as="fetch" crossorigin />
   </Fragment>
-  <PeopleSourceFilter slot="sidebar-extra" />
+  <details class="mobile-filter-dropdown" slot="sidebar-extra">
+    <summary>Filters <span aria-hidden="true"></span></summary>
+    <div class="mobile-filter-dropdown-content">
+      <PeopleSourceFilter />
+    </div>
+  </details>
   <Fragment slot="counter-extra">
     <div class="movie-counter-row">
       <button type="button" class="stats-toggle people-stats-toggle" aria-expanded="false" aria-controls="people-stats-panel" aria-label="Show people stats">Stats <span aria-hidden="true">▾</span></button>
