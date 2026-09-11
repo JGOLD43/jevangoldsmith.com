@@ -63,13 +63,23 @@ let isMobileCollectionViewTransitioning = false;
 
 const glassSearchLayouts = new Set(['books-layout', 'movies-layout', 'people-layout', 'podcasts-layout']);
 const observedSearchLayouts = new WeakSet<HTMLElement>();
+const mobileFilterState = new WeakMap<HTMLDetailsElement, boolean>();
 
 function syncCollectionSearchSurface(layout: HTMLElement) {
     if (!glassSearchLayouts.has(layout.id)) return;
     const main = layout.querySelector<HTMLElement>(':scope > .collection-main');
     const tabs = layout.querySelector<HTMLElement>('.collection-mobile-toggle');
-    const isOpen = layout.classList.contains('mobile-list-view')
-        && window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isOpen = layout.classList.contains('mobile-list-view') && isMobile;
+    layout.querySelectorAll<HTMLDetailsElement>('.mobile-filter-dropdown').forEach((details) => {
+        if (!isMobile) {
+            if (!mobileFilterState.has(details)) mobileFilterState.set(details, details.open);
+            details.open = true;
+        } else if (mobileFilterState.has(details)) {
+            details.open = mobileFilterState.get(details) ?? false;
+            mobileFilterState.delete(details);
+        }
+    });
     layout.classList.toggle('collection-search-open', isOpen);
     if (main) main.inert = isOpen;
     if (!isOpen || !tabs) {
@@ -198,6 +208,12 @@ function switchCollectionViewFromDom(view: string, shouldAnimate = true) {
 }
 
 registerActions({ switchCollectionView: switchCollectionViewFromDom as ActionFn });
+
+const collectionLayout = document.querySelector<HTMLElement>('main.collection-layout');
+if (collectionLayout) {
+    observeCollectionSearchSurface(collectionLayout);
+    syncCollectionSearchSurface(collectionLayout);
+}
 
 let mobileSwipeStart: { x: number; y: number; layout: HTMLElement } | null = null;
 document.addEventListener('touchstart', (event) => {
