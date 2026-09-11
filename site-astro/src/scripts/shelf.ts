@@ -39,54 +39,72 @@ function initFilters(zoom: { release: () => void } | null | undefined) {
   });
 }
 
-function initShelfDetailMoreToggle() {
-  // Mobile-only "See further description" toggle. The button is rendered for
-  // every product but CSS hides it (and shows the content unconditionally) on
-  // desktop, so this handler is harmless above 760px.
-  document.addEventListener('click', function (event) {
-    const btn = (event.target as Element | null)?.closest?.('[data-shelf-detail-more]') as HTMLButtonElement | null;
-    if (!btn) return;
-    event.preventDefault();
-    event.stopPropagation();
-    const card = btn.closest('.shelf-item');
-    const expanded = card?.classList.toggle('shelf-details-open') ?? false;
-    btn.setAttribute('aria-expanded', String(expanded));
-    btn.textContent = expanded ? 'Hide description' : 'See further description';
-    if (expanded) {
-      // Wait for the panel to mount, then bring the bottom into view.
-      requestAnimationFrame(() => {
-        const extra = card?.querySelector('.shelf-object-detail-extra');
-        extra?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      });
-    }
-  });
-}
-
 function initShelf() {
-  const grid = document.querySelector('.shelf-grid');
-  if (!grid) return;
+  const grid = document.querySelector<HTMLElement>('.shelf-grid');
+  const shelf = document.querySelector<HTMLElement>('.shelf-page');
+  const back = document.querySelector<HTMLButtonElement>('[data-shelf-back]');
+  if (!grid || !shelf || !back) return;
+  const mobile = window.matchMedia('(max-width: 760px)');
+  let expandedItem: HTMLElement | null = null;
+  let previousScroll = 0;
+
+  function closeMobileDetail() {
+    if (!expandedItem) return;
+    const trigger = expandedItem.querySelector<HTMLButtonElement>('[data-shelf-item]');
+    expandedItem.classList.remove('is-expanded');
+    expandedItem.querySelector('.shelf-object-detail')?.setAttribute('aria-hidden', 'true');
+    trigger?.setAttribute('aria-expanded', 'false');
+    shelf!.classList.remove('shelf-detail-open');
+    expandedItem = null;
+    trigger?.focus({ preventScroll: true });
+    window.scrollTo({ top: previousScroll, behavior: 'instant' });
+  }
+
+  // A scaled grid cannot grow the document to fit its mobile description.
+  // Open a normal full-width item instead, keeping all its details in flow.
+  grid.addEventListener('click', function (event) {
+    if (!mobile.matches) return;
+    const trigger = (event.target as Element | null)?.closest<HTMLElement>('[data-shelf-item]');
+    const item = trigger?.closest<HTMLElement>('.shelf-item');
+    if (!item) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (expandedItem) {
+      closeMobileDetail();
+      return;
+    }
+    previousScroll = window.scrollY;
+    expandedItem = item;
+    item.classList.add('is-expanded');
+    item.querySelector('.shelf-object-detail')?.setAttribute('aria-hidden', 'false');
+    trigger?.setAttribute('aria-expanded', 'true');
+    shelf.classList.add('shelf-detail-open');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    back.focus({ preventScroll: true });
+  }, true);
+
+  back.addEventListener('click', closeMobileDetail);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeMobileDetail();
+  });
+
   grid.classList.add('js-zoom-grid');
   document.querySelectorAll('.shelf-item').forEach(function (el) {
     el.classList.add('js-zoom-item');
   });
-  initShelfDetailMoreToggle();
-
-  // On mobile the detail panel renders BELOW the image (CSS handles layout),
-  // so no horizontal centerOffset is needed and the image should take less
-  // vertical room to leave space for the text.
-  const isMobile = window.innerWidth <= 760;
   const zoom = initGridZoom({
-    grid: grid as HTMLElement,
+    grid,
     itemSelector: '.shelf-item',
     triggerSelector: '[data-shelf-item]',
     eventName: 'shelf_object_open',
-    centerOffsetCssX: isMobile ? 0 : 139,
-    fillW: isMobile ? 0.7 : undefined,
-    fillH: isMobile ? 0.32 : undefined,
-    maxScale: isMobile ? 3.2 : undefined
+    centerOffsetCssX: 139,
   }) as { release: () => void } | null;
 
   initFilters(zoom);
+  mobile.addEventListener('change', function () {
+    closeMobileDetail();
+    zoom?.release();
+  });
 }
 
 if (document.readyState === 'loading') {
