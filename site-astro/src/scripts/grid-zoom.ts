@@ -1,9 +1,9 @@
 import { installOnce } from '../lib/install-once';
 import { TIMING } from './timing';
 
-type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; centerOffsetCssX?: number };
-type State = { grid: HTMLElement; activeItem: HTMLElement | null; itemSelector: string; triggerSelector: string; opts: Opts };
-type GridZoomConfig = { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; eventName?: string; centerOffsetCssX?: number; bypassZoomForLinks?: boolean };
+type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; centerOffsetCssX?: number; recenterOnResize?: boolean };
+type State = { grid: HTMLElement; activeItem: HTMLElement | null; itemSelector: string; triggerSelector: string; opts: Opts; onClose?: () => void };
+type GridZoomConfig = Opts & { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; eventName?: string; bypassZoomForLinks?: boolean; onOpen?: (item: HTMLElement) => void; onClose?: () => void };
 
 const instances: State[] = [];
 
@@ -44,7 +44,9 @@ function apply(grid: HTMLElement, item: HTMLElement, opts: Opts) {
   document.body.classList.add('zoom-open');
 }
 
-function release(grid: HTMLElement) {
+function release(state: State) {
+  state.onClose?.();
+  const grid = state.grid;
   grid.style.setProperty('--tx', '0px');
   grid.style.setProperty('--ty', '0px');
   grid.style.setProperty('--scale', '1');
@@ -68,14 +70,15 @@ export function init(config: GridZoomConfig) {
     fillW: config.fillW,
     fillH: config.fillH,
     anchorSelector: config.anchorSelector,
-    centerOffsetCssX: config.centerOffsetCssX
+    centerOffsetCssX: config.centerOffsetCssX,
+    recenterOnResize: config.recenterOnResize,
   };
 
-  const state: State = { grid, activeItem: null, itemSelector, triggerSelector, opts };
+  const state: State = { grid, activeItem: null, itemSelector, triggerSelector, opts, onClose: config.onClose };
 
   function closeActive() {
     if (!state.activeItem) return;
-    release(state.grid);
+    release(state);
     state.activeItem = null;
   }
 
@@ -84,9 +87,10 @@ export function init(config: GridZoomConfig) {
       closeActive();
       return;
     }
-    if (state.activeItem) release(state.grid);
+    if (state.activeItem) release(state);
     state.activeItem = item;
     apply(state.grid, item, state.opts);
+    config.onOpen?.(item);
   }
 
   grid.addEventListener('click', function (event: Event) {
@@ -142,7 +146,7 @@ export function init(config: GridZoomConfig) {
       for (const inst of instances) {
         if (!inst.activeItem) continue;
         if (target?.closest(inst.itemSelector)) continue;
-        release(inst.grid);
+        release(inst);
         inst.activeItem = null;
       }
     });
@@ -150,13 +154,13 @@ export function init(config: GridZoomConfig) {
       if ((event as KeyboardEvent).key !== 'Escape') return;
       for (const inst of instances) {
         if (!inst.activeItem) continue;
-        release(inst.grid);
+        release(inst);
         inst.activeItem = null;
       }
     });
     window.addEventListener('resize', function () {
       for (const inst of instances) {
-        if (inst.activeItem) apply(inst.grid, inst.activeItem, inst.opts);
+        if (inst.activeItem && inst.opts.recenterOnResize !== false) apply(inst.grid, inst.activeItem, inst.opts);
       }
     });
   });
@@ -164,6 +168,6 @@ export function init(config: GridZoomConfig) {
   instances.push(state);
   return {
     release: closeActive,
-    refresh: function () {}
+    refresh: function (options: Opts = {}) { Object.assign(state.opts, options); }
   };
 }

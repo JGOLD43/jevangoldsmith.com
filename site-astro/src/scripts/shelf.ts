@@ -1,4 +1,5 @@
 import { init as initGridZoom } from './grid-zoom';
+import { TIMING } from './timing';
 
 type ShelfCard = HTMLElement & { shelfFilterTimer?: number };
 
@@ -41,55 +42,73 @@ function initFilters(zoom: { release: () => void } | null | undefined) {
 
 function initShelf() {
   const grid = document.querySelector<HTMLElement>('.shelf-grid');
+  const frame = document.querySelector<HTMLElement>('.shelf-grid-frame');
   const shelf = document.querySelector<HTMLElement>('.shelf-page');
   const back = document.querySelector<HTMLButtonElement>('[data-shelf-back]');
-  if (!grid || !shelf || !back) return;
+  if (!grid || !frame || !shelf || !back) return;
   const mobile = window.matchMedia('(max-width: 760px)');
-  let expandedItem: HTMLElement | null = null;
+  let activeItem: HTMLElement | null = null;
   let previousScroll = 0;
+  let animationFrame = 0;
+  let closeTimer = 0;
 
-  function closeMobileDetail() {
-    if (!expandedItem) return;
-    const trigger = expandedItem.querySelector<HTMLButtonElement>('[data-shelf-item]');
-    expandedItem.classList.remove('is-expanded');
-    expandedItem.querySelector('.shelf-object-detail')?.setAttribute('aria-hidden', 'true');
-    trigger?.setAttribute('aria-expanded', 'false');
-    shelf!.classList.remove('shelf-detail-open');
-    expandedItem = null;
-    trigger?.focus({ preventScroll: true });
-    window.scrollTo({ top: previousScroll, behavior: 'instant' });
+  function syncHeight() {
+    if (!activeItem || !shelf!.classList.contains('shelf-zoom-layout')) return;
+    const bottom = activeItem.getBoundingClientRect().bottom;
+    const top = frame!.getBoundingClientRect().top;
+    frame!.style.height = Math.max(0, Math.ceil(bottom - top)) + 'px';
   }
 
-  // A scaled grid cannot grow the document to fit its mobile description.
-  // Open a normal full-width item instead, keeping all its details in flow.
-  grid.addEventListener('click', function (event) {
-    if (!mobile.matches) return;
-    const trigger = (event.target as Element | null)?.closest<HTMLElement>('[data-shelf-item]');
-    const item = trigger?.closest<HTMLElement>('.shelf-item');
-    if (!item) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    if (expandedItem) {
-      closeMobileDetail();
-      return;
-    }
-    previousScroll = window.scrollY;
-    expandedItem = item;
-    item.classList.add('is-expanded');
-    item.querySelector('.shelf-object-detail')?.setAttribute('aria-hidden', 'false');
-    trigger?.setAttribute('aria-expanded', 'true');
-    shelf.classList.add('shelf-detail-open');
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    back.focus({ preventScroll: true });
-  }, true);
+  const observer = new ResizeObserver(syncHeight);
 
-  back.addEventListener('click', closeMobileDetail);
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') closeMobileDetail();
-  });
+  function finishClose() {
+    shelf!.classList.remove('shelf-zoom-layout');
+    frame!.style.height = '';
+    closeTimer = 0;
+  }
+
+  function openDetail(item: HTMLElement) {
+    window.clearTimeout(closeTimer);
+    cancelAnimationFrame(animationFrame);
+    activeItem = item;
+    item.querySelector('.shelf-object-detail')?.setAttribute('aria-hidden', 'false');
+    item.querySelector('[data-shelf-item]')?.setAttribute('aria-expanded', 'true');
+    if (!mobile.matches) return;
+    previousScroll = window.scrollY;
+    frame!.style.height = frame!.offsetHeight + 'px';
+    shelf!.classList.add('shelf-zoom-layout');
+    observer.observe(item);
+    const started = performance.now();
+    function followAnimation() {
+      syncHeight();
+      if (performance.now() - started < TIMING.gridZoomFlight + 50) {
+        animationFrame = requestAnimationFrame(followAnimation);
+      }
+    }
+    animationFrame = requestAnimationFrame(followAnimation);
+  }
+
+  function closeDetail() {
+    const trigger = activeItem?.querySelector<HTMLButtonElement>('[data-shelf-item]');
+    activeItem?.querySelector('.shelf-object-detail')?.setAttribute('aria-hidden', 'true');
+    trigger?.setAttribute('aria-expanded', 'false');
+    activeItem = null;
+    observer.disconnect();
+    cancelAnimationFrame(animationFrame);
+    if (!shelf!.classList.contains('shelf-zoom-layout')) return;
+    window.scrollTo({ top: previousScroll, behavior: 'instant' });
+    trigger?.focus({ preventScroll: true });
+    // Keep the same containing block through the reverse zoom, then restore
+    // the normal grid's height once the original animation has finished.
+    closeTimer = window.setTimeout(finishClose, TIMING.gridZoomFlight);
+  }
+
+  const zoomOptions = () => mobile.matches
+    ? { centerOffsetCssX: 0, fillW: 0.7, fillH: 0.32, maxScale: 3.2 }
+    : { centerOffsetCssX: 139, fillW: 0.82, fillH: 0.72, maxScale: 5.6 };
 
   grid.classList.add('js-zoom-grid');
-  document.querySelectorAll('.shelf-item').forEach(function (el) {
+  grid.querySelectorAll('.shelf-item').forEach(function (el) {
     el.classList.add('js-zoom-item');
   });
   const zoom = initGridZoom({
@@ -97,13 +116,30 @@ function initShelf() {
     itemSelector: '.shelf-item',
     triggerSelector: '[data-shelf-item]',
     eventName: 'shelf_object_open',
-    centerOffsetCssX: 139,
-  }) as { release: () => void } | null;
+    ...zoomOptions(),
+    recenterOnResize: false,
+    onOpen: openDetail,
+    onClose: closeDetail,
+  });
 
+  back.addEventListener('click', () => zoom?.release());
   initFilters(zoom);
   mobile.addEventListener('change', function () {
-    closeMobileDetail();
     zoom?.release();
+    window.clearTimeout(closeTimer);
+    finishClose();
+    zoom?.refresh(zoomOptions());
+  });
+  let viewportWidth = window.innerWidth;
+  window.addEventListener('resize', function () {
+    // Mobile browser chrome changes the viewport height while scrolling.
+    // Keep the existing zoom instead of scaling the already enlarged item.
+    if (viewportWidth !== window.innerWidth) {
+      viewportWidth = window.innerWidth;
+      zoom?.release();
+      zoom?.refresh(zoomOptions());
+    }
+    syncHeight();
   });
 }
 
