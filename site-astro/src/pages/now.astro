@@ -36,42 +36,24 @@ const sections = NOW_SECTIONS;
   </Fragment>
 <main class="now-page">
   <header class="now-header">
-    <p class="now-eyebrow">Now · a living field note</p>
-    <h1 class="now-title">A snapshot of right now</h1>
-    <p class="now-subtitle">What I’m building, learning, and paying attention to—updated whenever the picture changes.</p>
+    <h1 class="now-title">Now</h1>
     <section class="now-overview" aria-label="Latest Now update">
-      <div class="now-updated">
-        <div>
-          <span class="now-updated-label">Latest update</span>
-          <strong class="now-updated-date">{lastUpdated}</strong>
-        </div>
-        <span class="now-current-pill">Current</span>
-      </div>
-      {/* Critical visual styles are inlined on every element here so the
-          map, pin, and label all render correctly on FIRST PAINT — the
-          .now-* rules live in the page's deferred (non-critical) CSS, which
-          loads after paint and otherwise left the dot + label invisible /
-          mispositioned for a beat. position:relative on the anchor is what
-          the absolutely-positioned pin + label anchor to. */}
       <a class="now-map-thumb" id="now-map-thumb-link" href={mapLink} title={`Open ${lastUpdatedLocation} on the trip map`} aria-label={`Open ${lastUpdatedLocation} on the trip map`}
          data-now-lat={lastUpdatedLat} data-now-lng={lastUpdatedLng}
-         style="position:relative;display:block;border-radius:0;overflow:hidden">
-        <img id="now-map-thumb-img" src={mapThumbUrl} alt={`Map showing current location: ${lastUpdatedLocation}`} fetchpriority="high" decoding="async" width="256" height="256" style="width:100%;height:100%;object-fit:cover;display:block" />
+         style="position:relative;display:block;width:64px;height:64px;border-radius:4px;overflow:hidden">
+        <img id="now-map-thumb-img" src={mapThumbUrl} alt="" decoding="async" width="256" height="256" style="width:100%;height:100%;object-fit:cover;display:block" />
         <span class="now-map-thumb-marker" style={`position:absolute;left:${pinLeftPct}%;top:${pinTopPct}%;width:22px;height:22px;margin:-11px 0 0 -11px;pointer-events:none`} aria-hidden="true">
           <span class="now-marker-pulse" style="position:absolute;inset:0;background:rgba(255,215,0,0.5);border-radius:50%"></span>
           <span class="now-marker-dot" style="position:absolute;inset:6px;background:gold;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.45)"></span>
         </span>
-        <span class="now-map-thumb-label" style="position:absolute;left:16px;bottom:14px;right:16px;font-size:0.9rem;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.8);letter-spacing:0.02em">
-          <span class="now-map-label-kicker">Latest location</span>
-          {lastUpdatedLocation}
-        </span>
       </a>
-      <div class="now-overview-footer">
-        <p>Every update leaves a pin behind, so this page becomes a map of where life was happening.</p>
-        <a class="now-archive-cta" href="/now/archive.html">
-          Explore the Now map
-          <span aria-hidden="true">→</span>
+      <div class="now-update-meta">
+        <a class="now-location-link" href={mapLink}>
+          <span class="now-map-thumb-label">{lastUpdatedLocation}</span>
+          <span aria-hidden="true">↗</span>
         </a>
+        <span class="now-updated-date">Updated {lastUpdated}</span>
+        <a class="now-archive-cta" href="/now/archive.html">Past updates <span aria-hidden="true">→</span></a>
       </div>
     </section>
   </header>
@@ -92,157 +74,64 @@ const sections = NOW_SECTIONS;
 
 <style is:global>
   .now-page {
-    max-width: 1120px;
+    max-width: 824px;
     margin: 0 auto;
-    padding: 3rem 2rem 6rem;
+    padding: 2rem 2rem 4rem;
   }
-  .now-header { margin-bottom: 3.5rem; }
-  .now-overview {
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    background: var(--background-alt);
-    box-shadow: 0 18px 44px rgba(12, 24, 34, 0.08);
-  }
-  .now-archive-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    text-decoration: none;
-    border: 1px solid var(--secondary-color);
-    border-radius: 999px;
-    padding: 0.65rem 1rem;
-    white-space: nowrap;
-    transition: transform 0.15s ease, background 0.15s ease;
-  }
-  .now-archive-cta:hover {
-    background: var(--secondary-color);
-    transform: translateX(2px);
-  }
-  .now-eyebrow {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: var(--secondary-color);
-    margin: 0 0 0.75rem;
-  }
+  .now-header { margin-bottom: 2.5rem; }
   h1.now-title {
     font-family: Chivo, Georgia, serif;
-    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-size: 2.5rem;
     font-weight: 700;
-    line-height: 1.02;
-    margin: 0 0 1.1rem;
+    line-height: 1.1;
+    margin: 0 0 1.25rem;
     color: var(--primary-color);
     letter-spacing: -0.035em;
   }
-  .now-subtitle {
-    font-size: 1.05rem;
-    color: var(--text-light);
-    line-height: 1.55;
-    margin: 0 0 2rem;
-    max-width: 56ch;
-  }
-  .now-meta-row {
-    display: flex;
-    align-items: stretch;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  .now-updated {
+  .now-overview {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
-    padding: 1rem 1.1rem;
   }
-  .now-updated-label { display: block; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.68rem; color: var(--text-light); font-weight: 700; margin-bottom: 0.15rem; }
-  .now-updated-date { display: block; color: var(--primary-color); font-weight: 700; font-size: 1rem; letter-spacing: 0; }
-  .now-current-pill { padding: 0.28rem 0.6rem; border-radius: 999px; color: #17222b; background: var(--secondary-color); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
   .now-map-thumb {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 250px;
-    border-radius: 0;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    background: var(--background-alt);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    text-decoration: none;
     flex: none;
+    background: var(--background-alt);
   }
-  .now-map-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    /* Round the image itself, not just the parent's overflow clip. On iOS
-       Safari a child <img> isn't clipped to the parent's rounded corners
-       until the first repaint, which flashed sharp 90° corners on load. */
-    border-radius: 0;
-  }
-  .now-map-thumb:hover {
-    transform: none;
-    /* More obvious gold highlight on hover — a 1px border alone barely
-       registered on a busy satellite tile. Outline + glow ring make
-       it unmistakable. */
-    border-color: var(--secondary-color);
+  .now-map-thumb:hover, .now-map-thumb:focus-visible {
     outline: 2px solid var(--secondary-color);
-    outline-offset: 0;
-    box-shadow: 0 0 0 4px rgba(201, 168, 108, 0.35), 0 8px 22px rgba(0, 0, 0, 0.35);
+    outline-offset: 3px;
   }
-  .now-map-thumb-marker {
-    position: absolute;
-    /* left/top set inline from the lat/lng sub-tile offset */
-    width: 22px;
-    height: 22px;
-    margin: -11px 0 0 -11px;
-    pointer-events: none;
+  .now-update-meta {
+    display: grid;
+    justify-items: start;
+    gap: 0.15rem;
+    min-width: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
   }
-  .now-map-thumb-marker .now-marker-dot {
-    position: absolute;
-    inset: 6px;
-    background: gold;
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  .now-location-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
   }
-  .now-map-thumb-marker .now-marker-pulse {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 215, 0, 0.5);
-    border-radius: 50%;
-    animation: nowPulse 1.8s ease-out infinite;
+  .now-updated-date { color: var(--text-light); }
+  .now-archive-cta {
+    color: var(--text-light);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
+  .now-location-link:hover, .now-archive-cta:hover { color: var(--secondary-color); }
+  .now-marker-pulse { animation: nowPulse 1.8s ease-out infinite; }
   @keyframes nowPulse {
     0% { opacity: 0.9; transform: scale(0.6); }
     100% { opacity: 0; transform: scale(1.6); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .now-map-thumb-marker .now-marker-pulse { animation: none; opacity: 0.5; transform: scale(1); }
-  }
-  .now-map-thumb-label {
-    position: absolute;
-    left: 8px;
-    bottom: 8px;
-    right: 8px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-    letter-spacing: 0.02em;
-  }
-  .now-map-label-kicker { display: block; margin-bottom: 0.2rem; font-size: 0.65rem; letter-spacing: 0.11em; text-transform: uppercase; opacity: 0.82; }
-  .now-overview-footer { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1rem 1.1rem 1.1rem; }
-  .now-overview-footer p { margin: 0; max-width: 43ch; color: var(--text-light); font-size: 0.85rem; line-height: 1.5; }
-  @media (max-width: 480px) {
-    .now-map-thumb { height: 190px; }
-    .now-overview-footer { align-items: stretch; flex-direction: column; }
-    .now-archive-cta { width: 100%; }
+    .now-marker-pulse { animation: none; opacity: 0.5; transform: scale(1); }
   }
 
   .now-sections { display: grid; gap: 2.5rem; }
@@ -283,73 +172,9 @@ const sections = NOW_SECTIONS;
   }
   .now-footer a { color: var(--secondary-color); text-decoration: underline; text-underline-offset: 3px; }
 
-  @media (min-width: 901px) {
-    .now-header {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(260px, 0.9fr);
-      align-items: end;
-      column-gap: clamp(2.5rem, 5vw, 5rem);
-    }
-    .now-eyebrow {
-      grid-column: 1 / -1;
-      margin-bottom: 0.85rem;
-    }
-    h1.now-title {
-      grid-column: 1;
-      margin-bottom: 0;
-      font-size: clamp(3rem, 3.35vw, 3.5rem);
-      line-height: 1.05;
-      white-space: nowrap;
-    }
-    .now-subtitle {
-      grid-column: 2;
-      margin: 0 0 0.35rem;
-      font-size: 1rem;
-      line-height: 1.55;
-      text-wrap: pretty;
-    }
-    .now-overview {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: minmax(240px, 0.72fr) minmax(0, 2fr);
-      grid-template-rows: auto 1fr;
-      margin-top: 2rem;
-    }
-    .now-updated {
-      grid-column: 1;
-      grid-row: 1;
-      padding: 1.25rem 1.4rem;
-    }
-    .now-map-thumb {
-      grid-column: 2;
-      grid-row: 1 / 3;
-      height: 280px;
-      border-width: 0 0 0 1px;
-    }
-    .now-overview-footer {
-      grid-column: 1;
-      grid-row: 2;
-      align-items: stretch;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 1.25rem 1.4rem 1.4rem;
-      border-top: 1px solid var(--border-color);
-    }
-    .now-overview-footer p {
-      max-width: none;
-    }
-    .now-archive-cta {
-      width: 100%;
-    }
-    .now-sections {
-      max-width: 760px;
-      margin: 0 auto;
-    }
-  }
-
   @media (max-width: 600px) {
-    .now-page { padding: 2.5rem 1.25rem 4rem; }
-    .now-header { margin-bottom: 2.5rem; }
+    .now-page { padding: 2rem 1.25rem 4rem; }
+    h1.now-title { font-size: 2.25rem; }
     .now-sections { gap: 2rem; }
   }
 
