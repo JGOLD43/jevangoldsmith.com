@@ -219,7 +219,9 @@
     "category": "Advertising and Copywriting",
     "shortDescription": "",
     "review": null,
-    "read": true
+    "read": true,
+    "coverImage": "/images/book-covers/one-sentence-persuasion-course.jpg",
+    "coverImageMedium": "/images/book-covers/one-sentence-persuasion-course.jpg"
   },
   {
     "title": "Copywriting Secrets",
@@ -1001,7 +1003,9 @@
     "category": "Mental Endurance",
     "shortDescription": "",
     "review": null,
-    "read": false
+    "read": false,
+    "coverImage": "/images/book-covers/mind-of-napoleon.jpg",
+    "coverImageMedium": "/images/book-covers/mind-of-napoleon.jpg"
   },
   {
     "title": "Ogilvy on Advertising",
@@ -1167,7 +1171,9 @@
     "category": "Out of the Box Thinking",
     "shortDescription": "",
     "review": null,
-    "read": false
+    "read": false,
+    "coverImage": "/images/book-covers/steve-jobs-next-big-thing.jpg",
+    "coverImageMedium": "/images/book-covers/steve-jobs-next-big-thing.jpg"
   },
   {
     "title": "Damn Right!: Behind the Scenes with Berkshire Hathaway Billionaire Charlie Munger",
@@ -1361,7 +1367,9 @@
     "category": "Patience and Clear Thinking",
     "shortDescription": "",
     "review": null,
-    "read": true
+    "read": true,
+    "coverImage": "/images/book-covers/tao-of-charlie-munger.jpg",
+    "coverImageMedium": "/images/book-covers/tao-of-charlie-munger.jpg"
   },
   {
     "title": "Random Reminiscences of Men and Events",
@@ -1387,7 +1395,9 @@
     "category": "Patience and Clear Thinking",
     "shortDescription": "",
     "review": null,
-    "read": true
+    "read": true,
+    "coverImage": "/images/book-covers/few-lessons-investors-managers.jpg",
+    "coverImageMedium": "/images/book-covers/few-lessons-investors-managers.jpg"
   },
   {
     "title": "The Wit and Wisdom of Lee Kuan Yew",
@@ -1497,7 +1507,9 @@
     "category": "Patience and Clear Thinking",
     "shortDescription": "",
     "review": null,
-    "read": false
+    "read": false,
+    "coverImage": "/images/book-covers/autobiography-restless-mind.jpg",
+    "coverImageMedium": "/images/book-covers/autobiography-restless-mind.jpg"
   },
   {
     "title": "Seeking Wisdom: From Darwin to Munger",
@@ -1565,7 +1577,9 @@
     "category": "Patience and Clear Thinking",
     "shortDescription": "",
     "review": null,
-    "read": false
+    "read": false,
+    "coverImage": "/images/book-covers/quotations-david-ogilvy.jpg",
+    "coverImageMedium": "/images/book-covers/quotations-david-ogilvy.jpg"
   },
   {
     "title": "Nonviolent Communication",

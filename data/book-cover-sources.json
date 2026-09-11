@@ -1,0 +1,37 @@
+[
+  {
+    "title": "The One Sentence Persuasion Course",
+    "cover": "images/book-covers/one-sentence-persuasion-course.jpg",
+    "source": "https://books.apple.com/us/book/the-one-sentence-persuasion-course/id620242275"
+  },
+  {
+    "title": "The Mind of Napoleon: A Selection of His Written and Spoken Words",
+    "cover": "images/book-covers/mind-of-napoleon.jpg",
+    "source": "https://www.perlego.com/book/3019900/mind-of-napoleon-a-selection-of-his-written-and-spoken-words-pdf"
+  },
+  {
+    "title": "Steve Jobs and the NeXT Big Thing",
+    "cover": "images/book-covers/steve-jobs-next-big-thing.jpg",
+    "source": "https://www.kirkusreviews.com/book-reviews/randall-e-stross/steve-jobs-and-the-next-big-thing/"
+  },
+  {
+    "title": "Tao of Charlie Munger",
+    "cover": "images/book-covers/tao-of-charlie-munger.jpg",
+    "source": "https://www.simonandschuster.com/books/Tao-of-Charlie-Munger/David-Clark/9781501153341"
+  },
+  {
+    "title": "A Few Lessons for Investors and Managers from Warren Buffett",
+    "cover": "images/book-covers/few-lessons-investors-managers.jpg",
+    "source": "https://www.poorcharliesalmanack.com/a_few_lessons_for_investors_and_managers.php"
+  },
+  {
+    "title": "Autobiography of a Restless Mind",
+    "cover": "images/book-covers/autobiography-restless-mind.jpg",
+    "source": "https://www.iuniverse.com/en/bookstore/bookdetails/432788-Autobiography-of-a-Restless-Mind"
+  },
+  {
+    "title": "Quotations of David Ogilvy",
+    "cover": "images/book-covers/quotations-david-ogilvy.jpg",
+    "source": "https://www.ogilvy.com/sites/g/files/dhpsjz106/files/pdfdocuments/Quotations_of_David_Ogilvy_v2.pdf"
+  }
+]

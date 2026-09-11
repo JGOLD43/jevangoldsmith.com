@@ -14,7 +14,8 @@
         "properties": {
           "title": { "type": "string", "description": "Book title (required)." },
           "author": { "type": "string", "description": "Author name (required)." },
-          "isbn": { "type": "string", "description": "13-digit ISBN. The cover resolves automatically from this via the remote-asset manifest — do NOT set coverImage by hand (books.generated.json is generated)." },
+          "isbn": { "type": "string", "description": "13-digit ISBN. The cover resolves automatically from this via the remote-asset manifest." },
+          "coverImage": { "type": "string", "description": "Curated cover URL or local path when an ISBN cover is unavailable. Edit this in books.json; books.generated.json is generated." },
           "year": { "type": ["string", "number"], "description": "Publication year." },
           "rating": { "type": "number", "minimum": 0, "maximum": 5, "description": "Your rating, 0–5." },
           "reReads": { "type": ["number", "null"], "description": "Number of times re-read." },

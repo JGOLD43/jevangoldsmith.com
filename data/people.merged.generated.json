@@ -36,7 +36,7 @@
         },
         {
           "author": "David Clark",
-          "coverImage": "",
+          "coverImage": "/images/book-covers/tao-of-charlie-munger.jpg",
           "href": "/books/tao-of-charlie-munger-david-clark.html",
           "label": "Tao of Charlie Munger (2017)",
           "title": "Tao of Charlie Munger"
@@ -131,7 +131,7 @@
         },
         {
           "author": "David Ogilvy",
-          "coverImage": "",
+          "coverImage": "/images/book-covers/quotations-david-ogilvy.jpg",
           "href": "/books/quotations-of-david-ogilvy-david-ogilvy.html",
           "label": "Quotations of David Ogilvy (1986)",
           "title": "Quotations of David Ogilvy"
@@ -175,7 +175,7 @@
         },
         {
           "author": "Randall E. Stross",
-          "coverImage": "",
+          "coverImage": "/images/book-covers/steve-jobs-next-big-thing.jpg",
           "href": "/books/steve-jobs-and-the-next-big-thing-randall-e-stross.html",
           "label": "Steve Jobs and the NeXT Big Thing (1993)",
           "title": "Steve Jobs and the NeXT Big Thing"
@@ -251,7 +251,7 @@
         },
         {
           "author": "Peter Bevelin",
-          "coverImage": "",
+          "coverImage": "/images/book-covers/few-lessons-investors-managers.jpg",
           "href": "/books/a-few-lessons-for-investors-and-managers-from-warren-buffett-peter-bevelin.html",
           "label": "A Few Lessons for Investors and Managers from Warren Buffett (2012)",
           "title": "A Few Lessons for Investors and Managers from Warren Buffett"
@@ -363,7 +363,7 @@
       "books": [
         {
           "author": "Dee Hock",
-          "coverImage": "",
+          "coverImage": "/images/book-covers/autobiography-restless-mind.jpg",
           "href": "/books/autobiography-of-a-restless-mind-dee-hock.html",
           "label": "Autobiography of a Restless Mind (2012)",
           "title": "Autobiography of a Restless Mind"
@@ -520,7 +520,7 @@
         },
         {
           "author": "J. Christopher Herold",
-          "coverImage": "",
+          "coverImage": "/images/book-covers/mind-of-napoleon.jpg",
           "href": "/books/the-mind-of-napoleon-a-selection-of-his-written-and-spoken-words-j-christopher-herold.html",
           "label": "The Mind of Napoleon: A Selection of His Written and Spoken Words (1955)",
           "title": "The Mind of Napoleon: A Selection of His Written and Spoken Words"

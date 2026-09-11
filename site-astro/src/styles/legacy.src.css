@@ -4476,7 +4476,7 @@ body.meet-page {
 }
 
 .category-books.expanded, .category-movies.expanded, .genre-movies.expanded {
-  max-height: 2000px;
+  max-height: none;
 }
 
 .book-link, .movie-link {

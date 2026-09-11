@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Walks people.merged.generated.json + products.json and verifies that every
+// Walks books.generated.json, people.merged.generated.json and products.json to verify
 // `image` and `srcset` path resolves to a file on disk under images/. Run
 // after people:merge in the build pipeline so a missing image variant
 // fails the build instead of shipping broken <img> URLs.
@@ -12,6 +12,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const sharp = require('sharp');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -68,8 +69,34 @@ function checkProducts(failures) {
   }
 }
 
-function main() {
+async function checkBooks(failures) {
+  const books = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'books.generated.json'), 'utf8'));
+  const checked = new Map();
+  for (const book of books) {
+    for (const field of ['coverImage', 'coverImageMedium']) {
+      const cover = book[field];
+      const label = `book "${book.title}": ${field}`;
+      if (!cover || !pathExists(cover)) {
+        failures.push(`${label} is missing${cover ? ` on disk: ${cover}` : ''}`);
+        continue;
+      }
+      if (/^https?:\/\//.test(cover)) continue;
+      if (!checked.has(cover)) {
+        try {
+          const { info } = await sharp(path.join(ROOT, cover.replace(/^\//, ''))).raw().toBuffer({ resolveWithObject: true });
+          checked.set(cover, info.width >= 20 && info.height >= 20);
+        } catch {
+          checked.set(cover, false);
+        }
+      }
+      if (!checked.get(cover)) failures.push(`${label} is not a valid cover image: ${cover}`);
+    }
+  }
+}
+
+async function main() {
   const failures = [];
+  await checkBooks(failures);
   checkPeople(failures);
   checkProducts(failures);
   if (failures.length > 0) {
@@ -80,4 +107,7 @@ function main() {
   console.log('[check-asset-integrity] ok');
 }
 
-main();
+main().catch((error) => {
+  console.error(`[check-asset-integrity] ${error.message}`);
+  process.exitCode = 1;
+});
