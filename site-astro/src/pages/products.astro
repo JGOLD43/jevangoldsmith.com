@@ -205,7 +205,30 @@ const categoryCounts = Object.fromEntries(
   }
 
   .shelf-page .shelf-grid {
-    padding-top: 24px;
+    padding-top: 0;
+  }
+
+  .shelf-grid-frame {
+    position: relative;
+  }
+
+  /* Give the transformed object and its description real space in the
+     page on every screen size, preserving the grid's zoom geometry. */
+  .shelf-page.shelf-zoom-layout {
+    overflow: clip;
+  }
+
+  .shelf-zoom-layout .shelf-grid {
+    position: absolute;
+    inset: 0 0 auto;
+  }
+
+  .shelf-zoom-layout .shelf-topbar {
+    visibility: hidden;
+  }
+
+  body.shelf-experience.zoom-open::before {
+    display: none;
   }
 
   .shelf-back {
@@ -220,7 +243,7 @@ const categoryCounts = Object.fromEntries(
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    margin: 0 -20px 28px;
+    margin: 0 -20px 8px;
     padding: 18px 32px;
     border-bottom: 1px solid transparent;
     background: transparent;
@@ -304,14 +327,6 @@ const categoryCounts = Object.fromEntries(
     pointer-events: auto;
   }
 
-  /* The zoomed grid is transformed visually and therefore does not push the
-     footer down in document flow. Keep the footer's space (so scrollY cannot
-     jump) but hide its contents while a Shelf item owns the viewport. */
-  body.shelf-experience.zoom-open .site-footer {
-    visibility: hidden;
-    pointer-events: none;
-  }
-
   .shelf-page .shelf-object-stage {
     margin-bottom: -36px;
   }
@@ -342,7 +357,8 @@ const categoryCounts = Object.fromEntries(
     .shelf-page .shelf-grid.is-zoomed .shelf-item.is-zoom-target .shelf-object-detail {
       gap: 0.42rem;
       width: clamp(190px, 15vw, 230px);
-      height: clamp(120px, 17vw, 245px);
+      min-height: clamp(120px, 17vw, 245px);
+      height: auto;
       font-size: 0.56rem;
       line-height: 1.4;
       transform: translate(0, -50%);
@@ -378,25 +394,6 @@ const categoryCounts = Object.fromEntries(
       padding-top: calc(19px + (clamp(180px, 32vw, 300px) - 130px) / 2);
     }
 
-    .shelf-grid-frame {
-      position: relative;
-    }
-
-    /* Reserve the transformed item's actual height without changing the
-       grid's geometry or its original zoom animation. */
-    .shelf-page.shelf-zoom-layout {
-      overflow: clip;
-    }
-
-    .shelf-zoom-layout .shelf-grid {
-      position: absolute;
-      inset: 0 0 auto;
-    }
-
-    .shelf-zoom-layout .shelf-topbar {
-      visibility: hidden;
-    }
-
     .shelf-back {
       display: block;
       visibility: hidden;
@@ -414,15 +411,6 @@ const categoryCounts = Object.fromEntries(
     }
 
     .shelf-zoom-layout .shelf-back {
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    body.shelf-experience.zoom-open::before {
-      display: none;
-    }
-
-    body.shelf-experience.zoom-open .site-footer {
       visibility: visible;
       pointer-events: auto;
     }

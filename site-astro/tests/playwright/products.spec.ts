@@ -45,7 +45,8 @@ test('opening a Shelf item near the footer keeps its scroll position and backgro
   await page.getByRole('button', { name: 'Boots' }).click();
 
   await expect(page.locator('body')).toHaveClass(/zoom-open/);
-  await expect(page.locator('.site-footer')).toHaveCSS('visibility', 'hidden');
+  await expect(page.locator('.site-footer')).toHaveCSS('visibility', 'visible');
+  await expect(page.locator('.shelf-page')).toHaveClass(/shelf-zoom-layout/);
   await expect(page.locator('.shelf-item.is-zoom-target .shelf-object-name--general')).toBeHidden();
   await expect(page.locator('.shelf-item.is-zoom-target .shelf-object-name--specific')).toHaveText('Craftsman Boots');
   await expect(page.locator('.shelf-item.is-zoom-target .shelf-object-name--specific')).toBeVisible();
@@ -67,6 +68,19 @@ test('opening a Shelf item near the footer keeps its scroll position and backgro
   expect(expandedBounds.detailTop).toBeGreaterThanOrEqual(0);
   expect(expandedBounds.imageBottom).toBeLessThanOrEqual(expandedBounds.viewportHeight);
   expect(expandedBounds.detailBottom).toBeLessThanOrEqual(expandedBounds.viewportHeight);
+
+  await expect.poll(() => page.locator('.shelf-item.is-zoom-target').evaluate((item) => {
+    const contentBottom = Math.max(item.getBoundingClientRect().bottom,
+      ...Array.from(item.querySelectorAll('.shelf-object-photo, .shelf-object-detail')).map((element) => element.getBoundingClientRect().bottom));
+    return document.querySelector('.site-footer')!.getBoundingClientRect().top - contentBottom;
+  })).toBeGreaterThan(0);
+  const backgroundJoinsFooter = await page.locator('.shelf-page').evaluate((shelf) =>
+    Math.abs(shelf.getBoundingClientRect().bottom - document.querySelector('.site-footer')!.getBoundingClientRect().top) < 1,
+  );
+  expect(backgroundJoinsFooter).toBe(true);
+  await page.locator('.site-footer').scrollIntoViewIfNeeded();
+  await expect(page.locator('.site-footer').getByRole('link', { name: 'The Shelf', exact: true })).toBeInViewport();
+  await expect(page.locator('body')).toHaveClass(/zoom-open/);
 });
 
 test('expanded Shelf details are vertically centred with the selected object', async ({ page }) => {

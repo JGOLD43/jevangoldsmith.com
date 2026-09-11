@@ -54,7 +54,13 @@ function initShelf() {
 
   function syncHeight() {
     if (!activeItem || !shelf!.classList.contains('shelf-zoom-layout')) return;
-    const bottom = activeItem.getBoundingClientRect().bottom;
+    // Desktop details sit beside the item and can extend beyond its box.
+    // Include both the photo and the full text when placing the footer.
+    const bottom = Math.max(
+      activeItem.getBoundingClientRect().bottom,
+      activeItem.querySelector('.shelf-object-photo')?.getBoundingClientRect().bottom ?? 0,
+      activeItem.querySelector('.shelf-object-detail')?.getBoundingClientRect().bottom ?? 0,
+    );
     const top = frame!.getBoundingClientRect().top;
     frame!.style.height = Math.max(0, Math.ceil(bottom - top)) + 'px';
   }
@@ -74,11 +80,12 @@ function initShelf() {
     activeItem = item;
     item.querySelector('.shelf-object-detail')?.setAttribute('aria-hidden', 'false');
     item.querySelector('[data-shelf-item]')?.setAttribute('aria-expanded', 'true');
-    if (!mobile.matches) return;
     previousScroll = window.scrollY;
     frame!.style.height = frame!.offsetHeight + 'px';
     shelf!.classList.add('shelf-zoom-layout');
     observer.observe(item);
+    const detail = item.querySelector('.shelf-object-detail');
+    if (detail) observer.observe(detail);
     const started = performance.now();
     function followAnimation() {
       syncHeight();
