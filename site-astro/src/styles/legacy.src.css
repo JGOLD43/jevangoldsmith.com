@@ -1150,6 +1150,72 @@ button[type="submit"]:hover {
   display: flex;
 }
 
+/* The title and controls share a row so their centres stay aligned when
+   headings, subtitles, counters, or collection views change size. */
+.collection-header:has(.view-toggle-single) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  row-gap: .75rem;
+}
+
+.collection-header:has(.view-toggle-single) > .header-content,
+.collection-header:has(.view-toggle-single) > .header-right,
+.collection-header:has(.view-toggle-single) > .movie-counter-group {
+  display: contents;
+}
+
+.collection-header:has(.view-toggle-single) .taste-title-switcher {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  justify-self: start;
+  min-width: 0;
+}
+
+.collection-header:has(.view-toggle-single) #collection-title {
+  margin: 0;
+}
+
+.collection-header:has(.view-toggle-single) .philosophy-link-wrapper {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.collection-header:has(.view-toggle-single) :is(.book-counter-group, .movie-counter-row) {
+  grid-column: -2 / -1;
+  grid-row: 1;
+  align-self: center;
+  justify-self: end;
+}
+
+.collection-header:has(.view-toggle-single) .stats-toggle {
+  align-self: center;
+}
+
+.collection-header:has(.view-toggle-single) .collection-header-counter {
+  grid-column: -2 / -1;
+  grid-row: 2;
+  justify-self: end;
+}
+
+.collection-header:has(.view-toggle-single) .recent-books-carousel {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  min-width: 0;
+}
+
+@media (width > 900px) {
+  .collection-header:has(.view-toggle-single):has(.recent-books-carousel) {
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr) auto;
+  }
+
+  .collection-header:has(.view-toggle-single) .recent-books-carousel {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+}
+
 .collection-header .header-content h1, .collection-header .header-content .bookshelf-view-title {
   color: #000;
   margin-bottom: .5rem;
