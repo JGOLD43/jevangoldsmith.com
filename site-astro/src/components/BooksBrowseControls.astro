@@ -1,0 +1,50 @@
+---
+import BookYearFilter from './BookYearFilter.astro';
+interface Props { years: number[]; id: string; sidebar?: boolean; }
+const { years, id, sidebar = false } = Astro.props;
+---
+<div class:list={['books-browse-controls', { 'books-browse-controls--sidebar': sidebar }]}>
+  <BookYearFilter years={years} id={id} />
+  <a class="books-most-liked" href="/books-by-rating.html" data-most-liked-link>
+    <span class="book-filter-label">Ratings</span>
+    <span>Most Liked</span>
+  </a>
+</div>
+
+<style is:global>
+  .books-browse-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+    min-width: 0;
+    border: 1px solid var(--border-color);
+    border-radius: .6rem;
+    background: var(--background-alt);
+  }
+  .books-most-liked {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .3rem;
+    padding: .7rem .8rem;
+    border-left: 1px solid var(--border-color);
+    border-radius: 0 .6rem .6rem 0;
+    color: var(--text-color);
+    font-size: .85rem;
+    line-height: 1.4;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .books-most-liked:hover { color: var(--secondary-color); background: var(--card-bg); }
+  .books-most-liked:focus-visible { outline: 2px solid var(--secondary-color); outline-offset: 3px; }
+  .books-browse-controls--sidebar { margin: 0 0 1rem; }
+  .collapsed .books-browse-controls--sidebar { display: none; }
+  @media (width <= 900px) {
+    .mobile-list-view .collapsed .books-browse-controls--sidebar { display: grid; }
+  }
+  @media (width <= 400px) {
+    .books-most-liked { padding: .65rem .4rem; font-size: .8rem; }
+  }
+</style>

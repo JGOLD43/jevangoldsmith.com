@@ -3,7 +3,7 @@ import { slugify } from '../lib/slug';
 import { CATEGORY_NAME_BY_KEY } from '../lib/book-categories';
 import { applyCardVisibility } from './collection-helpers';
 import { highlightAndScroll } from './collection-ui';
-import { categoryDisplayNames, getCoverUrl, state } from './books-state';
+import { categoryDisplayNames, filterBooks, getCoverUrl, state } from './books-state';
 import { TIMING } from './timing';
 
 export function renderBooks(books: AnyObj[]) {
@@ -15,15 +15,15 @@ export function renderBooks(books: AnyObj[]) {
         ':scope > *',
         (card) => [card.dataset.isbn || '', card.dataset.title || '']
     );
+    const empty = document.getElementById('books-empty-state');
+    if (empty) empty.hidden = books.length > 0;
 }
 
+let renderedSidebarSignature = '';
 export function renderSidebar(categories: Record<string, AnyObj[]>) {
-    const ssrCategoryKeys = Object.keys(categories);
-    const ssrAlreadyRendered = ssrCategoryKeys.some((key) => {
-        const c = document.getElementById(`category-${key}`);
-        return c && c.children.length > 0;
-    });
-    if (ssrAlreadyRendered) return;
+    const signature = JSON.stringify(Object.entries(categories).map(([key, books]) => [key, books.map((book) => book.isbn || book.title)]));
+    if (signature === renderedSidebarSignature) return;
+    renderedSidebarSignature = signature;
 
     const countAll = document.getElementById('count-all');
     const allList: AnyObj[] = (Object.values(categories) as AnyObj[][]).reduce((acc: AnyObj[], list) => acc.concat(list), []);
@@ -32,7 +32,7 @@ export function renderSidebar(categories: Record<string, AnyObj[]>) {
     // the collection, sorted by title for browsability. Same row markup
     // as per-category panels so styling stays consistent.
     const allContainer = document.getElementById('category-all');
-    if (allContainer && allContainer.children.length === 0) {
+    if (allContainer) {
         const sorted = [...allList].sort((a, b) =>
             String(a.title || '').localeCompare(String(b.title || ''))
         );
@@ -81,9 +81,17 @@ export function renderSidebar(categories: Record<string, AnyObj[]>) {
     });
 }
 
-export function renderCarousel(books: AnyObj[]) {
+export function renderCarousel(books: AnyObj[], refresh = false) {
     const track = document.getElementById('carousel-track');
     if (!track) return;
+    const carousel = track.closest<HTMLElement>('.recent-books-carousel');
+    if (carousel) carousel.hidden = books.length === 0;
+    if (refresh) {
+        track.replaceChildren();
+        delete track.dataset.cloned;
+        track.style.animationDelay = '';
+        track.style.transform = '';
+    }
     if (track.children.length > 0) {
         const originals = Array.from(track.children);
         if (originals.length >= 40 || track.dataset.cloned === 'true') {
@@ -271,7 +279,7 @@ export function updateStarFilterDisplay(value: string | number) {
 
 export function getBooksByCategory(): Record<string, AnyObj[]> {
     const categories: Record<string, AnyObj[]> = {};
-    state.books.forEach((book: AnyObj) => {
+    filterBooks(state.books).forEach((book: AnyObj) => {
         const category = book.category || 'Uncategorized';
         if (!categories[category]) categories[category] = [];
         categories[category].push(book);
@@ -279,12 +287,24 @@ export function getBooksByCategory(): Record<string, AnyObj[]> {
     return categories;
 }
 
-export function renderCategoryGrid() {
+let renderedCategorySignature = '';
+export function renderCategoryGrid(books: AnyObj[] = filterBooks(state.books)) {
     const container = document.getElementById('category-grid');
     if (!container) return;
-    // Category grid cards are owned by books.astro. This function remains
-    // as a stable call site for the view toggle, but it no longer builds
-    // static category markup at runtime.
+    const signature = JSON.stringify(books.map((book) => book.isbn || book.title));
+    if (signature === renderedCategorySignature) return;
+    renderedCategorySignature = signature;
+    container.querySelectorAll<HTMLElement>('.category-card').forEach((card) => {
+        const categoryBooks = books.filter((book) => book.category === card.dataset.category);
+        card.hidden = categoryBooks.length === 0;
+        const count = card.querySelector('.category-card-count');
+        if (count) count.textContent = String(categoryBooks.length);
+        const covers = card.querySelector('.category-card-books');
+        if (covers) covers.innerHTML = categoryBooks.slice(0, 8).map((book) => {
+            const cover = getCoverUrl(book, 'medium');
+            return cover ? `<img src="${escapeAttr(cover)}" alt="${escapeAttr(book.title)}" loading="lazy" decoding="async" data-remove-on-error="true">` : '<div class="empty-slot"></div>';
+        }).join('') + '<div class="empty-slot"></div>'.repeat(Math.max(0, 8 - categoryBooks.length));
+    });
 }
 
 export function setViewMode(mode: string) {

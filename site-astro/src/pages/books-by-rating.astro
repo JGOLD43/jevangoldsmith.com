@@ -2,10 +2,13 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import BookYearFilter from '../components/BookYearFilter.astro';
 import { bookCoverUrl } from '../lib/book-card';
+import { availableReadingYears, bookReadingYears } from '../lib/book-reading-years';
 import { slugify } from '../lib/slug';
 
 const books = await getCollection('books') as CollectionEntry<'books'>[];
+const readingYears = availableReadingYears(books.map((entry) => entry.data));
 
 const tiers = [
   { name: 'S', rating: 5, color: '#f3d36b', label: 'S tier — 5 stars' },
@@ -23,16 +26,17 @@ const tiers = [
 ---
 
 <Base
-  title="Books Ranked by Star Rating | Jevan Goldsmith"
+  title="Most Liked Books | Jevan Goldsmith"
   description="Books Jevan Goldsmith has rated, grouped by star rating."
   canonical="https://jevangoldsmith.com/books-by-rating.html"
   bodyClass="nav-compact"
 >
   <main class="rating-page">
     <header class="rating-page-header">
-      <a class="rating-back-link" href="/books.html">← Bookshelf</a>
-      <h1>Books by Tier</h1>
+      <a class="rating-back-link" href="/books.html" data-bookshelf-link>← Bookshelf</a>
+      <h1>Most Liked</h1>
       <p>Books I’ve rated, sorted from five stars down.</p>
+      <div class="rating-year-control"><BookYearFilter years={readingYears} id="rating-year" /></div>
     </header>
 
     <section class="tier-list" aria-label="Books grouped by star rating">
@@ -47,7 +51,7 @@ const tiers = [
               const slug = book.isbn || slugify(`${book.title}-${book.author}`);
               const cover = bookCoverUrl(book, 'medium');
               return (
-                <a class="tier-book" href={slug ? `/books/${slug}.html` : '/books.html'} title={`${book.title} by ${book.author}`}>
+                <a class="tier-book" data-read-years={bookReadingYears(book).join(' ')} href={slug ? `/books/${slug}.html` : '/books.html'} title={`${book.title} by ${book.author}`}>
                   {cover ? <img src={cover} alt={book.title} loading="eager" decoding="async" /> : <span class="tier-book-fallback">{book.title}</span>}
                 </a>
               );
@@ -56,12 +60,53 @@ const tiers = [
         </section>
       ))}
     </section>
+    <p id="rating-empty-state" hidden>No rated books for this year.</p>
 
     <p class="rating-page-note">Only books with a star rating are shown.</p>
   </main>
 </Base>
 
+<script>
+  import { readingYearFromUrl, updateReadingYearUrl } from '../lib/book-reading-years';
+  import { onDomReady } from '../scripts/dom-ready';
+
+  onDomReady(() => {
+    const select = document.querySelector<HTMLSelectElement>('[data-book-year-filter]');
+    if (!select) return;
+    const years = Array.from(select.options).map((option) => Number(option.value)).filter(Number.isFinite);
+    select.value = readingYearFromUrl(years);
+    function applyYear() {
+      if (!select) return;
+      const year = select.value;
+      let count = 0;
+      document.querySelectorAll<HTMLElement>('.tier-row').forEach((row) => {
+        let rowCount = 0;
+        row.querySelectorAll<HTMLElement>('.tier-book').forEach((book) => {
+          book.hidden = year !== 'all' && !book.dataset.readYears?.split(' ').includes(year);
+          if (!book.hidden) rowCount++;
+        });
+        row.hidden = rowCount === 0;
+        count += rowCount;
+      });
+      const empty = document.getElementById('rating-empty-state');
+      if (empty) empty.hidden = count > 0;
+      const back = document.querySelector<HTMLAnchorElement>('[data-bookshelf-link]');
+      if (back) back.href = `/books.html${year === 'all' ? '' : `?year=${year}`}`;
+    }
+    select.addEventListener('change', () => { applyYear(); updateReadingYearUrl(select.value); });
+    applyYear();
+  }, 'book rating year filter');
+</script>
+
 <style>
+  .rating-year-control {
+    width: 12rem;
+    margin-top: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: .6rem;
+    background: var(--background-alt);
+  }
+  .tier-row[hidden], .tier-book[hidden] { display: none; }
   .rating-page {
     max-width: 1120px;
     margin: 0 auto;

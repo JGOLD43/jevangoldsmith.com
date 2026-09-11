@@ -1,4 +1,5 @@
 import { bookCoverUrl } from '../lib/book-card';
+import { matchesReadingYear } from '../lib/book-reading-years';
 import type { Book } from '../content.config';
 
 export interface BooksState {
@@ -9,6 +10,7 @@ export interface BooksState {
     sidebarCollapsed: boolean;
     starFilter: string;
     viewMode: string;
+    yearFilter: string;
 }
 
 export const state: BooksState = {
@@ -18,8 +20,23 @@ export const state: BooksState = {
     searchQuery: '',
     sidebarCollapsed: true,
     starFilter: 'all',
-    viewMode: 'list'
+    viewMode: 'list',
+    yearFilter: 'all'
 };
+
+export function filterBooks(books: AnyObj[]): AnyObj[] {
+    const query = state.searchQuery.toLowerCase();
+    return books.filter((book) => {
+        if (!matchesReadingYear(book, state.yearFilter)) return false;
+        const isUnread = book.read === false;
+        const ratingValue = Number(book.rating || 0);
+        if (query && ![book.title, book.author, book.category || '']
+            .some((value) => String(value).toLowerCase().includes(query))) return false;
+        if (state.starFilter !== 'all' && (isUnread || ratingValue <= 0 || ratingValue < Number(state.starFilter))) return false;
+        if (state.reReadsFilter !== 'all' && (isUnread || Number(book.reReads || 0) < Number(state.reReadsFilter))) return false;
+        return true;
+    });
+}
 
 export let booksRuntime: AnyObj = null;
 export function setBooksRuntime(runtime: AnyObj) {

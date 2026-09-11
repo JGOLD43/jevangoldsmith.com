@@ -17,6 +17,7 @@
           "isbn": { "type": "string", "description": "13-digit ISBN. The cover resolves automatically from this via the remote-asset manifest." },
           "coverImage": { "type": "string", "description": "Curated cover URL or local path when an ISBN cover is unavailable. Edit this in books.json; books.generated.json is generated." },
           "year": { "type": ["string", "number"], "description": "Publication year." },
+          "readYears": { "type": "array", "uniqueItems": true, "items": { "type": "integer", "minimum": 1000, "maximum": 9999 }, "description": "Years when you read or reread the book. Omit if unknown; this is separate from publication year." },
           "rating": { "type": "number", "minimum": 0, "maximum": 5, "description": "Your rating, 0–5." },
           "reReads": { "type": ["number", "null"], "description": "Number of times re-read." },
           "category": { "type": ["string", "null"] },

@@ -1,12 +1,13 @@
 import { CATEGORY_MAP, CATEGORY_NAME_BY_KEY } from '../lib/book-categories';
 import { debounce } from '../lib/debounce';
+import { availableReadingYears, matchesReadingYear, readingYearFromUrl, updateReadingYearUrl } from '../lib/book-reading-years';
 import './action-dispatcher';
 import { bindStarRatingDrag, installEscapeCloser, installImageErrorHandler } from './collection-helpers';
 import { createCollectionRuntime } from './collection-runtime';
 import { closeDropdownOnOutsideClick, toggleClearButton } from './collection-ui';
 import { fetchJson, readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
-import { booksRuntime, setBooksRuntime, state } from './books-state';
+import { booksRuntime, filterBooks, setBooksRuntime, state } from './books-state';
 import { LOCAL_KEYS } from './storage-keys';
 import { URL_PARAMS } from './url-params';
 import { TIMING } from './timing';
@@ -14,6 +15,7 @@ import {
     flashCategoryArrow,
     renderBooks,
     renderCarousel,
+    renderCategoryGrid,
     renderSidebar,
     scrollToBookByTitle,
     setViewMode,
@@ -28,29 +30,6 @@ import {
     openCategoryModal
 } from './books-modal';
 import { initBooksZoom, installBookFlightPopstate } from './books-flight';
-
-// --- filters ---
-function filterBooks(books: AnyObj[]): AnyObj[] {
-    const query = state.searchQuery.toLowerCase();
-    return books.filter((book) => {
-        const isUnread = book.read === false;
-        const ratingValue = Number(book.rating || 0);
-        if (query) {
-            const matchesQuery = [book.title, book.author, book.category || '']
-                .some((value) => String(value).toLowerCase().includes(query));
-            if (!matchesQuery) return false;
-        }
-        if (state.starFilter !== 'all') {
-            if (isUnread || ratingValue <= 0) return false;
-            if (ratingValue < Number(state.starFilter)) return false;
-        }
-        if (state.reReadsFilter !== 'all') {
-            if (isUnread) return false;
-            if (Number(book.reReads || 0) < Number(state.reReadsFilter)) return false;
-        }
-        return true;
-    });
-}
 
 function getBooksForCategory(books: AnyObj[], categoryKey: string) {
     if (categoryKey === 'all') return books;
@@ -99,11 +78,18 @@ function buildCollectionController() {
         groupItems: (filteredBooks: AnyObj[]) => groupBooksByCategory(filteredBooks),
         renderSidebar,
         renderVisibleItems: renderBooks,
+        onRender: () => renderCategoryGrid(),
         updateCount: (visibleBooks: AnyObj[], s: AnyObj) => updateBookCount(visibleBooks.length, s.activeCategory),
         updateControls: (s: AnyObj) => {
             updateStarFilterDisplay(s.starFilter);
             updateReReadsFilterDisplay(s.reReadsFilter);
             toggleClearButton('search-clear-btn', Boolean(s.searchQuery));
+            document.querySelectorAll<HTMLSelectElement>('[data-book-year-filter]').forEach((select) => {
+                select.value = s.yearFilter;
+            });
+            document.querySelectorAll<HTMLAnchorElement>('[data-most-liked-link]').forEach((link) => {
+                link.href = `/books-by-rating.html${s.yearFilter === 'all' ? '' : `?year=${s.yearFilter}`}`;
+            });
         },
         group: {
             allButtonSelector: '.sidebar-category[data-category="all"]',
@@ -186,6 +172,13 @@ function bindBooksEvents() {
     installImageErrorHandler();
     installEscapeCloser(closeBookModal);
     installEscapeCloser(closeCategoryModal);
+    document.querySelectorAll<HTMLSelectElement>('[data-book-year-filter]').forEach((select) => {
+        select.addEventListener('change', () => {
+            applyFilter(() => { state.yearFilter = select.value; });
+            updateReadingYearUrl(state.yearFilter);
+            renderCarousel(state.books.filter((book) => matchesReadingYear(book, state.yearFilter)), true);
+        });
+    });
 
     document.addEventListener('click', (event: Event) => {
         const target = event.target as Element | null;
@@ -265,8 +258,9 @@ async function initBooksPage() {
         buildCollectionController();
         restoreSidebarState();
         await loadBooksData();
+        state.yearFilter = readingYearFromUrl(availableReadingYears(state.books));
         bindBooksEvents();
-        renderCarousel(state.books);
+        renderCarousel(state.books.filter((book) => matchesReadingYear(book, state.yearFilter)), state.yearFilter !== 'all');
         renderFromState();
         initBooksZoom();
         scrollToLinkedBook();
