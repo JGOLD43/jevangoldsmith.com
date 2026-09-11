@@ -1,7 +1,7 @@
 import { installOnce } from '../lib/install-once';
 import { TIMING } from './timing';
 
-type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; centerOffsetCssX?: number; recenterOnResize?: boolean };
+type Opts = { maxScale?: number; fillW?: number; fillH?: number; anchorSelector?: string; centerOffsetCssX?: number; recenterOnResize?: boolean; targetTop?: (item: HTMLElement, scale: number) => number | undefined };
 type State = { grid: HTMLElement; activeItem: HTMLElement | null; itemSelector: string; triggerSelector: string; opts: Opts; onClose?: () => void };
 type GridZoomConfig = Opts & { grid: string | HTMLElement; itemSelector?: string; triggerSelector?: string; eventName?: string; bypassZoomForLinks?: boolean; onOpen?: (item: HTMLElement) => void; onClose?: () => void };
 
@@ -33,7 +33,10 @@ function apply(grid: HTMLElement, item: HTMLElement, opts: Opts) {
   const originY = gridCy;
   const centerShiftVisualX = (opts?.centerOffsetCssX ?? 0) * targetScale;
   const tx = vw / 2 - centerShiftVisualX - (gridCxViewport + targetScale * (itemCxViewport - gridCxViewport));
-  const ty = vh / 2 - (gridCyViewport + targetScale * (itemCyViewport - gridCyViewport));
+  const targetTop = opts.targetTop?.(item, targetScale);
+  const targetY = targetTop ?? vh / 2;
+  const itemY = targetTop === undefined ? itemCyViewport : itemRect.top;
+  const ty = targetY - (gridCyViewport + targetScale * (itemY - gridCyViewport));
   grid.style.setProperty('--origin-x', originX + 'px');
   grid.style.setProperty('--origin-y', originY + 'px');
   grid.style.setProperty('--tx', tx + 'px');
@@ -72,6 +75,7 @@ export function init(config: GridZoomConfig) {
     anchorSelector: config.anchorSelector,
     centerOffsetCssX: config.centerOffsetCssX,
     recenterOnResize: config.recenterOnResize,
+    targetTop: config.targetTop,
   };
 
   const state: State = { grid, activeItem: null, itemSelector, triggerSelector, opts, onClose: config.onClose };

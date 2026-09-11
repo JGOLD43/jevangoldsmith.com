@@ -63,6 +63,7 @@ function initShelf() {
 
   function finishClose() {
     shelf!.classList.remove('shelf-zoom-layout');
+    shelf!.style.removeProperty('--shelf-back-top');
     frame!.style.height = '';
     closeTimer = 0;
   }
@@ -107,6 +108,19 @@ function initShelf() {
     ? { centerOffsetCssX: 0, fillW: 0.7, fillH: 0.32, maxScale: 3.2 }
     : { centerOffsetCssX: 139, fillW: 0.82, fillH: 0.72, maxScale: 5.6 };
 
+  function mobileDetailTop(item: HTMLElement, scale: number) {
+    if (!mobile.matches) return undefined;
+    const navBottom = document.querySelector('.navbar')?.getBoundingClientRect().bottom ?? 0;
+    const backTop = navBottom + 16;
+    shelf!.style.setProperty('--shelf-back-top', `${backTop - shelf!.getBoundingClientRect().top}px`);
+
+    // Keep the original zoom size and motion, but land the photo beneath
+    // the back button instead of halfway down a potentially tall viewport.
+    const itemTop = item.getBoundingClientRect().top;
+    const imageTop = item.querySelector('.shelf-object-photo')?.getBoundingClientRect().top ?? itemTop;
+    return backTop + back!.getBoundingClientRect().height + 24 - (imageTop - itemTop) * scale;
+  }
+
   grid.classList.add('js-zoom-grid');
   grid.querySelectorAll('.shelf-item').forEach(function (el) {
     el.classList.add('js-zoom-item');
@@ -118,6 +132,7 @@ function initShelf() {
     eventName: 'shelf_object_open',
     ...zoomOptions(),
     recenterOnResize: false,
+    targetTop: mobileDetailTop,
     onOpen: openDetail,
     onClose: closeDetail,
   });

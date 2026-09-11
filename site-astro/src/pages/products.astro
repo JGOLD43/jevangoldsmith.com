@@ -360,6 +360,10 @@ const categoryCounts = Object.fromEntries(
   }
 
   @media (max-width: 760px) {
+    .shelf-page {
+      position: relative;
+    }
+
     .shelf-page .shelf-topbar {
       margin: -24px -12px 24px;
       padding: 14px 16px;
@@ -381,7 +385,6 @@ const categoryCounts = Object.fromEntries(
     /* Reserve the transformed item's actual height without changing the
        grid's geometry or its original zoom animation. */
     .shelf-page.shelf-zoom-layout {
-      position: relative;
       overflow: clip;
     }
 
@@ -394,10 +397,12 @@ const categoryCounts = Object.fromEntries(
       visibility: hidden;
     }
 
-    .shelf-zoom-layout .shelf-back {
+    .shelf-back {
       display: block;
+      visibility: hidden;
+      pointer-events: none;
       position: absolute;
-      top: 16px;
+      top: var(--shelf-back-top, 16px);
       left: 16px;
       z-index: 1000;
       padding: 8px 4px;
@@ -406,6 +411,11 @@ const categoryCounts = Object.fromEntries(
       border: 0;
       font: inherit;
       cursor: pointer;
+    }
+
+    .shelf-zoom-layout .shelf-back {
+      visibility: visible;
+      pointer-events: auto;
     }
 
     body.shelf-experience.zoom-open::before {
