@@ -99,3 +99,27 @@ test('expanded Shelf details are vertically centred with the selected object', a
 
   expect(Math.abs(centres.stage - centres.detail)).toBeLessThan(20);
 });
+
+test('Shelf navigation returns as soon as an item starts closing', async ({ page }) => {
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/products.html');
+    await page.getByRole('button', { name: 'Laptop', exact: true }).click();
+    await expect(page.locator('.shelf-topbar')).toBeHidden();
+
+    // Inspect the same event turn so auto-waiting cannot mask a delayed return.
+    const closing = await page.evaluate(() => {
+      const back = document.querySelector<HTMLButtonElement>('.shelf-back')!;
+      if (window.innerWidth <= 760) back.click();
+      else document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      return {
+        navigation: getComputedStyle(document.querySelector('.shelf-topbar')!).visibility,
+        backVisible: getComputedStyle(back).display !== 'none' && getComputedStyle(back).visibility === 'visible',
+        animating: document.querySelector('.shelf-page')!.classList.contains('shelf-zoom-layout'),
+      };
+    });
+
+    expect(closing).toEqual({ navigation: 'visible', backVisible: false, animating: true });
+    await expect(page.locator('.shelf-page')).not.toHaveClass(/shelf-zoom-layout/);
+  }
+});

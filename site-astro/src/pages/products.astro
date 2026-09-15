@@ -223,7 +223,9 @@ const categoryCounts = Object.fromEntries(
     inset: 0 0 auto;
   }
 
-  .shelf-zoom-layout .shelf-topbar {
+  /* Restore navigation when closing starts; the zoom layout stays in place
+     until the product's return animation finishes. */
+  body.zoom-open .shelf-page .shelf-topbar {
     visibility: hidden;
   }
 
@@ -410,7 +412,7 @@ const categoryCounts = Object.fromEntries(
       cursor: pointer;
     }
 
-    .shelf-zoom-layout .shelf-back {
+    body.zoom-open .shelf-page .shelf-back {
       visibility: visible;
       pointer-events: auto;
     }
