@@ -73,11 +73,11 @@ const subject = personSchema({
       <div class="person-profile-hero-grid">
         <div class="person-profile-image-wrap">
           <picture>
-            <source type="image/avif" srcset={heroSrcset.replace(/\.jpg\b/g, '.avif')} sizes="(max-width: 768px) 90vw, 360px" />
+            <source type="image/avif" srcset={heroSrcset.replace(/\.jpg\b/g, '.avif')} sizes="(max-width: 559px) calc(100vw - 32px), (max-width: 1024px) 300px, 380px" />
             <img
               src={heroImage.startsWith('/') || heroImage.startsWith('http') ? heroImage : `/${heroImage}`}
               srcset={heroSrcset}
-              sizes="(max-width: 768px) 90vw, 360px"
+              sizes="(max-width: 559px) calc(100vw - 32px), (max-width: 1024px) 300px, 380px"
               alt={p.name}
               width="400"
               height="400"

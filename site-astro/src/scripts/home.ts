@@ -3,7 +3,14 @@ function initSnapshot() {
     const toggles = document.querySelectorAll('[data-snapshot-toggle]');
     if (!card || toggles.length === 0) return;
     const container = card.closest('.profile-container') as HTMLElement | null;
-    const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+    const snapshotViewport = window.matchMedia('(max-width: 1024px)');
+    const isCompact = () => snapshotViewport.matches;
+    snapshotViewport.addEventListener('change', () => {
+        card.getAnimations().forEach((animation) => animation.cancel());
+        card.style.removeProperty('transform');
+        card.classList.remove('visible');
+        container?.classList.remove('is-flipped');
+    });
 
     // On mobile the initial off-screen transform comes from CSS
     // (.profile-container .snapshot-card in index.astro). We do NOT set
@@ -15,7 +22,7 @@ function initSnapshot() {
             card.classList.toggle('visible');
             if (!container) return;
             container.classList.toggle('is-flipped');
-            if (!isMobile()) return;
+            if (!isCompact()) return;
             const open = container.classList.contains('is-flipped');
             // Capture the current visual position before cancelling — so
             // rapid taps mid-slide pick up from wherever the panel
@@ -138,9 +145,9 @@ function initCarousel() {
     const gap = 24;
 
     function visibleCards() {
-        if (window.innerWidth >= 1024) return 4;
-        if (window.innerWidth >= 768) return 3;
-        return 1;
+        // Read the rendered card size so split-window layouts and desktop
+        // use the same bounds as the CSS rather than a second breakpoint list.
+        return Math.max(1, Math.floor(((track as HTMLElement).clientWidth + gap) / (cards[0].offsetWidth + gap)));
     }
 
     function maxSlide() {

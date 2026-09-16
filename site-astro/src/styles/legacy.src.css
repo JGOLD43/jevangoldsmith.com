@@ -15223,3 +15223,130 @@ body.nav-compact .navbar .work-mode-icon {
 .movie-search-tier-badge--b { background: #78b6e8; }
 .movie-search-tier-badge--c { background: #82dc7a; }
 .movie-search-tier-badge--d { background: #f4f4f4; }
+
+/* Split laptop windows need their own density: the phone's two-column
+   shelves and full-width portrait grow too large before desktop takes over. */
+@media (560px <= width <= 1024px) {
+  .hero {
+    min-height: auto;
+    padding: 2rem 0;
+  }
+
+  .hero .hero-container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 40vw, 360px);
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    padding: 0 1.5rem;
+  }
+
+  .hero-container .hero-left {
+    order: initial;
+    align-self: center;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    text-align: left;
+  }
+
+  .hero-container .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .hero-container .profile-container,
+  .hero-container .hero-picture,
+  .hero-container .hero-image {
+    width: 100%;
+    max-width: none;
+  }
+
+  .hero-container .hero-headline { font-size: clamp(2rem, 5vw, 2.6rem); }
+  .hero-container .hero-welcome { font-size: 1rem; margin-bottom: 0; }
+  .hero-container .hero-social-links { gap: .75rem; margin: 0; }
+  .hero-container .hero-social-links a { width: 44px; height: 44px; }
+
+  .feature-card { flex: 0 0 calc(50% - 12px); }
+  .feature-image { height: auto; aspect-ratio: 4 / 3; }
+
+  .books-grid,
+  .movies-grid,
+  .collection-layout.sidebar-collapsed .books-grid,
+  .collection-layout.sidebar-collapsed .movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+    gap: .75rem !important;
+  }
+
+  .book-card, .movie-card { min-width: 0; padding: .65rem; }
+  .book-card .book-title, .movie-card .movie-title { font-size: .95rem; }
+  .book-card .book-title-row,
+  .movie-card .movie-title-row { display: block; }
+  .book-card .book-year,
+  .movie-card .movie-year { display: inline-block; margin-top: .2rem; }
+
+  .book-card .book-cover-wrapper,
+  .movie-card .movie-poster-wrapper {
+    aspect-ratio: 2 / 3;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .book-card .book-cover,
+  .movie-card .movie-poster {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .podcast-card .movie-poster-wrapper { aspect-ratio: 1; }
+  #projects-container.movies-grid,
+  #challenges-container.movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+  }
+  .project-card .movie-poster-wrapper,
+  .challenge-card .movie-poster-wrapper { aspect-ratio: 16 / 10; }
+
+  .person-profile-hero-grid {
+    grid-template-columns: minmax(0, .75fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 1.5rem;
+  }
+
+  .person-profile-image-wrap { width: 100%; max-width: 300px; }
+  .person-profile-intro h1 { font-size: clamp(2rem, 5vw, 3rem); }
+
+  .person-detail-panel { padding: 2.75rem 1.25rem 1.25rem; }
+  .person-detail-hero {
+    grid-template-columns: minmax(0, .75fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 1.5rem;
+    padding-right: 0;
+  }
+  .person-detail-image-wrap { max-width: 260px; }
+  .person-detail-copy h2 { font-size: clamp(1.75rem, 4vw, 2.4rem); }
+
+  /* Book details also open inside the listing; override its inline
+     showcase styles as well as the standalone detail page. */
+  main.detail-page--book .detail-hero,
+  .detail-page--movie .detail-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+    align-items: start;
+    gap: 1.5rem;
+    text-align: left;
+  }
+
+  main.detail-page--book .detail-hero-cover,
+  .detail-page--movie .detail-hero-poster { width: 100%; }
+  main.detail-page--book .detail-hero-body,
+  .detail-page--movie .detail-hero-body { text-align: left; }
+  main.detail-page--book .detail-kicker,
+  .detail-page--movie .detail-kicker { justify-content: flex-start; }
+}
