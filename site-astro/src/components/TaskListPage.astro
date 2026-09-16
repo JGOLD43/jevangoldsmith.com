@@ -131,17 +131,17 @@ const categoryKeys = config.categoryOrder
         {(config as any).counterGroupClass ? (
           <div class={(config as any).counterGroupClass}>
             <slot name="counter-extra" />
-            <div class="header-counter">
-              <span class="counter-number" id={config.counterId}>{total}</span>
-              <span class="counter-label">{config.counterLabel}</span>
+            <div class="header-counter collection-header-counter">
+              <span class="counter-number collection-counter-number" id={config.counterId}>{total}</span>
+              <span class="counter-label collection-counter-label">{config.counterLabel}</span>
             </div>
           </div>
         ) : (
           <>
             <slot name="counter-extra" />
-            <div class="header-counter">
-              <span class="counter-number" id={config.counterId}>{total}</span>
-              <span class="counter-label">{config.counterLabel}</span>
+            <div class="header-counter collection-header-counter">
+              <span class="counter-number collection-counter-number" id={config.counterId}>{total}</span>
+              <span class="counter-label collection-counter-label">{config.counterLabel}</span>
             </div>
           </>
         )}
