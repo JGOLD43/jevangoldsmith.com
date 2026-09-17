@@ -9,7 +9,15 @@ interface LibraryBook {
   cover: string;
   ratio: number;
   href: string;
+  tier: string;
+  tierLabel: string;
+  tierColor: string;
+  collection: string;
 }
+
+type LibrarySort = 'az' | 'tiers' | 'collection';
+const sortNames: Record<LibrarySort, string> = { az: 'A–Z', tiers: 'By tiers', collection: 'By collection' };
+const parseSort = (value: string | null | undefined): LibrarySort => value === 'tiers' || value === 'collection' ? value : 'az';
 
 function initBookLibrary() {
   const library = document.querySelector<HTMLElement>('#book-library');
@@ -19,9 +27,18 @@ function initBookLibrary() {
   const title = library?.querySelector<HTMLAnchorElement>('.book-library-title');
   const author = library?.querySelector<HTMLElement>('.book-library-author');
   const request = library?.querySelector<HTMLAnchorElement>('.book-library-request');
+  const sortMenu = library?.querySelector<HTMLDetailsElement>('.book-library-sort');
+  const groupLabel = library?.querySelector<HTMLElement>('.book-library-group');
+  const controls = library?.querySelector<HTMLElement>('.book-library-controls');
+  const sortStatus = library?.querySelector<HTMLElement>('[data-library-sort-status]');
   if (!library || !stage || !track || !title || !author || !request) return;
 
-  const books = readInlineJson<LibraryBook[]>('jg-book-library') || [];
+  const allBooks = readInlineJson<LibraryBook[]>('jg-book-library') || [];
+  let books = [...allBooks];
+  let sortMode: LibrarySort = 'az';
+  let sorting = false;
+  let sortAnimations: Animation[] = [];
+  let outgoingShelf: HTMLElement | null = null;
   const picker = document.querySelector<HTMLDetailsElement>('.books-view-picker');
   const summary = picker?.querySelector<HTMLElement>('summary');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -43,6 +60,7 @@ function initBookLibrary() {
   let scale = 1;
   let pitch = 62;
   let gap = 280;
+  let sceneryPosition = 0;
   let drag: { id: number; x: number; y: number; start: number; moved: boolean; book: number | null;
     mode: 'browse' | 'rotate'; pitch: number; yaw: number } | null = null;
   let lastTap: { book: number; x: number; y: number; time: number } | null = null;
@@ -96,14 +114,100 @@ function initBookLibrary() {
     return finished;
   }
 
+  function orderBooks(mode: LibrarySort) {
+    const tierRank: Record<string, number> = { s: 0, a: 1, b: 2, c: 3, d: 4 };
+    sortMode = mode;
+    books = [...allBooks].sort((a, b) => {
+      const groupOrder = mode === 'tiers' ? (tierRank[a.tier] ?? 5) - (tierRank[b.tier] ?? 5)
+        : mode === 'collection' ? a.collection.localeCompare(b.collection, 'en') : 0;
+      return groupOrder || a.title.localeCompare(b.title, 'en', { numeric: true }) || a.id.localeCompare(b.id);
+    });
+    for (const node of volumes.values()) node.remove();
+    for (const node of shadows.values()) node.remove();
+    volumes.clear();
+    shadows.clear();
+    selected = -1;
+    library!.querySelectorAll<HTMLButtonElement>('[data-library-sort]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.librarySort === mode));
+    });
+    sortMenu?.querySelector('summary')?.setAttribute('aria-label', `Sort books: ${sortNames[mode]}`);
+  }
+
+  function finishSortTransition() {
+    const animations = sortAnimations;
+    sortAnimations = [];
+    animations.forEach((animation) => animation.cancel());
+    outgoingShelf?.remove();
+    outgoingShelf = null;
+    sorting = false;
+    stage!.inert = false;
+    if (controls) controls.inert = false;
+    library!.removeAttribute('data-sorting');
+    library!.removeAttribute('aria-busy');
+  }
+
+  function changeSort(mode: LibrarySort) {
+    if (!active || openingDetail || !books.length) return;
+    if (sortMenu) sortMenu.open = false;
+    sortMenu?.querySelector('summary')?.focus({ preventScroll: true });
+    if (mode === sortMode) return;
+    finishSortTransition();
+    releaseDrag();
+    hoverPointer = null;
+    lastTap = null;
+    window.clearTimeout(snapTimer);
+    cancelAnimationFrame(frame);
+    frame = 0;
+    lastTime = 0;
+    resetInspection(true);
+    render();
+    if (!reducedMotion.matches) {
+      // The old shelf travels up while the newly ordered shelf rises from
+      // below, like moving the camera down one level of the same bookcase.
+      outgoingShelf = stage!.cloneNode(true) as HTMLElement;
+      outgoingShelf.classList.add('book-library-stage-outgoing');
+      outgoingShelf.inert = true;
+      outgoingShelf.setAttribute('aria-hidden', 'true');
+      outgoingShelf.removeAttribute('tabindex');
+      outgoingShelf.style.setProperty('--wood-offset', library!.style.getPropertyValue('--wood-offset'));
+      stage!.before(outgoingShelf);
+    }
+    sceneryPosition += position;
+    orderBooks(mode);
+    position = target = velocity = 0;
+    openAmount = openTarget = 1;
+    render();
+    updateCaption();
+    saveView();
+    if (sortStatus) sortStatus.textContent = `Library sorted ${mode === 'az' ? 'A to Z' : mode === 'tiers' ? 'by tier, S to D' : 'by collection'}.`;
+    if (!outgoingShelf) return;
+    sorting = true;
+    library!.dataset.sorting = 'true';
+    library!.setAttribute('aria-busy', 'true');
+    stage!.inert = true;
+    if (controls) controls.inert = true;
+    const travel = library!.clientHeight + 80;
+    const timing: KeyframeAnimationOptions = { duration: 1000, easing: 'cubic-bezier(.45, 0, .18, 1)', fill: 'both' };
+    const incoming = stage!.animate([{ transform: `translateY(${travel}px)` }, { transform: 'translateY(0)' }], timing);
+    sortAnimations = [incoming,
+      outgoingShelf.animate([{ transform: 'translateY(0)' }, { transform: `translateY(-${travel}px)` }], timing)];
+    if (controls) sortAnimations.push(controls.animate([{ opacity: 0 }, { opacity: 0, offset: .85 }, { opacity: 1 }], timing));
+    incoming.finished.then(() => {
+      if (sortAnimations.includes(incoming)) finishSortTransition();
+    }).catch(() => { /* Closing or resizing cancels the camera movement. */ });
+  }
+
   function saveView() {
     const url = new URL(window.location.href);
     if (active) {
       url.searchParams.set('view', 'library');
       if (books.length) url.searchParams.set('libraryBook', books[wrap(Math.round(target))].id);
+      if (sortMode === 'az') url.searchParams.delete('librarySort');
+      else url.searchParams.set('librarySort', sortMode);
     } else {
       url.searchParams.delete('view');
       url.searchParams.delete('libraryBook');
+      url.searchParams.delete('librarySort');
     }
     window.history.replaceState(window.history.state, '', url);
   }
@@ -114,6 +218,11 @@ function initBookLibrary() {
     if (index === selected) return;
     selected = index;
     const book = books[index];
+    if (groupLabel) {
+      groupLabel.hidden = sortMode === 'az';
+      groupLabel.textContent = sortMode === 'tiers' ? book.tierLabel : book.collection;
+      groupLabel.style.setProperty('--tier-color', sortMode === 'tiers' ? book.tierColor : '#e3d8c6');
+    }
     title!.textContent = book.title;
     title!.href = `${book.href}?from=library`;
     author!.textContent = book.author;
@@ -126,6 +235,7 @@ function initBookLibrary() {
     button.type = 'button';
     button.className = 'library-volume';
     button.dataset.libraryIndex = String(logical);
+    button.dataset.bookId = book.id;
     button.setAttribute('aria-label', `${book.title}, by ${book.author}`);
     for (const face of ['back', 'spine', 'pages', 'top', 'bottom', 'cover']) {
       const layer = document.createElement('span');
@@ -160,8 +270,8 @@ function initBookLibrary() {
     if (!books.length) return;
     // The grain travels with the books; the distant room moves more slowly.
     // Modulo a complete texture tile keeps long browsing sessions continuous.
-    library!.style.setProperty('--wood-offset', `${(-position * pitch) % 960}px`);
-    library!.style.setProperty('--room-offset', `${-position * pitch * .14}px`);
+    library!.style.setProperty('--wood-offset', `${(-(position + sceneryPosition) * pitch) % 960}px`);
+    library!.style.setProperty('--room-offset', `${-(position + sceneryPosition) * pitch * .14}px`);
     stage!.style.setProperty('--shelf-depth', `${130 * scale}px`);
     stage!.style.setProperty('--shelf-rear-depth', `${52 * scale}px`);
     const center = Math.round(position);
@@ -242,6 +352,7 @@ function initBookLibrary() {
 
   function resize() {
     if (!active) return;
+    finishSortTransition();
     if (releaseDrag()) select(target);
     hoverPointer = null;
     resetInspection(true);
@@ -253,7 +364,7 @@ function initBookLibrary() {
   }
 
   function select(logical: number) {
-    if (!books.length || openingDetail) return;
+    if (!books.length || openingDetail || sorting) return;
     if (document.activeElement?.classList.contains('library-volume')) stage!.focus({ preventScroll: true });
     window.clearTimeout(snapTimer);
     if (Math.round(logical) !== Math.round(target)) {
@@ -268,7 +379,7 @@ function initBookLibrary() {
   }
 
   function openDetails(logical: number) {
-    if (!active || openingDetail || !books.length) return;
+    if (!active || openingDetail || sorting || !books.length) return;
     select(logical);
     const cover = volumes.get(logical)?.querySelector<HTMLImageElement>('img');
     const href = `${books[wrap(logical)].href}?from=library`;
@@ -302,6 +413,8 @@ function initBookLibrary() {
   function close(updateUrl = true, focus = true) {
     if (!active) return;
     active = false;
+    finishSortTransition();
+    if (sortMenu) sortMenu.open = false;
     releaseDrag();
     hoverPointer = null;
     resetInspection(true);
@@ -322,7 +435,11 @@ function initBookLibrary() {
   function open(updateUrl = true, fromUrl = false) {
     if (picker) picker.open = false;
     if (fromUrl) {
-      const id = new URL(window.location.href).searchParams.get('libraryBook');
+      finishSortTransition();
+      const params = new URL(window.location.href).searchParams;
+      orderBooks(parseSort(params.get('librarySort')));
+      sceneryPosition = 0;
+      const id = params.get('libraryBook');
       const index = books.findIndex((book) => book.id === id);
       target = position = index < 0 ? 0 : index;
       velocity = 0;
@@ -350,6 +467,12 @@ function initBookLibrary() {
     if (element?.closest('[data-open-book-library]')) open();
     if (element?.closest('[data-close-book-library]')) close();
     if (picker && (element?.closest('.books-view-menu button') || !element?.closest('.books-view-picker'))) picker.open = false;
+    if (sortMenu?.open && !element?.closest('.book-library-sort')) sortMenu.open = false;
+  });
+
+  sortMenu?.querySelectorAll<HTMLButtonElement>('[data-library-sort]').forEach((button) => {
+    button.disabled = !books.length;
+    button.addEventListener('click', () => changeSort(parseSort(button.dataset.librarySort)));
   });
 
   library.querySelectorAll<HTMLButtonElement>('[data-library-step]').forEach((button) => {
@@ -359,7 +482,7 @@ function initBookLibrary() {
   if (!books.length) request.hidden = true;
 
   stage.addEventListener('pointerdown', (event) => {
-    if (!active || openingDetail || !books.length || event.button !== 0 || !event.isPrimary) return;
+    if (!active || openingDetail || sorting || !books.length || event.button !== 0 || !event.isPrimary) return;
     hoverPointer = null;
     window.clearTimeout(snapTimer);
     const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
@@ -374,7 +497,7 @@ function initBookLibrary() {
       moved: false, book, mode: rotate ? 'rotate' : 'browse', pitch: tiltX, yaw: tiltY };
   });
   stage.addEventListener('pointermove', (event) => {
-    if (!active || openingDetail) return;
+    if (!active || openingDetail || sorting) return;
     if (!drag) {
       if (event.pointerType !== 'mouse' || event.buttons) return;
       hoverPointer = { x: event.clientX, y: event.clientY };
@@ -445,7 +568,11 @@ function initBookLibrary() {
     resetInspection();
     select(target);
   });
-  reducedMotion.addEventListener('change', () => { resetInspection(true); if (active) render(); });
+  reducedMotion.addEventListener('change', () => {
+    finishSortTransition();
+    resetInspection(true);
+    if (active) render();
+  });
   stage.addEventListener('click', (event) => {
     // Keyboard/screen-reader activation has no preceding pointer event.
     if (event.detail !== 0) return;
@@ -460,7 +587,7 @@ function initBookLibrary() {
     openDetails(Number(node.dataset.libraryIndex));
   });
   stage.addEventListener('wheel', (event) => {
-    if (!active || openingDetail || !books.length || event.ctrlKey) return;
+    if (!active || openingDetail || sorting || !books.length || event.ctrlKey) return;
     lastTap = null;
     releaseDrag();
     hoverPointer = null;
@@ -476,7 +603,7 @@ function initBookLibrary() {
     snapTimer = window.setTimeout(() => select(target), 160);
   }, { passive: false });
   library.addEventListener('keydown', (event) => {
-    if (!books.length || openingDetail) return;
+    if (!books.length || openingDetail || sorting || sortMenu?.open) return;
     if (event.key === 'Enter' && (event.target === stage || (event.target as Element).closest('.library-volume'))) {
       event.preventDefault();
       const volume = (event.target as Element).closest<HTMLElement>('[data-library-index]');
@@ -491,6 +618,12 @@ function initBookLibrary() {
   });
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || openingDetail) return;
+    if (sortMenu?.open) {
+      event.preventDefault();
+      sortMenu.open = false;
+      sortMenu.querySelector('summary')?.focus();
+      return;
+    }
     if (active) { event.preventDefault(); close(); }
     else if (picker?.open) { picker.open = false; summary?.focus(); }
   });
@@ -504,6 +637,7 @@ function initBookLibrary() {
     else close(false);
   });
   window.addEventListener('pagehide', () => {
+    finishSortTransition();
     hoverPointer = null;
     releaseDrag(); resetInspection(true);
     cancelAnimationFrame(frame); frame = 0; window.clearTimeout(snapTimer);
