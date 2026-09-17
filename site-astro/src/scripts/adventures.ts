@@ -111,7 +111,7 @@ function selectAdventure(id: string) {
     // On mobile, skip the preview overlay — render the full inline story
     // immediately and scroll the user there. Desktop keeps the side-panel
     // preview because there's room for both panel + story side by side.
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia('(max-width: 968px)').matches;
     if (isMobile) {
         renderInlineStory(adventure);
         requestAnimationFrame(() => {
@@ -609,11 +609,9 @@ export function initAdventuresPage() {
     loadFilters();
     bindAdventureActions();
     bindLightboxEvents();
-    // Mobile lands on the map (SSR pre-applies .map-view to avoid flicker);
-    // desktop strips it before paint via the inline script in adventures.astro
-    // setting html.adv-desktop. JS just synchronizes button state and ensures
-    // the world map mounts so the Now marker has something to attach to.
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    // Phones and tablets land on the map; desktop CSS shows both panels.
+    // Keep the selected tab in .map-view so resizing preserves that choice.
+    const isMobile = window.matchMedia('(max-width: 968px)').matches;
     const focusNow = new URLSearchParams(window.location.search).get(URL_PARAMS.focus) === 'now';
     if (isMobile) {
         // Sync the bottom toggle's "active" state to match the SSR class.
@@ -630,10 +628,6 @@ export function initAdventuresPage() {
     } else if (focusNow) {
         loadAdventures().then(() => { ensureWorldMap(); placeNowMarkerAndFocus(); });
     } else {
-        // Desktop strips the SSR'd .map-view (mobile-only hint); restore the
-        // split layout state so JS sees clean classes.
-        const split = document.querySelector('.adventures-page-split');
-        split?.classList.remove('map-view');
         loadAdventures();
         setTimeout(placeNowMarkerAndFocus, 1500);
     }

@@ -5199,7 +5199,7 @@ body.meet-page {
   transition: max-height .22s, opacity .22s, padding .22s;
 }
 
-@media (width >= 769px) {
+@media (width >= 969px) {
   .adventures-map-carousel-wrap {
     display: none;
   }
@@ -5584,7 +5584,8 @@ body.meet-page {
   }
 
   .adventures-page-split {
-    height: calc(100dvh - 58px - 54px - env(safe-area-inset-bottom, 0px));
+    height: calc(100dvh - var(--nav-height, 70px) - 54px - env(safe-area-inset-bottom, 0px));
+    min-height: 0;
     flex-direction: column;
     display: flex;
   }
@@ -5610,59 +5611,51 @@ body.meet-page {
     display: none;
   }
 
-  html.adv-desktop .adventures-page-split.map-view .adventures-sidebar {
-    display: flex;
-  }
-
-  html.adv-desktop .adventures-page-split.map-view .adventures-map-panel {
-    display: block;
-  }
-
   .adventures-page-split.map-view .adventures-map-panel {
     height: 100%;
     display: block;
   }
 
-  @media (width <= 768px) {
-    .adventures-sidebar-toggle {
-      display: none;
-    }
+  /* The full-width list stays readable regardless of the saved desktop
+     sidebar preference, throughout the same breakpoint as the List/Map tabs. */
+  .adventures-sidebar-toggle {
+    display: none;
+  }
 
-    .adventures-page-split.sidebar-collapsed .adventures-sidebar-header {
-      flex-direction: row;
-      justify-content: space-between;
-      gap: 0;
-      padding: 1rem;
-    }
+  .adventures-page-split.sidebar-collapsed .adventures-sidebar-header {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+    padding: 1rem;
+  }
 
-    .adventures-page-split.sidebar-collapsed .adventures-sidebar-header h1, .adventures-page-split.sidebar-collapsed .adventures-count {
-      display: inline-block;
-    }
+  .adventures-page-split.sidebar-collapsed .adventures-sidebar-header h1, .adventures-page-split.sidebar-collapsed .adventures-count {
+    display: inline-block;
+  }
 
-    .adventures-page-split.sidebar-collapsed .adventures-filters {
-      display: flex;
-    }
+  .adventures-page-split.sidebar-collapsed .adventures-filters {
+    display: flex;
+  }
 
-    .adventures-page-split.sidebar-collapsed .adventure-compact-info {
-      display: block;
-    }
+  .adventures-page-split.sidebar-collapsed .adventure-compact-info {
+    display: block;
+  }
 
-    .adventures-page-split.sidebar-collapsed .adventures-compact-list {
-      padding: 1rem;
-    }
+  .adventures-page-split.sidebar-collapsed .adventures-compact-list {
+    padding: 1rem;
+  }
 
-    .adventures-page-split.sidebar-collapsed .adventure-compact-card {
-      box-shadow: none;
-      background: var(--background-alt);
-      border: 1px solid var(--border-color);
-      justify-content: flex-start;
-      gap: .85rem;
-      padding: .65rem;
-    }
+  .adventures-page-split.sidebar-collapsed .adventure-compact-card {
+    box-shadow: none;
+    background: var(--background-alt);
+    border: 1px solid var(--border-color);
+    justify-content: flex-start;
+    gap: .85rem;
+    padding: .65rem;
+  }
 
-    .adventures-page-split.sidebar-collapsed .adventure-compact-image {
-      width: 90px;
-    }
+  .adventures-page-split.sidebar-collapsed .adventure-compact-image {
+    width: 90px;
   }
 
   .adventure-detail-overlay {
