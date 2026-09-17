@@ -2969,5 +2969,41 @@
       "search"
     ],
     "ctaOptional": false
+  },
+  {
+    "path": "resume.html",
+    "url": "/resume.html",
+    "title": "Resume | Jevan Goldsmith",
+    "description": "Explore Jevan Goldsmith’s work experience, skills and education, including trade assistant experience. Download the original résumé or request it by email.",
+    "intent": "resume",
+    "topics": [
+      "business-building",
+      "real-estate-development"
+    ],
+    "index": true,
+    "schemaType": "WebPage",
+    "primaryKeyword": "Jevan Goldsmith resume",
+    "secondaryKeywords": [
+      "CV",
+      "work experience",
+      "trade assistant",
+      "finance",
+      "sales"
+    ],
+    "audience": "Employers and collaborators",
+    "searchIntent": "learn",
+    "contentDepth": "utility",
+    "relatedPages": [
+      "projects.html",
+      "contact.html",
+      "books.html"
+    ],
+    "lastReviewed": "2026-09-17",
+    "section": "experience",
+    "generatedFrom": "site-astro/src/pages/resume.astro",
+    "journeyStage": "trust",
+    "primaryCta": "contact",
+    "secondaryCtas": [],
+    "ctaOptional": true
   }
 ]

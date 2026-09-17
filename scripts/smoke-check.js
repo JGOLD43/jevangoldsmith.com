@@ -27,6 +27,10 @@ const HTML_FALLBACK = process.env.SMOKE_HTML_FALLBACK !== '0';
 // not pixel-perfect markup.
 const CHECKS = [
   {
+    url: '/resume',
+    must: ['id="work-experience"', 'id="trade-assistant"', 'id="email-resume"', '/downloads/jevan-goldsmith-resume-2025.pdf']
+  },
+  {
     url: '/',
     must: ['</footer>', 'href="/books.html"', 'href="/adventures.html"'],
     mustNot: ['<<', '>>']

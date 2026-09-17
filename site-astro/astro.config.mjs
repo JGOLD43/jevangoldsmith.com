@@ -54,7 +54,9 @@ export default defineConfig({
         '/field-notes',
         '/field-notes.html',
         '/data-smoke',
-        '/data-smoke.html'
+        '/data-smoke.html',
+        '/resume-requested',
+        '/resume-requested.html'
       ].some((suffix) => page.endsWith(suffix))
     })
   ]

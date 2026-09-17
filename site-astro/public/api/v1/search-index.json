@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updatedAt": "2026-09-04T23:47:07.334Z",
+  "updatedAt": "2026-09-17T06:49:08.717Z",
   "guidance": "Static search/discovery index. Fetch candidate URLs from this file, then fetch canonical collection endpoints or HTML for detail.",
   "records": [
     {
@@ -4333,6 +4333,22 @@
         "Uncategorized"
       ],
       "searchText": "mysterious skin uncategorized uncategorized movies"
+    },
+    {
+      "type": "page",
+      "id": "resume",
+      "title": "Resume | Jevan Goldsmith",
+      "summary": "Explore Jevan Goldsmith’s work experience, skills and education, including trade assistant experience. Download the original résumé or request it by email.",
+      "section": "experience",
+      "url": "https://jevangoldsmith.com/resume.html",
+      "tags": [
+        "CV",
+        "work experience",
+        "trade assistant",
+        "finance",
+        "sales"
+      ],
+      "searchText": "resume résumé cv jevan goldsmith experience skills education finance sales technology trade assistant tiler bathroom renovations maryborough tess service.com.au seedling plair facility managers australia unisc swish earlywork toastmasters download pdf email"
     }
   ]
 }

@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { resumePdf } from '../data/resume';
+import '../styles/resume.css';
+---
+<Base title="Resume requested | Jevan Goldsmith" description="Your resume request has been submitted. You can also download the PDF directly." canonical="https://jevangoldsmith.com/resume-requested.html" robots="noindex, follow">
+  <main class="resume-wrap resume-confirmation">
+    <p class="resume-eyebrow">Resume / Email request</p>
+    <h1>Thanks for your interest.</h1>
+    <p>If you’ve just completed the email form and spam check, your request has been submitted. Look out for an email with the PDF download link, and check your spam folder if it doesn’t arrive.</p>
+    <p>You can also save a copy right here.</p>
+    <div class="resume-actions">
+      <a class="resume-button resume-button-primary" href={resumePdf} download="Jevan Goldsmith Resume 2025.pdf">Download PDF ↓</a>
+      <a class="resume-button" href="/resume.html">Back to my résumé</a>
+    </div>
+    <p class="resume-form-note">Still having trouble? <a href="mailto:hello@jevangoldsmith.com?subject=Resume%20request">Get in touch</a>.</p>
+  </main>
+</Base>
