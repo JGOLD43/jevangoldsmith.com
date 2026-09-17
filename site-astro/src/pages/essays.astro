@@ -1,4 +1,5 @@
 ---
+import NewsletterSignup from '../components/NewsletterSignup.astro';
 import essaysData from '../../public/data/essays.json';
 import CollectionPage from '../components/CollectionPage.astro';
 import InlineJson from '../components/InlineJson.astro';
@@ -235,12 +236,9 @@ const config = ({
       ))}
     </div>
   </div>
-  <section class="field-notes-inline-cta" data-field-notes-inline>
-    <p class="archive-kicker">Newsletter</p>
-    <h2>Want more notes like this?</h2>
-    <p>Exclusive, newsletter-only content once a month: books, objects, questions, and experiments worth keeping. No spam, no nonsense.</p>
-    <a href="/newsletter.html" class="btn-primary">Subscribe</a>
-  </section>
+  <div class="essay-signup" data-field-notes-inline>
+    <NewsletterSignup id="essay-signup" source="essay-end" title="Get my next essay and project update." description="A monthly note on what I'm building and learning, with one useful idea, book or tool to take away." />
+  </div>
 </CollectionPage>
 
 <InlineJson id="jg-essays-data" data={essaysData} />
@@ -562,18 +560,16 @@ const config = ({
 
   /* When cards view is active, hide the reader nav, back link, and field-notes CTA */
   .essays-main[data-view="cards"] .essay-nav,
-  .essays-main[data-view="cards"] .essay-back-to-list,
-  .essays-main[data-view="cards"] .field-notes-inline-cta {
+  .essays-main[data-view="cards"] .essay-back-to-list {
     display: none;
   }
 
   /* When an essay is open (reader view), strip the surrounding collection
      chrome — title block ("Essays / My Writing Philosophy / N Total"),
-     the browse sidebar, and the newsletter CTA — so the essay reads like
+     and the browse sidebar — so the essay reads like
      its own standalone page. The "All essays" back link stays as the
      way home. */
-  .essays-main[data-view="reader"] .main-header.collection-header,
-  .essays-main[data-view="reader"] .field-notes-inline-cta {
+  .essays-main[data-view="reader"] .main-header.collection-header {
     display: none !important;
   }
   /* Collapse the sidebar column entirely in reader view by collapsing the

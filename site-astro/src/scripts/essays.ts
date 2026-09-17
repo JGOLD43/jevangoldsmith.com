@@ -343,12 +343,10 @@ function applyEssayView(mode: 'reader' | 'cards') {
 
 function setEssayView(mode: string) {
     applyEssayView(mode === 'cards' ? 'cards' : 'reader');
+    if (mode === 'cards') history.replaceState(null, '', window.location.pathname + window.location.search);
 }
 
 function restoreEssayView() {
-    // List is always the default landing view; clicking a row opens the
-    // reader, and the back link returns to the list. View state is not
-    // persisted, so refreshing the page always brings the index back.
     applyEssayView('cards');
 }
 
@@ -361,6 +359,7 @@ function openEssayFromCard(essayId: string, event?: Event) {
     state.currentIndex = fullIndex;
     essaysRuntime?.resetGrouping();
     renderFromState();
+    history.replaceState(null, '', `#${encodeURIComponent(essayId)}`);
     scrollEssaysToTop();
 }
 
@@ -385,6 +384,14 @@ function initEssaysPage() {
         essaysRuntime?.closeDropdownOnOutsideClick(event);
     });
     loadEssays();
+    openLinkedEssay();
+    window.addEventListener('hashchange', openLinkedEssay);
+}
+
+function openLinkedEssay() {
+    let id = '';
+    try { id = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
+    if (findEssayIndex(state.essays, id) >= 0) openEssayFromCard(id);
 }
 
 onDomReady(initEssaysPage, 'essays init');

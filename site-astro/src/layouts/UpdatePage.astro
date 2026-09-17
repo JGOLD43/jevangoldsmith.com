@@ -1,0 +1,32 @@
+---
+import Base from './Base.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+interface Props { title: string; description: string; path: string; kicker?: string; }
+const { title, description, path, kicker = 'Building & learning' } = Astro.props;
+---
+<Base title={`${title} | Jevan Goldsmith`} description={description} canonical={`https://jevangoldsmith.com${path}`} pageType="Article">
+  <main class="update-page">
+    <a class="update-back" href="/updates.html">← All updates</a>
+    <article>
+      <header class="update-header"><p class="update-kicker">{kicker}</p><h1>{title}</h1><p class="update-lead">{description}</p><p class="update-author">By Jevan Goldsmith</p></header>
+      <div class="update-body"><slot /></div>
+    </article>
+    <NewsletterSignup id="update-signup" source={`update:${path}`} title="Get the next update by email." />
+  </main>
+</Base>
+<style>
+  .update-page { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
+  .update-back { font-size: .82rem; color: var(--text-light); text-decoration: none; }
+  .update-header { margin: 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color); }
+  .update-kicker { text-transform: uppercase; font-size: .7rem; letter-spacing: .13em; color: var(--text-light); }
+  .update-header h1 { font-family: Chivo, sans-serif; color: var(--text-color); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.12; letter-spacing: -.04em; margin: 1rem 0; }
+  .update-lead { color: var(--text-light); font-size: 1.1rem; line-height: 1.7; }
+  .update-author { color: var(--text-light); font-size: .8rem; margin-top: 1.25rem; }
+  .update-body { color: var(--text-color); font-size: 1.05rem; line-height: 1.85; padding-bottom: 2rem; }
+  .update-body :global(h2) { font-family: Chivo, sans-serif; font-size: 1.5rem; line-height: 1.3; letter-spacing: -.02em; margin: 2rem 0 1rem; }
+  .update-body :global(p) { margin: 0 0 1.3rem; }
+  .update-body :global(a) { color: var(--text-color); text-decoration: underline; text-underline-offset: 4px; }
+  .update-body :global(ul), .update-body :global(ol) { margin: 0 0 1.5rem; padding-left: 1.5rem; }
+  .update-body :global(li) { margin: .5rem 0; }
+  .update-body :global(blockquote) { border-left: 3px solid #ffd700; padding: .3rem 0 .3rem 1.25rem; margin: 1.5rem 0; color: var(--text-light); }
+</style>

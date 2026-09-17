@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+const updates = [
+  { title: 'A look inside', description: 'A sample of my monthly project updates, lessons and useful ideas.', href: '/updates/a-look-inside.html', label: 'Sample newsletter' },
+  { title: 'How this website fits together', description: 'A home for projects, writing and useful notes—and the decisions behind it.', href: '/updates/how-this-website-works.html', label: 'Building' },
+  { title: 'A weekly review that ends with a next step', description: 'Four questions for turning a busy week into a lesson, a decision and an action.', href: '/updates/a-weekly-review-with-a-next-step.html', label: 'Useful systems' }
+];
+---
+<Base title="Project Updates & Useful Ideas | Jevan Goldsmith" description="Notes on what I'm building, what I'm learning, and things you can use." canonical="https://jevangoldsmith.com/updates.html" pageType="CollectionPage">
+  <main class="updates-index">
+    <header><p>Building & learning</p><h1>Notes from the work.</h1><p>Project updates, lessons and useful ideas. Start with the sample newsletter, or explore a story below.</p></header>
+    {updates.map((update) => <article><p class="update-label">{update.label}</p><h2><a href={update.href}>{update.title}</a></h2><p>{update.description}</p><a href={update.href}>Read the update <span aria-hidden="true">→</span></a></article>)}
+  </main>
+</Base>
+<style>
+  .updates-index { max-width: 850px; margin: auto; padding: 3rem 1.5rem; color: var(--text-color); }
+  header { margin-bottom: 3rem; }
+  h1 { font-family: Chivo, sans-serif; font-size: clamp(2.4rem, 5vw, 3.5rem); letter-spacing: -.04em; line-height: 1.1; margin: 1rem 0; }
+  p { color: var(--text-light); line-height: 1.7; }
+  article { border-top: 1px solid var(--border-color); padding: 1.5rem 0; }
+  h2 { font-size: 1.4rem; margin: .65rem 0; }
+  a { color: var(--text-color); text-underline-offset: 4px; }
+  h2 a { text-decoration: none; }
+  .update-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; }
+</style>

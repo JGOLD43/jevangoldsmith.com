@@ -113,7 +113,7 @@ The site currently uses an Astro content model:
 - shared nav/footer source lives in `site-astro/src/components/`
 - collections live in `data/*.json` where migrated
 - primary commercial actions live in `data/ctas.json`
-- Newsletter configuration lives in `data/newsletter.json`
+- Newsletter configuration lives in `data/newsletter.json`; setup status is in `docs/EMAIL_GROWTH.md`
 - topic taxonomy starts in `data/topics.json`
 - books live in `data/books.json` and are rendered by Astro
 - admin tools are present, but not all content types persist through a backend
@@ -133,8 +133,10 @@ Historical static-agent API notes live under `docs/archive/`.
 
 ## Analytics
 
-Analytics events are privacy-friendly and configured through
-`data/site.config.json`.
+Newsletter forms record campaign labels and signup placement with each request.
+Site-wide visitor analytics and confirmed-subscriber reporting still need the
+owner's selected email/analytics service. See [email growth setup](docs/EMAIL_GROWTH.md)
+for the current delivery status, welcome drafts and verification checklist.
 
 ## Security Notes
 

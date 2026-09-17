@@ -538,8 +538,8 @@
   {
     "path": "newsletter.html",
     "url": "/newsletter.html",
-    "title": "Monthly Newsletter & Ideas | Jevan Goldsmith",
-    "description": "Exclusive, newsletter-only content once a month. No spam, no nonsense.",
+    "title": "Follow What I’m Building | Jevan Goldsmith",
+    "description": "A monthly note on my projects, lessons from trying things, and the books and tools I'm putting to use.",
     "intent": "newsletter",
     "topics": [
       "better-thinking",
@@ -571,8 +571,8 @@
       "books.html",
       "products.html"
     ],
-    "lastReviewed": "2026-04-22",
-    "section": "experience",
+    "lastReviewed": "2026-09-17",
+    "section": "explore",
     "generatedFrom": "_src/pages",
     "journeyStage": "lead",
     "primaryCta": "newsletter",
@@ -632,8 +632,8 @@
   {
     "path": "index.html",
     "url": "/",
-    "title": "Jevan Goldsmith | Projects, Writing & Real Estate",
-    "description": "Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas.",
+    "title": "Jevan Goldsmith | Follow What I’m Building",
+    "description": "A monthly note on my projects, lessons from trying things, and the books and tools I'm putting to use.",
     "intent": "personal-home",
     "topics": [
       "real-estate-development",
@@ -668,7 +668,7 @@
       "projects.html",
       "products.html"
     ],
-    "lastReviewed": "2026-04-22",
+    "lastReviewed": "2026-09-17",
     "section": "home",
     "generatedFrom": "_src/pages",
     "journeyStage": "orientation",
@@ -3005,5 +3005,137 @@
     "primaryCta": "contact",
     "secondaryCtas": [],
     "ctaOptional": true
+  },
+  {
+    "path": "updates.html",
+    "url": "/updates.html",
+    "title": "Project Updates & Useful Ideas | Jevan Goldsmith",
+    "description": "Notes on what I am building, learning and putting to use.",
+    "intent": "project-updates",
+    "topics": [
+      "business-building",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "project updates & useful ideas",
+    "secondaryKeywords": [],
+    "audience": "Readers following projects and useful ideas",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "newsletter.html",
+      "now.html",
+      "projects.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-09-17",
+    "section": "explore",
+    "generatedFrom": "site-astro/src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "updates/a-look-inside.html",
+    "url": "/updates/a-look-inside.html",
+    "title": "A Look Inside: Sample Monthly Update | Jevan Goldsmith",
+    "description": "A sample of my monthly project updates, lessons and useful ideas.",
+    "intent": "project-updates",
+    "topics": [
+      "business-building",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "a look inside: sample monthly update",
+    "secondaryKeywords": [],
+    "audience": "Readers following projects and useful ideas",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "newsletter.html",
+      "now.html",
+      "projects.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-09-17",
+    "section": "explore",
+    "generatedFrom": "site-astro/src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "updates/how-this-website-works.html",
+    "url": "/updates/how-this-website-works.html",
+    "title": "How This Website Fits Together | Jevan Goldsmith",
+    "description": "A home for projects, writing and useful notes—and the decisions behind it.",
+    "intent": "project-updates",
+    "topics": [
+      "business-building",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "how this website fits together",
+    "secondaryKeywords": [],
+    "audience": "Readers following projects and useful ideas",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "newsletter.html",
+      "now.html",
+      "projects.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-09-17",
+    "section": "explore",
+    "generatedFrom": "site-astro/src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
+  },
+  {
+    "path": "updates/a-weekly-review-with-a-next-step.html",
+    "url": "/updates/a-weekly-review-with-a-next-step.html",
+    "title": "A Weekly Review That Ends With a Next Step | Jevan Goldsmith",
+    "description": "Four questions for turning a busy week into a lesson, a decision and an action.",
+    "intent": "project-updates",
+    "topics": [
+      "business-building",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "Article",
+    "primaryKeyword": "a weekly review that ends with a next step",
+    "secondaryKeywords": [],
+    "audience": "Readers following projects and useful ideas",
+    "searchIntent": "learn",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "newsletter.html",
+      "now.html",
+      "projects.html",
+      "weekly-review-template.html"
+    ],
+    "lastReviewed": "2026-09-17",
+    "section": "explore",
+    "generatedFrom": "site-astro/src/pages",
+    "journeyStage": "orientation",
+    "primaryCta": "newsletter",
+    "secondaryCtas": [
+      "contact"
+    ],
+    "ctaOptional": false
   }
 ]

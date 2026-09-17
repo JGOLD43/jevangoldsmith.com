@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
 ---
 <Base
   title="Weekly Review Template | Jevan Goldsmith"
@@ -13,7 +14,8 @@ import Base from '../layouts/Base.astro';
         <p>A simple Sunday review for turning a messy week into lessons, decisions, and next actions.</p>
         <div class="archive-actions">
             <a href="#template" class="btn-primary">Use Template</a>
-            <a href="/newsletter.html" class="btn-secondary">Subscribe to newsletter</a>
+            <a href="/downloads/weekly-review.md" download class="btn-secondary">Download editable template</a>
+            <button type="button" class="btn-secondary" data-print-review>Print template</button>
         </div>
     </section>
 
@@ -55,10 +57,29 @@ import Base from '../layouts/Base.astro';
         </div>
     </section>
 
+    <NewsletterSignup id="resource-signup" source="weekly-review-template" resource="weekly-review" title="More useful tools, and the work behind them." description="Get my monthly project update, lessons and practical resources like this one." />
     <section class="resource-detail-final">
         <h2>Why this exists</h2>
         <p>The point is not perfect productivity. The point is to notice what your life is actually teaching you before another week buries it.</p>
+        <p><a href="/updates/a-weekly-review-with-a-next-step.html">See a worked example →</a></p>
         <a href="/free-resources.html" class="btn-secondary">Back to Resources</a>
     </section>
 </main>
 </Base>
+
+<script>
+  document.querySelector('[data-print-review]')?.addEventListener('click', () => window.print());
+</script>
+<style is:global>
+  @media print {
+    body:has(.resource-template) { background: white !important; color: black !important; }
+    body:has(.resource-template) nav, body:has(.resource-template) .footer,
+    body:has(.resource-template) .archive-actions, body:has(.resource-template) .newsletter-signup,
+    body:has(.resource-template) .resource-detail-final, body:has(.resource-template) .skip-link { display: none !important; }
+    body:has(.resource-template) .resource-detail { padding: 0; max-width: none; }
+    body:has(.resource-template) h1, body:has(.resource-template) h2, body:has(.resource-template) h3,
+    body:has(.resource-template) p, body:has(.resource-template) li { color: black !important; }
+    .template-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .template-grid article { break-inside: avoid; min-height: 180px; }
+  }
+</style>

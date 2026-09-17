@@ -94,10 +94,39 @@ function recordForMovie(m) {
   };
 }
 
+function refreshAuthoredRecords(records, projects, pages, newsletter) {
+  const refreshed = records.filter((record) => record.type !== 'projects' && record.type !== 'newsletter');
+  for (const project of projects.filter(isVisible)) {
+    const id = project.id || project.slug;
+    const summary = project.shortDescription || project.description || '';
+    refreshed.push({ type: 'projects', id, title: project.title, summary, section: 'projects',
+      url: `${SITE}/projects/${project.slug || id}.html`, tags: asArray(project.tags),
+      searchText: buildSearchText([project.title, summary, 'projects', ...asArray(project.tags)]) });
+  }
+  for (const page of pages.filter((page) => page.index !== false)) {
+    const id = page.path.replace(/\.html$/, '');
+    const record = { type: 'page', id, title: page.title, summary: page.description || '',
+      section: page.section || 'page', url: `${SITE}${page.url || `/${page.path}`}`,
+      tags: asArray(page.topics), searchText: buildSearchText([page.title, page.description, ...asArray(page.topics)]) };
+    const index = refreshed.findIndex((existing) => existing.type === 'page' && existing.id === id);
+    if (index >= 0) refreshed[index] = record;
+    else refreshed.push(record);
+  }
+  refreshed.push({ type: 'newsletter', id: 'field-notes', title: newsletter.name,
+    summary: newsletter.description, section: 'newsletter', url: `${SITE}/newsletter.html`,
+    tags: ['monthly', 'projects'], searchText: buildSearchText([newsletter.name, newsletter.description, 'monthly newsletter']) });
+  return refreshed;
+}
+
 function main() {
   const write = process.argv.includes('--write');
   const indexDoc = readJson(INDEX);
-  const records = Array.isArray(indexDoc) ? indexDoc : indexDoc.records || [];
+  const records = refreshAuthoredRecords(
+    Array.isArray(indexDoc) ? indexDoc : indexDoc.records || [],
+    unwrap(readJson(path.join(DATA, 'projects.json')), 'projects'),
+    readJson(path.join(DATA, 'pages.json')),
+    readJson(path.join(DATA, 'newsletter.json'))
+  );
   const seen = new Set(records.map((r) => `${r.type}:${(r.title || '').toLowerCase().trim()}`));
 
   const additions = [];
@@ -156,4 +185,5 @@ function main() {
   process.stdout.write(`[search-sync] wrote ${merged.length} records to ${path.relative(ROOT, INDEX)}\n`);
 }
 
-main();
+if (require.main === module) main();
+module.exports = { refreshAuthoredRecords };

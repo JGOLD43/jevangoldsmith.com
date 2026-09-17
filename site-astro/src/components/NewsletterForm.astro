@@ -1,0 +1,47 @@
+---
+import newsletter from '../../../data/newsletter.json';
+interface Props { id: string; source: string; buttonLabel?: string; resource?: string; }
+const { id, source, buttonLabel = 'Get my updates', resource = '' } = Astro.props;
+const { delivery } = newsletter;
+const page = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<div class="signup" id={id}>
+  <form class="signup-form" action={delivery.action} method="POST"
+    data-newsletter-form data-delivery-mode={delivery.mode} data-endpoint={delivery.endpoint}
+    aria-describedby={`${id}-promise ${id}-status`}>
+    {Object.entries(delivery.fields).map(([name, value]) => <input type="hidden" name={name} value={value} />)}
+    <input type="hidden" name="signup_source" value={source} />
+    <input type="hidden" name="signup_page" value={page} />
+    <input type="hidden" name="resource" value={resource} />
+    <input type="hidden" name="consent" value="I want Jevan Goldsmith's monthly project updates and can unsubscribe anytime." />
+    <div class="signup-trap" aria-hidden="true">
+      <label for={`${id}-website`}>Leave this empty</label>
+      <input id={`${id}-website`} type="text" name="_honey" tabindex="-1" autocomplete="off" />
+    </div>
+    <label class="sr-only" for={`${id}-email`}>Email address</label>
+    <div class="signup-controls">
+      <input id={`${id}-email`} type="email" name={delivery.emailField} placeholder="Your email address"
+        autocomplete="email" inputmode="email" required maxlength="254" />
+      <button type="submit">{buttonLabel}</button>
+    </div>
+  </form>
+  <p class="signup-promise" id={`${id}-promise`}>Free. Once a month. Unsubscribe anytime. <a href="/privacy.html">Privacy</a></p>
+  <p class="signup-status" id={`${id}-status`} data-newsletter-status role="status" aria-live="polite" aria-atomic="true"></p>
+</div>
+<style>
+  .signup { width: 100%; max-width: 36rem; text-align: left; }
+  .signup-form { margin: 0; position: relative; }
+  .signup-controls { display: flex; gap: .5rem; width: 100%; }
+  .signup-controls input { min-width: 0; flex: 1; min-height: 50px; padding: .8rem 1rem; border: 1px solid var(--border-color); border-radius: .55rem; background: var(--card-bg, var(--background)); color: var(--text-color); font: inherit; font-size: 1rem; }
+  .signup-controls input::placeholder { color: var(--text-light); opacity: 1; }
+  .signup-controls button { min-height: 50px; padding: .8rem 1.15rem; border: 1px solid #171713; border-radius: .55rem; background: #ffd700; color: #171713; font: inherit; font-size: .95rem; font-weight: 700; cursor: pointer; }
+  .signup-controls button:hover { background: #f2cc00; }
+  .signup-controls button:disabled { cursor: wait; opacity: .65; }
+  .signup-controls :focus-visible { outline: 2px solid var(--text-color); outline-offset: 3px; }
+  .signup-promise, .signup-status { font-size: .78rem; line-height: 1.55; color: var(--text-light); margin: .65rem 0 0; }
+  .signup-promise a { color: inherit; text-underline-offset: 3px; }
+  .signup-status:empty { display: none; }
+  .signup-status[data-state="error"] { color: var(--text-color); }
+  .signup-trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  @media (max-width: 420px) { .signup-controls { flex-direction: column; } .signup-controls button { width: 100%; } }
+</style>

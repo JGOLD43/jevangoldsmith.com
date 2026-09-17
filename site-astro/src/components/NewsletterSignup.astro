@@ -1,0 +1,23 @@
+---
+import NewsletterForm from './NewsletterForm.astro';
+import newsletter from '../../../data/newsletter.json';
+interface Props { id: string; source: string; title?: string; description?: string; resource?: string; buttonLabel?: string; }
+const { id, source, title = 'Keep in touch with what I’m building.', description = newsletter.description, resource, buttonLabel } = Astro.props;
+---
+<section class="newsletter-signup" aria-labelledby={`${id}-title`}>
+  <div class="newsletter-signup-copy">
+    <p class="newsletter-eyebrow">A note from Jevan</p>
+    <h2 id={`${id}-title`}>{title}</h2>
+    <p>{description}</p>
+    <a class="newsletter-sample" href={newsletter.sampleUrl}>Read a sample update <span aria-hidden="true">→</span></a>
+  </div>
+  <NewsletterForm id={id} source={source} resource={resource} buttonLabel={buttonLabel} />
+</section>
+<style>
+  .newsletter-signup { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 2rem; padding: 2.5rem 0; border-top: 1px solid var(--border-color); }
+  .newsletter-signup-copy h2 { font-family: Chivo, sans-serif; font-size: clamp(1.45rem, 2.3vw, 1.9rem); font-weight: 600; color: var(--text-color); line-height: 1.2; margin: 0 0 .8rem; letter-spacing: -.03em; }
+  .newsletter-signup-copy p { font-size: .95rem; line-height: 1.65; color: var(--text-light); margin: 0 0 .8rem; }
+  .newsletter-signup-copy .newsletter-eyebrow { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .13em; }
+  .newsletter-sample { color: var(--text-color); font-size: .85rem; text-underline-offset: 4px; }
+  @media (max-width: 760px) { .newsletter-signup { grid-template-columns: 1fr; gap: 1.25rem; padding: 2rem 0; } }
+</style>

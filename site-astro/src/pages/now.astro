@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
 import {
   NOW_LAST_UPDATED,
   NOW_LOCATION_LABEL,
@@ -67,6 +68,7 @@ const sections = NOW_SECTIONS;
     ))}
   </div>
 
+  <NewsletterSignup id="now-signup" source="now-page" title="Get the next update by email." description="Follow what develops from here, along with the lessons, books and tools I'm putting to use. One note each month." />
   <footer class="now-footer">
     <h2>Something else on your mind?</h2>
     <div class="now-footer-actions">

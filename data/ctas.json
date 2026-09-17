@@ -1,7 +1,7 @@
 {
   "primary": {
     "id": "newsletter",
-    "label": "Subscribe to newsletter",
+    "label": "Get my updates",
     "href": "newsletter.html",
     "intent": "retention",
     "description": "Give curious readers a recurring thread back into the archive."
@@ -51,7 +51,7 @@
     },
     {
       "id": "newsletter",
-      "label": "Subscribe to newsletter",
+      "label": "Get my updates",
       "href": "newsletter.html",
       "intent": "retention",
       "priority": 1,

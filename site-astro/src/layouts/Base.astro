@@ -455,6 +455,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
                 <div class="dropdown-columns">
                   <div class="dropdown-column">
                     <a href="/newsletter.html" class:list={['newsletter.html' === _activeHref ? 'active' : '']}>Newsletter</a>
+                    <a href="/updates.html">Project Updates</a>
                     <a href="/essays.html" class:list={['essays.html' === _activeHref ? 'active' : '']}>Essays</a>
                   </div>
                   <div class="dropdown-column">
@@ -546,8 +547,8 @@ if (seoSlug === 'index' || seoSlug === 'search') {
               </div>
             </button>
             <div class="navbar-contact">
-              <a href="/meet.html" class="navbar-contact-btn">
-                <span>Follow</span>
+            <a href="/newsletter.html#newsletter-signup" class="navbar-contact-btn">
+              <span>Get my updates</span>
                 <svg class="ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-send" /></svg>
               </a>
               <div class="navbar-contact-dropdown">
@@ -581,6 +582,7 @@ if (seoSlug === 'index' || seoSlug === 'search') {
     <script type="speculationrules" is:inline set:html={JSON.stringify(speculationRules)} />
     <script>
       import '../scripts/theme.ts';
+      import '../scripts/newsletter.ts';
       // Static Speculation Rules above handle prerender for supporting
       // browsers; this only wires the <link rel=prefetch> hover fallback for
       // browsers without Speculation Rules support.

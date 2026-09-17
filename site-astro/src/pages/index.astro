@@ -2,6 +2,9 @@
 import { getCollection } from 'astro:content';
 import remoteAssets from '../../../data/remote-assets.generated.json';
 import Base from '../layouts/Base.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+import newsletter from '../../../data/newsletter.json';
+import { NOW_SECTIONS, NOW_LAST_UPDATED } from '../lib/now-location';
 
 interface RemoteAssetEntry { widths?: number[]; formats?: Record<string, Record<string, string>>; }
 
@@ -92,8 +95,8 @@ if (latestChallenge) {
 }
 ---
 <Base
-  title="Jevan Goldsmith | Projects, Writing & Real Estate"
-  description="Personal website of Jevan Goldsmith: real estate development, writing, technology, books, adventures, and useful ideas."
+  title="Jevan Goldsmith | Follow What I’m Building"
+  description={newsletter.description}
   canonical="https://jevangoldsmith.com/"
   pageType="WebSite"
 >
@@ -122,27 +125,17 @@ if (latestChallenge) {
       fetchpriority="high"
     />
   </Fragment>
-    <!-- Side Navigation Dots -->
-    <nav class="side-nav" id="side-nav">
-        <a href="#hero" class="side-nav-dot active" data-section="hero" title="Intro" aria-label="Intro"></a>
-        <a href="#newsletter-cta" class="side-nav-dot" data-section="newsletter-cta" title="Newsletter" aria-label="Newsletter"></a>
-        <a href="#featured" class="side-nav-dot" data-section="featured" title="Featured" aria-label="Featured"></a>
-        <a href="#value-prop" class="side-nav-dot" data-section="value-prop" title="What I Do" aria-label="What I Do"></a>
-        <a href="#essays" class="side-nav-dot" data-section="essays" title="Essays" aria-label="Essays"></a>
-        <a href="#focus" class="side-nav-dot" data-section="focus" title="Current Focus" aria-label="Current Focus"></a>
-    </nav>
-
     <header class="hero" id="hero">
         <div class="hero-container">
             <div class="hero-left">
-                <h1 class="hero-headline">
-                    <span class="mode-work">Jevan Goldsmith<br><span class="hero-welcome-work">Project Coordinator</span></span>
-                    <span class="mode-personal">Hi I'm Jevan.</span>
-                </h1>
-                <p class="hero-welcome">
-                    <span class="mode-work hero-work-now">What I'm working on <a href="/now.html" class="hero-now-link">now</a></span>
-                    <span class="mode-personal">In the effort to better remember my life I had an idea that I needed to keep a better tab on it. Maybe I took that too literally.</span>
-                </p>
+                <p class="hero-intro">Hi, I'm Jevan Goldsmith.</p>
+                <h1 class="hero-headline">Follow what<br>I'm building.</h1>
+                <p class="hero-welcome">Each month, I share progress on my projects, lessons from trying things, and the books and tools I'm putting to use.</p>
+                <NewsletterForm id="home-signup" source="home-hero" />
+                <div class="hero-reading-links">
+                    <a href="/now.html">See what I'm working on <span aria-hidden="true">→</span></a>
+                    <a href={newsletter.sampleUrl}>Read a sample update</a>
+                </div>
 
             </div>
             <div class="hero-right">
@@ -223,27 +216,40 @@ if (latestChallenge) {
         </div>
     </header>
 
-    <!-- Newsletter CTA Section -->
-    <section class="newsletter-cta-section newsletter-cta-section--minimal" id="newsletter-cta">
-        <div class="newsletter-cta-container">
-            <div class="newsletter-cta-content">
-                <h2 class="newsletter-cta-title">Newsletter</h2>
-                <p class="newsletter-cta-description">Exclusive, newsletter-only content once a month. No spam, no nonsense.</p>
-                <form class="newsletter-cta-form newsletter-cta-form--inline" action="https://formsubmit.co/hello@jevangoldsmith.com" method="POST" data-newsletter-form data-endpoint="https://formsubmit.co/ajax/hello@jevangoldsmith.com">
-                    <input type="hidden" name="_subject" value="Newsletter signup">
-                    <input type="hidden" name="_template" value="table">
-                    <label class="sr-only" for="home-field-notes-email">Email for newsletter</label>
-                    <input id="home-field-notes-email" type="email" placeholder="Enter your email" class="newsletter-cta-input" name="email" autocomplete="email" required>
-                    <button type="submit" class="newsletter-cta-button">Subscribe</button>
-                </form>
-            </div>
+    <section class="home-current" aria-labelledby="home-current-title">
+        <div class="home-current-intro">
+            <p class="home-section-kicker">Updated {NOW_LAST_UPDATED}</p>
+            <h2 id="home-current-title">What I'm working on now</h2>
+        </div>
+        <div class="home-current-stories">
+            {NOW_SECTIONS.slice(0, 2).map((section) => (
+                <article>
+                    <h3>{section.title}</h3>
+                    <div set:html={section.body} />
+                    <a href="/now.html">Read the current update <span aria-hidden="true">→</span></a>
+                </article>
+            ))}
+            <article>
+                <h3>A home for what I'm building</h3>
+                <p>The website brings my projects, writing and useful notes together. Here's how it works and what I'm improving.</p>
+                <a href="/projects/personal-website.html">Inside the website <span aria-hidden="true">→</span></a>
+            </article>
+        </div>
+    </section>
+
+    <section class="home-current home-notes" aria-labelledby="home-notes-title">
+        <p class="home-section-kicker">From the work</p>
+        <h2 id="home-notes-title">A couple of useful starting points</h2>
+        <div class="home-current-stories">
+            <article><h3>How this website fits together</h3><p>A home for projects, writing and useful notes, and the decisions behind it.</p><a href="/updates/how-this-website-works.html">Read the story <span aria-hidden="true">→</span></a></article>
+            <article><h3>A weekly review with a next step</h3><p>Four questions, a worked example and an editable template to try yourself.</p><a href="/updates/a-weekly-review-with-a-next-step.html">Try the review <span aria-hidden="true">→</span></a></article>
         </div>
     </section>
 
     <!-- Featured Carousel Section -->
     <section class="featured-carousel-section" id="featured">
         <div class="carousel-header">
-            <h2 class="carousel-title">Things I have been up to</h2>
+            <h2 class="carousel-title">Explore my writing and projects</h2>
             <a href="search.html" class="carousel-discover">Explore everything →</a>
         </div>
         <div class="carousel-controls">
@@ -275,97 +281,30 @@ if (latestChallenge) {
 </Base>
 
 <style is:inline>
-  /* Minimal newsletter section — clean, low-key block with a single-row
-     pill input that has the Subscribe button tucked inside the right edge. */
-  /* Edge-to-edge horizontal band, bounded by hairlines top + bottom —
-     matches the dark-mode treatment shown in the original design. Fill
-     is white in light mode so it pops against the creamy --background,
-     transparent in dark mode (page bg already provides contrast). */
-  .newsletter-cta-section--minimal {
-    background: #fff;
-    padding: 3rem 1.25rem;
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-  }
-  [data-theme="dark"] .newsletter-cta-section--minimal {
-    background: transparent;
-  }
-  .newsletter-cta-section--minimal .newsletter-cta-container { max-width: 720px; margin: 0 auto; }
-  .newsletter-cta-section--minimal .newsletter-cta-content { text-align: left; }
-  .newsletter-cta-section--minimal .newsletter-cta-title {
-    color: var(--text-color);
-    font-family: Chivo, sans-serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0 0 0.75rem;
-    letter-spacing: 0;
-  }
-  .newsletter-cta-section--minimal .newsletter-cta-description {
-    color: var(--text-light);
-    font-size: 1rem;
-    line-height: 1.5;
-    margin: 0 0 1.5rem;
-    max-width: 640px;
-  }
-  .newsletter-cta-form.newsletter-cta-form--inline {
-    position: relative;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center;
-    background: var(--background);
-    border: 1px solid var(--border-color);
-    border-radius: 999px;
-    padding: 4px 4px 4px 18px;
-    max-width: 640px;
-    gap: 0;
-    transition: border-color .15s ease, box-shadow .15s ease;
-  }
-  .newsletter-cta-form--inline:focus-within {
-    border-color: var(--text-color);
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.04);
-  }
-  .newsletter-cta-form.newsletter-cta-form--inline .newsletter-cta-input {
-    flex: 1 1 auto !important;
-    width: auto !important;
-    border: none !important;
-    background: transparent !important;
-    color: var(--text-color) !important;
-    font-size: 0.95rem !important;
-    padding: 0.65rem 0.5rem !important;
-    outline: none !important;
-    min-width: 0 !important;
-    font-family: inherit;
-    box-shadow: none !important;
-  }
-  .newsletter-cta-form.newsletter-cta-form--inline .newsletter-cta-input::placeholder { color: var(--text-light); opacity: 0.7; }
-  /* Match the navbar "Follow" button: gold pill with a black border
-     and black text. Hover inverts to black background with gold text
-     so the affordance pattern reads the same across the site. */
-  .newsletter-cta-form.newsletter-cta-form--inline .newsletter-cta-button {
-    flex: 0 0 auto !important;
-    width: auto !important;
-    background: gold !important;
-    color: #000 !important;
-    border: 2px solid #000 !important;
-    border-radius: 999px !important;
-    padding: 0.55rem 1.25rem !important;
-    font-size: 0.9rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.5px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: background .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease;
-    margin: 0 !important;
-  }
-  .newsletter-cta-form--inline .newsletter-cta-button:hover {
-    background: #000 !important;
-    color: gold !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px #0003;
-  }
-  @media (max-width: 480px) {
-    .newsletter-cta-form--inline { padding-left: 14px; }
-    .newsletter-cta-form--inline .newsletter-cta-button { padding: 0.55rem 1rem; font-size: 0.85rem; }
+  .hero .hero-container { gap: 3rem; }
+  .hero .hero-left { max-width: 36rem; }
+  .hero .hero-intro { color: var(--text-light); font-size: .95rem; margin: 0 0 1.25rem; }
+  .hero .hero-headline { font-size: clamp(2.5rem, 4.6vw, 4rem); letter-spacing: -.045em; line-height: 1.05; margin: 0 0 1.25rem; }
+  .hero .hero-welcome { max-width: 34rem; font-size: 1.05rem; line-height: 1.7; margin: 0 0 1.6rem; }
+  .hero-reading-links { display: flex; flex-wrap: wrap; gap: .8rem 1.5rem; margin-top: 1.25rem; }
+  .hero-reading-links a { font-size: .83rem; color: var(--text-color); text-underline-offset: 4px; }
+  .home-current { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 3rem; border-top: 1px solid var(--border-color); }
+  .home-section-kicker { color: var(--text-light); font-size: .72rem; margin: 0 0 .7rem; }
+  .home-current h2 { color: var(--text-color); font-family: Chivo, sans-serif; font-size: 1.8rem; line-height: 1.2; letter-spacing: -.03em; margin: 0 0 1.8rem; }
+  .home-current-stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+  .home-current-stories h3 { color: var(--text-color); font-size: 1.1rem; margin: 0 0 .7rem; }
+  .home-current-stories p { color: var(--text-light); font-size: .95rem; line-height: 1.7; margin: 0 0 1rem; }
+  .home-current-stories a { color: var(--text-color); font-size: .85rem; text-underline-offset: 4px; }
+  @media (max-width: 900px) { .hero .hero-container { gap: 1.5rem; } }
+  @media (max-width: 559px) {
+    .hero { padding-top: 2.25rem !important; }
+    .hero .hero-container { display: flex; flex-direction: column; }
+    .hero .hero-left { order: 0; width: 100%; }
+    .hero .hero-right { order: 1; width: 100%; }
+    .hero .hero-headline { font-size: 2.7rem; }
+    .hero .hero-welcome { font-size: 1rem; }
+    .home-current { padding: 2rem 1rem; }
+    .home-current-stories { grid-template-columns: 1fr; }
   }
 
   /* Compact windows: PROFILE tap slides the snapshot up from the bottom of
@@ -497,5 +436,5 @@ if (latestChallenge) {
 <script>
   // (slice 14) + Phase 7 (slice 5): home + newsletter + sanitize as native.
   import '../scripts/home.ts';
-  import '../scripts/newsletter.ts';
+
 </script>
