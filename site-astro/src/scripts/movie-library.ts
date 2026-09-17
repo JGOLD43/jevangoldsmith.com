@@ -61,6 +61,7 @@ function initMovieLibrary() {
   let lastTime = 0;
   let snapTimer = 0;
   let scale = 1;
+  let viewportWidth = 0;
   let pitch = 62;
   let gap = 280;
   let drag: { id: number; x: number; y: number; start: number; moved: boolean; movie: number | null;
@@ -335,8 +336,11 @@ function initMovieLibrary() {
       const distance = logical - position;
       // Standard tall disc cases: a printed sleeve inside a slim plastic shell.
       const recession = Math.min(Math.abs(distance), 4.5);
-      const height = 262 * scale * (1 - recession * .085);
+      // Keep the poster's drawing surface fixed throughout a gesture. Resizing
+      // every face on every frame forces mobile browsers to rerasterize it.
+      const height = 262 * scale;
       const width = height * .71;
+      const caseScale = 1 - recession * .085;
       // Open a clear lane around the centre before two cases exchange depth.
       // A linear fan switches their stacking while their covers still overlap.
       // This smooth clearance also stays open throughout swipes and wheel input.
@@ -344,6 +348,9 @@ function initMovieLibrary() {
       const spread = clearance * clearance * (3 - 2 * clearance);
       const x = distance * pitch + Math.sign(distance) * gap * spread;
       const y = -recession * 6 * scale;
+      // Keep one cover of overscan, but do not allocate mobile drawing layers
+      // for the many cases and reflections that are completely off screen.
+      const inView = Math.abs(x) < viewportWidth / 2 + width;
       // Resting cases show the same left spine on both sides of the display.
       // Ease to a front-facing cover as each case arrives in the spotlight.
       const yaw = -Math.atan(x / 1800) * 180 / Math.PI - 6 + 44 * spread;
@@ -355,12 +362,16 @@ function initMovieLibrary() {
         layer.style.setProperty('--width', `${width}px`);
         layer.style.setProperty('--height', `${height}px`);
         layer.style.setProperty('--depth', `${19.3 * scale}px`);
+        layer.style.setProperty('--case-scale', String(caseScale));
         layer.style.setProperty('--x', `${x}px`);
         layer.style.setProperty('--y', `${y}px`);
         layer.style.setProperty('--case-yaw', `${yaw}deg`);
         layer.style.setProperty('--inspect-pitch', `${inspecting ? tiltX : 0}deg`);
         layer.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
-        layer.style.zIndex = String(10000 - Math.round(Math.abs(distance) * 100));
+        layer.style.visibility = inView ? 'visible' : 'hidden';
+        // Only change stacking when the centre changes, after the cases clear
+        // one another. Continuous z-index changes rebuild mobile paint layers.
+        layer.style.zIndex = String(10000 - Math.abs(logical - center));
       }
       node.style.setProperty('--inspect-shine', String(inspecting ? Math.min(.18, (Math.abs(tiltX) + Math.abs(tiltY)) * .004) : 0));
       const isSelected = logical === Math.round(target);
@@ -409,6 +420,7 @@ function initMovieLibrary() {
     hoverPointer = null;
     resetInspection(true);
     const rect = stage!.getBoundingClientRect();
+    viewportWidth = rect.width;
     // Leave room for the overhead light; keep short landscape views legible.
     const availableHeight = rect.height * (rect.height < 220 ? .78 : .66);
     scale = Math.min(1.42, availableHeight / 262, rect.width * .72 / 262);

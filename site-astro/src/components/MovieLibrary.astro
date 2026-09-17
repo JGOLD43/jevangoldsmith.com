@@ -227,7 +227,8 @@ const library = movies.map((movie) => {
     position: absolute; left: 50%; top: var(--shelf-baseline);
     width: var(--width); height: var(--height); padding: 3px 2px;
     transform-origin: 50% 0;
-    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg))) rotateX(calc(-1 * var(--inspect-pitch, 0deg))) scaleY(.32);
+    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg))) rotateX(calc(-1 * var(--inspect-pitch, 0deg))) scale3d(var(--case-scale, 1), calc(var(--case-scale, 1) * .32), var(--case-scale, 1));
+    will-change: transform;
     opacity: .32; filter: blur(1.4px) saturate(.7);
     mask-image: linear-gradient(#000b, #0006 16%, transparent 42%);
   }
@@ -240,7 +241,8 @@ const library = movies.map((movie) => {
     position: absolute; left: 50%; top: var(--shelf-baseline); height: 0; width: var(--width);
     transform-origin: 50% 0; transform-style: preserve-3d;
     /* Match the case's bottom edge so it stays grounded when turned. */
-    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg)));
+    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg))) scale3d(var(--case-scale, 1), var(--case-scale, 1), var(--case-scale, 1));
+    will-change: transform;
   }
   .disc-case-contact::before {
     /* Spread the shadow around the contact edge in the visible shelf plane.
@@ -260,13 +262,14 @@ const library = movies.map((movie) => {
     margin: 0; padding: 0; border: 0; background: none; border-radius: 5px;
     transform-style: preserve-3d; transform-origin: 50% 100%;
     /* Rest at an angle along the bench, then face forward in the spotlight. */
-    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg));
+    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg)) scale3d(var(--case-scale, 1), var(--case-scale, 1), var(--case-scale, 1));
+    will-change: transform;
     cursor: inherit; -webkit-tap-highlight-color: transparent;
   }
-  .disc-case > span { position: absolute; display: block; }
+  .disc-case > span { position: absolute; display: block; backface-visibility: hidden; }
   .disc-case-back {
     inset: 0; border-radius: 3px; background: #121313;
-    transform: translateZ(calc(-1 * var(--depth))); box-shadow: inset 0 0 0 1px #ffffff12;
+    transform: translateZ(calc(-1 * var(--depth))) rotateY(180deg); box-shadow: inset 0 0 0 1px #ffffff12;
   }
   .disc-case-spine {
     top: 0; bottom: 0; left: calc(-1 * var(--depth)); width: var(--depth);
@@ -310,7 +313,10 @@ const library = movies.map((movie) => {
     background: linear-gradient(#171818, #242525 18%, #161717 48%, #0a0b0b 52%, #202121 70%, #171818);
     box-shadow: inset 0 0 0 1px #ffffff12;
   }
-  .disc-case-top { top: 1px; }
+  .disc-case-top {
+    top: 1px;
+    transform: translateZ(calc(1px - var(--depth))) rotateX(90deg);
+  }
   .disc-case-bottom { top: calc(100% - 1px); }
   .disc-case-cover {
     inset: 0; padding: 3px 2px; border-radius: 3px;
@@ -322,12 +328,18 @@ const library = movies.map((movie) => {
     display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1px;
     pointer-events: none; -webkit-user-drag: none;
   }
-  .disc-case-cover::after {
+  .disc-case-cover::before, .disc-case-cover::after {
     content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
-    background:
-      linear-gradient(calc(115deg + var(--inspect-yaw, 0deg)), transparent 20%, rgb(255 255 255 / calc(.015 + var(--inspect-shine, 0))) 46%, transparent 72%),
-      linear-gradient(90deg, #0002, transparent 2%, transparent 99%, #0002);
+  }
+  .disc-case-cover::before {
+    background: linear-gradient(90deg, #0002, transparent 2%, transparent 99%, #0002);
     box-shadow: inset 0 0 0 1px #ffffff10;
+  }
+  .disc-case-cover::after {
+    /* Fade a prepainted reflection instead of repainting the poster's gradient
+       as the case rotates. Opacity stays on its own compositor layer. */
+    background: linear-gradient(115deg, transparent 20%, #ffffff3d 46%, transparent 72%);
+    opacity: calc(.06 + var(--inspect-shine, 0) * 4); will-change: opacity;
   }
   .disc-case-fallback {
     display: flex; height: 100%; align-items: center; justify-content: center; padding: 1rem;

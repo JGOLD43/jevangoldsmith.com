@@ -369,6 +369,47 @@ test('disc shelf supports touch swiping and reduced motion sorting', async ({ br
   await context.close();
 });
 
+test('moving the disc shelf preserves the raster size of the movie artwork', async ({ page }) => {
+  await page.setViewportSize({ width: 393, height: 852 });
+  await page.goto('/movies.html?view=disc-boxes&discMovie=before-sunrise');
+  await expect(page.locator('.disc-case[aria-pressed="true"]')).toBeVisible();
+  await page.evaluate(async () => {
+    const state = window as typeof window & { movieArtworkResizes: number };
+    state.movieArtworkResizes = 0;
+    const observer = new ResizeObserver((entries) => {
+      // Recycling a case far outside the viewport removes its image entirely.
+      // Only artwork still on the shelf must keep the same drawing surface.
+      state.movieArtworkResizes += entries.filter((entry) => entry.target.isConnected).length;
+    });
+    document.querySelectorAll('.disc-case-cover img').forEach((image) => observer.observe(image));
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    state.movieArtworkResizes = 0;
+  });
+  for (const [key, movie] of [['ArrowRight', 'before-sunset'], ['ArrowLeft', 'before-sunrise']]) {
+    await page.keyboard.press(key);
+    const selected = page.locator('.disc-case[aria-pressed="true"]');
+    await expect(selected).toHaveAttribute('data-movie-id', movie);
+    await expect.poll(() => selected.evaluate((node) => Math.abs(parseFloat((node as HTMLElement).style.getPropertyValue('--x'))))).toBeLessThan(.01);
+  }
+  expect(await page.evaluate(() => (window as typeof window & { movieArtworkResizes: number }).movieArtworkResizes)).toBe(0);
+});
+
+test('rotating a disc case keeps its artwork and shine on stable drawing layers', async ({ page }) => {
+  await page.setViewportSize({ width: 393, height: 852 });
+  await page.goto('/movies.html?view=disc-boxes&discMovie=before-sunrise');
+  const selected = page.locator('.disc-case[aria-pressed="true"]');
+  const cover = selected.locator('.disc-case-cover');
+  const before = await cover.evaluate((node) => getComputedStyle(node, '::after').backgroundImage);
+  const box = await selected.boundingBox();
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box!.x + box!.width / 2 + 80, box!.y + box!.height / 2 + 25, { steps: 12 });
+  await expect.poll(() => selected.evaluate((node) => parseFloat((node as HTMLElement).style.getPropertyValue('--inspect-yaw')))).toBeGreaterThan(20);
+  expect(await cover.evaluate((node) => getComputedStyle(node, '::after').backgroundImage)).toBe(before);
+  await page.mouse.up();
+  await page.mouse.move(0, 0);
+});
+
 test('missing movie posters have a usable case and detail link', async ({ page }) => {
   await page.route(/a\.ltrbxd\.com|image\.tmdb\.org/, (route) => route.abort());
   await page.goto('/movies.html?view=disc-boxes');
