@@ -7,7 +7,7 @@ test('Now is the only active top-level navigation item on the Now page', async (
   expect(activeLabels.map((label) => label.trim())).toEqual(['Now']);
 });
 
-test('Explore and Experiences use balanced dropdown grids', async ({ page }) => {
+test('Thoughts and Experiences use balanced dropdown grids', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/books.html');
 
@@ -28,9 +28,9 @@ test('Explore and Experiences use balanced dropdown grids', async ({ page }) => 
     });
   };
 
-  const explore = await gridGeometry('Explore', '.dropdown-links-grid--two');
-  expect(explore.columns).toBe(2);
-  expect(new Set(explore.widths).size).toBe(1);
+  const thoughts = await gridGeometry('Thoughts', '.dropdown-links-grid--two');
+  expect(thoughts.columns).toBe(2);
+  expect(new Set(thoughts.widths).size).toBe(1);
 
   const experiences = await gridGeometry('Experiences', '.dropdown-links-grid--three');
   expect(experiences.columns).toBe(3);

@@ -10,7 +10,7 @@ import { inlineSprite } from '../lib/icon-sprite';
 // Site-wide navbar — inlined here (was components/Nav.astro). Active marker:
 //   - leaf nav-link active when current page matches its href (adventure-*
 //     subpages roll up to adventures.html)
-//   - section dropdown-trigger active when section ID matches (Explore, Taste, Experiences)
+//   - section dropdown-trigger active when section ID matches (Thoughts, Taste, Experiences)
 const _navFile = currentPageFromUrl(Astro.url.pathname);
 const _activeHref = _navFile.startsWith('adventure-') ? 'adventures.html' : _navFile;
 const _sectionByFile: Record<string, string> = {};
@@ -19,12 +19,13 @@ for (const p of (pages as Array<{ path?: string; section?: string }>) ?? []) {
 }
 const _activeSection = _sectionByFile[_navFile] ?? '';
 const _triggerByLabel: Record<string, string> = {
-  Explore: 'explore',
+  Thoughts: 'explore',
   Taste: 'taste',
   Experiences: 'experience',
 };
 const _triggerFilesByLabel: Record<string, Set<string>> = {
-  Explore: new Set(['adventures.html', 'free-resources.html']),
+  Thoughts: new Set(['newsletter.html', 'essays.html', 'lesson-logger.html', 'free-resources.html']),
+  Experiences: new Set(['adventures.html']),
 };
 const _explicitTriggerLabel = Object.keys(_triggerFilesByLabel).find((label) =>
   _triggerFilesByLabel[label]?.has(_activeHref),
@@ -449,13 +450,12 @@ if (seoSlug === 'index' || seoSlug === 'search') {
           <ul class="nav-links">
             <li><a href="/index.html" class:list={['index.html' === _activeHref ? 'active' : '']}>Home</a></li>
             <li class="nav-dropdown">
-              <a href="#" aria-haspopup="true" aria-expanded="false" class:list={['dropdown-trigger', _isTriggerActive('Explore') ? 'active' : '']}>Explore</a>
+              <a href="#" aria-haspopup="true" aria-expanded="false" class:list={['dropdown-trigger', _isTriggerActive('Thoughts') ? 'active' : '']}>Thoughts</a>
               <div class="dropdown-menu dropdown-menu-wide">
-                <div class="dropdown-wide-header">A Collection of Thoughts</div>
                 <div class="dropdown-links-grid dropdown-links-grid--two">
                   <a href="/newsletter.html" class:list={['newsletter.html' === _activeHref ? 'active' : '']}>Newsletter</a>
                   <a href="/essays.html" class:list={['essays.html' === _activeHref ? 'active' : '']}>Essays</a>
-                  <a href="/adventures.html" class:list={['adventures.html' === _activeHref ? 'active' : '']}>Trips</a>
+                  <a href="/lesson-logger.html" class:list={['lesson-logger.html' === _activeHref ? 'active' : '']}>Lesson Log</a>
                   <a href="/free-resources.html" class:list={['free-resources.html' === _activeHref ? 'active' : '']}>Resources</a>
                 </div>
               </div>
@@ -502,11 +502,10 @@ if (seoSlug === 'index' || seoSlug === 'search') {
             <li class="nav-dropdown">
               <a href="#" aria-haspopup="true" aria-expanded="false" class:list={['dropdown-trigger', _isTriggerActive('Experiences') ? 'active' : '']}>Experiences</a>
               <div class="dropdown-menu dropdown-menu-wide">
-                <div class="dropdown-wide-header">Things I think up, build and learn</div>
                 <div class="dropdown-links-grid dropdown-links-grid--three">
                   <a href="/projects.html" class:list={['projects.html' === _activeHref ? 'active' : '']}>Projects</a>
                   <a href="/challenges.html" class:list={['challenges.html' === _activeHref ? 'active' : '']}>Challenges</a>
-                  <a href="/lesson-logger.html" class:list={['lesson-logger.html' === _activeHref ? 'active' : '']}>Lesson Log</a>
+                  <a href="/adventures.html" class:list={['adventures.html' === _activeHref ? 'active' : '']}>Trips</a>
                 </div>
               </div>
             </li>
