@@ -184,6 +184,7 @@ const library = movies.map((movie) => {
   }
   .movie-library-shelf-top {
     position: absolute; inset: calc(-1 * var(--shelf-rear-depth, 52px)) 0 0;
+    overflow: hidden;
     background:
       radial-gradient(ellipse 34% 90% at 50% 72%, #e2d5b959, transparent),
       linear-gradient(90deg, #202222, #353836 48%, #202222);
@@ -191,15 +192,30 @@ const library = movies.map((movie) => {
     box-shadow: inset 0 16px 24px -20px #000b;
   }
   .movie-library-shelf-top::after {
-    content: ''; position: absolute; inset: 0;
+    content: ''; position: absolute; inset: 0 calc(-1 * var(--bench-tile, 360px));
+    /* Brushed grain, subtle wear and panel joins make camera travel visible. */
     background:
       repeating-linear-gradient(0deg, transparent 0 2px, #00000006 2px 3px),
-      repeating-linear-gradient(92deg, transparent 0 3px, #ffffff03 3px 4px);
+      linear-gradient(90deg, #0005 0 1px, #e4ddc72e 1px 2px, transparent 2px),
+      linear-gradient(90deg, transparent 8%, #ffffff0a 19%, transparent 23%, #0000000e 49%, transparent 64%, #ffffff08 83%, transparent 92%),
+      repeating-linear-gradient(92deg, transparent 0 3px, #ffffff06 3px 4px);
+    background-size: auto, var(--bench-tile, 360px) 100%, var(--bench-tile, 360px) 100%, var(--bench-tile, 360px) 100%;
+    transform: translate3d(var(--bench-travel, 0px), 0, 0); will-change: transform;
   }
   .movie-library-shelf-front {
     position: absolute; top: 100%; left: 0; right: 0; height: var(--shelf-lip, 16px);
+    overflow: hidden;
     background: linear-gradient(#383a37, #272927 22%, #191b1b);
     box-shadow: inset 0 1px #ffffff26, inset 0 -2px #0009, 0 12px 20px #0005;
+  }
+  .movie-library-shelf-front::after {
+    content: ''; position: absolute; inset: 0 calc(-1 * var(--bench-front-tile, 424.8px));
+    background:
+      linear-gradient(90deg, #0007 0 1px, #ffffff1f 1px 2px, transparent 2px),
+      linear-gradient(90deg, transparent 8%, #ffffff0a 19%, transparent 23%, #0002 49%, transparent 64%, #ffffff08 83%, transparent 92%);
+    background-size: var(--bench-front-tile, 424.8px) 100%;
+    /* The nearer edge travels a little faster to give the bench depth. */
+    transform: translate3d(var(--bench-front-travel, 0px), 0, 0); will-change: transform;
   }
   .movie-library-cases { position: absolute; inset: 0; }
   .movie-library-reflections {
@@ -243,7 +259,7 @@ const library = movies.map((movie) => {
     position: absolute; left: 50%; top: var(--shelf-baseline); width: var(--width); height: var(--height);
     margin: 0; padding: 0; border: 0; background: none; border-radius: 5px;
     transform-style: preserve-3d; transform-origin: 50% 100%;
-    /* Face the viewer along a level display; turning reveals the spine. */
+    /* Rest at an angle along the bench, then face forward in the spotlight. */
     transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg));
     cursor: inherit; -webkit-tap-highlight-color: transparent;
   }

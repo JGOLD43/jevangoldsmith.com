@@ -54,6 +54,7 @@ function initMovieLibrary() {
   let active = false;
   let position = 0;
   let target = 0;
+  let benchOffset = 0;
   let velocity = 0;
   let selected = -1;
   let frame = 0;
@@ -175,6 +176,8 @@ function initMovieLibrary() {
       caseDisplay!.before(outgoingShelf);
     }
     orderMovies(mode);
+    // Sorting replaces the cases without jumping the bench beneath them.
+    benchOffset += position;
     position = target = velocity = 0;
     render();
     updateCaption();
@@ -303,6 +306,15 @@ function initMovieLibrary() {
     stage!.style.setProperty('--shelf-depth', `${38 * scale}px`);
     stage!.style.setProperty('--shelf-rear-depth', `${52 * scale}px`);
     stage!.style.setProperty('--shelf-lip', `${16 * scale}px`);
+    // The grain travels with the row, while the overhead light stays fixed.
+    // Repeat whole texture tiles so an infinite shelf never exposes an edge.
+    const benchTile = 360 * scale;
+    const benchTravel = reducedMotion.matches ? 0 : (position + benchOffset) * pitch;
+    const benchPhase = ((benchTravel % benchTile) + benchTile) % benchTile;
+    stage!.style.setProperty('--bench-tile', `${benchTile}px`);
+    stage!.style.setProperty('--bench-travel', `${-benchPhase}px`);
+    stage!.style.setProperty('--bench-front-tile', `${benchTile * 1.18}px`);
+    stage!.style.setProperty('--bench-front-travel', `${-benchPhase * 1.18}px`);
     const center = Math.round(position);
     // A small moving window keeps the infinite shelf light, even for large libraries.
     const radius = Math.min(12, Math.floor(movies.length / 2));
@@ -332,9 +344,9 @@ function initMovieLibrary() {
       const spread = clearance * clearance * (3 - 2 * clearance);
       const x = distance * pitch + Math.sign(distance) * gap * spread;
       const y = -recession * 6 * scale;
-      // Compensate for the shared camera, keeping every resting front visible
-      // and its printed spine on the far side until deliberately turned.
-      const yaw = -Math.atan(x / 1800) * 180 / Math.PI - 6;
+      // Resting cases show the same left spine on both sides of the display.
+      // Ease to a front-facing cover as each case arrives in the spotlight.
+      const yaw = -Math.atan(x / 1800) * 180 / Math.PI - 6 + 44 * spread;
       const inspecting = logical === inspectedMovie;
       const shadow = shadows.get(logical)!;
       const reflection = reflections.get(logical)!;
@@ -492,6 +504,7 @@ function initMovieLibrary() {
       const id = params.get('discMovie');
       const index = movies.findIndex((movie) => movie.id === id);
       target = position = index < 0 ? 0 : index;
+      benchOffset = 0;
       velocity = 0;
     }
     if (!active) {
