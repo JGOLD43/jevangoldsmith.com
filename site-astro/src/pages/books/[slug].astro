@@ -22,7 +22,6 @@ const ratingValue = Number(b.rating ?? 0);
 const reReads = Number(b.reReads ?? 0);
 const isUnread = b.read === false;
 const hasRating = !isUnread && ratingValue > 0;
-const stars = hasRating ? '★'.repeat(ratingValue) + '☆'.repeat(5 - ratingValue) : '';
 const timesRead = reReads + 1;
 
 const notesHtml = renderNotes(b.notes);
@@ -95,10 +94,72 @@ const schema = bookSchema({
         object-fit: contain !important;
         background: #1a1a1a;
       }
-      .detail-page--book .detail-hero-body {
+      main.detail-page--book .detail-hero-body {
         flex: none;
+        width: 100%;
         max-width: 640px;
         margin: 0 auto;
+        text-align: left;
+      }
+      .detail-page--book .book-detail-category {
+        margin: 0 0 .65rem;
+        color: var(--text-light);
+        font-size: .72rem;
+        font-weight: 600;
+        line-height: 1.5;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .detail-page--book .detail-title {
+        margin: 0;
+        font-size: clamp(2rem, 4.5vw, 2.75rem);
+        line-height: 1.12;
+        letter-spacing: -.025em;
+        text-wrap: balance;
+        overflow-wrap: anywhere;
+      }
+      .detail-page--book .detail-author {
+        margin: .65rem 0 0;
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+      .detail-page--book .detail-lead {
+        margin: 1.25rem 0 0;
+        max-width: 52ch;
+        font-size: 1.05rem;
+        line-height: 1.65;
+      }
+      .book-detail-facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 2rem;
+        margin: 1.5rem 0 0;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
+      }
+      .book-detail-facts dt {
+        margin-bottom: .35rem;
+        color: var(--text-light);
+        font-size: .68rem;
+        font-weight: 600;
+        line-height: 1.4;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+      .book-detail-facts dd {
+        display: flex;
+        align-items: center;
+        gap: .35rem;
+        margin: 0;
+        color: var(--text-color);
+        font-size: .95rem;
+        font-weight: 600;
+        line-height: 1.5;
+      }
+      .detail-page--book .detail-section {
+        max-width: 640px;
+        margin-left: auto;
+        margin-right: auto;
       }
       @media (max-width: 640px) {
         .detail-page--book .detail-hero-cover {
@@ -135,21 +196,26 @@ const schema = bookSchema({
         </div>
       )}
       <div class="detail-hero-body">
-        <p class="detail-kicker">
-          {isUnread && <span class="detail-status-badge status-planned">To Read</span>}
-          {b.category && <span class="detail-category-pill">{b.category}</span>}
-          {b.year && <span class="detail-year-pill">{b.year}</span>}
-        </p>
+        {b.category && <p class="book-detail-category">{b.category}</p>}
         <h1 class="detail-title">{b.title}</h1>
-        <p class="detail-meta-line">by {b.author}</p>
-        {hasRating && (
-          <p class="detail-rating">
-            <span class="detail-rating-stars">{stars}</span>
-            <span class="detail-rating-num">{ratingValue}/5</span>
-          </p>
-        )}
-        {timesRead > 1 && <p class="detail-meta-line">Read {timesRead}× total</p>}
+        <p class="detail-author">by {b.author}</p>
         {b.shortDescription && <p class="detail-lead">{b.shortDescription}</p>}
+        {(b.year || hasRating || isUnread || timesRead > 1) && (
+          <dl class="book-detail-facts">
+            {b.year && <div><dt>Published</dt><dd>{b.year}</dd></div>}
+            {hasRating && (
+              <div>
+                <dt>My rating</dt>
+                <dd aria-label={`${ratingValue} out of 5`}>
+                  <span aria-hidden="true">★</span>
+                  <span>{ratingValue}/5</span>
+                </dd>
+              </div>
+            )}
+            {isUnread && <div><dt>Status</dt><dd>To read</dd></div>}
+            {timesRead > 1 && <div><dt>Times read</dt><dd>{timesRead}</dd></div>}
+          </dl>
+        )}
       </div>
     </header>
 
@@ -160,17 +226,12 @@ const schema = bookSchema({
       </section>
     )}
 
-    <section class="detail-section detail-section--notes">
-      <h2 class="detail-h2">My Notes</h2>
-      {notesHtml ? (
+    {notesHtml && (
+      <section class="detail-section detail-section--notes">
+        <h2 class="detail-h2">My Notes</h2>
         <div class="detail-notes-body" set:html={notesHtml} />
-      ) : (
-        <p class="detail-notes-empty">
-          Quotes that stuck, ideas to apply, what I'd push back on. Add a <code>notes</code> field to this book in
-          <code>data/books.json</code>.
-        </p>
-      )}
-    </section>
+      </section>
+    )}
 
     {commentaryHtml && (
       <section class="detail-section">
