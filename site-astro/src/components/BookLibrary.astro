@@ -103,9 +103,6 @@ const library = await Promise.all(books
   }
   html:has(body.book-library-open), body.book-library-open { overflow: hidden !important; }
   body.book-library-open .collection-mobile-toggle { visibility: hidden; }
-  body.is-book-launching .book-library {
-    opacity: 0; transition: opacity .24s cubic-bezier(.25, .8, .25, 1); pointer-events: none;
-  }
   .book-library-header {
     position: absolute; z-index: 3; inset: 0 0 auto; padding: 1.5rem 2.5rem;
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;

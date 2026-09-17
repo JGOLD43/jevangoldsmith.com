@@ -6,6 +6,7 @@ let restoreBookListFromSpa: (() => boolean) | null = null;
 
 interface BookFlightContext {
     returnHref: string;
+    backdrop?: HTMLElement;
     beforeDetail: () => void;
     restoreListing: () => void;
 }
@@ -127,6 +128,25 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
     // view-transition doesn't try to morph the hidden element during nav.
     (cover.style as CSSStyleDeclaration).viewTransitionName = 'none';
 
+    // Keep the actual source scene on screen while fetching and swapping
+    // the detail page. The library lives inside the listing <main>, so
+    // fading/removing it early exposes the gallery underneath it.
+    const backdrop = context?.backdrop?.cloneNode(true) as HTMLElement | undefined;
+    if (backdrop) {
+        backdrop.removeAttribute('id');
+        backdrop.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
+        backdrop.dataset.bookFlightBackdrop = 'true';
+        backdrop.setAttribute('aria-hidden', 'true');
+        backdrop.inert = true;
+        backdrop.style.pointerEvents = 'none';
+        const sourceVolume = cover.closest<HTMLElement>('[data-library-index]');
+        if (sourceVolume) {
+            const index = sourceVolume.dataset.libraryIndex;
+            const volume = backdrop.querySelector<HTMLElement>(`[data-library-index="${index}"]`);
+            if (volume) volume.style.visibility = 'hidden';
+        }
+        document.body.appendChild(backdrop);
+    }
     document.body.appendChild(clone);
     document.body.classList.add('is-book-launching');
 
@@ -201,6 +221,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
             let handoffComplete = false;
             const cleanupFlightCover = () => {
                 clone.remove();
+                backdrop?.remove();
                 cover.style.visibility = '';
                 (cover.style as CSSStyleDeclaration).viewTransitionName = '';
                 document.body.classList.remove('is-book-launching');
@@ -520,6 +541,12 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
                     // class-driven fade for newMain's children).
                     newMain.style.opacity = '1';
                     newMainRevealedAt.t = performance.now();
+                    // The underlying DOM is now the book page, never the
+                    // gallery. Crossfade directly from the 3D shelf as
+                    // its selected cover flies into the detail position.
+                    backdrop?.animate([{ opacity: 1 }, { opacity: 0 }], {
+                        duration: 360, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards'
+                    });
                 });
             });
             // When the clone finishes flying, hand the cover over to the

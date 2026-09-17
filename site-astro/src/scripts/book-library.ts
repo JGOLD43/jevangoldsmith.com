@@ -210,6 +210,7 @@ function initBookLibrary() {
     library!.inert = true;
     flyCoverToDetail(cover, href, {
       returnHref: window.location.pathname + window.location.search,
+      backdrop: library!,
       beforeDetail: () => {
         close(false, false);
         library!.inert = false;
@@ -217,9 +218,6 @@ function initBookLibrary() {
       restoreListing: () => {
         openingDetail = false;
         open(false, true);
-        library!.animate([{ opacity: 0 }, { opacity: 1 }], {
-          duration: 280, easing: 'cubic-bezier(.25, .8, .25, 1)',
-        });
       },
     });
   }
@@ -389,7 +387,7 @@ function initBookLibrary() {
       openingDetail = false;
       library!.inert = false;
       document.body.classList.remove('is-book-launching');
-      document.querySelectorAll('[data-book-flight-clone]').forEach((node) => node.remove());
+      document.querySelectorAll('[data-book-flight-clone], [data-book-flight-backdrop]').forEach((node) => node.remove());
       track!.querySelectorAll('img').forEach((image) => {
         image.style.visibility = '';
         image.style.viewTransitionName = '';
