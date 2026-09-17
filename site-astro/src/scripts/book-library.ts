@@ -388,7 +388,7 @@ function initBookLibrary() {
       library!.inert = false;
       document.body.classList.remove('is-book-launching');
       document.querySelectorAll('[data-book-flight-clone], [data-book-flight-backdrop]').forEach((node) => node.remove());
-      track!.querySelectorAll('img').forEach((image) => {
+      track!.querySelectorAll<HTMLElement>('.library-volume, img').forEach((image) => {
         image.style.visibility = '';
         image.style.viewTransitionName = '';
       });

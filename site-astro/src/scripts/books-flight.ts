@@ -1,6 +1,7 @@
 import { SESSION_KEYS } from './storage-keys';
 import { TIMING } from './timing';
 import { BREAKPOINT, HERO_OFFSET_TOP } from './breakpoints';
+import { createVolumeFlight, mountDetailVolume, VOLUME_FLIGHT_MS } from './book-volume-flight';
 
 let restoreBookListFromSpa: (() => boolean) | null = null;
 
@@ -48,6 +49,8 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
         window.location.href = href;
         return;
     }
+    const sourceVolume = context ? cover.closest<HTMLElement>('.library-volume') : null;
+    const volumeFlight = sourceVolume ? createVolumeFlight(sourceVolume) : null;
 
     // The grid card uses `object-fit: contain`, so the actual rendered
     // image inside the cover element is letterboxed if the natural
@@ -124,6 +127,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
 
     // Hide the original so we don't render it twice during the flight.
     cover.style.visibility = 'hidden';
+    if (sourceVolume) sourceVolume.style.visibility = 'hidden';
     // Also strip view-transition-name from the original so the cross-doc
     // view-transition doesn't try to morph the hidden element during nav.
     (cover.style as CSSStyleDeclaration).viewTransitionName = 'none';
@@ -147,7 +151,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
         }
         document.body.appendChild(backdrop);
     }
-    document.body.appendChild(clone);
+    if (!volumeFlight) document.body.appendChild(clone);
     document.body.classList.add('is-book-launching');
 
     const scale = destWidth / srcRenderW;
@@ -157,7 +161,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
     // Forward flight (open): single continuous position+scale tween.
     // Snappy 240ms — feels like a fast tap response. Same easing as
     // reverse so opens and closes share a voice.
-    const animation = clone.animate(
+    const animation = volumeFlight?.motion || clone.animate(
         [
             { transform: 'translate(0px, 0px) scale(1)' },
             { transform: `translate(${tx}px, ${ty}px) scale(${scale})` }
@@ -221,8 +225,10 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
             let handoffComplete = false;
             const cleanupFlightCover = () => {
                 clone.remove();
+                volumeFlight?.remove();
                 backdrop?.remove();
                 cover.style.visibility = '';
+                if (sourceVolume) sourceVolume.style.visibility = '';
                 (cover.style as CSSStyleDeclaration).viewTransitionName = '';
                 document.body.classList.remove('is-book-launching');
             };
@@ -239,12 +245,13 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
                 tagged.setAttribute('data-spa-detail-css', '1');
                 document.head.appendChild(tagged);
             });
-            newMain.classList.add('is-spa-arrival');
+            if (!volumeFlight) newMain.classList.add('is-spa-arrival');
             // Belt-and-suspenders: hide the new hero img via inline
             // style too. Class-based opacity rules can flash for one
             // paint frame during JS-driven insertion in some browsers;
             // inline style applies immediately on parse.
             const newHeroImg = newMain.querySelector('.detail-hero-cover img') as HTMLImageElement | null;
+            const detailVolume = newHeroImg && sourceVolume ? mountDetailVolume(newHeroImg, sourceVolume) : null;
             if (newHeroImg) {
                 newHeroImg.style.opacity = '0';
                 // Stop the image from briefly rendering at its natural
@@ -285,6 +292,10 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
             // real destination — no end-of-flight snap.
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
+                    if (volumeFlight && detailVolume && newMain.isConnected) {
+                        volumeFlight.flyTo(detailVolume.volume);
+                        return;
+                    }
                     if (!newHeroImg || !newHeroImg.isConnected) { animation.play(); return; }
                     const realRect = newHeroImg.getBoundingClientRect();
                     if (!realRect.width || !realRect.height) { animation.play(); return; }
@@ -325,6 +336,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
                 document.querySelectorAll<HTMLStyleElement>('style[data-spa-detail-css="1"]')
                     .forEach((existing) => existing.remove());
                 newMain.parentNode!.replaceChild(oldMain, newMain);
+                detailVolume?.dispose();
                 hiddenSidebars.forEach((el) => { el.style.display = ''; });
                 document.title = previousTitle;
                 context?.restoreListing();
@@ -376,6 +388,27 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
                 if (!newMain.isConnected || !newMain.parentNode) {
                     restoreBookListFromSpa = null;
                     return false;
+                }
+                if (detailVolume && context?.backdrop) {
+                    // If Back is pressed during opening, depart from the
+                    // current animated pose instead of jumping to the hero.
+                    const departing = volumeFlight?.layer.isConnected ? volumeFlight.volume : detailVolume.volume;
+                    const returning = createVolumeFlight(departing);
+                    swapListingBack();
+                    const destination = context.backdrop.querySelector<HTMLElement>('.library-volume[aria-pressed="true"]');
+                    if (destination) {
+                        destination.style.visibility = 'hidden';
+                        context.backdrop.inert = true;
+                        returning.flyTo(destination);
+                        const finish = () => {
+                            destination.style.visibility = '';
+                            context.backdrop!.inert = false;
+                            returning.remove();
+                        };
+                        returning.motion.finished.then(finish).catch(finish);
+                    } else returning.remove();
+                    restoreBookListFromSpa = null;
+                    return true;
                 }
                 // Reverse flight: clone the current hero, swap the
                 // listing back in, then animate the clone from hero rect
@@ -545,7 +578,8 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
                     // gallery. Crossfade directly from the 3D shelf as
                     // its selected cover flies into the detail position.
                     backdrop?.animate([{ opacity: 1 }, { opacity: 0 }], {
-                        duration: 360, easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards'
+                        duration: volumeFlight ? VOLUME_FLIGHT_MS : 360,
+                        easing: 'cubic-bezier(.25, .8, .25, 1)', fill: 'forwards'
                     });
                 });
             });
@@ -556,7 +590,9 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
                 if (handoffComplete || !newMain.isConnected) return;
                 handoffComplete = true;
                 // Reveal the real hero immediately at full opacity.
-                if (newHeroImg) {
+                if (detailVolume) {
+                    detailVolume.volume.style.visibility = '';
+                } else if (newHeroImg) {
                     newHeroImg.style.visibility = '';
                     newHeroImg.style.opacity = '';
                 }
@@ -567,7 +603,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
                 // the clone to the MEASURED real-hero rect just before
                 // fading it out, so the cross-fade hides any sub-pixel
                 // mismatch — no shading flicker.
-                if (newHeroImg) {
+                if (newHeroImg && !detailVolume) {
                     const realRect = newHeroImg.getBoundingClientRect();
                     if (realRect.width && realRect.height) {
                         // Snap the clone to the REAL hero rect with NO
@@ -655,6 +691,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?
             // needed.
             animation.finished
                 .then(() => waitForReveal())
+                .then(() => detailVolume?.ready)
                 .then(handoff)
                 .catch(handoff);
         })
