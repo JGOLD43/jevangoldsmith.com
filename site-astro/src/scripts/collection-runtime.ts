@@ -81,7 +81,7 @@ function syncCollectionSearchSurface(layout: HTMLElement) {
         }
     });
     layout.classList.toggle('collection-search-open', isOpen);
-    if (main) main.inert = isOpen || document.body.classList.contains('book-library-open');
+    if (main) main.inert = isOpen || document.body.classList.contains('book-library-open') || document.body.classList.contains('movie-library-open');
     if (!isOpen || !tabs) {
         layout.style.removeProperty('--collection-search-top');
         layout.style.removeProperty('--collection-search-bottom');

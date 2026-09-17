@@ -42,10 +42,7 @@ const MOVIE_FLIGHT_CFG = {
 };
 
 let releaseGenreModalFocus: (() => void) | null = null;
-let currentMode: 'list' | 'grid' = 'list';
-
 function setViewMode(mode: 'list' | 'grid') {
-    currentMode = mode;
     const list = document.getElementById(MOVIES_LIST_ID);
     const grid = document.getElementById(GRID_VIEW_ID);
     const sidebar = document.getElementById('movies-sidebar');
@@ -61,14 +58,21 @@ function setViewMode(mode: 'list' | 'grid') {
     const btn = document.getElementById(TOGGLE_ID);
     if (btn) {
         btn.dataset.currentMode = mode;
-        const nextLabel = mode === 'list' ? 'Switch to genre grid view' : 'Switch to list view';
-        btn.setAttribute('aria-label', nextLabel);
-        btn.setAttribute('title', nextLabel);
     }
+    document.querySelectorAll<HTMLElement>('[data-action="set-movies-view-mode"]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.mode === mode));
+    });
+    // Keep the existing mobile List / Collection controls in sync with this menu.
+    layout?.querySelectorAll<HTMLElement>('.mobile-view-btn').forEach((button) => {
+        const selected = button.dataset.view === (mode === 'grid' ? 'collection' : 'list');
+        button.classList.toggle('active', selected);
+        button.setAttribute('aria-selected', String(selected));
+    });
 }
 
 function syncMobileMovieView(event: Event) {
     const detail = (event as CustomEvent<{ view?: string }>).detail;
+    if (detail?.view === 'search') return;
     setViewMode(detail?.view === 'collection' ? 'grid' : 'list');
 }
 
@@ -131,10 +135,10 @@ function init() {
     document.addEventListener('click', (event) => {
         const target = event.target as Element | null;
         if (!target) return;
-        const toggle = target.closest?.('[data-action="toggle-movies-view-mode"]') as HTMLElement | null;
+        const toggle = target.closest?.('[data-action="set-movies-view-mode"]') as HTMLElement | null;
         if (toggle) {
             event.preventDefault();
-            setViewMode(currentMode === 'list' ? 'grid' : 'list');
+            setViewMode(toggle.dataset.mode === 'grid' ? 'grid' : 'list');
             return;
         }
         const genreCard = target.closest?.('[data-action="open-genre-modal"]') as HTMLElement | null;

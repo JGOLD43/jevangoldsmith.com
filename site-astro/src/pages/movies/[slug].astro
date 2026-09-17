@@ -142,3 +142,17 @@ const schema = movieSchema({
     )}
   </main>
 </Base>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const back = document.querySelector<HTMLAnchorElement>('.detail-page--movie .detail-back');
+  if (params.get('from') === 'disc-boxes' && back) {
+    const returnParams = new URLSearchParams({ view: 'disc-boxes' });
+    const movie = params.get('discMovie');
+    if (movie) returnParams.set('discMovie', movie);
+    const sort = params.get('discSort');
+    if (sort === 'tiers' || sort === 'collection') returnParams.set('discSort', sort);
+    back.href = `/movies.html?${returnParams}`;
+    back.textContent = '← Back to Disc boxes';
+  }
+</script>

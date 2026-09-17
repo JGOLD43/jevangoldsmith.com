@@ -1,0 +1,304 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { ratingTier } from '../lib/rating-tier';
+import { slugify } from '../lib/slug';
+import InlineJson from './InlineJson.astro';
+
+interface Props { movies: CollectionEntry<'movies'>['data'][]; }
+const { movies } = Astro.props;
+const library = movies.map((movie) => {
+  const tier = ratingTier(Number(movie.starCount || 0));
+  const runtime = Number(movie.runtime) || 0;
+  const duration = runtime ? `${Math.floor(runtime / 60)}h ${runtime % 60}m` : '';
+  const id = slugify(movie.title);
+  return { id, title: movie.title, subtitle: [movie.year, duration].filter(Boolean).join(' · '),
+    cover: movie.poster || '', href: `/movies/${id}.html`,
+    tier: tier?.key || '', tierLabel: tier?.label || 'Unrated', tierColor: tier?.color || '#e3d8c6',
+    collection: movie.genre || 'Uncategorized' };
+}).sort((a, b) => a.title.localeCompare(b.title, 'en', { numeric: true }));
+---
+<section class="movie-library" id="movie-library" aria-label="Disc boxes view" hidden>
+  <div class="movie-library-room" aria-hidden="true"></div>
+  <header class="movie-library-header">
+    <div><h2>Disc boxes</h2><p>{library.length} movies watched</p></div>
+    <div class="movie-library-header-actions">
+      <details class="movie-library-sort">
+        <summary aria-label="Sort movies" aria-controls="movie-library-sort-options">
+          Sort <svg class="movie-library-sort-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="m3 4.5 3 3 3-3" /></svg>
+        </summary>
+        <div id="movie-library-sort-options" class="movie-library-sort-options" role="group" aria-label="Movie order">
+          <button type="button" data-disc-sort="tiers" aria-pressed="false">By tiers <span aria-hidden="true">✓</span></button>
+          <button type="button" data-disc-sort="az" aria-pressed="true">A–Z <span aria-hidden="true">✓</span></button>
+          <button type="button" data-disc-sort="collection" aria-pressed="false">By genre <span aria-hidden="true">✓</span></button>
+        </div>
+      </details>
+      <button type="button" class="movie-library-exit" data-close-movie-library>
+        <span aria-hidden="true">←</span> Movies
+      </button>
+    </div>
+  </header>
+  <div class="movie-library-stage" tabindex="0" role="region"
+    aria-label="Interactive disc shelf. Drag the shelf to browse. Move over or drag the selected case to rotate it. Double-click a case to open its details."
+    aria-describedby="movie-library-help">
+    <div class="movie-library-shelf" aria-hidden="true">
+      <div class="movie-library-shelf-top"><div class="movie-library-wood-grain"></div></div>
+      <div class="movie-library-shelf-front"><div class="movie-library-wood-grain"></div></div>
+    </div>
+    <div class="movie-library-contact-shadows" aria-hidden="true"></div>
+    <div class="movie-library-track"></div>
+  </div>
+  <p id="movie-library-help" class="sr-only">Move over the selected case to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last movie. Double-click or double-tap a case, or press Enter, to open its details. Escape returns to Movies.</p>
+  <div class="movie-library-controls">
+    <button class="movie-library-arrow" type="button" data-disc-step="-1" aria-label="Previous movie">←</button>
+    <div class="movie-library-caption">
+      <div aria-live="polite" aria-atomic="true">
+        <p class="movie-library-group" hidden></p>
+        <a class="movie-library-title" href={library[0]?.href || '/movies.html'}>{library[0]?.title}</a>
+        <p class="movie-library-subtitle">{library[0]?.subtitle}</p>
+      </div>
+      <a class="movie-library-details" href={library[0]?.href || '/movies.html'}>View movie</a>
+    </div>
+    <button class="movie-library-arrow" type="button" data-disc-step="1" aria-label="Next movie">→</button>
+  </div>
+  <p class="sr-only" data-disc-sort-status role="status"></p>
+  {library.length === 0 && <p class="movie-library-empty">No movies watched yet.</p>}
+</section>
+<InlineJson id="jg-movie-library" data={library} />
+<script>
+  import '../scripts/movie-library';
+</script>
+<style is:global>
+  .movies-view-picker { position: relative; }
+  .movies-view-picker > summary { list-style: none; cursor: pointer; }
+  .movies-view-picker > summary::-webkit-details-marker { display: none; }
+  .movies-view-picker > summary .view-icon-grid { display: block; }
+  .movies-view-menu {
+    position: absolute; z-index: 90; right: 0; top: calc(100% + .5rem);
+    display: grid; width: 190px; padding: .35rem; gap: .15rem;
+    border: 1px solid var(--border-color); border-radius: .75rem;
+    background: var(--background); box-shadow: 0 12px 32px #0003;
+  }
+  .movies-view-picker:not([open]) > .movies-view-menu { display: none; }
+  .movies-view-menu button {
+    display: flex; align-items: center; gap: .65rem; padding: .7rem .8rem;
+    min-height: 44px; border: 0; border-radius: .4rem; background: transparent;
+    color: var(--text-color); font: inherit; font-size: .9rem; text-align: left; cursor: pointer;
+  }
+  .movies-view-menu button:hover, .movies-view-menu button[aria-pressed="true"] { background: var(--background-alt); }
+  .movies-view-menu svg { width: 18px; height: 18px; flex: none; }
+  .movies-view-menu small { color: var(--text-light); font-size: .7rem; margin-left: auto; }
+  .movie-library[hidden] { display: none !important; }
+  .movie-library {
+    position: fixed; inset: var(--nav-height, 58px) 0 0; z-index: 900;
+    overflow: hidden; background: #21170f; color: #fff;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    isolation: isolate;
+  }
+  .movie-library-room {
+    position: absolute; inset: -12px;
+    background-image: linear-gradient(#160e0780, #160e07ad), url('/images/library/library-room.webp');
+    background-size: auto 100%; background-repeat: repeat-x;
+    background-position: calc(50% + var(--room-offset, 0px)) center;
+    filter: blur(3px); pointer-events: none;
+  }
+  .movie-library::after {
+    content: ''; position: absolute; inset: auto 0 0; height: 180px; z-index: 2;
+    background: linear-gradient(transparent, #160e08dc 72%); pointer-events: none;
+  }
+  html:has(body.movie-library-open), body.movie-library-open { overflow: hidden !important; }
+  body.movie-library-open .collection-mobile-toggle { visibility: hidden; }
+  .movie-library-header {
+    position: absolute; z-index: 3; inset: 0 0 auto; padding: 1.5rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    pointer-events: none;
+  }
+  .movie-library-header h2 { color: #fff; font: inherit; font-size: 1rem; font-weight: 500; margin: 0; }
+  .movie-library-header p { color: #e3d8c6; font-size: .72rem; margin: .2rem 0 0; }
+  .movie-library-header-actions { display: flex; align-items: center; gap: .5rem; pointer-events: auto; }
+  .movie-library-exit, .movie-library-sort > summary {
+    pointer-events: auto; display: inline-flex; align-items: center; gap: .45rem;
+    color: #fff; border: 1px solid #ffffff55; background: #24190ec9; border-radius: 6px;
+    min-height: 40px; padding: .5rem .75rem; font: inherit; font-size: .8rem; cursor: pointer;
+  }
+  .movie-library-exit:hover, .movie-library-sort > summary:hover { background: #ffffff15; }
+  .movie-library-sort { position: relative; }
+  .movie-library-sort > summary { list-style: none; }
+  .movie-library-sort > summary::-webkit-details-marker { display: none; }
+  .movie-library-sort-chevron {
+    display: block; flex: none; width: .75rem; height: .75rem;
+    fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .movie-library-sort-options {
+    position: absolute; top: calc(100% + .55rem); right: 0; width: 188px;
+    padding: .35rem; border: 1px solid #ffffff35; border-radius: 10px;
+    background: #281e16; box-shadow: 0 14px 36px #0006;
+  }
+  .movie-library-sort:not([open]) .movie-library-sort-options { display: none; }
+  .movie-library-sort-options button {
+    display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px;
+    padding: .65rem .75rem; border: 0; border-radius: 6px; background: transparent;
+    color: #f7f0e4; font: inherit; font-size: .8rem; text-align: left; cursor: pointer;
+  }
+  .movie-library-sort-options button:hover, .movie-library-sort-options button[aria-pressed="true"] { background: #ffffff12; }
+  .movie-library-sort-options button span { color: #f3d36b; visibility: hidden; }
+  .movie-library-sort-options button[aria-pressed="true"] span { visibility: visible; }
+  .movie-library-stage-outgoing { pointer-events: none; }
+  .movie-library-stage {
+    position: absolute; inset: 80px 0 158px; perspective: 1800px;
+    cursor: grab; touch-action: pinch-zoom; user-select: none; -webkit-user-select: none;
+    outline-offset: -4px;
+  }
+  .movie-library-stage[data-dragging="true"], .movie-library-stage[data-rotating="true"] { cursor: grabbing; }
+  .movie-library-shelf {
+    position: absolute; left: -50%; top: 65%; width: 200%; height: var(--shelf-depth, 130px);
+    transform: skewY(-15.642deg); transform-origin: 50% 0;
+    pointer-events: none; filter: drop-shadow(0 22px 16px #09050288);
+  }
+  .movie-library-shelf-top {
+    /* Extend behind the back row so the full width of each angled binding
+       rests on wood, while keeping the front edge clear of the controls. */
+    position: absolute; inset: calc(-1 * var(--shelf-rear-depth, 52px)) 0 0;
+    overflow: hidden; background: #795335;
+    border-top: 1px solid #312013; border-bottom: 2px solid #d3a2739c;
+  }
+  .movie-library-wood-grain {
+    position: absolute; inset: 0 -960px;
+    background: url('/images/library/walnut-grain.webp') repeat-x 0 center / 960px 360px;
+    transform: translate3d(var(--wood-offset, 0px), 0, 0); will-change: transform;
+  }
+  .movie-library-shelf-top::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(#1c100b66, transparent 38%, #e0b5831a 86%, #fff0);
+    box-shadow: inset 0 12px 14px -10px #0009;
+  }
+  .movie-library-shelf-front {
+    position: absolute; top: 100%; left: 0; right: 0; height: 22px;
+    overflow: hidden; background: #4e301c; border-top: 1px solid #e4b28399;
+  }
+  .movie-library-shelf-front .movie-library-wood-grain { background-size: 960px 160px; }
+  .movie-library-shelf-front::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(#321c1026, #23140cb3);
+    box-shadow: inset 0 -2px 2px #160c0877;
+  }
+  .movie-library-contact-shadows { position: absolute; inset: 0; perspective: 1800px; pointer-events: none; }
+  .disc-case-contact {
+    position: absolute; left: 50%; top: 65%; height: 0; width: var(--width);
+    transform-origin: 50% 0; transform-style: preserve-3d;
+    /* Use the binding's camera, rotation, and bottom-centre anchor.
+       A shelf-skewed ellipse drifts away from the actual book edge. */
+    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateZ(3deg);
+  }
+  .disc-case-contact::before {
+    /* Spread the shadow around the contact edge in the visible shelf plane.
+       A 90-degree plane projects behind the cover and hides the shadow. */
+    content: ''; position: absolute; left: -8%; right: -8%; top: calc(var(--depth) * -.2);
+    height: calc(var(--depth) * .8);
+    background: radial-gradient(ellipse at 50% 35%, #0a0603a6 0%, #0a060366 38%, #0a060300 73%);
+    border-radius: 50%; filter: blur(3px);
+  }
+  .disc-case-contact::after {
+    content: ''; position: absolute; left: 1px; right: 1px; top: -1px; height: 4px;
+    background: #0a0603b3; border-radius: 50%; filter: blur(1px);
+  }
+  .movie-library-track { position: absolute; inset: 0; perspective: 1800px; }
+  .disc-case {
+    position: absolute; left: 50%; top: 65%; width: var(--width); height: var(--height);
+    margin: 0; padding: 0; border: 0; background: none; border-radius: 5px;
+    transform-style: preserve-3d; transform-origin: 50% 100%;
+    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg)) rotateZ(3deg);
+    cursor: inherit; -webkit-tap-highlight-color: transparent;
+  }
+  .disc-case > span { position: absolute; display: block; }
+  .disc-case-back {
+    inset: 0; border-radius: 5px; background: #16191c;
+    transform: translateZ(calc(-1 * var(--depth))); box-shadow: inset 0 0 0 1px #666;
+  }
+  .disc-case-spine {
+    top: 0; bottom: 0; left: calc(-1 * var(--depth)); width: var(--depth);
+    background: linear-gradient(90deg, #090b0e, #34383d 35%, #14171b 90%);
+    transform-origin: right center; transform: rotateY(-90deg);
+    border-radius: 4px 0 0 4px; box-shadow: inset 0 0 0 1px #ffffff25;
+    color: #f4efdf; font: 600 calc(var(--depth) * .42)/1.1 Inter, sans-serif;
+    writing-mode: vertical-rl; text-orientation: mixed; overflow: hidden;
+    padding-block: 12px; text-align: center; white-space: nowrap;
+  }
+  .disc-case-edge {
+    top: 2px; bottom: 2px; left: calc(100% - 1px); width: calc(var(--depth) - 2px);
+    background: linear-gradient(90deg, #050608, #34383d 25%, #101216 44%, #020304 49%, #484d52 56%, #17191d 80%, #050608);
+    box-shadow: inset 0 1px #666, inset 0 -1px #666;
+    transform-origin: left center; transform: rotateY(90deg); border-radius: 0 3px 3px 0;
+  }
+  .disc-case-edge::after {
+    content: ''; position: absolute; top: 43%; bottom: 43%; left: 20%; right: 20%;
+    border-radius: 50%; background: #080a0d; box-shadow: inset 1px 0 2px #ffffff35;
+  }
+  .disc-case-top, .disc-case-bottom {
+    left: 1px; right: 1px; height: calc(var(--depth) - 1px);
+    transform-origin: 50% 0; transform: rotateX(-90deg);
+    background: linear-gradient(#121518, #454a50 18%, #15181c 48%, #050608 52%, #2d3238 70%, #101215);
+    box-shadow: inset 0 0 0 1px #ffffff25;
+  }
+  .disc-case-top { top: 1px; }
+  .disc-case-bottom { top: calc(100% - 1px); }
+  .disc-case-cover {
+    inset: 0; padding: 6px 5px 7px 8px; border-radius: 5px;
+    background: linear-gradient(90deg, #050709, #42484e 3%, #131619 6%, #24282d 98%, #090b0d);
+    box-shadow: inset 0 1px 1px #b6bec477, inset 0 -1px 1px #000, 2px 2px 4px #0006;
+    overflow: hidden;
+  }
+  .disc-case-cover img {
+    display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1px;
+    pointer-events: none; -webkit-user-drag: none;
+  }
+  .disc-case-cover::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+    background:
+      linear-gradient(calc(115deg + var(--inspect-yaw, 0deg)), transparent 12%, rgb(255 255 255 / calc(.06 + var(--inspect-shine, 0))) 46%, transparent 75%),
+      linear-gradient(90deg, #0007, transparent 3%, #fff3 4%, transparent 6%, transparent 97%, #fff3 98%, #0008);
+    box-shadow: inset 0 0 0 1px #ffffff35;
+  }
+  .disc-case-fallback {
+    display: flex; height: 100%; align-items: center; justify-content: center; padding: 1rem;
+    color: #f4efdf; background: #293039; font: 600 1rem/1.3 Georgia, serif;
+  }
+  .movie-library-controls {
+    z-index: 3;
+    position: absolute; bottom: max(28px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
+    display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 1rem;
+    align-items: center; width: min(460px, calc(100% - 32px)); text-align: center;
+  }
+  .movie-library-caption { min-width: 0; }
+  .movie-library-group {
+    margin: 0 0 .4rem; color: var(--tier-color, #e3d8c6); font-size: .65rem;
+    line-height: 1.3; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .movie-library-title {
+    color: #fff; font-size: .9rem; font-weight: 400; line-height: 1.35;
+    text-decoration: none; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .movie-library-title:hover { text-decoration: underline; }
+  .movie-library-subtitle { color: #e3d8c6; font-size: .8rem; margin: .35rem 0 0; line-height: 1.4; }
+  .movie-library-details {
+    display: flex; align-items: center; justify-content: center; width: 144px; min-height: 40px;
+    margin: .9rem auto 0; background: #f7f0e4; color: #382416; border-radius: 6px;
+    border: 1px solid #efe2cd; text-decoration: none; font-size: .8rem;
+  }
+  .movie-library-details:hover { background: #eadcc5; }
+  .movie-library-arrow { border: 0; background: transparent; color: #fff; font: inherit; font-size: 1rem; width: 44px; height: 44px; cursor: pointer; }
+  .movie-library :focus-visible, .movies-view-picker :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  .movie-library-stage:focus, .movie-library-stage:focus-visible { outline: none; box-shadow: none; }
+  .movie-library-empty { padding: 8rem 2rem; text-align: center; }
+  @media (max-width: 600px) {
+    .movie-library-header { padding: 1.1rem; }
+    .movie-library-stage { top: 72px; bottom: 154px; }
+    .movie-library-controls { gap: .4rem; bottom: max(24px, env(safe-area-inset-bottom)); }
+  }
+  @media (max-height: 560px) {
+    .movie-library-header { padding-block: .6rem; }
+    .movie-library-stage { top: 50px; bottom: 125px; }
+    .movie-library-controls { bottom: 10px; }
+    .movie-library-details { margin-top: .45rem; }
+  }
+</style>
