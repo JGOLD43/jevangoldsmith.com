@@ -125,7 +125,7 @@ const schema = bookSchema({
       }
     `} />
   </Fragment>
-  <main class="detail-page detail-page--book">
+  <main class="detail-page detail-page--book" data-library-book-id={b.isbn || entry.id}>
     <a href="/books.html" class="detail-back">← Back to Books</a>
 
     <header class="detail-hero detail-hero--book">
@@ -180,6 +180,8 @@ const schema = bookSchema({
     )}
   </main>
 
-  <script is:inline set:html={`(function(){var back=document.querySelector('.detail-back[href="/books.html"]');if(!back)return;back.addEventListener('click',function(event){try{var ref=document.referrer?new URL(document.referrer):null;var cameFromBooks=!!ref&&ref.origin===location.origin&&/\\/books(?:\\.html)?$/.test(ref.pathname);if(cameFromBooks&&history.length>1){event.preventDefault();history.back();}}catch(e){}});})();`} />
+  <script>
+    import '../../scripts/book-detail';
+  </script>
   <script is:inline set:html={`(function(){if(!document.documentElement.classList.contains('is-flight-arrival'))return;requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.add('is-flight-revealed');setTimeout(function(){document.documentElement.classList.remove('is-flight-arrival','is-flight-revealed');},420);});});})();`} />
 </Base>

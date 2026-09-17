@@ -1,5 +1,6 @@
 import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
+import { flyCoverToDetail } from './books-flight';
 
 interface LibraryBook {
   id: string;
@@ -43,6 +44,8 @@ function initBookLibrary() {
   let pitch = 62;
   let gap = 280;
   let drag: { id: number; x: number; start: number; moved: boolean; book: number | null } | null = null;
+  let lastTap: { book: number; x: number; y: number; time: number } | null = null;
+  let openingDetail = false;
 
   function saveView() {
     const url = new URL(window.location.href);
@@ -63,7 +66,7 @@ function initBookLibrary() {
     selected = index;
     const book = books[index];
     title!.textContent = book.title;
-    title!.href = book.href;
+    title!.href = `${book.href}?from=library`;
     author!.textContent = book.author;
     request!.href = `mailto:hello@jevangoldsmith.com?subject=${encodeURIComponent(`Book request: ${book.title}`)}&body=${encodeURIComponent(`Hi Jevan,\n\nI'm interested in "${book.title}" by ${book.author}.\n\nMy request or recommendation:\n`)}`;
   }
@@ -75,6 +78,7 @@ function initBookLibrary() {
     button.className = 'library-volume';
     button.dataset.libraryIndex = String(logical);
     button.setAttribute('aria-label', `${book.title}, by ${book.author}`);
+    button.title = 'Select to bring forward. Double-click to open book details.';
     for (const face of ['back', 'spine', 'pages', 'cover']) {
       const layer = document.createElement('span');
       layer.className = `library-volume-${face}`;
@@ -182,7 +186,7 @@ function initBookLibrary() {
   }
 
   function select(logical: number) {
-    if (!books.length) return;
+    if (!books.length || openingDetail) return;
     if (document.activeElement?.classList.contains('library-volume')) stage!.focus({ preventScroll: true });
     window.clearTimeout(snapTimer);
     target = Math.round(logical);
@@ -192,10 +196,45 @@ function initBookLibrary() {
     schedule();
   }
 
+  function openDetails(logical: number) {
+    if (!active || openingDetail || !books.length) return;
+    select(logical);
+    const cover = volumes.get(logical)?.querySelector<HTMLImageElement>('img');
+    const href = `${books[wrap(logical)].href}?from=library`;
+    if (!cover) { window.location.href = href; return; }
+    openingDetail = true;
+    lastTap = null;
+    cancelAnimationFrame(frame);
+    frame = 0;
+    lastTime = 0;
+    library!.inert = true;
+    flyCoverToDetail(cover, href, {
+      returnHref: window.location.pathname + window.location.search,
+      beforeDetail: () => {
+        close(false, false);
+        library!.inert = false;
+      },
+      restoreListing: () => {
+        openingDetail = false;
+        open(false, true);
+        library!.animate([{ opacity: 0 }, { opacity: 1 }], {
+          duration: 280, easing: 'cubic-bezier(.25, .8, .25, 1)',
+        });
+      },
+    });
+  }
+
+  title.addEventListener('click', (event) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    openDetails(Math.round(target));
+  });
+
   function close(updateUrl = true, focus = true) {
     if (!active) return;
     active = false;
     drag = null;
+    lastTap = null;
     stage!.removeAttribute('data-dragging');
     cancelAnimationFrame(frame);
     frame = 0;
@@ -249,7 +288,7 @@ function initBookLibrary() {
   if (!books.length) request.hidden = true;
 
   stage.addEventListener('pointerdown', (event) => {
-    if (!active || !books.length || event.button !== 0 || !event.isPrimary) return;
+    if (!active || openingDetail || !books.length || event.button !== 0 || !event.isPrimary) return;
     window.clearTimeout(snapTimer);
     const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
     drag = { id: event.pointerId, x: event.clientX, start: target, moved: false, book: node ? Number(node.dataset.libraryIndex) : null };
@@ -259,6 +298,7 @@ function initBookLibrary() {
     const delta = event.clientX - drag.x;
     if (!drag.moved && Math.abs(delta) < 5) return;
     drag.moved = true;
+    lastTap = null;
     stage!.setPointerCapture(event.pointerId);
     stage!.dataset.dragging = 'true';
     target = drag.start - delta / (46 * scale);
@@ -272,6 +312,17 @@ function initBookLibrary() {
     drag = null;
     stage!.removeAttribute('data-dragging');
     if (stage!.hasPointerCapture(event.pointerId)) stage!.releasePointerCapture(event.pointerId);
+    // Use the tap location as well as time: the first tap starts moving
+    // the book, so the second can land on the space it has just vacated.
+    // This also gives touch screens the same double-tap interaction.
+    const now = performance.now();
+    if (!finished.moved && event.type !== 'pointercancel' && lastTap && now - lastTap.time < 360
+      && Math.hypot(event.clientX - lastTap.x, event.clientY - lastTap.y) < 24) {
+      openDetails(lastTap.book);
+      return;
+    }
+    lastTap = !finished.moved && event.type !== 'pointercancel' && finished.book !== null
+      ? { book: finished.book, x: event.clientX, y: event.clientY, time: now } : null;
     select(finished.moved ? target : finished.book ?? target);
   }
   stage.addEventListener('pointerup', endDrag);
@@ -282,8 +333,16 @@ function initBookLibrary() {
     const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
     if (node) select(Number(node.dataset.libraryIndex));
   });
+  stage.addEventListener('dblclick', (event) => {
+    // Also respect the desktop's native double-click timing preference.
+    const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
+    if (!node) return;
+    event.preventDefault();
+    openDetails(Number(node.dataset.libraryIndex));
+  });
   stage.addEventListener('wheel', (event) => {
-    if (!active || !books.length || event.ctrlKey) return;
+    if (!active || openingDetail || !books.length || event.ctrlKey) return;
+    lastTap = null;
     event.preventDefault();
     const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
     const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? stage!.clientHeight : 1;
@@ -295,7 +354,13 @@ function initBookLibrary() {
     snapTimer = window.setTimeout(() => select(target), 160);
   }, { passive: false });
   library.addEventListener('keydown', (event) => {
-    if (!books.length) return;
+    if (!books.length || openingDetail) return;
+    if (event.key === 'Enter' && (event.target === stage || (event.target as Element).closest('.library-volume'))) {
+      event.preventDefault();
+      const volume = (event.target as Element).closest<HTMLElement>('[data-library-index]');
+      openDetails(volume ? Number(volume.dataset.libraryIndex) : Math.round(target));
+      return;
+    }
     const directions: Record<string, number> = { ArrowLeft: Math.round(target) - 1, ArrowRight: Math.round(target) + 1, Home: 0, End: books.length - 1 };
     if (event.key in directions) {
       event.preventDefault();
@@ -303,17 +368,36 @@ function initBookLibrary() {
     }
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
+    if (event.key !== 'Escape' || openingDetail) return;
     if (active) { event.preventDefault(); close(); }
     else if (picker?.open) { picker.open = false; summary?.focus(); }
   });
   new ResizeObserver(resize).observe(stage);
   window.addEventListener('popstate', () => {
-    if (new URL(window.location.href).searchParams.get('view') === 'library') open(false, true);
+    if (new URL(window.location.href).searchParams.get('view') === 'library') {
+      // A cover flight restores the listing first, then reopens the
+      // library. Do not make the outgoing detail page inert in between.
+      if (!document.querySelector('main.detail-page--book')) open(false, true);
+    }
     else close(false);
   });
   window.addEventListener('pagehide', () => { cancelAnimationFrame(frame); frame = 0; window.clearTimeout(snapTimer); });
-  window.addEventListener('pageshow', () => { if (active) { resize(); schedule(); } });
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted && new URLSearchParams(location.search).get('view') === 'library') {
+      // A slow connection may use the full-page flight fallback. A
+      // browser-cache return must not retain its hidden/inert source.
+      openingDetail = false;
+      library!.inert = false;
+      document.body.classList.remove('is-book-launching');
+      document.querySelectorAll('[data-book-flight-clone]').forEach((node) => node.remove());
+      track!.querySelectorAll('img').forEach((image) => {
+        image.style.visibility = '';
+        image.style.viewTransitionName = '';
+      });
+      open(false, true);
+    }
+    if (active) { resize(); schedule(); }
+  });
   if (new URL(window.location.href).searchParams.get('view') === 'library') open(false, true);
 }
 

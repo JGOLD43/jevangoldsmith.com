@@ -4,6 +4,12 @@ import { BREAKPOINT, HERO_OFFSET_TOP } from './breakpoints';
 
 let restoreBookListFromSpa: (() => boolean) | null = null;
 
+interface BookFlightContext {
+    returnHref: string;
+    beforeDetail: () => void;
+    restoreListing: () => void;
+}
+
 export function initBooksZoom() {
     const booksGrid = document.getElementById('books-container');
     if (!booksGrid) return;
@@ -35,7 +41,7 @@ function initBookCoverFlight(grid: HTMLElement) {
     });
 }
 
-export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
+export function flyCoverToDetail(cover: HTMLImageElement, href: string, context?: BookFlightContext) {
     const sourceRect = cover.getBoundingClientRect();
     if (!sourceRect.width || !sourceRect.height) {
         window.location.href = href;
@@ -81,6 +87,8 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
     const destTop = cssVw <= BREAKPOINT.mobile ? HERO_OFFSET_TOP.mobile : HERO_OFFSET_TOP.desktop;
 
     const clone = cover.cloneNode() as HTMLImageElement;
+    clone.dataset.bookFlightClone = 'true';
+    clone.setAttribute('aria-hidden', 'true');
     clone.removeAttribute('id');
     clone.removeAttribute('loading');
     // Strip the view-transition-name so the browser won't try to also
@@ -135,11 +143,15 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             { transform: `translate(${tx}px, ${ty}px) scale(${scale})` }
         ],
         {
-            duration: 240,
+            duration: context ? 360 : 240,
             easing: 'cubic-bezier(.25, .8, .25, 1)',
             fill: 'forwards'
         }
     );
+    // The library's 3D book can be far from the responsive detail hero.
+    // Start its flight only after measuring the real destination below;
+    // changing the target mid-flight would create a visible direction jump.
+    if (context) animation.pause();
 
     const hardNav = () => {
         // Hand off to the detail page: it will fade its content in
@@ -233,6 +245,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             // lands, reading as a delayed flicker.
             newMain.style.transition = 'opacity 140ms cubic-bezier(.22, 1, .36, 1)';
             oldMain.parentNode.replaceChild(newMain, oldMain);
+            context?.beforeDetail();
             // The detail page doesn't render a sidebar — hide the
             // listing sidebar so the new main can center under its
             // already-faded backdrop.
@@ -251,9 +264,9 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
             // real destination — no end-of-flight snap.
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                    if (!newHeroImg || !newHeroImg.isConnected) return;
+                    if (!newHeroImg || !newHeroImg.isConnected) { animation.play(); return; }
                     const realRect = newHeroImg.getBoundingClientRect();
-                    if (!realRect.width || !realRect.height) return;
+                    if (!realRect.width || !realRect.height) { animation.play(); return; }
                     // Recompute destination using the measured rect.
                     // srcRenderLeft/Top/W are the clone's start frame in
                     // viewport coords. The animation start keyframe is
@@ -279,6 +292,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                         // snap-correct at the end. No visible regression
                         // vs. the previous behaviour.
                     }
+                    if (context) animation.play();
                 });
             });
             // Synchronous swap that yanks the SPA-injected detail main
@@ -292,6 +306,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 newMain.parentNode!.replaceChild(oldMain, newMain);
                 hiddenSidebars.forEach((el) => { el.style.display = ''; });
                 document.title = previousTitle;
+                context?.restoreListing();
                 // Restore the view mode (list vs collections) that the
                 // user was in before the flight. Without this, the
                 // reverse always lands them in 'list' even if they
@@ -354,6 +369,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                     return true;
                 }
                 const backClone = currentHero.cloneNode() as HTMLImageElement;
+                backClone.setAttribute('aria-hidden', 'true');
                 backClone.removeAttribute('id');
                 backClone.removeAttribute('loading');
                 backClone.style.viewTransitionName = 'none';
@@ -480,7 +496,9 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
                 return true;
             };
             const backLink = newMain.querySelector<HTMLAnchorElement>('.detail-back[href="/books.html"]');
+            if (backLink && context) backLink.href = context.returnHref;
             backLink?.addEventListener('click', (event) => {
+                if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
                 event.preventDefault();
                 history.back();
             });
@@ -616,6 +634,7 @@ export function flyCoverToDetail(cover: HTMLImageElement, href: string) {
         .catch(() => {
             // Fallback: hard navigation if anything went wrong. Wait for
             // the flight to finish first so the user still sees the motion.
+            animation.play();
             animation.finished.then(hardNav).catch(hardNav);
             setTimeout(hardNav, TIMING.bookFlightFallback);
         });
