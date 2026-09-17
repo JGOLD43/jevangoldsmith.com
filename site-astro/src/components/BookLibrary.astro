@@ -128,7 +128,10 @@ const library = await Promise.all(books
     pointer-events: none; filter: drop-shadow(0 22px 16px #09050288);
   }
   .book-library-shelf-top {
-    position: absolute; inset: -10px 0 0; overflow: hidden; background: #795335;
+    /* Extend behind the back row so the full width of each angled binding
+       rests on wood, while keeping the front edge clear of the controls. */
+    position: absolute; inset: calc(-1 * var(--shelf-rear-depth, 52px)) 0 0;
+    overflow: hidden; background: #795335;
     border-top: 1px solid #312013; border-bottom: 2px solid #d3a2739c;
   }
   .book-library-wood-grain {
@@ -151,11 +154,23 @@ const library = await Promise.all(books
     background: linear-gradient(#321c1026, #23140cb3);
     box-shadow: inset 0 -2px 2px #160c0877;
   }
-  .book-library-contact-shadows { position: absolute; inset: 0; pointer-events: none; }
+  .book-library-contact-shadows { position: absolute; inset: 0; perspective: 1800px; pointer-events: none; }
   .library-volume-contact {
-    position: absolute; left: 50%; top: 65%; height: 14px; width: var(--width);
-    transform: translate(calc(-50% + var(--x)), calc(-7px + var(--y))) skewY(-15.642deg);
-    background: #150a05a6; filter: blur(5px); border-radius: 50%;
+    position: absolute; left: 50%; top: 65%; height: 0; width: var(--width);
+    transform-origin: 50% 0; transform-style: preserve-3d;
+    /* Use the binding's camera, rotation, and bottom-centre anchor.
+       A shelf-skewed ellipse drifts away from the actual book edge. */
+    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(-16deg) rotateZ(3deg);
+  }
+  .library-volume-contact::before {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+    height: calc(var(--depth) * 1.6); transform-origin: 50% 100%; transform: rotateX(90deg);
+    background: linear-gradient(transparent, #1c100852 55%, #1c100899);
+    border-radius: 40% 40% 8% 8%; filter: blur(2px);
+  }
+  .library-volume-contact::after {
+    content: ''; position: absolute; left: 1px; right: 1px; top: -1px; height: 3px;
+    background: #1c100899; border-radius: 50%; filter: blur(1px);
   }
   .book-library-track { position: absolute; inset: 0; perspective: 1800px; }
   .library-volume {
@@ -168,7 +183,6 @@ const library = await Promise.all(books
   .library-volume > span { position: absolute; display: block; }
   .library-volume-back {
     inset: 0; background: #283343; transform: translateZ(calc(-1 * var(--depth)));
-    box-shadow: 12px 18px 24px -10px #11233d88;
   }
   .library-volume-spine {
     top: 0; bottom: 0; left: calc(-1 * var(--depth)); width: var(--depth); background: #283343;

@@ -115,6 +115,7 @@ function initBookLibrary() {
     library!.style.setProperty('--wood-offset', `${(-position * pitch) % 960}px`);
     library!.style.setProperty('--room-offset', `${-position * pitch * .14}px`);
     stage!.style.setProperty('--shelf-depth', `${130 * scale}px`);
+    stage!.style.setProperty('--shelf-rear-depth', `${52 * scale}px`);
     const center = Math.round(position);
     // A small moving window keeps the infinite shelf light, even for large libraries.
     const radius = Math.min(12, Math.floor((books.length - 1) / 2));
@@ -144,7 +145,8 @@ function initBookLibrary() {
       const shadow = shadows.get(logical)!;
       shadow.style.setProperty('--x', `${x}px`);
       shadow.style.setProperty('--y', `${y}px`);
-      shadow.style.setProperty('--width', `${width * .95}px`);
+      shadow.style.setProperty('--width', `${width}px`);
+      shadow.style.setProperty('--depth', `${(22 + seed % 18) * scale}px`);
       node.style.zIndex = String(50 - (logical - center));
       const isSelected = logical === Math.round(target);
       node.setAttribute('aria-pressed', String(isSelected));
