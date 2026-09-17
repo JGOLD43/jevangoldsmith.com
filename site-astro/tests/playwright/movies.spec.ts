@@ -308,6 +308,45 @@ test('collector display keeps its ledge level and centres the largest case above
   }
 });
 
+test('browsing cases clear each other before their visible stacking order changes', async ({ page }) => {
+  for (const viewport of [{ width: 1280, height: 800 }, { width: 393, height: 852 }]) {
+    await page.setViewportSize(viewport);
+    await page.emulateMedia({ reducedMotion: viewport.width < 600 ? 'reduce' : 'no-preference' });
+    await page.goto('/movies.html?view=disc-boxes&discMovie=the-negotiator');
+    for (const direction of [1, -1]) {
+      const selected = page.locator('.disc-case[aria-pressed="true"]');
+      await expect.poll(() => selected.evaluate((node) => Math.abs(parseFloat((node as HTMLElement).style.getPropertyValue('--x'))))).toBeLessThan(1);
+      const from = Number(await selected.getAttribute('data-disc-index'));
+      await page.evaluate(({ from, to }) => {
+        const state = window as typeof window & { discMotionFrames: Promise<{ overlap: number; front: string | null }[]> };
+        state.discMotionFrames = new Promise((resolve) => {
+          const frames: { overlap: number; front: string | null }[] = [];
+          const started = performance.now();
+          const sample = () => {
+            const a = document.querySelector(`[data-disc-index="${from}"]`)!.getBoundingClientRect();
+            const b = document.querySelector(`[data-disc-index="${to}"]`)!.getBoundingClientRect();
+            const left = Math.max(a.left, b.left), right = Math.min(a.right, b.right);
+            const top = Math.max(a.top, b.top), bottom = Math.min(a.bottom, b.bottom);
+            const hit = right > left ? document.elementFromPoint((left + right) / 2, (top + bottom) / 2)?.closest<HTMLElement>('.disc-case') : null;
+            frames.push({ overlap: right - left, front: hit?.dataset.discIndex ?? null });
+            if (performance.now() - started < 1400) requestAnimationFrame(sample);
+            else resolve(frames);
+          };
+          requestAnimationFrame(sample);
+        });
+      }, { from, to: from + direction });
+      await page.keyboard.press(direction > 0 ? 'ArrowRight' : 'ArrowLeft');
+      const frames = await page.evaluate(() => (window as typeof window & { discMotionFrames: Promise<{ overlap: number; front: string | null }[]> }).discMotionFrames);
+      expect(Math.min(...frames.map((frame) => frame.overlap))).toBeLessThan(0);
+      const switchesThroughOverlap = frames.some((frame, index) => index > 0
+        && frame.front !== null && frames[index - 1].front !== null
+        && frame.front !== frames[index - 1].front
+        && Math.min(frame.overlap, frames[index - 1].overlap) > 2);
+      expect(switchesThroughOverlap).toBe(false);
+    }
+  }
+});
+
 test('disc shelf supports touch swiping and reduced motion sorting', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 393, height: 852 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
   const page = await context.newPage();

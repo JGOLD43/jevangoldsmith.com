@@ -45,6 +45,7 @@ const library = movies.map((movie) => {
       <div class="movie-library-shelf-front"></div>
     </div>
     <div class="movie-library-cases">
+      <div class="movie-library-reflections" aria-hidden="true"></div>
       <div class="movie-library-contact-shadows" aria-hidden="true"></div>
       <div class="movie-library-track"></div>
     </div>
@@ -164,20 +165,40 @@ const library = movies.map((movie) => {
   .movie-library-shelf-top {
     position: absolute; inset: calc(-1 * var(--shelf-rear-depth, 52px)) 0 0;
     background:
-      radial-gradient(ellipse 32% 100% at 50% 100%, #d7c6a83b, transparent),
-      linear-gradient(transparent, #282929 65%, #303130);
-    border-bottom: 1px solid #d8d1be52;
+      radial-gradient(ellipse 34% 90% at 50% 72%, #e2d5b959, transparent),
+      linear-gradient(90deg, #202222, #353836 48%, #202222);
+    border-top: 1px solid #ffffff14; border-bottom: 1px solid #e4ddc775;
+    box-shadow: inset 0 16px 24px -20px #000b;
   }
   .movie-library-shelf-top::after {
     content: ''; position: absolute; inset: 0;
-    background: repeating-linear-gradient(0deg, transparent 0 2px, #00000008 2px 3px);
+    background:
+      repeating-linear-gradient(0deg, transparent 0 2px, #00000006 2px 3px),
+      repeating-linear-gradient(92deg, transparent 0 3px, #ffffff03 3px 4px);
   }
   .movie-library-shelf-front {
-    position: absolute; top: 100%; left: 0; right: 0; height: var(--shelf-lip, 12px);
-    background: linear-gradient(#252626, #151617);
-    box-shadow: inset 0 1px #ffffff0c, inset 0 -1px #0009;
+    position: absolute; top: 100%; left: 0; right: 0; height: var(--shelf-lip, 16px);
+    background: linear-gradient(#383a37, #272927 22%, #191b1b);
+    box-shadow: inset 0 1px #ffffff26, inset 0 -2px #0009, 0 12px 20px #0005;
   }
   .movie-library-cases { position: absolute; inset: 0; }
+  .movie-library-reflections {
+    position: absolute; inset: 0; perspective: 1800px; pointer-events: none;
+    /* Reflections stop at the bench edge rather than spilling over its front. */
+    clip-path: polygon(0 0, 100% 0, 100% calc(var(--shelf-baseline) + var(--shelf-depth)), 0 calc(var(--shelf-baseline) + var(--shelf-depth)));
+  }
+  .disc-case-reflection {
+    position: absolute; left: 50%; top: var(--shelf-baseline);
+    width: var(--width); height: var(--height); padding: 3px 2px;
+    transform-origin: 50% 0;
+    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg))) rotateX(calc(-1 * var(--inspect-pitch, 0deg))) scaleY(.32);
+    opacity: .32; filter: blur(1.4px) saturate(.7);
+    mask-image: linear-gradient(#000b, #0006 16%, transparent 42%);
+  }
+  .disc-case-reflection img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    transform: scaleY(-1); -webkit-user-drag: none;
+  }
   .movie-library-contact-shadows { position: absolute; inset: 0; perspective: 1800px; pointer-events: none; }
   .disc-case-contact {
     position: absolute; left: 50%; top: var(--shelf-baseline); height: 0; width: var(--width);
@@ -188,10 +209,10 @@ const library = movies.map((movie) => {
   .disc-case-contact::before {
     /* Spread the shadow around the contact edge in the visible shelf plane.
        A 90-degree plane projects behind the cover and hides the shadow. */
-    content: ''; position: absolute; left: -8%; right: -8%; top: calc(var(--depth) * -.2);
-    height: calc(var(--depth) * .8);
-    background: radial-gradient(ellipse at 50% 35%, #000a 0%, #0006 38%, #0000 73%);
-    border-radius: 50%; filter: blur(3px);
+    content: ''; position: absolute; left: -12%; right: -12%; top: calc(var(--depth) * -.48);
+    height: calc(var(--depth) * 1.3);
+    background: radial-gradient(ellipse at 50% 35%, #000b 0%, #0007 34%, #0000 73%);
+    border-radius: 50%; filter: blur(4px);
   }
   .disc-case-contact::after {
     content: ''; position: absolute; left: 1px; right: 1px; top: -1px; height: 4px;

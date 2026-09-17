@@ -23,6 +23,7 @@ function initMovieLibrary() {
   const caseDisplay = library?.querySelector<HTMLElement>('.movie-library-cases');
   const track = library?.querySelector<HTMLElement>('.movie-library-track');
   const shadowTrack = library?.querySelector<HTMLElement>('.movie-library-contact-shadows');
+  const reflectionTrack = library?.querySelector<HTMLElement>('.movie-library-reflections');
   const title = library?.querySelector<HTMLAnchorElement>('.movie-library-title');
   const subtitle = library?.querySelector<HTMLElement>('.movie-library-subtitle');
   const detailsLink = library?.querySelector<HTMLAnchorElement>('.movie-library-details');
@@ -43,6 +44,7 @@ function initMovieLibrary() {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const volumes = new Map<number, HTMLButtonElement>();
   const shadows = new Map<number, HTMLElement>();
+  const reflections = new Map<number, HTMLElement>();
   const inertElements = new Map<HTMLElement, boolean>();
   const wrap = (index: number) => ((index % movies.length) + movies.length) % movies.length;
   const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
@@ -50,8 +52,6 @@ function initMovieLibrary() {
   let position = 0;
   let target = 0;
   let velocity = 0;
-  let openAmount = 1;
-  let openTarget = 1;
   let selected = -1;
   let frame = 0;
   let lastTime = 0;
@@ -83,7 +83,7 @@ function initMovieLibrary() {
     if (!hoverPointer || drag || openingDetail) return;
     // Wait for the movie to finish pulling out, then respond even if the
     // mouse has stayed still while it moved into place.
-    if (Math.abs(position - target) > .001 || Math.abs(openAmount - 1) > .001) return;
+    if (Math.abs(position - target) > .001) return;
     const movie = Math.round(target);
     const node = volumes.get(movie);
     if (!node) return;
@@ -122,8 +122,10 @@ function initMovieLibrary() {
     });
     for (const node of volumes.values()) node.remove();
     for (const node of shadows.values()) node.remove();
+    for (const node of reflections.values()) node.remove();
     volumes.clear();
     shadows.clear();
+    reflections.clear();
     selected = -1;
     library!.querySelectorAll<HTMLButtonElement>('[data-disc-sort]').forEach((button) => {
       button.setAttribute('aria-pressed', String(button.dataset.discSort === mode));
@@ -170,7 +172,6 @@ function initMovieLibrary() {
     }
     orderMovies(mode);
     position = target = velocity = 0;
-    openAmount = openTarget = 1;
     render();
     updateCaption();
     saveView();
@@ -276,6 +277,19 @@ function initMovieLibrary() {
     shadow.className = 'disc-case-contact';
     shadowTrack?.append(shadow);
     shadows.set(logical, shadow);
+    const reflection = document.createElement('span');
+    reflection.className = 'disc-case-reflection';
+    if (movie.cover) {
+      const image = document.createElement('img');
+      image.alt = '';
+      image.draggable = false;
+      image.decoding = 'async';
+      image.src = movie.cover;
+      image.addEventListener('error', () => image.remove(), { once: true });
+      reflection.append(image);
+    }
+    reflectionTrack?.append(reflection);
+    reflections.set(logical, reflection);
     volumes.set(logical, button);
     return button;
   }
@@ -284,7 +298,7 @@ function initMovieLibrary() {
     if (!movies.length) return;
     stage!.style.setProperty('--shelf-depth', `${38 * scale}px`);
     stage!.style.setProperty('--shelf-rear-depth', `${52 * scale}px`);
-    stage!.style.setProperty('--shelf-lip', `${12 * scale}px`);
+    stage!.style.setProperty('--shelf-lip', `${16 * scale}px`);
     const center = Math.round(position);
     // A small moving window keeps the infinite shelf light, even for large libraries.
     const radius = Math.min(12, Math.floor(movies.length / 2));
@@ -296,6 +310,8 @@ function initMovieLibrary() {
         volumes.delete(logical);
         shadows.get(logical)?.remove();
         shadows.delete(logical);
+        reflections.get(logical)?.remove();
+        reflections.delete(logical);
       }
     }
     for (let logical = start; logical < end; logical++) {
@@ -305,29 +321,32 @@ function initMovieLibrary() {
       const recession = Math.min(Math.abs(distance), 4.5);
       const height = 262 * scale * (1 - recession * .085);
       const width = height * .71;
-      const x = distance * pitch + clamp(distance, -1, 1) * gap * openAmount;
+      // Open a clear lane around the centre before two cases exchange depth.
+      // A linear fan switches their stacking while their covers still overlap.
+      // This smooth clearance also stays open throughout swipes and wheel input.
+      const clearance = Math.min(Math.abs(distance) * 2, 1);
+      const spread = clearance * clearance * (3 - 2 * clearance);
+      const x = distance * pitch + Math.sign(distance) * gap * spread;
       const y = -recession * 6 * scale;
       // Compensate for the shared camera, keeping every resting front visible
       // and its printed spine on the far side until deliberately turned.
       const yaw = -Math.atan(x / 1800) * 180 / Math.PI - 6;
-      node.style.setProperty('--width', `${width}px`);
-      node.style.setProperty('--height', `${height}px`);
-      node.style.setProperty('--depth', `${19.3 * scale}px`);
-      node.style.setProperty('--x', `${x}px`);
-      node.style.setProperty('--y', `${y}px`);
-      node.style.setProperty('--case-yaw', `${yaw}deg`);
       const inspecting = logical === inspectedMovie;
-      node.style.setProperty('--inspect-pitch', `${inspecting ? tiltX : 0}deg`);
-      node.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
-      node.style.setProperty('--inspect-shine', String(inspecting ? Math.min(.18, (Math.abs(tiltX) + Math.abs(tiltY)) * .004) : 0));
       const shadow = shadows.get(logical)!;
-      shadow.style.setProperty('--x', `${x}px`);
-      shadow.style.setProperty('--y', `${y}px`);
-      shadow.style.setProperty('--width', `${width}px`);
-      shadow.style.setProperty('--depth', `${19.3 * scale}px`);
-      shadow.style.setProperty('--case-yaw', `${yaw}deg`);
-      shadow.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
-      node.style.zIndex = String(100 - Math.round(Math.abs(distance) * 4));
+      const reflection = reflections.get(logical)!;
+      // All three share the same anchor, including while the case is turned.
+      for (const layer of [node, shadow, reflection]) {
+        layer.style.setProperty('--width', `${width}px`);
+        layer.style.setProperty('--height', `${height}px`);
+        layer.style.setProperty('--depth', `${19.3 * scale}px`);
+        layer.style.setProperty('--x', `${x}px`);
+        layer.style.setProperty('--y', `${y}px`);
+        layer.style.setProperty('--case-yaw', `${yaw}deg`);
+        layer.style.setProperty('--inspect-pitch', `${inspecting ? tiltX : 0}deg`);
+        layer.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
+        layer.style.zIndex = String(10000 - Math.round(Math.abs(distance) * 100));
+      }
+      node.style.setProperty('--inspect-shine', String(inspecting ? Math.min(.18, (Math.abs(tiltX) + Math.abs(tiltY)) * .004) : 0));
       const isSelected = logical === Math.round(target);
       node.setAttribute('aria-pressed', String(isSelected));
       node.tabIndex = isSelected ? 0 : -1;
@@ -346,14 +365,13 @@ function initMovieLibrary() {
     const stiffness = reducedMotion.matches ? .085 : .075;
     velocity = (velocity + (target - position) * stiffness * dt) * Math.pow(damping, dt);
     position += velocity * dt;
-    openAmount += (openTarget - openAmount) * (1 - Math.pow(.8, dt));
     updateHover();
     const tiltEase = reducedMotion.matches ? 1 : 1 - Math.pow(.76, dt);
     tiltX += (tiltTargetX - tiltX) * tiltEase;
     tiltY += (tiltTargetY - tiltY) * tiltEase;
-    const shelfMoving = Math.abs(target - position) > .001 || Math.abs(velocity) > .001 || Math.abs(openTarget - openAmount) > .001;
+    const shelfMoving = Math.abs(target - position) > .001 || Math.abs(velocity) > .001;
     const tiltMoving = Math.abs(tiltTargetX - tiltX) > .01 || Math.abs(tiltTargetY - tiltY) > .01;
-    if (!shelfMoving) { position = target; openAmount = openTarget; velocity = 0; }
+    if (!shelfMoving) { position = target; velocity = 0; }
     if (!tiltMoving) {
       tiltX = tiltTargetX; tiltY = tiltTargetY;
       if (!tiltX && !tiltY && !drag) inspectedMovie = null;
@@ -376,7 +394,7 @@ function initMovieLibrary() {
     const rect = stage!.getBoundingClientRect();
     scale = Math.min(1.68, rect.height * .78 / 262, rect.width * .84 / 262);
     pitch = 262 * scale * .71 * .46;
-    gap = 262 * scale * .71 * .22;
+    gap = 262 * scale * .71 * .32;
     render();
   }
 
@@ -389,7 +407,6 @@ function initMovieLibrary() {
       resetInspection(true);
     }
     target = Math.round(logical);
-    openTarget = 1;
     updateCaption();
     saveView();
     schedule();
@@ -448,7 +465,6 @@ function initMovieLibrary() {
       const index = movies.findIndex((movie) => movie.id === id);
       target = position = index < 0 ? 0 : index;
       velocity = 0;
-      openAmount = openTarget = 1;
     }
     if (!active) {
       active = true;
@@ -493,7 +509,7 @@ function initMovieLibrary() {
     window.clearTimeout(snapTimer);
     const node = (event.target as Element).closest<HTMLElement>('[data-disc-index]');
     const movie = node ? Number(node.dataset.discIndex) : null;
-    const rotate = movie === Math.round(target) && Math.abs(position - target) < .08 && openAmount > .9;
+    const rotate = movie === Math.round(target) && Math.abs(position - target) < .08;
     if (rotate) {
       inspectedMovie = movie;
       hoverBounds = null;
@@ -527,7 +543,6 @@ function initMovieLibrary() {
     }
     stage!.dataset.dragging = 'true';
     target = drag.start - delta / (46 * scale);
-    openTarget = 0;
     updateCaption();
     schedule();
   });
@@ -602,7 +617,6 @@ function initMovieLibrary() {
     const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
     const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? stage!.clientHeight : 1;
     target += clamp(delta * unit, -250, 250) / (100 * scale);
-    openTarget = 0;
     updateCaption();
     schedule();
     window.clearTimeout(snapTimer);

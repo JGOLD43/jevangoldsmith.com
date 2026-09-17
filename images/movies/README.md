@@ -1,6 +1,6 @@
 # Movies display assets
 
-The current Movies disc-box view uses a charcoal collector's display, drawn in CSS in `MovieLibrary.astro`: a level ledge, a soft overhead spotlight, and a subtle textured backdrop. `movie-library.ts` centres the selected case and reduces the surrounding cases into the distance. Cases remain interactive, including their printed spines when turned.
+The current Movies disc-box view uses a charcoal collector's display, drawn in CSS in `MovieLibrary.astro`: a level bench with a defined front edge, contact shadows, soft poster reflections, an overhead spotlight, and a subtle textured backdrop. Reflections follow each case's base and rotation, fading out on the bench surface. `movie-library.ts` centres the selected case and reduces the surrounding cases into the distance. During browsing, adjacent cases separate before exchanging their front-to-back order. Cases remain interactive, including their printed spines when turned.
 
 `cinema-room.webp` is the previous cinema-room background, retained as an earlier design asset and no longer loaded by the view. It was created with the built-in OpenAI imagegen tool on 17 September 2026 and saved as an optimized WebP (1536 × 1024).
 
