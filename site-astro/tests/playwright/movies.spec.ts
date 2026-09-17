@@ -233,7 +233,7 @@ test('disc cases rotate by dragging and shelf dragging selects a new movie', asy
   await expect(page.locator('.movie-library-stage')).not.toHaveAttribute('data-dragging', 'true');
 });
 
-test('DVD spines face the viewer at rest and the artwork has a narrow plastic rim', async ({ page }) => {
+test('DVD spines are revealed by turning the case and the artwork has a narrow plastic rim', async ({ page }) => {
   for (const viewport of [{ width: 1440, height: 900 }, { width: 393, height: 852 }]) {
     await page.setViewportSize(viewport);
     await page.goto('/movies.html?view=disc-boxes&discMovie=28-days-later');
@@ -248,17 +248,28 @@ test('DVD spines face the viewer at rest and the artwork has a narrow plastic ri
       const spineMatrix = new DOMMatrix(getComputedStyle(spine).transform);
       const coverStyle = getComputedStyle(cover);
       return {
-        // A negative normal means the spine faces away, even though its DOM exists.
+        // The spine belongs on the far side until the reader turns the case.
         facingCamera: caseMatrix.multiply(spineMatrix).m33,
-        spineWidth: spine.getBoundingClientRect().width,
+        backface: getComputedStyle(spine).backfaceVisibility,
         rim: ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].map((key) => parseFloat(coverStyle[key as keyof CSSStyleDeclaration] as string)),
         artworkMatches: spineArtwork.src === frontArtwork.src
       };
     });
-    expect(geometry.facingCamera).toBeGreaterThan(.3);
-    expect(geometry.spineWidth).toBeGreaterThan(5);
+    expect(geometry.facingCamera).toBeLessThan(-.2);
+    expect(geometry.backface).toBe('hidden');
     expect(Math.max(...geometry.rim)).toBeLessThanOrEqual(3);
     expect(geometry.artworkMatches).toBe(true);
+    const box = await selected.boundingBox();
+    await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 + 100, box!.y + box!.height / 2, { steps: 8 });
+    await expect.poll(() => selected.evaluate((node) => {
+      const spine = node.querySelector<HTMLElement>('.disc-case-spine')!;
+      return new DOMMatrix(getComputedStyle(node).transform).multiply(new DOMMatrix(getComputedStyle(spine).transform)).m33;
+    })).toBeGreaterThan(.3);
+    await page.mouse.up();
+    await page.mouse.move(0, 0);
+    await expect.poll(() => selected.evaluate((node) => parseFloat((node as HTMLElement).style.getPropertyValue('--inspect-yaw')))).toBe(0);
   }
 });
 
@@ -275,7 +286,9 @@ test('disc shelf supports touch swiping and reduced motion sorting', async ({ br
   await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 90, y }] });
   await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   await expect(page.locator('.movie-library-title')).not.toHaveText(initial);
+  await expect(page.locator('.mobile-view-btn[data-view="list"]')).toHaveAttribute('aria-selected', 'true');
   await page.locator('.movie-library-sort summary').tap();
+  await expect(page.locator('.movie-library-sort')).toHaveAttribute('open', '');
   await page.getByRole('button', { name: 'By tiers' }).tap();
   await expect(page.locator('.movie-library-stage-outgoing')).toHaveCount(0);
   await expect(page.locator('.movie-library-group')).toBeVisible();

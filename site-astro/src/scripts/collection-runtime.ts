@@ -217,6 +217,11 @@ if (collectionLayout) {
 
 let mobileSwipeStart: { x: number; y: number; layout: HTMLElement } | null = null;
 document.addEventListener('touchstart', (event) => {
+    // Disc-shelf drags belong to its own carousel, not the covered page tabs.
+    if ((event.target as Element | null)?.closest?.('#movie-library')) {
+        mobileSwipeStart = null;
+        return;
+    }
     const touch = event.touches[0];
     const layout = (event.target as Element | null)?.closest?.('main.collection-layout') as HTMLElement | null;
     if (!touch || event.touches.length !== 1 || !layout) return;

@@ -521,7 +521,7 @@ function initMovieLibrary() {
     stage!.setPointerCapture(event.pointerId);
     event.preventDefault();
     if (drag.mode === 'rotate') {
-      tiltTargetY = clamp(drag.yaw + delta * .45 / scale, -70, 60);
+      tiltTargetY = clamp(drag.yaw + delta * .45 / scale, -70, 70);
       tiltTargetX = clamp(drag.pitch - deltaY * .3 / scale, -24, 24);
       schedule();
       return;

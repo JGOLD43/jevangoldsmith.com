@@ -115,6 +115,7 @@ const library = movies.map((movie) => {
   .movie-library-header h2 { color: #fff; font: inherit; font-size: 1rem; font-weight: 500; margin: 0; }
   .movie-library-header p { color: #e3d8c6; font-size: .72rem; margin: .2rem 0 0; }
   .movie-library-header-actions { display: flex; align-items: center; gap: .5rem; pointer-events: auto; }
+  .movie-library-header-actions, .movie-library-controls { touch-action: manipulation; }
   .movie-library-exit, .movie-library-sort > summary {
     pointer-events: auto; display: inline-flex; align-items: center; gap: .45rem;
     color: #fff; border: 1px solid #ffffff55; background: #24190ec9; border-radius: 6px;
@@ -187,7 +188,7 @@ const library = movies.map((movie) => {
     transform-origin: 50% 0; transform-style: preserve-3d;
     /* Use the binding's camera, rotation, and bottom-centre anchor.
        A shelf-skewed ellipse drifts away from the actual book edge. */
-    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(24deg + var(--inspect-yaw, 0deg))) rotateZ(3deg);
+    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateZ(3deg);
   }
   .disc-case-contact::before {
     /* Spread the shadow around the contact edge in the visible shelf plane.
@@ -206,8 +207,8 @@ const library = movies.map((movie) => {
     position: absolute; left: 50%; top: 65%; width: var(--width); height: var(--height);
     margin: 0; padding: 0; border: 0; background: none; border-radius: 5px;
     transform-style: preserve-3d; transform-origin: 50% 100%;
-    /* Show the printed left spine at rest, rather than the opening edge. */
-    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(24deg + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg)) rotateZ(3deg);
+    /* Rest at the bookshelf angle; turning a case reveals its printed spine. */
+    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg)) rotateZ(3deg);
     cursor: inherit; -webkit-tap-highlight-color: transparent;
   }
   .disc-case > span { position: absolute; display: block; }
