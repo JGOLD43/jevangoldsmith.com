@@ -392,7 +392,9 @@ function initMovieLibrary() {
     hoverPointer = null;
     resetInspection(true);
     const rect = stage!.getBoundingClientRect();
-    scale = Math.min(1.68, rect.height * .78 / 262, rect.width * .84 / 262);
+    // Leave room for the overhead light; keep short landscape views legible.
+    const availableHeight = rect.height * (rect.height < 220 ? .78 : .66);
+    scale = Math.min(1.42, availableHeight / 262, rect.width * .72 / 262);
     pitch = 262 * scale * .71 * .46;
     gap = 262 * scale * .71 * .32;
     render();

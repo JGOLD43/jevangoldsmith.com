@@ -100,13 +100,21 @@ const library = movies.map((movie) => {
   .movie-library-room {
     position: absolute; inset: 0; pointer-events: none;
     background:
-      radial-gradient(ellipse 18% 55% at 50% -8%, #e9d6b53b, transparent 100%),
-      radial-gradient(ellipse 48% 76% at 50% 38%, #55534b38, transparent 100%),
-      linear-gradient(90deg, #08090a, #171819 48%, #08090a);
+      radial-gradient(ellipse 6% 12% at 50% -1%, #f5dbb68c, #c3aa7926 45%, transparent 85%),
+      radial-gradient(ellipse 26% 44% at 50% 12%, #8d7a5f38, transparent 85%),
+      linear-gradient(90deg, #08090a, #181816 50%, #08090a);
+  }
+  .movie-library-room::before {
+    content: ''; position: absolute; top: -16px; left: 50%;
+    width: min(100%, 720px); height: min(72%, 520px);
+    transform: translateX(-50%); filter: blur(18px);
+    /* The light widens as it falls down the wall, with a soft warm source. */
+    background: conic-gradient(from 140deg at 50% 0, transparent, #bda48138 10deg, #e6cbaa61 40deg, #bda48138 70deg, transparent 80deg);
+    mask-image: linear-gradient(#000, #000c 32%, transparent 96%);
   }
   .movie-library-room::after {
-    content: ''; position: absolute; inset: 0; opacity: .13;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23grain)' opacity='.3' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+    content: ''; position: absolute; inset: 0; opacity: .45; mix-blend-mode: soft-light;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23grain)' opacity='.5' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
   }
   .movie-library::after {
     content: ''; position: absolute; inset: auto 0 0; height: 180px; z-index: 2;
@@ -326,7 +334,6 @@ const library = movies.map((movie) => {
   .movie-library-stage:focus, .movie-library-stage:focus-visible { outline: none; box-shadow: none; }
   .movie-library-empty { padding: 8rem 2rem; text-align: center; }
   @media (max-width: 600px) {
-    .movie-library-room { background-size: 180% 100%; background-position: center; }
     .movie-library-header { padding: 1.1rem; }
     .movie-library-stage { top: 72px; bottom: 154px; }
     .movie-library-controls { gap: .4rem; bottom: max(24px, env(safe-area-inset-bottom)); }
