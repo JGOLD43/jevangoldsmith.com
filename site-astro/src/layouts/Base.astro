@@ -452,11 +452,15 @@ if (seoSlug === 'index' || seoSlug === 'search') {
             <li class="nav-dropdown">
               <a href="#" aria-haspopup="true" aria-expanded="false" class:list={['dropdown-trigger', _isTriggerActive('Thoughts') ? 'active' : '']}>Thoughts</a>
               <div class="dropdown-menu dropdown-menu-wide">
-                <div class="dropdown-links-grid dropdown-links-grid--two">
-                  <a href="/newsletter.html" class:list={['newsletter.html' === _activeHref ? 'active' : '']}>Newsletter</a>
-                  <a href="/essays.html" class:list={['essays.html' === _activeHref ? 'active' : '']}>Essays</a>
-                  <a href="/lesson-logger.html" class:list={['lesson-logger.html' === _activeHref ? 'active' : '']}>Lesson Log</a>
-                  <a href="/free-resources.html" class:list={['free-resources.html' === _activeHref ? 'active' : '']}>Resources</a>
+                <div class="dropdown-columns">
+                  <div class="dropdown-column">
+                    <a href="/newsletter.html" class:list={['newsletter.html' === _activeHref ? 'active' : '']}>Newsletter</a>
+                    <a href="/essays.html" class:list={['essays.html' === _activeHref ? 'active' : '']}>Essays</a>
+                  </div>
+                  <div class="dropdown-column">
+                    <a href="/lesson-logger.html" class:list={['lesson-logger.html' === _activeHref ? 'active' : '']}>Lesson Log</a>
+                    <a href="/free-resources.html" class:list={['free-resources.html' === _activeHref ? 'active' : '']}>Resources</a>
+                  </div>
                 </div>
               </div>
             </li>
@@ -484,7 +488,6 @@ if (seoSlug === 'index' || seoSlug === 'search') {
             <li class="nav-dropdown">
               <a href="#" aria-haspopup="true" aria-expanded="false" class:list={['dropdown-trigger', _isTriggerActive('Taste') ? 'active' : '']}>Taste</a>
               <div class="dropdown-menu dropdown-menu-wide">
-                <div class="dropdown-wide-header">Things I Interact With</div>
                 <div class="dropdown-columns">
                   <div class="dropdown-column">
                     <a href="/books.html" class:list={['books.html' === _activeHref ? 'active' : '']}>Reading</a>
@@ -502,10 +505,14 @@ if (seoSlug === 'index' || seoSlug === 'search') {
             <li class="nav-dropdown">
               <a href="#" aria-haspopup="true" aria-expanded="false" class:list={['dropdown-trigger', _isTriggerActive('Experiences') ? 'active' : '']}>Experiences</a>
               <div class="dropdown-menu dropdown-menu-wide">
-                <div class="dropdown-links-grid dropdown-links-grid--three">
-                  <a href="/projects.html" class:list={['projects.html' === _activeHref ? 'active' : '']}>Projects</a>
-                  <a href="/challenges.html" class:list={['challenges.html' === _activeHref ? 'active' : '']}>Challenges</a>
-                  <a href="/adventures.html" class:list={['adventures.html' === _activeHref ? 'active' : '']}>Trips</a>
+                <div class="dropdown-columns">
+                  <div class="dropdown-column">
+                    <a href="/projects.html" class:list={['projects.html' === _activeHref ? 'active' : '']}>Projects</a>
+                    <a href="/challenges.html" class:list={['challenges.html' === _activeHref ? 'active' : '']}>Challenges</a>
+                  </div>
+                  <div class="dropdown-column">
+                    <a href="/adventures.html" class:list={['adventures.html' === _activeHref ? 'active' : '']}>Trips</a>
+                  </div>
                 </div>
               </div>
             </li>

@@ -7,7 +7,7 @@ test('Now is the only active top-level navigation item on the Now page', async (
   expect(activeLabels.map((label) => label.trim())).toEqual(['Now']);
 });
 
-test('Thoughts and Experiences use balanced dropdown grids', async ({ page }) => {
+test('Thoughts, Taste and Experiences use balanced two-column dropdowns', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/books.html');
 
@@ -15,26 +15,26 @@ test('Thoughts and Experiences use balanced dropdown grids', async ({ page }) =>
   expect(navLabels.map((label) => label.trim())).toContain('Experiences');
   expect(navLabels.map((label) => label.trim())).not.toContain('Ventures');
 
-  const gridGeometry = async (triggerName: string, selector: string) => {
-    await page.locator('.navbar .nav-dropdown').filter({ hasText: triggerName }).hover();
-    const grid = page.locator(selector);
-    await expect(grid).toBeVisible();
-    return grid.evaluate((element) => {
+  const columnGeometry = async (triggerName: string) => {
+    const dropdown = page.locator('.navbar .nav-dropdown').filter({ hasText: triggerName });
+    await dropdown.hover();
+    const columns = dropdown.locator('.dropdown-columns');
+    await expect(columns).toBeVisible();
+    await expect(dropdown.locator('.dropdown-wide-header')).toHaveCount(0);
+    return columns.evaluate((element) => {
       const links = Array.from(element.querySelectorAll('a'));
       return {
-        columns: getComputedStyle(element).gridTemplateColumns.split(' ').length,
+        columns: new Set(links.map((link) => Math.round(link.getBoundingClientRect().left))).size,
         widths: links.map((link) => Math.round(link.getBoundingClientRect().width)),
       };
     });
   };
 
-  const thoughts = await gridGeometry('Thoughts', '.dropdown-links-grid--two');
-  expect(thoughts.columns).toBe(2);
-  expect(new Set(thoughts.widths).size).toBe(1);
-
-  const experiences = await gridGeometry('Experiences', '.dropdown-links-grid--three');
-  expect(experiences.columns).toBe(3);
-  expect(new Set(experiences.widths).size).toBe(1);
+  for (const label of ['Thoughts', 'Taste', 'Experiences']) {
+    const geometry = await columnGeometry(label);
+    expect(geometry.columns).toBe(2);
+    expect(new Set(geometry.widths).size).toBe(1);
+  }
 });
 
 test('Experiences is active on its child pages', async ({ page }) => {
