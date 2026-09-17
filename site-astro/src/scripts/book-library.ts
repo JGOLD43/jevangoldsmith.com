@@ -1,0 +1,301 @@
+import { readInlineJson } from './data-fetch';
+import { onDomReady } from './dom-ready';
+
+interface LibraryBook {
+  id: string;
+  title: string;
+  author: string;
+  cover: string;
+  ratio: number;
+  href: string;
+}
+
+function initBookLibrary() {
+  const library = document.querySelector<HTMLElement>('#book-library');
+  const stage = library?.querySelector<HTMLElement>('.book-library-stage');
+  const track = library?.querySelector<HTMLElement>('.book-library-track');
+  const title = library?.querySelector<HTMLAnchorElement>('.book-library-title');
+  const author = library?.querySelector<HTMLElement>('.book-library-author');
+  const request = library?.querySelector<HTMLAnchorElement>('.book-library-request');
+  if (!library || !stage || !track || !title || !author || !request) return;
+
+  const books = readInlineJson<LibraryBook[]>('jg-book-library') || [];
+  const picker = document.querySelector<HTMLDetailsElement>('.books-view-picker');
+  const summary = picker?.querySelector<HTMLElement>('summary');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const volumes = new Map<number, HTMLButtonElement>();
+  const inertElements = new Map<HTMLElement, boolean>();
+  const wrap = (index: number) => ((index % books.length) + books.length) % books.length;
+  const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+  let active = false;
+  let position = 0;
+  let target = 0;
+  let velocity = 0;
+  let openAmount = 1;
+  let openTarget = 1;
+  let selected = -1;
+  let frame = 0;
+  let lastTime = 0;
+  let snapTimer = 0;
+  let scale = 1;
+  let pitch = 62;
+  let gap = 280;
+  let drag: { id: number; x: number; start: number; moved: boolean; book: number | null } | null = null;
+
+  function saveView() {
+    const url = new URL(window.location.href);
+    if (active) {
+      url.searchParams.set('view', 'library');
+      if (books.length) url.searchParams.set('libraryBook', books[wrap(Math.round(target))].id);
+    } else {
+      url.searchParams.delete('view');
+      url.searchParams.delete('libraryBook');
+    }
+    window.history.replaceState(window.history.state, '', url);
+  }
+
+  function updateCaption() {
+    if (!books.length) return;
+    const index = wrap(Math.round(target));
+    if (index === selected) return;
+    selected = index;
+    const book = books[index];
+    title!.textContent = book.title;
+    title!.href = book.href;
+    author!.textContent = book.author;
+    request!.href = `mailto:hello@jevangoldsmith.com?subject=${encodeURIComponent(`Book request: ${book.title}`)}&body=${encodeURIComponent(`Hi Jevan,\n\nI'm interested in "${book.title}" by ${book.author}.\n\nMy request or recommendation:\n`)}`;
+  }
+
+  function createVolume(logical: number) {
+    const book = books[wrap(logical)];
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'library-volume';
+    button.dataset.libraryIndex = String(logical);
+    button.setAttribute('aria-label', `${book.title}, by ${book.author}`);
+    for (const face of ['back', 'spine', 'pages', 'cover']) {
+      const layer = document.createElement('span');
+      layer.className = `library-volume-${face}`;
+      layer.setAttribute('aria-hidden', 'true');
+      if (face === 'cover') {
+        const image = document.createElement('img');
+        image.alt = '';
+        image.draggable = false;
+        image.decoding = 'async';
+        image.src = book.cover;
+        image.addEventListener('error', () => {
+          const fallback = document.createElement('span');
+          fallback.className = 'library-volume-fallback';
+          fallback.textContent = book.title;
+          image.replaceWith(fallback);
+        }, { once: true });
+        layer.append(image);
+      }
+      button.append(layer);
+    }
+    track!.append(button);
+    volumes.set(logical, button);
+    return button;
+  }
+
+  function render() {
+    if (!books.length) return;
+    const center = Math.round(position);
+    // A small moving window keeps the infinite shelf light, even for large libraries.
+    const radius = Math.min(12, Math.floor((books.length - 1) / 2));
+    for (const [logical, node] of volumes) {
+      if (Math.abs(logical - center) > radius) {
+        node.remove();
+        volumes.delete(logical);
+      }
+    }
+    for (let logical = center - radius; logical <= center + radius; logical++) {
+      const node = volumes.get(logical) || createVolume(logical);
+      const book = books[wrap(logical)];
+      const distance = logical - position;
+      // Slightly varied binding sizes, with the cover's true aspect ratio retained.
+      const seed = Array.from(book.id).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+      const height = (230 + seed % 45) * scale;
+      const width = height * clamp(book.ratio, .48, 1.1);
+      node.style.setProperty('--width', `${width}px`);
+      node.style.setProperty('--height', `${height}px`);
+      node.style.setProperty('--depth', `${(22 + seed % 18) * scale}px`);
+      node.style.setProperty('--x', `${distance * pitch + clamp(distance, -1, 1) * gap * openAmount}px`);
+      node.style.setProperty('--y', `${-distance * pitch * .28 + Math.max(0, 1 - Math.abs(distance)) * 90 * scale * openAmount}px`);
+      node.style.zIndex = String(50 - (logical - center));
+      const isSelected = logical === Math.round(target);
+      node.setAttribute('aria-pressed', String(isSelected));
+      node.tabIndex = isSelected ? 0 : -1;
+    }
+  }
+
+  function animate(time: number) {
+    frame = 0;
+    if (!active) return;
+    const dt = Math.min(2, (time - (lastTime || time - 16.67)) / 16.67);
+    lastTime = time;
+    // The selection movement explains which physical book is leaving the row
+    // and which is returning. Keep that direct response visible in reduced
+    // motion too, using stronger damping to remove any spring overshoot.
+    const damping = reducedMotion.matches ? .55 : .66;
+    const stiffness = reducedMotion.matches ? .085 : .075;
+    velocity = (velocity + (target - position) * stiffness * dt) * Math.pow(damping, dt);
+    position += velocity * dt;
+    openAmount += (openTarget - openAmount) * (1 - Math.pow(.8, dt));
+    const moving = Math.abs(target - position) > .001 || Math.abs(velocity) > .001 || Math.abs(openTarget - openAmount) > .001;
+    if (!moving) { position = target; openAmount = openTarget; velocity = 0; }
+    render();
+    if (moving) frame = requestAnimationFrame(animate);
+    else lastTime = 0;
+  }
+
+  function schedule() {
+    if (active && !frame) frame = requestAnimationFrame(animate);
+  }
+
+  function resize() {
+    if (!active) return;
+    const rect = stage!.getBoundingClientRect();
+    scale = Math.min(clamp(rect.width / 900, .74, 1), Math.max(.4, rect.height / 350));
+    pitch = 62 * scale;
+    gap = clamp(rect.width * .255, 105, 280);
+    render();
+  }
+
+  function select(logical: number) {
+    if (!books.length) return;
+    if (document.activeElement?.classList.contains('library-volume')) stage!.focus({ preventScroll: true });
+    window.clearTimeout(snapTimer);
+    target = Math.round(logical);
+    openTarget = 1;
+    updateCaption();
+    saveView();
+    schedule();
+  }
+
+  function close(updateUrl = true, focus = true) {
+    if (!active) return;
+    active = false;
+    drag = null;
+    stage!.removeAttribute('data-dragging');
+    cancelAnimationFrame(frame);
+    frame = 0;
+    lastTime = 0;
+    window.clearTimeout(snapTimer);
+    library!.hidden = true;
+    document.body.classList.remove('book-library-open');
+    for (const [element, wasInert] of inertElements) element.inert = wasInert;
+    inertElements.clear();
+    if (updateUrl) saveView();
+    if (focus) summary?.focus({ preventScroll: true });
+  }
+
+  function open(updateUrl = true, fromUrl = false) {
+    if (picker) picker.open = false;
+    if (fromUrl) {
+      const id = new URL(window.location.href).searchParams.get('libraryBook');
+      const index = books.findIndex((book) => book.id === id);
+      target = position = index < 0 ? 0 : index;
+      velocity = 0;
+      openAmount = openTarget = 1;
+    }
+    if (!active) {
+      active = true;
+      library!.hidden = false;
+      document.body.classList.add('book-library-open');
+      // The site navigation remains usable; only covered page content is inert.
+      document.querySelectorAll<HTMLElement>('#books-layout > :not(#book-library):not(script), footer').forEach((element) => {
+        inertElements.set(element, element.inert);
+        element.inert = true;
+      });
+    }
+    resize();
+    updateCaption();
+    if (updateUrl) saveView();
+    stage!.focus({ preventScroll: true });
+    schedule();
+  }
+
+  document.addEventListener('click', (event) => {
+    const element = event.target instanceof Element ? event.target : null;
+    if (element?.closest('[data-open-book-library]')) open();
+    if (element?.closest('[data-close-book-library]')) close();
+    if (picker && (element?.closest('.books-view-menu button') || !element?.closest('.books-view-picker'))) picker.open = false;
+  });
+
+  library.querySelectorAll<HTMLButtonElement>('[data-library-step]').forEach((button) => {
+    button.disabled = books.length < 2;
+    button.addEventListener('click', () => select(Math.round(target) + Number(button.dataset.libraryStep)));
+  });
+  if (!books.length) request.hidden = true;
+
+  stage.addEventListener('pointerdown', (event) => {
+    if (!active || !books.length || event.button !== 0 || !event.isPrimary) return;
+    window.clearTimeout(snapTimer);
+    const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
+    drag = { id: event.pointerId, x: event.clientX, start: target, moved: false, book: node ? Number(node.dataset.libraryIndex) : null };
+  });
+  stage.addEventListener('pointermove', (event) => {
+    if (!drag || event.pointerId !== drag.id) return;
+    const delta = event.clientX - drag.x;
+    if (!drag.moved && Math.abs(delta) < 5) return;
+    drag.moved = true;
+    stage!.setPointerCapture(event.pointerId);
+    stage!.dataset.dragging = 'true';
+    target = drag.start - delta / (46 * scale);
+    openTarget = 0;
+    updateCaption();
+    schedule();
+  });
+  function endDrag(event: PointerEvent) {
+    if (!drag || event.pointerId !== drag.id) return;
+    const finished = drag;
+    drag = null;
+    stage!.removeAttribute('data-dragging');
+    if (stage!.hasPointerCapture(event.pointerId)) stage!.releasePointerCapture(event.pointerId);
+    select(finished.moved ? target : finished.book ?? target);
+  }
+  stage.addEventListener('pointerup', endDrag);
+  stage.addEventListener('pointercancel', endDrag);
+  stage.addEventListener('click', (event) => {
+    // Keyboard/screen-reader activation has no preceding pointer event.
+    if (event.detail !== 0) return;
+    const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
+    if (node) select(Number(node.dataset.libraryIndex));
+  });
+  stage.addEventListener('wheel', (event) => {
+    if (!active || !books.length || event.ctrlKey) return;
+    event.preventDefault();
+    const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+    const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? stage!.clientHeight : 1;
+    target += clamp(delta * unit, -250, 250) / (100 * scale);
+    openTarget = 0;
+    updateCaption();
+    schedule();
+    window.clearTimeout(snapTimer);
+    snapTimer = window.setTimeout(() => select(target), 160);
+  }, { passive: false });
+  library.addEventListener('keydown', (event) => {
+    if (!books.length) return;
+    const directions: Record<string, number> = { ArrowLeft: Math.round(target) - 1, ArrowRight: Math.round(target) + 1, Home: 0, End: books.length - 1 };
+    if (event.key in directions) {
+      event.preventDefault();
+      select(directions[event.key]);
+    }
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (active) { event.preventDefault(); close(); }
+    else if (picker?.open) { picker.open = false; summary?.focus(); }
+  });
+  new ResizeObserver(resize).observe(stage);
+  window.addEventListener('popstate', () => {
+    if (new URL(window.location.href).searchParams.get('view') === 'library') open(false, true);
+    else close(false);
+  });
+  window.addEventListener('pagehide', () => { cancelAnimationFrame(frame); frame = 0; window.clearTimeout(snapTimer); });
+  window.addEventListener('pageshow', () => { if (active) { resize(); schedule(); } });
+  if (new URL(window.location.href).searchParams.get('view') === 'library') open(false, true);
+}
+
+onDomReady(initBookLibrary, 'book library');

@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import BookCard from '../components/BookCard.astro';
 import BookCategoryModal from '../components/BookCategoryModal.astro';
+import BookLibrary from '../components/BookLibrary.astro';
 import BookModal from '../components/BookModal.astro';
 import BookStatsBody from '../components/BookStatsBody.astro';
 import BooksBrowseControls from '../components/BooksBrowseControls.astro';
@@ -166,10 +167,16 @@ const config = ({
   <Fragment slot="counter-extra">
     <div class="book-counter-group">
       <button type="button" class="stats-toggle book-stats-toggle" aria-expanded="false" aria-controls="book-stats-panel" aria-label="Show reading stats">Stats <span aria-hidden="true">▾</span></button>
-      <button class="view-toggle-single" id="view-toggle-main" data-action="toggle-view-mode" data-current-mode="list" aria-label="Switch to grid view" title="Switch to grid view">
-        <svg class="ico-stroke view-icon view-icon-list" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-listView"></use></svg>
-        <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-gridView"></use></svg>
-      </button>
+      <details class="books-view-picker">
+        <summary class="view-toggle-single" id="view-toggle-main" data-current-mode="list" data-tooltip="Choose Bookshelf view" aria-label="Choose Bookshelf view" title="Choose Bookshelf view">
+          <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-gridView"></use></svg>
+        </summary>
+        <div class="books-view-menu" role="group" aria-label="Bookshelf view">
+          <button type="button" data-action="set-view-mode" data-mode="list" aria-pressed="true"><svg class="ico-stroke" aria-hidden="true"><use href="#icon-gridView"></use></svg>Gallery</button>
+          <button type="button" data-action="set-view-mode" data-mode="grid" aria-pressed="false"><svg class="ico-stroke" aria-hidden="true"><use href="#icon-listView"></use></svg>Collections</button>
+          <button type="button" data-open-book-library><svg class="ico-stroke" aria-hidden="true"><use href="#icon-book"></use></svg>Library <small>3D</small></button>
+        </div>
+      </details>
     </div>
   </Fragment>
   <section id="book-stats-panel" class="book-stats-panel movie-stats-panel collapsed" aria-label="Reading stats" hidden>
@@ -212,6 +219,7 @@ const config = ({
     </div>
   </div>
   <Fragment slot="after-main">
+    <BookLibrary books={books} />
     <BookModal />
     <BookCategoryModal />
   </Fragment>

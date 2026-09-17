@@ -316,10 +316,14 @@ export function setViewMode(mode: string) {
     // Keep the single-button view toggles in sync with current mode so
     // their visible icon + accessible label reflect the next-target view.
     const nextLabel = mode === 'list' ? 'Switch to grid view' : 'Switch to list view';
-    document.querySelectorAll<HTMLButtonElement>('.view-toggle-single').forEach((btn) => {
+    document.querySelectorAll<HTMLElement>('.view-toggle-single').forEach((btn) => {
         btn.dataset.currentMode = mode;
-        btn.setAttribute('aria-label', nextLabel);
-        btn.setAttribute('title', nextLabel);
+        const label = btn.closest('.books-view-picker') ? 'Choose Bookshelf view' : nextLabel;
+        btn.setAttribute('aria-label', label);
+        btn.setAttribute('title', label);
+    });
+    document.querySelectorAll<HTMLElement>('.books-view-menu [data-mode]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.mode === mode));
     });
     // #category-grid-view lives INSIDE .books-main. Toggling .books-main's
     // display was a bug — it hid the grid view we were trying to show.

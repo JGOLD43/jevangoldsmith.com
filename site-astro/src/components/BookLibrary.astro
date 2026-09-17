@@ -1,0 +1,172 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import sharp from 'sharp';
+import { bookCoverUrl } from '../lib/book-card';
+import InlineJson from './InlineJson.astro';
+
+interface Props { books: CollectionEntry<'books'>[]; }
+const { books } = Astro.props;
+const library = await Promise.all(books
+  .filter(({ data }) => data.read !== false)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title, 'en', { numeric: true }))
+  .map(async ({ id, data }) => {
+    const cover = bookCoverUrl(data);
+    let ratio = 2 / 3;
+    // Use each actual cover's proportions instead of stretching every book
+    // into the same rectangle. Only inspect files already in the repository.
+    if (cover.startsWith('/images/')) {
+      const file = resolve(process.cwd(), '..', `.${cover}`);
+      if (existsSync(file)) {
+        const metadata = await sharp(file).metadata();
+        if (metadata.width && metadata.height) ratio = metadata.width / metadata.height;
+      }
+    }
+    return { id: data.isbn || id, title: data.title, author: data.author, cover, ratio,
+      href: `/books/${encodeURIComponent(id)}.html` };
+  }));
+---
+<section class="book-library" id="book-library" aria-label="Library view" hidden>
+  <header class="book-library-header">
+    <div><h2>Library</h2><p>{library.length} books read</p></div>
+    <button type="button" class="book-library-exit" data-close-book-library>
+      <span aria-hidden="true">←</span> Bookshelf
+    </button>
+  </header>
+  <div class="book-library-stage" tabindex="0" role="region"
+    aria-label="Interactive library. Scroll or drag to browse. Use left and right arrow keys, or select a book to bring it forward."
+    aria-describedby="book-library-help">
+    <div class="book-library-track"></div>
+  </div>
+  <p id="book-library-help" class="sr-only">Use Home or End for the first or last book. Escape returns to the bookshelf. Request opens an email about the selected book.</p>
+  <div class="book-library-controls">
+    <button class="book-library-arrow" type="button" data-library-step="-1" aria-label="Previous book">←</button>
+    <div class="book-library-caption">
+      <div aria-live="polite" aria-atomic="true">
+        <a class="book-library-title" href={library[0]?.href || '/books.html'}>{library[0]?.title}</a>
+        <p class="book-library-author">{library[0]?.author}</p>
+      </div>
+      <a class="book-library-request" href="mailto:hello@jevangoldsmith.com" aria-label="Request the selected book by email">request</a>
+    </div>
+    <button class="book-library-arrow" type="button" data-library-step="1" aria-label="Next book">→</button>
+  </div>
+  {library.length === 0 && <p class="book-library-empty">No books marked as read yet.</p>}
+</section>
+<InlineJson id="jg-book-library" data={library} />
+<script>
+  import '../scripts/book-library';
+</script>
+<style is:global>
+  .books-view-picker { position: relative; }
+  .books-view-picker > summary { list-style: none; cursor: pointer; }
+  .books-view-picker > summary::-webkit-details-marker { display: none; }
+  .books-view-picker > summary .view-icon-grid { display: block; }
+  .books-view-menu {
+    position: absolute; z-index: 90; right: 0; top: calc(100% + .5rem);
+    display: grid; width: 190px; padding: .35rem; gap: .15rem;
+    border: 1px solid var(--border-color); border-radius: .75rem;
+    background: var(--background); box-shadow: 0 12px 32px #0003;
+  }
+  .books-view-picker:not([open]) > .books-view-menu { display: none; }
+  .books-view-menu button {
+    display: flex; align-items: center; gap: .65rem; padding: .7rem .8rem;
+    min-height: 44px; border: 0; border-radius: .4rem; background: transparent;
+    color: var(--text-color); font: inherit; font-size: .9rem; text-align: left; cursor: pointer;
+  }
+  .books-view-menu button:hover, .books-view-menu button[aria-pressed="true"] { background: var(--background-alt); }
+  .books-view-menu svg { width: 18px; height: 18px; flex: none; }
+  .books-view-menu small { color: var(--text-light); font-size: .7rem; margin-left: auto; }
+  .book-library[hidden] { display: none !important; }
+  .book-library {
+    position: fixed; inset: var(--nav-height, 58px) 0 0; z-index: 900;
+    overflow: hidden; background: #33507b; color: #fff;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    isolation: isolate;
+  }
+  html:has(body.book-library-open), body.book-library-open { overflow: hidden !important; }
+  body.book-library-open .collection-mobile-toggle { visibility: hidden; }
+  .book-library-header {
+    position: absolute; z-index: 2; inset: 0 0 auto; padding: 1.5rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    pointer-events: none;
+  }
+  .book-library-header h2 { color: #fff; font: inherit; font-size: 1rem; font-weight: 500; margin: 0; }
+  .book-library-header p { color: #d5dfed; font-size: .72rem; margin: .2rem 0 0; }
+  .book-library-exit {
+    pointer-events: auto; display: inline-flex; align-items: center; gap: .45rem;
+    color: #fff; border: 1px solid #ffffff55; background: #33507b; border-radius: 6px;
+    min-height: 40px; padding: .5rem .75rem; font: inherit; font-size: .8rem; cursor: pointer;
+  }
+  .book-library-exit:hover { background: #ffffff15; }
+  .book-library-stage {
+    position: absolute; inset: 80px 0 158px; perspective: 1800px;
+    cursor: grab; touch-action: pinch-zoom; user-select: none; -webkit-user-select: none;
+    outline-offset: -4px;
+  }
+  .book-library-stage[data-dragging="true"] { cursor: grabbing; }
+  .book-library-track { position: absolute; inset: 0; perspective: 1800px; }
+  .library-volume {
+    position: absolute; left: 50%; top: 65%; width: var(--width); height: var(--height);
+    margin: 0; padding: 0; border: 0; background: none; border-radius: 0;
+    transform-style: preserve-3d; transform-origin: 50% 100%;
+    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(-16deg) rotateZ(3deg);
+    cursor: inherit; -webkit-tap-highlight-color: transparent;
+  }
+  .library-volume > span { position: absolute; display: block; }
+  .library-volume-back {
+    inset: 0; background: #283343; transform: translateZ(calc(-1 * var(--depth)));
+    box-shadow: 12px 18px 24px -10px #11233d88;
+  }
+  .library-volume-spine {
+    top: 0; bottom: 0; left: calc(-1 * var(--depth)); width: var(--depth); background: #283343;
+    transform-origin: right center; transform: rotateY(-90deg);
+  }
+  .library-volume-pages {
+    top: 1px; bottom: 1px; left: 100%; width: var(--depth);
+    background: repeating-linear-gradient(90deg, #d7d3c9 0, #ebe8df .8px, #d7d3c9 1.6px);
+    transform-origin: left center; transform: rotateY(90deg);
+  }
+  .library-volume-cover { inset: 0; background: #e6dfcd; overflow: hidden; }
+  .library-volume-cover img { display: block; width: 100%; height: 100%; pointer-events: none; -webkit-user-drag: none; }
+  .library-volume-cover::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, #0004, transparent 3%, #fff2 4%, transparent 6%, transparent 96%, #0002);
+    box-shadow: inset 0 0 0 1px #0002;
+  }
+  .library-volume-fallback { display: flex; height: 100%; align-items: center; padding: 1rem; color: #283343; font: 600 1rem/1.3 Georgia, serif; }
+  .book-library-controls {
+    position: absolute; bottom: max(28px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
+    display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 1rem;
+    align-items: center; width: min(460px, calc(100% - 32px)); text-align: center;
+  }
+  .book-library-caption { min-width: 0; }
+  .book-library-title {
+    color: #fff; font-size: .9rem; font-weight: 400; line-height: 1.35;
+    text-transform: lowercase; text-decoration: none; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .book-library-title:hover { text-decoration: underline; }
+  .book-library-author { color: #e1e7f0; font-size: .8rem; margin: .35rem 0 0; line-height: 1.4; }
+  .book-library-request {
+    display: flex; align-items: center; justify-content: center; width: 144px; min-height: 40px;
+    margin: .9rem auto 0; background: #fff; color: #283f61; border-radius: 6px;
+    border: 1px solid #e9edf3; text-decoration: none; font-size: .8rem;
+  }
+  .book-library-request:hover { background: #e7edf5; }
+  .book-library-arrow { border: 0; background: transparent; color: #fff; font: inherit; font-size: 1rem; width: 44px; height: 44px; cursor: pointer; }
+  .book-library :focus-visible, .books-view-picker :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  .book-library-stage:focus, .book-library-stage:focus-visible { outline: none; box-shadow: none; }
+  .book-library-empty { padding: 8rem 2rem; text-align: center; }
+  @media (max-width: 600px) {
+    .book-library-header { padding: 1.1rem; }
+    .book-library-stage { top: 72px; bottom: 154px; }
+    .book-library-controls { gap: .4rem; bottom: max(24px, env(safe-area-inset-bottom)); }
+  }
+  @media (max-height: 560px) {
+    .book-library-header { padding-block: .6rem; }
+    .book-library-stage { top: 50px; bottom: 125px; }
+    .book-library-controls { bottom: 10px; }
+    .book-library-request { margin-top: .45rem; }
+  }
+</style>
