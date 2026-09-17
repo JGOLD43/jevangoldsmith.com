@@ -49,6 +49,7 @@ function initBookLibrary() {
   let openingDetail = false;
   let inspectedBook: number | null = null;
   let hoverBounds: DOMRect | null = null;
+  let hoverPointer: { x: number; y: number } | null = null;
   let tiltX = 0;
   let tiltY = 0;
   let tiltTargetX = 0;
@@ -60,6 +61,30 @@ function initBookLibrary() {
     tiltTargetX = tiltTargetY = 0;
     if (immediate) { tiltX = tiltY = 0; inspectedBook = null; }
     else schedule();
+  }
+
+  function updateHover() {
+    if (!hoverPointer || drag || openingDetail) return;
+    // Wait for the book to finish pulling out, then respond even if the
+    // mouse has stayed still while it moved into place.
+    if (Math.abs(position - target) > .001 || Math.abs(openAmount - 1) > .001) return;
+    const book = Math.round(target);
+    const node = volumes.get(book);
+    if (!node) return;
+    // Use a stable rectangle, not the rotated faces beneath the pointer:
+    // turning the book must not accidentally end its own hover interaction.
+    const bounds = hoverBounds ||= node.getBoundingClientRect();
+    const x = (hoverPointer.x - bounds.left) / bounds.width * 2 - 1;
+    const y = (hoverPointer.y - bounds.top) / bounds.height * 2 - 1;
+    if (Math.abs(x) > 1 || Math.abs(y) > 1) {
+      tiltTargetX = tiltTargetY = 0;
+      return;
+    }
+    inspectedBook = book;
+    // A small greeting tilt makes entering the centre visible too.
+    // Reduced motion keeps this direct pointer control, without easing.
+    tiltTargetY = 8 + x * 32;
+    tiltTargetX = 5 - y * 18;
   }
 
   function releaseDrag() {
@@ -195,6 +220,7 @@ function initBookLibrary() {
     velocity = (velocity + (target - position) * stiffness * dt) * Math.pow(damping, dt);
     position += velocity * dt;
     openAmount += (openTarget - openAmount) * (1 - Math.pow(.8, dt));
+    updateHover();
     const tiltEase = reducedMotion.matches ? 1 : 1 - Math.pow(.76, dt);
     tiltX += (tiltTargetX - tiltX) * tiltEase;
     tiltY += (tiltTargetY - tiltY) * tiltEase;
@@ -203,7 +229,7 @@ function initBookLibrary() {
     if (!shelfMoving) { position = target; openAmount = openTarget; velocity = 0; }
     if (!tiltMoving) {
       tiltX = tiltTargetX; tiltY = tiltTargetY;
-      if (!tiltX && !tiltY && !hoverBounds && !drag) inspectedBook = null;
+      if (!tiltX && !tiltY && !drag) inspectedBook = null;
     }
     render();
     if (shelfMoving || tiltMoving) frame = requestAnimationFrame(animate);
@@ -217,6 +243,7 @@ function initBookLibrary() {
   function resize() {
     if (!active) return;
     if (releaseDrag()) select(target);
+    hoverPointer = null;
     resetInspection(true);
     const rect = stage!.getBoundingClientRect();
     scale = Math.min(clamp(rect.width / 900, .74, 1), Math.max(.4, rect.height / 350));
@@ -276,6 +303,7 @@ function initBookLibrary() {
     if (!active) return;
     active = false;
     releaseDrag();
+    hoverPointer = null;
     resetInspection(true);
     lastTap = null;
     stage!.removeAttribute('data-dragging');
@@ -332,6 +360,7 @@ function initBookLibrary() {
 
   stage.addEventListener('pointerdown', (event) => {
     if (!active || openingDetail || !books.length || event.button !== 0 || !event.isPrimary) return;
+    hoverPointer = null;
     window.clearTimeout(snapTimer);
     const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
     const book = node ? Number(node.dataset.libraryIndex) : null;
@@ -347,21 +376,9 @@ function initBookLibrary() {
   stage.addEventListener('pointermove', (event) => {
     if (!active || openingDetail) return;
     if (!drag) {
-      if (event.pointerType !== 'mouse' || event.buttons || reducedMotion.matches) return;
-      const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
-      const book = node ? Number(node.dataset.libraryIndex) : null;
-      if (book !== Math.round(target) || Math.abs(position - target) >= .08 || openAmount <= .9) {
-        if (hoverBounds) resetInspection();
-        return;
-      }
-      // Keep a fixed hit-area reference while hovering so the transformed
-      // cover never feeds its changing bounds back into its own rotation.
-      if (!hoverBounds || inspectedBook !== book) hoverBounds = node!.getBoundingClientRect();
-      inspectedBook = book;
-      const x = (event.clientX - hoverBounds.left) / hoverBounds.width * 2 - 1;
-      const y = (event.clientY - hoverBounds.top) / hoverBounds.height * 2 - 1;
-      tiltTargetY = clamp(x, -1, 1) * 16;
-      tiltTargetX = -clamp(y, -1, 1) * 10;
+      if (event.pointerType !== 'mouse' || event.buttons) return;
+      hoverPointer = { x: event.clientX, y: event.clientY };
+      updateHover();
       schedule();
       return;
     }
@@ -416,10 +433,14 @@ function initBookLibrary() {
     // when we transfer capture to the stage; that is not a cancelled drag.
     if (event.target === stage) endDrag(event);
   });
-  stage.addEventListener('pointerleave', () => { if (!drag) resetInspection(); });
+  stage.addEventListener('pointerleave', () => {
+    hoverPointer = null;
+    if (!drag) resetInspection();
+  });
   window.addEventListener('blur', () => {
     if (!active) return;
     releaseDrag();
+    hoverPointer = null;
     lastTap = null;
     resetInspection();
     select(target);
@@ -442,6 +463,7 @@ function initBookLibrary() {
     if (!active || openingDetail || !books.length || event.ctrlKey) return;
     lastTap = null;
     releaseDrag();
+    hoverPointer = null;
     resetInspection(true);
     event.preventDefault();
     const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
@@ -482,6 +504,7 @@ function initBookLibrary() {
     else close(false);
   });
   window.addEventListener('pagehide', () => {
+    hoverPointer = null;
     releaseDrag(); resetInspection(true);
     cancelAnimationFrame(frame); frame = 0; window.clearTimeout(snapTimer);
   });
