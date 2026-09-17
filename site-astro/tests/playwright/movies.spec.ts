@@ -233,6 +233,35 @@ test('disc cases rotate by dragging and shelf dragging selects a new movie', asy
   await expect(page.locator('.movie-library-stage')).not.toHaveAttribute('data-dragging', 'true');
 });
 
+test('DVD spines face the viewer at rest and the artwork has a narrow plastic rim', async ({ page }) => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 393, height: 852 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/movies.html?view=disc-boxes&discMovie=28-days-later');
+    const selected = page.locator('.disc-case[aria-pressed="true"]');
+    await expect(selected.locator('.disc-case-spine-title')).toHaveText('28 Days Later');
+    const geometry = await selected.evaluate((node) => {
+      const spine = node.querySelector<HTMLElement>('.disc-case-spine')!;
+      const cover = node.querySelector<HTMLElement>('.disc-case-cover')!;
+      const spineArtwork = node.querySelector<HTMLImageElement>('.disc-case-spine-art')!;
+      const frontArtwork = cover.querySelector<HTMLImageElement>('img')!;
+      const caseMatrix = new DOMMatrix(getComputedStyle(node).transform);
+      const spineMatrix = new DOMMatrix(getComputedStyle(spine).transform);
+      const coverStyle = getComputedStyle(cover);
+      return {
+        // A negative normal means the spine faces away, even though its DOM exists.
+        facingCamera: caseMatrix.multiply(spineMatrix).m33,
+        spineWidth: spine.getBoundingClientRect().width,
+        rim: ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].map((key) => parseFloat(coverStyle[key as keyof CSSStyleDeclaration] as string)),
+        artworkMatches: spineArtwork.src === frontArtwork.src
+      };
+    });
+    expect(geometry.facingCamera).toBeGreaterThan(.3);
+    expect(geometry.spineWidth).toBeGreaterThan(5);
+    expect(Math.max(...geometry.rim)).toBeLessThanOrEqual(3);
+    expect(geometry.artworkMatches).toBe(true);
+  }
+});
+
 test('disc shelf supports touch swiping and reduced motion sorting', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 393, height: 852 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
   const page = await context.newPage();
@@ -258,6 +287,7 @@ test('missing movie posters have a usable case and detail link', async ({ page }
   await page.goto('/movies.html?view=disc-boxes');
   await expect(page.locator('.disc-case[aria-pressed="true"] .disc-case-fallback')).toBeVisible();
   const selected = await page.locator('.movie-library-title').innerText();
+  await expect(page.locator('.disc-case[aria-pressed="true"] .disc-case-spine-title')).toHaveText(selected);
   await page.keyboard.press('Enter');
   await expect(page.locator('.detail-title')).toHaveText(selected);
 });

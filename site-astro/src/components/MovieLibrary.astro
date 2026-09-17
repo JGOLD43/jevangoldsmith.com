@@ -187,7 +187,7 @@ const library = movies.map((movie) => {
     transform-origin: 50% 0; transform-style: preserve-3d;
     /* Use the binding's camera, rotation, and bottom-centre anchor.
        A shelf-skewed ellipse drifts away from the actual book edge. */
-    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateZ(3deg);
+    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(24deg + var(--inspect-yaw, 0deg))) rotateZ(3deg);
   }
   .disc-case-contact::before {
     /* Spread the shadow around the contact edge in the visible shelf plane.
@@ -206,45 +206,63 @@ const library = movies.map((movie) => {
     position: absolute; left: 50%; top: 65%; width: var(--width); height: var(--height);
     margin: 0; padding: 0; border: 0; background: none; border-radius: 5px;
     transform-style: preserve-3d; transform-origin: 50% 100%;
-    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg)) rotateZ(3deg);
+    /* Show the printed left spine at rest, rather than the opening edge. */
+    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(24deg + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg)) rotateZ(3deg);
     cursor: inherit; -webkit-tap-highlight-color: transparent;
   }
   .disc-case > span { position: absolute; display: block; }
   .disc-case-back {
-    inset: 0; border-radius: 5px; background: #16191c;
-    transform: translateZ(calc(-1 * var(--depth))); box-shadow: inset 0 0 0 1px #666;
+    inset: 0; border-radius: 3px; background: #121313;
+    transform: translateZ(calc(-1 * var(--depth))); box-shadow: inset 0 0 0 1px #ffffff12;
   }
   .disc-case-spine {
     top: 0; bottom: 0; left: calc(-1 * var(--depth)); width: var(--depth);
-    background: linear-gradient(90deg, #090b0e, #34383d 35%, #14171b 90%);
+    background: #141515;
     transform-origin: right center; transform: rotateY(-90deg);
-    border-radius: 4px 0 0 4px; box-shadow: inset 0 0 0 1px #ffffff25;
-    color: #f4efdf; font: 600 calc(var(--depth) * .42)/1.1 Inter, sans-serif;
-    writing-mode: vertical-rl; text-orientation: mixed; overflow: hidden;
-    padding-block: 12px; text-align: center; white-space: nowrap;
+    border-radius: 2px; backface-visibility: hidden;
+    box-shadow: inset 0 0 0 1px #ffffff12;
+  }
+  .disc-case-spine-sleeve {
+    position: absolute; inset: 3px 1px; overflow: hidden; background: #282725;
+  }
+  .disc-case-spine-art {
+    width: 100%; height: 100%; display: block; object-fit: cover;
+    pointer-events: none; -webkit-user-drag: none; opacity: .65;
+  }
+  .disc-case-spine-sleeve::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, #0005, transparent 35%, #0003), linear-gradient(#0002, #0008 30%, #0008 70%, #0002);
+  }
+  .disc-case-spine-title {
+    position: absolute; z-index: 1; inset: 15px 0;
+    display: flex; align-items: center; justify-content: center;
+    writing-mode: vertical-rl; text-orientation: mixed;
+    color: #faf7ef; font: 600 calc(var(--depth) * .53)/1 Inter, sans-serif;
+    letter-spacing: .035em; text-align: center; text-transform: uppercase;
+    text-shadow: 0 1px 2px #000b;
   }
   .disc-case-edge {
     top: 2px; bottom: 2px; left: calc(100% - 1px); width: calc(var(--depth) - 2px);
-    background: linear-gradient(90deg, #050608, #34383d 25%, #101216 44%, #020304 49%, #484d52 56%, #17191d 80%, #050608);
-    box-shadow: inset 0 1px #666, inset 0 -1px #666;
+    background: linear-gradient(90deg, #141515, #202121 44%, #080909 49%, #292a2a 55%, #181919 70%);
+    box-shadow: inset 0 1px #ffffff12, inset 0 -1px #0006;
     transform-origin: left center; transform: rotateY(90deg); border-radius: 0 3px 3px 0;
   }
   .disc-case-edge::after {
     content: ''; position: absolute; top: 43%; bottom: 43%; left: 20%; right: 20%;
-    border-radius: 50%; background: #080a0d; box-shadow: inset 1px 0 2px #ffffff35;
+    border-radius: 50%; background: #0e0f0f; box-shadow: inset 1px 0 2px #ffffff16;
   }
   .disc-case-top, .disc-case-bottom {
     left: 1px; right: 1px; height: calc(var(--depth) - 1px);
     transform-origin: 50% 0; transform: rotateX(-90deg);
-    background: linear-gradient(#121518, #454a50 18%, #15181c 48%, #050608 52%, #2d3238 70%, #101215);
-    box-shadow: inset 0 0 0 1px #ffffff25;
+    background: linear-gradient(#171818, #242525 18%, #161717 48%, #0a0b0b 52%, #202121 70%, #171818);
+    box-shadow: inset 0 0 0 1px #ffffff12;
   }
   .disc-case-top { top: 1px; }
   .disc-case-bottom { top: calc(100% - 1px); }
   .disc-case-cover {
-    inset: 0; padding: 6px 5px 7px 8px; border-radius: 5px;
-    background: linear-gradient(90deg, #050709, #42484e 3%, #131619 6%, #24282d 98%, #090b0d);
-    box-shadow: inset 0 1px 1px #b6bec477, inset 0 -1px 1px #000, 2px 2px 4px #0006;
+    inset: 0; padding: 3px 2px; border-radius: 3px;
+    background: #141515;
+    box-shadow: inset 0 1px #ffffff1c, inset 0 -1px #0005, 1px 2px 3px #0004;
     overflow: hidden;
   }
   .disc-case-cover img {
@@ -254,9 +272,9 @@ const library = movies.map((movie) => {
   .disc-case-cover::after {
     content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
     background:
-      linear-gradient(calc(115deg + var(--inspect-yaw, 0deg)), transparent 12%, rgb(255 255 255 / calc(.06 + var(--inspect-shine, 0))) 46%, transparent 75%),
-      linear-gradient(90deg, #0007, transparent 3%, #fff3 4%, transparent 6%, transparent 97%, #fff3 98%, #0008);
-    box-shadow: inset 0 0 0 1px #ffffff35;
+      linear-gradient(calc(115deg + var(--inspect-yaw, 0deg)), transparent 20%, rgb(255 255 255 / calc(.015 + var(--inspect-shine, 0))) 46%, transparent 72%),
+      linear-gradient(90deg, #0002, transparent 2%, transparent 99%, #0002);
+    box-shadow: inset 0 0 0 1px #ffffff10;
   }
   .disc-case-fallback {
     display: flex; height: 100%; align-items: center; justify-content: center; padding: 1rem;

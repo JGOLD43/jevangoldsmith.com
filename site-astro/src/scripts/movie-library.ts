@@ -239,7 +239,25 @@ function initMovieLibrary() {
       const layer = document.createElement('span');
       layer.className = `disc-case-${face}`;
       layer.setAttribute('aria-hidden', 'true');
-      if (face === 'spine') layer.textContent = movie.title;
+      if (face === 'spine') {
+        const sleeve = document.createElement('span');
+        sleeve.className = 'disc-case-spine-sleeve';
+        if (movie.cover) {
+          const artwork = document.createElement('img');
+          artwork.className = 'disc-case-spine-art';
+          artwork.alt = '';
+          artwork.draggable = false;
+          artwork.decoding = 'async';
+          artwork.src = movie.cover;
+          artwork.addEventListener('error', () => artwork.remove(), { once: true });
+          sleeve.append(artwork);
+        }
+        const label = document.createElement('span');
+        label.className = 'disc-case-spine-title';
+        label.textContent = movie.title;
+        sleeve.append(label);
+        layer.append(sleeve);
+      }
       if (face === 'cover') {
         const image = document.createElement('img');
         image.alt = '';
@@ -297,7 +315,7 @@ function initMovieLibrary() {
       const y = -x * .28 + Math.max(0, 1 - Math.abs(distance)) * 90 * scale * openAmount;
       node.style.setProperty('--width', `${width}px`);
       node.style.setProperty('--height', `${height}px`);
-      node.style.setProperty('--depth', `${18 * scale}px`);
+      node.style.setProperty('--depth', `${19.3 * scale}px`);
       node.style.setProperty('--x', `${x}px`);
       node.style.setProperty('--y', `${y}px`);
       const inspecting = logical === inspectedMovie;
@@ -308,7 +326,7 @@ function initMovieLibrary() {
       shadow.style.setProperty('--x', `${x}px`);
       shadow.style.setProperty('--y', `${y}px`);
       shadow.style.setProperty('--width', `${width}px`);
-      shadow.style.setProperty('--depth', `${18 * scale}px`);
+      shadow.style.setProperty('--depth', `${19.3 * scale}px`);
       shadow.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
       node.style.zIndex = String(50 - (logical - center));
       const isSelected = logical === Math.round(target);
@@ -504,7 +522,7 @@ function initMovieLibrary() {
     stage!.setPointerCapture(event.pointerId);
     event.preventDefault();
     if (drag.mode === 'rotate') {
-      tiltTargetY = clamp(drag.yaw + delta * .45 / scale, -70, 70);
+      tiltTargetY = clamp(drag.yaw + delta * .45 / scale, -70, 60);
       tiltTargetX = clamp(drag.pitch - deltaY * .3 / scale, -24, 24);
       schedule();
       return;
