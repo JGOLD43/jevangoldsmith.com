@@ -1,5 +1,34 @@
 import { test, expect } from '@playwright/test';
 
+for (const width of [769, 900, 968, 969, 1280]) {
+  test(`books sidebar sits below the header at ${width}px, including after scrolling`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/books.html');
+    const sidebar = page.locator('#books-sidebar');
+    const header = page.locator('.navbar');
+    const expectAligned = async () => {
+      await expect.poll(async () => {
+        const nav = await header.boundingBox();
+        const rail = await sidebar.boundingBox();
+        return Math.abs((rail?.y ?? -1000) - ((nav?.y ?? 0) + (nav?.height ?? 0)));
+      }).toBeLessThanOrEqual(1);
+    };
+
+    await expect(sidebar).toHaveClass(/collapsed/);
+    await expectAligned();
+    await sidebar.locator('.sidebar-collapse-btn').click();
+    await expect(sidebar).not.toHaveClass(/collapsed/);
+    await expectAligned();
+
+    await page.evaluate(() => window.scrollTo(0, 400));
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300);
+    await expectAligned();
+    await sidebar.locator('.sidebar-collapse-btn').click();
+    await expect(sidebar).toHaveClass(/collapsed/);
+    await expectAligned();
+  });
+}
+
 test('books page renders 122 SSR cards + counter', async ({ page }) => {
   await page.goto('/books.html', { waitUntil: 'domcontentloaded' });
   // Counter starts at 0 then settles after JS runs.
