@@ -123,8 +123,13 @@ const library = await Promise.all(books
     transform-origin: right center; transform: rotateY(-90deg);
   }
   .library-volume-pages {
-    top: 1px; bottom: 1px; left: 100%; width: var(--depth);
-    background: repeating-linear-gradient(90deg, #d7d3c9 0, #ebe8df .8px, #d7d3c9 1.6px);
+    top: 2px; bottom: 2px; left: calc(100% - 1px); width: calc(var(--depth) - 2px);
+    /* Soft paper layers stay readable after the edge is foreshortened.
+       Subpixel, high-contrast stripes turn into a diagonal moiré pattern. */
+    background:
+      linear-gradient(90deg, #8d806b33, transparent 18%, #ffffff55 48%, transparent 78%, #82745e26),
+      repeating-linear-gradient(90deg, #eeeadd 0, #f7f4eb 2px, #f7f4eb 4px, #e7e1d4 5px, #f4f0e6 7px);
+    box-shadow: inset 0 1px #fff8, inset 0 -1px #8f826d33;
     transform-origin: left center; transform: rotateY(90deg);
   }
   .library-volume-cover { inset: 0; background: #e6dfcd; overflow: hidden; }
