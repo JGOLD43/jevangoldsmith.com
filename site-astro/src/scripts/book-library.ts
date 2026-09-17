@@ -43,9 +43,33 @@ function initBookLibrary() {
   let scale = 1;
   let pitch = 62;
   let gap = 280;
-  let drag: { id: number; x: number; start: number; moved: boolean; book: number | null } | null = null;
+  let drag: { id: number; x: number; y: number; start: number; moved: boolean; book: number | null;
+    mode: 'browse' | 'rotate'; pitch: number; yaw: number } | null = null;
   let lastTap: { book: number; x: number; y: number; time: number } | null = null;
   let openingDetail = false;
+  let inspectedBook: number | null = null;
+  let hoverBounds: DOMRect | null = null;
+  let tiltX = 0;
+  let tiltY = 0;
+  let tiltTargetX = 0;
+  let tiltTargetY = 0;
+  let ignoreDoubleClickUntil = 0;
+
+  function resetInspection(immediate = false) {
+    hoverBounds = null;
+    tiltTargetX = tiltTargetY = 0;
+    if (immediate) { tiltX = tiltY = 0; inspectedBook = null; }
+    else schedule();
+  }
+
+  function releaseDrag() {
+    const finished = drag;
+    drag = null;
+    stage!.removeAttribute('data-dragging');
+    stage!.removeAttribute('data-rotating');
+    if (finished && stage!.hasPointerCapture(finished.id)) stage!.releasePointerCapture(finished.id);
+    return finished;
+  }
 
   function saveView() {
     const url = new URL(window.location.href);
@@ -78,8 +102,7 @@ function initBookLibrary() {
     button.className = 'library-volume';
     button.dataset.libraryIndex = String(logical);
     button.setAttribute('aria-label', `${book.title}, by ${book.author}`);
-    button.title = 'Select to bring forward. Double-click to open book details.';
-    for (const face of ['back', 'spine', 'pages', 'cover']) {
+    for (const face of ['back', 'spine', 'pages', 'top', 'bottom', 'cover']) {
       const layer = document.createElement('span');
       layer.className = `library-volume-${face}`;
       layer.setAttribute('aria-hidden', 'true');
@@ -142,11 +165,16 @@ function initBookLibrary() {
       node.style.setProperty('--depth', `${(22 + seed % 18) * scale}px`);
       node.style.setProperty('--x', `${x}px`);
       node.style.setProperty('--y', `${y}px`);
+      const inspecting = logical === inspectedBook;
+      node.style.setProperty('--inspect-pitch', `${inspecting ? tiltX : 0}deg`);
+      node.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
+      node.style.setProperty('--inspect-shine', String(inspecting ? Math.min(.18, (Math.abs(tiltX) + Math.abs(tiltY)) * .004) : 0));
       const shadow = shadows.get(logical)!;
       shadow.style.setProperty('--x', `${x}px`);
       shadow.style.setProperty('--y', `${y}px`);
       shadow.style.setProperty('--width', `${width}px`);
       shadow.style.setProperty('--depth', `${(22 + seed % 18) * scale}px`);
+      shadow.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
       node.style.zIndex = String(50 - (logical - center));
       const isSelected = logical === Math.round(target);
       node.setAttribute('aria-pressed', String(isSelected));
@@ -167,10 +195,18 @@ function initBookLibrary() {
     velocity = (velocity + (target - position) * stiffness * dt) * Math.pow(damping, dt);
     position += velocity * dt;
     openAmount += (openTarget - openAmount) * (1 - Math.pow(.8, dt));
-    const moving = Math.abs(target - position) > .001 || Math.abs(velocity) > .001 || Math.abs(openTarget - openAmount) > .001;
-    if (!moving) { position = target; openAmount = openTarget; velocity = 0; }
+    const tiltEase = reducedMotion.matches ? 1 : 1 - Math.pow(.76, dt);
+    tiltX += (tiltTargetX - tiltX) * tiltEase;
+    tiltY += (tiltTargetY - tiltY) * tiltEase;
+    const shelfMoving = Math.abs(target - position) > .001 || Math.abs(velocity) > .001 || Math.abs(openTarget - openAmount) > .001;
+    const tiltMoving = Math.abs(tiltTargetX - tiltX) > .01 || Math.abs(tiltTargetY - tiltY) > .01;
+    if (!shelfMoving) { position = target; openAmount = openTarget; velocity = 0; }
+    if (!tiltMoving) {
+      tiltX = tiltTargetX; tiltY = tiltTargetY;
+      if (!tiltX && !tiltY && !hoverBounds && !drag) inspectedBook = null;
+    }
     render();
-    if (moving) frame = requestAnimationFrame(animate);
+    if (shelfMoving || tiltMoving) frame = requestAnimationFrame(animate);
     else lastTime = 0;
   }
 
@@ -180,6 +216,8 @@ function initBookLibrary() {
 
   function resize() {
     if (!active) return;
+    if (releaseDrag()) select(target);
+    resetInspection(true);
     const rect = stage!.getBoundingClientRect();
     scale = Math.min(clamp(rect.width / 900, .74, 1), Math.max(.4, rect.height / 350));
     pitch = 62 * scale;
@@ -191,6 +229,10 @@ function initBookLibrary() {
     if (!books.length || openingDetail) return;
     if (document.activeElement?.classList.contains('library-volume')) stage!.focus({ preventScroll: true });
     window.clearTimeout(snapTimer);
+    if (Math.round(logical) !== Math.round(target)) {
+      releaseDrag();
+      resetInspection(true);
+    }
     target = Math.round(logical);
     openTarget = 1;
     updateCaption();
@@ -233,7 +275,8 @@ function initBookLibrary() {
   function close(updateUrl = true, focus = true) {
     if (!active) return;
     active = false;
-    drag = null;
+    releaseDrag();
+    resetInspection(true);
     lastTap = null;
     stage!.removeAttribute('data-dragging');
     cancelAnimationFrame(frame);
@@ -291,15 +334,51 @@ function initBookLibrary() {
     if (!active || openingDetail || !books.length || event.button !== 0 || !event.isPrimary) return;
     window.clearTimeout(snapTimer);
     const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
-    drag = { id: event.pointerId, x: event.clientX, start: target, moved: false, book: node ? Number(node.dataset.libraryIndex) : null };
+    const book = node ? Number(node.dataset.libraryIndex) : null;
+    const rotate = book === Math.round(target) && Math.abs(position - target) < .08 && openAmount > .9;
+    if (rotate) {
+      inspectedBook = book;
+      hoverBounds = null;
+      stage!.dataset.rotating = 'true';
+    } else resetInspection(true);
+    drag = { id: event.pointerId, x: event.clientX, y: event.clientY, start: target,
+      moved: false, book, mode: rotate ? 'rotate' : 'browse', pitch: tiltX, yaw: tiltY };
   });
   stage.addEventListener('pointermove', (event) => {
-    if (!drag || event.pointerId !== drag.id) return;
+    if (!active || openingDetail) return;
+    if (!drag) {
+      if (event.pointerType !== 'mouse' || event.buttons || reducedMotion.matches) return;
+      const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
+      const book = node ? Number(node.dataset.libraryIndex) : null;
+      if (book !== Math.round(target) || Math.abs(position - target) >= .08 || openAmount <= .9) {
+        if (hoverBounds) resetInspection();
+        return;
+      }
+      // Keep a fixed hit-area reference while hovering so the transformed
+      // cover never feeds its changing bounds back into its own rotation.
+      if (!hoverBounds || inspectedBook !== book) hoverBounds = node!.getBoundingClientRect();
+      inspectedBook = book;
+      const x = (event.clientX - hoverBounds.left) / hoverBounds.width * 2 - 1;
+      const y = (event.clientY - hoverBounds.top) / hoverBounds.height * 2 - 1;
+      tiltTargetY = clamp(x, -1, 1) * 16;
+      tiltTargetX = -clamp(y, -1, 1) * 10;
+      schedule();
+      return;
+    }
+    if (event.pointerId !== drag.id) return;
     const delta = event.clientX - drag.x;
-    if (!drag.moved && Math.abs(delta) < 5) return;
+    const deltaY = event.clientY - drag.y;
+    if (!drag.moved && (drag.mode === 'rotate' ? Math.hypot(delta, deltaY) : Math.abs(delta)) < 5) return;
     drag.moved = true;
     lastTap = null;
     stage!.setPointerCapture(event.pointerId);
+    event.preventDefault();
+    if (drag.mode === 'rotate') {
+      tiltTargetY = clamp(drag.yaw + delta * .45 / scale, -70, 70);
+      tiltTargetX = clamp(drag.pitch - deltaY * .3 / scale, -24, 24);
+      schedule();
+      return;
+    }
     stage!.dataset.dragging = 'true';
     target = drag.start - delta / (46 * scale);
     openTarget = 0;
@@ -308,25 +387,44 @@ function initBookLibrary() {
   });
   function endDrag(event: PointerEvent) {
     if (!drag || event.pointerId !== drag.id) return;
-    const finished = drag;
-    drag = null;
-    stage!.removeAttribute('data-dragging');
-    if (stage!.hasPointerCapture(event.pointerId)) stage!.releasePointerCapture(event.pointerId);
+    const finished = releaseDrag()!;
+    const cancelled = event.type === 'pointercancel' || event.type === 'lostpointercapture';
+    if (finished.mode === 'rotate') resetInspection();
+    if (finished.moved) ignoreDoubleClickUntil = performance.now() + 400;
+    if (cancelled || (finished.mode === 'rotate' && finished.moved)) {
+      lastTap = null;
+      select(target);
+      return;
+    }
     // Use the tap location as well as time: the first tap starts moving
     // the book, so the second can land on the space it has just vacated.
     // This also gives touch screens the same double-tap interaction.
     const now = performance.now();
-    if (!finished.moved && event.type !== 'pointercancel' && lastTap && now - lastTap.time < 360
+    if (!finished.moved && lastTap && now - lastTap.time < 360
       && Math.hypot(event.clientX - lastTap.x, event.clientY - lastTap.y) < 24) {
       openDetails(lastTap.book);
       return;
     }
-    lastTap = !finished.moved && event.type !== 'pointercancel' && finished.book !== null
+    lastTap = !finished.moved && finished.book !== null
       ? { book: finished.book, x: event.clientX, y: event.clientY, time: now } : null;
     select(finished.moved ? target : finished.book ?? target);
   }
-  stage.addEventListener('pointerup', endDrag);
-  stage.addEventListener('pointercancel', endDrag);
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+  stage.addEventListener('lostpointercapture', (event) => {
+    // Touch starts with implicit capture on the cover. Its loss bubbles
+    // when we transfer capture to the stage; that is not a cancelled drag.
+    if (event.target === stage) endDrag(event);
+  });
+  stage.addEventListener('pointerleave', () => { if (!drag) resetInspection(); });
+  window.addEventListener('blur', () => {
+    if (!active) return;
+    releaseDrag();
+    lastTap = null;
+    resetInspection();
+    select(target);
+  });
+  reducedMotion.addEventListener('change', () => { resetInspection(true); if (active) render(); });
   stage.addEventListener('click', (event) => {
     // Keyboard/screen-reader activation has no preceding pointer event.
     if (event.detail !== 0) return;
@@ -336,13 +434,15 @@ function initBookLibrary() {
   stage.addEventListener('dblclick', (event) => {
     // Also respect the desktop's native double-click timing preference.
     const node = (event.target as Element).closest<HTMLElement>('[data-library-index]');
-    if (!node) return;
+    if (!node || performance.now() < ignoreDoubleClickUntil) return;
     event.preventDefault();
     openDetails(Number(node.dataset.libraryIndex));
   });
   stage.addEventListener('wheel', (event) => {
     if (!active || openingDetail || !books.length || event.ctrlKey) return;
     lastTap = null;
+    releaseDrag();
+    resetInspection(true);
     event.preventDefault();
     const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
     const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? stage!.clientHeight : 1;
@@ -381,7 +481,10 @@ function initBookLibrary() {
     }
     else close(false);
   });
-  window.addEventListener('pagehide', () => { cancelAnimationFrame(frame); frame = 0; window.clearTimeout(snapTimer); });
+  window.addEventListener('pagehide', () => {
+    releaseDrag(); resetInspection(true);
+    cancelAnimationFrame(frame); frame = 0; window.clearTimeout(snapTimer);
+  });
   window.addEventListener('pageshow', (event) => {
     if (event.persisted && new URLSearchParams(location.search).get('view') === 'library') {
       // A slow connection may use the full-page flight fallback. A

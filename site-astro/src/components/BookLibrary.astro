@@ -36,7 +36,7 @@ const library = await Promise.all(books
     </button>
   </header>
   <div class="book-library-stage" tabindex="0" role="region"
-    aria-label="Interactive library. Scroll or drag to browse. Select a book to bring it forward; double-click to open its details."
+    aria-label="Interactive library. Drag the shelf to browse. Move over or drag the selected book to rotate it. Double-click a book to open its details."
     aria-describedby="book-library-help">
     <div class="book-library-shelf" aria-hidden="true">
       <div class="book-library-shelf-top"><div class="book-library-wood-grain"></div></div>
@@ -45,7 +45,7 @@ const library = await Promise.all(books
     <div class="book-library-contact-shadows" aria-hidden="true"></div>
     <div class="book-library-track"></div>
   </div>
-  <p id="book-library-help" class="sr-only">Use left and right arrows to browse, Home or End for the first or last book. Double-click or double-tap a book, or press Enter, to open its details. Escape returns to the bookshelf. Request opens an email about the selected book.</p>
+  <p id="book-library-help" class="sr-only">Move the mouse over the selected book to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last book. Double-click or double-tap a book, or press Enter, to open its details. Escape returns to the bookshelf. Request opens an email about the selected book.</p>
   <div class="book-library-controls">
     <button class="book-library-arrow" type="button" data-library-step="-1" aria-label="Previous book">←</button>
     <div class="book-library-caption">
@@ -121,7 +121,7 @@ const library = await Promise.all(books
     cursor: grab; touch-action: pinch-zoom; user-select: none; -webkit-user-select: none;
     outline-offset: -4px;
   }
-  .book-library-stage[data-dragging="true"] { cursor: grabbing; }
+  .book-library-stage[data-dragging="true"], .book-library-stage[data-rotating="true"] { cursor: grabbing; }
   .book-library-shelf {
     position: absolute; left: -50%; top: 65%; width: 200%; height: var(--shelf-depth, 130px);
     transform: skewY(-15.642deg); transform-origin: 50% 0;
@@ -160,7 +160,7 @@ const library = await Promise.all(books
     transform-origin: 50% 0; transform-style: preserve-3d;
     /* Use the binding's camera, rotation, and bottom-centre anchor.
        A shelf-skewed ellipse drifts away from the actual book edge. */
-    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(-16deg) rotateZ(3deg);
+    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateZ(3deg);
   }
   .library-volume-contact::before {
     content: ''; position: absolute; left: 0; right: 0; bottom: 0;
@@ -177,7 +177,7 @@ const library = await Promise.all(books
     position: absolute; left: 50%; top: 65%; width: var(--width); height: var(--height);
     margin: 0; padding: 0; border: 0; background: none; border-radius: 0;
     transform-style: preserve-3d; transform-origin: 50% 100%;
-    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(-16deg) rotateZ(3deg);
+    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg)) rotateZ(3deg);
     cursor: inherit; -webkit-tap-highlight-color: transparent;
   }
   .library-volume > span { position: absolute; display: block; }
@@ -198,11 +198,21 @@ const library = await Promise.all(books
     box-shadow: inset 0 1px #fff8, inset 0 -1px #8f826d33;
     transform-origin: left center; transform: rotateY(90deg);
   }
+  .library-volume-top, .library-volume-bottom {
+    left: 1px; right: 1px; height: calc(var(--depth) - 1px);
+    transform-origin: 50% 0; transform: rotateX(-90deg);
+    background: repeating-linear-gradient(0deg, #e7e1d4 0, #f7f4eb 2px, #eeeadd 4px);
+    box-shadow: inset 0 0 0 1px #82745e33;
+  }
+  .library-volume-top { top: 1px; }
+  .library-volume-bottom { top: calc(100% - 1px); }
   .library-volume-cover { inset: 0; background: #e6dfcd; overflow: hidden; }
   .library-volume-cover img { display: block; width: 100%; height: 100%; pointer-events: none; -webkit-user-drag: none; }
   .library-volume-cover::after {
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(90deg, #0004, transparent 3%, #fff2 4%, transparent 6%, transparent 96%, #0002);
+    background:
+      linear-gradient(calc(115deg + var(--inspect-yaw, 0deg)), transparent 20%, rgb(255 255 255 / var(--inspect-shine, 0)) 50%, transparent 80%),
+      linear-gradient(90deg, #0004, transparent 3%, #fff2 4%, transparent 6%, transparent 96%, #0002);
     box-shadow: inset 0 0 0 1px #0002;
   }
   .library-volume-fallback { display: flex; height: 100%; align-items: center; padding: 1rem; color: #283343; font: 600 1rem/1.3 Georgia, serif; }
