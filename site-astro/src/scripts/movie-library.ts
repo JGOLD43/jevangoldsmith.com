@@ -8,6 +8,7 @@ interface LibraryMovie {
   subtitle: string;
   cover: string;
   overview: string;
+  rating: string;
   href: string;
   tier: string;
   tierLabel: string;

@@ -114,10 +114,11 @@ const { title = '', poster = '', subtitle = '' } = Astro.props;
     background: #10111200;
   }
   .movie-case-opening-overlay .movie-open-case {
-    position: absolute; min-height: 0; filter: drop-shadow(0 22px 30px #0009);
+    position: absolute; min-height: 0; grid-template-rows: minmax(0, 1fr);
+    filter: drop-shadow(0 22px 30px #0009);
   }
-  .movie-case-opening-overlay .movie-case-lid { padding: 3%; }
-  .movie-case-opening-overlay .movie-case-insert { height: 100%; overflow: hidden; }
+  .movie-case-opening-overlay .movie-case-lid { min-height: 0; padding: 3%; }
+  .movie-case-opening-overlay .movie-case-insert { min-height: 0; height: 100%; overflow: hidden; }
   .movie-case-opening-overlay .movie-case-tray { min-height: 0; }
   .movie-case-opening-overlay .movie-case-insert { font-size: .85rem; }
   .movie-case-opening-overlay .movie-case-insert .detail-title { font-size: 1.6rem; }

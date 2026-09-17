@@ -1,9 +1,12 @@
-interface CaseMovie { title: string; subtitle: string; cover: string; overview: string; href: string; }
+interface CaseMovie { title: string; subtitle: string; cover: string; overview: string; rating: string; href: string; }
 
 /** Opens a physical lid, reveals its disc, then moves the camera into the case. */
 export async function openMovieCase(source: HTMLElement, movie: CaseMovie, signal: AbortSignal): Promise<boolean> {
   const template = document.querySelector<HTMLTemplateElement>('#movie-case-opening-template');
-  if (!template || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
+  if (!template) return true;
+  // Opening is an explicit action. Reduced motion softens the lift and camera
+  // movement instead of removing the case-opening interaction altogether.
+  const gentle = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const box = source.getBoundingClientRect();
   const overlay = document.createElement('div');
   overlay.className = 'movie-case-opening-overlay';
@@ -16,6 +19,9 @@ export async function openMovieCase(source: HTMLElement, movie: CaseMovie, signa
   const insert = shell.querySelector<HTMLElement>('.movie-case-insert')!;
   shell.querySelectorAll<HTMLElement>('[data-case-title], .movie-disc-label strong, .movie-case-tray-caption').forEach((node) => { node.textContent = movie.title; });
   shell.querySelectorAll<HTMLElement>('[data-case-subtitle], .movie-disc-label span').forEach((node) => { node.textContent = movie.subtitle; });
+  const rating = shell.querySelector<HTMLElement>('[data-case-rating]')!;
+  rating.textContent = movie.rating;
+  rating.hidden = !movie.rating;
   shell.querySelector<HTMLElement>('[data-case-overview]')!.textContent = movie.overview || 'A synopsis has not been added yet.';
   shell.querySelectorAll<HTMLImageElement>('img').forEach((image) => {
     if (movie.cover) image.src = movie.cover;
@@ -45,11 +51,20 @@ export async function openMovieCase(source: HTMLElement, movie: CaseMovie, signa
   const openPose = { left: `${(innerWidth - width) / 2}px`, top: `${Math.max(navHeight + 46, (innerHeight - height) / 2)}px`, width: `${width}px`, height: `${height}px` };
   const easing = 'cubic-bezier(.22, .7, .22, 1)';
   try {
-    const travel = shell.animate([start, openPose], { duration: 780, easing, fill: 'both' });
+    overlay.dataset.phase = 'lifting';
+    const raisedPose = { ...start, top: `${Math.max(navHeight + 12, box.top - (gentle ? 18 : 42))}px` };
+    const lift = shell.animate([start, raisedPose], { duration: 320, easing, fill: 'both' });
+    animations.push(lift,
+      overlay.animate([{ backgroundColor: '#10111200' }, { backgroundColor: '#10111280' }], { duration: 320, fill: 'both' }));
+    await lift.finished;
+    if (signal.aborted) return false;
+    overlay.dataset.phase = 'opening';
+    const duration = gentle ? 820 : 900;
+    const travel = shell.animate([raisedPose, openPose], { duration, easing, fill: 'both' });
     animations.push(travel,
-      lid.animate([{ transform: 'rotateY(180deg)' }, { transform: 'rotateY(180deg)', offset: .12 }, { transform: 'rotateY(0deg)' }], { duration: 780, easing, fill: 'both' }),
-      insert.animate([{ opacity: 0 }, { opacity: 0, offset: .35 }, { opacity: 1 }], { duration: 780, fill: 'both' }),
-      overlay.animate([{ backgroundColor: '#10111200' }, { backgroundColor: '#101112ed' }], { duration: 780, fill: 'both' }));
+      lid.animate([{ transform: 'rotateY(180deg)' }, { transform: 'rotateY(180deg)', offset: .08 }, { transform: 'rotateY(0deg)' }], { duration, easing, fill: 'both' }),
+      insert.animate([{ opacity: 0 }, { opacity: 0, offset: .35 }, { opacity: 1 }], { duration, fill: 'both' }),
+      overlay.animate([{ backgroundColor: '#10111280' }, { backgroundColor: '#101112ed' }], { duration, fill: 'both' }));
     await travel.finished;
     if (signal.aborted) return false;
     overlay.dataset.phase = 'zoom';
@@ -59,7 +74,8 @@ export async function openMovieCase(source: HTMLElement, movie: CaseMovie, signa
       left: `${narrow ? innerWidth / 2 - zoomWidth * .75 : (innerWidth - zoomWidth) / 2}px`,
       top: `${navHeight + 60}px`, width: `${zoomWidth}px`, height: `${zoomWidth / 1.44}px`
     };
-    const zoom = shell.animate([openPose, zoomPose], { duration: 380, easing, fill: 'both' });
+    // Keep the opened case steady for a beat in reduced-motion mode.
+    const zoom = shell.animate([openPose, gentle ? openPose : zoomPose], { duration: gentle ? 260 : 380, easing, fill: 'both' });
     animations.push(zoom);
     await zoom.finished;
     return !signal.aborted;

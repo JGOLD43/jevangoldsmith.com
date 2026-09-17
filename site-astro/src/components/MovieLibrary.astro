@@ -13,7 +13,7 @@ const library = movies.map((movie) => {
   const duration = runtime ? `${Math.floor(runtime / 60)}h ${runtime % 60}m` : '';
   const id = slugify(movie.title);
   return { id, title: movie.title, subtitle: [movie.year, duration].filter(Boolean).join(' · '),
-    cover: movie.poster || '', overview: movie.overview || '', href: `/movies/${id}.html`,
+    cover: movie.poster || '', overview: movie.overview || '', rating: movie.rating || '', href: `/movies/${id}.html`,
     tier: tier?.key || '', tierLabel: tier?.label || 'Unrated', tierColor: tier?.color || '#e3d8c6',
     collection: movie.genre || 'Uncategorized' };
 }).sort((a, b) => a.title.localeCompare(b.title, 'en', { numeric: true }));
@@ -72,6 +72,7 @@ const library = movies.map((movie) => {
   <OpenMovieCase>
     <p class="detail-kicker" data-case-subtitle></p>
     <h2 class="detail-title" data-case-title></h2>
+    <p class="detail-rating" data-case-rating></p>
     <h3 class="detail-h2">Synopsis</h3>
     <p class="detail-prose" data-case-overview></p>
   </OpenMovieCase>

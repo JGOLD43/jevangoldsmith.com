@@ -438,16 +438,37 @@ test('Escape cancels opening a movie and restores browsing without navigating', 
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('.movie-library-title')).not.toHaveText('Seconds');
   // Let the original opening finish time pass: cancelled work must never navigate.
-  await page.waitForTimeout(1400);
+  await page.waitForTimeout(1800);
   expect(new URL(page.url()).pathname).toBe('/movies.html');
 });
 
-test('reduced motion opens the case page directly and direct links work without JavaScript', async ({ browser, page }) => {
+test('explicit case opening remains visible with reduced motion and direct links work without JavaScript', async ({ browser, page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/movies.html?view=disc-boxes&discMovie=seconds');
-  await page.getByRole('link', { name: 'Open case', exact: true }).click();
-  await expect(page.locator('.movie-case-insert .detail-title')).toHaveText('Seconds');
-  await expect(page.locator('.movie-case-opening-overlay')).toHaveCount(0);
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 393, height: 852 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/movies.html?view=disc-boxes&discMovie=the-dark-knight&discSort=tiers');
+    const caseBefore = await page.locator('.disc-case[aria-pressed="true"]').boundingBox();
+    if (viewport.width > 640) await page.getByRole('link', { name: 'Open case', exact: true }).click();
+    else await page.locator('.disc-case[aria-pressed="true"]').click();
+    const opening = page.locator('.movie-case-opening-overlay');
+    await expect(opening).toBeVisible();
+    expect(new URL(page.url()).pathname).toBe('/movies.html');
+    await expect(opening).toHaveAttribute('data-phase', 'lifting');
+    const shell = opening.locator('.movie-open-case');
+    const shellBox = await shell.boundingBox();
+    const lidBox = await opening.locator('.movie-case-lid').boundingBox();
+    expect(lidBox!.height).toBeLessThanOrEqual(shellBox!.height + 2);
+    await expect.poll(async () => (await shell.boundingBox())!.y, { intervals: [16] }).toBeLessThan(caseBefore!.y - 4);
+    await page.waitForFunction(() => document.querySelector<HTMLElement>('.movie-case-opening-overlay')?.dataset.phase === 'opening', null, { polling: 'raf' });
+    await expect.poll(() => opening.locator('.movie-case-lid').evaluate((node) => getComputedStyle(node).transform), { intervals: [20] })
+      .not.toBe('matrix3d(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1)');
+    await expect(opening.locator('[data-case-rating]')).toHaveText('★★★★½');
+    await page.waitForFunction(() => document.querySelector<HTMLElement>('.movie-case-opening-overlay')?.dataset.phase === 'zoom', null, { polling: 'raf' });
+    await expect(opening.locator('.movie-case-disc')).toBeVisible();
+    await expect(page).toHaveURL(/\/movies\/the-dark-knight\.html\?from=disc-boxes/);
+    await expect(page.locator('.movie-case-insert .detail-title')).toHaveText('The Dark Knight');
+    await expect(page.locator('.movie-case-opening-overlay')).toHaveCount(0);
+  }
   const noScript = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 393, height: 852 } });
   const direct = await noScript.newPage();
   await direct.goto(new URL('/movies/seconds.html', page.url()).href);
