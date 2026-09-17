@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import OpenMovieCase from '../../components/OpenMovieCase.astro';
 import { renderCommentary, renderNotes } from '../../lib/notes-render';
 import { movieSchema } from '../../lib/seo';
 import { slugify } from '../../lib/slug';
@@ -29,7 +30,6 @@ const runtime = Number(m.runtime) || 0;
 const runtimeStr = runtime ? `${Math.floor(runtime / 60)}h ${runtime % 60}m` : '';
 const timesWatched = Number(m.timesWatched) || 0;
 
-const backdrop = m.backdrop || '';
 const poster = m.poster || '';
 const starCount = Number(m.starCount) || 0;
 const ratingValue = starCount > 0 ? starCount : null;
@@ -49,7 +49,8 @@ const schema = movieSchema({
   title={`${m.title}${m.year ? ` (${m.year})` : ''} - Movies - Jevan Goldsmith`}
   description={m.review || m.overview || `Notes and review for ${m.title}.`}
   canonical={canonical}
-  bodyClass="nav-compact"
+  bodyClass="nav-compact movie-case-reading"
+  noFooter
   pageType="Article"
   ogImage={poster && poster.startsWith('http') ? poster : undefined}
   breadcrumbs={[
@@ -64,82 +65,40 @@ const schema = movieSchema({
       <link rel="preload" as="image" fetchpriority="high" href={poster} />
     </Fragment>
   )}
-  <main class="detail-page detail-page--movie">
-    {backdrop && (
-      <div class="detail-backdrop" style={`background-image: url(${backdrop})`}></div>
-    )}
-
+  <main class="detail-page detail-page--movie movie-case-page">
     <a href="/movies.html" class="detail-back">← Back to Movies</a>
-
-    <header class="detail-hero detail-hero--movie">
-      {poster && (
-        <div class="detail-hero-poster">
-          <img src={poster} alt={`${m.title} poster`} loading="eager" decoding="async" fetchpriority="high" width="300" height="450" style={`view-transition-name: movie-poster-${slug}`} />
-        </div>
-      )}
-      <div class="detail-hero-body">
-        <p class="detail-kicker">
-          {m.genre && <span class="detail-category-pill">{m.genre}</span>}
-          {m.year && <span class="detail-year-pill">{m.year}</span>}
-          {runtimeStr && <span class="detail-runtime-pill">{runtimeStr}</span>}
-        </p>
+    <OpenMovieCase title={m.title} poster={poster} subtitle={[m.year, runtimeStr].filter(Boolean).join(' · ')}>
+      <header>
+        <p class="detail-kicker">{[m.year, runtimeStr, m.genre === 'Uncategorized' ? '' : m.genre].filter(Boolean).join(' · ')}</p>
         <h1 class="detail-title">{m.title}</h1>
-        {m.rating && (
-          <p class="detail-rating">
-            <span class="detail-rating-stars">{m.rating}</span>
-            {m.starCount && <span class="detail-rating-num">{m.starCount}/5</span>}
-          </p>
-        )}
+        {m.rating && <p class="detail-rating">{m.rating}{m.starCount && <span class="movie-case-rating-number">{m.starCount}/5</span>}</p>}
         {m.date && <p class="detail-meta-line">Watched {m.date}{timesWatched > 1 ? ` · ${timesWatched}× total` : ''}</p>}
-        {m.link && (
-          <div class="detail-link-row">
-            <a class="detail-link-pill" href={m.link} target="_blank" rel="noopener noreferrer">View on Letterboxd ↗</a>
-          </div>
-        )}
-      </div>
-    </header>
-
-    {m.overview && (
-      <section class="detail-section">
+      </header>
+      <section class="movie-insert-section">
         <h2 class="detail-h2">Synopsis</h2>
-        <p class="detail-prose">{m.overview}</p>
+        <p class="detail-prose">{m.overview || 'A synopsis has not been added yet.'}</p>
       </section>
-    )}
-
-    {m.review && (
-      <section class="detail-section">
-        <h2 class="detail-h2">Quick Review</h2>
-        <p class="detail-pullquote">{m.review}</p>
-      </section>
-    )}
-
-    <section class="detail-section detail-section--notes">
-      <h2 class="detail-h2">My Notes</h2>
-      {notesHtml ? (
-        <div class="detail-notes-body" set:html={notesHtml} />
-      ) : (
-        <p class="detail-notes-empty">
-          What worked, what didn't, themes, scenes that stuck. Add a <code>notes</code> field to this movie in
-          <code>data/movies.json</code>.
-        </p>
+      {m.review && (
+        <section class="movie-insert-section">
+          <h2 class="detail-h2">Quick Review</h2>
+          <p class="detail-pullquote">{m.review}</p>
+        </section>
       )}
-    </section>
-
-    {commentaryHtml && (
-      <section class="detail-section">
-        <h2 class="detail-h2">Re-Watch Log</h2>
-        <div set:html={commentaryHtml} />
-      </section>
-    )}
-
-    {tmdbGenres.length > 0 && (
-      <section class="detail-section">
-        <h2 class="detail-h2">Tags</h2>
-        <div class="detail-tag-row">
-          {tmdbGenres.map((g: string) => <span class="detail-tag">{g}</span>)}
-        </div>
-      </section>
-    )}
+      {notesHtml && (
+        <section class="movie-insert-section">
+          <h2 class="detail-h2">My Notes</h2>
+          <div class="movie-insert-notes" set:html={notesHtml} />
+        </section>
+      )}
+      {commentaryHtml && (
+        <section class="movie-insert-section">
+          <h2 class="detail-h2">Re-Watch Log</h2>
+          <div class="movie-insert-notes" set:html={commentaryHtml} />
+        </section>
+      )}
+      {tmdbGenres.length > 0 && <p class="movie-insert-genres">{tmdbGenres.join(' / ')}</p>}
+      {m.link && <a class="movie-insert-link" href={m.link} target="_blank" rel="noopener noreferrer">View on Letterboxd ↗</a>}
+    </OpenMovieCase>
   </main>
 </Base>
 
@@ -156,3 +115,25 @@ const schema = movieSchema({
     back.textContent = '← Back to Disc boxes';
   }
 </script>
+
+<style is:global>
+  body.movie-case-reading {
+    background: radial-gradient(ellipse at 50% 0%, #3b3830 0, #181a1b 42%, #101112 80%);
+    background-attachment: fixed;
+    background-color: #101112;
+  }
+  .movie-case-page.detail-page { width: 100%; max-width: 1108px; padding: 22px 24px 64px; }
+  .movie-case-page .detail-back { color: #e3ddd1; font-size: .85rem; margin-bottom: 20px; }
+  .movie-case-page .detail-back:hover { color: #fff; }
+  .movie-case-page .movie-open-case { min-height: min(73vw, 736px); }
+  .movie-case-page .detail-kicker { display: block; }
+  .movie-case-page .movie-case-rating-number { margin-left: 10px; font-size: .75rem; }
+  .movie-case-page .movie-insert-notes { color: #373128; font-size: .94rem; line-height: 1.7; overflow-wrap: anywhere; }
+  .movie-case-page .movie-insert-notes p { color: inherit; }
+  .movie-case-page .movie-insert-genres { margin: 2rem 0 1rem; color: #706552; font-size: .7rem; line-height: 1.6; }
+  .movie-case-page .movie-insert-link { display: inline-block; font-size: .78rem; font-weight: 600; }
+  @media (max-width: 640px) {
+    .movie-case-page.detail-page { padding: 20px 16px 40px; }
+    .movie-case-page .movie-open-case { view-transition-name: none; }
+  }
+</style>

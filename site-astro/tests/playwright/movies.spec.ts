@@ -169,14 +169,14 @@ test('disc sorting, movie details and return links preserve the selected shelf',
   const tier = await page.locator('.movie-library-group').textContent() || '';
   const selected = await page.locator('.movie-library-title').innerText();
   const shelfUrl = page.url();
-  await page.getByRole('link', { name: 'View movie', exact: true }).click();
+  await page.getByRole('link', { name: 'Open case', exact: true }).click();
   await expect(page.locator('.detail-title')).toHaveText(selected);
   await expect(page.locator('.detail-back')).toHaveText('← Back to Disc boxes');
   await page.goBack();
   await expect(page.locator('#movie-library')).toBeVisible();
   await expect(page.locator('.movie-library-title')).toHaveText(selected);
   await expect(page).toHaveURL(shelfUrl);
-  await page.getByRole('link', { name: 'View movie', exact: true }).click();
+  await page.getByRole('link', { name: 'Open case', exact: true }).click();
   await page.locator('.detail-back').click();
   await expect(page.locator('.movie-library-title')).toHaveText(selected);
   await expect(page.locator('.movie-library-group')).toHaveText(tier);
@@ -377,4 +377,82 @@ test('missing movie posters have a usable case and detail link', async ({ page }
   await expect(page.locator('.disc-case[aria-pressed="true"] .disc-case-spine-title')).toHaveText(selected);
   await page.keyboard.press('Enter');
   await expect(page.locator('.detail-title')).toHaveText(selected);
+});
+
+test('selected movie opens its lid and reveals its disc before entering the case page', async ({ page }) => {
+  const errors: string[] = [];
+  let returning = false;
+  page.on('pageerror', (error) => {
+    // Chromium sometimes rejects its native history transition with no exposed
+    // ViewTransition object. This is a cancelled browser animation, not a script failure.
+    if (returning && error.name === 'AbortError' && error.message === 'Transition was skipped') return;
+    errors.push(error.message);
+  });
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 393, height: 852 }]) {
+    returning = false;
+    await page.setViewportSize(viewport);
+    await page.goto('/movies.html?view=disc-boxes&discMovie=seconds');
+    await page.locator('.disc-case[aria-pressed="true"]').click();
+    const opening = page.locator('.movie-case-opening-overlay');
+    await expect(opening).toBeVisible();
+    const lid = opening.locator('.movie-case-lid');
+    await expect.poll(() => lid.evaluate((node) => getComputedStyle(node).transform), { intervals: [20] })
+      .not.toBe('matrix3d(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1)');
+    // Observe the short zoom phase on animation frames, not assertion backoff.
+    await page.waitForFunction(() => document.querySelector<HTMLElement>('.movie-case-opening-overlay')?.dataset.phase === 'zoom', null, { polling: 'raf' });
+    await expect(opening.locator('.movie-case-disc')).toBeVisible();
+    await expect(page).toHaveURL(/\/movies\/seconds\.html\?from=disc-boxes/);
+    await expect(page.locator('.movie-case-insert .detail-title')).toHaveText('Seconds');
+    await expect(page.getByRole('img', { name: 'Seconds disc', exact: true })).toBeVisible();
+    await expect(page.locator('.movie-case-insert .detail-prose').first()).toContainText('middle-aged banker');
+    const layout = await page.evaluate(() => {
+      const insert = document.querySelector('.movie-case-insert')!.getBoundingClientRect();
+      const tray = document.querySelector('.movie-case-tray')!.getBoundingClientRect();
+      return { overflow: document.documentElement.scrollWidth - innerWidth, insertX: insert.x, insertY: insert.y, trayX: tray.x, trayBottom: tray.bottom };
+    });
+    expect(layout.overflow).toBeLessThanOrEqual(1);
+    if (viewport.width < 640) expect(layout.insertY).toBeGreaterThan(layout.trayBottom);
+    else expect(layout.trayX).toBeGreaterThan(layout.insertX);
+    // Allow the document transition to settle before back navigation.
+    await page.waitForTimeout(600);
+    returning = true;
+    await page.goBack();
+    await expect(page.locator('#movie-library')).toBeVisible();
+    await expect(page.locator('#movie-library')).not.toHaveAttribute('inert', '');
+    await expect(page.locator('.movie-case-opening-overlay')).toHaveCount(0);
+    await expect(page.locator('.disc-case[aria-pressed="true"]')).toBeVisible();
+    // Resizing during the native back transition intentionally aborts it.
+    await page.waitForTimeout(600);
+  }
+  expect(errors).toEqual([]);
+});
+
+test('Escape cancels opening a movie and restores browsing without navigating', async ({ page }) => {
+  await page.goto('/movies.html?view=disc-boxes&discMovie=seconds');
+  await page.getByRole('link', { name: 'Open case', exact: true }).click();
+  await expect(page.locator('.movie-case-opening-overlay')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.movie-case-opening-overlay')).toHaveCount(0);
+  await expect(page.locator('#movie-library')).not.toHaveAttribute('inert', '');
+  await expect(page.locator('.movie-library-stage')).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('.movie-library-title')).not.toHaveText('Seconds');
+  // Let the original opening finish time pass: cancelled work must never navigate.
+  await page.waitForTimeout(1400);
+  expect(new URL(page.url()).pathname).toBe('/movies.html');
+});
+
+test('reduced motion opens the case page directly and direct links work without JavaScript', async ({ browser, page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/movies.html?view=disc-boxes&discMovie=seconds');
+  await page.getByRole('link', { name: 'Open case', exact: true }).click();
+  await expect(page.locator('.movie-case-insert .detail-title')).toHaveText('Seconds');
+  await expect(page.locator('.movie-case-opening-overlay')).toHaveCount(0);
+  const noScript = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 393, height: 852 } });
+  const direct = await noScript.newPage();
+  await direct.goto(new URL('/movies/seconds.html', page.url()).href);
+  await expect(direct.getByRole('heading', { name: 'Synopsis', exact: true })).toBeVisible();
+  await expect(direct.locator('.movie-case-insert .detail-prose').first()).toContainText('middle-aged banker');
+  await expect(direct.getByRole('img', { name: 'Seconds disc', exact: true })).toBeVisible();
+  await noScript.close();
 });

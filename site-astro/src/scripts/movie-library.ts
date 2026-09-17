@@ -1,11 +1,13 @@
 import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
+import { openMovieCase } from './movie-case-transition';
 
 interface LibraryMovie {
   id: string;
   title: string;
   subtitle: string;
   cover: string;
+  overview: string;
   href: string;
   tier: string;
   tierLabel: string;
@@ -63,6 +65,7 @@ function initMovieLibrary() {
     mode: 'browse' | 'rotate'; pitch: number; yaw: number } | null = null;
   let lastTap: { movie: number; x: number; y: number; time: number } | null = null;
   let openingDetail = false;
+  let openingController: AbortController | null = null;
   let inspectedMovie: number | null = null;
   let hoverBounds: DOMRect | null = null;
   let hoverPointer: { x: number; y: number } | null = null;
@@ -387,6 +390,7 @@ function initMovieLibrary() {
 
   function resize() {
     if (!active) return;
+    if (openingDetail) cancelOpening();
     finishSortTransition();
     if (releaseDrag()) select(target);
     hoverPointer = null;
@@ -420,15 +424,35 @@ function initMovieLibrary() {
     return `${movie.href}?${params}`;
   }
 
-  function openDetails(logical: number) {
+  function cancelOpening() {
+    openingController?.abort();
+    openingController = null;
+    openingDetail = false;
+    library!.inert = false;
+    library!.removeAttribute('aria-busy');
+  }
+
+  async function openDetails(logical: number) {
     if (!active || openingDetail || sorting || !movies.length) return;
     select(logical);
     openingDetail = true;
     lastTap = null;
-    window.location.assign(detailHref(movies[wrap(logical)]));
+    releaseDrag();
+    hoverPointer = null;
+    resetInspection(true);
+    cancelAnimationFrame(frame); frame = 0;
+    render();
+    const movie = movies[wrap(logical)];
+    const href = detailHref(movie);
+    const source = volumes.get(logical);
+    if (!source) { window.location.assign(href); return; }
+    const controller = openingController = new AbortController();
+    library!.inert = true;
+    library!.setAttribute('aria-busy', 'true');
+    if (await openMovieCase(source, { ...movie, href }, controller.signal) && !controller.signal.aborted) window.location.assign(href);
   }
 
-  title.addEventListener('click', (event) => {
+  for (const link of [title, detailsLink]) link.addEventListener('click', (event) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     openDetails(Math.round(target));
@@ -436,6 +460,7 @@ function initMovieLibrary() {
 
   function close(updateUrl = true, focus = true) {
     if (!active) return;
+    if (openingDetail) cancelOpening();
     active = false;
     finishSortTransition();
     if (sortMenu) sortMenu.open = false;
@@ -559,6 +584,10 @@ function initMovieLibrary() {
       select(target);
       return;
     }
+    if (!finished.moved && finished.mode === 'rotate' && finished.movie !== null) {
+      openDetails(finished.movie);
+      return;
+    }
     // Use the tap location as well as time: the first tap starts moving
     // the movie, so the second can land on the space it has just vacated.
     // This also gives touch screens the same double-tap interaction.
@@ -600,7 +629,11 @@ function initMovieLibrary() {
     // Keyboard/screen-reader activation has no preceding pointer event.
     if (event.detail !== 0) return;
     const node = (event.target as Element).closest<HTMLElement>('[data-disc-index]');
-    if (node) select(Number(node.dataset.discIndex));
+    if (node) {
+      const logical = Number(node.dataset.discIndex);
+      if (logical === Math.round(target)) openDetails(logical);
+      else select(logical);
+    }
   });
   stage.addEventListener('dblclick', (event) => {
     // Also respect the desktop's native double-click timing preference.
@@ -639,7 +672,8 @@ function initMovieLibrary() {
     }
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || openingDetail) return;
+    if (event.key !== 'Escape') return;
+    if (openingDetail) { cancelOpening(); stage!.focus({ preventScroll: true }); return; }
     if (sortMenu?.open) {
       event.preventDefault();
       sortMenu.open = false;
@@ -662,7 +696,7 @@ function initMovieLibrary() {
   });
   window.addEventListener('pageshow', (event) => {
     if (event.persisted && new URLSearchParams(location.search).get('view') === 'disc-boxes') {
-      openingDetail = false;
+      cancelOpening();
       open(false, true);
     }
     if (active) { resize(); schedule(); }

@@ -8,7 +8,16 @@
     "year": "1966",
     "poster": "https://a.ltrbxd.com/resized/film-poster/3/8/8/9/4/38894-seconds-0-600-0-900-crop.jpg?v=d14e2964fe",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 20620,
+    "runtime": 107,
+    "tmdbGenres": [
+      "Science Fiction",
+      "Thriller",
+      "Horror"
+    ],
+    "overview": "An unhappy middle-aged banker agrees to a procedure that will fake his death and give him a completely new look and identity; one that comes with its own price.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/xqifM3qMTLZ91knsftAYxq55xwc.jpg"
   },
   {
     "title": "The Long Walk",
@@ -19,7 +28,16 @@
     "year": "2025",
     "poster": "https://a.ltrbxd.com/resized/film-poster/5/3/1/3/1/6/531316-the-long-walk-2025-0-600-0-900-crop.jpg?v=9cf0c245aa",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 604079,
+    "runtime": 108,
+    "tmdbGenres": [
+      "Science Fiction",
+      "Thriller",
+      "Horror"
+    ],
+    "overview": "In a dystopian 1970s America, fifty teenage boys take part in a deadly annual walking contest, forced to maintain a minimum pace or be executed, until only one survivor remains.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/2dlt9I2ga6hweywz9zsFUz1PVii.jpg"
   },
   {
     "title": "Tusk",
@@ -30,7 +48,15 @@
     "year": "2014",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/wi/5v/kd/wf/mmtVpRhu6UvHTF4Oz3sojJFDPL9-0-600-0-900-crop.jpg?v=5c518af279",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 246403,
+    "runtime": 102,
+    "tmdbGenres": [
+      "Comedy",
+      "Horror"
+    ],
+    "overview": "When his best friend and podcast co-host goes missing in the backwoods of Canada, a young guy joins forces with his friend's girlfriend to search for him.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/bQSfsZDaBWZCHI8Z2nrN1hkR6EG.jpg"
   },
   {
     "title": "The Sadness",
@@ -41,7 +67,15 @@
     "year": "2021",
     "poster": "https://a.ltrbxd.com/resized/film-poster/6/9/6/0/3/2/696032-the-sadness-0-600-0-900-crop.jpg?v=2c6fc1d343",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 776797,
+    "runtime": 100,
+    "tmdbGenres": [
+      "Horror",
+      "Thriller"
+    ],
+    "overview": "A young couple is pushed to the limits of sanity as they attempt to be reunited amid the chaos of a pandemic outbreak. The streets erupt into violence and depravity, as those infected are driven to enact the most cruel and ghastly things imaginable.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/1McO40rFBnUSz0EB2EwYQlUv9LV.jpg"
   },
   {
     "title": "Insidious: The Last Key",
@@ -52,7 +86,15 @@
     "year": "2018",
     "poster": "https://a.ltrbxd.com/resized/film-poster/3/4/0/9/7/9/340979-insidious-the-last-key-0-600-0-900-crop.jpg?v=a08060dbfe",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 406563,
+    "runtime": 103,
+    "tmdbGenres": [
+      "Horror",
+      "Thriller"
+    ],
+    "overview": "Parapsychologist Elise Rainier and her team travel to Five Keys, NM, to investigate a man’s claim of a haunting. Terror soon strikes when Rainier realizes that the house he lives in was her family’s old home.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/q1r0QUf4UVTqtkxOSMnTD8RyTaL.jpg"
   },
   {
     "title": "Mysterious Skin",
@@ -63,7 +105,14 @@
     "year": "2004",
     "poster": "https://a.ltrbxd.com/resized/sm/upload/uo/r7/1v/1j/wynnf6LT4ueuCuREPRMtHGQIk5T-0-600-0-900-crop.jpg?v=b0c8031954",
     "genre": "Uncategorized",
-    "timesWatched": 1
+    "timesWatched": 1,
+    "tmdbId": 11171,
+    "runtime": 105,
+    "tmdbGenres": [
+      "Drama"
+    ],
+    "overview": "A teenage hustler and a young man obsessed with alien abductions cross paths, together discovering a horrible, liberating truth.",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/yiNHoIFUlFAByjXkTDdJOK9nw2Z.jpg"
   },
   {
     "title": "28 Days Later",

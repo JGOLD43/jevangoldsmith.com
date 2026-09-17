@@ -1,0 +1,140 @@
+---
+interface Props { title?: string; poster?: string; subtitle?: string; }
+const { title = '', poster = '', subtitle = '' } = Astro.props;
+---
+<div class="movie-open-case">
+  <div class="movie-case-lid">
+    <div class="movie-case-insert">
+      <slot />
+    </div>
+    <div class="movie-case-outer" aria-hidden="true">
+      <img src={poster || undefined} alt="" decoding="async" />
+    </div>
+  </div>
+  <div class="movie-case-hinge" aria-hidden="true"></div>
+  <div class="movie-case-tray">
+    <div class="movie-case-recess" aria-hidden="true"></div>
+    <div class="movie-case-disc" role="img" aria-label={`${title} disc`}>
+      <div class="movie-disc-print">
+        <img src={poster || undefined} alt="" decoding="async" />
+      </div>
+      <div class="movie-disc-label"><strong>{title}</strong><span>{subtitle}</span></div>
+      <div class="movie-disc-hub" aria-hidden="true"></div>
+    </div>
+    <p class="movie-case-tray-caption" aria-hidden="true">{title}</p>
+  </div>
+</div>
+<style is:global>
+  .movie-open-case {
+    --case-hinge-width: 18px;
+    position: relative; display: grid; grid-template-columns: minmax(0, 1fr) var(--case-hinge-width) minmax(0, 1fr);
+    width: 100%; min-height: 540px; perspective: 1800px;
+    filter: drop-shadow(0 24px 32px #0008);
+    view-transition-name: movie-open-case;
+  }
+  .movie-case-lid {
+    position: relative; min-width: 0; padding: 16px; z-index: 2;
+    background: #161819; border: 2px solid #383b3b; border-radius: 12px 5px 5px 12px;
+    box-shadow: inset 0 0 0 4px #090a0b, inset 0 0 0 6px #ffffff0c;
+    transform-origin: calc(100% + var(--case-hinge-width) / 2) center; transform-style: preserve-3d;
+    transform: rotateY(var(--case-open-angle, 0deg));
+  }
+  .movie-case-insert {
+    position: relative; min-height: 100%; padding: clamp(22px, 3vw, 38px);
+    background: linear-gradient(100deg, #e7dfce, #f6f0e4 15%, #eee7d9 95%, #dad2c4);
+    color: #282621; box-shadow: 0 2px 5px #0008; backface-visibility: hidden;
+    transform: translateZ(1px);
+  }
+  .movie-case-lid::before, .movie-case-lid::after {
+    content: ''; position: absolute; z-index: 3; left: 7px; width: 14px; height: 30px;
+    background: linear-gradient(90deg, #151717, #434645, #202322); border-radius: 3px;
+    box-shadow: 2px 2px 4px #0008; transform: translateZ(2px); backface-visibility: hidden;
+  }
+  .movie-case-lid::before { top: 20%; }
+  .movie-case-lid::after { bottom: 20%; }
+  .movie-case-outer {
+    position: absolute; inset: -2px; padding: 3px 2px; background: #141515; border-radius: 5px;
+    transform: rotateY(180deg) translateZ(2px); backface-visibility: hidden; overflow: hidden;
+    box-shadow: inset 0 1px #ffffff40, 0 2px 4px #0006;
+  }
+  .movie-case-outer img:not([src]), .movie-disc-print img:not([src]) { visibility: hidden; }
+  .movie-case-outer img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .movie-case-hinge {
+    background: linear-gradient(90deg, #090a0b, #323534 25%, #101212 40%, #060707 60%, #303333 85%, #090a0b);
+    margin: 4px -1px; border-block: 1px solid #ffffff24;
+  }
+  .movie-case-tray {
+    position: relative; min-width: 0; min-height: 460px; display: grid; align-content: center; padding: 7%;
+    border: 2px solid #393d3c; border-radius: 5px 12px 12px 5px;
+    background: radial-gradient(ellipse at 50% 35%, #303331, #171a19 65%, #111313);
+    box-shadow: inset 0 0 0 4px #090a0a, inset 0 0 0 6px #ffffff0b;
+  }
+  .movie-case-recess {
+    position: absolute; top: 50%; left: 4%; right: 4%; aspect-ratio: 1;
+    transform: translateY(-50%); border: 3px solid #080a09; border-radius: 50%;
+    box-shadow: 0 1px 2px #ffffff30, inset 0 4px 8px #000b;
+  }
+  .movie-case-disc {
+    position: relative; aspect-ratio: 1; width: 100%; border-radius: 50%; padding: 5%;
+    background: conic-gradient(from 25deg, #b4b8b9, #faf6e6 10%, #7f8585 20%, #c8d4da 29%, #eee6cc 39%, #f8f9ef 50%, #8b9096 61%, #ccd4c5 73%, #f9f2de 85%, #b4b8b9);
+    border: 1px solid #d9d8cc; box-shadow: 0 7px 12px #000a, inset 0 0 0 2px #ffffff70;
+    view-transition-name: movie-case-disc;
+  }
+  .movie-disc-print { position: absolute; inset: 4%; border-radius: 50%; overflow: hidden; background: #252c2c; }
+  .movie-disc-print img { width: 100%; height: 100%; object-fit: cover; opacity: .85; }
+  .movie-disc-print::after { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, #fff3, transparent 40%, #0008 75%); }
+  .movie-disc-label {
+    position: absolute; inset: auto 14% 13%; display: grid; gap: 5px; text-align: center;
+    color: #fff; text-shadow: 0 1px 4px #000; font: 600 clamp(12px, 1.6vw, 22px)/1.15 Inter, sans-serif;
+  }
+  .movie-disc-label span { font-size: .55em; font-weight: 400; letter-spacing: .08em; }
+  .movie-disc-hub {
+    position: absolute; inset: 38%; border-radius: 50%; border: 1px solid #c3c6c57d;
+    background: conic-gradient(#e2e3e2b8, #727a80bf, #e4e2d7c9, #9aa4a6c9, #e2e3e2b8);
+    box-shadow: 0 0 0 2px #0004, inset 0 0 0 4px #d0d1c55e;
+  }
+  .movie-disc-hub::after {
+    content: ''; position: absolute; inset: 31%; border-radius: 50%; background: #111414;
+    border: 2px solid #a2aaa6; box-shadow: inset 0 0 0 3px #262e2b;
+  }
+  .movie-case-tray-caption {
+    position: absolute; left: 10%; right: 10%; bottom: 6%; margin: 0;
+    color: #8b918c; text-align: center; font: 500 .7rem/1.4 Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase;
+  }
+  .movie-case-insert h1, .movie-case-insert h2, .movie-case-insert h3 { color: #25231f; }
+  .movie-case-insert .detail-title { font-size: clamp(1.5rem, 3vw, 2.3rem); margin: .5rem 0 1.2rem; line-height: 1.1; }
+  .movie-case-insert .detail-kicker { color: #655c4d; font-size: .7rem; letter-spacing: .07em; margin: 0; }
+  .movie-case-insert .detail-h2 { font: 600 .7rem/1.4 Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; margin: 1.8rem 0 .6rem; }
+  .movie-case-insert .detail-prose, .movie-case-insert .detail-pullquote { font: 400 .94rem/1.7 Inter, sans-serif; color: #373128; margin: 0; }
+  .movie-case-insert .detail-meta-line { font-size: .75rem; color: #706552; }
+  .movie-case-insert .detail-rating { color: #80601d; margin: 1rem 0; }
+  .movie-case-insert a { color: #59452c; text-underline-offset: 3px; }
+  .movie-case-opening-overlay {
+    position: fixed; inset: 0; z-index: 1200; pointer-events: auto; overflow: hidden;
+    background: #10111200;
+  }
+  .movie-case-opening-overlay .movie-open-case {
+    position: absolute; min-height: 0; filter: drop-shadow(0 22px 30px #0009);
+  }
+  .movie-case-opening-overlay .movie-case-lid { padding: 3%; }
+  .movie-case-opening-overlay .movie-case-insert { height: 100%; overflow: hidden; }
+  .movie-case-opening-overlay .movie-case-tray { min-height: 0; }
+  .movie-case-opening-overlay .movie-case-insert { font-size: .85rem; }
+  .movie-case-opening-overlay .movie-case-insert .detail-title { font-size: 1.6rem; }
+  .movie-case-opening-overlay .movie-case-insert .detail-prose { font-size: .85rem; }
+  ::view-transition-group(movie-open-case), ::view-transition-group(movie-case-disc) { animation-duration: .45s; }
+  @media (max-width: 640px) {
+    .movie-case-opening-overlay .movie-open-case { view-transition-name: none; }
+    .movie-case-reading .movie-open-case { grid-template-columns: 1fr; min-height: 0; }
+    .movie-case-reading .movie-case-tray { grid-row: 1; min-height: 290px; padding: 30px max(18%, 45px) 48px; border-radius: 12px 12px 5px 5px; }
+    .movie-case-reading .movie-case-recess { width: 230px; max-width: 84%; left: 50%; right: auto; transform: translate(-50%, -50%); }
+    .movie-case-reading .movie-case-disc { max-width: 250px; margin: auto; }
+    .movie-case-reading .movie-case-tray-caption { bottom: 17px; font-size: .62rem; }
+    .movie-case-reading .movie-case-hinge { grid-row: 2; height: 14px; margin: -1px 4px; }
+    .movie-case-reading .movie-case-lid { grid-row: 3; border-radius: 5px 5px 12px 12px; padding: 12px; }
+    .movie-case-reading .movie-case-insert { padding: 25px 22px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(movie-open-case), ::view-transition-group(movie-case-disc) { animation-duration: 0s; }
+  }
+</style>

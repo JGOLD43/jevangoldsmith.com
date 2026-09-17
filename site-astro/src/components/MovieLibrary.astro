@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import { ratingTier } from '../lib/rating-tier';
 import { slugify } from '../lib/slug';
 import InlineJson from './InlineJson.astro';
+import OpenMovieCase from './OpenMovieCase.astro';
 
 interface Props { movies: CollectionEntry<'movies'>['data'][]; }
 const { movies } = Astro.props;
@@ -12,7 +13,7 @@ const library = movies.map((movie) => {
   const duration = runtime ? `${Math.floor(runtime / 60)}h ${runtime % 60}m` : '';
   const id = slugify(movie.title);
   return { id, title: movie.title, subtitle: [movie.year, duration].filter(Boolean).join(' · '),
-    cover: movie.poster || '', href: `/movies/${id}.html`,
+    cover: movie.poster || '', overview: movie.overview || '', href: `/movies/${id}.html`,
     tier: tier?.key || '', tierLabel: tier?.label || 'Unrated', tierColor: tier?.color || '#e3d8c6',
     collection: movie.genre || 'Uncategorized' };
 }).sort((a, b) => a.title.localeCompare(b.title, 'en', { numeric: true }));
@@ -38,7 +39,7 @@ const library = movies.map((movie) => {
     </div>
   </header>
   <div class="movie-library-stage" tabindex="0" role="region"
-    aria-label="Interactive disc shelf. Drag the shelf to browse. Move over or drag the selected case to rotate it. Double-click a case to open its details."
+    aria-label="Interactive disc shelf. Drag the shelf to browse. Drag the selected case to rotate it. Click the selected case to open it."
     aria-describedby="movie-library-help">
     <div class="movie-library-shelf" aria-hidden="true">
       <div class="movie-library-shelf-top"></div>
@@ -50,7 +51,7 @@ const library = movies.map((movie) => {
       <div class="movie-library-track"></div>
     </div>
   </div>
-  <p id="movie-library-help" class="sr-only">Move over the selected case to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last movie. Double-click or double-tap a case, or press Enter, to open its details. Escape returns to Movies.</p>
+  <p id="movie-library-help" class="sr-only">Move over the selected case to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last movie. Click or tap the selected case, or press Enter, to open it and read its synopsis. Escape cancels opening or returns to Movies.</p>
   <div class="movie-library-controls">
     <button class="movie-library-arrow" type="button" data-disc-step="-1" aria-label="Previous movie">←</button>
     <div class="movie-library-caption">
@@ -59,7 +60,7 @@ const library = movies.map((movie) => {
         <a class="movie-library-title" href={library[0]?.href || '/movies.html'}>{library[0]?.title}</a>
         <p class="movie-library-subtitle">{library[0]?.subtitle}</p>
       </div>
-      <a class="movie-library-details" href={library[0]?.href || '/movies.html'}>View movie</a>
+      <a class="movie-library-details" href={library[0]?.href || '/movies.html'}>Open case</a>
     </div>
     <button class="movie-library-arrow" type="button" data-disc-step="1" aria-label="Next movie">→</button>
   </div>
@@ -67,6 +68,14 @@ const library = movies.map((movie) => {
   {library.length === 0 && <p class="movie-library-empty">No movies watched yet.</p>}
 </section>
 <InlineJson id="jg-movie-library" data={library} />
+<template id="movie-case-opening-template">
+  <OpenMovieCase>
+    <p class="detail-kicker" data-case-subtitle></p>
+    <h2 class="detail-title" data-case-title></h2>
+    <h3 class="detail-h2">Synopsis</h3>
+    <p class="detail-prose" data-case-overview></p>
+  </OpenMovieCase>
+</template>
 <script>
   import '../scripts/movie-library';
 </script>
@@ -122,6 +131,8 @@ const library = movies.map((movie) => {
   }
   html:has(body.movie-library-open), body.movie-library-open { overflow: hidden !important; }
   body.movie-library-open .collection-mobile-toggle { visibility: hidden; }
+  /* Covered gallery posters must not fly over the open case during navigation. */
+  body.movie-library-open .movie-poster { view-transition-name: none !important; }
   .movie-library-header {
     position: absolute; z-index: 3; inset: 0 0 auto; padding: 1.5rem 2.5rem;
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;
