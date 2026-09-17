@@ -286,10 +286,9 @@ function initMovieLibrary() {
 
   function render() {
     if (!movies.length) return;
-    // The grain travels with the cases; the distant room moves more slowly.
+    // The grain travels with the cases; the distant cinema stays stationary.
     // Modulo a complete texture tile keeps long browsing sessions continuous.
     library!.style.setProperty('--wood-offset', `${(-(position + sceneryPosition) * pitch) % 960}px`);
-    library!.style.setProperty('--room-offset', `${-(position + sceneryPosition) * pitch * .14}px`);
     stage!.style.setProperty('--shelf-depth', `${130 * scale}px`);
     stage!.style.setProperty('--shelf-rear-depth', `${52 * scale}px`);
     const center = Math.round(position);

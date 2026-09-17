@@ -90,20 +90,20 @@ const library = movies.map((movie) => {
   .movie-library[hidden] { display: none !important; }
   .movie-library {
     position: fixed; inset: var(--nav-height, 58px) 0 0; z-index: 900;
-    overflow: hidden; background: #21170f; color: #fff;
+    overflow: hidden; background: #120c0d; color: #fff;
     font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
     isolation: isolate;
   }
   .movie-library-room {
     position: absolute; inset: -12px;
-    background-image: linear-gradient(#160e0780, #160e07ad), url('/images/library/library-room.webp');
-    background-size: auto 100%; background-repeat: repeat-x;
-    background-position: calc(50% + var(--room-offset, 0px)) center;
-    filter: blur(3px); pointer-events: none;
+    background-image: linear-gradient(#0c081012, #0c080f35), url('/images/movies/cinema-room.webp');
+    background-size: cover; background-repeat: no-repeat;
+    background-position: center;
+    filter: blur(2px); pointer-events: none;
   }
   .movie-library::after {
     content: ''; position: absolute; inset: auto 0 0; height: 180px; z-index: 2;
-    background: linear-gradient(transparent, #160e08dc 72%); pointer-events: none;
+    background: linear-gradient(transparent, #100b0fdc 72%); pointer-events: none;
   }
   html:has(body.movie-library-open), body.movie-library-open { overflow: hidden !important; }
   body.movie-library-open .collection-mobile-toggle { visibility: hidden; }
@@ -309,6 +309,8 @@ const library = movies.map((movie) => {
   .movie-library-stage:focus, .movie-library-stage:focus-visible { outline: none; box-shadow: none; }
   .movie-library-empty { padding: 8rem 2rem; text-align: center; }
   @media (max-width: 600px) {
+    /* Keep a curtain, wall light and the screen edge in the narrow crop. */
+    .movie-library-room { background-position: 12% center; }
     .movie-library-header { padding: 1.1rem; }
     .movie-library-stage { top: 72px; bottom: 154px; }
     .movie-library-controls { gap: .4rem; bottom: max(24px, env(safe-area-inset-bottom)); }
