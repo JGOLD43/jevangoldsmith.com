@@ -41,11 +41,13 @@ const library = movies.map((movie) => {
     aria-label="Interactive disc shelf. Drag the shelf to browse. Move over or drag the selected case to rotate it. Double-click a case to open its details."
     aria-describedby="movie-library-help">
     <div class="movie-library-shelf" aria-hidden="true">
-      <div class="movie-library-shelf-top"><div class="movie-library-wood-grain"></div></div>
-      <div class="movie-library-shelf-front"><div class="movie-library-wood-grain"></div></div>
+      <div class="movie-library-shelf-top"></div>
+      <div class="movie-library-shelf-front"></div>
     </div>
-    <div class="movie-library-contact-shadows" aria-hidden="true"></div>
-    <div class="movie-library-track"></div>
+    <div class="movie-library-cases">
+      <div class="movie-library-contact-shadows" aria-hidden="true"></div>
+      <div class="movie-library-track"></div>
+    </div>
   </div>
   <p id="movie-library-help" class="sr-only">Move over the selected case to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last movie. Double-click or double-tap a case, or press Enter, to open its details. Escape returns to Movies.</p>
   <div class="movie-library-controls">
@@ -90,20 +92,24 @@ const library = movies.map((movie) => {
   .movie-library[hidden] { display: none !important; }
   .movie-library {
     position: fixed; inset: var(--nav-height, 58px) 0 0; z-index: 900;
-    overflow: hidden; background: #120c0d; color: #fff;
+    overflow: hidden; background: #101112; color: #fff;
     font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
     isolation: isolate;
   }
   .movie-library-room {
-    position: absolute; inset: -12px;
-    background-image: linear-gradient(#0c081012, #0c080f35), url('/images/movies/cinema-room.webp');
-    background-size: cover; background-repeat: no-repeat;
-    background-position: center;
-    filter: blur(2px); pointer-events: none;
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 18% 55% at 50% -8%, #e9d6b53b, transparent 100%),
+      radial-gradient(ellipse 48% 76% at 50% 38%, #55534b38, transparent 100%),
+      linear-gradient(90deg, #08090a, #171819 48%, #08090a);
+  }
+  .movie-library-room::after {
+    content: ''; position: absolute; inset: 0; opacity: .13;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23grain)' opacity='.3' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
   }
   .movie-library::after {
     content: ''; position: absolute; inset: auto 0 0; height: 180px; z-index: 2;
-    background: linear-gradient(transparent, #100b0fdc 72%); pointer-events: none;
+    background: linear-gradient(transparent, #08090be8 72%); pointer-events: none;
   }
   html:has(body.movie-library-open), body.movie-library-open { overflow: hidden !important; }
   body.movie-library-open .collection-mobile-toggle { visibility: hidden; }
@@ -118,7 +124,7 @@ const library = movies.map((movie) => {
   .movie-library-header-actions, .movie-library-controls { touch-action: manipulation; }
   .movie-library-exit, .movie-library-sort > summary {
     pointer-events: auto; display: inline-flex; align-items: center; gap: .45rem;
-    color: #fff; border: 1px solid #ffffff55; background: #24190ec9; border-radius: 6px;
+    color: #fff; border: 1px solid #ffffff40; background: #202020d9; border-radius: 6px;
     min-height: 40px; padding: .5rem .75rem; font: inherit; font-size: .8rem; cursor: pointer;
   }
   .movie-library-exit:hover, .movie-library-sort > summary:hover { background: #ffffff15; }
@@ -132,7 +138,7 @@ const library = movies.map((movie) => {
   .movie-library-sort-options {
     position: absolute; top: calc(100% + .55rem); right: 0; width: 188px;
     padding: .35rem; border: 1px solid #ffffff35; border-radius: 10px;
-    background: #281e16; box-shadow: 0 14px 36px #0006;
+    background: #222323; box-shadow: 0 14px 36px #0006;
   }
   .movie-library-sort:not([open]) .movie-library-sort-options { display: none; }
   .movie-library-sort-options button {
@@ -145,70 +151,59 @@ const library = movies.map((movie) => {
   .movie-library-sort-options button[aria-pressed="true"] span { visibility: visible; }
   .movie-library-stage-outgoing { pointer-events: none; }
   .movie-library-stage {
+    --shelf-baseline: 85%;
     position: absolute; inset: 80px 0 158px; perspective: 1800px;
     cursor: grab; touch-action: pinch-zoom; user-select: none; -webkit-user-select: none;
     outline-offset: -4px;
   }
   .movie-library-stage[data-dragging="true"], .movie-library-stage[data-rotating="true"] { cursor: grabbing; }
   .movie-library-shelf {
-    position: absolute; left: -50%; top: 65%; width: 200%; height: var(--shelf-depth, 130px);
-    transform: skewY(-15.642deg); transform-origin: 50% 0;
-    pointer-events: none; filter: drop-shadow(0 22px 16px #09050288);
+    position: absolute; left: 0; top: var(--shelf-baseline); width: 100%; height: var(--shelf-depth, 38px);
+    pointer-events: none; filter: drop-shadow(0 18px 16px #0008);
   }
   .movie-library-shelf-top {
-    /* Extend behind the back row so the full width of each angled binding
-       rests on wood, while keeping the front edge clear of the controls. */
     position: absolute; inset: calc(-1 * var(--shelf-rear-depth, 52px)) 0 0;
-    overflow: hidden; background: #795335;
-    border-top: 1px solid #312013; border-bottom: 2px solid #d3a2739c;
-  }
-  .movie-library-wood-grain {
-    position: absolute; inset: 0 -960px;
-    background: url('/images/library/walnut-grain.webp') repeat-x 0 center / 960px 360px;
-    transform: translate3d(var(--wood-offset, 0px), 0, 0); will-change: transform;
+    background:
+      radial-gradient(ellipse 32% 100% at 50% 100%, #d7c6a83b, transparent),
+      linear-gradient(transparent, #282929 65%, #303130);
+    border-bottom: 1px solid #d8d1be52;
   }
   .movie-library-shelf-top::after {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(#1c100b66, transparent 38%, #e0b5831a 86%, #fff0);
-    box-shadow: inset 0 12px 14px -10px #0009;
+    background: repeating-linear-gradient(0deg, transparent 0 2px, #00000008 2px 3px);
   }
   .movie-library-shelf-front {
-    position: absolute; top: 100%; left: 0; right: 0; height: 22px;
-    overflow: hidden; background: #4e301c; border-top: 1px solid #e4b28399;
+    position: absolute; top: 100%; left: 0; right: 0; height: var(--shelf-lip, 12px);
+    background: linear-gradient(#252626, #151617);
+    box-shadow: inset 0 1px #ffffff0c, inset 0 -1px #0009;
   }
-  .movie-library-shelf-front .movie-library-wood-grain { background-size: 960px 160px; }
-  .movie-library-shelf-front::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(#321c1026, #23140cb3);
-    box-shadow: inset 0 -2px 2px #160c0877;
-  }
+  .movie-library-cases { position: absolute; inset: 0; }
   .movie-library-contact-shadows { position: absolute; inset: 0; perspective: 1800px; pointer-events: none; }
   .disc-case-contact {
-    position: absolute; left: 50%; top: 65%; height: 0; width: var(--width);
+    position: absolute; left: 50%; top: var(--shelf-baseline); height: 0; width: var(--width);
     transform-origin: 50% 0; transform-style: preserve-3d;
-    /* Use the binding's camera, rotation, and bottom-centre anchor.
-       A shelf-skewed ellipse drifts away from the actual book edge. */
-    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateZ(3deg);
+    /* Match the case's bottom edge so it stays grounded when turned. */
+    transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg)));
   }
   .disc-case-contact::before {
     /* Spread the shadow around the contact edge in the visible shelf plane.
        A 90-degree plane projects behind the cover and hides the shadow. */
     content: ''; position: absolute; left: -8%; right: -8%; top: calc(var(--depth) * -.2);
     height: calc(var(--depth) * .8);
-    background: radial-gradient(ellipse at 50% 35%, #0a0603a6 0%, #0a060366 38%, #0a060300 73%);
+    background: radial-gradient(ellipse at 50% 35%, #000a 0%, #0006 38%, #0000 73%);
     border-radius: 50%; filter: blur(3px);
   }
   .disc-case-contact::after {
     content: ''; position: absolute; left: 1px; right: 1px; top: -1px; height: 4px;
-    background: #0a0603b3; border-radius: 50%; filter: blur(1px);
+    background: #000b; border-radius: 50%; filter: blur(1px);
   }
   .movie-library-track { position: absolute; inset: 0; perspective: 1800px; }
   .disc-case {
-    position: absolute; left: 50%; top: 65%; width: var(--width); height: var(--height);
+    position: absolute; left: 50%; top: var(--shelf-baseline); width: var(--width); height: var(--height);
     margin: 0; padding: 0; border: 0; background: none; border-radius: 5px;
     transform-style: preserve-3d; transform-origin: 50% 100%;
-    /* Rest at the bookshelf angle; turning a case reveals its printed spine. */
-    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg)) rotateZ(3deg);
+    /* Face the viewer along a level display; turning reveals the spine. */
+    transform: translate3d(calc(-50% + var(--x)), calc(-100% + var(--y)), 0) rotateY(calc(var(--case-yaw) + var(--inspect-yaw, 0deg))) rotateX(var(--inspect-pitch, 0deg));
     cursor: inherit; -webkit-tap-highlight-color: transparent;
   }
   .disc-case > span { position: absolute; display: block; }
@@ -310,15 +305,14 @@ const library = movies.map((movie) => {
   .movie-library-stage:focus, .movie-library-stage:focus-visible { outline: none; box-shadow: none; }
   .movie-library-empty { padding: 8rem 2rem; text-align: center; }
   @media (max-width: 600px) {
-    /* Keep a curtain, wall light and the screen edge in the narrow crop. */
-    .movie-library-room { background-position: 12% center; }
+    .movie-library-room { background-size: 180% 100%; background-position: center; }
     .movie-library-header { padding: 1.1rem; }
     .movie-library-stage { top: 72px; bottom: 154px; }
     .movie-library-controls { gap: .4rem; bottom: max(24px, env(safe-area-inset-bottom)); }
   }
   @media (max-height: 560px) {
     .movie-library-header { padding-block: .6rem; }
-    .movie-library-stage { top: 50px; bottom: 125px; }
+    .movie-library-stage { top: 68px; bottom: 125px; }
     .movie-library-controls { bottom: 10px; }
     .movie-library-details { margin-top: .45rem; }
   }

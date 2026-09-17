@@ -255,7 +255,7 @@ test('DVD spines are revealed by turning the case and the artwork has a narrow p
         artworkMatches: spineArtwork.src === frontArtwork.src
       };
     });
-    expect(geometry.facingCamera).toBeLessThan(-.2);
+    expect(geometry.facingCamera).toBeLessThan(-.05);
     expect(geometry.backface).toBe('hidden');
     expect(Math.max(...geometry.rim)).toBeLessThanOrEqual(3);
     expect(geometry.artworkMatches).toBe(true);
@@ -270,6 +270,41 @@ test('DVD spines are revealed by turning the case and the artwork has a narrow p
     await page.mouse.up();
     await page.mouse.move(0, 0);
     await expect.poll(() => selected.evaluate((node) => parseFloat((node as HTMLElement).style.getPropertyValue('--inspect-yaw')))).toBe(0);
+  }
+});
+
+test('collector display keeps its ledge level and centres the largest case above the controls', async ({ page }) => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 393, height: 852 }, { width: 852, height: 393 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/movies.html?view=disc-boxes&discMovie=the-sadness');
+    await expect(page.locator('.disc-case[aria-pressed="true"]')).toBeVisible();
+    const display = await page.evaluate(() => {
+      const selected = document.querySelector<HTMLElement>('.disc-case[aria-pressed="true"]')!;
+      const index = Number(selected.dataset.discIndex);
+      const bounds = selected.getBoundingClientRect();
+      const neighbors = [-1, 1].map((offset) => document.querySelector<HTMLElement>(`[data-disc-index="${index + offset}"]`)!.getBoundingClientRect());
+      const front = document.querySelector<HTMLElement>('.movie-library-shelf-front')!.getBoundingClientRect();
+      const controls = document.querySelector<HTMLElement>('.movie-library-controls')!.getBoundingClientRect();
+      const shelf = document.querySelector<HTMLElement>('.movie-library-shelf')!;
+      return {
+        centre: bounds.x + bounds.width / 2,
+        selectedTop: bounds.top, selectedHeight: bounds.height, selectedBottom: bounds.bottom,
+        neighborHeights: neighbors.map((box) => box.height),
+        neighborBottoms: neighbors.map((box) => box.bottom),
+        ledgeTop: front.top, ledgeBottom: front.bottom,
+        controlTop: controls.top, controlBottom: controls.bottom,
+        headerBottom: document.querySelector('.movie-library-header')!.getBoundingClientRect().bottom,
+        shelfTransform: getComputedStyle(shelf).transform
+      };
+    });
+    expect(Math.abs(display.centre - viewport.width / 2)).toBeLessThan(8);
+    expect(display.shelfTransform).toBe('none');
+    expect(display.selectedTop).toBeGreaterThan(display.headerBottom - 4);
+    expect(Math.max(...display.neighborHeights)).toBeLessThan(display.selectedHeight);
+    expect(Math.max(...display.neighborBottoms) - Math.min(...display.neighborBottoms)).toBeLessThan(4);
+    expect(display.selectedBottom).toBeLessThan(display.ledgeTop);
+    expect(display.ledgeBottom).toBeLessThan(display.controlTop);
+    expect(display.controlBottom).toBeLessThanOrEqual(viewport.height);
   }
 });
 

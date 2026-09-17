@@ -20,6 +20,7 @@ const parseSort = (value: string | null | undefined): LibrarySort => value === '
 function initMovieLibrary() {
   const library = document.querySelector<HTMLElement>('#movie-library');
   const stage = library?.querySelector<HTMLElement>('.movie-library-stage');
+  const caseDisplay = library?.querySelector<HTMLElement>('.movie-library-cases');
   const track = library?.querySelector<HTMLElement>('.movie-library-track');
   const shadowTrack = library?.querySelector<HTMLElement>('.movie-library-contact-shadows');
   const title = library?.querySelector<HTMLAnchorElement>('.movie-library-title');
@@ -29,7 +30,7 @@ function initMovieLibrary() {
   const groupLabel = library?.querySelector<HTMLElement>('.movie-library-group');
   const controls = library?.querySelector<HTMLElement>('.movie-library-controls');
   const sortStatus = library?.querySelector<HTMLElement>('[data-disc-sort-status]');
-  if (!library || !stage || !track || !title || !subtitle || !detailsLink) return;
+  if (!library || !stage || !caseDisplay || !track || !title || !subtitle || !detailsLink) return;
 
   const allMovies = readInlineJson<LibraryMovie[]>('jg-movie-library') || [];
   let movies = [...allMovies];
@@ -58,7 +59,6 @@ function initMovieLibrary() {
   let scale = 1;
   let pitch = 62;
   let gap = 280;
-  let sceneryPosition = 0;
   let drag: { id: number; x: number; y: number; start: number; moved: boolean; movie: number | null;
     mode: 'browse' | 'rotate'; pitch: number; yaw: number } | null = null;
   let lastTap: { movie: number; x: number; y: number; time: number } | null = null;
@@ -160,17 +160,14 @@ function initMovieLibrary() {
     resetInspection(true);
     render();
     if (!reducedMotion.matches) {
-      // The old shelf travels up while the newly ordered shelf rises from
-      // below, like moving the camera down one level of the same bookcase.
-      outgoingShelf = stage!.cloneNode(true) as HTMLElement;
+      // Reorder the cases while the display ledge and lighting stay still.
+      outgoingShelf = caseDisplay!.cloneNode(true) as HTMLElement;
       outgoingShelf.classList.add('movie-library-stage-outgoing');
       outgoingShelf.inert = true;
       outgoingShelf.setAttribute('aria-hidden', 'true');
       outgoingShelf.removeAttribute('tabindex');
-      outgoingShelf.style.setProperty('--wood-offset', library!.style.getPropertyValue('--wood-offset'));
-      stage!.before(outgoingShelf);
+      caseDisplay!.before(outgoingShelf);
     }
-    sceneryPosition += position;
     orderMovies(mode);
     position = target = velocity = 0;
     openAmount = openTarget = 1;
@@ -184,11 +181,10 @@ function initMovieLibrary() {
     library!.setAttribute('aria-busy', 'true');
     stage!.inert = true;
     if (controls) controls.inert = true;
-    const travel = library!.clientHeight + 80;
-    const timing: KeyframeAnimationOptions = { duration: 1000, easing: 'cubic-bezier(.45, 0, .18, 1)', fill: 'both' };
-    const incoming = stage!.animate([{ transform: `translateY(${travel}px)` }, { transform: 'translateY(0)' }], timing);
+    const timing: KeyframeAnimationOptions = { duration: 450, easing: 'cubic-bezier(.2, 0, .2, 1)', fill: 'both' };
+    const incoming = caseDisplay!.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'translateY(0)' }], timing);
     sortAnimations = [incoming,
-      outgoingShelf.animate([{ transform: 'translateY(0)' }, { transform: `translateY(-${travel}px)` }], timing)];
+      outgoingShelf.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-12px)' }], timing)];
     if (controls) sortAnimations.push(controls.animate([{ opacity: 0 }, { opacity: 0, offset: .85 }, { opacity: 1 }], timing));
     incoming.finished.then(() => {
       if (sortAnimations.includes(incoming)) finishSortTransition();
@@ -286,11 +282,9 @@ function initMovieLibrary() {
 
   function render() {
     if (!movies.length) return;
-    // The grain travels with the cases; the distant cinema stays stationary.
-    // Modulo a complete texture tile keeps long browsing sessions continuous.
-    library!.style.setProperty('--wood-offset', `${(-(position + sceneryPosition) * pitch) % 960}px`);
-    stage!.style.setProperty('--shelf-depth', `${130 * scale}px`);
+    stage!.style.setProperty('--shelf-depth', `${38 * scale}px`);
     stage!.style.setProperty('--shelf-rear-depth', `${52 * scale}px`);
+    stage!.style.setProperty('--shelf-lip', `${12 * scale}px`);
     const center = Math.round(position);
     // A small moving window keeps the infinite shelf light, even for large libraries.
     const radius = Math.min(12, Math.floor(movies.length / 2));
@@ -308,15 +302,20 @@ function initMovieLibrary() {
       const node = volumes.get(logical) || createVolume(logical);
       const distance = logical - position;
       // Standard tall disc cases: a printed sleeve inside a slim plastic shell.
-      const height = 262 * scale;
+      const recession = Math.min(Math.abs(distance), 4.5);
+      const height = 262 * scale * (1 - recession * .085);
       const width = height * .71;
       const x = distance * pitch + clamp(distance, -1, 1) * gap * openAmount;
-      const y = -x * .28 + Math.max(0, 1 - Math.abs(distance)) * 90 * scale * openAmount;
+      const y = -recession * 6 * scale;
+      // Compensate for the shared camera, keeping every resting front visible
+      // and its printed spine on the far side until deliberately turned.
+      const yaw = -Math.atan(x / 1800) * 180 / Math.PI - 6;
       node.style.setProperty('--width', `${width}px`);
       node.style.setProperty('--height', `${height}px`);
       node.style.setProperty('--depth', `${19.3 * scale}px`);
       node.style.setProperty('--x', `${x}px`);
       node.style.setProperty('--y', `${y}px`);
+      node.style.setProperty('--case-yaw', `${yaw}deg`);
       const inspecting = logical === inspectedMovie;
       node.style.setProperty('--inspect-pitch', `${inspecting ? tiltX : 0}deg`);
       node.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
@@ -326,8 +325,9 @@ function initMovieLibrary() {
       shadow.style.setProperty('--y', `${y}px`);
       shadow.style.setProperty('--width', `${width}px`);
       shadow.style.setProperty('--depth', `${19.3 * scale}px`);
+      shadow.style.setProperty('--case-yaw', `${yaw}deg`);
       shadow.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
-      node.style.zIndex = String(50 - (logical - center));
+      node.style.zIndex = String(100 - Math.round(Math.abs(distance) * 4));
       const isSelected = logical === Math.round(target);
       node.setAttribute('aria-pressed', String(isSelected));
       node.tabIndex = isSelected ? 0 : -1;
@@ -374,9 +374,9 @@ function initMovieLibrary() {
     hoverPointer = null;
     resetInspection(true);
     const rect = stage!.getBoundingClientRect();
-    scale = Math.min(clamp(rect.width / 900, .74, 1), Math.max(.4, rect.height / 350));
-    pitch = 62 * scale;
-    gap = clamp(rect.width * .255, 105, 280);
+    scale = Math.min(1.68, rect.height * .78 / 262, rect.width * .84 / 262);
+    pitch = 262 * scale * .71 * .46;
+    gap = 262 * scale * .71 * .22;
     render();
   }
 
@@ -444,7 +444,6 @@ function initMovieLibrary() {
       finishSortTransition();
       const params = new URL(window.location.href).searchParams;
       orderMovies(parseSort(params.get('discSort')));
-      sceneryPosition = 0;
       const id = params.get('discMovie');
       const index = movies.findIndex((movie) => movie.id === id);
       target = position = index < 0 ? 0 : index;

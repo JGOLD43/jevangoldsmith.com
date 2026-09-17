@@ -1,8 +1,8 @@
-# Movies backdrop
+# Movies display assets
 
-`cinema-room.webp` is the background for the Movies disc-box view. Created with the built-in OpenAI imagegen tool on 17 September 2026 and saved as an optimized WebP (1536 × 1024). The foreground cases and wooden shelf remain interactive website elements.
+The current Movies disc-box view uses a charcoal collector's display, drawn in CSS in `MovieLibrary.astro`: a level ledge, a soft overhead spotlight, and a subtle textured backdrop. `movie-library.ts` centres the selected case and reduces the surrounding cases into the distance. Cases remain interactive, including their printed spines when turned.
 
-The cinema stays stationary while the shelf moves. On phones, a crop toward the left retains the curtain, wall light and screen edge.
+`cinema-room.webp` is the previous cinema-room background, retained as an earlier design asset and no longer loaded by the view. It was created with the built-in OpenAI imagegen tool on 17 September 2026 and saved as an optimized WebP (1536 × 1024).
 
 ## Generation prompt
 
