@@ -37,7 +37,9 @@ const library = await Promise.all(books
     <div><h2>Library</h2><p>{library.length} books read</p></div>
     <div class="book-library-header-actions">
       <details class="book-library-sort">
-        <summary aria-label="Sort books" aria-controls="book-library-sort-options">Sort <span aria-hidden="true">⌄</span></summary>
+        <summary aria-label="Sort books" aria-controls="book-library-sort-options">
+          Sort <svg class="book-library-sort-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="m3 4.5 3 3 3-3" /></svg>
+        </summary>
         <div id="book-library-sort-options" class="book-library-sort-options" role="group" aria-label="Book order">
           <button type="button" data-library-sort="tiers" aria-pressed="false">By tiers <span aria-hidden="true">✓</span></button>
           <button type="button" data-library-sort="az" aria-pressed="true">A–Z <span aria-hidden="true">✓</span></button>
@@ -136,6 +138,10 @@ const library = await Promise.all(books
   .book-library-sort { position: relative; }
   .book-library-sort > summary { list-style: none; }
   .book-library-sort > summary::-webkit-details-marker { display: none; }
+  .book-library-sort-chevron {
+    display: block; flex: none; width: .75rem; height: .75rem;
+    fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+  }
   .book-library-sort-options {
     position: absolute; top: calc(100% + .55rem); right: 0; width: 188px;
     padding: .35rem; border: 1px solid #ffffff35; border-radius: 10px;
@@ -198,14 +204,16 @@ const library = await Promise.all(books
     transform: translate3d(calc(-50% + var(--x)), var(--y), 0) rotateY(calc(-16deg + var(--inspect-yaw, 0deg))) rotateZ(3deg);
   }
   .library-volume-contact::before {
-    content: ''; position: absolute; left: 0; right: 0; bottom: 0;
-    height: calc(var(--depth) * 1.6); transform-origin: 50% 100%; transform: rotateX(90deg);
-    background: linear-gradient(transparent, #1c100852 55%, #1c100899);
-    border-radius: 40% 40% 8% 8%; filter: blur(2px);
+    /* Spread the shadow around the contact edge in the visible shelf plane.
+       A 90-degree plane projects behind the cover and hides the shadow. */
+    content: ''; position: absolute; left: -8%; right: -8%; top: calc(var(--depth) * -.2);
+    height: calc(var(--depth) * .8);
+    background: radial-gradient(ellipse at 50% 35%, #0a0603a6 0%, #0a060366 38%, #0a060300 73%);
+    border-radius: 50%; filter: blur(3px);
   }
   .library-volume-contact::after {
-    content: ''; position: absolute; left: 1px; right: 1px; top: -1px; height: 3px;
-    background: #1c100899; border-radius: 50%; filter: blur(1px);
+    content: ''; position: absolute; left: 1px; right: 1px; top: -1px; height: 4px;
+    background: #0a0603b3; border-radius: 50%; filter: blur(1px);
   }
   .book-library-track { position: absolute; inset: 0; perspective: 1800px; }
   .library-volume {
