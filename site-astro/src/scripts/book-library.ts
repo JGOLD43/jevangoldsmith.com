@@ -14,6 +14,7 @@ function initBookLibrary() {
   const library = document.querySelector<HTMLElement>('#book-library');
   const stage = library?.querySelector<HTMLElement>('.book-library-stage');
   const track = library?.querySelector<HTMLElement>('.book-library-track');
+  const shadowTrack = library?.querySelector<HTMLElement>('.book-library-contact-shadows');
   const title = library?.querySelector<HTMLAnchorElement>('.book-library-title');
   const author = library?.querySelector<HTMLElement>('.book-library-author');
   const request = library?.querySelector<HTMLAnchorElement>('.book-library-request');
@@ -24,6 +25,7 @@ function initBookLibrary() {
   const summary = picker?.querySelector<HTMLElement>('summary');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const volumes = new Map<number, HTMLButtonElement>();
+  const shadows = new Map<number, HTMLElement>();
   const inertElements = new Map<HTMLElement, boolean>();
   const wrap = (index: number) => ((index % books.length) + books.length) % books.length;
   const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
@@ -94,12 +96,21 @@ function initBookLibrary() {
       button.append(layer);
     }
     track!.append(button);
+    const shadow = document.createElement('span');
+    shadow.className = 'library-volume-contact';
+    shadowTrack?.append(shadow);
+    shadows.set(logical, shadow);
     volumes.set(logical, button);
     return button;
   }
 
   function render() {
     if (!books.length) return;
+    // The grain travels with the books; the distant room moves more slowly.
+    // Modulo a complete texture tile keeps long browsing sessions continuous.
+    library!.style.setProperty('--wood-offset', `${(-position * pitch) % 960}px`);
+    library!.style.setProperty('--room-offset', `${-position * pitch * .14}px`);
+    stage!.style.setProperty('--shelf-depth', `${130 * scale}px`);
     const center = Math.round(position);
     // A small moving window keeps the infinite shelf light, even for large libraries.
     const radius = Math.min(12, Math.floor((books.length - 1) / 2));
@@ -107,6 +118,8 @@ function initBookLibrary() {
       if (Math.abs(logical - center) > radius) {
         node.remove();
         volumes.delete(logical);
+        shadows.get(logical)?.remove();
+        shadows.delete(logical);
       }
     }
     for (let logical = center - radius; logical <= center + radius; logical++) {
@@ -117,11 +130,17 @@ function initBookLibrary() {
       const seed = Array.from(book.id).reduce((sum, char) => sum + char.charCodeAt(0), 0);
       const height = (230 + seed % 45) * scale;
       const width = height * clamp(book.ratio, .48, 1.1);
+      const x = distance * pitch + clamp(distance, -1, 1) * gap * openAmount;
+      const y = -x * .28 + Math.max(0, 1 - Math.abs(distance)) * 90 * scale * openAmount;
       node.style.setProperty('--width', `${width}px`);
       node.style.setProperty('--height', `${height}px`);
       node.style.setProperty('--depth', `${(22 + seed % 18) * scale}px`);
-      node.style.setProperty('--x', `${distance * pitch + clamp(distance, -1, 1) * gap * openAmount}px`);
-      node.style.setProperty('--y', `${-distance * pitch * .28 + Math.max(0, 1 - Math.abs(distance)) * 90 * scale * openAmount}px`);
+      node.style.setProperty('--x', `${x}px`);
+      node.style.setProperty('--y', `${y}px`);
+      const shadow = shadows.get(logical)!;
+      shadow.style.setProperty('--x', `${x}px`);
+      shadow.style.setProperty('--y', `${y}px`);
+      shadow.style.setProperty('--width', `${width * .95}px`);
       node.style.zIndex = String(50 - (logical - center));
       const isSelected = logical === Math.round(target);
       node.setAttribute('aria-pressed', String(isSelected));

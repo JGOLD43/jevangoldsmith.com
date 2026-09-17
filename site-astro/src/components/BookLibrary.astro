@@ -28,6 +28,7 @@ const library = await Promise.all(books
   }));
 ---
 <section class="book-library" id="book-library" aria-label="Library view" hidden>
+  <div class="book-library-room" aria-hidden="true"></div>
   <header class="book-library-header">
     <div><h2>Library</h2><p>{library.length} books read</p></div>
     <button type="button" class="book-library-exit" data-close-book-library>
@@ -37,6 +38,11 @@ const library = await Promise.all(books
   <div class="book-library-stage" tabindex="0" role="region"
     aria-label="Interactive library. Scroll or drag to browse. Use left and right arrow keys, or select a book to bring it forward."
     aria-describedby="book-library-help">
+    <div class="book-library-shelf" aria-hidden="true">
+      <div class="book-library-shelf-top"><div class="book-library-wood-grain"></div></div>
+      <div class="book-library-shelf-front"><div class="book-library-wood-grain"></div></div>
+    </div>
+    <div class="book-library-contact-shadows" aria-hidden="true"></div>
     <div class="book-library-track"></div>
   </div>
   <p id="book-library-help" class="sr-only">Use Home or End for the first or last book. Escape returns to the bookshelf. Request opens an email about the selected book.</p>
@@ -80,22 +86,33 @@ const library = await Promise.all(books
   .book-library[hidden] { display: none !important; }
   .book-library {
     position: fixed; inset: var(--nav-height, 58px) 0 0; z-index: 900;
-    overflow: hidden; background: #33507b; color: #fff;
+    overflow: hidden; background: #21170f; color: #fff;
     font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
     isolation: isolate;
+  }
+  .book-library-room {
+    position: absolute; inset: -12px;
+    background-image: linear-gradient(#160e0780, #160e07ad), url('/images/library/library-room.webp');
+    background-size: auto 100%; background-repeat: repeat-x;
+    background-position: calc(50% + var(--room-offset, 0px)) center;
+    filter: blur(3px); pointer-events: none;
+  }
+  .book-library::after {
+    content: ''; position: absolute; inset: auto 0 0; height: 180px; z-index: 2;
+    background: linear-gradient(transparent, #160e08dc 72%); pointer-events: none;
   }
   html:has(body.book-library-open), body.book-library-open { overflow: hidden !important; }
   body.book-library-open .collection-mobile-toggle { visibility: hidden; }
   .book-library-header {
-    position: absolute; z-index: 2; inset: 0 0 auto; padding: 1.5rem 2.5rem;
+    position: absolute; z-index: 3; inset: 0 0 auto; padding: 1.5rem 2.5rem;
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;
     pointer-events: none;
   }
   .book-library-header h2 { color: #fff; font: inherit; font-size: 1rem; font-weight: 500; margin: 0; }
-  .book-library-header p { color: #d5dfed; font-size: .72rem; margin: .2rem 0 0; }
+  .book-library-header p { color: #e3d8c6; font-size: .72rem; margin: .2rem 0 0; }
   .book-library-exit {
     pointer-events: auto; display: inline-flex; align-items: center; gap: .45rem;
-    color: #fff; border: 1px solid #ffffff55; background: #33507b; border-radius: 6px;
+    color: #fff; border: 1px solid #ffffff55; background: #24190ec9; border-radius: 6px;
     min-height: 40px; padding: .5rem .75rem; font: inherit; font-size: .8rem; cursor: pointer;
   }
   .book-library-exit:hover { background: #ffffff15; }
@@ -105,6 +122,41 @@ const library = await Promise.all(books
     outline-offset: -4px;
   }
   .book-library-stage[data-dragging="true"] { cursor: grabbing; }
+  .book-library-shelf {
+    position: absolute; left: -50%; top: 65%; width: 200%; height: var(--shelf-depth, 130px);
+    transform: skewY(-15.642deg); transform-origin: 50% 0;
+    pointer-events: none; filter: drop-shadow(0 22px 16px #09050288);
+  }
+  .book-library-shelf-top {
+    position: absolute; inset: -10px 0 0; overflow: hidden; background: #795335;
+    border-top: 1px solid #312013; border-bottom: 2px solid #d3a2739c;
+  }
+  .book-library-wood-grain {
+    position: absolute; inset: 0 -960px;
+    background: url('/images/library/walnut-grain.webp') repeat-x 0 center / 960px 360px;
+    transform: translate3d(var(--wood-offset, 0px), 0, 0); will-change: transform;
+  }
+  .book-library-shelf-top::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(#1c100b66, transparent 38%, #e0b5831a 86%, #fff0);
+    box-shadow: inset 0 12px 14px -10px #0009;
+  }
+  .book-library-shelf-front {
+    position: absolute; top: 100%; left: 0; right: 0; height: 22px;
+    overflow: hidden; background: #4e301c; border-top: 1px solid #e4b28399;
+  }
+  .book-library-shelf-front .book-library-wood-grain { background-size: 960px 160px; }
+  .book-library-shelf-front::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(#321c1026, #23140cb3);
+    box-shadow: inset 0 -2px 2px #160c0877;
+  }
+  .book-library-contact-shadows { position: absolute; inset: 0; pointer-events: none; }
+  .library-volume-contact {
+    position: absolute; left: 50%; top: 65%; height: 14px; width: var(--width);
+    transform: translate(calc(-50% + var(--x)), calc(-7px + var(--y))) skewY(-15.642deg);
+    background: #150a05a6; filter: blur(5px); border-radius: 50%;
+  }
   .book-library-track { position: absolute; inset: 0; perspective: 1800px; }
   .library-volume {
     position: absolute; left: 50%; top: 65%; width: var(--width); height: var(--height);
@@ -141,6 +193,7 @@ const library = await Promise.all(books
   }
   .library-volume-fallback { display: flex; height: 100%; align-items: center; padding: 1rem; color: #283343; font: 600 1rem/1.3 Georgia, serif; }
   .book-library-controls {
+    z-index: 3;
     position: absolute; bottom: max(28px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
     display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 1rem;
     align-items: center; width: min(460px, calc(100% - 32px)); text-align: center;
@@ -152,13 +205,13 @@ const library = await Promise.all(books
     -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
   .book-library-title:hover { text-decoration: underline; }
-  .book-library-author { color: #e1e7f0; font-size: .8rem; margin: .35rem 0 0; line-height: 1.4; }
+  .book-library-author { color: #e3d8c6; font-size: .8rem; margin: .35rem 0 0; line-height: 1.4; }
   .book-library-request {
     display: flex; align-items: center; justify-content: center; width: 144px; min-height: 40px;
-    margin: .9rem auto 0; background: #fff; color: #283f61; border-radius: 6px;
-    border: 1px solid #e9edf3; text-decoration: none; font-size: .8rem;
+    margin: .9rem auto 0; background: #f7f0e4; color: #382416; border-radius: 6px;
+    border: 1px solid #efe2cd; text-decoration: none; font-size: .8rem;
   }
-  .book-library-request:hover { background: #e7edf5; }
+  .book-library-request:hover { background: #eadcc5; }
   .book-library-arrow { border: 0; background: transparent; color: #fff; font: inherit; font-size: 1rem; width: 44px; height: 44px; cursor: pointer; }
   .book-library :focus-visible, .books-view-picker :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
   .book-library-stage:focus, .book-library-stage:focus-visible { outline: none; box-shadow: none; }
