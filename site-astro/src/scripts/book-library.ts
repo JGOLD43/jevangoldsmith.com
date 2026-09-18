@@ -1,7 +1,6 @@
 import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { flyCoverToDetail } from './books-flight';
-import { highlightCountFor, type HighlightCountRecord } from '../../../private-companion-app/src/domain/book-highlight-counts';
 import type { BookBinding } from '../lib/book-binding';
 
 interface LibraryBook {
@@ -41,12 +40,15 @@ function initBookLibrary() {
   if (!library || !stage || !track || !title || !author || !request) return;
 
   const allBooks = readInlineJson<LibraryBook[]>('jg-book-library') || [];
-  let appCounts: HighlightCountRecord[] | null = null;
+  let appCounts: Map<string, number> | null = null;
   window.addEventListener('jgold-library-counts', (event) => {
     const records = (event as CustomEvent).detail;
     if (!Array.isArray(records)) return;
-    appCounts = records.filter((record): record is HighlightCountRecord => record && typeof record.title === 'string'
-      && typeof record.author === 'string' && typeof record.isbn === 'string' && Number.isSafeInteger(record.highlightCount) && record.highlightCount >= 0);
+    // The native bridge has already matched each request to the local book.
+    // Consume only its returned public identity and count on the website.
+    appCounts = new Map(records.filter((record) => record && typeof record.publicId === 'string'
+      && Number.isSafeInteger(record.highlightCount) && record.highlightCount >= 0)
+      .map((record) => [record.publicId, record.highlightCount]));
     selected = -1;
     updateCaption();
     schedule();
@@ -247,7 +249,7 @@ function initBookLibrary() {
       collectionLabel.textContent = book.collection;
     }
     if (thought && thoughtText) {
-      const count = (appCounts ? highlightCountFor(book, appCounts) : null) ?? book.highlightCount;
+      const count = appCounts?.get(book.id) ?? book.highlightCount;
       thought.hidden = false;
       thought.dataset.bookId = book.id;
       thoughtText.replaceChildren();

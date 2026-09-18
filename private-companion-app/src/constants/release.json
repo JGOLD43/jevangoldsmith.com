@@ -1,7 +1,7 @@
 {
   "baseVersion": "1.5.5",
-  "revision": 6,
-  "label": "1.5.5-update.6",
-  "releasedAt": "2026-09-09T04:28:47.371Z",
-  "notes": "Redesign Library with compact browsing, cover stacks and organised marketing curricula"
+  "revision": 9,
+  "label": "1.5.5-update.9",
+  "releasedAt": "2026-09-18T00:36:51.888Z",
+  "notes": "Add live library highlight thought bubbles and publish book highlight totals"
 }

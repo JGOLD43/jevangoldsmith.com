@@ -1,6 +1,39 @@
 [
   {
     "baseVersion": "1.5.5",
+    "revision": 9,
+    "label": "1.5.5-update.9",
+    "releasedAt": "2026-09-18T00:36:51.888Z",
+    "notes": "Add live library highlight thought bubbles and publish book highlight totals",
+    "previewGroup": "ffc677f8-2d59-46df-9b83-7f8e19203b20",
+    "productionGroup": "e604f8cc-1e9e-45d0-86ad-36f40129e5aa",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.5",
+    "revision": 8,
+    "label": "1.5.5-update.8",
+    "releasedAt": "2026-09-17T14:51:05.403Z",
+    "notes": "Redesign all People screens with Library styling, simpler profiles and forms, smart groups and views, and a refreshed People map",
+    "previewGroup": "306e0c67-67f0-4ec0-a6e1-a44ad66fe8e7",
+    "productionGroup": "22f0a493-f986-4113-bb46-e65b1a94a507",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.5",
+    "revision": 7,
+    "label": "1.5.5-update.7",
+    "releasedAt": "2026-09-17T01:49:39.617Z",
+    "notes": "Open readable Library books directly; improve page controls, saved positions, bookmarks and reading themes",
+    "previewGroup": "dd297e4e-358f-434b-b428-86a2a574d5ed",
+    "productionGroup": "7947eb89-aa68-46cb-8547-85ce51f126a7",
+    "platform": "android",
+    "channel": "production"
+  },
+  {
+    "baseVersion": "1.5.5",
     "revision": 6,
     "label": "1.5.5-update.6",
     "releasedAt": "2026-09-09T04:28:47.371Z",
