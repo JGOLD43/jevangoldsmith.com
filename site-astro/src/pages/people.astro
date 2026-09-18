@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import CollectionPage from '../components/CollectionPage.astro';
 import ContentVisibilityStyle from '../components/ContentVisibilityStyle.astro';
 import PeopleModal from '../components/PeopleModal.astro';
+import PeopleGallery from '../components/PeopleGallery.astro';
 import PersonCard from '../components/PersonCard.astro';
 import PeopleSourceFilter from '../components/PeopleSourceFilter.astro';
 import PeopleStatsBody from '../components/PeopleStatsBody.astro';
@@ -101,6 +102,7 @@ const config = ({
       <PeopleStatsBody people={peopleEntries.map((p) => ({ name: p.data.name, category: p.data.category, sourceType: (p.data as any).sourceType }))} />
     </div>
   </section>
+  <PeopleGallery />
   <div id="people-container">
     <div class="people-grid" id="people-grid">
       {peopleEntries.map((p, i) => <PersonCard person={p.data} index={i} />)}

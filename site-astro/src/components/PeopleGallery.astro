@@ -1,0 +1,99 @@
+---
+import '../styles/people-gallery.css';
+---
+<button type="button" class="people-gallery-invitation" data-open-people-gallery aria-haspopup="dialog" aria-controls="people-gallery">
+  <span class="people-gallery-invitation-art" aria-hidden="true">
+    <img src="/images/generated/people/richard-feynman-200.jpg" alt="" width="200" height="200" loading="lazy" />
+    <img src="/images/generated/people/david-ogilvy-200.jpg" alt="" width="200" height="200" loading="lazy" />
+    <img src="/images/generated/people/charlie-munger-200.jpg" alt="" width="200" height="200" loading="lazy" />
+  </span>
+  <span class="people-gallery-invitation-copy"><small>The collector’s gallery</small><strong>The Portrait Room</strong><span>Good company. A little perspective.</span></span>
+  <span class="people-gallery-invitation-arrow" aria-hidden="true">↗</span>
+</button>
+
+<dialog id="people-gallery" class="people-gallery" aria-labelledby="people-gallery-title" tabindex="-1">
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute;pointer-events:none">
+    <defs>
+      <linearGradient id="pg-leather" x2=".9" y2="1"><stop stop-color="#70563a"/><stop offset=".45" stop-color="#4a3524"/><stop offset="1" stop-color="#211d14"/></linearGradient>
+      <linearGradient id="pg-wood" x2="1" y2=".2"><stop stop-color="#342118"/><stop offset=".35" stop-color="#8c6240"/><stop offset=".7" stop-color="#624329"/><stop offset="1" stop-color="#2d2118"/></linearGradient>
+      <linearGradient id="pg-brass" x2="1" y2="0"><stop stop-color="#614d2b"/><stop offset=".45" stop-color="#cebb86"/><stop offset="1" stop-color="#80683d"/></linearGradient>
+      <linearGradient id="pg-shade" x2="1" y2=".2"><stop stop-color="#baa57a"/><stop offset=".5" stop-color="#f0dfac"/><stop offset="1" stop-color="#a29270"/></linearGradient>
+      <radialGradient id="pg-globe-ball" cx=".35" cy=".28" r=".8"><stop stop-color="#b1b18c"/><stop offset=".65" stop-color="#777e63"/><stop offset="1" stop-color="#3c5143"/></radialGradient>
+      <symbol id="pg-prop-chair" viewBox="0 0 210 240">
+        <ellipse cx="110" cy="226" rx="91" ry="9" fill="#05160c" opacity=".35"/>
+        <path d="M43 180 36 229h12l13-46m102-3 11 49h-12l-16-46" fill="url(#pg-wood)" stroke="#23190f" stroke-width="2"/>
+        <path d="M39 61Q42 37 67 38h79q27-1 29 23l-9 98H49Z" fill="url(#pg-wood)" stroke="#382619" stroke-width="3"/>
+        <path d="M48 63q1-17 18-17h79q19 0 20 17l-7 86H55Z" fill="url(#pg-leather)" stroke="#aa865747" stroke-width="2"/>
+        <path d="m64 51 86 87m-9-88-78 88M105 47v96M52 93h109" fill="none" stroke="#221b1460" stroke-width="2"/>
+        <g fill="#251e14" stroke="#83613e" stroke-width=".7"><circle cx="80" cy="74" r="3"/><circle cx="131" cy="74" r="3"/><circle cx="104" cy="99" r="3"/><circle cx="80" cy="122" r="3"/><circle cx="131" cy="122" r="3"/></g>
+        <path d="M31 134q-5-18 11-21 20-3 22 18l-4 50H36Zm146 0q5-18-11-21-20-3-22 18l4 50h24Z" fill="url(#pg-leather)" stroke="#79603c" stroke-width="2"/>
+        <rect x="56" y="146" width="98" height="29" rx="9" fill="url(#pg-leather)" stroke="#9d774a" stroke-opacity=".6"/>
+        <path d="M43 178h124v14H43Z" fill="url(#pg-wood)" stroke="#352316" stroke-width="2"/><path d="M58 164h94" stroke="#be9a65" stroke-opacity=".25"/>
+        <path d="M25 127q16-11 40 0M146 127q19-10 38 0" fill="none" stroke="url(#pg-wood)" stroke-width="9" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="pg-prop-console" viewBox="0 0 290 225">
+        <ellipse cx="146" cy="215" rx="135" ry="8" fill="#07170d" opacity=".4"/>
+        <path d="M28 140h12v75H27Zm221 0h12l2 75h-12Z" fill="url(#pg-wood)"/>
+        <path d="M20 131h249v33H20Z" fill="url(#pg-wood)" stroke="#2a2117" stroke-width="2"/>
+        <path d="M34 138h98v18H34Zm113 0h106v18H147Z" fill="none" stroke="#b9986040"/><g fill="url(#pg-brass)"><circle cx="81" cy="147" r="3"/><circle cx="200" cy="147" r="3"/></g>
+        <rect x="12" y="123" width="265" height="10" rx="2" fill="url(#pg-wood)" stroke="#9e794b" stroke-width="1"/>
+        <path d="M69 48h5v73h-5" fill="url(#pg-brass)"/><ellipse cx="71" cy="121" rx="26" ry="4" fill="url(#pg-brass)"/>
+        <path d="M43 13h56l13 50H30Z" fill="url(#pg-shade)" stroke="#bfa674"/><path d="M45 15 39 60m18-45-2 45m20-45v45m11-45 7 45" stroke="#9c896d" opacity=".3"/><ellipse cx="71" cy="63" rx="41" ry="3" fill="#eedcac"/>
+        <path d="M152 114h77v8h-77Z" fill="#c7b991"/><path d="M149 111h83v3h-83m0 11h83v3h-83" fill="#502f28"/><path d="M164 104h64v6h-64" fill="#bdb797"/><path d="M160 101h71v3h-71m0 6h71v3h-71" fill="#3c5145"/>
+        <path d="M205 76h22v22h-22Z" fill="#c7c1aa"/><path d="M228 78q17 0 10 13h-10" fill="none" stroke="#c7c1aa" stroke-width="3"/>
+      </symbol>
+      <symbol id="pg-prop-plant" viewBox="0 0 150 255">
+        <ellipse cx="76" cy="242" rx="49" ry="8" fill="#07170d" opacity=".4"/>
+        <g fill="none" stroke="#687352" stroke-width="3"><path d="M75 202 81 45m-5 123-43-49m44 23 40-60M77 117 46 55m30 147 42-45"/></g>
+        <g fill="#465d3c" stroke="#66744b" stroke-width=".8"><path d="M80 92Q40 34 82 14 110 60 80 92Z"/><path d="M75 129Q36 99 32 46 72 54 75 129Z"/><path d="M82 151Q74 86 131 60 138 116 82 151Z"/><path d="M74 174Q15 169 11 102 59 115 74 174Z"/><path d="M78 200Q82 152 137 135 127 187 78 200Z"/><path d="M73 214Q20 203 21 157 66 167 73 214Z"/></g>
+        <g fill="none" stroke="#99a378" opacity=".25"><path d="M80 83 82 28m-9 88L41 61m42 81 42-67m-54 90-48-48m59 75 45-46"/></g>
+        <path d="M39 202h75l-12 39H51Z" fill="url(#pg-brass)" stroke="#756344"/><ellipse cx="76" cy="202" rx="38" ry="7" fill="#544d36"/><ellipse cx="76" cy="202" rx="31" ry="4" fill="#292c1d"/><path d="M48 213h58m-55 17h50" stroke="#ddc18a" stroke-opacity=".3"/>
+      </symbol>
+      <symbol id="pg-prop-globe" viewBox="0 0 170 230">
+        <ellipse cx="85" cy="217" rx="65" ry="8" fill="#07170d" opacity=".4"/>
+        <path d="M77 137h14l3 58 39 19H37l39-19Z" fill="url(#pg-wood)" stroke="#39281c" stroke-width="2"/>
+        <circle cx="84" cy="82" r="62" fill="none" stroke="url(#pg-brass)" stroke-width="5"/>
+        <circle cx="84" cy="82" r="52" fill="url(#pg-globe-ball)"/>
+        <path d="m56 37 21 9-6 16-18 8 10 15-9 8-16-14 1-22Zm31 44 15-10 23 6 4 18-19 6-4 18-10 3-10-23Zm-11 40 9 5-1 6-12-2" fill="#c0b988" opacity=".68"/>
+        <g fill="none" stroke="#3a5345" opacity=".45"><ellipse cx="84" cy="82" rx="25" ry="51"/><ellipse cx="84" cy="82" rx="44" ry="51"/><path d="M33 82h102M40 58h89m-87 48h85"/></g>
+        <path d="M47 25 122 139" fill="none" stroke="#c2aa76" stroke-width="2"/><ellipse cx="84" cy="136" rx="61" ry="8" fill="none" stroke="url(#pg-wood)" stroke-width="7"/>
+      </symbol>
+    </defs>
+  </svg>
+  <template data-gallery-prop="chair"><svg viewBox="0 0 210 240"><use href="#pg-prop-chair"/></svg></template>
+  <template data-gallery-prop="console"><svg viewBox="0 0 290 225"><use href="#pg-prop-console"/></svg></template>
+  <template data-gallery-prop="plant"><svg viewBox="0 0 150 255"><use href="#pg-prop-plant"/></svg></template>
+  <template data-gallery-prop="globe"><svg viewBox="0 0 170 230"><use href="#pg-prop-globe"/></svg></template>
+  <div class="pg-wall-scroll" data-gallery-wall tabindex="0" role="region" aria-label="Portrait wall. Scroll or use the arrow keys to browse.">
+    <div class="pg-wall-stage">
+      <div class="pg-room" aria-hidden="true"><div class="pg-cornice"></div><div class="pg-panelling"></div><div class="pg-floor"></div><div class="pg-carpet"></div></div>
+      <div class="pg-wall-track" data-gallery-track></div>
+    </div>
+  </div>
+  <header class="pg-header">
+    <h2 id="people-gallery-title" class="sr-only">People gallery</h2>
+    <div class="pg-header-actions">
+      <label class="pg-room-select"><span class="sr-only">Gallery room</span><select data-gallery-category aria-label="Gallery room"><option value="all">All rooms</option></select></label>
+      <button class="pg-square" type="button" data-gallery-search-toggle aria-label="Find a person" aria-expanded="false" aria-controls="pg-search-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/></svg></button>
+      <button class="pg-exit" type="button" data-gallery-close aria-label="Return to all people"><span aria-hidden="true">×</span><span class="pg-exit-label">All people</span></button>
+    </div>
+  </header>
+  <section id="pg-search-panel" class="pg-search-panel" data-gallery-search-panel aria-label="Find a portrait" hidden>
+    <div class="pg-search-row"><label><span class="sr-only">Search portraits</span><input type="search" data-gallery-search placeholder="Find a person or an idea…" autocomplete="off" /></label><button type="button" class="pg-text-button" data-gallery-search-close>Done</button></div>
+    <p class="pg-search-count" data-gallery-search-count aria-live="polite"></p>
+    <div class="pg-search-results" data-gallery-search-results></div>
+  </section>
+  <div class="pg-empty" data-gallery-empty hidden><h3>This room is quiet.</h3><p>No portraits match your search.</p><button type="button" data-gallery-reset>Show all people</button></div>
+  <footer class="pg-footer">
+    <div class="pg-browse-controls"><button type="button" class="pg-step" data-gallery-step="-1" aria-label="Previous portrait">←</button><div class="pg-browse-copy"><span data-gallery-location aria-live="polite">The collection</span><p>Scroll along the wall <span>·</span> Tap a portrait</p></div><button type="button" class="pg-step" data-gallery-step="1" aria-label="Next portrait">→</button></div>
+    <input class="pg-position" data-gallery-position type="range" min="0" max="97" value="0" aria-label="Position along the portrait wall" />
+  </footer>
+  <dialog class="pg-detail" data-gallery-detail aria-labelledby="pg-detail-name">
+    <button type="button" class="pg-detail-close" data-gallery-detail-close aria-label="Back to the gallery">×</button>
+    <div class="pg-detail-art"><div class="pg-detail-frame" data-gallery-detail-image></div><p>The people collection</p></div>
+    <div class="pg-detail-copy"><p class="pg-eyebrow" data-gallery-detail-category></p><h2 id="pg-detail-name"></h2><p class="pg-detail-role" data-gallery-detail-role></p><div class="pg-detail-lesson"><span>What I take from them</span><p data-gallery-detail-lesson></p></div><p class="pg-detail-bio" data-gallery-detail-bio></p><div class="pg-detail-media" data-gallery-detail-media></div><a class="pg-profile-link" data-gallery-profile hidden>Read the full profile ↗</a></div>
+  </dialog>
+</dialog>
+<script>
+  import '../scripts/people-gallery';
+</script>
