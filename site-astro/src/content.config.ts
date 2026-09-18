@@ -74,6 +74,7 @@ const bookSchema = z.looseObject({
   rating: z.number(),
   reReads: nnum(),
   readYears: z.array(z.number().int().min(1000).max(9999)).optional(),
+  highlightCount: z.number().int().nonnegative().optional(),
   category: nstr(),
   coverImage: nstr(),
   shortDescription: nstr(),

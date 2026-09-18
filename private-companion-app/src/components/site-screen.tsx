@@ -11,6 +11,8 @@ import { Fonts, type AppColors, type ThemeMode } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { freshSiteUrl, isInternalSiteUrl, isSafeExternalUrl } from '@/services/site-navigation';
 import { useAppTheme } from '@/state/theme-context';
+import { getLibraryHighlightCounts } from '@/storage/reading-analytics';
+import { isLibraryUrl, libraryCountResponse, libraryCountScript } from '@/services/library-highlight-bridge';
 
 const SITE_URL = 'https://jevangoldsmith.com/';
 
@@ -157,7 +159,14 @@ export function SiteScreen() {
 
   const handleMessage = useCallback((event: WebViewMessageEvent) => {
     try {
-      const message = JSON.parse(event.nativeEvent.data) as { type?: string; theme?: ThemeMode };
+      const message = JSON.parse(event.nativeEvent.data) as { type?: string; theme?: ThemeMode; books?: unknown };
+      if (message.type === 'jgold-library-counts-request' && isLibraryUrl(event.nativeEvent.url) && isLibraryUrl(currentUrlRef.current)) {
+        const requestUrl = currentUrlRef.current;
+        void getLibraryHighlightCounts().then((counts) => {
+          if (currentUrlRef.current === requestUrl) webViewRef.current?.injectJavaScript(libraryCountScript(libraryCountResponse(message.books, counts)));
+        }).catch(() => { /* Keep the last published count when the vault is unavailable. */ });
+        return;
+      }
       if (message.type === 'private-companion-theme' && (message.theme === 'light' || message.theme === 'dark')) {
         setThemeMode(message.theme);
       }

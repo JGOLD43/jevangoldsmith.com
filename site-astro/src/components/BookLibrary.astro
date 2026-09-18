@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import sharp from 'sharp';
 import { bookCoverUrl } from '../lib/book-card';
 import { ratingTier } from '../lib/rating-tier';
+import { bookBinding } from '../lib/book-binding';
 import InlineJson from './InlineJson.astro';
 
 interface Props { books: CollectionEntry<'books'>[]; }
@@ -15,17 +16,21 @@ const library = await Promise.all(books
   .map(async ({ id, data }) => {
     const cover = bookCoverUrl(data);
     let ratio = 2 / 3;
+    let coverFile: string | undefined;
     // Use each actual cover's proportions instead of stretching every book
     // into the same rectangle. Only inspect files already in the repository.
     if (cover.startsWith('/images/')) {
       const file = resolve(process.cwd(), '..', `.${cover}`);
       if (existsSync(file)) {
+        coverFile = file;
         const metadata = await sharp(file).metadata();
         if (metadata.width && metadata.height) ratio = metadata.width / metadata.height;
       }
     }
     const tier = ratingTier(data.rating);
     return { id: data.isbn || id, title: data.title, author: data.author, cover, ratio,
+      binding: await bookBinding(data.isbn || '', coverFile),
+      highlightCount: data.highlightCount ?? null,
       tier: tier?.key || '', tierLabel: tier?.label || 'Unrated', tierColor: tier?.color || '#e3d8c6',
       collection: data.category?.trim() || 'Uncollected',
       href: `/books/${encodeURIComponent(id)}.html` };
@@ -60,6 +65,9 @@ const library = await Promise.all(books
     </div>
     <div class="book-library-contact-shadows" aria-hidden="true"></div>
     <div class="book-library-track"></div>
+    <div class="book-library-thought" id="book-library-thought" role="status" aria-atomic="true" hidden>
+      <span class="book-library-thought-text"></span>
+    </div>
   </div>
   <p id="book-library-help" class="sr-only">Move the mouse over the selected book to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last book. Double-click or double-tap a book, or press Enter, to open its details. Escape returns to the bookshelf. Request opens an email about the selected book.</p>
   <div class="book-library-controls">
@@ -67,6 +75,7 @@ const library = await Promise.all(books
     <div class="book-library-caption">
       <div aria-live="polite" aria-atomic="true">
         <p class="book-library-group" hidden></p>
+        <p class="book-library-collection" hidden></p>
         <a class="book-library-title" href={library[0]?.href || '/books.html'}>{library[0]?.title}</a>
         <p class="book-library-author">{library[0]?.author}</p>
       </div>
@@ -225,12 +234,35 @@ const library = await Promise.all(books
   }
   .library-volume > span { position: absolute; display: block; }
   .library-volume-back {
-    inset: 0; background: #283343; transform: translateZ(calc(-1 * var(--depth)));
+    inset: 0; background: var(--binding-background, #e7decb); transform: translateZ(calc(-1 * var(--depth)));
   }
   .library-volume-spine {
-    top: 0; bottom: 0; left: calc(-1 * var(--depth)); width: var(--depth); background: #283343;
+    top: 0; bottom: 0; left: calc(-1 * var(--depth)); width: var(--depth);
+    background: var(--binding-background, #e7decb); color: var(--binding-ink, #28241e);
     transform-origin: right center; transform: rotateY(-90deg);
   }
+  .library-volume-spine svg { display: block; width: 100%; height: 100%; overflow: hidden; }
+  .library-volume-spine::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, #0005, #fff2 22%, transparent 48%, #0003 93%, #0006);
+    box-shadow: inset 0 1px #fff5, inset 0 -1px #0005;
+  }
+  .book-library-thought {
+    position: absolute; z-index: 80; left: var(--thought-x, 50%); top: var(--thought-y, 30%);
+    transform: translate(-50%, -100%); width: max-content; max-width: min(230px, calc(100% - 32px));
+    padding: 12px 20px; border: 1px solid #fffdf8; border-radius: 48% 45% 47% 44% / 48% 49% 46% 48%;
+    background: #fff9ed; color: #332719; box-shadow: 0 5px 20px #10090033;
+    font-size: .8rem; line-height: 1.4; text-align: center; pointer-events: none;
+    opacity: 0; visibility: hidden; transition: opacity 160ms ease;
+  }
+  .book-library-thought[data-visible="true"] { opacity: 1; visibility: visible; }
+  .book-library-thought::before, .book-library-thought::after {
+    content: ''; position: absolute; background: #fff9ed; border-radius: 50%;
+  }
+  .book-library-thought::before { width: 13px; height: 10px; bottom: -12px; left: 57%; }
+  .book-library-thought::after { width: 7px; height: 6px; bottom: -23px; left: 53%; }
+  .book-library-thought strong { font-weight: 750; }
+  @media (prefers-reduced-motion: reduce) { .book-library-thought { transition: none; } }
   .library-volume-pages {
     top: 2px; bottom: 2px; left: calc(100% - 1px); width: calc(var(--depth) - 2px);
     /* Soft paper layers stay readable after the edge is foreshortened.
@@ -274,9 +306,15 @@ const library = await Promise.all(books
   }
   .book-library-caption { min-width: 0; }
   .book-library-group {
-    margin: 0 0 .4rem; color: var(--tier-color, #e3d8c6); font-size: .65rem;
-    line-height: 1.3; letter-spacing: .06em; text-transform: uppercase;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin: 0 0 .5rem; padding: .36rem .85rem; min-width: 72px;
+    background: var(--tier-color, #e3d8c6); color: #20190e; border-radius: 999px;
+    box-shadow: 0 2px 8px #0003, inset 0 1px #fff5;
+    font-size: .72rem; font-weight: 750; line-height: 1.3; letter-spacing: .07em; text-transform: uppercase;
   }
+  .book-library-group[data-tier="s"] { background: #ffdb00; }
+  .book-library-group[hidden], .book-library-collection[hidden] { display: none; }
+  .book-library-collection { margin: 0 0 .35rem; font-size: .64rem; color: #e3d8c6; }
   .book-library-title {
     color: #fff; font-size: .9rem; font-weight: 400; line-height: 1.35;
     text-transform: lowercase; text-decoration: none; display: -webkit-box;

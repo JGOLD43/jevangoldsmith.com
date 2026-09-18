@@ -106,9 +106,10 @@ function PublicPreview({ fields, visible, busy, onDismiss, onPublish }: {
       <SafeAreaView style={styles.modalSafe}>
         <View style={styles.modalHeader}><Text style={styles.modalTitle}>Public preview</Text><Pressable onPress={onDismiss}><Text style={styles.close}>Cancel</Text></Pressable></View>
         <ScrollView contentContainerStyle={styles.form}>
-          <Card style={styles.publicWarning}><Text style={styles.warningTitle}>Only these fields will leave the phone</Text><Text style={styles.helper}>No book file, reading position, history, collection, private note, highlight, or attachment is included.</Text></Card>
+          <Card style={styles.publicWarning}><Text style={styles.warningTitle}>Only these fields will leave the phone</Text><Text style={styles.helper}>The highlight count is public. Highlight text, private notes, book files, reading position, history, and attachments stay on this phone.</Text></Card>
           <Text style={styles.previewTitle}>{fields.title}</Text>
           <Text style={styles.previewAuthor}>{fields.author || 'Unknown author'}</Text>
+          {fields.highlightCount !== undefined ? <Text style={styles.previewMeta}>{fields.highlightCount} {fields.highlightCount === 1 ? 'highlight' : 'highlights'}</Text> : null}
           <Text style={styles.previewMeta}>{[fields.year, fields.category, fields.isbn ? `ISBN ${fields.isbn}` : '', `${fields.rating}/5`].filter(Boolean).join(' · ')}</Text>
           {fields.summary ? <Text style={styles.previewBody}>{fields.summary}</Text> : null}
           {fields.review ? <Text style={styles.previewBody}>{fields.review}</Text> : null}
@@ -157,7 +158,8 @@ export default function BookDetailScreen() {
     setPublishing(true);
     try {
       const job = await queueAndAttemptPublication(
-        createBookPublishManifest(book.id, book.publicId, toPublicBookFields(book)),
+        createBookPublishManifest(book.id, book.publicId, { ...toPublicBookFields(book),
+          highlightCount: (await getBookReadingStats(book.id)).highlightCount }),
         book.id,
       );
       await editBook(book.id, { isPublic: job.status === 'submitted' });
@@ -230,7 +232,7 @@ export default function BookDetailScreen() {
         ListFooterComponent={<Button label="Delete book" variant="danger" onPress={() => Alert.alert('Delete book?', 'The encrypted file, progress, notes and highlights will be removed from this phone. The website is unchanged.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Delete', style: 'destructive', onPress: async () => { await deleteBook(book.id); router.back(); } }])} />}
       />
       <BookEditor book={book} visible={editorOpen} onDismiss={() => setEditorOpen(false)} onSave={async (fields) => { await editBook(book.id, fields); }} />
-      <PublicPreview fields={toPublicBookFields(book)} visible={previewOpen} busy={publishing} onDismiss={() => setPreviewOpen(false)} onPublish={publish} />
+      <PublicPreview fields={{ ...toPublicBookFields(book), ...(readingStats ? { highlightCount: readingStats.highlightCount } : {}) }} visible={previewOpen} busy={publishing} onDismiss={() => setPreviewOpen(false)} onPublish={publish} />
     </SafeAreaView>
   );
 }

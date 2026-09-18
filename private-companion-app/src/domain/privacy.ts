@@ -85,6 +85,9 @@ export function canPublish(draft: PublicDraft): boolean {
 }
 
 export function createBookPublishManifest(id: string, sourceId: string | null, book: PublicBookFields): BookPublishManifest {
+  if (book.highlightCount !== undefined && (!Number.isSafeInteger(book.highlightCount) || book.highlightCount < 0)) {
+    throw new Error('Highlight count must be a non-negative whole number.');
+  }
   return {
     version: 1,
     id,
@@ -102,6 +105,7 @@ export function createBookPublishManifest(id: string, sourceId: string | null, b
       summary: book.summary.trim(),
       review: book.review.trim(),
       read: book.read,
+      ...(book.highlightCount === undefined ? {} : { highlightCount: book.highlightCount }),
     },
   };
 }

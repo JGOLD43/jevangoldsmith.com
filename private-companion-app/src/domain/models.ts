@@ -270,6 +270,7 @@ export type PublicBookFields = Pick<Book,
   'title' | 'author' | 'isbn' | 'year' | 'rating' | 'reReads' | 'category' | 'summary' | 'review'
 > & {
   read: boolean;
+  highlightCount?: number;
 };
 
 export type NewVaultItem = Pick<VaultItem, 'kind' | 'title' | 'body'> & {

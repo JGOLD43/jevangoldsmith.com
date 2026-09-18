@@ -1,0 +1,151 @@
+{
+  "source": "JGOLD Kindle import",
+  "sourceExportedAt": "2026-08-28T23:47:27.652Z",
+  "description": "Initial counts of unique imported highlights only. Missing books remain unknown. Later app publications replace these totals. No highlight text is published.",
+  "books": [
+    {
+      "title": "Principles",
+      "author": "Ray Dalio",
+      "isbn": "9781501124020",
+      "highlightCount": 97
+    },
+    {
+      "title": "Influence",
+      "author": "Robert Cialdini",
+      "isbn": "9780061241895",
+      "highlightCount": 86
+    },
+    {
+      "title": "The One Sentence Persuasion Course",
+      "author": "Blair Warren",
+      "isbn": "",
+      "highlightCount": 13
+    },
+    {
+      "title": "Copywriting Secrets",
+      "author": "Jim Edwards",
+      "isbn": "9781640854628",
+      "highlightCount": 72
+    },
+    {
+      "title": "What It Takes",
+      "author": "Stephen A. Schwarzman",
+      "isbn": "9781501158148",
+      "highlightCount": 97
+    },
+    {
+      "title": "Churchill: Walking with Destiny",
+      "author": "Andrew Roberts",
+      "isbn": "9780670025299",
+      "highlightCount": 5
+    },
+    {
+      "title": "Hitler",
+      "author": "Ian Kershaw",
+      "isbn": "9780393067576",
+      "highlightCount": 67
+    },
+    {
+      "title": "Never Enough",
+      "author": "Andrew Wilkinson",
+      "isbn": "9781637744765",
+      "highlightCount": 97
+    },
+    {
+      "title": "The Coming Wave",
+      "author": "Mustafa Suleyman",
+      "isbn": "9780593593967",
+      "highlightCount": 92
+    },
+    {
+      "title": "Profit First",
+      "author": "Mike Michalowicz",
+      "isbn": "9780981808291",
+      "highlightCount": 39
+    },
+    {
+      "title": "Who: The A Method for Hiring",
+      "author": "Geoff Smart, Randy Street",
+      "isbn": "9780345510440",
+      "highlightCount": 74
+    },
+    {
+      "title": "Predictable Revenue",
+      "author": "Aaron Ross, Marylou Tyler",
+      "isbn": "9780984380213",
+      "highlightCount": 39
+    },
+    {
+      "title": "The Sales Acceleration Formula",
+      "author": "Mark Roberge",
+      "isbn": "9781511318204",
+      "highlightCount": 97
+    },
+    {
+      "title": "The Ultimate Blueprint for an Insanely Successful Business",
+      "author": "Keith J. Cunningham",
+      "isbn": "9780984659258",
+      "highlightCount": 58
+    },
+    {
+      "title": "Pushing to the Front",
+      "author": "Orison Swett Marden",
+      "isbn": "9781596052925",
+      "highlightCount": 96
+    },
+    {
+      "title": "Sam Walton: Made in America",
+      "author": "Sam Walton",
+      "isbn": "9780385468473",
+      "highlightCount": 97
+    },
+    {
+      "title": "Can't Hurt Me",
+      "author": "David Goggins",
+      "isbn": "9781544507859",
+      "highlightCount": 97
+    },
+    {
+      "title": "The Mind of Napoleon: A Selection of His Written and Spoken Words",
+      "author": "J. Christopher Herold",
+      "isbn": "",
+      "highlightCount": 61
+    },
+    {
+      "title": "Poor Charlie's Almanack",
+      "author": "Peter D. Kaufman (ed.)",
+      "isbn": "9781578645015",
+      "highlightCount": 87
+    },
+    {
+      "title": "The Road Less Stupid",
+      "author": "Keith J. Cunningham",
+      "isbn": "9780984659265",
+      "highlightCount": 62
+    },
+    {
+      "title": "Autobiography of a Restless Mind",
+      "author": "Dee Hock",
+      "isbn": "",
+      "highlightCount": 72
+    },
+    {
+      "title": "The Almanack of Naval Ravikant",
+      "author": "Eric Jorgenson",
+      "isbn": "9781544514208",
+      "highlightCount": 86
+    },
+    {
+      "title": "The Remains of the Day",
+      "author": "Kazuo Ishiguro",
+      "isbn": "9780571258246",
+      "highlightCount": 19
+    },
+    {
+      "title": "Ultralearning",
+      "author": "Scott Young",
+      "isbn": "9780062852748",
+      "highlightCount": 57
+    }
+  ]
+}

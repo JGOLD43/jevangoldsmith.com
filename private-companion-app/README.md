@@ -2,6 +2,10 @@
 
 A private, phone-first JGOLD app for jevangoldsmith.com. The Site tab mirrors the live mobile website, Studio manages explicitly public content, and the encrypted vault remains phone-only.
 
+The website's 3D library shows a thought bubble with the selected book's highlight count. Inside JGOLD, an origin-restricted WebView bridge queries local aggregate counts when the shelf opens; only requested book identities and totals reach the page, never highlight text or notes. Counts remain in memory. Publishing a book includes its current count in the public preview and manifest, so the public website can show it too. Older manifests preserve any existing count, and an unavailable count is distinct from zero.
+
+Initial public totals were matched to the saved JGOLD Kindle export dated 28 August 2026; `data/book-highlight-count-sources.json` records the matching totals without excerpts. The shelf constructs title-and-author spines from the displayed cover palette automatically for new books. These are cover-matched reconstructions, not scans of physical spines.
+
 ## Delivered features
 
 - Samsung fingerprint/device-authentication lock screen

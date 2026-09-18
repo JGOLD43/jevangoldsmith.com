@@ -4,6 +4,15 @@ import { activityStreaks, activityWeekStreaks } from '@/domain/activity';
 import type { BookReadingStats, DailyActivity, LibraryReadingStats } from '@/domain/models';
 
 import { getDatabase } from './database';
+import type { HighlightCountRecord } from '../domain/book-highlight-counts';
+
+export async function getLibraryHighlightCounts(): Promise<HighlightCountRecord[]> {
+  const database = await getDatabase();
+  return database.getAllAsync<HighlightCountRecord>(`SELECT b.public_id AS publicId, b.isbn, b.title, b.author,
+    COUNT(a.id) AS highlightCount FROM books b
+    LEFT JOIN book_annotations a ON a.book_id=b.id AND a.kind='highlight'
+    GROUP BY b.id`);
+}
 
 type SessionRow = { started_at: string; duration_seconds: number; local_day: string };
 

@@ -137,6 +137,30 @@ test('publication envelope rejects unknown fields and private-shaped content', (
   assert.throws(() => validateEnvelope({ ...envelope(), manifest: { ...envelope().manifest, highlights: ['private'] } }), /unexpected or missing fields/);
 });
 
+test('book count publication accepts aggregates, preserves legacy counts, and rejects private text', () => {
+  const book = { title: 'Atomic Habits', author: 'James Clear', isbn: '9780735211292', year: '2018',
+    rating: 5, reReads: 0, category: 'Learning', summary: '', review: '', read: true, highlightCount: 23 };
+  const submission = envelope({ manifest: { version: 1, id: 'book-1', type: 'book', sourceId: null, operation: 'create', book } });
+  assert.equal(validateEnvelope(submission).manifest.book.highlightCount, 23);
+  for (const highlightCount of [-1, 1.2, null, '12', Number.MAX_SAFE_INTEGER + 1]) {
+    assert.throws(() => validateEnvelope({ ...submission, manifest: { ...submission.manifest, book: { ...book, highlightCount } } }), /highlightCount/);
+  }
+  assert.throws(() => validateEnvelope({ ...submission, manifest: { ...submission.manifest, book: { ...book, highlights: ['private excerpt'] } } }), /unexpected/);
+  const options = fixture();
+  fs.writeFileSync(path.join(options.root, 'data/books.json'), '{"books":[]}');
+  fs.writeFileSync(path.join(options.inboxPath, 'job-123.json'), JSON.stringify(submission));
+  assert.equal(syncInbox(options).accepted, 1);
+  const readCount = () => JSON.parse(fs.readFileSync(path.join(options.root, 'data/books.json'))).books[0].highlightCount;
+  assert.equal(readCount(), 23);
+  const { highlightCount, ...legacyBook } = book;
+  fs.writeFileSync(path.join(options.inboxPath, 'job-124.json'), JSON.stringify({ ...submission, jobId: 'job-124', manifest: { ...submission.manifest, sourceId: book.isbn, operation: 'update', book: legacyBook } }));
+  assert.equal(syncInbox(options).accepted, 1);
+  assert.equal(readCount(), 23);
+  fs.writeFileSync(path.join(options.inboxPath, 'job-125.json'), JSON.stringify({ ...submission, jobId: 'job-125', manifest: { ...submission.manifest, sourceId: book.isbn, operation: 'update', book: { ...book, highlightCount: 0 } } }));
+  assert.equal(syncInbox(options).accepted, 1);
+  assert.equal(readCount(), 0);
+});
+
 test('HTML from the phone is escaped before website rendering', () => {
   assert.equal(escapeHtml('<script>"x" & y</script>'), '&lt;script&gt;&quot;x&quot; &amp; y&lt;/script&gt;');
 });

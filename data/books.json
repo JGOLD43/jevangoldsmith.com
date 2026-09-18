@@ -70,7 +70,8 @@
       "category": "Patience and Clear Thinking",
       "shortDescription": "Life and work principles from one of the world's most successful investors.",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 97
     },
     {
       "title": "Sapiens",
@@ -130,7 +131,8 @@
       "category": "Persuasion",
       "shortDescription": "The psychology of persuasion.",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 86
     },
     {
       "title": "Shoe Dog",
@@ -191,7 +193,8 @@
       "shortDescription": "",
       "review": null,
       "read": true,
-      "coverImage": "/images/book-covers/one-sentence-persuasion-course.jpg"
+      "coverImage": "/images/book-covers/one-sentence-persuasion-course.jpg",
+      "highlightCount": 13
     },
     {
       "title": "Copywriting Secrets",
@@ -203,7 +206,8 @@
       "category": "Advertising and Copywriting",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 72
     },
     {
       "title": "Made to Stick",
@@ -251,7 +255,8 @@
       "category": "Autobiographies",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 97
     },
     {
       "title": "Hard Drive: Bill Gates and the Making of the Microsoft Empire",
@@ -299,7 +304,8 @@
       "category": "Autobiographies",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 5
     },
     {
       "title": "Hitler",
@@ -311,7 +317,8 @@
       "category": "Autobiographies",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 67
     },
     {
       "title": "Surely You're Joking, Mr. Feynman!",
@@ -395,7 +402,8 @@
       "category": "Autobiographies",
       "shortDescription": "",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 97
     },
     {
       "title": "Pieces of the Action",
@@ -528,7 +536,8 @@
       "category": "Big Ideas",
       "shortDescription": "",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 92
     },
     {
       "title": "How to Lie with Statistics",
@@ -612,7 +621,8 @@
       "category": "Big Ideas",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 39
     },
     {
       "title": "Bartlett's Familiar Quotations",
@@ -636,7 +646,8 @@
       "category": "Big Ideas",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 74
     },
     {
       "title": "Predictable Revenue",
@@ -648,7 +659,8 @@
       "category": "Big Ideas",
       "shortDescription": "",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 39
     },
     {
       "title": "The Sales Acceleration Formula",
@@ -660,7 +672,8 @@
       "category": "Big Ideas",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 97
     },
     {
       "title": "7 Powers: The Foundations of Business Strategy",
@@ -684,7 +697,8 @@
       "category": "Big Ideas",
       "shortDescription": "",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 58
     },
     {
       "title": "What We Owe the Future",
@@ -720,7 +734,8 @@
       "category": "Mental Endurance",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 96
     },
     {
       "title": "Against the Odds",
@@ -744,7 +759,8 @@
       "category": "Mental Endurance",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 97
     },
     {
       "title": "The Autobiography of Andrew Carnegie",
@@ -852,7 +868,8 @@
       "category": "Mental Endurance",
       "shortDescription": "",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 97
     },
     {
       "title": "The Mind of Napoleon: A Selection of His Written and Spoken Words",
@@ -865,7 +882,8 @@
       "shortDescription": "",
       "review": null,
       "read": false,
-      "coverImage": "/images/book-covers/mind-of-napoleon.jpg"
+      "coverImage": "/images/book-covers/mind-of-napoleon.jpg",
+      "highlightCount": 61
     },
     {
       "title": "Ogilvy on Advertising",
@@ -1034,7 +1052,8 @@
       "category": "Patience and Clear Thinking",
       "shortDescription": "",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 87
     },
     {
       "title": "All I Want to Know is Where I'm Going to Die So I'll Never Go There",
@@ -1070,7 +1089,8 @@
       "category": "Patience and Clear Thinking",
       "shortDescription": "",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 62
     },
     {
       "title": "Berkshire Hathaway Letters to Shareholders 1965-2023",
@@ -1301,7 +1321,8 @@
       "shortDescription": "",
       "review": null,
       "read": false,
-      "coverImage": "/images/book-covers/autobiography-restless-mind.jpg"
+      "coverImage": "/images/book-covers/autobiography-restless-mind.jpg",
+      "highlightCount": 72
     },
     {
       "title": "Seeking Wisdom: From Darwin to Munger",
@@ -1349,7 +1370,8 @@
       "category": "Patience and Clear Thinking",
       "shortDescription": "",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 86
     },
     {
       "title": "Quotations of David Ogilvy",
@@ -1386,7 +1408,8 @@
       "category": "Patience and Clear Thinking",
       "shortDescription": "",
       "review": null,
-      "read": true
+      "read": true,
+      "highlightCount": 19
     },
     {
       "title": "One From Many: VISA and the Rise of Chaordic Organization",
@@ -1434,7 +1457,8 @@
       "category": "Learning",
       "shortDescription": "",
       "review": null,
-      "read": false
+      "read": false,
+      "highlightCount": 57
     },
     {
       "title": "On Writing Well",

@@ -67,7 +67,10 @@ function paragraphs(value) {
 }
 
 function validateBook(book) {
-  ownKeys(book, ['title', 'author', 'isbn', 'year', 'rating', 'reReads', 'category', 'summary', 'review', 'read'], 'book');
+  const fields = ['title', 'author', 'isbn', 'year', 'rating', 'reReads', 'category', 'summary', 'review', 'read'];
+  if (book && Object.hasOwn(book, 'highlightCount')) fields.push('highlightCount');
+  ownKeys(book, fields, 'book');
+  if (Object.hasOwn(book, 'highlightCount') && (!Number.isSafeInteger(book.highlightCount) || book.highlightCount < 0)) throw new Error('book.highlightCount is invalid');
   if (!Number.isInteger(book.rating) || book.rating < 0 || book.rating > 5) throw new Error('book.rating must be an integer from 0 to 5');
   if (!Number.isInteger(book.reReads) || book.reReads < 0 || book.reReads > 1000) throw new Error('book.reReads is invalid');
   if (typeof book.read !== 'boolean') throw new Error('book.read must be true or false');
@@ -82,6 +85,7 @@ function validateBook(book) {
     summary: boundedString(book.summary, 'book.summary', 2_000),
     review: boundedString(book.review, 'book.review', 100_000),
     read: book.read,
+    ...(Object.hasOwn(book, 'highlightCount') ? { highlightCount: book.highlightCount } : {}),
   };
 }
 
@@ -146,7 +150,8 @@ function writeJsonAtomic(filePath, value) {
 
 function applyPublicFields(existing, manifest, publicId, timestamp) {
   if (manifest.type === 'book') {
-    return { ...existing, title: manifest.book.title, author: manifest.book.author, isbn: manifest.book.isbn, year: manifest.book.year, rating: manifest.book.rating, reReads: manifest.book.reReads, category: manifest.book.category, shortDescription: manifest.book.summary, review: manifest.book.review || null, read: manifest.book.read };
+    return { ...existing, title: manifest.book.title, author: manifest.book.author, isbn: manifest.book.isbn, year: manifest.book.year, rating: manifest.book.rating, reReads: manifest.book.reReads, category: manifest.book.category, shortDescription: manifest.book.summary, review: manifest.book.review || null, read: manifest.book.read,
+      ...(Object.hasOwn(manifest.book, 'highlightCount') ? { highlightCount: manifest.book.highlightCount } : {}) };
   }
   const html = manifest.document ? renderDocument(manifest.document) : paragraphs(manifest.body);
   existing = { ...existing, studioDocument: manifest.document || null, studioBody: manifest.body };

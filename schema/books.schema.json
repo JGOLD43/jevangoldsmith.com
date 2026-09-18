@@ -19,6 +19,7 @@
           "year": { "type": ["string", "number"], "description": "Publication year." },
           "readYears": { "type": "array", "uniqueItems": true, "items": { "type": "integer", "minimum": 1000, "maximum": 9999 }, "description": "Years when you read or reread the book. Omit if unknown; this is separate from publication year." },
           "rating": { "type": "number", "minimum": 0, "maximum": 5, "description": "Your rating, 0–5." },
+          "highlightCount": { "type": "integer", "minimum": 0, "description": "Published highlight total. Omitted when unsynced; zero is a verified empty count." },
           "reReads": { "type": ["number", "null"], "description": "Number of times re-read." },
           "category": { "type": ["string", "null"] },
           "shortDescription": { "type": ["string", "null"] },

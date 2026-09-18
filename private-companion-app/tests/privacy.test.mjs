@@ -79,3 +79,13 @@ test('book publishing cannot include files, progress, highlights, or private not
   const serialized = JSON.stringify(manifest);
   assert.doesNotMatch(serialized, /file|progress|locator|highlight|annotation|note|collection/i);
 });
+
+test('book publication includes only the approved aggregate highlight count', () => {
+  const fields = { title: 'A book', author: 'An author', isbn: '', year: '', rating: 5, reReads: 0,
+    category: '', summary: '', review: '', read: true, highlightCount: 12, highlights: ['PRIVATE TEXT'], note: 'PRIVATE NOTE' };
+  const manifest = createBookPublishManifest('book-1', null, fields);
+  assert.equal(manifest.book.highlightCount, 12);
+  assert.doesNotMatch(JSON.stringify(manifest), /PRIVATE|highlights|note/);
+  assert.equal(createBookPublishManifest('book-1', null, { ...fields, highlightCount: 0 }).book.highlightCount, 0);
+  for (const highlightCount of [-1, 2.5, NaN]) assert.throws(() => createBookPublishManifest('book-1', null, { ...fields, highlightCount }), /Highlight count/);
+});

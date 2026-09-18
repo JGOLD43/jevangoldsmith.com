@@ -1,6 +1,8 @@
 import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { flyCoverToDetail } from './books-flight';
+import { highlightCountFor, type HighlightCountRecord } from '../../../private-companion-app/src/domain/book-highlight-counts';
+import type { BookBinding } from '../lib/book-binding';
 
 interface LibraryBook {
   id: string;
@@ -13,6 +15,8 @@ interface LibraryBook {
   tierLabel: string;
   tierColor: string;
   collection: string;
+  binding: BookBinding;
+  highlightCount: number | null;
 }
 
 type LibrarySort = 'az' | 'tiers' | 'collection';
@@ -29,11 +33,24 @@ function initBookLibrary() {
   const request = library?.querySelector<HTMLAnchorElement>('.book-library-request');
   const sortMenu = library?.querySelector<HTMLDetailsElement>('.book-library-sort');
   const groupLabel = library?.querySelector<HTMLElement>('.book-library-group');
+  const collectionLabel = library?.querySelector<HTMLElement>('.book-library-collection');
+  const thought = library?.querySelector<HTMLElement>('.book-library-thought');
+  const thoughtText = thought?.querySelector<HTMLElement>('.book-library-thought-text');
   const controls = library?.querySelector<HTMLElement>('.book-library-controls');
   const sortStatus = library?.querySelector<HTMLElement>('[data-library-sort-status]');
   if (!library || !stage || !track || !title || !author || !request) return;
 
   const allBooks = readInlineJson<LibraryBook[]>('jg-book-library') || [];
+  let appCounts: HighlightCountRecord[] | null = null;
+  window.addEventListener('jgold-library-counts', (event) => {
+    const records = (event as CustomEvent).detail;
+    if (!Array.isArray(records)) return;
+    appCounts = records.filter((record): record is HighlightCountRecord => record && typeof record.title === 'string'
+      && typeof record.author === 'string' && typeof record.isbn === 'string' && Number.isSafeInteger(record.highlightCount) && record.highlightCount >= 0);
+    selected = -1;
+    updateCaption();
+    schedule();
+  });
   let books = [...allBooks];
   let sortMode: LibrarySort = 'az';
   let sorting = false;
@@ -166,6 +183,7 @@ function initBookLibrary() {
       // below, like moving the camera down one level of the same bookcase.
       outgoingShelf = stage!.cloneNode(true) as HTMLElement;
       outgoingShelf.classList.add('book-library-stage-outgoing');
+      outgoingShelf.querySelector('.book-library-thought')?.remove();
       outgoingShelf.inert = true;
       outgoingShelf.setAttribute('aria-hidden', 'true');
       outgoingShelf.removeAttribute('tabindex');
@@ -219,9 +237,26 @@ function initBookLibrary() {
     selected = index;
     const book = books[index];
     if (groupLabel) {
-      groupLabel.hidden = sortMode === 'az';
-      groupLabel.textContent = sortMode === 'tiers' ? book.tierLabel : book.collection;
-      groupLabel.style.setProperty('--tier-color', sortMode === 'tiers' ? book.tierColor : '#e3d8c6');
+      groupLabel.hidden = false;
+      groupLabel.textContent = book.tierLabel;
+      groupLabel.dataset.tier = book.tier;
+      groupLabel.style.setProperty('--tier-color', book.tierColor);
+    }
+    if (collectionLabel) {
+      collectionLabel.hidden = sortMode !== 'collection';
+      collectionLabel.textContent = book.collection;
+    }
+    if (thought && thoughtText) {
+      const count = (appCounts ? highlightCountFor(book, appCounts) : null) ?? book.highlightCount;
+      thought.hidden = false;
+      thought.dataset.bookId = book.id;
+      thoughtText.replaceChildren();
+      if (count === null) thoughtText.textContent = 'Highlights not synced yet';
+      else {
+        const number = document.createElement('strong');
+        number.textContent = count.toLocaleString();
+        thoughtText.append('I’ve saved ', number, count === 1 ? ' highlight' : ' highlights');
+      }
     }
     title!.textContent = book.title;
     title!.href = `${book.href}?from=library`;
@@ -237,10 +272,34 @@ function initBookLibrary() {
     button.dataset.libraryIndex = String(logical);
     button.dataset.bookId = book.id;
     button.setAttribute('aria-label', `${book.title}, by ${book.author}`);
+    button.style.setProperty('--binding-background', book.binding.background);
+    button.style.setProperty('--binding-ink', book.binding.ink);
     for (const face of ['back', 'spine', 'pages', 'top', 'bottom', 'cover']) {
       const layer = document.createElement('span');
       layer.className = `library-volume-${face}`;
       layer.setAttribute('aria-hidden', 'true');
+      if (face === 'spine') {
+        const ns = 'http://www.w3.org/2000/svg';
+        const spine = document.createElementNS(ns, 'svg');
+        spine.setAttribute('viewBox', '0 0 36 280');
+        spine.setAttribute('preserveAspectRatio', 'none');
+        const addText = (value: string, y: number, length: number, size: number, color: string, weight: string) => {
+          const text = document.createElementNS(ns, 'text');
+          text.setAttribute('transform', `translate(18 ${y}) rotate(90)`);
+          text.setAttribute('dominant-baseline', 'middle');
+          text.setAttribute('font-family', book.binding.serif ? 'Georgia, serif' : 'Arial, sans-serif');
+          text.setAttribute('font-size', String(size));
+          text.setAttribute('font-weight', weight);
+          text.setAttribute('fill', color);
+          text.setAttribute('textLength', String(Math.min(length, value.length * size * .54)));
+          text.setAttribute('lengthAdjust', 'spacingAndGlyphs');
+          text.textContent = value;
+          spine.append(text);
+        };
+        addText(book.title, 14, 173, 14, book.binding.ink, '700');
+        addText(book.author, 198, 67, 9, book.binding.accent, '500');
+        layer.append(spine);
+      }
       if (face === 'cover') {
         const image = document.createElement('img');
         image.alt = '';
@@ -314,6 +373,20 @@ function initBookLibrary() {
       const isSelected = logical === Math.round(target);
       node.setAttribute('aria-pressed', String(isSelected));
       node.tabIndex = isSelected ? 0 : -1;
+      if (isSelected) node.setAttribute('aria-describedby', 'book-library-thought');
+      else node.removeAttribute('aria-describedby');
+    }
+    if (thought) {
+      const settled = Math.abs(target - position) < .02 && openAmount > .98 && !sorting && !openingDetail;
+      thought.dataset.visible = String(settled);
+      const node = settled ? volumes.get(Math.round(target)) : null;
+      if (node) {
+        const bounds = node.getBoundingClientRect();
+        const stageBounds = stage!.getBoundingClientRect();
+        const half = thought.offsetWidth / 2 + 16;
+        thought.style.setProperty('--thought-x', `${Math.round(clamp(bounds.left + bounds.width / 2 - stageBounds.left, half, stageBounds.width - half))}px`);
+        thought.style.setProperty('--thought-y', `${Math.round(Math.max(thought.offsetHeight + 8, bounds.top - stageBounds.top - 32))}px`);
+      }
     }
   }
 
@@ -459,6 +532,9 @@ function initBookLibrary() {
     updateCaption();
     if (updateUrl) saveView();
     stage!.focus({ preventScroll: true });
+    const native = (window as Window & { ReactNativeWebView?: { postMessage: (message: string) => void } }).ReactNativeWebView;
+    native?.postMessage(JSON.stringify({ type: 'jgold-library-counts-request',
+      books: allBooks.map(({ id, title, author }) => ({ id, title, author })) }));
     schedule();
   }
 
