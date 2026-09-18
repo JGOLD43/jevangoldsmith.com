@@ -1,14 +1,17 @@
 import { test, expect } from '@playwright/test';
 
 const gallery = '#people-gallery';
+const collection = '#people-grid .person-card';
 
 test('portrait wall opens from the people collection and returns focus on exit', async ({ page }) => {
   await page.goto('/people.html');
+  const total = await page.locator(collection).count();
+  expect(total).toBeGreaterThan(0);
   const entry = page.locator('[data-open-people-gallery]');
   await entry.click();
   await expect(page.locator(gallery)).toBeVisible();
   await expect(page).toHaveURL(/view=gallery/);
-  await expect(page.locator('.pg-portrait')).toHaveCount(98);
+  await expect(page.locator('.pg-portrait')).toHaveCount(total);
   await expect(page.locator(`${gallery} canvas`)).toHaveCount(0);
   await page.getByRole('button', { name: 'Return to all people' }).click();
   await expect(page.locator(gallery)).not.toBeVisible();
@@ -19,6 +22,7 @@ test('portrait wall opens from the people collection and returns focus on exit',
 test('mouse wheel, keyboard, and position slider browse the same wall', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/people.html?view=gallery');
+  const total = await page.locator(collection).count();
   await expect(page.locator(gallery)).toHaveAttribute('data-portrait', '0');
   await page.getByRole('button', { name: 'Next portrait', exact: true }).click();
   await expect(page.locator(gallery)).toHaveAttribute('data-portrait', '1');
@@ -26,7 +30,7 @@ test('mouse wheel, keyboard, and position slider browse the same wall', async ({
   await page.mouse.wheel(0, 550);
   await expect.poll(() => page.locator(gallery).getAttribute('data-portrait')).not.toBe('1');
   await page.keyboard.press('End');
-  await expect(page.locator(gallery)).toHaveAttribute('data-portrait', '97');
+  await expect(page.locator(gallery)).toHaveAttribute('data-portrait', String(total - 1));
   await expect(page.getByRole('button', { name: 'Next portrait', exact: true })).toBeDisabled();
   await page.getByRole('slider').focus();
   await page.keyboard.press('Home');
@@ -37,8 +41,10 @@ test('mouse wheel, keyboard, and position slider browse the same wall', async ({
 
 test('rooms, search, empty results, and portrait details stay connected', async ({ page }) => {
   await page.goto('/people.html?view=gallery');
+  const total = await page.locator(collection).count();
+  const scientists = await page.locator(`${collection}[data-category="science"]`).count();
   await page.getByLabel('Gallery room', { exact: true }).selectOption('science');
-  await expect(page.locator('.pg-portrait')).toHaveCount(5);
+  await expect(page.locator('.pg-portrait')).toHaveCount(scientists);
   await page.getByRole('button', { name: 'Find a person', exact: true }).click();
   await page.getByRole('searchbox').fill('Feynman');
   await expect(page.locator('.pg-portrait')).toHaveCount(1);
@@ -55,7 +61,7 @@ test('rooms, search, empty results, and portrait details stay connected', async 
   await expect(page.locator('#pg-search-panel')).not.toBeVisible();
   await expect(page.locator(gallery)).toBeVisible();
   await page.getByRole('button', { name: 'Show all people', exact: true }).click();
-  await expect(page.locator('.pg-portrait')).toHaveCount(98);
+  await expect(page.locator('.pg-portrait')).toHaveCount(total);
   await expect(page.locator('[data-gallery-empty]')).not.toBeVisible();
 });
 
@@ -88,7 +94,8 @@ for (const viewport of [{ width: 320, height: 667 }, { width: 390, height: 844 }
 test('a mouse drag moves the wall without opening a portrait', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/people.html?view=gallery');
-  await expect(page.locator('.pg-portrait')).toHaveCount(98);
+  const total = await page.locator(collection).count();
+  await expect(page.locator('.pg-portrait')).toHaveCount(total);
   await page.mouse.move(295, 400);
   await page.mouse.down();
   await page.mouse.move(60, 400, { steps: 10 });
