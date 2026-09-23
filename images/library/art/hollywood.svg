@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><rect width="500" height="500" fill="#653545"/><g fill="#f3d99d" font-family="Arial, sans-serif">
+<text x="33" y="58" font-family="Georgia, serif" font-size="29">The man who ate</text><text x="30" y="108" font-size="47" font-weight="900" letter-spacing="-2">HOLLYWOOD</text>
+<path d="M250 178L48 404h404z" fill="#cf9662" opacity=".35"/>
+<circle cx="250" cy="278" r="97" fill="#e3b773"/><circle cx="250" cy="278" r="75" fill="none" stroke="#653545" stroke-width="3"/>
+<g fill="#653545"><circle cx="250" cy="229" r="22"/><circle cx="298" cy="263" r="22"/><circle cx="279" cy="315" r="22"/><circle cx="220" cy="315" r="22"/><circle cx="203" cy="263" r="22"/><circle cx="250" cy="278" r="8"/></g>
+<g stroke="#e3b773" stroke-width="4"><path d="M125 381v43m15-43v43m15-43v43m-15 0v32M365 380v77m0-77q28 31 0 47"/></g>
+<text x="250" y="470" text-anchor="middle" font-size="12" letter-spacing="3">A PROFILE BY MARK SEAL</text></g></svg>

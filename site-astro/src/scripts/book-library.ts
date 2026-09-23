@@ -3,7 +3,7 @@ import { onDomReady } from './dom-ready';
 import { flyCoverToDetail } from './books-flight';
 import type { BookBinding } from '../lib/book-binding';
 import type { VideoArtwork } from '../lib/video-artwork';
-import { parseMaterialFilter, type MaterialKind, type MaterialFilter, type LibraryClassification, type ProblemCollection } from '../lib/library-materials';
+import { materialLabels, parseMaterialFilter, type MaterialKind, type MaterialFilter, type LibraryClassification, type ProblemCollection, type ArtArtwork } from '../lib/library-materials';
 import { materialCover } from './material-cover';
 
 interface LibraryBook {
@@ -25,6 +25,7 @@ interface LibraryBook {
   attribution?: { label: string; name: string; url: string };
   classification?: LibraryClassification;
   videoArtwork?: VideoArtwork;
+  artArtwork?: ArtArtwork;
 }
 
 type LibrarySort = 'az' | 'tiers' | 'collection';
@@ -51,10 +52,6 @@ function initBookLibrary() {
   const materialSelect = library.querySelector<HTMLSelectElement>('#library-material-type')!;
   const countLabel = library.querySelector<HTMLElement>('[data-library-count]')!;
   const empty = library.querySelector<HTMLElement>('[data-library-empty]')!;
-  const attribution = library.querySelector<HTMLElement>('.library-attribution')!;
-  const creditLabel = attribution.querySelector<HTMLElement>('[data-library-credit-label]')!;
-  const creditLink = attribution.querySelector<HTMLAnchorElement>('[data-library-credit-link]')!;
-  const defaultCredit = { label: creditLabel.textContent!, name: creditLink.textContent!.replace(' ↗', ''), url: creditLink.href };
   let materialFilter: MaterialFilter = 'book';
   const allBooks = readInlineJson<LibraryBook[]>('jg-book-library') || [];
   const problemCollections = readInlineJson<ProblemCollection[]>('jg-library-collections') || [];
@@ -62,8 +59,6 @@ function initBookLibrary() {
   const activeCollection = library.querySelector<HTMLElement>('.library-active-collection')!;
   const collectionChange = library.querySelector<HTMLButtonElement>('[data-library-change-collection]')!;
   const collectionDescription = library.querySelector<HTMLElement>('[data-library-collection-description]')!;
-  const contextButton = library.querySelector<HTMLButtonElement>('[data-library-item-context]')!;
-  const contextDialog = library.querySelector<HTMLDialogElement>('.library-context-dialog')!;
   let problemFilter = '';
   const currentCollection = () => problemCollections.find(({ id }) => id === problemFilter);
   let appCounts: Map<string, number> | null = null;
@@ -189,7 +184,7 @@ function initBookLibrary() {
     activeCollection.hidden = !collection;
     collectionChange.textContent = collection?.label || '';
     collectionDescription.textContent = collection?.description || '';
-    countLabel.textContent = `${books.length} ${onlyBooks ? 'books read' : materialFilter === 'all' ? 'items' : 'items saved to explore'}`;
+    countLabel.textContent = `${books.length} ${onlyBooks ? 'books read' : materialFilter === 'all' || materialFilter === 'archive' || materialFilter === 'art' || materialFilter === 'other' ? 'items' : materialLabels[materialFilter].toLowerCase()}`;
     empty.hidden = books.length !== 0;
     if (controls) controls.hidden = books.length === 0;
     if (!books.length && thought) thought.hidden = true;
@@ -324,9 +319,6 @@ function initBookLibrary() {
     if (index === selected) return;
     selected = index;
     const book = books[index];
-    contextButton.hidden = !book.classification;
-    const starter = currentCollection()?.starters.indexOf(book.id) ?? -1;
-    contextButton.textContent = starter >= 0 ? 'Start here · Why this is here' : 'Why this is here';
     if (groupLabel) {
       groupLabel.hidden = false;
       groupLabel.textContent = book.tierLabel;
@@ -334,7 +326,7 @@ function initBookLibrary() {
       groupLabel.style.setProperty('--tier-color', book.tierColor);
     }
     if (collectionLabel) {
-      collectionLabel.hidden = book.kind === 'book' && sortMode !== 'collection';
+      collectionLabel.hidden = (book.kind === 'book' && sortMode !== 'collection') || book.collection.toLowerCase() === book.tierLabel.toLowerCase();
       collectionLabel.textContent = book.collection;
     }
     if (thought && thoughtText) {
@@ -355,11 +347,6 @@ function initBookLibrary() {
     title!.target = external ? '_blank' : '';
     title!.rel = external ? 'noopener noreferrer' : '';
     author!.textContent = external ? [book.medium, book.duration, book.author].filter(Boolean).join(' · ') : book.author;
-    attribution.hidden = !external;
-    const credit = book.attribution || defaultCredit;
-    creditLabel.textContent = credit.label;
-    creditLink.textContent = `${credit.name} ↗`;
-    creditLink.href = credit.url;
     request!.textContent = external ? (book.medium === 'Video' ? 'Watch ↗' : 'Read / explore ↗') : 'request';
     request!.setAttribute('aria-label', external ? `Open ${book.title} at its source in a new tab` : 'Request the selected book by email');
     request!.target = external ? '_blank' : '';
@@ -379,6 +366,7 @@ function initBookLibrary() {
     button.setAttribute('aria-label', `${book.title}, by ${book.author}`);
     button.style.setProperty('--binding-background', book.binding.background);
     button.style.setProperty('--binding-ink', book.binding.ink);
+    if (book.artArtwork) button.style.setProperty('--art-frame', book.artArtwork.frame);
     for (const face of ['back', 'spine', 'pages', 'top', 'bottom', 'cover']) {
       const layer = document.createElement('span');
       layer.className = `library-volume-${face}`;
@@ -600,7 +588,6 @@ function initBookLibrary() {
   function close(updateUrl = true, focus = true) {
     if (!active) return;
     active = false;
-    contextDialog.close();
     finishSortTransition();
     if (sortMenu) sortMenu.open = false;
     releaseDrag();
@@ -675,7 +662,6 @@ function initBookLibrary() {
     problemFilter = problemCollections.some((collection) => collection.id === id) ? id : '';
     if (materialSelect.value === 'book') materialSelect.value = 'archive';
     sortMode = problemFilter ? 'collection' : 'az';
-    contextDialog.close();
     if (sortMenu) sortMenu.open = false;
     collectionPicker.open = false;
     changeMaterials();
@@ -721,38 +707,6 @@ function initBookLibrary() {
     collectionPicker.open = true;
     collectionPicker.querySelector('button')?.focus();
   });
-  contextButton.addEventListener('click', () => {
-    const book = books[wrap(Math.round(target))];
-    const info = book?.classification;
-    if (!info) return;
-    const roles: Record<string, string> = { guide: 'Practical guide', perspective: 'A perspective', 'case-study': 'Case study',
-      'cautionary-story': 'Cautionary story', 'creative-work': 'Creative example', reference: 'Reference collection' };
-    contextDialog.querySelector('[data-library-context-role]')!.textContent = roles[info.role] || info.role;
-    contextDialog.querySelector('#library-context-title')!.textContent = book.title;
-    contextDialog.querySelector('[data-library-context-why]')!.textContent = info.why;
-    const links = contextDialog.querySelector('.library-context-collections')!;
-    links.replaceChildren();
-    for (const id of info.collections) {
-      const collection = problemCollections.find((entry) => entry.id === id);
-      if (!collection) continue;
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.textContent = collection.label;
-      button.addEventListener('click', () => chooseCollection(id));
-      links.append(button);
-    }
-    const evidence = contextDialog.querySelector<HTMLAnchorElement>('[data-library-context-evidence]')!;
-    const guideLink = contextDialog.querySelector<HTMLAnchorElement>('[data-library-context-guide]')!;
-    const guideCollection = problemCollections.find((entry) => entry.id === (problemFilter || info.collections[0]));
-    guideLink.href = guideCollection ? `/guides/${guideCollection.id}.html` : '/free-resources.html#collection-guides';
-    guideLink.textContent = guideCollection ? `Follow the guide: ${guideCollection.label} →` : 'Find a collection guide →';
-    evidence.textContent = `Classification basis: ${info.evidence.basis} ↗`;
-    evidence.href = info.evidence.url;
-    contextDialog.showModal();
-  });
-  contextDialog.addEventListener('keydown', (event) => event.stopPropagation());
-  contextDialog.addEventListener('click', (event) => { if (event.target === contextDialog) contextDialog.close(); });
-
   library.querySelectorAll<HTMLButtonElement>('[data-library-step]').forEach((button) => {
     button.disabled = books.length < 2;
     button.addEventListener('click', () => select(Math.round(target) + Number(button.dataset.libraryStep)));

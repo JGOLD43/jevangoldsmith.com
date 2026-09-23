@@ -1,8 +1,8 @@
-import { materialLabels, type MaterialKind } from '../lib/library-materials';
+import { materialLabels, type MaterialKind, type ArtArtwork } from '../lib/library-materials';
 import type { VideoArtwork } from '../lib/video-artwork';
 
 // Printed material sleeves; video cases pair curated type with source thumbnails.
-export function materialCover(material: { title: string; kind: MaterialKind; collection: string; medium?: string; duration?: string | null; videoArtwork?: VideoArtwork }) {
+export function materialCover(material: { title: string; kind: MaterialKind; collection: string; medium?: string; duration?: string | null; videoArtwork?: VideoArtwork; artArtwork?: ArtArtwork }) {
   const cover = document.createElement('span');
   cover.className = 'material-design';
   const text = (className: string, value: string) => {
@@ -11,6 +11,20 @@ export function materialCover(material: { title: string; kind: MaterialKind; col
     node.textContent = value;
     cover.append(node);
   };
+  if (material.kind === 'art' && material.artArtwork) {
+    cover.classList.add('art-design');
+    const image = document.createElement('img');
+    image.alt = '';
+    image.draggable = false;
+    image.decoding = 'async';
+    image.addEventListener('error', () => {
+      image.remove();
+      text('art-fallback', material.title);
+    }, { once: true });
+    image.src = material.artArtwork.image;
+    cover.append(image);
+    return cover;
+  }
   if (material.kind === 'video' && material.videoArtwork) {
     const artwork = material.videoArtwork;
     cover.classList.add('video-design');

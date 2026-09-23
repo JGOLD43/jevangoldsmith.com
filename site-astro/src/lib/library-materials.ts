@@ -37,7 +37,12 @@ export interface LibraryClassification {
   provisional: boolean;
 }
 
-export function archiveVolume(item: ArchiveItem, classification?: LibraryClassification, artwork?: VideoArtwork) {
+export interface ArtArtwork {
+  image: string;
+  frame: string;
+}
+
+export function archiveVolume(item: ArchiveItem, classification?: LibraryClassification, artwork?: VideoArtwork, artArtwork?: ArtArtwork) {
   const kind = item.kind as Exclude<MaterialKind, 'book'>;
   const palettes = { article: '#eadfc8', art: '#976549', video: '#2a494a', interview: '#a95138',
     documentary: '#7e8781', memo: '#c3a26b', other: '#82875f' };
@@ -50,6 +55,7 @@ export function archiveVolume(item: ArchiveItem, classification?: LibraryClassif
       ? { background: video.background, ink: video.ink, accent: video.accent, serif: video.font === 'serif' }
       : { background: palettes[kind], ink: '#251e17', accent: '#251e17', serif: true },
     videoArtwork: video,
+    artArtwork: kind === 'art' ? artArtwork : undefined,
     highlightCount: null, duration: item.duration, medium: item.medium,
     attribution: item.attribution, classification,
   };

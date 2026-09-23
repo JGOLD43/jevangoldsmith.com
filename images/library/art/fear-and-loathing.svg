@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><rect width="500" height="500" fill="#f3c847"/><g fill="#412537" font-family="Arial, sans-serif">
+<circle cx="373" cy="214" r="74" fill="#e7663e"/>
+<path d="M0 305l107-39 80 27 113-43 200 75v175H0z" fill="#d38551"/>
+<path d="M0 366l195-69 305 88v115H0z" fill="#a64851"/>
+<path d="M160 500l76-203h27l97 203z" fill="#463039"/>
+<path d="M249 319v24m0 23v37m2 29v55" stroke="#f7dea2" stroke-width="5"/>
+<g fill="#412537"><path d="M56 170q12-18 23 0q12-18 24 0l-24-6z"/><path d="M150 214q16-23 31 0q15-23 31 0l-31-7z"/></g>
+<text x="29" y="58" font-size="42" font-weight="900" letter-spacing="-2">FEAR &amp; LOATHING</text>
+<text x="32" y="95" font-family="Georgia, serif" font-size="29" font-style="italic">in Las Vegas</text>
+<text x="29" y="464" font-size="12" letter-spacing="2" fill="#ffe6b4">A SAVAGE JOURNEY</text></g></svg>

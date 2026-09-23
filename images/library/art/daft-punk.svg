@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><rect width="500" height="500" fill="#172531"/><g fill="#e3c47e" font-family="Arial, sans-serif">
+<text x="32" y="65" font-size="44" font-weight="900" letter-spacing="-1">DAFT PUNK</text><text x="34" y="94" font-size="12" letter-spacing="4">AN IN-DEPTH HISTORY</text>
+<g stroke="#2d6770" stroke-width="2"><path d="M30 361v20"/><path d="M52 361v-31"/><path d="M74 361v42"/><path d="M96 361v-53"/><path d="M118 361v64"/><path d="M140 361v-20"/><path d="M162 361v31"/><path d="M184 361v-42"/><path d="M206 361v53"/><path d="M228 361v-64"/><path d="M250 361v20"/><path d="M272 361v-31"/><path d="M294 361v42"/><path d="M316 361v-53"/><path d="M338 361v64"/><path d="M360 361v-20"/><path d="M382 361v31"/><path d="M404 361v-42"/><path d="M426 361v53"/><path d="M448 361v-64"/><path d="M470 361v20"/></g>
+<path d="M52 265v-30q0-83 86-83q81 0 81 83v79q-84 37-167-4z" fill="#c1caca"/>
+<path d="M65 230q63-31 140 0v53q-70 33-140 0z" fill="#233c46"/>
+<path d="M278 295v-81q0-59 72-59q79 0 93 66v91q-57 40-139 3z" fill="#d9b85c"/>
+<path d="M289 224q76-33 143 9v43q-75 20-139-2z" fill="#233c46"/>
+<path d="M72 209q48-32 108-13M299 194q38-22 78-9" fill="none" stroke="#f9eccc" stroke-width="5"/>
+<text x="32" y="445" font-family="Georgia, serif" font-size="29" font-style="italic">Human after all.</text><path d="M33 468h431" stroke="#b49658"/>
+</g></svg>

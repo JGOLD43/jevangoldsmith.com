@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><rect width="500" height="500" fill="#eee8dd"/><g fill="#252c2b" font-family="Arial, sans-serif">
+<text x="32" y="55" font-size="35" font-weight="700" letter-spacing="-1">THE ART WORLD</text>
+<text x="34" y="81" font-size="12" letter-spacing="3">LARRY GAGOSIAN</text>
+<path d="M0 383h500M46 118v265M454 118v265" fill="none" stroke="#b8b0a2" stroke-width="2"/>
+<rect x="76" y="157" width="126" height="173" fill="#252c2b"/><rect x="85" y="166" width="108" height="155" fill="#c44433"/>
+<path d="M94 290l90-87v95z" fill="#edb064"/>
+<rect x="235" y="133" width="193" height="148" fill="#252c2b"/><rect x="244" y="142" width="175" height="130" fill="#376970"/>
+<circle cx="335" cy="206" r="44" fill="#e5d6aa"/>
+<path d="M0 383l140 117M500 383L360 500" stroke="#c6bdae"/>
+<rect x="270" y="352" width="79" height="8" fill="#5b5145"/><path d="M279 360v43m61-43v43" stroke="#5b5145" stroke-width="6"/>
+<text x="33" y="453" font-family="Georgia, serif" font-size="24">Who shapes what we see?</text></g></svg>

@@ -12,6 +12,8 @@ import additions from '../../../data/library-additions.json';
 import collectionData from '../../../data/library-collections.json';
 import corrections from '../../../data/library-material-corrections.json';
 import videoArtworks from '../../../data/library-video-artwork.json';
+import artArtworks from '../../../data/library-art-artwork.json';
+import type { ArtArtwork } from '../lib/library-materials';
 import type { VideoArtwork } from '../lib/video-artwork';
 import { archiveVolume, materialLabels, type ArchiveItem, type LibraryClassification } from '../lib/library-materials';
 import '../styles/library-materials.css';
@@ -47,8 +49,9 @@ const library = await Promise.all(books
 const classifications = collectionData.items as Record<string, LibraryClassification>;
 const materialCorrections = corrections as Record<string, Partial<ArchiveItem>>;
 const videoCovers = videoArtworks as Record<string, VideoArtwork>;
+const artCovers = artArtworks as Record<string, ArtArtwork>;
 const materials = [...archive.items, ...additions].map((item) =>
-  archiveVolume({ ...item, ...materialCorrections[item.id] }, classifications[item.id], videoCovers[item.id]));
+  archiveVolume({ ...item, ...materialCorrections[item.id] }, classifications[item.id], videoCovers[item.id], artCovers[item.id]));
 const collectionGroups = [...new Set(collectionData.collections.map((collection) => collection.group))];
 const entries = [...library, ...materials];
 const filters = [
@@ -129,24 +132,12 @@ const filters = [
         <a class="book-library-title" href={library[0]?.href || '/books.html'}>{library[0]?.title}</a>
         <p class="book-library-author">{library[0]?.author}</p>
       </div>
-      <button type="button" class="library-item-context" data-library-item-context hidden>Why this is here</button>
       <a class="book-library-request" href="mailto:hello@jevangoldsmith.com" aria-label="Request the selected book by email">request</a>
-      <p class="library-attribution" hidden><span class="library-unreviewed">Saved to explore — I haven’t read or watched everything here yet.</span><span data-library-credit-label>Collected by</span> <a data-library-credit-link href={archive.source.url} target="_blank" rel="noopener noreferrer">The Unintuitive ↗</a><br />Source links · some require access or purchase</p>
     </div>
     <button class="book-library-arrow" type="button" data-library-step="1" aria-label="Next item">→</button>
   </div>
   <p class="sr-only" data-library-sort-status role="status"></p>
   <div class="book-library-empty" data-library-empty hidden role="status"><p>No matches for these filters.</p><button type="button" data-library-reset>Show all material</button></div>
-  <dialog class="library-context-dialog" aria-labelledby="library-context-title">
-    <form method="dialog"><button aria-label="Close item context">×</button></form>
-    <p class="library-context-eyebrow" data-library-context-role></p>
-    <h2 id="library-context-title"></h2>
-    <p class="library-context-why" data-library-context-why></p>
-    <div class="library-context-collections" aria-label="Collections for this item"></div>
-    <p class="library-context-evidence"><a data-library-context-guide href="/free-resources.html#collection-guides">Follow a collection guide →</a></p>
-    <p class="library-context-evidence"><a target="_blank" rel="noopener noreferrer" data-library-context-evidence></a></p>
-    <p class="library-context-method">Collections suggest ways to approach a work, not a promise that it solves a problem. Placements draw on source text, excerpts and descriptions. I haven’t read or watched everything here yet.</p>
-  </dialog>
 </section>
 <InlineJson id="jg-book-library" json={JSON.stringify(entries).replace(/</g, '\\u003c')} />
 <InlineJson id="jg-library-collections" json={JSON.stringify(collectionData.collections)} />

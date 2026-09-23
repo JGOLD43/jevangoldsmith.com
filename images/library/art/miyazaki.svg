@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><rect width="500" height="500" fill="#b9d2c2"/><g fill="#244f49" font-family="Arial, sans-serif">
+<circle cx="370" cy="107" r="50" fill="#f4dd96"/>
+<path d="M0 247q43-39 87-8q53-67 117-12q59-32 118 8q89-45 178 7v64H0z" fill="#eef0d5"/>
+<path d="M0 328l101-146 102 133 83-92 214 139v138H0z" fill="#7da68a"/>
+<path d="M0 389l146-123 118 133 132-105 104 95v111H0z" fill="#3f7865"/>
+<path d="M0 458q96-106 221-29q115-89 279 26v45H0z" fill="#245448"/>
+<g fill="#edb264" transform="translate(264 214) rotate(-13)"><path d="M-92 0l183-2-57 12-126-3z"/><path d="M-6-9L-50-46l20-3L22 1z"/><path d="M-17 7l-35 35 15 3L22 5z"/></g>
+<text x="30" y="57" font-family="Georgia, serif" font-size="38">Hayao Miyazaki</text>
+<text x="32" y="87" font-size="12" letter-spacing="3">NINE CREATIVE LESSONS</text>
+<text x="32" y="472" font-size="12" letter-spacing="3" fill="#ecedce">ROOM FOR WONDER</text></g></svg>
