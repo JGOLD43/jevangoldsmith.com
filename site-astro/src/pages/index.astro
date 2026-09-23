@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import remoteAssets from '../../../data/remote-assets.generated.json';
 import Base from '../layouts/Base.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
-import newsletter from '../../../data/newsletter.json';
 import { NOW_SECTIONS, NOW_LAST_UPDATED } from '../lib/now-location';
 
 interface RemoteAssetEntry { widths?: number[]; formats?: Record<string, Record<string, string>>; }
@@ -95,8 +94,8 @@ if (latestChallenge) {
 }
 ---
 <Base
-  title="Jevan Goldsmith | Follow What I’m Building"
-  description={newsletter.description}
+  title="Jevan Goldsmith | Notes Along the Way"
+  description="Starting a business, reading widely, and making room for adventure. A personal collection of notes, projects, and interests from Jevan Goldsmith."
   canonical="https://jevangoldsmith.com/"
   pageType="WebSite"
 >
@@ -129,13 +128,14 @@ if (latestChallenge) {
         <div class="hero-container">
             <div class="hero-left">
                 <p class="hero-intro">Hi, I'm Jevan Goldsmith.</p>
-                <h1 class="hero-headline">Follow what<br>I'm building.</h1>
-                <p class="hero-welcome">Each month, I share progress on my projects, lessons from trying things, and the books and tools I'm putting to use.</p>
-                <NewsletterForm id="home-signup" source="home-hero" />
+                <h1 class="hero-headline">There’s a lot<br>I want to try.</h1>
+                <p class="hero-welcome">I’m starting a business, working my way through a pile of books, and making room for a few adventures. This is where I keep my notes along the way.</p>
                 <div class="hero-reading-links">
                     <a href="/now.html">See what I'm working on <span aria-hidden="true">→</span></a>
-                    <a href={newsletter.sampleUrl}>Read a sample update</a>
+                    <a href="/books.html">Browse my bookshelf</a>
                 </div>
+                <p class="hero-newsletter-invitation">Want to keep in touch? I write a short note once a month.</p>
+                <NewsletterForm id="home-signup" source="home-hero" />
 
             </div>
             <div class="hero-right">
@@ -287,6 +287,7 @@ if (latestChallenge) {
   .hero .hero-headline { font-size: clamp(2.5rem, 4.6vw, 4rem); letter-spacing: -.045em; line-height: 1.05; margin: 0 0 1.25rem; }
   .hero .hero-welcome { max-width: 34rem; font-size: 1.05rem; line-height: 1.7; margin: 0 0 1.6rem; }
   .hero-reading-links { display: flex; flex-wrap: wrap; gap: .8rem 1.5rem; margin-top: 1.25rem; }
+  .hero-newsletter-invitation { color: var(--text-light); font-size: .9rem; line-height: 1.6; margin: 1.5rem 0 .75rem; }
   .hero-reading-links a { font-size: .83rem; color: var(--text-color); text-underline-offset: 4px; }
   .home-current { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 3rem; border-top: 1px solid var(--border-color); }
   .home-section-kicker { color: var(--text-light); font-size: .72rem; margin: 0 0 .7rem; }

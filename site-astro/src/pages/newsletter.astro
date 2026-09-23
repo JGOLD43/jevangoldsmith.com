@@ -3,21 +3,21 @@ import Base from '../layouts/Base.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
 import newsletter from '../../../data/newsletter.json';
 ---
-<Base title="Follow What I'm Building | Jevan Goldsmith" description={newsletter.description} canonical="https://jevangoldsmith.com/newsletter.html" pageType="CollectionPage">
+<Base title="Letters from Jevan | Jevan Goldsmith" description={newsletter.description} canonical="https://jevangoldsmith.com/newsletter.html" pageType="CollectionPage">
   <main class="newsletter-page-content">
     <header class="newsletter-intro">
       <p class="newsletter-kicker">Jevan's monthly update</p>
-      <h1>Follow what I'm building.</h1>
-      <p class="newsletter-lead">Projects in progress, lessons from trying things, and the books and tools I'm putting to use. A short note from me, once a month.</p>
+      <h1>{newsletter.headline}</h1>
+      <p class="newsletter-lead">A little of what’s happening in my life: starting a business, what I’m reading, and the things I’m still figuring out. If something gets you thinking, write back. I’d like this to be a conversation.</p>
       <NewsletterForm id="newsletter-signup" source="newsletter-page" />
       <a class="sample-link" href={newsletter.sampleUrl}>Read a sample before you join <span aria-hidden="true">→</span></a>
     </header>
     <section class="newsletter-expect" aria-labelledby="expect-title">
       <h2 id="expect-title">What's inside</h2>
       <div class="newsletter-topics">
-        <article><span>01</span><h3>Something I'm building</h3><p>What moved forward, what I'm figuring out, and the next step.</p></article>
-        <article><span>02</span><h3>A lesson worth sharing</h3><p>A decision, an experiment, or an idea that changed how I think.</p></article>
-        <article><span>03</span><h3>Something you can use</h3><p>A book, tool or practical template, with a reason it's worth your time.</p></article>
+        <article><span>01</span><h3>What I’m trying</h3><p>A closer look at a project or a decision I’m working through, while it’s still fresh.</p></article>
+        <article><span>02</span><h3>What I’m taking from it</h3><p>What happened, what surprised me, and what I’d try differently next time.</p></article>
+        <article><span>03</span><h3>Something to pass on</h3><p>A book, a tool, or an idea, with a note on why it stuck with me.</p></article>
       </div>
     </section>
     <section class="newsletter-preview" aria-labelledby="preview-title">
