@@ -24,7 +24,7 @@ test('Shelf navigation keeps its compact typography and spacing', async ({ page 
 });
 
 test('opening a Shelf item near the footer keeps its scroll position and background', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.setViewportSize({ width: 1440, height: 800 });
   await page.goto('/products.html');
 
   const cards = page.locator('[data-shelf-card]');
@@ -32,10 +32,20 @@ test('opening a Shelf item near the footer keeps its scroll position and backgro
   expect(await cards.locator('.shelf-object-name--specific').evaluateAll((labels) =>
     labels.every((label) => getComputedStyle(label).display === 'none'),
   )).toBe(true);
+  await page.evaluate(() => document.fonts.ready);
+  await cards.evaluateAll((items) => Promise.all(items.flatMap((item) => item.getAnimations().map((animation) => animation.finished))));
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
 
   const scrollBeforeOpen = await page.evaluate(() => window.scrollY);
-  await page.getByRole('button', { name: 'Boots' }).click();
+  expect(scrollBeforeOpen).toBeGreaterThan(0);
+  // Click the visible photo directly: locator.click() scrolls the entire
+  // button into view first, changing the very scroll position being tested.
+  const photo = await page.getByRole('button', { name: 'Boots' }).locator('.shelf-object-photo').boundingBox();
+  expect(photo).not.toBeNull();
+  const clickY = photo!.y + photo!.height / 2;
+  expect(clickY).toBeGreaterThan(0);
+  expect(clickY).toBeLessThan(800);
+  await page.mouse.click(photo!.x + photo!.width / 2, clickY);
 
   await expect(page.locator('body')).toHaveClass(/zoom-open/);
   await expect(page.locator('.site-footer')).toHaveCSS('visibility', 'visible');
