@@ -208,7 +208,7 @@ function initMovieLibrary() {
       if (sortMode === 'az') url.searchParams.delete('discSort');
       else url.searchParams.set('discSort', sortMode);
     } else {
-      url.searchParams.delete('view');
+      url.searchParams.set('view', 'gallery');
       url.searchParams.delete('discMovie');
       url.searchParams.delete('discSort');
     }
@@ -727,7 +727,11 @@ function initMovieLibrary() {
     }
     if (active) { resize(); schedule(); }
   });
-  if (new URL(window.location.href).searchParams.get('view') === 'disc-boxes') open(false, true);
+  // A plain page visit starts in 3D. An explicit gallery choice survives reloads.
+  const initialParams = new URL(window.location.href).searchParams;
+  const initialView = initialParams.get('view');
+  const focusedGalleryLink = initialParams.has('movie');
+  if ((initialView === null && !focusedGalleryLink) || initialView === 'disc-boxes') open(true, true);
 }
 
 onDomReady(initMovieLibrary, 'movie library');

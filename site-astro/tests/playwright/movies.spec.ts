@@ -1,13 +1,19 @@
 import { test, expect } from '@playwright/test';
 
-test('movies page renders SSR cards immediately', async ({ page }) => {
+test('movies open in 3D by default and retain SSR cards and the gallery exit', async ({ page }) => {
   await page.goto('/movies.html');
+  await expect(page.locator('#movie-library')).toBeVisible();
+  expect(new URL(page.url()).searchParams.get('view')).toBe('disc-boxes');
+  await page.locator('[data-close-movie-library]').click();
+  await expect(page.locator('#movie-library')).toBeHidden();
+  await page.reload();
+  await expect(page.locator('#movie-library')).toBeHidden();
   // SSR'd cards available before any JS runs.
   expect(await page.locator('.movie-card').count()).toBeGreaterThanOrEqual(6);
 });
 
 test('movies load the first desktop row of cover images eagerly', async ({ page }) => {
-  await page.goto('/movies.html');
+  await page.goto('/movies.html?view=gallery');
   const loading = await page.locator('.movies-grid .movie-poster').evaluateAll((images) =>
     images.slice(0, 7).map((image) => ({
       loading: image.getAttribute('loading'),
@@ -23,7 +29,7 @@ test('movies load the first desktop row of cover images eagerly', async ({ page 
 
 test('movie collections mode uses the full desktop content width', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/movies.html');
+  await page.goto('/movies.html?view=gallery');
   await page.locator('#movies-view-toggle').click();
   await page.getByRole('button', { name: 'Collections', exact: true }).click();
 
@@ -50,7 +56,7 @@ test('movie collections mode uses the full desktop content width', async ({ page
 });
 
 test('movies retain one valid grid item per SSR card after hydration', async ({ page }) => {
-  await page.goto('/movies.html');
+  await page.goto('/movies.html?view=gallery');
   const initialTitles = await page.locator('#movies-container > .movie-card').evaluateAll((cards) =>
     cards.map((card) => card.getAttribute('data-movie-title'))
   );
@@ -71,7 +77,7 @@ test('movies retain one valid grid item per SSR card after hydration', async ({ 
 });
 
 test('movie tier badges stay inside their sidebar movie rows', async ({ page }) => {
-  await page.goto('/movies.html');
+  await page.goto('/movies.html?view=gallery');
   await page.waitForLoadState('networkidle');
   await page.locator('.sidebar-collapse-btn').click();
 
@@ -96,7 +102,7 @@ test('movie tier badges stay inside their sidebar movie rows', async ({ page }) 
 });
 
 test('filtered movie stats retain the compact redesigned layout', async ({ page }) => {
-  await page.goto('/movies.html');
+  await page.goto('/movies.html?view=gallery');
   await page.locator('#movie-search').evaluate((input: HTMLInputElement) => {
     input.value = 'dark';
     input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -112,7 +118,7 @@ test('filtered movie stats retain the compact redesigned layout', async ({ page 
 });
 
 async function openDiscBoxes(page: import('@playwright/test').Page) {
-  await page.goto('/movies.html');
+  await page.goto('/movies.html?view=gallery');
   await page.locator('#movies-view-toggle').click();
   await page.getByRole('button', { name: 'Disc boxes' }).click();
   await expect(page.locator('#movie-library')).toBeVisible();
@@ -121,7 +127,7 @@ async function openDiscBoxes(page: import('@playwright/test').Page) {
 test('disc boxes are an additional view and return to the selected collections view', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('/movies.html');
+  await page.goto('/movies.html?view=gallery');
   await page.locator('#movies-view-toggle').click();
   await page.getByRole('button', { name: 'Collections', exact: true }).click();
   await expect(page.locator('#movies-genre-grid-view')).toBeVisible();
@@ -137,7 +143,7 @@ test('disc boxes are an additional view and return to the selected collections v
   await expect(page.locator('#movies-genre-grid-view')).toBeVisible();
   await expect(page.locator('.movies-main')).not.toHaveAttribute('inert', '');
   await expect(page.locator('#movies-view-toggle')).toBeFocused();
-  expect(new URL(page.url()).searchParams.has('view')).toBe(false);
+  expect(new URL(page.url()).searchParams.get('view')).toBe('gallery');
   expect(errors).toEqual([]);
 });
 

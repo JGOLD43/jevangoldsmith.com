@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 for (const width of [769, 900, 968, 969, 1280]) {
   test(`books sidebar sits below the header at ${width}px, including after scrolling`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto('/books.html');
+    await page.goto('/books.html?view=gallery');
     const sidebar = page.locator('#books-sidebar');
     const header = page.locator('.navbar');
     const expectAligned = async () => {
@@ -29,8 +29,14 @@ for (const width of [769, 900, 968, 969, 1280]) {
   });
 }
 
-test('books page renders 122 SSR cards + counter', async ({ page }) => {
+test('books open in 3D by default and retain SSR cards and the gallery exit', async ({ page }) => {
   await page.goto('/books.html', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#book-library')).toBeVisible();
+  expect(new URL(page.url()).searchParams.get('view')).toBe('library');
+  await page.locator('[data-close-book-library]').click();
+  await expect(page.locator('#book-library')).toBeHidden();
+  await page.reload();
+  await expect(page.locator('#book-library')).toBeHidden();
   // Counter starts at 0 then settles after JS runs.
   await expect(page.locator('#book-count')).toHaveText(/^\d+$/, { timeout: 8000 });
   const counter = await page.locator('#book-count').innerText();
@@ -40,7 +46,7 @@ test('books page renders 122 SSR cards + counter', async ({ page }) => {
 });
 
 test('books filter changes visible count', async ({ page }) => {
-  await page.goto('/books.html', { waitUntil: 'domcontentloaded' });
+  await page.goto('/books.html?view=gallery', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(
     () => Number(document.getElementById('book-count')?.textContent || 0) > 100,
     null,
@@ -61,7 +67,7 @@ test('books page has no console errors', async ({ page }) => {
   page.on('console', (msg) => {
     if (msg.type() === 'error') errors.push(msg.text());
   });
-  await page.goto('/books.html', { waitUntil: 'domcontentloaded' });
+  await page.goto('/books.html?view=gallery', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(
     () => Number(document.getElementById('book-count')?.textContent || 0) > 100,
     null,
@@ -75,7 +81,7 @@ test('books page has no console errors', async ({ page }) => {
 });
 
 test('compare shelves separates read, queued, and new books', async ({ page }) => {
-  await page.goto('/books.html', { waitUntil: 'domcontentloaded' });
+  await page.goto('/books.html?view=gallery', { waitUntil: 'domcontentloaded' });
   await page.locator('.book-stats-toggle').click();
   await page.locator('#bookshelf-comparison-tab').click();
 
@@ -92,7 +98,7 @@ test('compare shelves separates read, queued, and new books', async ({ page }) =
 });
 
 test('reading-list builder saves named to-read lists on the device', async ({ page }) => {
-  await page.goto('/books.html', { waitUntil: 'domcontentloaded' });
+  await page.goto('/books.html?view=gallery', { waitUntil: 'domcontentloaded' });
   await page.evaluate(() => localStorage.removeItem('jgold-reading-lists-v1'));
   await page.locator('.book-stats-toggle').click();
   await page.locator('#bookshelf-comparison-tab').click();

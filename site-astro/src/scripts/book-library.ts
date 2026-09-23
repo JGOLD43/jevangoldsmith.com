@@ -284,7 +284,7 @@ function initBookLibrary() {
       if (sortMode === 'az') url.searchParams.delete('librarySort');
       else url.searchParams.set('librarySort', sortMode);
     } else {
-      url.searchParams.delete('view');
+      url.searchParams.set('view', 'gallery');
       url.searchParams.delete('libraryType');
       url.searchParams.delete('librarySearch');
       url.searchParams.delete('libraryBook');
@@ -826,7 +826,11 @@ function initBookLibrary() {
     }
     if (active) { resize(); schedule(); }
   });
-  if (new URL(window.location.href).searchParams.get('view') === 'library') open(false, true);
+  // A plain page visit starts in 3D. An explicit gallery choice survives reloads.
+  const initialParams = new URL(window.location.href).searchParams;
+  const initialView = initialParams.get('view');
+  const focusedGalleryLink = initialParams.has('book') || initialParams.has('year');
+  if ((initialView === null && !focusedGalleryLink) || initialView === 'library') open(true, true);
 }
 
 onDomReady(initBookLibrary, 'book library');
