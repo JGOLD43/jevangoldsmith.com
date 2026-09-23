@@ -1,3 +1,4 @@
+import { consumptionTime, formatConsumptionTime } from './library-time';
 import { interviewArtwork } from './interview-artwork';
 import { videoArtwork, type VideoArtwork } from './video-artwork';
 
@@ -49,10 +50,11 @@ export function archiveVolume(item: ArchiveItem, classification?: LibraryClassif
   const kind = item.kind as Exclude<MaterialKind, 'book'>;
   const palettes = { article: '#eadfc8', art: '#976549', video: '#2a494a', interview: '#a95138',
     documentary: '#7e8781', memo: '#c3a26b', other: '#82875f' };
+  const time = consumptionTime(item);
   const video = kind === 'video' ? videoArtwork(item, artwork) : undefined;
   return {
     id: item.id, title: item.title, author: item.author || new URL(item.url).hostname.replace(/^www\./, ''),
-    href: item.url, cover: '', kind, ratio: kind === 'interview' ? 1.55 : kind === 'art' || kind === 'documentary' ? 1 : .72,
+    href: `/library/${encodeURIComponent(item.id)}.html`, sourceHref: item.url, cover: '', kind, ratio: kind === 'interview' ? 1.55 : kind === 'art' || kind === 'documentary' ? 1 : .72,
     tier: '', tierLabel: materialLabels[kind], tierColor: '#e3d8c6', collection: item.topic,
     binding: video
       ? { background: video.background, ink: video.ink, accent: video.accent, serif: video.font === 'serif' }
@@ -60,7 +62,8 @@ export function archiveVolume(item: ArchiveItem, classification?: LibraryClassif
     videoArtwork: video,
     interviewArtwork: kind === 'interview' ? interviewArtwork(item) : undefined,
     artArtwork: kind === 'art' ? artArtwork : undefined,
-    highlightCount: null, duration: item.duration, medium: item.medium,
+    highlightCount: null, duration: `Est. ${formatConsumptionTime(time.minutes)}`, medium: item.medium,
+    consumptionMinutes: time.minutes, time,
     attribution: item.attribution, classification,
   };
 }

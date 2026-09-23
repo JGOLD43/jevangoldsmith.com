@@ -205,3 +205,11 @@
   .book-library[data-materials="true"] .book-library-stage { bottom: 140px; }
   .book-library .book-library-controls { bottom: 10px; }
 }
+
+.book-library .library-total-time { color: #d4c4a5; font-size: .75rem; margin-top: .15rem; }
+
+.book-library .library-time-help { position: relative; font-size: .75rem; color: #c5b99e; margin-top: .15rem; max-width: 220px; }
+.book-library .library-time-help summary { cursor: pointer; }
+.book-library .library-time-help p { position: absolute; z-index: 20; top: 100%; left: 0; width: min(300px, 80vw); padding: .8rem; border: 1px solid #c5ae7e70; border-radius: 6px; background: #281e16; color: #fff8ed; font-size: .8rem; line-height: 1.5; box-shadow: 0 6px 20px #0006; }
+
+.book-library .library-active-collection { transform: translateY(20px); }

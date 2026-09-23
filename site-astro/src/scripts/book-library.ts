@@ -1,3 +1,4 @@
+import { formatConsumptionTime, totalConsumptionTime } from '../lib/library-time';
 import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { flyCoverToDetail } from './books-flight';
@@ -22,6 +23,8 @@ interface LibraryBook {
   highlightCount: number | null;
   kind: MaterialKind;
   duration?: string | null;
+  consumptionMinutes: number;
+  time: { provisional: boolean; scope: string };
   medium?: string;
   attribution?: { label: string; name: string; url: string };
   classification?: LibraryClassification;
@@ -207,7 +210,18 @@ function initBookLibrary() {
     collectionDescription.textContent = collection?.description || '';
     collectionGuide.href = collection?.guideHref || '/free-resources.html#collection-guides';
     collectionGuide.setAttribute('aria-label', `Read the collection guide: ${collection?.label || 'All collections'}`);
+    for (const option of materialSelect.options) {
+      const items = allBooks.filter((item) => (!collection || item.classification?.collections.includes(collection.id))
+        && (option.value === 'all' || (option.value === 'archive' ? item.kind !== 'book' : item.kind === option.value)));
+      option.textContent = `${option.dataset.kindLabel} (${items.length})`;
+    }
     countLabel.textContent = `${books.length} ${onlyBooks ? 'books read' : materialFilter === 'all' || materialFilter === 'archive' || materialFilter === 'art' || materialFilter === 'other' ? 'items' : materialLabels[materialFilter].toLowerCase()}`;
+    const totalLabel = library!.querySelector<HTMLElement>('[data-library-total-time]');
+    if (totalLabel) {
+      const visits = books.filter((item) => item.time.scope === 'first-visit').length;
+      totalLabel.textContent = `Est. ${formatConsumptionTime(totalConsumptionTime(books))} total`;
+      totalLabel.title = `Sum of the ${books.length} visible items. ${books.filter((item) => item.time.provisional).length} use rough planning estimates.${visits ? ` Includes ${visits} first visits to open-ended resources.` : ''}`;
+    }
     empty.hidden = books.length !== 0;
     if (controls) controls.hidden = books.length === 0;
     if (!books.length && thought) thought.hidden = true;
@@ -367,17 +381,17 @@ function initBookLibrary() {
       }
     }
     title!.textContent = book.title;
-    const external = book.kind !== 'book';
-    title!.href = external ? book.href : `${book.href}?from=library`;
-    title!.target = external ? '_blank' : '';
-    title!.rel = external ? 'noopener noreferrer' : '';
-    author!.textContent = external ? [book.medium, book.duration, book.author].filter(Boolean).join(' · ') : book.author;
-    request!.textContent = external ? (book.medium === 'Video' ? 'Watch ↗' : 'Read / explore ↗') : 'request';
-    request!.setAttribute('aria-label', external ? `Open ${book.title} at its source in a new tab` : 'Request the selected book by email');
-    request!.target = external ? '_blank' : '';
-    request!.rel = external ? 'noopener noreferrer' : '';
-    request!.href = `mailto:hello@jevangoldsmith.com?subject=${encodeURIComponent(`Book request: ${book.title}`)}&body=${encodeURIComponent(`Hi Jevan,\n\nI'm interested in "${book.title}" by ${book.author}.\n\nMy request or recommendation:\n`)}`;
-    if (external) request!.href = book.href;
+    const material = book.kind !== 'book';
+    title!.href = material ? materialDetailHref(book) : `${book.href}?from=library`;
+    title!.removeAttribute('target');
+    title!.removeAttribute('rel');
+    author!.textContent = material ? [book.medium, book.duration, book.author].filter(Boolean).join(' · ') : [book.author, book.duration].filter(Boolean).join(' · ');
+    request!.textContent = material ? 'View details →' : 'request';
+    request!.setAttribute('aria-label', material ? `View ${book.title}` : 'Request the selected book by email');
+    request!.removeAttribute('target');
+    request!.removeAttribute('rel');
+    request!.href = material ? materialDetailHref(book) : `mailto:hello@jevangoldsmith.com?subject=${encodeURIComponent(`Book request: ${book.title}`)}&body=${encodeURIComponent(`Hi Jevan,\n\nI'm interested in "${book.title}" by ${book.author}.\n\nMy request or recommendation:\n`)}`;
+
   }
 
   function createVolume(logical: number) {
@@ -612,13 +626,24 @@ function initBookLibrary() {
     schedule();
   }
 
+  function materialDetailHref(book: LibraryBook) {
+    const shelf = new URL(window.location.href);
+    shelf.searchParams.set('view', 'library');
+    shelf.searchParams.set('libraryBook', book.id);
+    shelf.searchParams.set('libraryType', materialFilter);
+    shelf.searchParams.set('librarySort', sortMode);
+    if (problemFilter) shelf.searchParams.set('libraryCollection', problemFilter);
+    else shelf.searchParams.delete('libraryCollection');
+    return `${book.href}?returnTo=${encodeURIComponent(shelf.pathname + shelf.search)}`;
+  }
+
   function openDetails(logical: number) {
     if (!active || openingDetail || sorting || !books.length) return;
     select(logical);
     if (books[wrap(logical)].kind !== 'book') {
       lastTap = null;
       ignoreDoubleClickUntil = performance.now() + 400;
-      window.open(books[wrap(logical)].href, '_blank', 'noopener,noreferrer');
+      window.location.href = materialDetailHref(books[wrap(logical)]);
       return;
     }
     const cover = volumes.get(logical)?.querySelector<HTMLImageElement>('img');

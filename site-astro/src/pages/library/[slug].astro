@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+import { libraryMaterials } from '../../lib/library-catalog';
+import { materialLabels } from '../../lib/library-materials';
+import { formatConsumptionTime } from '../../lib/library-time';
+import { guides } from '../../lib/library-guides';
+
+export function getStaticPaths() {
+  return libraryMaterials.map((item) => ({ params: { slug: item.id }, props: { item } }));
+}
+const { item } = Astro.props;
+const collectionGuides = guides.filter((guide) => item.classification?.collections.includes(guide.collectionId));
+const image = item.artArtwork?.image || item.videoArtwork?.image;
+const watch = item.medium === 'Video' || item.kind === 'documentary';
+const listen = /audio/i.test(item.medium || '');
+const sourceAction = watch ? 'Watch at the source' : listen ? 'Listen at the source' : 'Read / explore the source';
+const backHref = `/books.html?view=library&libraryType=all&libraryBook=${encodeURIComponent(item.id)}`;
+---
+<Base title={`${item.title} | Jevan Goldsmith`}
+  description={item.classification?.why || `${item.title} — ${item.collection}.`}
+  canonical={`https://jevangoldsmith.com${item.href}`}
+  breadcrumbs={[{ name: 'Home', url: 'https://jevangoldsmith.com/' }, { name: 'Library', url: 'https://jevangoldsmith.com/books.html?view=library' }, { name: item.title, url: `https://jevangoldsmith.com${item.href}` }]}
+>
+  <main class="material-detail" data-material-id={item.id}>
+    <a class="material-back" data-material-back href={backHref}>← Back to the library</a>
+    <header class="material-intro">
+      <p class="material-eyebrow">{materialLabels[item.kind]} · {item.collection}</p>
+      <h1>{item.title}</h1>
+      <p class="material-meta">{item.medium} · {item.author}</p>
+    </header>
+    {image && <img class="material-hero-image" src={image} alt="" width="640" height="360" />}
+    <section class="material-source" aria-label="Time and original source">
+      <div><p class="material-eyebrow">Estimated {watch ? 'watching' : listen ? 'listening' : 'reading / exploring'} time</p>
+        <p class="material-time">{formatConsumptionTime(item.consumptionMinutes)}{item.time.scope === 'first-visit' && <span> · first visit</span>}</p>
+      </div>
+      <a class="material-source-button" href={item.sourceHref} target="_blank" rel="noopener noreferrer">{sourceAction} ↗<span class="sr-only"> (opens in a new tab)</span></a>
+      <details class="material-time-basis"><summary>{item.time.provisional ? 'About this planning estimate' : 'About this estimate'}</summary><p>{item.time.basis}</p></details>
+    </section>
+    {item.classification?.why && <section class="material-context"><h2>About this piece</h2><p>{item.classification.why}</p></section>}
+    {collectionGuides.length > 0 && <section class="material-context"><h2>Explore it in a collection</h2><p>These guides explain where to start and what to explore next.</p>
+      <ul>{collectionGuides.map((guide) => <li><a href={guide.href}>{guide.collection.label} →</a><p>{guide.collection.description}</p></li>)}</ul>
+    </section>}
+  </main>
+  <script>
+    const back = document.querySelector<HTMLAnchorElement>('[data-material-back]');
+    const value = new URLSearchParams(window.location.search).get('returnTo');
+    if (back && value) {
+      try {
+        const url = new URL(value, window.location.origin);
+        if (url.origin === window.location.origin && /^\/books(?:\.html)?$/.test(url.pathname)) back.href = url.pathname + url.search;
+      } catch { /* Keep the item's safe default shelf link. */ }
+    }
+  </script>
+</Base>
+<style>
+  .material-detail { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+  .material-back { display: inline-block; margin-bottom: 3rem; color: var(--text-light); }
+  .material-eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text-light); margin: 0 0 .7rem; }
+  h1 { font-size: clamp(2rem, 5.5vw, 3.6rem); line-height: 1.1; letter-spacing: -.035em; text-wrap: balance; margin: 0; }
+  .material-meta { color: var(--text-light); margin: 1.2rem 0 2rem; }
+  .material-hero-image { display: block; width: 100%; height: auto; max-height: 420px; object-fit: contain; margin: 2rem 0; }
+  .material-source { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; border-block: 1px solid var(--border-color); padding: 1.75rem 0; }
+  .material-time { font-size: 1.5rem; font-weight: 600; margin: 0; }
+  .material-time span { font-size: .95rem; font-weight: 400; }
+  .material-source-button { display: inline-block; color: #171812; background: #ffdf00; border: 1px solid #171812; border-radius: 999px; padding: .85rem 1.2rem; font-weight: 700; text-decoration: none; }
+  .material-source-button:hover { background: #ffe956; }
+  .material-time-basis { flex-basis: 100%; font-size: .85rem; color: var(--text-light); }
+  summary { cursor: pointer; }
+  .material-time-basis p { max-width: 60ch; line-height: 1.6; }
+  .material-context { margin-top: 2.5rem; }
+  h2 { font-size: 1.3rem; margin-bottom: 1rem; }
+  .material-context p { line-height: 1.7; }
+  ul { list-style: none; margin: 1.5rem 0 0; padding: 0; }
+  li { border-top: 1px solid var(--border-color); padding: 1rem 0; }
+  li a { font-weight: 600; }
+  li p { margin: .5rem 0 0; color: var(--text-light); font-size: .9rem; }
+</style>
+<style is:global>
+  @view-transition { navigation: auto; }
+  ::view-transition-group(root) { animation-duration: .2s; }
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(root) { animation-duration: 0s; }
+  }
+</style>

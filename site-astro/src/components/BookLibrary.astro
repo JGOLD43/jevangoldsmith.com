@@ -7,16 +7,12 @@ import { bookCoverUrl } from '../lib/book-card';
 import { ratingTier } from '../lib/rating-tier';
 import { bookBinding } from '../lib/book-binding';
 import InlineJson from './InlineJson.astro';
-import archive from '../../../data/learning-archive.json';
-import additions from '../../../data/library-additions.json';
 import collectionData from '../../../data/library-collections.json';
 import { shelfCollections } from '../lib/library-guides';
-import corrections from '../../../data/library-material-corrections.json';
-import videoArtworks from '../../../data/library-video-artwork.json';
-import artArtworks from '../../../data/library-art-artwork.json';
-import type { ArtArtwork } from '../lib/library-materials';
-import type { VideoArtwork } from '../lib/video-artwork';
-import { archiveVolume, materialLabels, type ArchiveItem, type LibraryClassification } from '../lib/library-materials';
+import { libraryMaterials as materials } from '../lib/library-catalog';
+import { materialLabels } from '../lib/library-materials';
+import { bookConsumptionTime } from '../lib/library-book-time';
+import { formatConsumptionTime, totalConsumptionTime } from '../lib/library-time';
 import '../styles/library-materials.css';
 import '../styles/library-collections.css';
 
@@ -40,19 +36,14 @@ const library = await Promise.all(books
       }
     }
     const tier = ratingTier(data.rating);
-    return { kind: 'book', id: data.isbn || id, title: data.title, author: data.author, cover, ratio,
+    const time = bookConsumptionTime(data);
+    return { kind: 'book', consumptionMinutes: time.minutes, time, duration: `Est. ${formatConsumptionTime(time.minutes)}`, id: data.isbn || id, title: data.title, author: data.author, cover, ratio,
       binding: await bookBinding(data.isbn || '', coverFile),
       highlightCount: data.highlightCount ?? null,
       tier: tier?.key || '', tierLabel: tier?.label || 'Unrated', tierColor: tier?.color || '#e3d8c6',
       collection: data.category?.trim() || 'Uncollected',
       href: `/books/${encodeURIComponent(id)}.html` };
   }));
-const classifications = collectionData.items as Record<string, LibraryClassification>;
-const materialCorrections = corrections as Record<string, Partial<ArchiveItem>>;
-const videoCovers = videoArtworks as Record<string, VideoArtwork>;
-const artCovers = artArtworks as Record<string, ArtArtwork>;
-const materials = [...archive.items, ...additions].map((item) =>
-  archiveVolume({ ...item, ...materialCorrections[item.id] }, classifications[item.id], videoCovers[item.id], artCovers[item.id]));
 const collectionGroups = [...new Set(collectionData.collections.map((collection) => collection.group))];
 const entries = [...library, ...materials];
 const filters = [
@@ -68,9 +59,10 @@ const filters = [
     <div class="book-library-heading"><h2>Library</h2>
       <label class="sr-only" for="library-material-type">Material type</label>
       <select id="library-material-type" class="library-material-select">
-        {filters.map(({ value, label, count }) => <option value={value}>{label} ({count})</option>)}
+        {filters.map(({ value, label, count }) => <option value={value} data-kind-label={label}>{label} ({count})</option>)}
       </select>
       <p data-library-count>{library.length} books read</p>
+      <details class="library-time-help"><summary class="library-total-time" data-library-total-time>Est. {formatConsumptionTime(totalConsumptionTime(library))} total</summary><p>Totals add up the items in this view. Recorded durations and book lengths are used where available; the rest are rough planning allowances. Open-ended resources count as a first visit. Each item page explains its estimate.</p></details>
     </div>
     <div class="book-library-header-actions">
       <details class="book-library-sort">
@@ -124,7 +116,7 @@ const filters = [
       <span class="book-library-thought-text"></span>
     </div>
   </div>
-  <p id="book-library-help" class="sr-only">Move the mouse over the selected book to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last book. Double-click or double-tap a book, or press Enter, to open its details. Use the material dropdown to explore articles, art, videos, interviews, documentaries, and memos. Materials open at their source in a new tab. Escape returns to the bookshelf. Request opens an email about the selected book.</p>
+  <p id="book-library-help" class="sr-only">Move the mouse over the selected book to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last book. Double-click or double-tap a book, or press Enter, to open its details. Use the material dropdown to explore articles, art, videos, interviews, documentaries, and memos. All items open their own page first, with a separate link to the original source. Escape returns to the bookshelf. Request opens an email about the selected book.</p>
   <div class="book-library-controls">
     <button class="book-library-arrow" type="button" data-library-step="-1" aria-label="Previous item">←</button>
     <div class="book-library-caption">

@@ -42,14 +42,14 @@ const { collection } = guide;
               <div class="guide-step-body">
                 <h2>{step.heading}</h2>
                 <div class="guide-source">
-                  <p class="guide-eyebrow">{step.format}{step.material.duration ? ` · ${step.material.duration}` : ''}</p>
-                  <h3><a href={step.material.url} target="_blank" rel="noopener noreferrer">{step.material.title}<span aria-hidden="true"> ↗</span></a></h3>
+                  <p class="guide-eyebrow">{step.format}{` · Est. ${step.durationLabel}`}</p>
+                  <h3><a href={step.detailHref}>{step.material.title} →</a></h3>
                   <p class="guide-credit">{step.attribution.label} <a href={step.attribution.url} target="_blank" rel="noopener noreferrer">{step.attribution.name} ↗</a></p>
                 </div>
                 <p class="guide-why">{step.why}</p>
                 <div class="guide-prompt"><h4>Pause & try</h4><p>{step.tryThis}</p></div>
                 <div class="guide-source-links">
-                  <a class="guide-open-source" href={step.material.url} target="_blank" rel="noopener noreferrer">{step.action}<span aria-hidden="true"> ↗</span><span class="sr-only">: {step.material.title} (opens in a new tab)</span></a>
+                  <a class="guide-open-source" href={step.detailHref}>View details →<span class="sr-only">: {step.material.title}</span></a>
                   <a href={step.shelfHref}>Find on the shelf<span class="sr-only">: {step.material.title}</span> →</a>
                 </div>
               </div>
@@ -64,7 +64,7 @@ const { collection } = guide;
           <p>Items 1–5 are the guided route above. The remaining items are listed alphabetically below; choose what interests you next. These numbers match the collection shelf.</p>
           <ol class="guide-remaining" start={guide.steps.length + 1}>
             {guide.remaining.map(({ material, shelfHref }) => <li>
-              <a href={material.url} target="_blank" rel="noopener noreferrer">{material.title} ↗</a>
+              <a href={`/library/${encodeURIComponent(material.id)}.html`}>{material.title} →</a>
               <a class="guide-shelf-link" href={shelfHref}>Find on the shelf<span class="sr-only">: {material.title}</span> →</a>
             </li>)}
           </ol>

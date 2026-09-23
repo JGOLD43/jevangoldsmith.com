@@ -1,3 +1,4 @@
+import { consumptionTime, formatConsumptionTime } from './library-time';
 import archive from '../../../data/learning-archive.json';
 import additions from '../../../data/library-additions.json';
 import corrections from '../../../data/library-material-corrections.json';
@@ -41,7 +42,7 @@ export const guides = guideData.guides.map((guide) => {
     steps: guide.steps.map((step) => {
       const material = materials.get(step.itemId);
       if (!material) throw new Error(`Unknown guide material: ${step.itemId}`);
-      return { ...step, material,
+      return { ...step, material, detailHref: `/library/${encodeURIComponent(material.id)}.html`, durationLabel: formatConsumptionTime(consumptionTime(material).minutes),
         format: materialLabels[material.kind as MaterialKind],
         action: material.medium === 'Video' || material.kind === 'documentary' ? 'Watch' : 'Read / explore',
         shelfHref: shelfHref(guide.collectionId, step.itemId),
