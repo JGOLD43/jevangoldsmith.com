@@ -31,7 +31,7 @@ async function submitNewsletter(event: SubmitEvent): Promise<void> {
     const trap = form.elements.namedItem('_honey') as HTMLInputElement | null;
     if (trap?.value) return;
     const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-    const original = button?.textContent ?? 'Get my updates';
+    const original = button?.textContent ?? 'Keep in touch';
     form.dataset.submitting = 'true';
     form.setAttribute('aria-busy', 'true');
     if (button) { button.disabled = true; button.textContent = 'Sending…'; }

@@ -4,7 +4,7 @@ test('the main action leads to signup and the form fits a small screen', async (
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   const form = page.locator('#home-signup');
-  await expect(form.getByRole('button', { name: 'Get my updates' })).toBeInViewport();
+  await expect(form.getByRole('button', { name: 'Keep in touch' })).toBeInViewport();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.locator('.navbar-contact-btn').click();
   await expect(page).toHaveURL(/newsletter\.html#newsletter-signup$/);

@@ -1,7 +1,7 @@
 ---
 import newsletter from '../../../data/newsletter.json';
 interface Props { id: string; source: string; buttonLabel?: string; resource?: string; }
-const { id, source, buttonLabel = 'Get my updates', resource = '' } = Astro.props;
+const { id, source, buttonLabel = 'Keep in touch', resource = '' } = Astro.props;
 const { delivery } = newsletter;
 const page = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
