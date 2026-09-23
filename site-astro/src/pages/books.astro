@@ -141,6 +141,8 @@ const config = ({
 >
   {lcpCoverUrl && (
     <Fragment slot="head">
+      {/* Keep return navigation opted in before the external stylesheets finish loading. */}
+      <style is:inline>@view-transition { navigation: auto; }</style>
       <link rel="preload" as="image" fetchpriority="high" href={lcpCoverUrl} />
       {firstRowCoverUrls.map((u) => (
         <link rel="preload" as="image" href={u} />
