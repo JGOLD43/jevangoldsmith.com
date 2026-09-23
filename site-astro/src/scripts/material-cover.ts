@@ -1,8 +1,9 @@
 import { materialLabels, type MaterialKind, type ArtArtwork } from '../lib/library-materials';
+import type { InterviewArtwork } from '../lib/interview-artwork';
 import type { VideoArtwork } from '../lib/video-artwork';
 
 // Printed material sleeves; video cases pair curated type with source thumbnails.
-export function materialCover(material: { title: string; kind: MaterialKind; collection: string; medium?: string; duration?: string | null; videoArtwork?: VideoArtwork; artArtwork?: ArtArtwork }) {
+export function materialCover(material: { title: string; kind: MaterialKind; collection: string; medium?: string; duration?: string | null; videoArtwork?: VideoArtwork; artArtwork?: ArtArtwork; interviewArtwork?: InterviewArtwork }) {
   const cover = document.createElement('span');
   cover.className = 'material-design';
   const text = (className: string, value: string) => {
@@ -11,6 +12,29 @@ export function materialCover(material: { title: string; kind: MaterialKind; col
     node.textContent = value;
     cover.append(node);
   };
+  if (material.kind === 'interview' && material.interviewArtwork) {
+    const artwork = material.interviewArtwork;
+    cover.classList.add('cassette-design');
+    cover.dataset.motif = artwork.motif;
+    cover.dataset.font = artwork.font;
+    cover.style.setProperty('--cassette-paper', artwork.paper);
+    cover.style.setProperty('--cassette-ink', artwork.ink);
+    cover.style.setProperty('--cassette-accent', artwork.accent);
+    text('cassette-kicker', artwork.kicker);
+    const space = document.createElement('span');
+    space.className = 'cassette-headline-space';
+    const heading = document.createElement('span');
+    heading.className = 'material-heading';
+    heading.textContent = material.title;
+    space.append(heading);
+    cover.append(space);
+    const window = document.createElement('span');
+    window.className = 'cassette-window';
+    for (let i = 0; i < 2; i++) window.append(document.createElement('i'));
+    cover.append(window);
+    text('cassette-footer', material.duration || material.medium || 'Interview');
+    return cover;
+  }
   if (material.kind === 'documentary') {
     cover.classList.add('reel-design');
     const flange = document.createElement('span');
@@ -106,12 +130,12 @@ const headlineSizes = new WeakMap<HTMLElement, string>();
 export function fitMaterialHeadline(volume: HTMLElement, width: number, height: number) {
   const size = `${width}:${height}`;
   if (headlineSizes.get(volume) === size) return;
-  const space = volume.querySelector<HTMLElement>('.article-headline-space, .reel-label-text');
+  const space = volume.querySelector<HTMLElement>('.article-headline-space, .reel-label-text, .cassette-headline-space');
   const heading = space?.querySelector<HTMLElement>('.material-heading');
   if (!space || !heading || !space.clientHeight) return;
   const fits = () => heading.scrollHeight <= space.clientHeight && heading.scrollWidth <= space.clientWidth;
   let low = 1;
-  let high = width * (volume.dataset.kind === 'documentary' ? .115 : .14);
+  let high = width * (volume.dataset.kind === 'interview' ? .085 : volume.dataset.kind === 'documentary' ? .115 : .14);
   heading.style.fontSize = `${high}px`;
   if (!fits()) {
     // The text stays at the largest size that fits its available print area.

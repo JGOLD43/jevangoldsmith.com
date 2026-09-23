@@ -1,3 +1,4 @@
+import { interviewArtwork } from './interview-artwork';
 import { videoArtwork, type VideoArtwork } from './video-artwork';
 
 export const materialLabels = {
@@ -57,6 +58,7 @@ export function archiveVolume(item: ArchiveItem, classification?: LibraryClassif
       ? { background: video.background, ink: video.ink, accent: video.accent, serif: video.font === 'serif' }
       : { background: palettes[kind], ink: '#251e17', accent: '#251e17', serif: true },
     videoArtwork: video,
+    interviewArtwork: kind === 'interview' ? interviewArtwork(item) : undefined,
     artArtwork: kind === 'art' ? artArtwork : undefined,
     highlightCount: null, duration: item.duration, medium: item.medium,
     attribution: item.attribution, classification,

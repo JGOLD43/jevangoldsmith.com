@@ -2,6 +2,7 @@ import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { flyCoverToDetail } from './books-flight';
 import type { BookBinding } from '../lib/book-binding';
+import type { InterviewArtwork } from '../lib/interview-artwork';
 import type { VideoArtwork } from '../lib/video-artwork';
 import { materialLabels, parseMaterialFilter, type MaterialKind, type MaterialFilter, type LibraryClassification, type ProblemCollection, type ArtArtwork } from '../lib/library-materials';
 import { materialCover, fitMaterialHeadline } from './material-cover';
@@ -26,6 +27,7 @@ interface LibraryBook {
   classification?: LibraryClassification;
   videoArtwork?: VideoArtwork;
   artArtwork?: ArtArtwork;
+  interviewArtwork?: InterviewArtwork;
 }
 
 type LibrarySort = 'az' | 'tiers' | 'collection';
@@ -487,7 +489,7 @@ function initBookLibrary() {
       const distance = logical - position;
       // Slightly varied binding sizes, with the cover's true aspect ratio retained.
       const seed = seeds.get(book.id)!;
-      const height = (230 + seed % 45) * scale * (book.kind === 'interview' ? .62 : book.kind === 'art' || book.kind === 'documentary' ? .85 : 1);
+      const height = (230 + seed % 45) * scale * (book.kind === 'interview' ? .72 : book.kind === 'art' || book.kind === 'documentary' ? .85 : 1);
       const width = height * clamp(book.ratio, .48, 1.6);
       const depth = (book.kind === 'book' ? 22 + seed % 18 : book.kind === 'article' ? 4 : book.kind === 'memo' ? 8 : book.kind === 'documentary' ? 24 : 18) * scale;
       const x = distance * pitch + clamp(distance, -1, 1) * gap * openAmount;
@@ -500,7 +502,7 @@ function initBookLibrary() {
         setStyle(node, '--depth', `${depth}px`);
         setStyle(shadow, '--width', `${width}px`);
         setStyle(shadow, '--depth', `${depth}px`);
-        if (book.kind === 'article' || book.kind === 'documentary') fitMaterialHeadline(node, width, height);
+        if (book.kind === 'article' || book.kind === 'documentary' || book.kind === 'interview') fitMaterialHeadline(node, width, height);
         geometry.set(node, dimensions);
       }
       const inspecting = logical === inspectedBook;

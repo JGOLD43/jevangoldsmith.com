@@ -113,15 +113,31 @@
   background: var(--art-frame, #775038); box-shadow: inset 0 0 0 1px #0003;
 }
 .book-library .library-volume[data-kind="art"] .library-volume-spine svg { display: none; }
-/* An interview cassette: two visible reels and a handwritten-style label. */
+/* Individually printed cassette labels; the entire title has a measured print area. */
 .book-library .library-volume[data-kind="interview"] .library-volume-cover { border: 6px solid #2d2923; border-radius: 8px; box-sizing: border-box; }
-.book-library .library-volume[data-kind="interview"] .material-design { background: linear-gradient(#dcccb0 0 73%, #a65d43 73%); padding: 6%; }
-.book-library .library-volume[data-kind="interview"] .material-edition { font-size: 6px; padding-bottom: 3%; }
-.book-library .library-volume[data-kind="interview"] .material-heading { order: 1; font: italic 600 11px/1.2 Georgia, serif; -webkit-line-clamp: 2; margin: 4% 0; }
-.book-library .library-volume[data-kind="interview"] .material-illustration { order: 2; margin: 0; min-height: 28%; border-radius: 8px; background: #282923; display: flex; justify-content: space-around; align-items: center; }
-.book-library .library-volume[data-kind="interview"] .material-illustration i { width: 23px; height: 23px; background: radial-gradient(circle, #171913 0 20%, #d8cfad 22% 47%, #676555 50% 60%, #d8cfad 62%); border-radius: 50%; }
-.book-library .library-volume[data-kind="interview"] .material-illustration i:nth-child(3), .book-library .library-volume[data-kind="interview"] .material-rule { display: none; }
-.book-library .library-volume[data-kind="interview"] .material-footnote { order: 3; font-size: 6px; padding-top: 5%; }
+.book-library .library-volume[data-kind="interview"] .cassette-design {
+  position: relative; display: block; padding: 0; container-type: inline-size;
+  background: var(--cassette-paper); color: var(--cassette-ink);
+}
+.book-library .cassette-kicker { position: absolute; top: 6%; left: 6%; right: 6%; padding-bottom: 2%; border-bottom: 1px solid currentColor; text-transform: uppercase; letter-spacing: .08em; font: 700 3.2cqw/1.2 Arial, sans-serif; }
+.book-library .cassette-headline-space { position: absolute; top: 20%; left: 6%; right: 6%; height: 43%; display: flex; align-items: center; }
+.book-library .library-volume[data-kind="interview"] .material-heading { display: block; width: 100%; flex: none; margin: 0; overflow: visible; -webkit-line-clamp: unset; font: 700 16px/1.1 Georgia, serif; overflow-wrap: normal; hyphens: none; }
+.book-library .cassette-design[data-font="sans"] .material-heading { font-family: Arial, sans-serif; letter-spacing: -.025em; }
+.book-library .cassette-design[data-font="mono"] .material-heading { font-family: 'Courier New', monospace; letter-spacing: -.045em; }
+.book-library .cassette-window { position: absolute; top: 68%; left: 7%; right: 7%; height: 18%; display: flex; align-items: center; justify-content: space-around; border-radius: 1.5cqw; background: linear-gradient(#151c1c, #343b35); box-shadow: inset 0 1px 3px #000a, 0 1px #fff5; }
+.book-library .cassette-window i { height: 83%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #191e1b 0 19%, #e6dec8 21% 42%, #8a8c79 44% 51%, #e6dec8 53% 62%, #535b50 64%); }
+.book-library .cassette-footer { position: absolute; bottom: 3%; right: 6%; font: 600 3.2cqw/1.1 Arial, sans-serif; }
+.book-library .library-volume[data-kind="interview"] .library-cover-number { top: auto; right: 45.5%; bottom: 14%; width: 9%; min-width: 0; height: auto; aspect-ratio: 1; padding: 0; font-size: calc(var(--width) * .045); }
+/* Subject-specific graphics occupy the base, clear of the title and reels. */
+.book-library .cassette-design::before { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 11%; background: var(--cassette-accent); opacity: .35; }
+.book-library .cassette-design::after { content: ''; position: absolute; left: 6%; bottom: 2%; width: 44%; height: 7%; background: var(--cassette-accent); }
+.book-library .cassette-design[data-motif="stripe"]::after { background: repeating-linear-gradient(125deg, var(--cassette-accent) 0 5%, transparent 5% 9%); }
+.book-library .cassette-design[data-motif="grid"]::after { height: 9%; background: repeating-linear-gradient(0deg, transparent 0 3px, var(--cassette-accent) 3px 4px), repeating-linear-gradient(90deg, transparent 0 7px, var(--cassette-accent) 7px 8px); }
+.book-library .cassette-design[data-motif="keys"]::after { background: repeating-linear-gradient(90deg, var(--cassette-ink) 0 4%, var(--cassette-paper) 4% 7%); border-bottom: 2px solid var(--cassette-ink); }
+.book-library .cassette-design[data-motif="spectrum"]::before { opacity: 1; background: linear-gradient(90deg, #6b9855 0 17%, #dac654 17% 34%, #d28a43 34% 51%, #ba5557 51% 68%, #7d6999 68% 85%, #568daa 85%); }
+.book-library .cassette-design[data-motif="spectrum"]::after { display: none; }
+.book-library .cassette-design[data-motif="wave"]::after { background: repeating-radial-gradient(ellipse at 50% 150%, transparent 0 4px, var(--cassette-accent) 4px 6px); }
+.book-library .cassette-design[data-motif="orbit"]::after { background: repeating-radial-gradient(circle at 50%, transparent 0 5px, var(--cassette-accent) 5px 7px); }
 /* A perforated metal reel around a real-depth stack of wound film. */
 .book-library .library-volume[data-kind="documentary"] :is(.library-volume-cover, .library-volume-back) {
   border-radius: 50%; background: transparent; overflow: visible; box-shadow: none;
