@@ -1,5 +1,6 @@
 ---
 import NewsletterSignup from '../components/NewsletterSignup.astro';
+import WritingNav from '../components/WritingNav.astro';
 import essaysData from '../../public/data/essays.json';
 import CollectionPage from '../components/CollectionPage.astro';
 import InlineJson from '../components/InlineJson.astro';
@@ -135,6 +136,7 @@ const config = ({
       <svg class="ico-stroke view-icon view-icon-grid" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-gridView"></use></svg>
     </button>
   </Fragment>
+  <WritingNav active="essays" />
   <button type="button" class="essay-back-to-list" data-action="setEssayView" data-action-args="cards" data-view="reader">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
     All essays

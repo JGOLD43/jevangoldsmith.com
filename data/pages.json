@@ -536,6 +536,44 @@
     "ctaOptional": false
   },
   {
+    "path": "notes.html",
+    "url": "/notes.html",
+    "title": "Notes | Jevan Goldsmith",
+    "description": "Selected short thoughts and longer notes from Jevan Goldsmith’s Twitter, on action, technology, courage, and being human.",
+    "intent": "notes",
+    "topics": [
+      "better-thinking",
+      "business-building",
+      "personal-systems"
+    ],
+    "index": true,
+    "schemaType": "CollectionPage",
+    "primaryKeyword": "Jevan Goldsmith notes",
+    "secondaryKeywords": [
+      "short writing",
+      "Twitter notes",
+      "thoughts"
+    ],
+    "audience": "Builders and operators looking for practical judgment",
+    "searchIntent": "explore",
+    "contentDepth": "supporting",
+    "relatedPages": [
+      "essays.html",
+      "writing-philosophy.html",
+      "newsletter.html"
+    ],
+    "lastReviewed": "2026-09-23",
+    "section": "explore",
+    "generatedFrom": "data/notes.json",
+    "journeyStage": "authority",
+    "primaryCta": "best-essays",
+    "secondaryCtas": [
+      "newsletter",
+      "search"
+    ],
+    "ctaOptional": false
+  },
+  {
     "path": "newsletter.html",
     "url": "/newsletter.html",
     "title": "Follow What I’m Building | Jevan Goldsmith",

@@ -12,7 +12,7 @@ import { inlineSprite } from '../lib/icon-sprite';
 //     subpages roll up to adventures.html)
 //   - section dropdown-trigger active when section ID matches (Thoughts, Taste, Experiences)
 const _navFile = currentPageFromUrl(Astro.url.pathname);
-const _activeHref = _navFile.startsWith('adventure-') ? 'adventures.html' : _navFile;
+const _activeHref = _navFile.startsWith('adventure-') ? 'adventures.html' : _navFile === 'notes.html' ? 'essays.html' : _navFile;
 const _sectionByFile: Record<string, string> = {};
 for (const p of (pages as Array<{ path?: string; section?: string }>) ?? []) {
   if (p.path) _sectionByFile[p.path] = p.section ?? '';

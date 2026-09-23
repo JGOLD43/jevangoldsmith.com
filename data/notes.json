@@ -1,0 +1,80 @@
+{
+  "description": "Selected public posts by Jevan Goldsmith. Original wording is preserved; longer selections are marked as excerpts.",
+  "collectedAt": "2026-09-23",
+  "notes": [
+    {
+      "id": "crime-and-punishment",
+      "date": "2026-09-15",
+      "kind": "short",
+      "source": "https://x.com/JevanGoldsmith/status/2099676479189844436",
+      "text": "If AI takes the ideas from Crime and Punishment literally I think we are cooked."
+    },
+    {
+      "id": "names-and-outcomes",
+      "title": "Names and outcomes",
+      "date": "2026-08-22",
+      "kind": "longer",
+      "excerpt": true,
+      "source": "https://x.com/JevanGoldsmith/status/2091025600949731666",
+      "text": "Chat vs Work describes a surface, but not the outcome.\n\nLooking at model names like Luna / Terra / Sol is like expecting me to drive cars I've never seen without telling me if they are supercar, 4wd, hatchback, sedan etc.\n\nUsers need to know: fastest, best daily driver, best work horse, cheapest, best at coding, best at research, etc."
+    },
+    {
+      "id": "encouragement",
+      "date": "2026-04-05",
+      "kind": "short",
+      "source": "https://x.com/JevanGoldsmith/status/2040567619091378215",
+      "text": "Most advice is useless\n\nWhat people actually need is encouragement and permission to feel into their own spirit.\n\nSurrounded by good examples of people who walk that talk"
+    },
+    {
+      "id": "follow-the-thread",
+      "date": "2026-03-22",
+      "kind": "short",
+      "source": "https://x.com/JevanGoldsmith/status/2035517247272485161",
+      "text": "The courage to follow the thread of our desires, through fear and over all expectation of others is the journey that must make us feel most alive and filled with the least regret."
+    },
+    {
+      "id": "trust-and-ai",
+      "date": "2026-02-02",
+      "kind": "short",
+      "source": "https://x.com/JevanGoldsmith/status/2018197192805384446",
+      "text": "Ai slop is going to get worse rapidly\n\nMaking Trust even more scarce and valuable\n\nSo think twice about using it to supplement what you actually want to say\n\nOtherwise people are going to start thinking you aren't saying anything at all"
+    },
+    {
+      "id": "why-the-mind-resists-action",
+      "title": "Why the mind resists action",
+      "date": "2026-01-29",
+      "kind": "longer",
+      "excerpt": true,
+      "source": "https://x.com/JevanGoldsmith/status/2016849499159973943",
+      "text": "Understanding is not a prerequisite for improvement.\nWe think it is — but it isn’t.\n\nEvolution doesn’t understand anything.\nIt doesn’t sit around trying to predict what will work.\nIt just tries things. What breaks disappears. What survives looks intelligent in hindsight."
+    },
+    {
+      "id": "to-act-is-to-live",
+      "date": "2025-05-12",
+      "kind": "short",
+      "source": "https://x.com/JevanGoldsmith/status/1921776603891224890",
+      "text": "To seek is to delay;\nTo find is to carry;\nTo act is to live;\nTo live is to be;"
+    },
+    {
+      "id": "small-risks",
+      "date": "2025-02-03",
+      "kind": "short",
+      "source": "https://x.com/JevanGoldsmith/status/1886165395608097147",
+      "text": "Consistent small risks taken in private build the conviction to take larger risks in public"
+    },
+    {
+      "id": "change-is-the-rule",
+      "date": "2025-02-02",
+      "kind": "short",
+      "source": "https://x.com/JevanGoldsmith/status/1885931779053523450",
+      "text": "Change is the rule not the exception"
+    },
+    {
+      "id": "the-best-in-people",
+      "date": "2025-02-02",
+      "kind": "short",
+      "source": "https://x.com/JevanGoldsmith/status/1885889343308575113",
+      "text": "A question that has occupied my mind a lot recently:\n\nWhat could Ai not do better than we can?\n\nHard question.\n\nWhat is the best in people?\n\nAn Ad man of 20th century may have left us a clue:\n\nI plead for charm, flair, showmanship, taste and distinction - David Oglivy"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import WritingNav from '../components/WritingNav.astro';
+import notesData from '../../../data/notes.json';
+
+const groups = [
+  { id: 'longer', title: 'Longer notes' },
+  { id: 'short', title: 'Short notes' }
+].map(group => ({ ...group, notes: notesData.notes.filter(note => note.kind === group.id).sort((a, b) => b.date.localeCompare(a.date)) }));
+const formatDate = (date: string) => new Date(`${date}T00:00:00Z`).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+<Base
+  title="Notes | Jevan Goldsmith"
+  description="Short thoughts, questions, and ideas from Jevan Goldsmith’s Twitter. On action, technology, courage, and being human."
+  canonical="https://jevangoldsmith.com/notes.html"
+  breadcrumbs={[{ name: 'Home', url: '/' }, { name: 'Essays', url: '/essays.html' }, { name: 'Notes', url: '/notes.html' }]}
+>
+  <main class="notes-page">
+    <header class="notes-header">
+      <h1>Notes</h1>
+      <p>Short thoughts, questions, and ideas I’m still working through.</p>
+      <p class="notes-source">Selected from <a href="https://x.com/JevanGoldsmith" target="_blank" rel="noopener noreferrer">@JevanGoldsmith</a> on Twitter.</p>
+    </header>
+    <WritingNav active="notes" />
+    <nav class="notes-contents" aria-label="Note sections">
+      <a href="#longer">Longer notes <span>{groups[0].notes.length}</span></a>
+      <a href="#short">Short notes <span>{groups[1].notes.length}</span></a>
+    </nav>
+    {groups.map(group => (
+      <section class="notes-section" id={group.id} aria-labelledby={`${group.id}-heading`}>
+        <h2 id={`${group.id}-heading`}>{group.title}</h2>
+        {group.notes.map(note => (
+          <article class="note" id={note.id} aria-label={note.title || `Note from ${formatDate(note.date)}`}>
+            <div class="note-meta">
+              <a class="note-permalink" href={`#${note.id}`} aria-label={`Link to ${note.title || `note from ${formatDate(note.date)}`}`}><time datetime={note.date}>{formatDate(note.date)}</time></a>
+              {note.excerpt && <span class="note-excerpt">Excerpt</span>}
+            </div>
+            <div class="note-body">
+              {note.title && <h3>{note.title}</h3>}
+              <div class="note-text">{note.text.split('\n\n').map(paragraph => <p>{paragraph}</p>)}</div>
+              <a class="note-original" href={note.source} target="_blank" rel="noopener noreferrer" aria-label={`${note.excerpt ? 'Read full post' : 'View original post'} on Twitter, ${formatDate(note.date)}`}>{note.excerpt ? 'Read full post' : 'View original'} <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+        ))}
+      </section>
+    ))}
+    <footer class="notes-footer"><p>For the longer version, <a href="/essays.html">read the essays</a>.</p></footer>
+  </main>
+</Base>
+<style>
+  .notes-page { max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+  .notes-header { margin-bottom: 1.75rem; }
+  .notes-header h1 { font-size: 2rem; letter-spacing: -0.04em; margin-bottom: 0.65rem; }
+  .notes-header p { color: var(--text-light); margin: 0; }
+  .notes-header .notes-source { margin-top: 0.65rem; font-size: 0.85rem; }
+  .notes-source a, .notes-footer a { color: var(--primary-color); text-underline-offset: 4px; }
+  .notes-contents { display: flex; gap: 1.5rem; flex-wrap: wrap; padding: 1rem 0 2.5rem; }
+  .notes-contents a { color: var(--text-light); font-size: 0.83rem; text-decoration: none; }
+  .notes-contents span { color: var(--text-light); margin-left: 0.35rem; font-variant-numeric: tabular-nums; }
+  .notes-section { scroll-margin-top: 90px; margin-bottom: 2.5rem; }
+  .notes-section h2 { font-size: 0.95rem; font-weight: 500; color: var(--text-light); margin-bottom: 0; }
+  .note { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 1.5rem; padding: 1.8rem 0; border-bottom: 1px solid var(--border-color); scroll-margin-top: 90px; }
+  .note:target { border-bottom-color: var(--secondary-color); }
+  .note-meta { padding-top: 0.15rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .note-permalink { font-size: 0.78rem; color: var(--text-light); text-decoration: none; white-space: nowrap; }
+  .note-excerpt { color: var(--text-light); font-size: 0.72rem; }
+  .note-body h3 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.015em; margin: 0 0 0.85rem; }
+  .note-text p { white-space: pre-line; margin: 0 0 0.85rem; font-size: 0.98rem; line-height: 1.75; overflow-wrap: anywhere; }
+  .note-original { display: inline-block; padding: 0.35rem 0; color: var(--text-light); font-size: 0.78rem; text-decoration: none; }
+  .note-original span { margin-left: 0.2rem; }
+  .notes-page a:hover { color: var(--primary-color); text-decoration: underline; text-underline-offset: 4px; }
+  .notes-page a:focus-visible { outline: 2px solid var(--secondary-color); outline-offset: 4px; }
+  .notes-footer { font-size: 0.9rem; color: var(--text-light); }
+  @media (max-width: 600px) {
+    .notes-page { padding: 2rem 1rem 3rem; }
+    .notes-header h1 { font-size: 1.75rem; }
+    .notes-contents { padding-bottom: 2rem; }
+    .note { grid-template-columns: 1fr; gap: 0.65rem; padding: 1.5rem 0; }
+    .note-meta { flex-direction: row; align-items: baseline; gap: 0.75rem; }
+  }
+</style>

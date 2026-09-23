@@ -1,0 +1,16 @@
+---
+interface Props { active: 'essays' | 'notes' }
+const { active } = Astro.props;
+---
+<nav class="writing-nav" aria-label="Writing">
+  <a href="/essays.html" aria-current={active === 'essays' ? 'page' : undefined}>Essays</a>
+  <a href="/notes.html" aria-current={active === 'notes' ? 'page' : undefined}>Notes</a>
+</nav>
+<style>
+  .writing-nav { display: flex; gap: 1.5rem; border-bottom: 1px solid var(--border-color); }
+  .writing-nav a { padding: 0.65rem 0; margin-bottom: -1px; border-bottom: 2px solid transparent; color: var(--text-light); text-decoration: none; font-size: 0.92rem; }
+  .writing-nav a[aria-current="page"] { color: var(--primary-color); border-bottom-color: var(--secondary-color); font-weight: 600; }
+  .writing-nav a:hover { color: var(--primary-color); }
+  .writing-nav a:focus-visible { outline: 2px solid var(--secondary-color); outline-offset: 4px; }
+  :global(.essays-main[data-view="reader"]) .writing-nav { display: none; }
+</style>
