@@ -21,6 +21,7 @@ interface LibraryBook {
   kind: MaterialKind;
   duration?: string | null;
   medium?: string;
+  attribution?: { label: string; name: string; url: string };
 }
 
 type LibrarySort = 'az' | 'tiers' | 'collection';
@@ -50,6 +51,9 @@ function initBookLibrary() {
   const empty = library.querySelector<HTMLElement>('[data-library-empty]')!;
   const clearSearch = library.querySelector<HTMLButtonElement>('[data-library-clear]')!;
   const attribution = library.querySelector<HTMLElement>('.library-attribution')!;
+  const creditLabel = attribution.querySelector<HTMLElement>('[data-library-credit-label]')!;
+  const creditLink = attribution.querySelector<HTMLAnchorElement>('[data-library-credit-link]')!;
+  const defaultCredit = { label: creditLabel.textContent!, name: creditLink.textContent!.replace(' ↗', ''), url: creditLink.href };
   let materialFilter: MaterialFilter = 'book';
   let searchQuery = '';
   const allBooks = readInlineJson<LibraryBook[]>('jg-book-library') || [];
@@ -324,6 +328,10 @@ function initBookLibrary() {
     title!.rel = external ? 'noopener noreferrer' : '';
     author!.textContent = external ? [book.medium, book.duration, book.author].filter(Boolean).join(' · ') : book.author;
     attribution.hidden = !external;
+    const credit = book.attribution || defaultCredit;
+    creditLabel.textContent = credit.label;
+    creditLink.textContent = `${credit.name} ↗`;
+    creditLink.href = credit.url;
     request!.textContent = external ? (book.medium === 'Video' ? 'Watch ↗' : 'Read / explore ↗') : 'request';
     request!.setAttribute('aria-label', external ? `Open ${book.title} at its source in a new tab` : 'Request the selected book by email');
     request!.target = external ? '_blank' : '';

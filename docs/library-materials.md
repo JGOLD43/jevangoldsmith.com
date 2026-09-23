@@ -12,6 +12,12 @@ viewing or personal recommendations. Imported material has no personal ratings
 and does not count toward books read. The public shelf explicitly notes that
 Jevan has not read or watched everything in it.
 
+Additional resources selected directly by Jevan live in
+`data/library-additions.json`, so refreshing the original import cannot remove
+them. Entries may supply an author and their own attribution; otherwise the
+original collection credit is used. The first addition is Jonny Miller's
+*How to Unclench*, linked as a 32-minute article with audio available at its source.
+
 ## Refreshing the source
 
 Save the public article HTML, then run:

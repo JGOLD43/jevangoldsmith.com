@@ -8,6 +8,7 @@ import { ratingTier } from '../lib/rating-tier';
 import { bookBinding } from '../lib/book-binding';
 import InlineJson from './InlineJson.astro';
 import archive from '../../../data/learning-archive.json';
+import additions from '../../../data/library-additions.json';
 import { archiveVolume, materialLabels } from '../lib/library-materials';
 import '../styles/library-materials.css';
 
@@ -38,7 +39,7 @@ const library = await Promise.all(books
       collection: data.category?.trim() || 'Uncollected',
       href: `/books/${encodeURIComponent(id)}.html` };
   }));
-const materials = archive.items.map(archiveVolume);
+const materials = [...archive.items, ...additions].map(archiveVolume);
 const entries = [...library, ...materials];
 const filters = [
   { value: 'book', label: 'Books', count: library.length },
@@ -102,7 +103,7 @@ const filters = [
         <p class="book-library-author">{library[0]?.author}</p>
       </div>
       <a class="book-library-request" href="mailto:hello@jevangoldsmith.com" aria-label="Request the selected book by email">request</a>
-      <p class="library-attribution" hidden><span class="library-unreviewed">Saved to explore — I haven’t read or watched everything here yet.</span>Collected by <a href={archive.source.url} target="_blank" rel="noopener noreferrer">The Unintuitive ↗</a><br />Source links · some require access or purchase</p>
+      <p class="library-attribution" hidden><span class="library-unreviewed">Saved to explore — I haven’t read or watched everything here yet.</span><span data-library-credit-label>Collected by</span> <a data-library-credit-link href={archive.source.url} target="_blank" rel="noopener noreferrer">The Unintuitive ↗</a><br />Source links · some require access or purchase</p>
     </div>
     <button class="book-library-arrow" type="button" data-library-step="1" aria-label="Next item">→</button>
   </div>

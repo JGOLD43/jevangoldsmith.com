@@ -15,6 +15,8 @@ export interface ArchiveItem {
   topic: string;
   medium: string;
   duration: string | null;
+  author?: string;
+  attribution?: { label: string; name: string; url: string };
 }
 
 export function archiveVolume(item: ArchiveItem) {
@@ -22,10 +24,11 @@ export function archiveVolume(item: ArchiveItem) {
   const palettes = { article: '#eadfc8', art: '#976549', video: '#2a494a', interview: '#a95138',
     documentary: '#7e8781', memo: '#c3a26b', other: '#82875f' };
   return {
-    id: item.id, title: item.title, author: new URL(item.url).hostname.replace(/^www\./, ''),
+    id: item.id, title: item.title, author: item.author || new URL(item.url).hostname.replace(/^www\./, ''),
     href: item.url, cover: '', kind, ratio: kind === 'interview' ? 1.55 : kind === 'art' || kind === 'documentary' ? 1 : .72,
     tier: '', tierLabel: materialLabels[kind], tierColor: '#e3d8c6', collection: item.topic,
     binding: { background: palettes[kind], ink: '#251e17', accent: '#251e17', serif: true },
     highlightCount: null, duration: item.duration, medium: item.medium,
+    attribution: item.attribution,
   };
 }
