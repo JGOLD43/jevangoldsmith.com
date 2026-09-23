@@ -92,12 +92,19 @@
   background: linear-gradient(90deg, var(--video-accent) 0 4%, #fff8e5 4% 78%, #b68b4d 78%);
   transform: rotate(-24deg);
 }
-/* Cases have plastic edges and backs, not the shared volume's pale paper.
-   Include the underside and clear inherited paper-edge highlights. */
-.book-library .library-volume:is([data-kind="video"], [data-kind="interview"]) :is(.library-volume-back, .library-volume-pages, .library-volume-top, .library-volume-bottom) {
-  background: #171b1a; box-shadow: inset 0 0 0 1px #0004;
+/* A case is one dark shell. Cover art must not colour its spine or back,
+   and the shared book-paper highlights must not leak around its corners. */
+.book-library .library-volume[data-kind="video"] { --case-color: #171b1a; --case-radius: 5px; }
+.book-library .library-volume[data-kind="interview"] { --case-color: #2d2923; --case-radius: 8px; }
+.book-library .library-volume:is([data-kind="video"], [data-kind="interview"]) :is(.library-volume-back, .library-volume-spine, .library-volume-pages, .library-volume-top, .library-volume-bottom) {
+  background: var(--case-color); box-shadow: inset 0 0 0 1px #0004;
 }
-.book-library .library-volume:is([data-kind="video"], [data-kind="interview"]) .library-volume-back { border-radius: 5px; }
+.book-library .library-volume:is([data-kind="video"], [data-kind="interview"]) .library-volume-back { border-radius: var(--case-radius); }
+.book-library .library-volume:is([data-kind="video"], [data-kind="interview"]) .library-volume-cover { background: var(--case-color); border-color: var(--case-color); }
+.book-library .library-volume:is([data-kind="video"], [data-kind="interview"]) .library-volume-spine::after {
+  background: linear-gradient(90deg, #0005, transparent 48%, #0004); box-shadow: none;
+}
+.book-library .library-volume:is([data-kind="video"], [data-kind="interview"]) .library-volume-spine text { fill: #e3d8c6; }
 .book-library .library-volume[data-kind="art"] :is(.library-volume-back, .library-volume-pages, .library-volume-top, .library-volume-bottom, .library-volume-spine) {
   background: var(--art-frame, #775038); box-shadow: inset 0 0 0 1px #0003;
 }
@@ -111,7 +118,6 @@
 .book-library .library-volume[data-kind="interview"] .material-illustration i { width: 23px; height: 23px; background: radial-gradient(circle, #171913 0 20%, #d8cfad 22% 47%, #676555 50% 60%, #d8cfad 62%); border-radius: 50%; }
 .book-library .library-volume[data-kind="interview"] .material-illustration i:nth-child(3), .book-library .library-volume[data-kind="interview"] .material-rule { display: none; }
 .book-library .library-volume[data-kind="interview"] .material-footnote { order: 3; font-size: 6px; padding-top: 5%; }
-.book-library .library-volume[data-kind="interview"] .library-volume-pages, .book-library .library-volume[data-kind="interview"] .library-volume-top { background: #37352f; }
 /* A circular metal film tin, labelled for the documentary. */
 .book-library .library-volume[data-kind="documentary"] .library-volume-cover, .book-library .library-volume[data-kind="documentary"] .library-volume-back { border-radius: 50%; background: #8f958d; box-shadow: inset 0 0 0 3px #c3c6b8, inset 0 0 0 7px #5c665d, inset 0 0 0 10px #a9afa3; }
 .book-library .library-volume[data-kind="documentary"] .material-design { background: repeating-radial-gradient(circle at 50% 50%, #d1d1bd18 0 1px, #404c4218 1px 3px), linear-gradient(135deg, #d6d7c5, #7c897c 40%, #c1c6b7 70%, #727e70); align-items: center; justify-content: center; padding: 20% 12%; text-align: center; }
