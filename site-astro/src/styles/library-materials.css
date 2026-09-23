@@ -18,14 +18,31 @@
 .book-library .material-footnote { display: block; margin-top: auto; padding-top: 8%; font: 7px/1.5 Arial, sans-serif; }
 .book-library .material-illustration { position: relative; display: block; flex: 1; min-height: 14%; margin: 10% 0; }
 .book-library .material-rule { display: block; height: 12px; margin-top: 8%; opacity: .3; background: repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 4px); }
-/* Article headlines use all available paper space and are fitted in full. */
-.book-library .library-volume[data-kind="article"] .material-design { background: linear-gradient(90deg, #00000008, transparent 8%, #ffffff20 50%, #0000000a), #eee5ce; }
-.book-library .library-volume[data-kind="article"] .material-design { container-type: inline-size; }
-.book-library .library-volume[data-kind="article"] .material-edition { flex: none; font-size: 5.5cqw; padding-bottom: 7%; }
+/* Source-inspired editorial sheets; fit the complete headline in every layout. */
+.book-library .library-volume[data-kind="article"] .material-design { position: relative; container-type: inline-size; background: var(--article-paper, #eee5ce); color: var(--article-ink, #272c2b); }
+.book-library .library-volume[data-kind="article"] .material-edition { flex: none; font: 700 5cqw/1.25 Georgia, serif; text-transform: none; letter-spacing: 0; padding-bottom: 8%; border-bottom: 2px solid var(--article-accent, #51442d); }
 .book-library .article-headline-space { display: flex; align-items: center; flex: 1; min-height: 0; margin: 8% 0; }
 .book-library .library-volume[data-kind="article"] .material-heading { display: block; flex: none; width: 100%; overflow: visible; -webkit-line-clamp: unset; line-height: 1.12; overflow-wrap: normal; word-break: normal; hyphens: none; }
-.book-library .library-volume[data-kind="article"] .material-footnote { flex: none; margin: 0; border-top: 1px solid #51442d55; padding-top: 6%; font-size: 5cqw; }
-.book-library .library-volume[data-kind="article"] .library-volume-cover { box-shadow: 2px 2px #e2d6ba, 4px 4px #eee5d1; }
+.book-library .library-volume[data-kind="article"] .material-footnote { flex: none; margin: 0; border-top: 1px solid var(--article-accent, #51442d55); padding-top: 6%; padding-right: 18%; font-size: 4.5cqw; line-height: 1.4; }
+.book-library .library-volume[data-kind="article"] .library-volume-cover { box-shadow: 2px 2px #d6cfbe, 4px 4px #e8e1d3; }
+.book-library .article-design[data-font="sans"] .material-heading { font-family: Arial, sans-serif; letter-spacing: -.035em; }
+.book-library .article-design[data-font="mono"] .material-heading { font-family: 'Courier New', monospace; letter-spacing: -.05em; }
+.book-library .article-design[data-layout="essay"] .material-edition { font-style: italic; font-weight: 400; border-bottom-width: 1px; }
+.book-library .article-design[data-layout="essay"] .material-heading { font-weight: 500; }
+.book-library .article-design[data-layout="press"] .material-edition { text-align: center; font-size: 7cqw; border-bottom: 3px double var(--article-ink); padding-bottom: 6%; }
+.book-library .article-design[data-layout="press"] .article-headline-space { text-align: center; }
+.book-library .article-design[data-layout="press"] .material-footnote { border-top: 3px double var(--article-ink); }
+.book-library .article-design[data-layout="journal"] .material-edition { margin: -11% -11% 0; padding: 10% 11%; background: var(--article-accent); color: #fff; font: 700 5cqw/1.3 Arial, sans-serif; text-transform: uppercase; letter-spacing: .06em; }
+.book-library .article-design[data-layout="journal"] .material-heading { letter-spacing: -.035em; }
+.book-library .article-design[data-layout="notebook"] { border-left: 6px solid var(--article-accent); background-image: repeating-linear-gradient(0deg, transparent 0 16px, #586f4710 16px 17px); }
+.book-library .article-design[data-layout="notebook"] .material-edition { font-family: 'Courier New', monospace; font-weight: 700; }
+.book-library .article-design[data-layout="notebook"] .material-heading { font-style: italic; }
+.book-library .article-design[data-layout="technical"] .material-edition { border: 1px solid var(--article-accent); padding: 5%; color: var(--article-accent); font: 700 4.7cqw/1.3 'Courier New', monospace; }
+.book-library .article-design[data-layout="technical"] .material-footnote { border-top-style: dashed; font-family: 'Courier New', monospace; }
+.book-library .article-design[data-layout="studio"] { border-top: 9px solid var(--article-accent); }
+.book-library .article-design[data-layout="studio"] .material-edition { font-family: Arial, sans-serif; font-weight: 800; text-transform: uppercase; font-size: 4.8cqw; letter-spacing: .08em; }
+.book-library .article-design[data-layout="studio"] .material-footnote { border-top: 4px solid var(--article-accent); }
+.book-library .library-volume[data-kind="article"] .library-cover-number { top: auto; right: 9%; bottom: 9%; width: 12%; min-width: 0; height: auto; aspect-ratio: 1; padding: 0; font-size: calc(var(--width) * .055); }
 /* A walnut frame and paper mat around an original abstract print. */
 .book-library .library-volume[data-kind="art"] .library-volume-cover { border: 8px ridge var(--art-frame, #775038); box-sizing: border-box; background: var(--art-frame, #775038); box-shadow: inset 0 0 8px #0009; }
 .book-library .library-volume[data-kind="art"] .material-design { padding: 9%; background: #eee6d6; }
@@ -178,7 +195,6 @@
   display: block; flex: none; width: 100%; padding: 0; margin: 0; overflow: visible; -webkit-line-clamp: unset;
   font: 700 16px/1.12 Georgia, serif; text-align: center; color: #302719; overflow-wrap: normal; hyphens: none;
 }
-.book-library .reel-mark { position: absolute; top: 4%; left: 0; width: 100%; text-align: center; color: #354338; font: 700 4cqw/1 Arial, sans-serif; letter-spacing: .15em; }
 .book-library .library-volume[data-kind="documentary"] .library-volume-cover::after { display: none; }
 .book-library .library-volume[data-kind="documentary"] .library-cover-number { top: 12%; right: 14%; }
 /* Manila folder with a tab and a pinned memo. */

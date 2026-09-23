@@ -1,3 +1,4 @@
+import { articleArtwork } from './article-artwork';
 import { consumptionTime, formatConsumptionTime } from './library-time';
 import { interviewArtwork } from './interview-artwork';
 import { videoArtwork, type VideoArtwork } from './video-artwork';
@@ -59,6 +60,7 @@ export function archiveVolume(item: ArchiveItem, classification?: LibraryClassif
     binding: video
       ? { background: video.background, ink: video.ink, accent: video.accent, serif: video.font === 'serif' }
       : { background: palettes[kind], ink: '#251e17', accent: '#251e17', serif: true },
+    articleArtwork: kind === 'article' ? articleArtwork(item) : undefined,
     videoArtwork: video,
     interviewArtwork: kind === 'interview' ? interviewArtwork(item) : undefined,
     artArtwork: kind === 'art' ? artArtwork : undefined,

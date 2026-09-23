@@ -1,9 +1,10 @@
+import type { ArticleArtwork } from '../lib/article-artwork';
 import { materialLabels, type MaterialKind, type ArtArtwork } from '../lib/library-materials';
 import type { InterviewArtwork } from '../lib/interview-artwork';
 import type { VideoArtwork } from '../lib/video-artwork';
 
 // Printed material sleeves; video cases pair curated type with source thumbnails.
-export function materialCover(material: { title: string; kind: MaterialKind; collection: string; medium?: string; duration?: string | null; videoArtwork?: VideoArtwork; artArtwork?: ArtArtwork; interviewArtwork?: InterviewArtwork }) {
+export function materialCover(material: { title: string; kind: MaterialKind; collection: string; medium?: string; duration?: string | null; videoArtwork?: VideoArtwork; artArtwork?: ArtArtwork; interviewArtwork?: InterviewArtwork; articleArtwork?: ArticleArtwork }) {
   const cover = document.createElement('span');
   cover.className = 'material-design';
   const text = (className: string, value: string) => {
@@ -53,7 +54,6 @@ export function materialCover(material: { title: string; kind: MaterialKind; col
     space.append(heading);
     tape.append(space);
     cover.append(flange, hub, tape);
-    text('reel-mark', 'DOCUMENTARY');
     return cover;
   }
   if (material.kind === 'art' && material.artArtwork) {
@@ -102,8 +102,17 @@ export function materialCover(material: { title: string; kind: MaterialKind; col
     text('video-footer', [material.collection, material.duration].filter(Boolean).join(' · '));
     return cover;
   }
-  text('material-edition', materialLabels[material.kind]);
   if (material.kind === 'article') {
+    const artwork = material.articleArtwork;
+    if (artwork) {
+      cover.classList.add('article-design');
+      cover.dataset.layout = artwork.layout;
+      cover.dataset.font = artwork.font;
+      cover.style.setProperty('--article-paper', artwork.paper);
+      cover.style.setProperty('--article-ink', artwork.ink);
+      cover.style.setProperty('--article-accent', artwork.accent);
+    }
+    text('material-edition', artwork?.source || 'Article');
     const space = document.createElement('span');
     space.className = 'article-headline-space';
     const heading = document.createElement('span');
@@ -114,6 +123,7 @@ export function materialCover(material: { title: string; kind: MaterialKind; col
     text('material-footnote', [material.collection, material.duration || material.medium].filter(Boolean).join(' · '));
     return cover;
   }
+  text('material-edition', materialLabels[material.kind]);
   const illustration = document.createElement('span');
   illustration.className = 'material-illustration';
   for (let i = 0; i < 3; i++) illustration.append(document.createElement('i'));

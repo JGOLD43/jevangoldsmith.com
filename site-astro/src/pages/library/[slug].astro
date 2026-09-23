@@ -21,9 +21,15 @@ const backHref = `/books.html?view=library&libraryType=all&libraryBook=${encodeU
   canonical={`https://jevangoldsmith.com${item.href}`}
   breadcrumbs={[{ name: 'Home', url: 'https://jevangoldsmith.com/' }, { name: 'Library', url: 'https://jevangoldsmith.com/books.html?view=library' }, { name: item.title, url: `https://jevangoldsmith.com${item.href}` }]}
 >
+  <Fragment slot="head">
+    {/* Opt in before the source-specific stylesheet finishes loading. */}
+    <style is:inline>@view-transition { navigation: auto; }</style>
+  </Fragment>
   <main class="material-detail" data-material-id={item.id}>
     <a class="material-back" data-material-back href={backHref}>← Back to the library</a>
-    <header class="material-intro">
+    <header class="material-intro" data-article-layout={item.articleArtwork?.layout} data-article-font={item.articleArtwork?.font}
+      style={item.articleArtwork ? `--article-paper:${item.articleArtwork.paper};--article-ink:${item.articleArtwork.ink};--article-accent:${item.articleArtwork.accent}` : undefined}>
+      {item.articleArtwork && <p class="article-source-name">From {item.articleArtwork.source}</p>}
       <p class="material-eyebrow">{materialLabels[item.kind]} · {item.collection}</p>
       <h1>{item.title}</h1>
       <p class="material-meta">{item.medium} · {item.author}</p>
@@ -57,6 +63,18 @@ const backHref = `/books.html?view=library&libraryType=all&libraryBook=${encodeU
   .material-back { display: inline-block; margin-bottom: 3rem; color: var(--text-light); }
   .material-eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text-light); margin: 0 0 .7rem; }
   h1 { font-size: clamp(2rem, 5.5vw, 3.6rem); line-height: 1.1; letter-spacing: -.035em; text-wrap: balance; margin: 0; }
+  .material-intro[data-article-layout] { background: var(--article-paper); color: var(--article-ink); padding: clamp(1.3rem, 4vw, 2.5rem); border-top: 5px solid var(--article-accent); margin-bottom: 2rem; }
+  .material-intro[data-article-layout] h1 { color: var(--article-ink); font-family: Georgia, serif; font-weight: 600; }
+  .material-intro[data-article-layout] :is(.material-meta, .material-eyebrow) { color: var(--article-ink); }
+  .article-source-name { font: italic 1.1rem/1.4 Georgia, serif; border-bottom: 1px solid var(--article-accent); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  .material-intro[data-article-font="sans"] h1 { font-family: Arial, sans-serif; }
+  .material-intro[data-article-font="mono"] h1 { font-family: 'Courier New', monospace; }
+  .material-intro[data-article-layout="press"] { border-top: 4px double var(--article-ink); text-align: center; }
+  .material-intro[data-article-layout="press"] .article-source-name { font-style: normal; font-weight: 700; border-bottom: 4px double var(--article-ink); }
+  .material-intro[data-article-layout="journal"] .article-source-name { background: var(--article-accent); color: #fff; padding: .75rem; font-family: Arial, sans-serif; font-style: normal; }
+  .material-intro[data-article-layout="notebook"] { border-top: 0; border-left: 7px solid var(--article-accent); background-image: repeating-linear-gradient(0deg, transparent 0 27px, #586f4710 27px 28px); }
+  .material-intro[data-article-layout="technical"] .article-source-name { font-family: 'Courier New', monospace; font-style: normal; border: 1px solid var(--article-accent); padding: .75rem; }
+  .material-intro[data-article-layout="studio"] { border-top-width: 12px; }
   .material-meta { color: var(--text-light); margin: 1.2rem 0 2rem; }
   .material-hero-image { display: block; width: 100%; height: auto; max-height: 420px; object-fit: contain; margin: 2rem 0; }
   .material-source { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; border-block: 1px solid var(--border-color); padding: 1.75rem 0; }

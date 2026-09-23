@@ -1,3 +1,4 @@
+import type { ArticleArtwork } from '../lib/article-artwork';
 import { formatConsumptionTime, totalConsumptionTime } from '../lib/library-time';
 import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
@@ -30,6 +31,7 @@ interface LibraryBook {
   classification?: LibraryClassification;
   videoArtwork?: VideoArtwork;
   artArtwork?: ArtArtwork;
+  articleArtwork?: ArticleArtwork;
   interviewArtwork?: InterviewArtwork;
 }
 
