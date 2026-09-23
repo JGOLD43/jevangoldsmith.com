@@ -34,11 +34,64 @@
 .book-library .library-volume[data-kind="art"] .material-illustration i:nth-child(2) { background: #b7482b; left: 50%; top: -30%; transform: rotate(22deg); }
 .book-library .library-volume[data-kind="art"] .material-illustration i:nth-child(3) { width: 35%; height: 35%; background: #f1d8aa; top: 30%; left: 37%; border-radius: 50%; }
 .book-library .library-volume[data-kind="art"] .material-heading { font-size: 11px; -webkit-line-clamp: 3; }
-/* A moulded video case, with a sleeve, spine, and film window. */
+/* Individual printed sleeves inside the same physical video case. */
 .book-library .library-volume[data-kind="video"] .library-volume-cover { border: 6px solid #171b1a; border-radius: 5px; box-sizing: border-box; }
-.book-library .library-volume[data-kind="video"] .material-design { color: #f5edd5; background: linear-gradient(145deg, #274441 35%, #162723); }
-.book-library .library-volume[data-kind="video"] .material-illustration { min-height: 23%; background: repeating-linear-gradient(90deg, #ffffff80 0 5px, transparent 5px 11px) top / 100% 4px no-repeat, repeating-linear-gradient(90deg, #ffffff80 0 5px, transparent 5px 11px) bottom / 100% 4px no-repeat; border: 1px solid #ffffff40; }
-.book-library .library-volume[data-kind="video"] .material-illustration::after { content: ''; position: absolute; left: 44%; top: 30%; border: 14px solid transparent; border-left: 21px solid #e9bd6e; }
+.book-library .video-design {
+  position: relative; container-type: inline-size; isolation: isolate; overflow: hidden;
+  padding: 0; color: var(--video-ink); background: var(--video-paper);
+}
+.book-library .video-design::after {
+  content: ''; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  box-shadow: inset 3px 0 5px #0004, inset 0 0 0 1px #ffffff20;
+}
+.book-library .video-frame { position: absolute; left: 0; right: 0; top: 17%; height: 42%; overflow: hidden; background: #131513; }
+.book-library .video-frame .video-still { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.book-library .video-kicker {
+  position: absolute; z-index: 2; top: 6%; left: 8%; right: 8%;
+  font: 700 4.5cqw/1.4 Arial, sans-serif; letter-spacing: .09em; text-transform: uppercase;
+}
+.book-library .video-heading {
+  position: absolute; z-index: 2; top: 64%; left: 8%; right: 8%;
+  font: 900 11cqw/.99 Arial, sans-serif; letter-spacing: -.055em; text-wrap: balance; overflow-wrap: anywhere;
+}
+.book-library .video-design[data-font="serif"] .video-heading { font-family: Georgia, serif; font-weight: 700; letter-spacing: -.045em; line-height: 1.04; }
+.book-library .video-design[data-font="mono"] .video-heading { font-family: 'Courier New', monospace; font-size: 10cqw; letter-spacing: -.055em; }
+.book-library .video-footer {
+  position: absolute; z-index: 2; bottom: 5%; left: 8%; right: 8%; padding-top: 4%;
+  border-top: 1px solid currentColor; font: 500 4.2cqw/1.25 Arial, sans-serif;
+}
+/* Portrait films put the speaker above a shaded title block. */
+.book-library .video-design[data-layout="portrait"] .video-frame { top: 0; height: 100%; }
+.book-library .video-design[data-layout="portrait"] .video-frame::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, #0009, transparent 25%, #0002 35%, var(--video-paper) 78%);
+}
+.book-library .video-design[data-layout="portrait"] .video-still { object-position: 50% 25%; }
+.book-library .video-design[data-layout="portrait"] .video-kicker { color: #fff4df; }
+.book-library .video-design[data-layout="portrait"] .video-heading { top: auto; bottom: 17%; font-size: 14cqw; }
+/* Editorial sleeves keep the full landscape frame, like a printed still. */
+.book-library .video-design[data-layout="editorial"] .video-kicker { top: 7%; padding-bottom: 5%; border-bottom: 2px solid var(--video-accent); }
+.book-library .video-design[data-layout="editorial"] .video-heading { top: 22%; font-size: 12cqw; }
+.book-library .video-design[data-layout="editorial"] .video-frame { left: 8%; right: 8%; top: 49%; height: 32%; }
+.book-library .video-design[data-layout="editorial"] .video-still { object-fit: contain; }
+/* A broad colour band and offset still give these cases an album-sleeve feel. */
+.book-library .video-design[data-layout="split"] { background: linear-gradient(90deg, var(--video-accent) 0 7%, var(--video-paper) 7%); }
+.book-library .video-design[data-layout="split"] .video-kicker { left: 14%; }
+.book-library .video-design[data-layout="split"] .video-frame { left: 14%; right: 0; top: 20%; height: 37%; }
+.book-library .video-design[data-layout="split"] .video-heading { left: 14%; top: 63%; font-size: 11.5cqw; }
+.book-library .video-design[data-layout="split"] .video-footer { left: 14%; }
+/* Series and films without a still get a deliberate typographic jacket. */
+.book-library .video-design[data-layout="type"] .video-kicker { padding-bottom: 5%; border-bottom: 2px solid var(--video-ink); }
+.book-library .video-design[data-layout="type"] .video-heading { top: 22%; font-size: 18cqw; line-height: .95; text-transform: uppercase; }
+.book-library .video-design[data-layout="type"]::before {
+  content: ''; position: absolute; width: 60%; height: 8%; bottom: 23%; left: 8%;
+  background: var(--video-accent); box-shadow: 18px 13px var(--video-accent), 36px 26px var(--video-accent); transform: rotate(-17deg);
+}
+.book-library .video-design[data-layout="type"][data-motif="smoke"]::before {
+  width: 72%; height: 6%; left: 12%; bottom: 26%; box-shadow: 0 2px 4px #0003;
+  background: linear-gradient(90deg, var(--video-accent) 0 4%, #fff8e5 4% 78%, #b68b4d 78%);
+  transform: rotate(-24deg);
+}
 .book-library .library-volume[data-kind="video"] .library-volume-pages, .book-library .library-volume[data-kind="video"] .library-volume-top { background: #161a18; }
 /* An interview cassette: two visible reels and a handwritten-style label. */
 .book-library .library-volume[data-kind="interview"] .library-volume-cover { border: 6px solid #2d2923; border-radius: 8px; box-sizing: border-box; }

@@ -2,6 +2,7 @@ import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { flyCoverToDetail } from './books-flight';
 import type { BookBinding } from '../lib/book-binding';
+import type { VideoArtwork } from '../lib/video-artwork';
 import { parseMaterialFilter, type MaterialKind, type MaterialFilter, type LibraryClassification, type ProblemCollection } from '../lib/library-materials';
 import { materialCover } from './material-cover';
 
@@ -23,6 +24,7 @@ interface LibraryBook {
   medium?: string;
   attribution?: { label: string; name: string; url: string };
   classification?: LibraryClassification;
+  videoArtwork?: VideoArtwork;
 }
 
 type LibrarySort = 'az' | 'tiers' | 'collection';

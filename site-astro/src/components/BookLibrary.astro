@@ -11,6 +11,8 @@ import archive from '../../../data/learning-archive.json';
 import additions from '../../../data/library-additions.json';
 import collectionData from '../../../data/library-collections.json';
 import corrections from '../../../data/library-material-corrections.json';
+import videoArtworks from '../../../data/library-video-artwork.json';
+import type { VideoArtwork } from '../lib/video-artwork';
 import { archiveVolume, materialLabels, type ArchiveItem, type LibraryClassification } from '../lib/library-materials';
 import '../styles/library-materials.css';
 import '../styles/library-collections.css';
@@ -44,8 +46,9 @@ const library = await Promise.all(books
   }));
 const classifications = collectionData.items as Record<string, LibraryClassification>;
 const materialCorrections = corrections as Record<string, Partial<ArchiveItem>>;
+const videoCovers = videoArtworks as Record<string, VideoArtwork>;
 const materials = [...archive.items, ...additions].map((item) =>
-  archiveVolume({ ...item, ...materialCorrections[item.id] }, classifications[item.id]));
+  archiveVolume({ ...item, ...materialCorrections[item.id] }, classifications[item.id], videoCovers[item.id]));
 const collectionGroups = [...new Set(collectionData.collections.map((collection) => collection.group))];
 const entries = [...library, ...materials];
 const filters = [
