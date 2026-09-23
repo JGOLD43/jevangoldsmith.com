@@ -39,3 +39,43 @@ CSS/typographic illustrations, not official covers or reproductions of artwork.
 Search and selected type/item are reflected in the page URL, so a shelf can be
 bookmarked or shared. The native app's highlight-count bridge receives books
 only. No native app update is needed for this public website change.
+
+## Problem collections
+
+`data/library-collections.json` contains an individually authored classification
+for each of the 234 saved materials, reviewed on 23 September 2026. Twenty
+problem-oriented collections are grouped into Life, People, Making & learning,
+Work & money, and A wider world. Each item belongs to one to three collections,
+with a specific explanation, a role (guide, perspective, case study, cautionary
+story, creative example or reference), and the source used for classification.
+Each collection has three deliberately chosen starting points; these are not
+personal ratings or a claim that Jevan has completed the works.
+
+The review used accessible article/PDF text and excerpts, uploader descriptions,
+and film or publisher synopses. It did not watch every film or unlock paid
+material. Sparse descriptions and inaccessible works have explicitly provisional
+placements; paid workbooks/artbooks are classified from their public introductions.
+The public “Why this is here” dialog discloses the classification basis and links
+to it. Contrasting and cautionary examples are not presented as advice to imitate.
+The two versions of Falkovich's 100 tips remain separate source entries.
+
+Sort → By collection opens with hover, click or keyboard; touch opens the same
+picker. Selecting a collection filters across the archive (switching from Books
+to All material when necessary). Material type and search narrow that selection
+further. Three starting points lead the default collection order, followed by
+the remaining titles alphabetically. A–Z and tiers can still reorder a filtered
+collection. “Group by original topic” retains the imported topic ordering.
+`libraryCollection` joins the existing URL state, including selected item, search,
+format and sort, so reloads and shared links reproduce the shelf.
+
+`data/library-material-corrections.json` overlays reviewed corrections without
+changing original imported IDs or losing them on refresh. It repairs duplicated
+URLs for Rams and Miyazaki, corrects two film titles, identifies the linked Thiel
+PDF as an article, and removes the source's tongue-in-cheek documentary label
+from the fictional film *Thank You for Smoking*. Existing deep links still work.
+
+When adding or refreshing materials, author a classification and source basis for
+every new ID. The unit checks reject missing/orphan classifications, invalid
+collection membership, duplicate generic explanations, invalid starting points,
+and corrections that replace identities. Review uncertain placements again when
+more of their source becomes available; do not silently imply completed viewing.

@@ -2,7 +2,7 @@ import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { flyCoverToDetail } from './books-flight';
 import type { BookBinding } from '../lib/book-binding';
-import { materialLabels, parseMaterialFilter, type MaterialKind, type MaterialFilter } from '../lib/library-materials';
+import { materialLabels, parseMaterialFilter, type MaterialKind, type MaterialFilter, type LibraryClassification, type ProblemCollection } from '../lib/library-materials';
 import { materialCover } from './material-cover';
 
 interface LibraryBook {
@@ -22,6 +22,7 @@ interface LibraryBook {
   duration?: string | null;
   medium?: string;
   attribution?: { label: string; name: string; url: string };
+  classification?: LibraryClassification;
 }
 
 type LibrarySort = 'az' | 'tiers' | 'collection';
@@ -57,6 +58,15 @@ function initBookLibrary() {
   let materialFilter: MaterialFilter = 'book';
   let searchQuery = '';
   const allBooks = readInlineJson<LibraryBook[]>('jg-book-library') || [];
+  const problemCollections = readInlineJson<ProblemCollection[]>('jg-library-collections') || [];
+  const collectionPicker = library.querySelector<HTMLDetailsElement>('.library-collection-picker')!;
+  const activeCollection = library.querySelector<HTMLElement>('.library-active-collection')!;
+  const collectionChange = library.querySelector<HTMLButtonElement>('[data-library-change-collection]')!;
+  const collectionDescription = library.querySelector<HTMLElement>('[data-library-collection-description]')!;
+  const contextButton = library.querySelector<HTMLButtonElement>('[data-library-item-context]')!;
+  const contextDialog = library.querySelector<HTMLDialogElement>('.library-context-dialog')!;
+  let problemFilter = '';
+  const currentCollection = () => problemCollections.find(({ id }) => id === problemFilter);
   let appCounts: Map<string, number> | null = null;
   window.addEventListener('jgold-library-counts', (event) => {
     const records = (event as CustomEvent).detail;
@@ -154,10 +164,18 @@ function initBookLibrary() {
     const tierRank: Record<string, number> = { s: 0, a: 1, b: 2, c: 3, d: 4 };
     sortMode = mode;
     const query = searchQuery.trim().toLocaleLowerCase();
+    const collection = currentCollection();
     books = allBooks.filter((item) => {
       const matchesKind = materialFilter === 'all' || (materialFilter === 'archive' ? item.kind !== 'book' : item.kind === materialFilter);
-      return matchesKind && (!query || `${item.title} ${item.author} ${item.collection} ${materialLabels[item.kind]}`.toLocaleLowerCase().includes(query));
+      const matchesCollection = !collection || item.classification?.collections.includes(collection.id);
+      return matchesKind && matchesCollection && (!query || `${item.title} ${item.author} ${item.collection} ${materialLabels[item.kind]}`.toLocaleLowerCase().includes(query));
     }).sort((a, b) => {
+      if (collection && mode === 'collection') {
+        const rank = (id: string) => { const index = collection.starters.indexOf(id); return index < 0 ? Infinity : index; };
+        const starterOrder = rank(a.id) - rank(b.id);
+        if (starterOrder) return starterOrder;
+        return a.title.localeCompare(b.title, 'en', { numeric: true }) || a.id.localeCompare(b.id);
+      }
       const groupOrder = mode === 'tiers' ? (tierRank[a.tier] ?? 5) - (tierRank[b.tier] ?? 5)
         : mode === 'collection' ? a.collection.localeCompare(b.collection, 'en') : 0;
       return groupOrder || a.title.localeCompare(b.title, 'en', { numeric: true }) || a.id.localeCompare(b.id);
@@ -169,17 +187,25 @@ function initBookLibrary() {
     selected = -1;
     const onlyBooks = materialFilter === 'book';
     library!.dataset.materials = String(!onlyBooks);
+    library!.dataset.collection = String(Boolean(collection));
+    activeCollection.hidden = !collection;
+    collectionChange.textContent = collection?.label || '';
+    collectionDescription.textContent = collection?.description || '';
     countLabel.textContent = `${books.length} ${onlyBooks ? 'books read' : materialFilter === 'all' ? 'items' : 'items saved to explore'}`;
     empty.hidden = books.length !== 0;
     if (controls) controls.hidden = books.length === 0;
     if (!books.length && thought) thought.hidden = true;
     clearSearch.hidden = !searchQuery;
+    library!.querySelectorAll<HTMLButtonElement>('[data-library-collection]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.libraryCollection === problemFilter));
+    });
+    collectionPicker.dataset.selected = String(Boolean(collection));
     library!.querySelectorAll<HTMLButtonElement>('[data-library-step]').forEach((button) => { button.disabled = books.length < 2; });
     library!.querySelectorAll<HTMLButtonElement>('[data-library-sort]').forEach((button) => {
       button.disabled = !books.length;
       button.setAttribute('aria-pressed', String(button.dataset.librarySort === mode));
     });
-    sortMenu?.querySelector('summary')?.setAttribute('aria-label', `Sort library: ${sortNames[mode]}`);
+    sortMenu?.querySelector('summary')?.setAttribute('aria-label', `Sort library: ${collection?.label || sortNames[mode]}`);
   }
 
   function finishSortTransition() {
@@ -267,7 +293,10 @@ function initBookLibrary() {
     schedule();
     if (sortStatus) sortStatus.textContent = countLabel.textContent;
   }
-  materialSelect.addEventListener('change', changeMaterials);
+  materialSelect.addEventListener('change', () => {
+    if (materialSelect.value === 'book') problemFilter = '';
+    changeMaterials();
+  });
   search.addEventListener('input', changeMaterials);
   clearSearch.addEventListener('click', () => { search.value = ''; changeMaterials(); search.focus(); });
 
@@ -279,6 +308,8 @@ function initBookLibrary() {
       else url.searchParams.set('libraryType', materialFilter);
       if (searchQuery) url.searchParams.set('librarySearch', searchQuery);
       else url.searchParams.delete('librarySearch');
+      if (problemFilter) url.searchParams.set('libraryCollection', problemFilter);
+      else url.searchParams.delete('libraryCollection');
       if (!books.length) url.searchParams.delete('libraryBook');
       if (books.length) url.searchParams.set('libraryBook', books[wrap(Math.round(target))].id);
       if (sortMode === 'az') url.searchParams.delete('librarySort');
@@ -289,6 +320,7 @@ function initBookLibrary() {
       url.searchParams.delete('librarySearch');
       url.searchParams.delete('libraryBook');
       url.searchParams.delete('librarySort');
+      url.searchParams.delete('libraryCollection');
     }
     window.history.replaceState(window.history.state, '', url);
   }
@@ -299,6 +331,9 @@ function initBookLibrary() {
     if (index === selected) return;
     selected = index;
     const book = books[index];
+    contextButton.hidden = !book.classification;
+    const starter = currentCollection()?.starters.indexOf(book.id) ?? -1;
+    contextButton.textContent = starter >= 0 ? 'Start here · Why this is here' : 'Why this is here';
     if (groupLabel) {
       groupLabel.hidden = false;
       groupLabel.textContent = book.tierLabel;
@@ -572,6 +607,7 @@ function initBookLibrary() {
   function close(updateUrl = true, focus = true) {
     if (!active) return;
     active = false;
+    contextDialog.close();
     finishSortTransition();
     if (sortMenu) sortMenu.open = false;
     releaseDrag();
@@ -597,10 +633,12 @@ function initBookLibrary() {
       finishSortTransition();
       const params = new URL(window.location.href).searchParams;
       materialFilter = parseMaterialFilter(params.get('libraryType'));
+      problemFilter = problemCollections.some(({ id }) => id === params.get('libraryCollection')) ? params.get('libraryCollection')! : '';
+      if (problemFilter && materialFilter === 'book') materialFilter = 'archive';
       searchQuery = params.get('librarySearch') || '';
       materialSelect.value = materialFilter;
       search.value = searchQuery;
-      orderBooks(parseSort(params.get('librarySort')));
+      orderBooks(parseSort(params.get('librarySort') || (problemFilter ? 'collection' : null)));
       sceneryPosition = 0;
       const id = params.get('libraryBook');
       const index = books.findIndex((book) => book.id === id);
@@ -640,6 +678,86 @@ function initBookLibrary() {
     button.disabled = !books.length;
     button.addEventListener('click', () => changeSort(parseSort(button.dataset.librarySort)));
   });
+
+  function chooseCollection(id: string) {
+    if (openingDetail) return;
+    problemFilter = problemCollections.some((collection) => collection.id === id) ? id : '';
+    if (materialSelect.value === 'book') materialSelect.value = 'archive';
+    sortMode = problemFilter ? 'collection' : 'az';
+    contextDialog.close();
+    if (sortMenu) sortMenu.open = false;
+    collectionPicker.open = false;
+    changeMaterials();
+    sortMenu?.querySelector('summary')?.focus({ preventScroll: true });
+    if (sortStatus) sortStatus.textContent = `${currentCollection()?.label || 'All collections'}. ${countLabel.textContent}`;
+  }
+  library.querySelectorAll<HTMLButtonElement>('[data-library-collection]').forEach((button) => {
+    button.addEventListener('click', () => chooseCollection(button.dataset.libraryCollection || ''));
+  });
+  library.querySelector('[data-library-clear-collection]')?.addEventListener('click', () => chooseCollection(''));
+  library.querySelector('[data-library-reset]')?.addEventListener('click', () => {
+    search.value = '';
+    materialSelect.value = 'archive';
+    chooseCollection('');
+  });
+  library.querySelector('[data-library-topic]')?.addEventListener('click', () => {
+    problemFilter = '';
+    sortMode = 'collection';
+    if (sortMenu) sortMenu.open = false;
+    collectionPicker.open = false;
+    changeMaterials();
+    sortMenu?.querySelector('summary')?.focus({ preventScroll: true });
+  });
+  collectionChange.addEventListener('click', (event) => {
+    // The trigger sits outside Sort; do not immediately close the menu again
+    // through the document's outside-click handler.
+    event.stopPropagation();
+    if (sortMenu) sortMenu.open = true;
+    collectionPicker.open = true;
+    collectionPicker.querySelector<HTMLElement>(`[data-library-collection="${problemFilter}"]`)?.focus();
+  });
+  // Hover is a shortcut; native details keeps the same choices available by
+  // click, touch and keyboard. Keep the submenu open while moving into it.
+  collectionPicker.addEventListener('pointerenter', (event) => {
+    if (event.pointerType === 'mouse' && window.matchMedia('(hover: hover)').matches) collectionPicker.open = true;
+  });
+  collectionPicker.addEventListener('pointerleave', (event) => {
+    if (event.pointerType === 'mouse' && !collectionPicker.contains(document.activeElement)) collectionPicker.open = false;
+  });
+  sortMenu?.addEventListener('toggle', () => { if (!sortMenu.open) collectionPicker.open = false; });
+  collectionPicker.querySelector('summary')?.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+    event.preventDefault();
+    collectionPicker.open = true;
+    collectionPicker.querySelector('button')?.focus();
+  });
+  contextButton.addEventListener('click', () => {
+    const book = books[wrap(Math.round(target))];
+    const info = book?.classification;
+    if (!info) return;
+    const roles: Record<string, string> = { guide: 'Practical guide', perspective: 'A perspective', 'case-study': 'Case study',
+      'cautionary-story': 'Cautionary story', 'creative-work': 'Creative example', reference: 'Reference collection' };
+    contextDialog.querySelector('[data-library-context-role]')!.textContent = roles[info.role] || info.role;
+    contextDialog.querySelector('#library-context-title')!.textContent = book.title;
+    contextDialog.querySelector('[data-library-context-why]')!.textContent = info.why;
+    const links = contextDialog.querySelector('.library-context-collections')!;
+    links.replaceChildren();
+    for (const id of info.collections) {
+      const collection = problemCollections.find((entry) => entry.id === id);
+      if (!collection) continue;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = collection.label;
+      button.addEventListener('click', () => chooseCollection(id));
+      links.append(button);
+    }
+    const evidence = contextDialog.querySelector<HTMLAnchorElement>('[data-library-context-evidence]')!;
+    evidence.textContent = `Classification basis: ${info.evidence.basis} ↗`;
+    evidence.href = info.evidence.url;
+    contextDialog.showModal();
+  });
+  contextDialog.addEventListener('keydown', (event) => event.stopPropagation());
+  contextDialog.addEventListener('click', (event) => { if (event.target === contextDialog) contextDialog.close(); });
 
   library.querySelectorAll<HTMLButtonElement>('[data-library-step]').forEach((button) => {
     button.disabled = books.length < 2;
@@ -769,7 +887,7 @@ function initBookLibrary() {
     snapTimer = window.setTimeout(() => select(target), 160);
   }, { passive: false });
   library.addEventListener('keydown', (event) => {
-    if ((event.target as Element).closest('input, select, textarea') || !books.length || openingDetail || sorting || sortMenu?.open) return;
+    if ((event.target as Element).closest('input, select, textarea, dialog') || !books.length || openingDetail || sorting || sortMenu?.open) return;
     if (event.key === 'Enter' && (event.target === stage || (event.target as Element).closest('.library-volume'))) {
       event.preventDefault();
       const volume = (event.target as Element).closest<HTMLElement>('[data-library-index]');
@@ -786,6 +904,12 @@ function initBookLibrary() {
     if (event.key !== 'Escape' || openingDetail) return;
     if (event.target === materialSelect) return;
     if (event.target === search && search.value) { search.value = ''; changeMaterials(); return; }
+    if (sortMenu?.open && collectionPicker.open) {
+      event.preventDefault();
+      collectionPicker.open = false;
+      collectionPicker.querySelector('summary')?.focus();
+      return;
+    }
     if (sortMenu?.open) {
       event.preventDefault();
       sortMenu.open = false;

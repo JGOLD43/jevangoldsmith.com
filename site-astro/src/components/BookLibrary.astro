@@ -9,8 +9,11 @@ import { bookBinding } from '../lib/book-binding';
 import InlineJson from './InlineJson.astro';
 import archive from '../../../data/learning-archive.json';
 import additions from '../../../data/library-additions.json';
-import { archiveVolume, materialLabels } from '../lib/library-materials';
+import collectionData from '../../../data/library-collections.json';
+import corrections from '../../../data/library-material-corrections.json';
+import { archiveVolume, materialLabels, type ArchiveItem, type LibraryClassification } from '../lib/library-materials';
 import '../styles/library-materials.css';
+import '../styles/library-collections.css';
 
 interface Props { books: CollectionEntry<'books'>[]; }
 const { books } = Astro.props;
@@ -39,7 +42,11 @@ const library = await Promise.all(books
       collection: data.category?.trim() || 'Uncollected',
       href: `/books/${encodeURIComponent(id)}.html` };
   }));
-const materials = [...archive.items, ...additions].map(archiveVolume);
+const classifications = collectionData.items as Record<string, LibraryClassification>;
+const materialCorrections = corrections as Record<string, Partial<ArchiveItem>>;
+const materials = [...archive.items, ...additions].map((item) =>
+  archiveVolume({ ...item, ...materialCorrections[item.id] }, classifications[item.id]));
+const collectionGroups = [...new Set(collectionData.collections.map((collection) => collection.group))];
 const entries = [...library, ...materials];
 const filters = [
   { value: 'book', label: 'Books', count: library.length },
@@ -66,7 +73,24 @@ const filters = [
         <div id="book-library-sort-options" class="book-library-sort-options" role="group" aria-label="Library order">
           <button type="button" data-library-sort="tiers" aria-pressed="false">By tiers <span aria-hidden="true">✓</span></button>
           <button type="button" data-library-sort="az" aria-pressed="true">A–Z <span aria-hidden="true">✓</span></button>
-          <button type="button" data-library-sort="collection" aria-pressed="false">By collection <span aria-hidden="true">✓</span></button>
+          <details class="library-collection-picker">
+            <summary>By collection <b aria-hidden="true">‹</b></summary>
+            <div class="library-collection-menu" role="group" aria-label="Problem collections">
+              <div class="library-collection-intro"><strong>What are you working on?</strong><p>Collections from the learning archive · all formats</p></div>
+              <div class="library-collection-list">
+                <button type="button" data-library-collection="" aria-pressed="true">All collections <small>{materials.length}</small></button>
+                {collectionGroups.map((group) => <div class="library-collection-section">
+                  <h3>{group}</h3>
+                  {collectionData.collections.filter((collection) => collection.group === group).map((collection) =>
+                    <button type="button" data-library-collection={collection.id} aria-pressed="false">
+                      <div><strong>{collection.label}</strong><p>{collection.description}</p></div>
+                      <small>{materials.filter((item) => item.classification?.collections.includes(collection.id)).length}</small>
+                    </button>)}
+                </div>)}
+              </div>
+              <button type="button" data-library-topic>Group by original topic</button>
+            </div>
+          </details>
         </div>
       </details>
       <button type="button" class="book-library-exit" data-close-book-library>
@@ -78,6 +102,11 @@ const filters = [
     <label class="sr-only" for="library-search">Search the library</label>
     <input id="library-search" type="search" placeholder="Find something worth your time…" autocomplete="off" />
     <button type="button" data-library-clear hidden>Clear</button>
+  </div>
+  <div class="library-active-collection" hidden>
+    <button type="button" data-library-change-collection></button>
+    <button type="button" data-library-clear-collection aria-label="Clear collection filter">×</button>
+    <p data-library-collection-description></p>
   </div>
   <div class="book-library-stage" tabindex="0" role="region"
     aria-label="Interactive library. Drag the shelf to browse. Move over or drag the selected book to rotate it. Double-click an item to open it."
@@ -102,15 +131,26 @@ const filters = [
         <a class="book-library-title" href={library[0]?.href || '/books.html'}>{library[0]?.title}</a>
         <p class="book-library-author">{library[0]?.author}</p>
       </div>
+      <button type="button" class="library-item-context" data-library-item-context hidden>Why this is here</button>
       <a class="book-library-request" href="mailto:hello@jevangoldsmith.com" aria-label="Request the selected book by email">request</a>
       <p class="library-attribution" hidden><span class="library-unreviewed">Saved to explore — I haven’t read or watched everything here yet.</span><span data-library-credit-label>Collected by</span> <a data-library-credit-link href={archive.source.url} target="_blank" rel="noopener noreferrer">The Unintuitive ↗</a><br />Source links · some require access or purchase</p>
     </div>
     <button class="book-library-arrow" type="button" data-library-step="1" aria-label="Next item">→</button>
   </div>
   <p class="sr-only" data-library-sort-status role="status"></p>
-  <p class="book-library-empty" data-library-empty hidden role="status">No matches. Try another search or material type.</p>
+  <div class="book-library-empty" data-library-empty hidden role="status"><p>No matches for these filters.</p><button type="button" data-library-reset>Show all material</button></div>
+  <dialog class="library-context-dialog" aria-labelledby="library-context-title">
+    <form method="dialog"><button aria-label="Close item context">×</button></form>
+    <p class="library-context-eyebrow" data-library-context-role></p>
+    <h2 id="library-context-title"></h2>
+    <p class="library-context-why" data-library-context-why></p>
+    <div class="library-context-collections" aria-label="Collections for this item"></div>
+    <p class="library-context-evidence"><a target="_blank" rel="noopener noreferrer" data-library-context-evidence></a></p>
+    <p class="library-context-method">Collections suggest ways to approach a work, not a promise that it solves a problem. Placements draw on source text, excerpts and descriptions. I haven’t read or watched everything here yet.</p>
+  </dialog>
 </section>
 <InlineJson id="jg-book-library" json={JSON.stringify(entries).replace(/</g, '\\u003c')} />
+<InlineJson id="jg-library-collections" json={JSON.stringify(collectionData.collections)} />
 <script>
   import '../scripts/book-library';
 </script>

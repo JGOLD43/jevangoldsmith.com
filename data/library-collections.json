@@ -1,0 +1,3295 @@
+{
+  "reviewedAt": "2026-09-23",
+  "methodology": "Problem-based editorial placements use accessible source text, public excerpts, video descriptions and film synopses. They are interpretations, not claims that every work has been fully read or watched. A collection may contain practical guides, contrasting perspectives, creative examples and cautionary stories. Start-here choices are entry points, not personal ratings.",
+  "collections": [
+    {
+      "id": "direction",
+      "label": "Find my direction",
+      "description": "Choose what deserves your time, and question inherited definitions of success.",
+      "group": "Life",
+      "starters": [
+        "archive-b78029ad4b0f",
+        "archive-798802b56554",
+        "archive-ee2cbd1d6bcb"
+      ]
+    },
+    {
+      "id": "action",
+      "label": "Get unstuck & start",
+      "description": "Turn delay and overthinking into a concrete next step.",
+      "group": "Life",
+      "starters": [
+        "archive-0567bd8484de",
+        "archive-2372e8e07dc6",
+        "archive-001160cfb5f4"
+      ]
+    },
+    {
+      "id": "focus",
+      "label": "Protect my time & attention",
+      "description": "Make room for worthwhile work and life beyond constant distraction.",
+      "group": "Life",
+      "starters": [
+        "archive-2116370b4a77",
+        "archive-7482edf94910",
+        "archive-3b6715a87c86"
+      ]
+    },
+    {
+      "id": "calm",
+      "label": "Feel less wound up",
+      "description": "Explore attention, mental wellbeing and ways of meeting pressure with less tension.",
+      "group": "Life",
+      "starters": [
+        "how-to-unclench",
+        "archive-99a326f6da4d",
+        "archive-355680338223"
+      ]
+    },
+    {
+      "id": "resilience",
+      "label": "Find a way through setbacks",
+      "description": "Meet failure, loss and uncertainty without reducing them to a success slogan.",
+      "group": "Life",
+      "starters": [
+        "archive-23f6ec1f2a5c",
+        "archive-af9f9235556b",
+        "archive-eb9ac180f718"
+      ]
+    },
+    {
+      "id": "connection",
+      "label": "Build deeper connections",
+      "description": "Understand belonging, generosity and the relationships behind a good life.",
+      "group": "People",
+      "starters": [
+        "archive-1cde0fd23030",
+        "archive-34df5905a24d",
+        "archive-2eef8d9ffd0f"
+      ]
+    },
+    {
+      "id": "independence",
+      "label": "Stop living for approval",
+      "description": "Notice status games and make choices that feel like your own.",
+      "group": "People",
+      "starters": [
+        "archive-c1270394c4a9",
+        "archive-cbc35cbf47e5",
+        "archive-6c5ee515eada"
+      ]
+    },
+    {
+      "id": "learning",
+      "label": "Learn & get better",
+      "description": "Improve how you practise, ask questions and develop a demanding skill.",
+      "group": "Making & learning",
+      "starters": [
+        "archive-87d6e6b7cf9d",
+        "archive-226e8dc0b433",
+        "archive-91a90060e0c7"
+      ]
+    },
+    {
+      "id": "judgment",
+      "label": "Make better decisions",
+      "description": "Examine assumptions, incentives and risk before committing to a course.",
+      "group": "Making & learning",
+      "starters": [
+        "archive-f7b93a732fdc",
+        "archive-5d406a210122",
+        "archive-6b3a52091fb3"
+      ]
+    },
+    {
+      "id": "creativity",
+      "label": "Find original ideas",
+      "description": "Get past the blank page and study how creative people develop work.",
+      "group": "Making & learning",
+      "starters": [
+        "archive-809be3308e7e",
+        "archive-5df74c3dc852",
+        "archive-92eabb120c57"
+      ]
+    },
+    {
+      "id": "craft",
+      "label": "Make work I’m proud of",
+      "description": "Develop taste, notice details and understand the effort behind quality.",
+      "group": "Making & learning",
+      "starters": [
+        "archive-6b77d174f5c8",
+        "archive-17c34baa8f90",
+        "archive-79283b1f5453"
+      ]
+    },
+    {
+      "id": "communication",
+      "label": "Explain & tell better stories",
+      "description": "Make an idea understandable, memorable and worth someone’s attention.",
+      "group": "Making & learning",
+      "starters": [
+        "archive-860eda3bfc8d",
+        "archive-1572b0659a34",
+        "archive-163bb29cbc15"
+      ]
+    },
+    {
+      "id": "career",
+      "label": "Shape my working life",
+      "description": "Choose opportunities, negotiate your value and question what a career is for.",
+      "group": "Work & money",
+      "starters": [
+        "archive-be3c4fca20c0",
+        "archive-b71da3c455fa",
+        "archive-d978c7e1938d"
+      ]
+    },
+    {
+      "id": "business",
+      "label": "Build something people want",
+      "description": "Understand customers, test a business idea and learn from companies that struggled.",
+      "group": "Work & money",
+      "starters": [
+        "archive-e5a7b0d0c4bd",
+        "archive-6cb80ac74208",
+        "archive-008591ecaccc"
+      ]
+    },
+    {
+      "id": "leadership",
+      "label": "Lead a team well",
+      "description": "Build the conditions for people to decide, collaborate and do useful work.",
+      "group": "Work & money",
+      "starters": [
+        "archive-0e3663981d8d",
+        "archive-d5479cc27874",
+        "archive-26550db542d1"
+      ]
+    },
+    {
+      "id": "money",
+      "label": "Put money in perspective",
+      "description": "Explore financial independence, business ownership and the limits of wealth.",
+      "group": "Work & money",
+      "starters": [
+        "archive-fe4408394eb0",
+        "archive-92a881b5085c",
+        "archive-0ac2b501f974"
+      ]
+    },
+    {
+      "id": "power",
+      "label": "Recognise power & manipulation",
+      "description": "Spot distorted incentives, persuasive stories and the costs hidden behind success.",
+      "group": "A wider world",
+      "starters": [
+        "archive-b6da727f1fe6",
+        "archive-6784d172e874",
+        "archive-70a75c21981c"
+      ]
+    },
+    {
+      "id": "change",
+      "label": "Understand a changing world",
+      "description": "Study technological shifts, the companies they reshape and what they mean for work.",
+      "group": "A wider world",
+      "starters": [
+        "archive-4366b4cb7ff1",
+        "archive-cc0b9e0c0361",
+        "archive-0e4e7efdff83"
+      ]
+    },
+    {
+      "id": "adventure",
+      "label": "Live beyond my routine",
+      "description": "Follow curiosity into unfamiliar places while thinking carefully about risk.",
+      "group": "A wider world",
+      "starters": [
+        "archive-00752223f3a7",
+        "archive-5dd6cfdf0cac",
+        "archive-a014e1c66206"
+      ]
+    },
+    {
+      "id": "perspective",
+      "label": "See life from further out",
+      "description": "Explore time, mortality, science and art to give everyday concerns a wider setting.",
+      "group": "A wider world",
+      "starters": [
+        "archive-c57e33955afd",
+        "archive-36f0e394d4a0",
+        "archive-860d4a978d72"
+      ]
+    }
+  ],
+  "items": {
+    "archive-6c86b1603a9d": {
+      "collections": [
+        "direction",
+        "focus"
+      ],
+      "role": "perspective",
+      "why": "A reminder to spend finite time on people and work that matter, rather than obligations you do not value.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.paulgraham.com/vb.html"
+      },
+      "provisional": false
+    },
+    "archive-87d6e6b7cf9d": {
+      "collections": [
+        "learning"
+      ],
+      "role": "guide",
+      "why": "Uses apprenticeship to ask how observation, practice and specific feedback can make learning useful outside the classroom.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.scotthyoung.com/blog/2019/06/07/apprenticeships/"
+      },
+      "provisional": false
+    },
+    "archive-6c5ee515eada": {
+      "collections": [
+        "independence",
+        "connection"
+      ],
+      "role": "perspective",
+      "why": "Kreider's encounter with an unguarded opinion explores the limits of approval and the generosity relationships require.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://archive.nytimes.com/opinionator.blogs.nytimes.com/2013/06/15/i-know-what-you-think-of-me/"
+      },
+      "provisional": false
+    },
+    "archive-4531afbd0d52": {
+      "collections": [
+        "calm"
+      ],
+      "role": "perspective",
+      "why": "A discussion of personal meditation instruction and practice; useful for comparing experiences, rather than expecting a universal method.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://web.archive.org/web/20200624214955/https://www.reddit.com/r/transcendental/comments/80o9ps/personal_instruction_makes_all_the_difference/"
+      },
+      "provisional": false
+    },
+    "archive-d40ebb5b8fe7": {
+      "collections": [
+        "perspective",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "Simler examines an unusual theory of consciousness, inviting curiosity while distinguishing an intriguing explanation from an established one.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://meltingasphalt.com/mr-jaynes-wild-ride/"
+      },
+      "provisional": false
+    },
+    "archive-1f038812d0c6": {
+      "collections": [
+        "action",
+        "direction"
+      ],
+      "role": "perspective",
+      "why": "Kenna explores committing to the task in front of you instead of trying to think your way past a stage of life.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://riverkenna.substack.com/p/the-only-thing-to-do"
+      },
+      "provisional": false
+    },
+    "archive-99a326f6da4d": {
+      "collections": [
+        "calm",
+        "direction"
+      ],
+      "role": "perspective",
+      "why": "Ferriss questions when constant self-improvement becomes another source of dissatisfaction rather than a better way to live.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://tim.blog/2026/03/04/the-self-help-trap/"
+      },
+      "provisional": false
+    },
+    "archive-9f289c7be89a": {
+      "collections": [
+        "leadership",
+        "resilience"
+      ],
+      "role": "case-study",
+      "why": "Rick Rescorla's story connects preparation and responsibility for others with action under extraordinary pressure.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://archive.ph/20250912193924/https://www.newyorker.com/magazine/2002/02/11/september-11th-attacks-world-trade-center-rick-rescorla-the-real-heroes-are-dead#selection-323.0-334.0"
+      },
+      "provisional": false
+    },
+    "archive-a7da533278ab": {
+      "collections": [
+        "connection",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "An exploration of bodily signals and honesty that asks why actions can communicate more convincingly than words.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://meltingasphalt.com/honesty-and-the-human-body/"
+      },
+      "provisional": false
+    },
+    "archive-355680338223": {
+      "collections": [
+        "calm",
+        "focus"
+      ],
+      "role": "guide",
+      "why": "Beshara gathers habits for looking after mental wellbeing and energy, including sleep and the conditions around daily work.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://jjbeshara.com/2020/06/04/mental-wealth/"
+      },
+      "provisional": false
+    },
+    "archive-908c4b71cc31": {
+      "collections": [
+        "independence",
+        "connection"
+      ],
+      "role": "perspective",
+      "why": "Examines how status shapes behaviour, helping make hidden social incentives easier to notice.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://meltingasphalt.com/social-status-down-the-rabbit-hole/"
+      },
+      "provisional": false
+    },
+    "archive-c7583d373727": {
+      "collections": [
+        "judgment",
+        "learning"
+      ],
+      "role": "reference",
+      "why": "Perell's collection of mental models offers different lenses for revisiting assumptions and everyday decisions.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://perell.com/essay/50-ideas-that-changed-my-life/"
+      },
+      "provisional": false
+    },
+    "archive-71a26ffda1ad": {
+      "collections": [
+        "direction",
+        "creativity"
+      ],
+      "role": "perspective",
+      "why": "Graham explores why a project you genuinely own can create engagement that assigned work often lacks.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://paulgraham.com/own.html"
+      },
+      "provisional": false
+    },
+    "archive-5814bb1dee7e": {
+      "collections": [
+        "action",
+        "direction"
+      ],
+      "role": "guide",
+      "why": "Clear's short observations connect identity, consistent effort and choosing a direction you actually want.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://jamesclear.com/random-ideas-about-life"
+      },
+      "provisional": false
+    },
+    "archive-2372e8e07dc6": {
+      "collections": [
+        "action",
+        "independence"
+      ],
+      "role": "perspective",
+      "why": "Rivett considers how a fixed story about who you are can prevent you from becoming someone who takes action.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.fredrivett.com/2025/09/10/becoming-the-person-who-does-the-thing/"
+      },
+      "provisional": false
+    },
+    "archive-c963f7b2d7d3": {
+      "collections": [
+        "learning",
+        "action"
+      ],
+      "role": "guide",
+      "why": "Qureshi collects advice that changed his behaviour, providing concrete practices to try rather than simply accumulate.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://nabeelqu.substack.com/p/advice"
+      },
+      "provisional": false
+    },
+    "archive-c1270394c4a9": {
+      "collections": [
+        "independence",
+        "power"
+      ],
+      "role": "perspective",
+      "why": "Lewis examines how the wish to join an inner circle can quietly displace your own standards.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.lewissociety.org/innerring/"
+      },
+      "provisional": false
+    },
+    "archive-1a7f56bd1875": {
+      "collections": [
+        "learning",
+        "action"
+      ],
+      "role": "perspective",
+      "why": "Sarris argues for practical experience and self-directed initiative beyond formal schooling.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://map.simonsarris.com/p/school-is-not-enough"
+      },
+      "provisional": false
+    },
+    "archive-44de8f3cab8b": {
+      "collections": [
+        "learning",
+        "creativity"
+      ],
+      "role": "case-study",
+      "why": "Hillis describes Feynman's involvement with the Connection Machine as an example of curiosity crossing disciplinary boundaries.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://longnow.org/ideas/richard-feynman-and-the-connection-machine/"
+      },
+      "provisional": false
+    },
+    "archive-28694741eecd": {
+      "collections": [
+        "communication",
+        "direction"
+      ],
+      "role": "creative-work",
+      "why": "Orwell examines the motives behind his writing, a useful starting point for clarifying what you want your own work to say.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.orwellfoundation.com/the-orwell-foundation/orwell/essays-and-other-works/why-i-write/"
+      },
+      "provisional": false
+    },
+    "archive-e3be2e01b985": {
+      "collections": [
+        "adventure",
+        "direction"
+      ],
+      "role": "case-study",
+      "why": "Finnegan's surfing portrait invites reflection on choosing a life around a consuming passion and its demands.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://archive.is/20260124012435/https://www.newyorker.com/magazine/1992/08/24/playing-docs-games-part-one"
+      },
+      "provisional": false
+    },
+    "archive-226e8dc0b433": {
+      "collections": [
+        "learning",
+        "independence"
+      ],
+      "role": "guide",
+      "why": "Luu makes the case for asking basic questions despite embarrassment, so gaps in understanding can become opportunities to learn.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://danluu.com/look-stupid/"
+      },
+      "provisional": false
+    },
+    "archive-809be3308e7e": {
+      "collections": [
+        "creativity",
+        "business"
+      ],
+      "role": "guide",
+      "why": "Cohen uses extreme constraints to break routine thinking and generate different product and business ideas.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://longform.asmartbear.com/extreme-questions/"
+      },
+      "provisional": false
+    },
+    "archive-92a881b5085c": {
+      "collections": [
+        "money",
+        "direction"
+      ],
+      "role": "perspective",
+      "why": "An argument for questioning consumption as a route to lasting satisfaction, centred on how quickly new purchases become normal.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.mrmoneymustache.com/2011/10/22/what-is-hedonic-adaptation-and-how-can-it-turn-you-into-a-sukka/"
+      },
+      "provisional": false
+    },
+    "archive-f5ae36ee490b": {
+      "collections": [
+        "change",
+        "power"
+      ],
+      "role": "perspective",
+      "why": "Kaczynski's manifesto is a historical polemic about technology and autonomy, included for critical examination of its arguments.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://web.cs.ucdavis.edu/~rogaway/classes/188/materials/Industrial%20Society%20and%20Its%20Future.pdf"
+      },
+      "provisional": false
+    },
+    "archive-2116370b4a77": {
+      "collections": [
+        "focus",
+        "calm"
+      ],
+      "role": "perspective",
+      "why": "Roy examines compulsive internet use and the difficulty of reclaiming an offline life.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://benroy.substack.com/p/notes-on-internet-addiction"
+      },
+      "provisional": false
+    },
+    "archive-32a6a7c57b38": {
+      "collections": [
+        "judgment",
+        "learning"
+      ],
+      "role": "guide",
+      "why": "Sirlin distinguishes the actual rules of competitive games from self-imposed restrictions that stop players improving.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.sirlin.net/articles/playing-to-win"
+      },
+      "provisional": false
+    },
+    "archive-5c4f283b5dfa": {
+      "collections": [
+        "action",
+        "focus"
+      ],
+      "role": "guide",
+      "why": "Pavlina describes planning and time-use techniques through his experience of completing college on an accelerated schedule.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://stevepavlina.com/blog/2005/11/do-it-now/"
+      },
+      "provisional": false
+    },
+    "archive-0316c1fe4a4b": {
+      "collections": [
+        "direction",
+        "connection"
+      ],
+      "role": "reference",
+      "why": "Kelly's varied advice offers prompts for everyday choices, relationships and finding a less complicated way through life.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://kk.org/thetechnium/101-additional-advices/"
+      },
+      "provisional": false
+    },
+    "archive-a290a8a9bd9b": {
+      "collections": [
+        "focus",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "A humorous examination of chronic lateness and unrealistic planning, useful for recognising your own estimates of time.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://waitbutwhy.com/2015/07/why-im-always-late.html"
+      },
+      "provisional": false
+    },
+    "archive-168d3409b4ab": {
+      "collections": [
+        "learning",
+        "focus"
+      ],
+      "role": "guide",
+      "why": "Karpathy offers practical advice for managing demanding courses, studying effectively and protecting the conditions needed to learn.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://cs.stanford.edu/people/karpathy/advice.html"
+      },
+      "provisional": false
+    },
+    "archive-3b8cd819b1cb": {
+      "collections": [
+        "resilience"
+      ],
+      "role": "perspective",
+      "why": "A short Scott Adams dog story shared as a reframing prompt. Placement is provisional because the image text was not accessible.",
+      "evidence": {
+        "basis": "Limited source information — provisional placement",
+        "url": "https://x.com/ShaanVP/status/2011213264651448671"
+      },
+      "provisional": true
+    },
+    "archive-68cf50890c73": {
+      "collections": [
+        "focus",
+        "perspective"
+      ],
+      "role": "perspective",
+      "why": "Gurwinder asks how social media changes the experience of time and what makes a day feel worth remembering.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.gurwinder.blog/p/how-social-media-shortens-your-life"
+      },
+      "provisional": false
+    },
+    "archive-66ba14869461": {
+      "collections": [
+        "direction",
+        "money"
+      ],
+      "role": "perspective",
+      "why": "A post-exit reflection on why achieving financial success can leave the question of what to do with your life unanswered.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://vinay.sh/i-am-rich-and-have-no-idea-what-to-do-with-my-life/"
+      },
+      "provisional": false
+    },
+    "archive-e9381e2b97ae": {
+      "collections": [
+        "action",
+        "connection"
+      ],
+      "role": "reference",
+      "why": "Falkovich's practical tips suggest small experiments with habits, relationships and everyday friction.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://putanumonit.com/2019/12/30/100-ways-to-live-better/"
+      },
+      "provisional": false
+    },
+    "archive-6b3a52091fb3": {
+      "collections": [
+        "judgment",
+        "independence"
+      ],
+      "role": "guide",
+      "why": "Graham argues that making beliefs part of your identity can make it harder to change your mind.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://paulgraham.com/identity.html"
+      },
+      "provisional": false
+    },
+    "archive-b6da727f1fe6": {
+      "collections": [
+        "communication",
+        "power"
+      ],
+      "role": "guide",
+      "why": "Orwell connects vague writing with evasive thinking and political manipulation, offering a lens for both writing and reading critically.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.orwellfoundation.com/the-orwell-foundation/orwell/essays-and-other-works/politics-and-the-english-language/"
+      },
+      "provisional": false
+    },
+    "archive-0bf695ef3ff4": {
+      "collections": [
+        "action",
+        "focus"
+      ],
+      "role": "reference",
+      "why": "Barnes gathers small, concrete changes to possessions, routines and surroundings that can make daily life easier.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://ideopunk.com/blog/tipsforabetterlife"
+      },
+      "provisional": false
+    },
+    "archive-b78029ad4b0f": {
+      "collections": [
+        "direction",
+        "independence"
+      ],
+      "role": "perspective",
+      "why": "Thompson's letter asks you to choose a way of living before forcing yourself into a predetermined career goal.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://fs.blog/hunter-s-thompson-to-hume-logan/"
+      },
+      "provisional": false
+    },
+    "archive-05e59659c4c3": {
+      "collections": [
+        "perspective"
+      ],
+      "role": "perspective",
+      "why": "Chesky's essay is saved as a reflection on the experience of time; this placement remains provisional pending access to the text.",
+      "evidence": {
+        "basis": "Limited source information — provisional placement",
+        "url": "https://medium.com/@bchesky/how-to-time-travel-b604096d5ed0"
+      },
+      "provisional": true
+    },
+    "archive-75e21c83d591": {
+      "collections": [
+        "action",
+        "creativity"
+      ],
+      "role": "guide",
+      "why": "Qureshi's personal principles emphasise making things, choosing demanding environments and following the energy of genuine interest.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://nabeelqu.co/principles/"
+      },
+      "provisional": false
+    },
+    "archive-e3637d1d4ca1": {
+      "collections": [
+        "action",
+        "connection"
+      ],
+      "role": "reference",
+      "why": "The LessWrong version of Falkovich's practical tips offers the same habit and relationship experiments as the Putanumonit entry.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.lesswrong.com/posts/HJeD6XbMGEfcrx3mD/100-ways-to-live-better"
+      },
+      "provisional": false
+    },
+    "archive-2ed3b5feffe5": {
+      "collections": [
+        "connection",
+        "independence"
+      ],
+      "role": "perspective",
+      "why": "A prescriptive nightlife routine to examine as one person's approach to social preparation and status, rather than a general relationship model.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://web.archive.org/web/20200204080037/http://www.thegmanifesto.com/2013/02/ten-stepnightlife-preparation-routine.html/"
+      },
+      "provisional": false
+    },
+    "archive-1cc8c5f49212": {
+      "collections": [
+        "business",
+        "career"
+      ],
+      "role": "guide",
+      "why": "Kelly describes building a sustainable creative livelihood around a relatively small audience that deeply values the work.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://kk.org/thetechnium/1000-true-fans/"
+      },
+      "provisional": false
+    },
+    "archive-355185d8f4aa": {
+      "collections": [
+        "calm",
+        "direction"
+      ],
+      "role": "perspective",
+      "why": "Goddard's spiritual essay links self-observation, defining an aim and detachment; its metaphysical claims are presented as a viewpoint.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://coolwisdombooks.com/neville/neville-goddard-fundamentals-1953/"
+      },
+      "provisional": false
+    },
+    "archive-2eef8d9ffd0f": {
+      "collections": [
+        "direction",
+        "connection"
+      ],
+      "role": "perspective",
+      "why": "Altman's life advice foregrounds close relationships and the shortness of life alongside ambition and work.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://blog.samaltman.com/the-days-are-long-but-the-decades-are-short"
+      },
+      "provisional": false
+    },
+    "archive-fe4408394eb0": {
+      "collections": [
+        "money",
+        "career"
+      ],
+      "role": "perspective",
+      "why": "Collins explains how savings gave him room to navigate job loss and make choices without immediate dependence on an employer.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://jlcollinsnh.com/2011/06/06/why-you-need-f-you-money/"
+      },
+      "provisional": false
+    },
+    "archive-9ab41ee99374": {
+      "collections": [
+        "money",
+        "business"
+      ],
+      "role": "guide",
+      "why": "An ambitious wealth-building plan centred on transferable skills and selling; examine its income assumptions before applying its arithmetic.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://web.archive.org/web/20190701191202/http://wallstreetplayboys.com/1-million-10-years-zero-excuses"
+      },
+      "provisional": false
+    },
+    "archive-0567bd8484de": {
+      "collections": [
+        "action",
+        "independence"
+      ],
+      "role": "guide",
+      "why": "Mack explores resourcefulness and finding a way forward when the apparent rules or circumstances seem to say no.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.highagency.com/"
+      },
+      "provisional": false
+    },
+    "archive-34df5905a24d": {
+      "collections": [
+        "connection"
+      ],
+      "role": "case-study",
+      "why": "A Reddit account of help from a stranger offers a small example of generosity and passing kindness forward.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://www.reddit.com/r/AskReddit/comments/elal2/comment/c18z0z2/"
+      },
+      "provisional": false
+    },
+    "archive-182fd59df78b": {
+      "collections": [
+        "career",
+        "judgment"
+      ],
+      "role": "guide",
+      "why": "Pearson considers how unusually valuable opportunities can justify spending more effort on a few promising relationships or experiments.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://taylorpearson.me/luck/"
+      },
+      "provisional": false
+    },
+    "archive-2fe8dda89001": {
+      "collections": [
+        "resilience"
+      ],
+      "role": "case-study",
+      "why": "Kennon uses Munger's early losses as a reflection on continuing through setbacks, rather than a formula guaranteeing later success.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://www.joshuakennon.com/if-charlie-munger-didnt-quit-when-he-was-divorced-broke-and-burying-his-9-year-old-son-you-have-no-excuse/"
+      },
+      "provisional": false
+    },
+    "archive-b1c89095007a": {
+      "collections": [
+        "leadership",
+        "focus",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "Deresiewicz connects independent thought and sustained attention with the ability to lead instead of simply follow prevailing opinion.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://jamesclear.com/great-speeches/solitude-and-leadership-by-william-deresiewicz"
+      },
+      "provisional": false
+    },
+    "archive-649cf30b0cc7": {
+      "collections": [
+        "learning"
+      ],
+      "role": "case-study",
+      "why": "Karlsson compares exceptional people's childhoods to question conventional assumptions about education and intellectual development.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.henrikkarlsson.xyz/p/childhoods"
+      },
+      "provisional": false
+    },
+    "archive-9a2ab2e9a6f9": {
+      "collections": [
+        "craft",
+        "independence"
+      ],
+      "role": "perspective",
+      "why": "Davis discusses his music, self-imposed standards and experiences of racism, offering a view of artistic independence under social pressure.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.erenkrantz.com/Music/MilesDavisInterview.shtml"
+      },
+      "provisional": false
+    },
+    "archive-f4ec946bd645": {
+      "collections": [
+        "leadership",
+        "communication"
+      ],
+      "role": "perspective",
+      "why": "Carter's interview provides a primary example of a political leader explaining personal beliefs and public responsibility.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.playboy.com/read/playboy-interview-jimmy-carter"
+      },
+      "provisional": false
+    },
+    "archive-1736fe18b8ad": {
+      "collections": [
+        "business",
+        "power",
+        "craft"
+      ],
+      "role": "case-study",
+      "why": "A profile of Gagosian offers a way to examine how reputation, relationships and commerce shape the art world.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://removepaywalls.com/https://www.newyorker.com/magazine/2023/07/31/larry-gagosian-profile"
+      },
+      "provisional": false
+    },
+    "archive-02008211d6ff": {
+      "collections": [
+        "learning",
+        "craft"
+      ],
+      "role": "perspective",
+      "why": "Symons studies Quiller-Couch's lectures on reading, connecting close attention to literature with education and the development of taste.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://arthurquillercouch.com/studies/lectures-art-reading-study"
+      },
+      "provisional": false
+    },
+    "archive-db9d31af5272": {
+      "collections": [
+        "communication",
+        "creativity"
+      ],
+      "role": "creative-work",
+      "why": "Thompson's highly subjective narrative is an example to study for voice and perspective, rather than lifestyle advice.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://tayiabr.wordpress.com/2016/06/29/fear-and-loathing-in-las-vegas-a-savage-journey-to-the-heart-of-the-american-dream/"
+      },
+      "provisional": false
+    },
+    "archive-79283b1f5453": {
+      "collections": [
+        "craft",
+        "communication"
+      ],
+      "role": "creative-work",
+      "why": "Wallace's account of Federer pairs close observation of mastery with vivid writing about an experience that is hard to describe.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://web.archive.org/web/20120626071933/https://www.nytimes.com/2006/08/20/sports/playmagazine/20federer.html"
+      },
+      "provisional": false
+    },
+    "archive-6b77d174f5c8": {
+      "collections": [
+        "craft"
+      ],
+      "role": "guide",
+      "why": "Rams's principles provide specific questions about usefulness, clarity, restraint and longevity when assessing a design.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.vitsoe.com/us/about/good-design"
+      },
+      "provisional": false
+    },
+    "archive-0e3663981d8d": {
+      "collections": [
+        "leadership",
+        "creativity"
+      ],
+      "role": "guide",
+      "why": "Catmull explains Pixar's peer feedback and problem-solving culture as conditions for a team to produce creative work.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://stem.elearning.unipd.it/pluginfile.php/197858/mod_folder/content/0/Catmull%20(2008)%20how%20Pixar%20fosters%20collective%20creativity.pdf"
+      },
+      "provisional": false
+    },
+    "archive-92eabb120c57": {
+      "collections": [
+        "creativity",
+        "craft"
+      ],
+      "role": "case-study",
+      "why": "Phan draws lessons from Miyazaki's working process, including observation, dedication and the effort behind imaginative films.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.readtrung.com/p/hayao-miyazaki-9-creative-lessons"
+      },
+      "provisional": false
+    },
+    "archive-59a2852aabfa": {
+      "collections": [
+        "money",
+        "power"
+      ],
+      "role": "cautionary-story",
+      "why": "Marvin Davis's empire and disputed legacy invite scrutiny of the gap between visible wealth, dealmaking power and financial reality.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://web.archive.org/web/20250824004614/https://www.vanityfair.com/news/2005/11/davis200511"
+      },
+      "provisional": false
+    },
+    "archive-343db8625826": {
+      "collections": [
+        "creativity",
+        "craft"
+      ],
+      "role": "case-study",
+      "why": "A history of Daft Punk's evolving music and presentation offers examples of building a distinctive creative identity over time.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://thedaftpunkhistorian.weebly.com/in-depth-history.html"
+      },
+      "provisional": false
+    },
+    "archive-1572b0659a34": {
+      "collections": [
+        "communication",
+        "craft"
+      ],
+      "role": "creative-work",
+      "why": "Talese builds a revealing profile through observation and surrounding voices when a direct interview with Sinatra is unavailable.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.esquire.com/news-politics/a638/frank-sinatra-has-a-cold-gay-talese/"
+      },
+      "provisional": false
+    },
+    "archive-5fcc3692745e": {
+      "collections": [
+        "craft",
+        "creativity"
+      ],
+      "role": "reference",
+      "why": "Musicians' essays about influential artists offer routes into unfamiliar work and examples of what peers value in a creative practice.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.rollingstone.com/music/music-lists/100-greatest-artists-147446/talking-heads-49251/"
+      },
+      "provisional": false
+    },
+    "archive-91a90060e0c7": {
+      "collections": [
+        "learning",
+        "action"
+      ],
+      "role": "case-study",
+      "why": "Sivers describes an intensive learning experience that challenged his assumptions about how slowly a skill must be acquired.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://sive.rs/kimo"
+      },
+      "provisional": false
+    },
+    "archive-38751d35c0fb": {
+      "collections": [
+        "craft",
+        "direction",
+        "creativity"
+      ],
+      "role": "reference",
+      "why": "Jobs's words across different stages of life connect making useful, carefully considered objects with a sense of purpose.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://book.stevejobsarchive.com/"
+      },
+      "provisional": false
+    },
+    "archive-798802b56554": {
+      "collections": [
+        "direction",
+        "leadership"
+      ],
+      "role": "guide",
+      "why": "Cohen offers a framework for thinking about fulfilment in your own work and the conditions you create for other people.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://longform.asmartbear.com/fulfillment/"
+      },
+      "provisional": false
+    },
+    "archive-a35eb7813e0a": {
+      "collections": [
+        "leadership"
+      ],
+      "role": "perspective",
+      "why": "An interview on Thiel's approach to work and leadership; placement is based on the publisher's description, not a full-text review.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.washingtonpost.com/news/on-leadership/wp/2014/10/10/peter-thiel-on-what-works-at-work/"
+      },
+      "provisional": false
+    },
+    "archive-423a329756a4": {
+      "collections": [
+        "business",
+        "judgment"
+      ],
+      "role": "case-study",
+      "why": "The Hummingbird profile examines an investment process built around identifying unusual founders rather than following familiar signals.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.generalist.com/p/hummingbird"
+      },
+      "provisional": false
+    },
+    "archive-51f7d4001150": {
+      "collections": [
+        "business",
+        "direction"
+      ],
+      "role": "case-study",
+      "why": "A portrait of Cucinelli's business and life in Solomeo, saved for examining how a founder's values shape a company.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://removepaywalls.com/https://www.newyorker.com/magazine/2010/03/29/the-prince-of-solomeo"
+      },
+      "provisional": false
+    },
+    "archive-3b35a53e98df": {
+      "collections": [
+        "leadership",
+        "business"
+      ],
+      "role": "case-study",
+      "why": "A historical study of McKinsey's development offers context for how a professional firm builds its structure and identity.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://www.researchgate.net/publication/255660867_Building_the_Professional_Firm_McKinsey_Co_1939-1968"
+      },
+      "provisional": false
+    },
+    "archive-b71da3c455fa": {
+      "collections": [
+        "career",
+        "communication",
+        "money"
+      ],
+      "role": "guide",
+      "why": "McKenzie gives concrete preparation and negotiation approaches for discussing compensation and making your value legible.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.kalzumeus.com/2012/01/23/salary-negotiation/"
+      },
+      "provisional": false
+    },
+    "archive-4366b4cb7ff1": {
+      "collections": [
+        "change",
+        "business"
+      ],
+      "role": "perspective",
+      "why": "Andreessen's historical thesis about software-led industry change is useful for studying a strategic prediction and its assumptions.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://a16z.com/why-software-is-eating-the-world/"
+      },
+      "provisional": false
+    },
+    "archive-0d0aba78b454": {
+      "collections": [
+        "direction",
+        "learning",
+        "craft"
+      ],
+      "role": "guide",
+      "why": "Graham connects choosing a field, following curiosity and developing expertise with the possibility of doing substantial work.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.paulgraham.com/greatwork.html"
+      },
+      "provisional": false
+    },
+    "archive-183569df266e": {
+      "collections": [
+        "career",
+        "action"
+      ],
+      "role": "guide",
+      "why": "Altman's advice focuses on compounding skills, independent conviction and sustained effort in ambitious careers.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://blog.samaltman.com/how-to-be-successful"
+      },
+      "provisional": false
+    },
+    "archive-f7b93a732fdc": {
+      "collections": [
+        "judgment",
+        "leadership"
+      ],
+      "role": "guide",
+      "why": "37signals offers questions about reversibility, timing, ownership and scope that can make a decision easier to handle.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://37signals.com/how-we-make-decisions/"
+      },
+      "provisional": false
+    },
+    "archive-d5479cc27874": {
+      "collections": [
+        "leadership",
+        "focus"
+      ],
+      "role": "guide",
+      "why": "Rabois's operating advice connects executive attention, useful inputs and clear responsibility with a team's ability to deliver.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://delian.io/lessons-3"
+      },
+      "provisional": false
+    },
+    "archive-b006f3046596": {
+      "collections": [
+        "business",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "Housel asks which customer needs will remain stable, offering a counterweight to strategies driven only by predictions of change.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://collabfund.com/blog/betting-on-things-that-never-change/"
+      },
+      "provisional": false
+    },
+    "archive-915db78f812b": {
+      "collections": [
+        "action",
+        "leadership"
+      ],
+      "role": "reference",
+      "why": "Collison collects rapid, ambitious projects to challenge assumptions about how long coordinated work has to take.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://patrickcollison.com/fast"
+      },
+      "provisional": false
+    },
+    "archive-a237fe9afe71": {
+      "collections": [
+        "money",
+        "business"
+      ],
+      "role": "perspective",
+      "why": "Barnum's historical advice combines thrift, focus, useful skills and customer service; read it in the context of its era.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.gutenberg.org/files/8581/8581-h/8581-h.htm"
+      },
+      "provisional": false
+    },
+    "archive-af9f9235556b": {
+      "collections": [
+        "resilience",
+        "action"
+      ],
+      "role": "perspective",
+      "why": "Horowitz reflects on moving from understandable frustration toward the next available action during a business crisis.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://a16z.com/nobody-cares/"
+      },
+      "provisional": false
+    },
+    "archive-336319fbe7cf": {
+      "collections": [
+        "leadership",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "Rao questions the reassuring idea that CEOs directly steer everything, and examines the appeal of sweeping management narratives.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://ribbonfarm.com/2017/11/09/ceos-dont-steer/"
+      },
+      "provisional": false
+    },
+    "archive-cd1346a980bd": {
+      "collections": [
+        "power",
+        "leadership"
+      ],
+      "role": "cautionary-story",
+      "why": "Reporting on McKinsey's government work invites examination of conflicts, institutional accountability and whose interests a firm serves.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.propublica.org:443/article/how-mckinsey-makes-its-own-rules"
+      },
+      "provisional": false
+    },
+    "archive-3b595ef20d9f": {
+      "collections": [
+        "leadership",
+        "communication"
+      ],
+      "role": "case-study",
+      "why": "MacCaw describes Stripe's everyday information-sharing practices as a concrete example of how culture is produced by routines.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://blog.alexmaccaw.com/what-its-like-to-work-for-stripe/"
+      },
+      "provisional": false
+    },
+    "archive-0d58fd8d9f9a": {
+      "collections": [
+        "leadership",
+        "action"
+      ],
+      "role": "guide",
+      "why": "Johnson's project rules focus attention on authority, small teams, communication and the practical conditions needed to deliver.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.hotpmo.com/management-models/kellys-14-project-management-rules-everything-you-need-to-know/"
+      },
+      "provisional": false
+    },
+    "archive-001160cfb5f4": {
+      "collections": [
+        "action",
+        "independence"
+      ],
+      "role": "perspective",
+      "why": "Francis challenges embarrassment about visible effort and the idea that serious commitment should look effortless.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://aaronfrancis.com/2024/what-if-you-tried-hard-dac139a5"
+      },
+      "provisional": false
+    },
+    "archive-0a75e50f5f83": {
+      "collections": [
+        "focus",
+        "leadership"
+      ],
+      "role": "case-study",
+      "why": "A study of executive time allocation offers a basis for comparing stated priorities with how attention is actually spent.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://archive.ph/20250503215411/https://hbr.org/2018/07/how-ceos-manage-time"
+      },
+      "provisional": false
+    },
+    "archive-e5a7b0d0c4bd": {
+      "collections": [
+        "business",
+        "judgment"
+      ],
+      "role": "guide",
+      "why": "Sequoia distinguishes types of product-market fit by the customer's relationship to the problem, helping frame what needs testing.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://sequoiacap.com/article/pmf-framework"
+      },
+      "provisional": false
+    },
+    "archive-35aa572c6415": {
+      "collections": [
+        "creativity",
+        "action"
+      ],
+      "role": "guide",
+      "why": "Altucher proposes regular idea generation as a practice for producing options when waiting for inspiration is not working.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://archive.jamesaltucher.com/blog/the-ultimate-guide-for-becoming-an-idea-machine/"
+      },
+      "provisional": false
+    },
+    "archive-6cb80ac74208": {
+      "collections": [
+        "business",
+        "communication"
+      ],
+      "role": "guide",
+      "why": "Butterfield's memo reframes Slack around the change customers want, rather than the software features the company sells.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://buildingslack.com/you-asked/"
+      },
+      "provisional": false
+    },
+    "archive-23efaee4c81e": {
+      "collections": [
+        "power",
+        "career"
+      ],
+      "role": "perspective",
+      "why": "Rao uses The Office to build a deliberately cynical model of workplace politics; useful as a lens to question, not a universal law.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://ribbonfarm.com/2009/10/07/the-gervais-principle-or-the-office-according-to-the-office/"
+      },
+      "provisional": false
+    },
+    "archive-882a3a1cadf9": {
+      "collections": [
+        "power",
+        "business"
+      ],
+      "role": "cautionary-story",
+      "why": "An investigation of Willms's internet businesses offers a case for examining deceptive selling and incentives that reward it.",
+      "evidence": {
+        "basis": "Source listing and available description",
+        "url": "https://www.theatlantic.com/magazine/archive/2014/01/the-dark-lord-of-the-internet/355726/"
+      },
+      "provisional": false
+    },
+    "archive-7482edf94910": {
+      "collections": [
+        "focus",
+        "direction"
+      ],
+      "role": "guide",
+      "why": "Altman puts choosing worthwhile work before optimising speed, then considers the habits and environment that support sustained output.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://blog.samaltman.com/productivity"
+      },
+      "provisional": false
+    },
+    "archive-008591ecaccc": {
+      "collections": [
+        "business",
+        "learning",
+        "communication"
+      ],
+      "role": "guide",
+      "why": "Armstrong's onboarding email turns product management into concrete habits: speak with users, measure behaviour and communicate priorities.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://sriramk.com/memos/brian_armstrong_new_PM_letter.pdf"
+      },
+      "provisional": false
+    },
+    "archive-be3c4fca20c0": {
+      "collections": [
+        "career",
+        "direction"
+      ],
+      "role": "perspective",
+      "why": "Marlinspike asks how work reshapes the person doing it, challenging the assumption that career advancement is the only goal.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://moxie.org/2013/01/07/career-advice.html"
+      },
+      "provisional": false
+    },
+    "archive-0e0260e9ae57": {
+      "collections": [
+        "leadership"
+      ],
+      "role": "guide",
+      "why": "A summary of Andreessen's hiring advice directs attention toward drive and relevant performance rather than impressive credentials alone.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.driverlesscrocodile.com/teams/resource-marc-andreessen-on-talent-and-hiring/"
+      },
+      "provisional": false
+    },
+    "archive-716552b6f1e7": {
+      "collections": [
+        "money",
+        "business"
+      ],
+      "role": "reference",
+      "why": "A directory of investor letters, operator talks and research tools for studying how different people evaluate businesses.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://mylesmarino.com/posts/tools"
+      },
+      "provisional": false
+    },
+    "archive-ffa5420aae98": {
+      "collections": [
+        "power",
+        "change"
+      ],
+      "role": "perspective",
+      "why": "Thiel's political essay exposes the assumptions behind his view of freedom and technological escape, inviting critical comparison.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.cato-unbound.org/2009/04/13/peter-thiel/education-libertarian/"
+      },
+      "provisional": false
+    },
+    "archive-4625ca75c7df": {
+      "collections": [
+        "perspective",
+        "adventure"
+      ],
+      "role": "creative-work",
+      "why": "Quammen uses rivers and natural history to reflect on change and the impossibility of holding an experience still.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://web.archive.org/web/20230530200109/https://davidquammen.com/samerivertwice/"
+      },
+      "provisional": false
+    },
+    "archive-42f794393621": {
+      "collections": [
+        "leadership",
+        "communication"
+      ],
+      "role": "reference",
+      "why": "Greenberg's short internal memos show how repeated, concrete messages can communicate operating priorities and expectations.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.danielscrivner.com/memos-from-the-chairman-the-famous-memos-of-bear-stearns-chairman-alan-c-greenberg/"
+      },
+      "provisional": false
+    },
+    "archive-7b9d2f8ab07e": {
+      "collections": [
+        "business",
+        "judgment"
+      ],
+      "role": "reference",
+      "why": "Bessemer's investment memos provide examples of reasoning recorded before outcomes were known, useful for studying a thesis on its own terms.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.bvp.com/atlas?type=memo"
+      },
+      "provisional": false
+    },
+    "archive-6feae1fc374e": {
+      "collections": [
+        "change",
+        "communication",
+        "business"
+      ],
+      "role": "case-study",
+      "why": "Jobs's Flash memo shows how a company publicly argues for a platform decision and frames competing technical and commercial interests.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://sriramk.com/memos/jobs-thoughts-on-flash.pdf"
+      },
+      "provisional": false
+    },
+    "archive-058a6d41c9e6": {
+      "collections": [
+        "change",
+        "leadership"
+      ],
+      "role": "case-study",
+      "why": "Ozzie's internal memo examines how an established software company might respond to the move toward internet-delivered services.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://sriramk.com/memos/ray_ozzie_services.pdf"
+      },
+      "provisional": false
+    },
+    "archive-c357030a291b": {
+      "collections": [
+        "change",
+        "leadership"
+      ],
+      "role": "case-study",
+      "why": "Gates's Internet Tidal Wave memo is a historical example of reframing a major technology shift as an organisation-wide priority.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://sriramk.com/memos/billgates-tidalwave.pdf"
+      },
+      "provisional": false
+    },
+    "archive-70a75c21981c": {
+      "collections": [
+        "power",
+        "leadership"
+      ],
+      "role": "cautionary-story",
+      "why": "The reported Facebook memo makes growth-at-any-cost reasoning explicit, inviting scrutiny of what organisational metrics leave out.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.buzzfeednews.com/article/ryanmac/growth-at-any-cost-top-facebook-executive-defended-data#.xt4mkokxx"
+      },
+      "provisional": false
+    },
+    "archive-70b695fea597": {
+      "collections": [
+        "leadership",
+        "business"
+      ],
+      "role": "guide",
+      "why": "Harrison's railway operating manual offers a concrete industry example of translating a management philosophy into daily operations.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.alexanderjarvis.com/how-we-work-and-why/"
+      },
+      "provisional": false
+    },
+    "archive-5f9387f3a01e": {
+      "collections": [
+        "business",
+        "craft"
+      ],
+      "role": "cautionary-story",
+      "why": "Schultz's memo asks whether efficiency and expansion have weakened the distinctive experience customers came for.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.tutor2u.net/business/blog/starbucks-the-famous-strategic-change-memo-from-2007"
+      },
+      "provisional": false
+    },
+    "archive-7095f630b1af": {
+      "collections": [
+        "power",
+        "communication"
+      ],
+      "role": "cautionary-story",
+      "why": "Ratliff's investigation of Paul Le Roux traces how technical ability and hidden organisational power can enable exploitation and violence.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://magazine.atavist.com/2016/the-mastermind"
+      },
+      "provisional": false
+    },
+    "archive-26eaea79ba80": {
+      "collections": [
+        "learning",
+        "perspective"
+      ],
+      "role": "reference",
+      "why": "Reading paths across literature and philosophy offer starting points when you want to explore a subject but do not know where to begin.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.readingtheroom.net/"
+      },
+      "provisional": false
+    },
+    "archive-23f6ec1f2a5c": {
+      "collections": [
+        "resilience",
+        "direction",
+        "learning"
+      ],
+      "role": "perspective",
+      "why": "Gardner examines lifelong renewal: remaining curious, avoiding self-imposed limits and finding meaning beyond a fixed identity.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://gsb-courses.stanford.edu/building-innovative-brands/wp-content/uploads/sites/25/2022/04/johngardner-roadtoself-renewal2.pdf"
+      },
+      "provisional": false
+    },
+    "archive-5a540d4e7f85": {
+      "collections": [
+        "creativity",
+        "direction"
+      ],
+      "role": "creative-work",
+      "why": "An image-led artbook intended to provoke reflection on ambition and state of mind; classification draws on its public introduction.",
+      "evidence": {
+        "basis": "Public introduction; paid contents not reviewed",
+        "url": "https://theunintuitive.com/p/state-of-mind-artbook"
+      },
+      "provisional": false
+    },
+    "archive-cea980577495": {
+      "collections": [
+        "leadership",
+        "action"
+      ],
+      "role": "reference",
+      "why": "Valve's handbook describes selecting work and taking responsibility in an organisation that presents itself as unusually self-directed.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.valvesoftware.com/en/publications"
+      },
+      "provisional": false
+    },
+    "archive-b1a23b3cb335": {
+      "collections": [
+        "perspective",
+        "change"
+      ],
+      "role": "creative-work",
+      "why": "Asimov's speculative story stretches questions about computation, entropy and human purpose across an immense timescale.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://users.ece.cmu.edu/~gamvrosi/thelastq.html"
+      },
+      "provisional": false
+    },
+    "archive-0bc54f254874": {
+      "collections": [
+        "leadership",
+        "change"
+      ],
+      "role": "reference",
+      "why": "Facebook's internal culture book is a historical artefact for examining the beliefs a fast-growing technology company communicated to employees.",
+      "evidence": {
+        "basis": "Limited source information — provisional placement",
+        "url": "https://drive.google.com/file/d/1TZYqdFOXkZZPpMJx_16YBFkw-jaPbxiS/view"
+      },
+      "provisional": true
+    },
+    "archive-26550db542d1": {
+      "collections": [
+        "leadership"
+      ],
+      "role": "reference",
+      "why": "Netflix's culture slides make explicit the trade-offs it proposes between performance, freedom, responsibility and managerial control.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://igormroz.com/documents/netflix_culture.pdf"
+      },
+      "provisional": false
+    },
+    "archive-83d2520f2fe8": {
+      "collections": [
+        "creativity",
+        "leadership"
+      ],
+      "role": "case-study",
+      "why": "An account of Half-Life's development is saved for studying how a creative team turns an ambitious game into a finished release.",
+      "evidence": {
+        "basis": "Limited source information — provisional placement",
+        "url": "https://www.docdroid.net/nuj22KX/the-final-hours-of-half-life-pdf"
+      },
+      "provisional": true
+    },
+    "archive-b95555386aef": {
+      "collections": [
+        "communication",
+        "leadership"
+      ],
+      "role": "reference",
+      "why": "A circulated production handbook offers a view of how an online-video team describes its goals; provenance and full contents need further checking.",
+      "evidence": {
+        "basis": "Limited source information — provisional placement",
+        "url": "https://www.reddit.com/r/mrbeastsnark/comments/1es0jy6/mrbeast_productions_employee_handbook_as_uploaded/"
+      },
+      "provisional": true
+    },
+    "archive-907593ab887c": {
+      "collections": [
+        "leadership",
+        "connection"
+      ],
+      "role": "reference",
+      "why": "HubSpot's culture presentation describes the values and working conditions it believes make a company worth belonging to.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://www.slideshare.net/slideshow/the-hubspot-culture-code-creating-a-company-we-love/17415022#4"
+      },
+      "provisional": false
+    },
+    "archive-bf31fb6f924b": {
+      "collections": [
+        "creativity",
+        "change"
+      ],
+      "role": "reference",
+      "why": "A prompt collection aimed at using AI to think differently; placement is based on the public introduction to the paid material.",
+      "evidence": {
+        "basis": "Public introduction; paid contents not reviewed",
+        "url": "https://theunintuitive.com/p/the-only-prompt-library-built-for-people-who-are-tired-of-prompt"
+      },
+      "provisional": false
+    },
+    "archive-55a66f2f6d78": {
+      "collections": [
+        "judgment",
+        "leadership"
+      ],
+      "role": "reference",
+      "why": "Dalio's principles document presents explicit rules for decisions and working relationships, to compare with your own context.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://archive.org/details/BridgewaterRayDalioPrinciples/mode/2up"
+      },
+      "provisional": false
+    },
+    "archive-68713bfe30b6": {
+      "collections": [
+        "calm",
+        "judgment"
+      ],
+      "role": "reference",
+      "why": "A collection of Ray Peat's writing about health to examine critically; this archive has not assessed its claims as treatment guidance.",
+      "evidence": {
+        "basis": "Limited source information — provisional placement",
+        "url": "https://github.com/ibuybooks/peat-collected-works"
+      },
+      "provisional": true
+    },
+    "archive-31b5808299e4": {
+      "collections": [
+        "direction",
+        "action"
+      ],
+      "role": "guide",
+      "why": "A reflection workbook intended to test habitual assumptions; classification is based on the public introduction, not the paid exercises.",
+      "evidence": {
+        "basis": "Public introduction; paid contents not reviewed",
+        "url": "https://theunintuitive.com/p/the-mindset-rewiring-workbook"
+      },
+      "provisional": false
+    },
+    "archive-62832b53c2df": {
+      "collections": [
+        "action"
+      ],
+      "role": "perspective",
+      "why": "Rossmann's talk challenges promises to begin tomorrow, making it a prompt for examining delay and following through.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=-LF3Cy5hZbc"
+      },
+      "provisional": false
+    },
+    "archive-8b5deae3950e": {
+      "collections": [
+        "independence",
+        "adventure"
+      ],
+      "role": "case-study",
+      "why": "Massie's farm provides a concrete example of pursuing self-sufficiency and shaping daily life around an unconventional set of priorities.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=SA_4QXiDwzY"
+      },
+      "provisional": false
+    },
+    "archive-7eb489cfc1bf": {
+      "collections": [
+        "leadership",
+        "resilience",
+        "connection"
+      ],
+      "role": "perspective",
+      "why": "Joss's lessons connect responsibility, courage, relationships and personal renewal with a life beyond professional achievement.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=62rgESCyB2g"
+      },
+      "provisional": false
+    },
+    "archive-3b6715a87c86": {
+      "collections": [
+        "focus",
+        "connection",
+        "perspective"
+      ],
+      "role": "perspective",
+      "why": "Wallace asks how deliberately directing attention can change the way you experience routine frustrations and other people.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=DCbGM4mqEVw"
+      },
+      "provisional": false
+    },
+    "archive-3122c0d76f75": {
+      "collections": [
+        "craft",
+        "connection"
+      ],
+      "role": "case-study",
+      "why": "A day at Imaya's food stand shows care expressed through preparation, affordability and a long relationship with customers.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=VHkwt6yxVWk"
+      },
+      "provisional": false
+    },
+    "archive-6dda14d905d7": {
+      "collections": [
+        "resilience",
+        "perspective"
+      ],
+      "role": "perspective",
+      "why": "A short reflection on valuing a difficult life; the sparse source description makes this a provisional thematic placement.",
+      "evidence": {
+        "basis": "Limited source information — provisional placement",
+        "url": "https://www.youtube.com/watch?v=GS7CxAtV5Ks"
+      },
+      "provisional": true
+    },
+    "archive-a1a315feb3b1": {
+      "collections": [
+        "learning",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "Gladwell challenges individual-only accounts of success by drawing attention to opportunity, background and practice.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=EcMKLwVlpJk"
+      },
+      "provisional": false
+    },
+    "archive-ea6fe34981cf": {
+      "collections": [
+        "calm",
+        "perspective"
+      ],
+      "role": "perspective",
+      "why": "A brief Harris clip saved for reflection on how to experience life; its broad title leaves the precise lesson provisional.",
+      "evidence": {
+        "basis": "Limited source information — provisional placement",
+        "url": "https://www.youtube.com/watch?v=891MOyYBadY"
+      },
+      "provisional": true
+    },
+    "archive-37629948dbce": {
+      "collections": [
+        "money",
+        "independence"
+      ],
+      "role": "perspective",
+      "why": "Kreil discusses relating to money without letting it dominate identity; a viewpoint on priorities rather than a trading plan.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=VTbiFqqlN_g"
+      },
+      "provisional": false
+    },
+    "archive-b8e4e019cdec": {
+      "collections": [
+        "resilience"
+      ],
+      "role": "perspective",
+      "why": "A personal message encouraging young people to keep going, useful as encouragement rather than a detailed method for a particular setback.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=9fvETktnaRw"
+      },
+      "provisional": false
+    },
+    "archive-633b03d274b7": {
+      "collections": [
+        "leadership",
+        "power"
+      ],
+      "role": "case-study",
+      "why": "Lee's political speech illustrates forceful leadership rhetoric and invites reflection on the relationship between resolve and authority.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=kGDqLeRuyCA"
+      },
+      "provisional": false
+    },
+    "archive-aff891df977c": {
+      "collections": [
+        "action",
+        "resilience"
+      ],
+      "role": "perspective",
+      "why": "Rohn stresses personal change and repeated effort as responses to circumstances you would like to improve.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=u_TFcUoPO8E"
+      },
+      "provisional": false
+    },
+    "archive-80bffa96d1bd": {
+      "collections": [
+        "craft",
+        "resilience"
+      ],
+      "role": "perspective",
+      "why": "A Seinfeld excerpt from Comedian offers a working performer's perspective on the uncertainty involved in a creative career.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=wmpGnyV1tFE"
+      },
+      "provisional": false
+    },
+    "archive-cbc35cbf47e5": {
+      "collections": [
+        "independence",
+        "creativity"
+      ],
+      "role": "perspective",
+      "why": "Bowie advises artists to protect their own reasons for making work instead of shaping everything around audience approval.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=cNbnef_eXBM"
+      },
+      "provisional": false
+    },
+    "archive-5df74c3dc852": {
+      "collections": [
+        "creativity",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "Ferguson's account of remixing explores how existing work becomes raw material for new ideas and complicates simple notions of originality.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=nJPERZDfyWc"
+      },
+      "provisional": false
+    },
+    "archive-73ea759deada": {
+      "collections": [
+        "creativity",
+        "calm"
+      ],
+      "role": "perspective",
+      "why": "Lynch describes the relationship he sees between meditation and creative work, offering an artist's account of his practice.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=BH4qD5Fzyjk"
+      },
+      "provisional": false
+    },
+    "archive-9a49989e5179": {
+      "collections": [
+        "creativity",
+        "craft"
+      ],
+      "role": "case-study",
+      "why": "Studio footage from The Black Album gives a concrete example of musical ideas being developed with collaborators.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=YlCZX9mdIW0"
+      },
+      "provisional": false
+    },
+    "archive-070944241c4c": {
+      "collections": [
+        "craft",
+        "creativity"
+      ],
+      "role": "case-study",
+      "why": "Access to Ford's studio and return to womenswear offers a look at how aesthetic decisions become a finished creative body of work.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=l8aF7pSRFVA"
+      },
+      "provisional": false
+    },
+    "archive-860eda3bfc8d": {
+      "collections": [
+        "communication"
+      ],
+      "role": "guide",
+      "why": "Adams offers a non-fiction writing tutorial applicable to explaining ideas in articles, humour and business writing.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=lDwm-UPILuw"
+      },
+      "provisional": false
+    },
+    "archive-65293bf5074a": {
+      "collections": [
+        "resilience",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "A short piece framing failure as a privilege prompts reflection on the conditions that make taking a chance possible.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=nKhQLb7HxDw"
+      },
+      "provisional": false
+    },
+    "archive-d978c7e1938d": {
+      "collections": [
+        "learning",
+        "career",
+        "direction"
+      ],
+      "role": "guide",
+      "why": "Hamming asks how to choose important problems and develop working habits that make a research or engineering career count.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=a1zDuOPkMSw"
+      },
+      "provisional": false
+    },
+    "archive-d7c1842a66ae": {
+      "collections": [
+        "craft",
+        "creativity"
+      ],
+      "role": "perspective",
+      "why": "Colani discusses his design career and organic forms, offering a contrasting aesthetic perspective to minimalist design traditions.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://vernissage.tv/2013/04/10/vernissagetv-classics-r3-interview-with-luigi-colani-2007/"
+      },
+      "provisional": false
+    },
+    "archive-386e2563d338": {
+      "collections": [
+        "business",
+        "career"
+      ],
+      "role": "case-study",
+      "why": "Bezos recounts leaving an established career to start Amazon, providing a founder's perspective on commitment under uncertainty.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=p7FgXSoqfnI"
+      },
+      "provisional": false
+    },
+    "archive-27ff2cac4f03": {
+      "collections": [
+        "learning",
+        "money"
+      ],
+      "role": "case-study",
+      "why": "Simons's interview connects mathematical research, quantitative investing and philanthropy through one unusual career.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=QNznD9hMEh0"
+      },
+      "provisional": false
+    },
+    "archive-52637c118209": {
+      "collections": [
+        "communication",
+        "business"
+      ],
+      "role": "perspective",
+      "why": "Ogilvy's advertising interview offers a practitioner's account of creating messages that connect commercial goals with an audience.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=0kfsnjcUNiw"
+      },
+      "provisional": false
+    },
+    "archive-0743466e3c79": {
+      "collections": [
+        "career",
+        "independence"
+      ],
+      "role": "perspective",
+      "why": "Naval explores what it means to work for yourself and align effort with your own judgment and incentives.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=ySeMzzvPVxk"
+      },
+      "provisional": false
+    },
+    "archive-0ac2b501f974": {
+      "collections": [
+        "money",
+        "power"
+      ],
+      "role": "perspective",
+      "why": "Johnson investigates wealth concentration and its justifications from inside a wealthy family, broadening a purely individual view of money.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=HmlX3fLQrEc"
+      },
+      "provisional": false
+    },
+    "archive-dca48c6d9d5e": {
+      "collections": [
+        "judgment",
+        "communication"
+      ],
+      "role": "guide",
+      "why": "Altman describes note-taking and writing as ways of making thoughts clearer before acting on them.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=tDmjz6HB-yw"
+      },
+      "provisional": false
+    },
+    "archive-f4244d751a77": {
+      "collections": [
+        "communication",
+        "independence"
+      ],
+      "role": "case-study",
+      "why": "Thompson's interview connects writing, politics and a deliberately unconventional public identity.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=7Xsl-pJqycs"
+      },
+      "provisional": false
+    },
+    "archive-643546a06b80": {
+      "collections": [
+        "business",
+        "craft",
+        "change"
+      ],
+      "role": "perspective",
+      "why": "Jobs reflects on Apple's beginnings and the intersection of art and computing, connecting product judgment with a changing industry.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=9m68auPIPRk"
+      },
+      "provisional": false
+    },
+    "archive-500609e83ae7": {
+      "collections": [
+        "craft",
+        "change"
+      ],
+      "role": "perspective",
+      "why": "Jobs addresses designers about shaping the emerging personal computer, asking what it would take to make new technology both useful and beautiful.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=t9HmOz8H0qI"
+      },
+      "provisional": false
+    },
+    "archive-bacf6e60b5fc": {
+      "collections": [
+        "independence",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "McAfee's provocative interview is a study in personal narrative and unconventional claims, rather than a model of sound judgment.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=37G0JmU6NwM"
+      },
+      "provisional": false
+    },
+    "archive-756effc9b792": {
+      "collections": [
+        "learning",
+        "resilience"
+      ],
+      "role": "perspective",
+      "why": "Jordan reflects on competitive experience; a source for considering standards and persistence in a demanding practice.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=EUo0ncJX19A"
+      },
+      "provisional": false
+    },
+    "archive-1cde0fd23030": {
+      "collections": [
+        "connection",
+        "direction"
+      ],
+      "role": "perspective",
+      "why": "Chesky discusses loneliness, belonging and success, questioning whether professional achievement supplies the connection people need.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=g5GaBnavBrY"
+      },
+      "provisional": false
+    },
+    "archive-ba56a6f4d28f": {
+      "collections": [
+        "creativity",
+        "craft"
+      ],
+      "role": "perspective",
+      "why": "Zimmer discusses film scores and live performance, offering insight into the choices behind a recognisable musical voice.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=FUHM3J-z0Vw"
+      },
+      "provisional": false
+    },
+    "archive-e26c73186259": {
+      "collections": [
+        "calm",
+        "learning"
+      ],
+      "role": "perspective",
+      "why": "Gupta and Naval question whether copying prescriptions can reproduce expertise, and explore sincerity in the pursuit of understanding.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=sBtuqpNZwio"
+      },
+      "provisional": false
+    },
+    "archive-c57e33955afd": {
+      "collections": [
+        "perspective",
+        "learning"
+      ],
+      "role": "perspective",
+      "why": "Feynman turns everyday physical phenomena into questions, modelling curiosity and explanation without requiring a formal course.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=P1ww1IXRfTA"
+      },
+      "provisional": false
+    },
+    "archive-7025101c927b": {
+      "collections": [
+        "creativity",
+        "craft"
+      ],
+      "role": "perspective",
+      "why": "Eno discusses production methods and Oblique Strategies, offering ways to unsettle routine creative choices.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://productionadvice.co.uk/brian-eno-interview/"
+      },
+      "provisional": false
+    },
+    "archive-aef4e24caec3": {
+      "collections": [
+        "business",
+        "change"
+      ],
+      "role": "cautionary-story",
+      "why": "Pan Am's rise and collapse offers a case for asking how an admired business can lose its position as conditions change.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?si=rsoEVggdZ2mXK-FM&v=ZucyCLraEIE&feature=youtu.be"
+      },
+      "provisional": false
+    },
+    "archive-a2352cd5b99a": {
+      "collections": [
+        "business",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "Thiel argues for differentiation and durable advantage rather than reflexively entering competition; a thesis to test against a real market.",
+      "evidence": {
+        "basis": "Linked article PDF",
+        "url": "https://www.csun.edu/~vcact00f/497CapStone/Peter%20Thiel_%20Competition%20Is%20for%20Losers%20-%20WSJ.pdf"
+      },
+      "provisional": false
+    },
+    "archive-0f5098ffb5ee": {
+      "collections": [
+        "judgment",
+        "independence"
+      ],
+      "role": "perspective",
+      "why": "A Thiel clip saved for exploring independent thinking; the limited source description makes the specific application provisional.",
+      "evidence": {
+        "basis": "Limited source information — provisional placement",
+        "url": "https://www.youtube.com/watch?v=YC2qBGU7DCE"
+      },
+      "provisional": true
+    },
+    "archive-e47561bc25f2": {
+      "collections": [
+        "communication",
+        "business",
+        "judgment"
+      ],
+      "role": "perspective",
+      "why": "Sutherland uses advertising to explore perceived value and the difference between changing a product and changing how people see it.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=audakxABYUc"
+      },
+      "provisional": false
+    },
+    "archive-ee2cbd1d6bcb": {
+      "collections": [
+        "direction",
+        "resilience"
+      ],
+      "role": "perspective",
+      "why": "Jobs's commencement speech uses personal setbacks and mortality to reflect on choosing work and a life that feel meaningful.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=UF8uR6Z6KLc"
+      },
+      "provisional": false
+    },
+    "archive-cdb8cc99ea84": {
+      "collections": [
+        "leadership",
+        "creativity"
+      ],
+      "role": "case-study",
+      "why": "Interviews with the original Macintosh team provide a historical look at the identity and working atmosphere behind a new product.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=l3agg64LM88"
+      },
+      "provisional": false
+    },
+    "archive-7fc97b275b99": {
+      "collections": [
+        "business",
+        "leadership"
+      ],
+      "role": "reference",
+      "why": "YC's lecture series provides a structured entry point into startup problems, from ideas and customers to building a team.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/playlist?list=PL5q_lef6zVkaTY_cT1k7qFNF2TidHCe-1"
+      },
+      "provisional": false
+    },
+    "archive-163bb29cbc15": {
+      "collections": [
+        "communication",
+        "craft"
+      ],
+      "role": "case-study",
+      "why": "The original iPhone presentation is a concrete example of demonstrating a product and building an audience's understanding of its value.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=VQKMoT-6XSg"
+      },
+      "provisional": false
+    },
+    "archive-7a13b5e83934": {
+      "collections": [
+        "money",
+        "career"
+      ],
+      "role": "perspective",
+      "why": "Dennis discusses the pursuit of wealth from his own experience, inviting reflection on what financial ambition demands.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=uC3Pq3bzPNM"
+      },
+      "provisional": false
+    },
+    "archive-930d8fcc5e97": {
+      "collections": [
+        "business",
+        "leadership"
+      ],
+      "role": "perspective",
+      "why": "Altman's founder-selection criteria offer an investor's lens on the people and capabilities behind ambitious companies.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=szKyUrOh4fs"
+      },
+      "provisional": false
+    },
+    "archive-ec093bd05761": {
+      "collections": [
+        "action",
+        "career"
+      ],
+      "role": "perspective",
+      "why": "St. John's short synthesis of success interviews offers prompts about effort and direction to compare with your own experience.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=Y6bbMQXQ180"
+      },
+      "provisional": false
+    },
+    "archive-5d406a210122": {
+      "collections": [
+        "judgment",
+        "power"
+      ],
+      "role": "guide",
+      "why": "Munger examines recurring sources of misjudgment, including incentives and persuasion, to make flawed decisions easier to recognise.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=pqzcCfUglws"
+      },
+      "provisional": false
+    },
+    "archive-919b447e84e8": {
+      "collections": [
+        "business",
+        "leadership",
+        "connection"
+      ],
+      "role": "cautionary-story",
+      "why": "The rise and fall of govWorks puts startup pressure and a founders' friendship in the same frame.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.imdb.com/title/tt0256408/"
+      },
+      "provisional": false
+    },
+    "archive-684a428f3acc": {
+      "collections": [
+        "money",
+        "power",
+        "business"
+      ],
+      "role": "case-study",
+      "why": "A portrait of Icahn offers a way to examine activist investing, corporate control and the competing accounts of who benefits.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://press.wbd.com/na/property/icahn-restless-billionaire/videos"
+      },
+      "provisional": false
+    },
+    "archive-23b0277dc774": {
+      "collections": [
+        "leadership",
+        "money"
+      ],
+      "role": "case-study",
+      "why": "Agnelli's life connects industrial leadership, inherited position and personal costs, complicating a purely glamorous picture of success.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/agnelli/umc.cmc.1i0426pswm2kg4wfxnpnw6odl"
+      },
+      "provisional": false
+    },
+    "archive-6dda956c039e": {
+      "collections": [
+        "power",
+        "judgment",
+        "money"
+      ],
+      "role": "cautionary-story",
+      "why": "An investigation of the financial crisis examines incentives and conflicts across finance, government and expert institutions.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.sonyclassics.com/insidejob/_pdf/insidejob_presskit.pdf"
+      },
+      "provisional": false
+    },
+    "archive-00110da5a437": {
+      "collections": [
+        "business",
+        "change"
+      ],
+      "role": "case-study",
+      "why": "The race to build 3D-printing companies offers a view of commercial competition around a promising new technology.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.netflix.com/in/title/80005444"
+      },
+      "provisional": false
+    },
+    "archive-b019c33a8db0": {
+      "collections": [
+        "change",
+        "business",
+        "resilience"
+      ],
+      "role": "case-study",
+      "why": "General Magic's early mobile-computing ambitions invite questions about timing, execution and what remains after a company fails.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/general-magic/umc.cmc.68nmgwt1ckm4kj9yo0qlxhh3b"
+      },
+      "provisional": false
+    },
+    "archive-cc0b9e0c0361": {
+      "collections": [
+        "change",
+        "business"
+      ],
+      "role": "case-study",
+      "why": "A history of personal computing shows how technical invention, commercial choices and industry power developed together.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.pbs.org/nerds/"
+      },
+      "provisional": false
+    },
+    "archive-a122d6a42d5c": {
+      "collections": [
+        "creativity",
+        "leadership"
+      ],
+      "role": "case-study",
+      "why": "Pixar's early history connects animation, technical experimentation and the people required to build a creative studio.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://movies.disney.com/the-pixar-story"
+      },
+      "provisional": false
+    },
+    "archive-6784d172e874": {
+      "collections": [
+        "power",
+        "leadership",
+        "judgment"
+      ],
+      "role": "cautionary-story",
+      "why": "Enron's collapse offers a case for questioning celebrated performance, internal incentives and the stories leaders tell about success.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.pbs.org/independentlens/documentaries/enron/"
+      },
+      "provisional": false
+    },
+    "archive-7f59e6883bca": {
+      "collections": [
+        "judgment",
+        "power",
+        "independence"
+      ],
+      "role": "cautionary-story",
+      "why": "Wine fraud exposes how prestige and the desire to belong can undermine scrutiny of what is being sold.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://dogwoofsite.squarespace.com/sourgrapes"
+      },
+      "provisional": false
+    },
+    "archive-597a261c7059": {
+      "collections": [
+        "craft",
+        "leadership",
+        "connection"
+      ],
+      "role": "case-study",
+      "why": "The Naito family's restoration workshop brings exacting craft together with succession, trust and the costs of preserving a legacy.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.benbertucci.com/one-of-one"
+      },
+      "provisional": false
+    },
+    "archive-bb2e1c13d987": {
+      "collections": [
+        "craft",
+        "direction"
+      ],
+      "role": "perspective",
+      "why": "Rams's design practice opens questions about making fewer, better things and the responsibilities attached to consumption.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.hustwit.com/rams"
+      },
+      "provisional": false
+    },
+    "archive-b1f4dcc99a13": {
+      "collections": [
+        "resilience",
+        "independence"
+      ],
+      "role": "case-study",
+      "why": "Woods's public rise and fall offer a way to reflect on exceptional performance, expectations and the pressures of fame.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.ourtimeprojects.com/tiger"
+      },
+      "provisional": false
+    },
+    "archive-eb9ac180f718": {
+      "collections": [
+        "craft",
+        "resilience"
+      ],
+      "role": "case-study",
+      "why": "Seinfeld rebuilding a stand-up act makes visible the testing, uncertainty and repetition behind a polished performance.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.rottentomatoes.com/m/comedian"
+      },
+      "provisional": false
+    },
+    "archive-77281dd0b945": {
+      "collections": [
+        "creativity",
+        "craft"
+      ],
+      "role": "creative-work",
+      "why": "Talking Heads' concert film is an example to study for staging, rhythm and the cumulative effect of performance choices.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://a24films.com/films/stop-making-sense"
+      },
+      "provisional": false
+    },
+    "archive-1858045ac1e2": {
+      "collections": [
+        "craft",
+        "creativity",
+        "connection"
+      ],
+      "role": "case-study",
+      "why": "The story of a recording studio asks how a place, its tools and the people working together shape music.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.primevideo.com/detail/0TVMSXOARWX7GH7ZWGW6ES0PR2"
+      },
+      "provisional": false
+    },
+    "archive-dbbe30461e4f": {
+      "collections": [
+        "creativity",
+        "independence"
+      ],
+      "role": "case-study",
+      "why": "A portrait of Robert Crumb explores the relationship between an individual artistic voice, obsession and the surrounding culture.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/nz/movie/crumb/umc.cmc.2l28wihzigcltmsbt3dw1wh3l"
+      },
+      "provisional": false
+    },
+    "archive-4f365bf41313": {
+      "collections": [
+        "creativity",
+        "direction"
+      ],
+      "role": "case-study",
+      "why": "Lynch reflects on the experiences and visual-art practice that formed his creative life.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.criterionchannel.com/david-lynch-the-art-life"
+      },
+      "provisional": false
+    },
+    "archive-a50cd2fa8f5d": {
+      "collections": [
+        "perspective",
+        "craft",
+        "resilience"
+      ],
+      "role": "case-study",
+      "why": "Salgado's photography connects witnessing human suffering with renewed attention to the natural world.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/the-salt-of-the-earth/umc.cmc.70ld2b1uatyz926mvah3ciow0"
+      },
+      "provisional": false
+    },
+    "archive-a3c84a41e242": {
+      "collections": [
+        "adventure",
+        "judgment",
+        "craft"
+      ],
+      "role": "case-study",
+      "why": "Petit's wire walk makes preparation and artistic ambition visible alongside an extraordinary level of risk.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.amazon.com/gp/video/detail/B0GTV7V8TQ?&linkCode=sl2&tag=bossletter-20&linkId=721b7ab90b6d3e64ed9391f2a9056007&language=en_US&ref_=as_li_ss_tl"
+      },
+      "provisional": false
+    },
+    "archive-c0edabf62b30": {
+      "collections": [
+        "perspective",
+        "craft"
+      ],
+      "role": "reference",
+      "why": "Clark's series offers a historically situated account of Western art and ideas, useful for broadening visual and cultural reference points.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://archive.org/details/kenneth-clark-civilisation-episode-1_202405/Kenneth_Clark-Civilisation-Episode_1.mkv"
+      },
+      "provisional": false
+    },
+    "archive-5c3c6c6b76fe": {
+      "collections": [
+        "creativity",
+        "leadership"
+      ],
+      "role": "case-study",
+      "why": "A year inside Studio Ghibli reveals the people, working relationships and dedication involved in completing animated films.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/the-kingdom-of-dreams-and-madness/umc.cmc.4bitxuba728ug6ef0y7t18utc"
+      },
+      "provisional": false
+    },
+    "archive-ce8a5693e114": {
+      "collections": [
+        "craft",
+        "connection",
+        "business"
+      ],
+      "role": "case-study",
+      "why": "Valentino's final career chapter pairs creative standards with a long personal and business partnership in a changing industry.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/valentino-the-last-emperor/umc.cmc.12qnsjvy7t3g6tm1pea1zpxcq"
+      },
+      "provisional": false
+    },
+    "archive-172f3245ab4a": {
+      "collections": [
+        "perspective",
+        "creativity",
+        "connection"
+      ],
+      "role": "creative-work",
+      "why": "The Harlem Cultural Festival footage restores a shared musical experience and invites reflection on which cultural histories get remembered.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.primevideo.com/detail/Summer-of-Soul-or-When-the-Revolution-Could-Not-Be-Televised/0OX6N8IFNXOHVHVUGOMJXT7456"
+      },
+      "provisional": false
+    },
+    "archive-6f8ed4521793": {
+      "collections": [
+        "creativity",
+        "communication"
+      ],
+      "role": "creative-work",
+      "why": "Nick Cave's staged day blends documentary and performance to explore memory, songwriting and the stories an artist tells about himself.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/20000-days-on-earth/umc.cmc.1ejck33lq1ey7vkrz6y1kf76o"
+      },
+      "provisional": false
+    },
+    "archive-36f0e394d4a0": {
+      "collections": [
+        "perspective",
+        "craft"
+      ],
+      "role": "creative-work",
+      "why": "Sakamoto's final piano performance invites close listening and reflection on what an artist chooses to leave behind.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/ryuichi-sakamoto-opus/umc.cmc.m3t6ye925axuwi5z3rifg4qq"
+      },
+      "provisional": false
+    },
+    "archive-4603b91f9393": {
+      "collections": [
+        "creativity",
+        "career"
+      ],
+      "role": "case-study",
+      "why": "A long view of Kanye West's early ambitions and career provides material for examining creative persistence and the changes success brings.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://media.netflix.com/en/only-on-netflix/81426972"
+      },
+      "provisional": false
+    },
+    "archive-2b70ceee88bd": {
+      "collections": [
+        "career",
+        "communication"
+      ],
+      "role": "case-study",
+      "why": "Evans narrates his Hollywood rise and reversals, offering both a career story and an example of autobiographical mythmaking.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/sg/movie/the-kid-stays-in-the-picture/umc.cmc.5y738t2ps8gsx0k19xizmjo6z"
+      },
+      "provisional": false
+    },
+    "archive-e83bb60e261c": {
+      "collections": [
+        "career",
+        "business",
+        "connection"
+      ],
+      "role": "case-study",
+      "why": "Weintraub's entertainment career offers a portrait of producing opportunities through relationships and persistence.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.imdb.com/title/tt1833708/"
+      },
+      "provisional": false
+    },
+    "archive-17c34baa8f90": {
+      "collections": [
+        "craft",
+        "learning",
+        "connection"
+      ],
+      "role": "case-study",
+      "why": "Jiro's repeated refinement of sushi connects apprenticeship and exacting standards with the demands placed on the next generation.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/jiro-dreams-of-sushi/umc.cmc.5qqi4em3n9hlkhvcfbz1aj50r"
+      },
+      "provisional": false
+    },
+    "archive-de0a6a612e9c": {
+      "collections": [
+        "learning",
+        "resilience"
+      ],
+      "role": "case-study",
+      "why": "Jordan's career and championship performance provide an example for reflecting on preparation and sustained competitive ambition.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.rottentomatoes.com/m/michael-jordan-to-the-max"
+      },
+      "provisional": false
+    },
+    "archive-fe472f33c367": {
+      "collections": [
+        "career",
+        "resilience",
+        "power"
+      ],
+      "role": "case-study",
+      "why": "Two young basketball players' aspirations meet family, educational and economic pressures, complicating simple advice to work harder.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/hoop-dreams/umc.cmc.7eh6x3fc3pcpz7047gl6jg3s9"
+      },
+      "provisional": false
+    },
+    "archive-a014e1c66206": {
+      "collections": [
+        "judgment",
+        "adventure",
+        "learning"
+      ],
+      "role": "case-study",
+      "why": "Honnold's preparation for El Capitan brings skill, risk and relationships into a decision with irreversible consequences.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/free-solo/umc.cmc.5qihxgav718gwxcja7fl9ll2p"
+      },
+      "provisional": false
+    },
+    "archive-f65a8b8970ee": {
+      "collections": [
+        "connection",
+        "learning",
+        "adventure"
+      ],
+      "role": "case-study",
+      "why": "A generation of surfers shows how friendship and competition can shape both individual development and a sport's culture.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.hbo.com/movies/a-z"
+      },
+      "provisional": false
+    },
+    "archive-00752223f3a7": {
+      "collections": [
+        "adventure",
+        "direction",
+        "perspective"
+      ],
+      "role": "case-study",
+      "why": "A journey to Patagonia links adventure with the question of what an outdoor life might lead you to protect.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/180-south/umc.cmc.6xl883pm9wjokvruv0ut52cgb"
+      },
+      "provisional": false
+    },
+    "archive-e43dad240232": {
+      "collections": [
+        "adventure",
+        "judgment"
+      ],
+      "role": "case-study",
+      "why": "Plant's offshore-sailing ambitions make resourcefulness and commitment visible alongside the tension between speed and safety.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/coyote-the-mike-plant-story/umc.cmc.2lzmi088jpgbekzhi7nmwt2r3"
+      },
+      "provisional": false
+    },
+    "archive-b5749f1a8c90": {
+      "collections": [
+        "creativity",
+        "connection"
+      ],
+      "role": "case-study",
+      "why": "The Zephyr team's skateboarding story shows how a local scene and shared experimentation can produce a new style.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/dogtown-and-z-boys/umc.cmc.3xgt6w2t4arck6db18x0bxcyf"
+      },
+      "provisional": false
+    },
+    "archive-9ec6ee34560f": {
+      "collections": [
+        "adventure",
+        "direction"
+      ],
+      "role": "case-study",
+      "why": "Big-wave surfing's history explores people building lives around a demanding pursuit outside conventional career expectations.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/riding-giants/umc.cmc.4bdehxpq1xogm39190skcc8hh"
+      },
+      "provisional": false
+    },
+    "archive-a83148976989": {
+      "collections": [
+        "judgment",
+        "adventure"
+      ],
+      "role": "cautionary-story",
+      "why": "Treadwell's life among bears invites scrutiny of the gap between a deeply felt personal mission and an unforgiving environment.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/th/movie/%E0%B8%81%E0%B8%A3%E0%B8%8B%E0%B8%A5-%E0%B8%AB%E0%B8%A1%E0%B8%9B%E0%B8%B2%E0%B9%83%E0%B8%AB%E0%B8%8D/umc.cmc.1bob73a2zwpm6b8qp5uau0l5l?l=th"
+      },
+      "provisional": false
+    },
+    "archive-e17af2802b84": {
+      "collections": [
+        "judgment",
+        "resilience"
+      ],
+      "role": "cautionary-story",
+      "why": "Crowhurst's voyage exposes how financial pressure and public commitment can make it harder to abandon a dangerous course.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/gb/movie/deep-water/umc.cmc.yyjf7462ixcrht6wnquqxusr"
+      },
+      "provisional": false
+    },
+    "archive-5dd6cfdf0cac": {
+      "collections": [
+        "adventure",
+        "learning",
+        "connection"
+      ],
+      "role": "case-study",
+      "why": "Two novice birdwatchers undertake a Big Year, showing how curiosity can become a shared project and a way to see familiar places differently.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=zl-wAqplQAo"
+      },
+      "provisional": false
+    },
+    "archive-a1eb266c5b3b": {
+      "collections": [
+        "resilience",
+        "communication"
+      ],
+      "role": "case-study",
+      "why": "Ali's preparation and public presence around the Foreman fight offer a portrait of competitive belief and its cultural meaning.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/when-we-were-kings/umc.cmc.4as6o9azj5z99c3dp2oumwsbq"
+      },
+      "provisional": false
+    },
+    "archive-f1a85b1ba1f6": {
+      "collections": [
+        "craft",
+        "judgment"
+      ],
+      "role": "case-study",
+      "why": "Senna's racing career pairs extraordinary skill and rivalry with the limits and consequences of a dangerous pursuit.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/in/movie/senna/umc.cmc.3uozgq6d6xzpm3s0ua0o7wxkc"
+      },
+      "provisional": false
+    },
+    "archive-4bbd82ec20e5": {
+      "collections": [
+        "power",
+        "judgment"
+      ],
+      "role": "cautionary-story",
+      "why": "An investigation that begins with doping turns toward the systems that can conceal it, making institutional incentives central.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://media.netflix.com/en/only-on-netflix/80168079"
+      },
+      "provisional": false
+    },
+    "archive-e4b4169183e2": {
+      "collections": [
+        "learning",
+        "calm"
+      ],
+      "role": "case-study",
+      "why": "A behind-the-scenes view of Gracie preparing to defend a fighting title offers an example of preparation for pressure.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.imdb.com/title/tt0251637/"
+      },
+      "provisional": false
+    },
+    "archive-8ba2c7ba3769": {
+      "collections": [
+        "leadership",
+        "learning",
+        "connection"
+      ],
+      "role": "case-study",
+      "why": "The Bulls' final championship season places individual excellence alongside team relationships and organisational conflict.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/show/the-last-dance/umc.cmc.1crzdh2ju2ri5bxx0xvzz0mra"
+      },
+      "provisional": false
+    },
+    "archive-e6ca3e383589": {
+      "collections": [
+        "career",
+        "craft",
+        "business"
+      ],
+      "role": "case-study",
+      "why": "Shelby's path from driving to building cars illustrates reinvention through technical skill and an entrepreneurial ambition.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/shelby-american/umc.cmc.ypvovphlrnyc4oymh4k8qckc"
+      },
+      "provisional": false
+    },
+    "archive-ee52223f377d": {
+      "collections": [
+        "perspective",
+        "learning"
+      ],
+      "role": "reference",
+      "why": "Sagan's scientific journey places everyday concerns in a wider universe and models curiosity about how we know what we know.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.rottentomatoes.com/tv/cosmos_a_personal_voyage"
+      },
+      "provisional": false
+    },
+    "archive-51e6e40db0ac": {
+      "collections": [
+        "power",
+        "judgment",
+        "communication"
+      ],
+      "role": "perspective",
+      "why": "Žižek reads ideology through cinema, offering an interpretive lens for noticing the assumptions inside familiar stories.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/au/movie/the-perverts-guide-to-ideology/umc.cmc.6px6e3fnlqzo2ibmg0urybjmz"
+      },
+      "provisional": false
+    },
+    "archive-1fe8f8c42bda": {
+      "collections": [
+        "connection",
+        "adventure",
+        "perspective"
+      ],
+      "role": "case-study",
+      "why": "Bourdain's encounters through food offer a route into unfamiliar places by listening to the people who live there.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://cnnpressroom.blogs.cnn.com/2013/04/08/anthony-bourdain-parts-unknown-on-cnn-international/"
+      },
+      "provisional": false
+    },
+    "archive-7a37fce1ac95": {
+      "collections": [
+        "power",
+        "communication"
+      ],
+      "role": "perspective",
+      "why": "A critical documentary about propaganda invites examination of how institutions attempt to shape public beliefs.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://metanoia-films.org/psywar/"
+      },
+      "provisional": false
+    },
+    "archive-813e672beedb": {
+      "collections": [
+        "power",
+        "independence",
+        "communication"
+      ],
+      "role": "perspective",
+      "why": "Curtis explores the use of psychological ideas in public relations and politics, questioning how desires become tools of influence.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.blendedbody.com/_cl/_audio/_2ndgen/CenturyOfSelf/ArchivePage-century_of_the_self.shtml"
+      },
+      "provisional": false
+    },
+    "archive-e08f395ac205": {
+      "collections": [
+        "power",
+        "money"
+      ],
+      "role": "cautionary-story",
+      "why": "The Miami cocaine trade shows how illicit wealth can reshape a city while concealing violence behind the appearance of prosperity.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.imdb.com/title/tt0380268"
+      },
+      "provisional": false
+    },
+    "archive-dbfa1da4d996": {
+      "collections": [
+        "judgment",
+        "leadership",
+        "power"
+      ],
+      "role": "cautionary-story",
+      "why": "McNamara's reflections on war raise questions about uncertainty, responsibility and the limits of a leader's own account.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/the-fog-of-war/umc.cmc.3j815y9s5id2nvfztrlfh75il"
+      },
+      "provisional": false
+    },
+    "archive-adf759a871fa": {
+      "collections": [
+        "connection",
+        "resilience"
+      ],
+      "role": "case-study",
+      "why": "A friend's memorial film becomes an account of family loss and care, offering perspective on what people preserve for one another.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://tv.apple.com/us/movie/dear-zachary-a-letter-to-a-son-about-his-father/umc.cmc.4r9lcwr4m7s8hmn2k76wqhmd5"
+      },
+      "provisional": false
+    },
+    "archive-860d4a978d72": {
+      "collections": [
+        "perspective",
+        "direction"
+      ],
+      "role": "case-study",
+      "why": "Returning to the same people over decades reveals how choices, circumstances and childhood expectations interact across a life.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.primevideo.com/-/es_419/detail/0MJFFT6TS6Y43QJ9WXZWSYNN15"
+      },
+      "provisional": false
+    },
+    "archive-0e4e7efdff83": {
+      "collections": [
+        "change",
+        "career"
+      ],
+      "role": "perspective",
+      "why": "Grey's automation essay poses questions about which tasks machines can take over and what that could mean for work.",
+      "evidence": {
+        "basis": "Video title and uploader description",
+        "url": "https://www.youtube.com/watch?v=7Pq-S557XQU"
+      },
+      "provisional": false
+    },
+    "archive-e26187144167": {
+      "collections": [
+        "power",
+        "communication",
+        "judgment"
+      ],
+      "role": "creative-work",
+      "why": "A fictional satire about a tobacco spokesman exposes the distance between winning an argument and being truthful.",
+      "evidence": {
+        "basis": "Film or publisher description",
+        "url": "https://www.searchlightpictures.com/thankyouforsmoking"
+      },
+      "provisional": false
+    },
+    "how-to-unclench": {
+      "collections": [
+        "calm",
+        "focus"
+      ],
+      "role": "guide",
+      "why": "Miller's field guide offers a repeatable way to notice bracing, experiment with softening and bring that awareness into daily life.",
+      "evidence": {
+        "basis": "Source text or public excerpt",
+        "url": "https://howtounclench.com/"
+      },
+      "provisional": false
+    }
+  }
+}
