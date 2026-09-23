@@ -2,6 +2,8 @@ import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { flyCoverToDetail } from './books-flight';
 import type { BookBinding } from '../lib/book-binding';
+import { materialLabels, parseMaterialFilter, type MaterialKind, type MaterialFilter } from '../lib/library-materials';
+import { materialCover } from './material-cover';
 
 interface LibraryBook {
   id: string;
@@ -16,6 +18,9 @@ interface LibraryBook {
   collection: string;
   binding: BookBinding;
   highlightCount: number | null;
+  kind: MaterialKind;
+  duration?: string | null;
+  medium?: string;
 }
 
 type LibrarySort = 'az' | 'tiers' | 'collection';
@@ -39,6 +44,14 @@ function initBookLibrary() {
   const sortStatus = library?.querySelector<HTMLElement>('[data-library-sort-status]');
   if (!library || !stage || !track || !title || !author || !request) return;
 
+  const materialSelect = library.querySelector<HTMLSelectElement>('#library-material-type')!;
+  const search = library.querySelector<HTMLInputElement>('#library-search')!;
+  const countLabel = library.querySelector<HTMLElement>('[data-library-count]')!;
+  const empty = library.querySelector<HTMLElement>('[data-library-empty]')!;
+  const clearSearch = library.querySelector<HTMLButtonElement>('[data-library-clear]')!;
+  const attribution = library.querySelector<HTMLElement>('.library-attribution')!;
+  let materialFilter: MaterialFilter = 'book';
+  let searchQuery = '';
   const allBooks = readInlineJson<LibraryBook[]>('jg-book-library') || [];
   let appCounts: Map<string, number> | null = null;
   window.addEventListener('jgold-library-counts', (event) => {
@@ -53,7 +66,7 @@ function initBookLibrary() {
     updateCaption();
     schedule();
   });
-  let books = [...allBooks];
+  let books = allBooks.filter((item) => item.kind === 'book');
   let sortMode: LibrarySort = 'az';
   let sorting = false;
   let sortAnimations: Animation[] = [];
@@ -136,7 +149,11 @@ function initBookLibrary() {
   function orderBooks(mode: LibrarySort) {
     const tierRank: Record<string, number> = { s: 0, a: 1, b: 2, c: 3, d: 4 };
     sortMode = mode;
-    books = [...allBooks].sort((a, b) => {
+    const query = searchQuery.trim().toLocaleLowerCase();
+    books = allBooks.filter((item) => {
+      const matchesKind = materialFilter === 'all' || (materialFilter === 'archive' ? item.kind !== 'book' : item.kind === materialFilter);
+      return matchesKind && (!query || `${item.title} ${item.author} ${item.collection} ${materialLabels[item.kind]}`.toLocaleLowerCase().includes(query));
+    }).sort((a, b) => {
       const groupOrder = mode === 'tiers' ? (tierRank[a.tier] ?? 5) - (tierRank[b.tier] ?? 5)
         : mode === 'collection' ? a.collection.localeCompare(b.collection, 'en') : 0;
       return groupOrder || a.title.localeCompare(b.title, 'en', { numeric: true }) || a.id.localeCompare(b.id);
@@ -146,10 +163,19 @@ function initBookLibrary() {
     volumes.clear();
     shadows.clear();
     selected = -1;
+    const onlyBooks = materialFilter === 'book';
+    library!.dataset.materials = String(!onlyBooks);
+    countLabel.textContent = `${books.length} ${onlyBooks ? 'books read' : materialFilter === 'all' ? 'items' : 'items saved to explore'}`;
+    empty.hidden = books.length !== 0;
+    if (controls) controls.hidden = books.length === 0;
+    if (!books.length && thought) thought.hidden = true;
+    clearSearch.hidden = !searchQuery;
+    library!.querySelectorAll<HTMLButtonElement>('[data-library-step]').forEach((button) => { button.disabled = books.length < 2; });
     library!.querySelectorAll<HTMLButtonElement>('[data-library-sort]').forEach((button) => {
+      button.disabled = !books.length;
       button.setAttribute('aria-pressed', String(button.dataset.librarySort === mode));
     });
-    sortMenu?.querySelector('summary')?.setAttribute('aria-label', `Sort books: ${sortNames[mode]}`);
+    sortMenu?.querySelector('summary')?.setAttribute('aria-label', `Sort library: ${sortNames[mode]}`);
   }
 
   function finishSortTransition() {
@@ -217,15 +243,46 @@ function initBookLibrary() {
     }).catch(() => { /* Closing or resizing cancels the camera movement. */ });
   }
 
+  function changeMaterials() {
+    if (openingDetail) return;
+    finishSortTransition();
+    releaseDrag();
+    hoverPointer = null;
+    lastTap = null;
+    window.clearTimeout(snapTimer);
+    resetInspection(true);
+    materialFilter = parseMaterialFilter(materialSelect.value);
+    searchQuery = search.value;
+    orderBooks(sortMode);
+    position = target = velocity = 0;
+    openAmount = openTarget = 1;
+    resize();
+    render();
+    updateCaption();
+    saveView();
+    schedule();
+    if (sortStatus) sortStatus.textContent = countLabel.textContent;
+  }
+  materialSelect.addEventListener('change', changeMaterials);
+  search.addEventListener('input', changeMaterials);
+  clearSearch.addEventListener('click', () => { search.value = ''; changeMaterials(); search.focus(); });
+
   function saveView() {
     const url = new URL(window.location.href);
     if (active) {
       url.searchParams.set('view', 'library');
+      if (materialFilter === 'book') url.searchParams.delete('libraryType');
+      else url.searchParams.set('libraryType', materialFilter);
+      if (searchQuery) url.searchParams.set('librarySearch', searchQuery);
+      else url.searchParams.delete('librarySearch');
+      if (!books.length) url.searchParams.delete('libraryBook');
       if (books.length) url.searchParams.set('libraryBook', books[wrap(Math.round(target))].id);
       if (sortMode === 'az') url.searchParams.delete('librarySort');
       else url.searchParams.set('librarySort', sortMode);
     } else {
       url.searchParams.delete('view');
+      url.searchParams.delete('libraryType');
+      url.searchParams.delete('librarySearch');
       url.searchParams.delete('libraryBook');
       url.searchParams.delete('librarySort');
     }
@@ -245,12 +302,12 @@ function initBookLibrary() {
       groupLabel.style.setProperty('--tier-color', book.tierColor);
     }
     if (collectionLabel) {
-      collectionLabel.hidden = sortMode !== 'collection';
+      collectionLabel.hidden = book.kind === 'book' && sortMode !== 'collection';
       collectionLabel.textContent = book.collection;
     }
     if (thought && thoughtText) {
       const count = appCounts?.get(book.id) ?? book.highlightCount;
-      thought.hidden = false;
+      thought.hidden = book.kind !== 'book';
       thought.dataset.bookId = book.id;
       thoughtText.replaceChildren();
       if (count === null) thoughtText.textContent = 'Highlights not synced yet';
@@ -261,9 +318,18 @@ function initBookLibrary() {
       }
     }
     title!.textContent = book.title;
-    title!.href = `${book.href}?from=library`;
-    author!.textContent = book.author;
+    const external = book.kind !== 'book';
+    title!.href = external ? book.href : `${book.href}?from=library`;
+    title!.target = external ? '_blank' : '';
+    title!.rel = external ? 'noopener noreferrer' : '';
+    author!.textContent = external ? [book.medium, book.duration, book.author].filter(Boolean).join(' · ') : book.author;
+    attribution.hidden = !external;
+    request!.textContent = external ? (book.medium === 'Video' ? 'Watch ↗' : 'Read / explore ↗') : 'request';
+    request!.setAttribute('aria-label', external ? `Open ${book.title} at its source in a new tab` : 'Request the selected book by email');
+    request!.target = external ? '_blank' : '';
+    request!.rel = external ? 'noopener noreferrer' : '';
     request!.href = `mailto:hello@jevangoldsmith.com?subject=${encodeURIComponent(`Book request: ${book.title}`)}&body=${encodeURIComponent(`Hi Jevan,\n\nI'm interested in "${book.title}" by ${book.author}.\n\nMy request or recommendation:\n`)}`;
+    if (external) request!.href = book.href;
   }
 
   function createVolume(logical: number) {
@@ -273,6 +339,7 @@ function initBookLibrary() {
     button.className = 'library-volume';
     button.dataset.libraryIndex = String(logical);
     button.dataset.bookId = book.id;
+    button.dataset.kind = book.kind;
     button.setAttribute('aria-label', `${book.title}, by ${book.author}`);
     button.style.setProperty('--binding-background', book.binding.background);
     button.style.setProperty('--binding-ink', book.binding.ink);
@@ -302,7 +369,8 @@ function initBookLibrary() {
         addText(book.author, 198, 67, 9, book.binding.accent, '500');
         layer.append(spine);
       }
-      if (face === 'cover') {
+      if (face === 'cover' && book.kind !== 'book') layer.append(materialCover(book));
+      if (face === 'cover' && book.kind === 'book') {
         const image = document.createElement('img');
         image.alt = '';
         image.draggable = false;
@@ -352,13 +420,14 @@ function initBookLibrary() {
       const distance = logical - position;
       // Slightly varied binding sizes, with the cover's true aspect ratio retained.
       const seed = Array.from(book.id).reduce((sum, char) => sum + char.charCodeAt(0), 0);
-      const height = (230 + seed % 45) * scale;
-      const width = height * clamp(book.ratio, .48, 1.1);
+      const height = (230 + seed % 45) * scale * (book.kind === 'interview' ? .62 : book.kind === 'art' || book.kind === 'documentary' ? .85 : 1);
+      const width = height * clamp(book.ratio, .48, 1.6);
+      const depth = (book.kind === 'book' ? 22 + seed % 18 : book.kind === 'article' ? 4 : book.kind === 'memo' ? 8 : 18) * scale;
       const x = distance * pitch + clamp(distance, -1, 1) * gap * openAmount;
       const y = -x * .28 + Math.max(0, 1 - Math.abs(distance)) * 90 * scale * openAmount;
       node.style.setProperty('--width', `${width}px`);
       node.style.setProperty('--height', `${height}px`);
-      node.style.setProperty('--depth', `${(22 + seed % 18) * scale}px`);
+      node.style.setProperty('--depth', `${depth}px`);
       node.style.setProperty('--x', `${x}px`);
       node.style.setProperty('--y', `${y}px`);
       const inspecting = logical === inspectedBook;
@@ -369,13 +438,13 @@ function initBookLibrary() {
       shadow.style.setProperty('--x', `${x}px`);
       shadow.style.setProperty('--y', `${y}px`);
       shadow.style.setProperty('--width', `${width}px`);
-      shadow.style.setProperty('--depth', `${(22 + seed % 18) * scale}px`);
+      shadow.style.setProperty('--depth', `${depth}px`);
       shadow.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
       node.style.zIndex = String(50 - (logical - center));
       const isSelected = logical === Math.round(target);
       node.setAttribute('aria-pressed', String(isSelected));
       node.tabIndex = isSelected ? 0 : -1;
-      if (isSelected) node.setAttribute('aria-describedby', 'book-library-thought');
+      if (isSelected && book.kind === 'book') node.setAttribute('aria-describedby', 'book-library-thought');
       else node.removeAttribute('aria-describedby');
     }
     if (thought) {
@@ -456,6 +525,12 @@ function initBookLibrary() {
   function openDetails(logical: number) {
     if (!active || openingDetail || sorting || !books.length) return;
     select(logical);
+    if (books[wrap(logical)].kind !== 'book') {
+      lastTap = null;
+      ignoreDoubleClickUntil = performance.now() + 400;
+      window.open(books[wrap(logical)].href, '_blank', 'noopener,noreferrer');
+      return;
+    }
     const cover = volumes.get(logical)?.querySelector<HTMLImageElement>('img');
     const href = `${books[wrap(logical)].href}?from=library`;
     if (!cover) { window.location.href = href; return; }
@@ -480,6 +555,7 @@ function initBookLibrary() {
   }
 
   title.addEventListener('click', (event) => {
+    if (title!.target === '_blank') return;
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     openDetails(Math.round(target));
@@ -512,6 +588,10 @@ function initBookLibrary() {
     if (fromUrl) {
       finishSortTransition();
       const params = new URL(window.location.href).searchParams;
+      materialFilter = parseMaterialFilter(params.get('libraryType'));
+      searchQuery = params.get('librarySearch') || '';
+      materialSelect.value = materialFilter;
+      search.value = searchQuery;
       orderBooks(parseSort(params.get('librarySort')));
       sceneryPosition = 0;
       const id = params.get('libraryBook');
@@ -536,7 +616,7 @@ function initBookLibrary() {
     stage!.focus({ preventScroll: true });
     const native = (window as Window & { ReactNativeWebView?: { postMessage: (message: string) => void } }).ReactNativeWebView;
     native?.postMessage(JSON.stringify({ type: 'jgold-library-counts-request',
-      books: allBooks.map(({ id, title, author }) => ({ id, title, author })) }));
+      books: allBooks.filter((item) => item.kind === 'book').map(({ id, title, author }) => ({ id, title, author })) }));
     schedule();
   }
 
@@ -681,7 +761,7 @@ function initBookLibrary() {
     snapTimer = window.setTimeout(() => select(target), 160);
   }, { passive: false });
   library.addEventListener('keydown', (event) => {
-    if (!books.length || openingDetail || sorting || sortMenu?.open) return;
+    if ((event.target as Element).closest('input, select, textarea') || !books.length || openingDetail || sorting || sortMenu?.open) return;
     if (event.key === 'Enter' && (event.target === stage || (event.target as Element).closest('.library-volume'))) {
       event.preventDefault();
       const volume = (event.target as Element).closest<HTMLElement>('[data-library-index]');
@@ -696,6 +776,8 @@ function initBookLibrary() {
   });
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || openingDetail) return;
+    if (event.target === materialSelect) return;
+    if (event.target === search && search.value) { search.value = ''; changeMaterials(); return; }
     if (sortMenu?.open) {
       event.preventDefault();
       sortMenu.open = false;

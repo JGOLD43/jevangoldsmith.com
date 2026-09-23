@@ -1,0 +1,94 @@
+.book-library .book-library-heading { pointer-events: auto; }
+.book-library .book-library-heading h2 { font-size: .78rem; color: #cfbea4; margin-bottom: .25rem; }
+.book-library .library-material-select {
+  display: block; max-width: 220px; padding: .25rem 1.6rem .25rem 0; color: #fff8ed;
+  background: transparent; border: 0; border-bottom: 1px solid #c5ae7e70; border-radius: 0;
+  font: inherit; font-size: 1.05rem; font-weight: 500; cursor: pointer; color-scheme: dark;
+}
+.book-library .library-material-select option { background: #281e16; color: #fff8ed; }
+.book-library .library-search-row { position: absolute; z-index: 3; top: 112px; left: 2.5rem; display: flex; gap: .5rem; max-width: calc(100% - 5rem); }
+.book-library .library-search-row input {
+  width: 270px; max-width: 100%; border: 1px solid #ffffff36; background: #21170fbb;
+  border-radius: 6px; padding: .6rem .75rem; min-height: 40px; color: #fff8ed; font: inherit; font-size: .75rem;
+}
+.book-library .library-search-row input::placeholder { color: #d1c1aa; opacity: 1; }
+.book-library .library-search-row button { color: #f7f0e4; background: #281e16; border: 1px solid #ffffff36; border-radius: 6px; padding: .5rem; cursor: pointer; }
+.book-library .book-library-stage { top: 140px; }
+.book-library[data-materials="true"] .book-library-stage { bottom: 224px; }
+.book-library .book-library-empty { position: absolute; inset: 42% 1rem auto; padding: 0; pointer-events: none; }
+.book-library [hidden] { display: none !important; }
+.book-library .library-attribution { font-size: .58rem; line-height: 1.5; color: #bbaa92; margin: .7rem 0 0; }
+.book-library .library-unreviewed { display: block; color: #e1d2ba; font-size: .65rem; margin-bottom: .3rem; }
+.book-library .library-attribution a { color: #e1d2ba; text-underline-offset: 3px; }
+.book-library .book-library-title { text-transform: none; }
+.book-library .book-library-arrow:disabled { opacity: .3; cursor: default; }
+.book-library .material-design { display: flex; flex-direction: column; height: 100%; padding: 9%; box-sizing: border-box; color: #302719; background: var(--binding-background); text-align: left; }
+.book-library .material-edition { display: block; text-transform: uppercase; font: 700 8px/1.2 Arial, sans-serif; letter-spacing: .18em; padding-bottom: 7%; border-bottom: 1px solid currentColor; }
+.book-library .material-heading { display: block; font: 600 17px/1.12 Georgia, serif; overflow: hidden; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; }
+.book-library .material-footnote { display: block; margin-top: auto; padding-top: 8%; font: 7px/1.5 Arial, sans-serif; }
+.book-library .material-illustration { position: relative; display: block; flex: 1; min-height: 14%; margin: 10% 0; }
+.book-library .material-rule { display: block; height: 12px; margin-top: 8%; opacity: .3; background: repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 4px); }
+/* Folded, layered paper with a narrow editorial column. */
+.book-library .library-volume[data-kind="article"] .material-design { background: linear-gradient(90deg, #00000008, transparent 8%, #ffffff20 50%, #0000000a), #eee5ce; }
+.book-library .library-volume[data-kind="article"] .material-illustration { flex: 0; height: 30px; min-height: 0; background: repeating-linear-gradient(0deg, #51442d66 0 1px, transparent 1px 5px); width: 52%; }
+.book-library .library-volume[data-kind="article"] .library-volume-cover { box-shadow: 2px 2px #e2d6ba, 4px 4px #eee5d1; }
+/* A walnut frame and paper mat around an original abstract print. */
+.book-library .library-volume[data-kind="art"] .library-volume-cover { border: 8px ridge #775038; box-sizing: border-box; background: #eae0cd; box-shadow: inset 0 0 8px #0009; }
+.book-library .library-volume[data-kind="art"] .material-design { padding: 9%; background: #eee6d6; }
+.book-library .library-volume[data-kind="art"] .material-edition, .book-library .library-volume[data-kind="art"] .material-rule, .book-library .library-volume[data-kind="art"] .material-footnote { display: none; }
+.book-library .library-volume[data-kind="art"] .material-illustration { min-height: 55%; margin: 0 0 8%; background: #d9a56d; overflow: hidden; }
+.book-library .library-volume[data-kind="art"] .material-illustration i { position: absolute; width: 66%; height: 100%; border-radius: 50% 50% 0 0; background: #284b48; left: -8%; top: 24%; transform: rotate(-25deg); }
+.book-library .library-volume[data-kind="art"] .material-illustration i:nth-child(2) { background: #b7482b; left: 50%; top: -30%; transform: rotate(22deg); }
+.book-library .library-volume[data-kind="art"] .material-illustration i:nth-child(3) { width: 35%; height: 35%; background: #f1d8aa; top: 30%; left: 37%; border-radius: 50%; }
+.book-library .library-volume[data-kind="art"] .material-heading { font-size: 11px; -webkit-line-clamp: 3; }
+/* A moulded video case, with a sleeve, spine, and film window. */
+.book-library .library-volume[data-kind="video"] .library-volume-cover { border: 6px solid #171b1a; border-radius: 5px; box-sizing: border-box; }
+.book-library .library-volume[data-kind="video"] .material-design { color: #f5edd5; background: linear-gradient(145deg, #274441 35%, #162723); }
+.book-library .library-volume[data-kind="video"] .material-illustration { min-height: 23%; background: repeating-linear-gradient(90deg, #ffffff80 0 5px, transparent 5px 11px) top / 100% 4px no-repeat, repeating-linear-gradient(90deg, #ffffff80 0 5px, transparent 5px 11px) bottom / 100% 4px no-repeat; border: 1px solid #ffffff40; }
+.book-library .library-volume[data-kind="video"] .material-illustration::after { content: ''; position: absolute; left: 44%; top: 30%; border: 14px solid transparent; border-left: 21px solid #e9bd6e; }
+.book-library .library-volume[data-kind="video"] .library-volume-pages, .book-library .library-volume[data-kind="video"] .library-volume-top { background: #161a18; }
+/* An interview cassette: two visible reels and a handwritten-style label. */
+.book-library .library-volume[data-kind="interview"] .library-volume-cover { border: 6px solid #2d2923; border-radius: 8px; box-sizing: border-box; }
+.book-library .library-volume[data-kind="interview"] .material-design { background: linear-gradient(#dcccb0 0 73%, #a65d43 73%); padding: 6%; }
+.book-library .library-volume[data-kind="interview"] .material-edition { font-size: 6px; padding-bottom: 3%; }
+.book-library .library-volume[data-kind="interview"] .material-heading { order: 1; font: italic 600 11px/1.2 Georgia, serif; -webkit-line-clamp: 2; margin: 4% 0; }
+.book-library .library-volume[data-kind="interview"] .material-illustration { order: 2; margin: 0; min-height: 28%; border-radius: 8px; background: #282923; display: flex; justify-content: space-around; align-items: center; }
+.book-library .library-volume[data-kind="interview"] .material-illustration i { width: 23px; height: 23px; background: radial-gradient(circle, #171913 0 20%, #d8cfad 22% 47%, #676555 50% 60%, #d8cfad 62%); border-radius: 50%; }
+.book-library .library-volume[data-kind="interview"] .material-illustration i:nth-child(3), .book-library .library-volume[data-kind="interview"] .material-rule { display: none; }
+.book-library .library-volume[data-kind="interview"] .material-footnote { order: 3; font-size: 6px; padding-top: 5%; }
+.book-library .library-volume[data-kind="interview"] .library-volume-pages, .book-library .library-volume[data-kind="interview"] .library-volume-top { background: #37352f; }
+/* A circular metal film tin, labelled for the documentary. */
+.book-library .library-volume[data-kind="documentary"] .library-volume-cover, .book-library .library-volume[data-kind="documentary"] .library-volume-back { border-radius: 50%; background: #8f958d; box-shadow: inset 0 0 0 3px #c3c6b8, inset 0 0 0 7px #5c665d, inset 0 0 0 10px #a9afa3; }
+.book-library .library-volume[data-kind="documentary"] .material-design { background: repeating-radial-gradient(circle at 50% 50%, #d1d1bd18 0 1px, #404c4218 1px 3px), linear-gradient(135deg, #d6d7c5, #7c897c 40%, #c1c6b7 70%, #727e70); align-items: center; justify-content: center; padding: 20% 12%; text-align: center; }
+.book-library .library-volume[data-kind="documentary"] .material-heading { padding: 8% 6%; background: #f0dfad; font: 600 13px/1.2 Georgia, serif; width: 100%; box-shadow: 0 2px 3px #0004; -webkit-line-clamp: 4; }
+.book-library .library-volume[data-kind="documentary"] .material-edition { font-size: 6px; }
+.book-library .library-volume[data-kind="documentary"] .material-illustration, .book-library .library-volume[data-kind="documentary"] .material-rule, .book-library .library-volume[data-kind="documentary"] .library-volume-spine, .book-library .library-volume[data-kind="documentary"] .library-volume-pages, .book-library .library-volume[data-kind="documentary"] .library-volume-top, .book-library .library-volume[data-kind="documentary"] .library-volume-bottom { display: none; }
+.book-library .library-volume[data-kind="documentary"] .material-footnote { margin-top: 0; font-size: 6px; }
+/* Manila folder with a tab and a pinned memo. */
+.book-library .library-volume[data-kind="memo"] .library-volume-cover { overflow: visible; background: #b79864; border-radius: 0 7px 3px 3px; }
+.book-library .library-volume[data-kind="memo"] .library-volume-cover::before { content: ''; position: absolute; left: 0; bottom: 100%; width: 45%; height: 12px; background: #b79864; border-radius: 6px 6px 0 0; }
+.book-library .library-volume[data-kind="memo"] .material-design { margin: 12% 6% 5%; height: 87%; background: #eee7d4; box-shadow: 0 1px 4px #0005; transform: rotate(-2deg); }
+.book-library .library-volume[data-kind="memo"] .material-illustration { flex: 0; min-height: 8%; }
+.book-library .library-volume[data-kind="memo"] .material-heading { font: 600 14px/1.25 'Courier New', monospace; }
+.book-library .library-volume[data-kind="other"] .material-design { background: #747b56; color: #faf0d3; border-left: 8px solid #2a3226; }
+@media (max-width: 600px) {
+  .book-library .book-library-header { align-items: start; gap: .5rem; }
+  .book-library .library-material-select { max-width: 175px; font-size: .9rem; }
+  .book-library .book-library-header-actions { gap: .3rem; padding-top: 1rem; }
+  .book-library .book-library-exit, .book-library .book-library-sort > summary { padding: .45rem .55rem; font-size: .7rem; }
+  .book-library .library-search-row { left: 1.1rem; right: 1.1rem; top: 108px; max-width: none; }
+  .book-library .library-search-row input { width: 100%; font-size: 16px; }
+  .book-library .library-material-select { font-size: 16px; max-width: 185px; }
+  .book-library .book-library-stage { top: 152px; }
+  .book-library[data-materials="true"] .book-library-stage { bottom: 238px; }
+  .book-library .material-heading { font-size: 12px; }
+  .book-library .material-edition { font-size: 6px; }
+  .book-library .material-footnote { font-size: 6px; }
+}
+@media (max-height: 600px) and (min-width: 601px) {
+  .book-library .library-search-row { top: 85px; }
+  .book-library .book-library-stage { top: 105px; bottom: 125px; }
+  .book-library[data-materials="true"] .book-library-stage { bottom: 160px; }
+  .book-library .book-library-controls { bottom: 10px; }
+  .book-library .library-attribution { margin-top: .3rem; }
+}

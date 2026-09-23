@@ -1,0 +1,31 @@
+export const materialLabels = {
+  book: 'Books', article: 'Articles', art: 'Art', video: 'Videos', interview: 'Interviews',
+  documentary: 'Documentaries', memo: 'Memos', other: 'Other material',
+} as const;
+export type MaterialKind = keyof typeof materialLabels;
+export type MaterialFilter = MaterialKind | 'all' | 'archive';
+export const parseMaterialFilter = (value: string | null): MaterialFilter =>
+  value === 'all' || value === 'archive' || (value && Object.hasOwn(materialLabels, value)) ? value as MaterialFilter : 'book';
+
+export interface ArchiveItem {
+  id: string;
+  title: string;
+  url: string;
+  kind: string;
+  topic: string;
+  medium: string;
+  duration: string | null;
+}
+
+export function archiveVolume(item: ArchiveItem) {
+  const kind = item.kind as Exclude<MaterialKind, 'book'>;
+  const palettes = { article: '#eadfc8', art: '#976549', video: '#2a494a', interview: '#a95138',
+    documentary: '#7e8781', memo: '#c3a26b', other: '#82875f' };
+  return {
+    id: item.id, title: item.title, author: new URL(item.url).hostname.replace(/^www\./, ''),
+    href: item.url, cover: '', kind, ratio: kind === 'interview' ? 1.55 : kind === 'art' || kind === 'documentary' ? 1 : .72,
+    tier: '', tierLabel: materialLabels[kind], tierColor: '#e3d8c6', collection: item.topic,
+    binding: { background: palettes[kind], ink: '#251e17', accent: '#251e17', serif: true },
+    highlightCount: null, duration: item.duration, medium: item.medium,
+  };
+}

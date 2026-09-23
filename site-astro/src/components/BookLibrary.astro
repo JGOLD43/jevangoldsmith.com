@@ -7,6 +7,9 @@ import { bookCoverUrl } from '../lib/book-card';
 import { ratingTier } from '../lib/rating-tier';
 import { bookBinding } from '../lib/book-binding';
 import InlineJson from './InlineJson.astro';
+import archive from '../../../data/learning-archive.json';
+import { archiveVolume, materialLabels } from '../lib/library-materials';
+import '../styles/library-materials.css';
 
 interface Props { books: CollectionEntry<'books'>[]; }
 const { books } = Astro.props;
@@ -28,24 +31,38 @@ const library = await Promise.all(books
       }
     }
     const tier = ratingTier(data.rating);
-    return { id: data.isbn || id, title: data.title, author: data.author, cover, ratio,
+    return { kind: 'book', id: data.isbn || id, title: data.title, author: data.author, cover, ratio,
       binding: await bookBinding(data.isbn || '', coverFile),
       highlightCount: data.highlightCount ?? null,
       tier: tier?.key || '', tierLabel: tier?.label || 'Unrated', tierColor: tier?.color || '#e3d8c6',
       collection: data.category?.trim() || 'Uncollected',
       href: `/books/${encodeURIComponent(id)}.html` };
   }));
+const materials = archive.items.map(archiveVolume);
+const entries = [...library, ...materials];
+const filters = [
+  { value: 'book', label: 'Books', count: library.length },
+  { value: 'all', label: 'Everything', count: entries.length },
+  { value: 'archive', label: 'All material', count: materials.length },
+  ...Object.entries(materialLabels).filter(([kind]) => kind !== 'book').map(([value, label]) => ({ value, label, count: materials.filter((item) => item.kind === value).length })),
+];
 ---
 <section class="book-library" id="book-library" aria-label="Library view" hidden>
   <div class="book-library-room" aria-hidden="true"></div>
   <header class="book-library-header">
-    <div><h2>Library</h2><p>{library.length} books read</p></div>
+    <div class="book-library-heading"><h2>Library</h2>
+      <label class="sr-only" for="library-material-type">Material type</label>
+      <select id="library-material-type" class="library-material-select">
+        {filters.map(({ value, label, count }) => <option value={value}>{label} ({count})</option>)}
+      </select>
+      <p data-library-count>{library.length} books read</p>
+    </div>
     <div class="book-library-header-actions">
       <details class="book-library-sort">
-        <summary aria-label="Sort books" aria-controls="book-library-sort-options">
+        <summary aria-label="Sort library" aria-controls="book-library-sort-options">
           Sort <svg class="book-library-sort-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="m3 4.5 3 3 3-3" /></svg>
         </summary>
-        <div id="book-library-sort-options" class="book-library-sort-options" role="group" aria-label="Book order">
+        <div id="book-library-sort-options" class="book-library-sort-options" role="group" aria-label="Library order">
           <button type="button" data-library-sort="tiers" aria-pressed="false">By tiers <span aria-hidden="true">✓</span></button>
           <button type="button" data-library-sort="az" aria-pressed="true">A–Z <span aria-hidden="true">✓</span></button>
           <button type="button" data-library-sort="collection" aria-pressed="false">By collection <span aria-hidden="true">✓</span></button>
@@ -56,8 +73,13 @@ const library = await Promise.all(books
       </button>
     </div>
   </header>
+  <div class="library-search-row">
+    <label class="sr-only" for="library-search">Search the library</label>
+    <input id="library-search" type="search" placeholder="Find something worth your time…" autocomplete="off" />
+    <button type="button" data-library-clear hidden>Clear</button>
+  </div>
   <div class="book-library-stage" tabindex="0" role="region"
-    aria-label="Interactive library. Drag the shelf to browse. Move over or drag the selected book to rotate it. Double-click a book to open its details."
+    aria-label="Interactive library. Drag the shelf to browse. Move over or drag the selected book to rotate it. Double-click an item to open it."
     aria-describedby="book-library-help">
     <div class="book-library-shelf" aria-hidden="true">
       <div class="book-library-shelf-top"><div class="book-library-wood-grain"></div></div>
@@ -69,9 +91,9 @@ const library = await Promise.all(books
       <span class="book-library-thought-text"></span>
     </div>
   </div>
-  <p id="book-library-help" class="sr-only">Move the mouse over the selected book to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last book. Double-click or double-tap a book, or press Enter, to open its details. Escape returns to the bookshelf. Request opens an email about the selected book.</p>
+  <p id="book-library-help" class="sr-only">Move the mouse over the selected book to tilt it, or hold and drag it to rotate. Drag the shelf or use left and right arrows to browse, Home or End for the first or last book. Double-click or double-tap a book, or press Enter, to open its details. Use the material dropdown to explore articles, art, videos, interviews, documentaries, and memos. Materials open at their source in a new tab. Escape returns to the bookshelf. Request opens an email about the selected book.</p>
   <div class="book-library-controls">
-    <button class="book-library-arrow" type="button" data-library-step="-1" aria-label="Previous book">←</button>
+    <button class="book-library-arrow" type="button" data-library-step="-1" aria-label="Previous item">←</button>
     <div class="book-library-caption">
       <div aria-live="polite" aria-atomic="true">
         <p class="book-library-group" hidden></p>
@@ -80,13 +102,14 @@ const library = await Promise.all(books
         <p class="book-library-author">{library[0]?.author}</p>
       </div>
       <a class="book-library-request" href="mailto:hello@jevangoldsmith.com" aria-label="Request the selected book by email">request</a>
+      <p class="library-attribution" hidden><span class="library-unreviewed">Saved to explore — I haven’t read or watched everything here yet.</span>Collected by <a href={archive.source.url} target="_blank" rel="noopener noreferrer">The Unintuitive ↗</a><br />Source links · some require access or purchase</p>
     </div>
-    <button class="book-library-arrow" type="button" data-library-step="1" aria-label="Next book">→</button>
+    <button class="book-library-arrow" type="button" data-library-step="1" aria-label="Next item">→</button>
   </div>
   <p class="sr-only" data-library-sort-status role="status"></p>
-  {library.length === 0 && <p class="book-library-empty">No books marked as read yet.</p>}
+  <p class="book-library-empty" data-library-empty hidden role="status">No matches. Try another search or material type.</p>
 </section>
-<InlineJson id="jg-book-library" data={library} />
+<InlineJson id="jg-book-library" json={JSON.stringify(entries).replace(/</g, '\\u003c')} />
 <script>
   import '../scripts/book-library';
 </script>
