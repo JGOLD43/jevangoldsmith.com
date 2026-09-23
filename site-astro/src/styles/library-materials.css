@@ -6,14 +6,7 @@
   font: inherit; font-size: 1.05rem; font-weight: 500; cursor: pointer; color-scheme: dark;
 }
 .book-library .library-material-select option { background: #281e16; color: #fff8ed; }
-.book-library .library-search-row { position: absolute; z-index: 3; top: 112px; left: 2.5rem; display: flex; gap: .5rem; max-width: calc(100% - 5rem); }
-.book-library .library-search-row input {
-  width: 270px; max-width: 100%; border: 1px solid #ffffff36; background: #21170fbb;
-  border-radius: 6px; padding: .6rem .75rem; min-height: 40px; color: #fff8ed; font: inherit; font-size: .75rem;
-}
-.book-library .library-search-row input::placeholder { color: #d1c1aa; opacity: 1; }
-.book-library .library-search-row button { color: #f7f0e4; background: #281e16; border: 1px solid #ffffff36; border-radius: 6px; padding: .5rem; cursor: pointer; }
-.book-library .book-library-stage { top: 140px; }
+.book-library .book-library-stage { top: 100px; }
 .book-library[data-materials="true"] .book-library-stage { bottom: 224px; }
 .book-library .book-library-empty { position: absolute; inset: 42% 1rem auto; padding: 0; pointer-events: none; }
 .book-library [hidden] { display: none !important; }
@@ -76,18 +69,15 @@
   .book-library .library-material-select { max-width: 175px; font-size: .9rem; }
   .book-library .book-library-header-actions { gap: .3rem; padding-top: 1rem; }
   .book-library .book-library-exit, .book-library .book-library-sort > summary { padding: .45rem .55rem; font-size: .7rem; }
-  .book-library .library-search-row { left: 1.1rem; right: 1.1rem; top: 108px; max-width: none; }
-  .book-library .library-search-row input { width: 100%; font-size: 16px; }
   .book-library .library-material-select { font-size: 16px; max-width: 185px; }
-  .book-library .book-library-stage { top: 152px; }
+  .book-library .book-library-stage { top: 108px; }
   .book-library[data-materials="true"] .book-library-stage { bottom: 270px; }
   .book-library .material-heading { font-size: 12px; }
   .book-library .material-edition { font-size: 6px; }
   .book-library .material-footnote { font-size: 6px; }
 }
 @media (max-height: 600px) and (min-width: 601px) {
-  .book-library .library-search-row { top: 85px; }
-  .book-library .book-library-stage { top: 105px; bottom: 125px; }
+  .book-library .book-library-stage { top: 85px; bottom: 125px; }
   .book-library[data-materials="true"] .book-library-stage { bottom: 160px; }
   .book-library .book-library-controls { bottom: 10px; }
   .book-library .library-attribution { margin-top: .3rem; }

@@ -1233,8 +1233,8 @@
     "shortDescription": "",
     "review": null,
     "read": true,
-    "coverImage": "images/generated/remote/baf482889a4934-360.jpg",
-    "coverImageMedium": "images/generated/remote/baf482889a4934-240.jpg"
+    "coverImage": "/images/book-covers/all-i-want-to-know-flat.jpg",
+    "coverImageMedium": "/images/book-covers/all-i-want-to-know-flat.jpg"
   },
   {
     "title": "The Checklist Manifesto",
@@ -1416,8 +1416,8 @@
     "shortDescription": "",
     "review": null,
     "read": true,
-    "coverImage": "/images/book-covers/few-lessons-investors-managers.jpg",
-    "coverImageMedium": "/images/book-covers/few-lessons-investors-managers.jpg"
+    "coverImage": "/images/book-covers/few-lessons-investors-managers-flat.jpg",
+    "coverImageMedium": "/images/book-covers/few-lessons-investors-managers-flat.jpg"
   },
   {
     "title": "The Wit and Wisdom of Lee Kuan Yew",

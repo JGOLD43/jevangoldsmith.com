@@ -21,8 +21,9 @@
   },
   {
     "title": "A Few Lessons for Investors and Managers from Warren Buffett",
-    "cover": "images/book-covers/few-lessons-investors-managers.jpg",
-    "source": "https://www.poorcharliesalmanack.com/a_few_lessons_for_investors_and_managers.php"
+    "cover": "images/book-covers/few-lessons-investors-managers-flat.jpg",
+    "source": "https://www.poorcharliesalmanack.com/a_few_lessons_for_investors_and_managers.php",
+    "preparation": "Outer padding and shadow removed with the built-in image editing tool; optimized to 600px JPEG."
   },
   {
     "title": "Autobiography of a Restless Mind",
@@ -33,5 +34,11 @@
     "title": "Quotations of David Ogilvy",
     "cover": "images/book-covers/quotations-david-ogilvy.jpg",
     "source": "https://www.ogilvy.com/sites/g/files/dhpsjz106/files/pdfdocuments/Quotations_of_David_Ogilvy_v2.pdf"
+  },
+  {
+    "title": "All I Want to Know is Where I'm Going to Die So I'll Never Go There",
+    "cover": "images/book-covers/all-i-want-to-know-flat.jpg",
+    "source": "https://www.poorcharliesalmanack.com/all_i_want_to_know.php",
+    "preparation": "Outer padding and shadow removed with the built-in image editing tool; optimized to 600px JPEG."
   }
 ]

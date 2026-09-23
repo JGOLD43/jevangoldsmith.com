@@ -2,7 +2,7 @@ import { readInlineJson } from './data-fetch';
 import { onDomReady } from './dom-ready';
 import { flyCoverToDetail } from './books-flight';
 import type { BookBinding } from '../lib/book-binding';
-import { materialLabels, parseMaterialFilter, type MaterialKind, type MaterialFilter, type LibraryClassification, type ProblemCollection } from '../lib/library-materials';
+import { parseMaterialFilter, type MaterialKind, type MaterialFilter, type LibraryClassification, type ProblemCollection } from '../lib/library-materials';
 import { materialCover } from './material-cover';
 
 interface LibraryBook {
@@ -47,16 +47,13 @@ function initBookLibrary() {
   if (!library || !stage || !track || !title || !author || !request) return;
 
   const materialSelect = library.querySelector<HTMLSelectElement>('#library-material-type')!;
-  const search = library.querySelector<HTMLInputElement>('#library-search')!;
   const countLabel = library.querySelector<HTMLElement>('[data-library-count]')!;
   const empty = library.querySelector<HTMLElement>('[data-library-empty]')!;
-  const clearSearch = library.querySelector<HTMLButtonElement>('[data-library-clear]')!;
   const attribution = library.querySelector<HTMLElement>('.library-attribution')!;
   const creditLabel = attribution.querySelector<HTMLElement>('[data-library-credit-label]')!;
   const creditLink = attribution.querySelector<HTMLAnchorElement>('[data-library-credit-link]')!;
   const defaultCredit = { label: creditLabel.textContent!, name: creditLink.textContent!.replace(' ↗', ''), url: creditLink.href };
   let materialFilter: MaterialFilter = 'book';
-  let searchQuery = '';
   const allBooks = readInlineJson<LibraryBook[]>('jg-book-library') || [];
   const problemCollections = readInlineJson<ProblemCollection[]>('jg-library-collections') || [];
   const collectionPicker = library.querySelector<HTMLDetailsElement>('.library-collection-picker')!;
@@ -163,12 +160,11 @@ function initBookLibrary() {
   function orderBooks(mode: LibrarySort) {
     const tierRank: Record<string, number> = { s: 0, a: 1, b: 2, c: 3, d: 4 };
     sortMode = mode;
-    const query = searchQuery.trim().toLocaleLowerCase();
     const collection = currentCollection();
     books = allBooks.filter((item) => {
       const matchesKind = materialFilter === 'all' || (materialFilter === 'archive' ? item.kind !== 'book' : item.kind === materialFilter);
       const matchesCollection = !collection || item.classification?.collections.includes(collection.id);
-      return matchesKind && matchesCollection && (!query || `${item.title} ${item.author} ${item.collection} ${materialLabels[item.kind]}`.toLocaleLowerCase().includes(query));
+      return matchesKind && matchesCollection;
     }).sort((a, b) => {
       if (collection && mode === 'collection') {
         const rank = (id: string) => { const index = collection.starters.indexOf(id); return index < 0 ? Infinity : index; };
@@ -195,7 +191,6 @@ function initBookLibrary() {
     empty.hidden = books.length !== 0;
     if (controls) controls.hidden = books.length === 0;
     if (!books.length && thought) thought.hidden = true;
-    clearSearch.hidden = !searchQuery;
     library!.querySelectorAll<HTMLButtonElement>('[data-library-collection]').forEach((button) => {
       button.setAttribute('aria-pressed', String(button.dataset.libraryCollection === problemFilter));
     });
@@ -282,7 +277,6 @@ function initBookLibrary() {
     window.clearTimeout(snapTimer);
     resetInspection(true);
     materialFilter = parseMaterialFilter(materialSelect.value);
-    searchQuery = search.value;
     orderBooks(sortMode);
     position = target = velocity = 0;
     openAmount = openTarget = 1;
@@ -297,8 +291,6 @@ function initBookLibrary() {
     if (materialSelect.value === 'book') problemFilter = '';
     changeMaterials();
   });
-  search.addEventListener('input', changeMaterials);
-  clearSearch.addEventListener('click', () => { search.value = ''; changeMaterials(); search.focus(); });
 
   function saveView() {
     const url = new URL(window.location.href);
@@ -306,8 +298,7 @@ function initBookLibrary() {
       url.searchParams.set('view', 'library');
       if (materialFilter === 'book') url.searchParams.delete('libraryType');
       else url.searchParams.set('libraryType', materialFilter);
-      if (searchQuery) url.searchParams.set('librarySearch', searchQuery);
-      else url.searchParams.delete('librarySearch');
+      url.searchParams.delete('librarySearch');
       if (problemFilter) url.searchParams.set('libraryCollection', problemFilter);
       else url.searchParams.delete('libraryCollection');
       if (!books.length) url.searchParams.delete('libraryBook');
@@ -635,9 +626,7 @@ function initBookLibrary() {
       materialFilter = parseMaterialFilter(params.get('libraryType'));
       problemFilter = problemCollections.some(({ id }) => id === params.get('libraryCollection')) ? params.get('libraryCollection')! : '';
       if (problemFilter && materialFilter === 'book') materialFilter = 'archive';
-      searchQuery = params.get('librarySearch') || '';
       materialSelect.value = materialFilter;
-      search.value = searchQuery;
       orderBooks(parseSort(params.get('librarySort') || (problemFilter ? 'collection' : null)));
       sceneryPosition = 0;
       const id = params.get('libraryBook');
@@ -696,7 +685,6 @@ function initBookLibrary() {
   });
   library.querySelector('[data-library-clear-collection]')?.addEventListener('click', () => chooseCollection(''));
   library.querySelector('[data-library-reset]')?.addEventListener('click', () => {
-    search.value = '';
     materialSelect.value = 'archive';
     chooseCollection('');
   });
@@ -903,7 +891,6 @@ function initBookLibrary() {
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || openingDetail) return;
     if (event.target === materialSelect) return;
-    if (event.target === search && search.value) { search.value = ''; changeMaterials(); return; }
     if (sortMenu?.open && collectionPicker.open) {
       event.preventDefault();
       collectionPicker.open = false;
