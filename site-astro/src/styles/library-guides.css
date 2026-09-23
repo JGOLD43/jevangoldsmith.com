@@ -62,3 +62,8 @@
   .guide-prompt { padding: .9rem; }
   .guide-intro { font-size: 1rem; }
 }
+
+.guide-remaining { padding-left: 1.6rem; }
+.guide-remaining li { padding: .65rem 0 .65rem .4rem; line-height: 1.6; }
+.guide-remaining a { color: var(--primary-color); text-underline-offset: 3px; }
+.guide-remaining .guide-shelf-link { display: block; font-size: .8rem; color: var(--text-light); }

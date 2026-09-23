@@ -17,11 +17,25 @@ export const shelfHref = (collectionId: string, itemId?: string) => {
   if (itemId) params.set('libraryBook', itemId);
   return `/books.html?${params}`;
 };
+// Send only IDs and the guide URL to the shelf; keep the authored guide on its page.
+export const shelfCollections = collectionData.collections.map((collection) => {
+  const guide = guideData.guides.find(({ collectionId }) => collectionId === collection.id);
+  const steps = guide?.steps.map(({ itemId }) => itemId) || collection.starters;
+  const members = [...materials.values()].filter(({ id }) =>
+    (collectionData.items as Record<string, { collections: string[] }>)[id]?.collections.includes(collection.id));
+  const remaining = members.filter(({ id }) => !steps.includes(id))
+    .sort((a, b) => a.title.localeCompare(b.title, 'en', { numeric: true }) || a.id.localeCompare(b.id));
+  return { ...collection, readingOrder: [...steps, ...remaining.map(({ id }) => id)], guideHref: `/guides/${collection.id}.html` };
+});
 export const guides = guideData.guides.map((guide) => {
   const collection = collectionData.collections.find(({ id }) => id === guide.collectionId);
   if (!collection) throw new Error(`Unknown guide collection: ${guide.collectionId}`);
   return {
-    ...guide, collection, href: `/guides/${guide.collectionId}.html`,
+    ...guide, collection,
+    remaining: shelfCollections.find(({ id }) => id === collection.id)!.readingOrder.slice(guide.steps.length).map((id) => ({
+      material: materials.get(id)!, shelfHref: shelfHref(collection.id, id),
+    })),
+    href: `/guides/${guide.collectionId}.html`,
     shelfHref: shelfHref(guide.collectionId),
     itemCount: Object.values(collectionData.items).filter(({ collections }) => collections.includes(guide.collectionId)).length,
     steps: guide.steps.map((step) => {

@@ -20,6 +20,7 @@ const { collection } = guide;
       <p class="guide-eyebrow">{collection.group} · Collection guide · 5 stops</p>
       <h1>{collection.label}</h1>
       <p class="guide-intro">{guide.intro}</p>
+      <a class="guide-open-source" href={guide.shelfHref}>Browse this collection in reading order →</a>
       <p class="guide-method-note">{guideNote}</p>
     </header>
     <div class="guide-layout">
@@ -59,6 +60,14 @@ const { collection } = guide;
           <p class="guide-eyebrow">After the five stops</p>
           <h2 id="guide-finish-title">Take it into your own life.</h2>
           <p>{guide.finish}</p>
+          <h3>Continue exploring</h3>
+          <p>Items 1–5 are the guided route above. The remaining items are listed alphabetically below; choose what interests you next. These numbers match the collection shelf.</p>
+          <ol class="guide-remaining" start={guide.steps.length + 1}>
+            {guide.remaining.map(({ material, shelfHref }) => <li>
+              <a href={material.url} target="_blank" rel="noopener noreferrer">{material.title} ↗</a>
+              <a class="guide-shelf-link" href={shelfHref}>Find on the shelf<span class="sr-only">: {material.title}</span> →</a>
+            </li>)}
+          </ol>
           <a class="guide-open-source" href={guide.shelfHref}>Explore all {guide.itemCount} items in this collection →</a>
           <p class="guide-more"><a href="/free-resources.html#collection-guides">Choose another guide</a></p>
         </section>

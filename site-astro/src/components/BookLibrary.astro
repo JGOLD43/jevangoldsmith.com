@@ -10,6 +10,7 @@ import InlineJson from './InlineJson.astro';
 import archive from '../../../data/learning-archive.json';
 import additions from '../../../data/library-additions.json';
 import collectionData from '../../../data/library-collections.json';
+import { shelfCollections } from '../lib/library-guides';
 import corrections from '../../../data/library-material-corrections.json';
 import videoArtworks from '../../../data/library-video-artwork.json';
 import artArtworks from '../../../data/library-art-artwork.json';
@@ -108,6 +109,7 @@ const filters = [
     <button type="button" data-library-change-collection></button>
     <button type="button" data-library-clear-collection aria-label="Clear collection filter">×</button>
     <p data-library-collection-description></p>
+    <a class="library-collection-guide" data-library-collection-guide href="/free-resources.html#collection-guides">Read the collection guide →</a>
   </div>
   <div class="book-library-stage" tabindex="0" role="region"
     aria-label="Interactive library. Drag the shelf to browse. Move over or drag the selected book to rotate it. Double-click an item to open it."
@@ -127,6 +129,7 @@ const filters = [
     <button class="book-library-arrow" type="button" data-library-step="-1" aria-label="Previous item">←</button>
     <div class="book-library-caption">
       <div aria-live="polite" aria-atomic="true">
+        <p class="library-item-number" data-library-item-number hidden></p>
         <p class="book-library-group" hidden></p>
         <p class="book-library-collection" hidden></p>
         <a class="book-library-title" href={library[0]?.href || '/books.html'}>{library[0]?.title}</a>
@@ -140,7 +143,7 @@ const filters = [
   <div class="book-library-empty" data-library-empty hidden role="status"><p>No matches for these filters.</p><button type="button" data-library-reset>Show all material</button></div>
 </section>
 <InlineJson id="jg-book-library" json={JSON.stringify(entries).replace(/</g, '\\u003c')} />
-<InlineJson id="jg-library-collections" json={JSON.stringify(collectionData.collections)} />
+<InlineJson id="jg-library-collections" json={JSON.stringify(shelfCollections)} />
 <script>
   import '../scripts/book-library';
 </script>

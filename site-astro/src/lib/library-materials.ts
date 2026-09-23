@@ -27,6 +27,8 @@ export interface ProblemCollection {
   description: string;
   group: string;
   starters: string[];
+  readingOrder?: string[];
+  guideHref?: string;
 }
 
 export interface LibraryClassification {

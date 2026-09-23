@@ -59,6 +59,9 @@ function initBookLibrary() {
   const activeCollection = library.querySelector<HTMLElement>('.library-active-collection')!;
   const collectionChange = library.querySelector<HTMLButtonElement>('[data-library-change-collection]')!;
   const collectionDescription = library.querySelector<HTMLElement>('[data-library-collection-description]')!;
+  const collectionGuide = library.querySelector<HTMLAnchorElement>('[data-library-collection-guide]')!;
+  const itemNumber = library.querySelector<HTMLElement>('[data-library-item-number]')!;
+  let collectionOrder = new Map<string, number>();
   let problemFilter = '';
   const currentCollection = () => problemCollections.find(({ id }) => id === problemFilter);
   let appCounts: Map<string, number> | null = null;
@@ -158,13 +161,14 @@ function initBookLibrary() {
     const tierRank: Record<string, number> = { s: 0, a: 1, b: 2, c: 3, d: 4 };
     sortMode = mode;
     const collection = currentCollection();
+    collectionOrder = new Map((collection?.readingOrder || collection?.starters || []).map((id, index) => [id, index + 1]));
     books = allBooks.filter((item) => {
       const matchesKind = materialFilter === 'all' || (materialFilter === 'archive' ? item.kind !== 'book' : item.kind === materialFilter);
       const matchesCollection = !collection || item.classification?.collections.includes(collection.id);
       return matchesKind && matchesCollection;
     }).sort((a, b) => {
       if (collection && mode === 'collection') {
-        const rank = (id: string) => { const index = collection.starters.indexOf(id); return index < 0 ? Infinity : index; };
+        const rank = (id: string) => collectionOrder.get(id) ?? Infinity;
         const starterOrder = rank(a.id) - rank(b.id);
         if (starterOrder) return starterOrder;
         return a.title.localeCompare(b.title, 'en', { numeric: true }) || a.id.localeCompare(b.id);
@@ -184,6 +188,8 @@ function initBookLibrary() {
     activeCollection.hidden = !collection;
     collectionChange.textContent = collection?.label || '';
     collectionDescription.textContent = collection?.description || '';
+    collectionGuide.href = collection?.guideHref || '/free-resources.html#collection-guides';
+    collectionGuide.setAttribute('aria-label', `Read the collection guide: ${collection?.label || 'All collections'}`);
     countLabel.textContent = `${books.length} ${onlyBooks ? 'books read' : materialFilter === 'all' || materialFilter === 'archive' || materialFilter === 'art' || materialFilter === 'other' ? 'items' : materialLabels[materialFilter].toLowerCase()}`;
     empty.hidden = books.length !== 0;
     if (controls) controls.hidden = books.length === 0;
@@ -319,6 +325,9 @@ function initBookLibrary() {
     if (index === selected) return;
     selected = index;
     const book = books[index];
+    const number = collectionOrder.get(book.id);
+    itemNumber.hidden = !number;
+    itemNumber.textContent = number ? `Item ${number} of ${collectionOrder.size}${number <= 5 ? ' · Guided reading' : ''}` : '';
     if (groupLabel) {
       groupLabel.hidden = false;
       groupLabel.textContent = book.tierLabel;
@@ -363,7 +372,8 @@ function initBookLibrary() {
     button.dataset.libraryIndex = String(logical);
     button.dataset.bookId = book.id;
     button.dataset.kind = book.kind;
-    button.setAttribute('aria-label', `${book.title}, by ${book.author}`);
+    const number = collectionOrder.get(book.id);
+    button.setAttribute('aria-label', `${number ? `Item ${number} of ${collectionOrder.size}: ` : ''}${book.title}, by ${book.author}`);
     button.style.setProperty('--binding-background', book.binding.background);
     button.style.setProperty('--binding-ink', book.binding.ink);
     if (book.artArtwork) button.style.setProperty('--art-frame', book.artArtwork.frame);
@@ -394,6 +404,12 @@ function initBookLibrary() {
         layer.append(spine);
       }
       if (face === 'cover' && book.kind !== 'book') layer.append(materialCover(book));
+      if (face === 'cover' && number) {
+        const badge = document.createElement('span');
+        badge.className = 'library-cover-number';
+        badge.textContent = String(number).padStart(2, '0');
+        layer.append(badge);
+      }
       if (face === 'cover' && book.kind === 'book') {
         const image = document.createElement('img');
         image.alt = '';
