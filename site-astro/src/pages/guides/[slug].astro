@@ -1,0 +1,68 @@
+---
+import Base from '../../layouts/Base.astro';
+import { guides, guideNote } from '../../lib/library-guides';
+import '../../styles/library-guides.css';
+
+export function getStaticPaths() {
+  return guides.map((guide) => ({ params: { slug: guide.collectionId }, props: { guide } }));
+}
+const { guide } = Astro.props;
+const { collection } = guide;
+---
+<Base title={`${collection.label}: a collection guide | Jevan Goldsmith`}
+  description={guide.outcome}
+  canonical={`https://jevangoldsmith.com${guide.href}`}
+  breadcrumbs={[{ name: 'Home', url: 'https://jevangoldsmith.com/' }, { name: 'Resources', url: 'https://jevangoldsmith.com/free-resources.html' }, { name: collection.label, url: `https://jevangoldsmith.com${guide.href}` }]}
+>
+  <main class="collection-guide">
+    <a class="guide-back" href="/free-resources.html#collection-guides">← All collection guides</a>
+    <header class="guide-header">
+      <p class="guide-eyebrow">{collection.group} · Collection guide · 5 stops</p>
+      <h1>{collection.label}</h1>
+      <p class="guide-intro">{guide.intro}</p>
+      <p class="guide-method-note">{guideNote}</p>
+    </header>
+    <div class="guide-layout">
+      <aside class="guide-sidebar">
+        <nav aria-label="Guide steps">
+          <details open>
+            <summary>Your five stops</summary>
+            <ol>{guide.steps.map((step, index) => <li><a href={`#step-${index + 1}`}>{step.heading}</a></li>)}</ol>
+          </details>
+        </nav>
+        <div class="guide-outcome"><p class="guide-eyebrow">What to take away</p><p>{guide.outcome}</p></div>
+        <p class="guide-pacing">Go at your own pace. Films and series may take several sittings. Source links open separately; some require access or purchase.</p>
+      </aside>
+      <div class="guide-reading">
+        <ol class="guide-steps">
+          {guide.steps.map((step, index) => (
+            <li class="guide-step" id={`step-${index + 1}`}>
+              <span class="guide-step-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              <div class="guide-step-body">
+                <h2>{step.heading}</h2>
+                <div class="guide-source">
+                  <p class="guide-eyebrow">{step.format}{step.material.duration ? ` · ${step.material.duration}` : ''}</p>
+                  <h3><a href={step.material.url} target="_blank" rel="noopener noreferrer">{step.material.title}<span aria-hidden="true"> ↗</span></a></h3>
+                  <p class="guide-credit">{step.attribution.label} <a href={step.attribution.url} target="_blank" rel="noopener noreferrer">{step.attribution.name} ↗</a></p>
+                </div>
+                <p class="guide-why">{step.why}</p>
+                <div class="guide-prompt"><h4>Pause & try</h4><p>{step.tryThis}</p></div>
+                <div class="guide-source-links">
+                  <a class="guide-open-source" href={step.material.url} target="_blank" rel="noopener noreferrer">{step.action}<span aria-hidden="true"> ↗</span><span class="sr-only">: {step.material.title} (opens in a new tab)</span></a>
+                  <a href={step.shelfHref}>Find on the shelf<span class="sr-only">: {step.material.title}</span> →</a>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <section class="guide-finish" aria-labelledby="guide-finish-title">
+          <p class="guide-eyebrow">After the five stops</p>
+          <h2 id="guide-finish-title">Take it into your own life.</h2>
+          <p>{guide.finish}</p>
+          <a class="guide-open-source" href={guide.shelfHref}>Explore all {guide.itemCount} items in this collection →</a>
+          <p class="guide-more"><a href="/free-resources.html#collection-guides">Choose another guide</a></p>
+        </section>
+      </div>
+    </div>
+  </main>
+</Base>

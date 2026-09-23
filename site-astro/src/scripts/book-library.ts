@@ -740,6 +740,10 @@ function initBookLibrary() {
       links.append(button);
     }
     const evidence = contextDialog.querySelector<HTMLAnchorElement>('[data-library-context-evidence]')!;
+    const guideLink = contextDialog.querySelector<HTMLAnchorElement>('[data-library-context-guide]')!;
+    const guideCollection = problemCollections.find((entry) => entry.id === (problemFilter || info.collections[0]));
+    guideLink.href = guideCollection ? `/guides/${guideCollection.id}.html` : '/free-resources.html#collection-guides';
+    guideLink.textContent = guideCollection ? `Follow the guide: ${guideCollection.label} →` : 'Find a collection guide →';
     evidence.textContent = `Classification basis: ${info.evidence.basis} ↗`;
     evidence.href = info.evidence.url;
     contextDialog.showModal();

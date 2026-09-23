@@ -1,0 +1,766 @@
+{
+  "updatedAt": "2026-09-23",
+  "editorialNote": "Suggested routes through material saved to explore. I haven’t read or watched everything here yet. The order and prompts are editorial suggestions based on available source text, excerpts, descriptions and synopses; they are not personal ratings or claims of completed viewing.",
+  "guides": [
+    {
+      "collectionId": "direction",
+      "intro": "Use this path when you have plenty of possible goals but little confidence that any of them are yours. Begin with the shape of an ordinary day, then look at fulfilment, uncertainty and the effect work has on you. Finish with a small project that can teach you more than another round of abstract planning.",
+      "outcome": "A description of a life you would like to live, and one small experiment that tests it.",
+      "steps": [
+        {
+          "itemId": "archive-b78029ad4b0f",
+          "heading": "Start with a way of living",
+          "why": "Thompson’s letter turns the usual career question around: consider the life before choosing the job. Starting here gives you something more personal than a title or milestone against which to judge the rest of the path.",
+          "tryThis": "Describe an ordinary Tuesday you would welcome. Include people, pace, surroundings and the kind of effort you want to make."
+        },
+        {
+          "itemId": "archive-798802b56554",
+          "heading": "Give fulfilment some detail",
+          "why": "Cohen’s framework helps turn that imagined day into a closer examination of work and the conditions around it. Use it to distinguish what is missing from what merely looks attractive at a distance.",
+          "tryThis": "Name two conditions that make work satisfying for you. For each, recall a real occasion when it was present."
+        },
+        {
+          "itemId": "archive-ee2cbd1d6bcb",
+          "heading": "Make room for an unfinished story",
+          "why": "Jobs’s commencement speech adds a life story to the frameworks. Read his retrospective account alongside your uncertainty: a coherent story told afterwards is different from knowing the right move beforehand.",
+          "tryThis": "Which interest keeps returning without an obvious payoff? Write down one way to explore it without needing to justify your whole future."
+        },
+        {
+          "itemId": "archive-be3c4fca20c0",
+          "heading": "Ask who the work will make you",
+          "why": "Marlinspike asks how a career changes the person doing it. This is a useful check on the appealing future you have sketched: the daily habits of a role matter as much as its rewards.",
+          "tryThis": "Compare two possible directions. What would each train you to notice, value and spend your days doing?"
+        },
+        {
+          "itemId": "archive-71a26ffda1ad",
+          "heading": "Turn direction into a project",
+          "why": "A Project of One’s Own brings the route back to direct experience. A personally meaningful project can test curiosity and commitment before you make a much larger decision about your life.",
+          "tryThis": "Choose a two-week project that produces something you can show or use. Define its smallest finished version and the first session."
+        }
+      ],
+      "finish": "Keep the Tuesday description beside your project. After two weeks, record what gave you energy, what you avoided and what surprised you. Revise the direction from that evidence; you do not need to turn the experiment into a permanent identity."
+    },
+    {
+      "collectionId": "action",
+      "intro": "This route is for an idea that has spent too long in your head. It moves from perceived obstacles to identity, visible effort and the first useful deadline. Bring one specific stalled task with you; using a different hypothetical example at every step makes it too easy to stay in planning mode.",
+      "outcome": "A small piece of finished work and a clear next action.",
+      "steps": [
+        {
+          "itemId": "archive-0567bd8484de",
+          "heading": "Question the apparent barrier",
+          "why": "Mack’s essay introduces resourcefulness as a response to circumstances that seem fixed. Start by examining the obstacle itself before deciding that you need more motivation or a better system.",
+          "tryThis": "Write the sentence ‘I cannot start because…’. Separate an actual constraint from an assumption you could check with one message or experiment."
+        },
+        {
+          "itemId": "archive-2372e8e07dc6",
+          "heading": "Loosen the story about yourself",
+          "why": "Rivett explores how an internal identity can keep you from doing the thing you want to do. Once the external barrier is clearer, look at the role your own description of yourself plays in maintaining it.",
+          "tryThis": "Replace ‘I am not someone who…’ with one observable action. Make it small enough to do without first feeling like a different person."
+        },
+        {
+          "itemId": "archive-001160cfb5f4",
+          "heading": "Allow the effort to be visible",
+          "why": "Francis challenges the embarrassment of trying hard. This follows the identity question because a first attempt often feels exposing precisely when it matters to you.",
+          "tryThis": "Identify the part of this task you have been treating casually to protect yourself. Give it one uninterrupted session of deliberate effort."
+        },
+        {
+          "itemId": "archive-915db78f812b",
+          "heading": "Shrink the first useful deadline",
+          "why": "Collison’s collection of fast projects challenges assumptions about duration. Treat the examples as a prompt to examine your schedule, rather than a promise that every project can move at the same speed.",
+          "tryThis": "What could exist by tomorrow that does not exist today? Cut the scope until the answer is believable; keep the essential purpose."
+        },
+        {
+          "itemId": "archive-62832b53c2df",
+          "heading": "Catch the next promise of tomorrow",
+          "why": "Rossmann’s talk brings the route back to the familiar moment of postponement. Use it after attempting something, when you have a real delay to examine rather than an imagined future burst of discipline.",
+          "tryThis": "Do the next ten-minute action before collecting another productivity tip. Then leave a written starting point for the following session."
+        }
+      ],
+      "finish": "Keep the first rough output. Compare the obstacle you predicted with the one you actually met, then schedule one more session. If the task is still stuck, change its scope or ask a specific person for help instead of making a larger promise to yourself."
+    },
+    {
+      "collectionId": "focus",
+      "intro": "Start here when your days feel busy but your attention rarely stays where you want it. The order moves from the pull of the internet to worthwhile work, everyday attention and independent thought. The aim is to make space for something you care about, rather than build an elaborate system for measuring every minute.",
+      "outcome": "One protected block of time, with a clear purpose and fewer avoidable interruptions.",
+      "steps": [
+        {
+          "itemId": "archive-2116370b4a77",
+          "heading": "Notice what keeps pulling you back",
+          "why": "Roy’s account of internet use is a starting point for recognising your own patterns. Observe the situation around a distraction before deciding which restriction or habit would actually help.",
+          "tryThis": "For one day, note three times you opened a feed automatically. What were you doing, feeling or avoiding just beforehand?"
+        },
+        {
+          "itemId": "archive-7482edf94910",
+          "heading": "Decide what deserves the space",
+          "why": "Altman begins productivity with the choice of work. Follow the distraction audit by naming what you want your recovered attention to serve; otherwise you may simply fit more low-value tasks into the day.",
+          "tryThis": "Choose one piece of work worth a quiet hour. Write why it matters and one tempting task that can wait."
+        },
+        {
+          "itemId": "archive-3b6715a87c86",
+          "heading": "Include ordinary life in attention",
+          "why": "Wallace’s speech broadens the question beyond output. How you notice routine frustrations and other people is also a use of attention, even when nothing measurable gets finished.",
+          "tryThis": "During one familiar frustration, describe what happened without assuming you know everyone else’s motives. Notice whether another explanation changes your response."
+        },
+        {
+          "itemId": "archive-b1c89095007a",
+          "heading": "Leave room for your own thought",
+          "why": "Deresiewicz connects solitude with thinking independently. After examining both work and daily experience, try a period with fewer incoming opinions so an unfinished thought has time to develop.",
+          "tryThis": "Take one question into a twenty-minute walk or notebook session without headphones or feeds. Stay with it rather than gathering more takes."
+        },
+        {
+          "itemId": "archive-6c86b1603a9d",
+          "heading": "Choose what to leave out",
+          "why": "Graham’s Life Is Short supplies a final perspective on the cost of attention. The useful decision is not only what to fit in, but which recurring demand no longer deserves its place.",
+          "tryThis": "Remove or reduce one optional commitment for the next week. Give the released time to a person, project or activity you actually value."
+        }
+      ],
+      "finish": "Try the protected block three times. Record what interrupted it and whether its purpose still felt worthwhile. Keep the simplest change that helped; the goal is an attention pattern you can live with, not a flawless week."
+    },
+    {
+      "collectionId": "calm",
+      "intro": "This path begins with noticing everyday tension, then questions the urge to turn relaxation into another achievement. It moves outward from a moment of bracing to the habits and inputs around your day. Use the material as an invitation to observe and experiment gently, without requiring yourself to feel a particular way.",
+      "outcome": "A simple account of when you tense up and one small change to your daily surroundings.",
+      "steps": [
+        {
+          "itemId": "how-to-unclench",
+          "heading": "Notice the moment of bracing",
+          "why": "Miller’s field guide gives the collection a concrete starting point: noticing tension and exploring what softening might feel like. Read the introduction before choosing a small, comfortable experiment from the guide.",
+          "tryThis": "Notice one ordinary moment when you brace, such as opening your inbox. Describe the sensation and situation without judging whether you relaxed successfully."
+        },
+        {
+          "itemId": "archive-99a326f6da4d",
+          "heading": "Take the pressure off improvement",
+          "why": "Ferriss reflects on the limits of years spent optimising himself. Read this next so that the first experiment does not become another test of whether you are doing life correctly.",
+          "tryThis": "Where has a helpful practice become a demand? Write what doing a little less of it, or measuring it less, might look like."
+        },
+        {
+          "itemId": "archive-355680338223",
+          "heading": "Look at the conditions around the day",
+          "why": "Beshara’s Mental Wealth broadens the view to habits and the environment around work and wellbeing. Use it to examine ordinary conditions instead of assigning every tense moment to a personal failure.",
+          "tryThis": "Choose one practical condition to notice for a week, such as late work, breaks or the transition into bed. Change only one manageable thing."
+        },
+        {
+          "itemId": "archive-73ea759deada",
+          "heading": "Consider calm as room for creativity",
+          "why": "Lynch’s documentary offers an artist’s perspective on meditation and creativity. It adds a different purpose for quiet: making room to notice and develop ideas. His experience is a perspective to consider, not a result you have to reproduce.",
+          "tryThis": "Spend a short quiet interval with a sketch, a piece of music or a view outside. What becomes noticeable when there is no output target?"
+        },
+        {
+          "itemId": "archive-2116370b4a77",
+          "heading": "Reduce a recurring source of noise",
+          "why": "Roy’s account of compulsive internet use closes the route with the inputs around you. After observing internal pressure, examine whether a repeated digital habit is making it harder to settle.",
+          "tryThis": "Choose one transition in the day to keep free of a feed. Decide what you would like to do in that space instead."
+        }
+      ],
+      "finish": "Keep a brief note of what felt comfortable, what added pressure and which environmental change was useful. Keep or adapt one experiment. There is no requirement to complete every practice or turn a quiet moment into a streak."
+    },
+    {
+      "collectionId": "resilience",
+      "intro": "Use this route after a setback, when both encouragement and ‘just work harder’ advice feel incomplete. Begin with the possibility of renewal, move to a next action, then examine rebuilding and the conditions that make another attempt possible. The later examples complicate a simple success story rather than promising a triumphant ending.",
+      "outcome": "A realistic next attempt, with support, limits and a reason to continue.",
+      "steps": [
+        {
+          "itemId": "archive-23f6ec1f2a5c",
+          "heading": "Separate the setback from the whole person",
+          "why": "Gardner’s address considers renewal, curiosity and the limits people place on themselves. Start here to ask what can still grow when one role, plan or outcome has disappointed you.",
+          "tryThis": "Name what was lost or failed as specifically as possible. Then list two parts of your life or ability that the outcome does not settle."
+        },
+        {
+          "itemId": "archive-af9f9235556b",
+          "heading": "Find the next available move",
+          "why": "Horowitz’s business-crisis essay directs attention toward action. Read it after making room for the setback, so its bluntness becomes a tool for finding a move rather than dismissing what happened.",
+          "tryThis": "Separate what needs acknowledgment from what needs action. Choose one action within your control that would make tomorrow slightly easier."
+        },
+        {
+          "itemId": "archive-eb9ac180f718",
+          "heading": "Watch someone rebuild the work",
+          "why": "Comedian follows the work of developing comedy and provides a concrete study of starting again. Look for the distance between a public performance and the uncertain process that produces it.",
+          "tryThis": "Which part of your next attempt needs small, low-stakes repetitions? Design a practice version that can be imperfect in front of a limited audience."
+        },
+        {
+          "itemId": "archive-65293bf5074a",
+          "heading": "Account for the ability to try again",
+          "why": "The Privilege of Failure prompts a check on resources and circumstances. Place it here to question the idea that everyone can absorb the same setback or simply choose the same level of risk.",
+          "tryThis": "What time, money, support or permission would another attempt require? Name one gap to address before increasing the stakes."
+        },
+        {
+          "itemId": "archive-b019c33a8db0",
+          "heading": "Let an unsuccessful project teach you",
+          "why": "General Magic offers a company story in which ambition and invention do not produce a straightforward commercial victory. Use it to consider what can remain valuable when the original plan does not work.",
+          "tryThis": "List what you would carry forward from your setback: a skill, relationship, insight or piece of work. What would you deliberately leave behind?"
+        }
+      ],
+      "finish": "Write a short restart plan: the smallest next attempt, the support it needs, the limit on what you will risk and a date to reconsider. Continuing and changing direction are both options; judge them against your circumstances rather than the shape of somebody else’s story."
+    },
+    {
+      "collectionId": "connection",
+      "intro": "This path is for a life that looks full but feels short on connection. It moves from the limits of achievement to generosity, time and everyday interpretation, then opens outward through other people’s lives. Keep one real relationship in mind so the route ends in contact rather than a better theory of friendship.",
+      "outcome": "One act of reconnection and a repeatable way to make room for people.",
+      "steps": [
+        {
+          "itemId": "archive-1cde0fd23030",
+          "heading": "Question what success can supply",
+          "why": "Chesky’s conversation about happiness, loneliness and belonging makes a useful opening. It asks whether professional achievement can meet needs that depend on relationships and shared life.",
+          "tryThis": "Which relationship have you expected to improve automatically once work settles down? Write down what contact would actually look like this week."
+        },
+        {
+          "itemId": "archive-34df5905a24d",
+          "heading": "Look at generosity without a transaction",
+          "why": "Today You, Tomorrow Me brings the abstract need for connection into a specific story of help. Notice the difference between keeping an exact account and participating in a wider pattern of mutual care.",
+          "tryThis": "Offer one useful, proportionate act of help without attaching a request. Or accept help you would normally refuse out of embarrassment."
+        },
+        {
+          "itemId": "archive-2eef8d9ffd0f",
+          "heading": "Give people a place in the calendar",
+          "why": "Altman’s reflections on passing time bring urgency to the previous two pieces. A relationship can matter deeply while still receiving almost no time unless you make a deliberate opening for it.",
+          "tryThis": "Arrange one call, meal or walk. If it goes well, suggest a simple recurring rhythm that suits both people."
+        },
+        {
+          "itemId": "archive-3b6715a87c86",
+          "heading": "Reconsider the everyday story",
+          "why": "Wallace asks how attention changes ordinary encounters. Read this after making contact, as a prompt to notice the assumptions and irritations you bring into moments with other people.",
+          "tryThis": "Recall a recent small misunderstanding. Write a plausible explanation of the other person’s behaviour that does not make you the centre of it."
+        },
+        {
+          "itemId": "archive-1fe8f8c42bda",
+          "heading": "Practise curiosity across differences",
+          "why": "Choose an episode of Parts Unknown set somewhere unfamiliar to you. Bourdain’s travel and food series extends the route beyond your own circle and gives you a setting in which to observe conversation, hospitality and local context.",
+          "tryThis": "Note one question you would like to ask someone about their own experience. Keep it open enough that their answer could surprise you."
+        }
+      ],
+      "finish": "Make the contact before starting another collection. Afterwards, record one thing you learned about the other person and one small way to keep the relationship present. A useful result may be an ordinary shared afternoon rather than a dramatic conversation."
+    },
+    {
+      "collectionId": "independence",
+      "intro": "Use this path when other people’s approval is shaping choices you would rather make for yourself. Begin with belonging and status, then consider creative conviction, being misunderstood and the identities you defend. Finish with a contrasting artist’s voice; independence should leave room to listen as well as disagree.",
+      "outcome": "One choice you can explain in your own terms, with a clear distinction between useful feedback and approval seeking.",
+      "steps": [
+        {
+          "itemId": "archive-c1270394c4a9",
+          "heading": "Recognise the invitation to belong",
+          "why": "Lewis’s Inner Ring examines the desire to get inside an exclusive circle. Start with the social pull itself, rather than assuming approval seeking is simply a lack of confidence.",
+          "tryThis": "Name a group whose acceptance matters to you. What do you find yourself doing, hiding or agreeing with to stay close to it?"
+        },
+        {
+          "itemId": "archive-cbc35cbf47e5",
+          "heading": "Protect the reason for making something",
+          "why": "Bowie’s advice about playing to the gallery narrows the question to creative work. It gives you a way to ask what you wanted from a project before an imagined audience entered the room.",
+          "tryThis": "Describe what interests you about one project without mentioning praise, visibility or how impressive it would look."
+        },
+        {
+          "itemId": "archive-6c5ee515eada",
+          "heading": "Allow other people an incomplete view",
+          "why": "Kreider’s essay examines the discomfort of what others think of us. Follow the creative prompt with this social one: doing something for your own reasons does not guarantee that everyone will understand them.",
+          "tryThis": "Choose one harmless misunderstanding you can leave uncorrected. What useful activity could receive the energy you would spend managing that impression?"
+        },
+        {
+          "itemId": "archive-6b3a52091fb3",
+          "heading": "Keep conviction from becoming a costume",
+          "why": "Graham’s essay supplies a counterweight to declaring yourself independent. A strongly defended identity can also narrow your thinking, even when the identity is ‘someone who does not follow the crowd’.",
+          "tryThis": "What evidence could change your mind about one belief attached to your identity? Write it down before seeking another argument in its favour."
+        },
+        {
+          "itemId": "archive-9a2ab2e9a6f9",
+          "heading": "Listen to a particular artistic voice",
+          "why": "The Miles Davis interview brings these ideas into an artist’s account of his work and world. Read for specific judgments and experiences, including points you resist, rather than collecting a ready-made model of rebellion.",
+          "tryThis": "Identify one judgment you understand better after reading and one you still question. Can you state both without needing either total agreement or rejection?"
+        }
+      ],
+      "finish": "Make one modest decision according to your own stated reason. Ask for feedback from someone whose judgment is relevant, and decide in advance what kind of feedback would actually change your approach. Approval and useful information do not have to carry the same weight."
+    },
+    {
+      "collectionId": "learning",
+      "intro": "Bring one skill you want to practise, not just a subject you want to collect information about. This route moves from apprenticeship to asking questions, adjusting pace and building study conditions, then ends with a demanding example of craft. The useful output is a practice loop you can repeat.",
+      "outcome": "A small practice task, a source of feedback and a schedule for trying again.",
+      "steps": [
+        {
+          "itemId": "archive-87d6e6b7cf9d",
+          "heading": "Begin with observation and feedback",
+          "why": "Young’s discussion of apprenticeship asks what learning looks like near real work. Use it to shift attention from finishing resources to attempting a task and seeing where your understanding breaks down.",
+          "tryThis": "Choose a small task performed by someone skilled. Watch or inspect an example, then attempt your own version before studying another explanation."
+        },
+        {
+          "itemId": "archive-226e8dc0b433",
+          "heading": "Ask the basic question",
+          "why": "Luu’s essay addresses the embarrassment that can block feedback. Place it after your first attempt, when you have a real point of confusion and a reason to expose it.",
+          "tryThis": "Write the simplest question you are reluctant to ask. Ask a suitable person, or explain the problem plainly enough to identify what you need to look up."
+        },
+        {
+          "itemId": "archive-91a90060e0c7",
+          "heading": "Test an assumed pace",
+          "why": "Sivers’s learning story questions the speed limits people accept. Treat it as an invitation to test your own pace, while keeping quality of understanding and available energy in view.",
+          "tryThis": "Which step are you delaying because a course or habit says it belongs later? Try a bounded version and note the prerequisites you actually lack."
+        },
+        {
+          "itemId": "archive-168d3409b4ab",
+          "heading": "Build conditions for repeated work",
+          "why": "Karpathy’s course advice brings the route back to sustained study. An unusually productive session is useful, but a skill also needs conditions that let you return and work through difficult material.",
+          "tryThis": "Schedule two practice sessions with a clear task and a distraction-free starting point. End each by writing the next question to tackle."
+        },
+        {
+          "itemId": "archive-17c34baa8f90",
+          "heading": "Observe a demanding practice culture",
+          "why": "Jiro Dreams of Sushi gives you a case study of repetition, standards and apprenticeship. Watch for what can transfer to your skill, and what depends on the particular workplace and people shown.",
+          "tryThis": "Choose one detail to improve through repetition. Define what better would look like and who or what could give you reliable feedback."
+        }
+      ],
+      "finish": "Repeat the task, feedback and revision cycle three times. Keep the attempts so you can compare them. Judge the learning by what you can now notice or do, rather than the number of links, notes or lessons you have completed."
+    },
+    {
+      "collectionId": "judgment",
+      "intro": "Take one real decision through this path. Start by making it manageable, then examine incentives, identity and the usefulness of writing things down. Finish with a failure case that tests whether your process would notice uncomfortable evidence. The aim is a clearer decision with visible assumptions, not certainty.",
+      "outcome": "A one-page decision note with alternatives, evidence, risks and a review date.",
+      "steps": [
+        {
+          "itemId": "archive-f7b93a732fdc",
+          "heading": "Make the decision smaller and clearer",
+          "why": "The 37signals guide offers questions about reversibility, timing and responsibility. Begin here to define the decision you actually face, rather than carrying several unresolved questions as one enormous problem.",
+          "tryThis": "State the decision, who owns it, when it matters and what would be difficult to reverse. Identify the smallest useful commitment."
+        },
+        {
+          "itemId": "archive-5d406a210122",
+          "heading": "Look for pressures on the reasoning",
+          "why": "Munger’s talk considers recurring patterns of misjudgment. Use it after defining the decision to inspect the incentives and social pressures surrounding your preferred answer.",
+          "tryThis": "Who gains if you choose each option, including you? Name one incentive or persuasive cue that might be making an argument feel stronger than its evidence."
+        },
+        {
+          "itemId": "archive-6b3a52091fb3",
+          "heading": "Separate the option from your identity",
+          "why": "Graham adds a different obstacle: beliefs can become hard to revise when they express who you are. This is especially useful when a decision feels like a test of loyalty or character.",
+          "tryThis": "Complete: ‘If I chose the other option, I worry it would mean I am…’. Then state the practical trade-off without that identity claim."
+        },
+        {
+          "itemId": "archive-dca48c6d9d5e",
+          "heading": "Write the reasoning before the result",
+          "why": "Altman’s discussion of note-taking provides a concrete way to slow down and externalise thought. Use writing here to preserve what you actually believe before the outcome reshapes your memory.",
+          "tryThis": "Write your preferred option, the strongest alternative, the biggest unknown and what evidence would make you switch. Put a date on the note."
+        },
+        {
+          "itemId": "archive-6784d172e874",
+          "heading": "Stress-test the story of success",
+          "why": "Enron: The Smartest Guys in the Room offers a case of distorted incentives and a powerful success narrative. Watch for information that was inconvenient to the prevailing story, then return to your own decision.",
+          "tryThis": "What bad news would you be least willing to hear about your preferred option? Find one independent way to check for it."
+        }
+      ],
+      "finish": "Make the appropriate next commitment and set a review date. When you revisit the note, distinguish a poor process from an unlucky outcome. Update the decision rule you would use next time rather than rewriting the original reasoning to fit what happened."
+    },
+    {
+      "collectionId": "creativity",
+      "intro": "Use this route when a project feels blank, stale or too predictable. It moves from generating alternatives to studying influences, close observation and changes in process. Finish with the messier environment around a real creative production. Bring a draft or brief so that each source leads to an experiment.",
+      "outcome": "Three distinct directions and one small version worth developing.",
+      "steps": [
+        {
+          "itemId": "archive-809be3308e7e",
+          "heading": "Change the constraints",
+          "why": "Cohen’s extreme brainstorming prompts disrupt the assumptions inside a familiar problem. Begin by widening the options before trying to polish the first plausible idea.",
+          "tryThis": "Apply two extreme constraints to your brief: dramatically less time, a different audience or removal of the main feature. Generate several responses without selecting a winner."
+        },
+        {
+          "itemId": "archive-5df74c3dc852",
+          "heading": "Examine what the ideas are made from",
+          "why": "Everything Is a Remix shifts the question from pure originality to transformation of existing material. Follow the brainstorming with an honest look at the influences and combinations inside your options.",
+          "tryThis": "Name three influences on one idea. Describe what you are borrowing and what you would change, combine or challenge rather than reproduce."
+        },
+        {
+          "itemId": "archive-92eabb120c57",
+          "heading": "Feed imagination with observation",
+          "why": "Phan’s account of Miyazaki’s creative process adds attention to the world outside the reference pile. It is a useful turn from recombining familiar examples toward noticing something directly.",
+          "tryThis": "Observe a place, interaction or movement relevant to the project. Record five specific details before interpreting them."
+        },
+        {
+          "itemId": "archive-7025101c927b",
+          "heading": "Alter the way you work",
+          "why": "Eno’s discussion of production and Oblique Strategies offers another route out of habit: change the process rather than demand a better idea from the same routine.",
+          "tryThis": "Make a second version under one unfamiliar rule. Change the order, tool, collaborator or starting point, and keep both versions for comparison."
+        },
+        {
+          "itemId": "archive-5c3c6c6b76fe",
+          "heading": "See the production around the idea",
+          "why": "The Kingdom of Dreams and Madness brings you into the working world of Studio Ghibli. Use it to consider how an imaginative idea meets time, collaboration and the ordinary demands of making a film.",
+          "tryThis": "Which uncertainty in your project can only be resolved by making something? Build a rough test that answers that question alone."
+        }
+      ],
+      "finish": "Place three directions side by side. Choose the one with the most interesting unresolved question and make a small finished version. Keep a note of the observation or process change that produced it so you can use that method again without repeating the same idea."
+    },
+    {
+      "collectionId": "craft",
+      "intro": "This route is for work that functions but does not yet feel considered. Start with criteria, look closely at disciplined practice and skilled performance, then examine what can be lost through efficiency and what revision actually demands. Bring a piece of your own work to assess throughout.",
+      "outcome": "A revised piece of work and three specific standards you can use again.",
+      "steps": [
+        {
+          "itemId": "archive-6b77d174f5c8",
+          "heading": "Define what good means here",
+          "why": "Rams’s principles offer concrete questions about usefulness, clarity and restraint. Begin by choosing standards relevant to your medium instead of judging quality only by whether you like the overall impression.",
+          "tryThis": "Select three principles and translate each into a question about your own piece. Identify one detail that fails one of those questions."
+        },
+        {
+          "itemId": "archive-17c34baa8f90",
+          "heading": "Look behind the polished result",
+          "why": "Jiro Dreams of Sushi shifts attention to the practice and standards behind a finished experience. Notice both the care involved and the demands that this working culture places on people.",
+          "tryThis": "Which small part of your work would improve through focused repetition? Make three attempts at that part rather than restarting the entire piece."
+        },
+        {
+          "itemId": "archive-79283b1f5453",
+          "heading": "Learn to describe the difference",
+          "why": "Wallace’s Federer essay is an exercise in noticing and describing exceptional performance. Read for the concrete distinctions that make admiration more precise than saying someone is talented.",
+          "tryThis": "Choose an excellent example in your own field. Describe three observable choices that make it work, then compare one with your current attempt."
+        },
+        {
+          "itemId": "archive-5f9387f3a01e",
+          "heading": "Check what efficiency has removed",
+          "why": "Schultz’s Starbucks memo asks whether growth and efficiency weakened the experience customers valued. Apply that question after defining quality: a convenient shortcut may preserve the output while changing its character.",
+          "tryThis": "Which shortcut in your process helps, and which erases something important? Test restoring one detail and compare the experience."
+        },
+        {
+          "itemId": "archive-eb9ac180f718",
+          "heading": "Return to the unfinished stage",
+          "why": "Comedian brings the route back to developing and testing material. It is a useful final reminder that standards become practical through revision, including attempts that do not yet satisfy them.",
+          "tryThis": "Show a small revision to a relevant person. Ask where it becomes unclear, unconvincing or dull, then revise that point once more."
+        }
+      ],
+      "finish": "Save the before and after versions. Write three standards supported by details you can now see, and one compromise you chose deliberately. Use those standards on the next piece without expecting every project to demand the same level of refinement."
+    },
+    {
+      "collectionId": "communication",
+      "intro": "Bring a message, article, presentation or proposal that someone needs to understand. This route moves from sentence-level clarity to observation, demonstration, language and the result an audience cares about. Each step should change the same piece of communication, so the learning accumulates into a finished revision.",
+      "outcome": "A clearer message that a real reader can explain back to you.",
+      "steps": [
+        {
+          "itemId": "archive-860eda3bfc8d",
+          "heading": "Make the first version easier to follow",
+          "why": "Adams’s non-fiction writing tutorial supplies an accessible starting point for explaining an idea. Use it on a short section of your own work before taking on larger questions of narrative and persuasion.",
+          "tryThis": "Rewrite one paragraph so its central claim is unmistakable. Remove a sentence that repeats the point without adding evidence or meaning."
+        },
+        {
+          "itemId": "archive-1572b0659a34",
+          "heading": "Replace abstraction with observed detail",
+          "why": "Talese’s Sinatra profile shows how a portrait can be built through scenes, people and specific observations. It follows the clarity exercise by asking what gives a reader something concrete to understand.",
+          "tryThis": "Find one general claim in your draft. Support it with a precise example, scene or fact you can substantiate."
+        },
+        {
+          "itemId": "archive-163bb29cbc15",
+          "heading": "Show the idea working",
+          "why": "Jobs’s 2007 iPhone presentation adds demonstration and sequence to written description. Watch how the audience is introduced to an unfamiliar product, then consider where your explanation asks readers to imagine too much.",
+          "tryThis": "Create a short example, sketch or demonstration of the main idea. Put it where the audience first needs it, not after every detail."
+        },
+        {
+          "itemId": "archive-b6da727f1fe6",
+          "heading": "Check what the language conceals",
+          "why": "Orwell’s essay is a useful corrective after studying persuasive performance. Clear communication also requires examining whether familiar phrases make a weak claim sound more solid or hide who is doing what.",
+          "tryThis": "Underline vague phrases and passive descriptions in your revision. Replace one with a specific actor, action and consequence."
+        },
+        {
+          "itemId": "archive-6cb80ac74208",
+          "heading": "End with the change that matters",
+          "why": "Butterfield’s Slack memo reframes the product around the change customers want. Use this last to connect all the improved sentences and examples to a purpose the audience can recognise.",
+          "tryThis": "Write one sentence naming who this is for and what will be different for them. Check that the opening and ending both support it."
+        }
+      ],
+      "finish": "Give the revision to someone resembling the intended audience. Ask them what it means, why it matters and what they would do next. Revise the first point of confusion they identify; do not explain it away verbally and leave the same problem in the document."
+    },
+    {
+      "collectionId": "career",
+      "intro": "Use this path when you are weighing a role, a change of direction or greater independence. It combines questions about the life work creates with negotiation, worthwhile problems and alternative ways to earn. Finish with a story that makes opportunity and constraints visible alongside personal ambition.",
+      "outcome": "A comparison of two working futures and one practical conversation or experiment.",
+      "steps": [
+        {
+          "itemId": "archive-be3c4fca20c0",
+          "heading": "Consider who the work will make you",
+          "why": "Marlinspike’s career advice asks how work changes the person doing it. Start here so that later questions about compensation and achievement sit inside a fuller picture of the life you are choosing.",
+          "tryThis": "For each option, describe a typical week and the habits it would strengthen. Which parts would you welcome even without the job title?"
+        },
+        {
+          "itemId": "archive-b71da3c455fa",
+          "heading": "Make your value discussable",
+          "why": "McKenzie’s negotiation essay turns a broad career question into preparation for a concrete conversation. Read it for ways to make relevant work and value legible, while considering the context of your own role.",
+          "tryThis": "Gather three examples of useful outcomes you have contributed to. Draft the question you want to ask in your next compensation or role discussion."
+        },
+        {
+          "itemId": "archive-d978c7e1938d",
+          "heading": "Choose a problem worth sustained effort",
+          "why": "Hamming’s talk shifts the focus from obtaining a position to what you might do within it. It is a useful next step once you have considered both daily life and practical terms.",
+          "tryThis": "Name a problem you would be proud to spend a year understanding. What smaller contribution could you make in the next month?"
+        },
+        {
+          "itemId": "archive-1cc8c5f49212",
+          "heading": "Consider a different scale of working life",
+          "why": "Kelly’s 1,000 True Fans offers a model of earning through a direct audience. Treat it as an alternative to examine, not a guaranteed arithmetic shortcut to independence.",
+          "tryThis": "If you worked directly for an audience or clients, who would they be and what would they repeatedly value? Identify an assumption you could test cheaply."
+        },
+        {
+          "itemId": "archive-fe472f33c367",
+          "heading": "Look at ambition inside a wider system",
+          "why": "Hoop Dreams follows basketball ambitions within family and social circumstances. It adds a needed check on career stories that attribute every outcome to effort, talent or choosing correctly.",
+          "tryThis": "Which factors in your options are controllable, negotiable or outside your control? What support would make your preferred path more realistic?"
+        }
+      ],
+      "finish": "Compare the options using daily life, meaningful work, terms and constraints. Choose one reversible move: a conversation, trial project or application. Set a date to review what you learned before making the larger decision."
+    },
+    {
+      "collectionId": "business",
+      "intro": "Take one proposed product or service through this path. Begin with the customer’s problem, translate it into a meaningful outcome, then turn that understanding into contact and observation. The later company stories test what happens when a promising idea meets relationships, growth and the experience people actually receive.",
+      "outcome": "A short customer hypothesis and a small test that could prove it wrong.",
+      "steps": [
+        {
+          "itemId": "archive-e5a7b0d0c4bd",
+          "heading": "Identify the relationship to the problem",
+          "why": "Sequoia’s framework distinguishes forms of product-market fit by how customers experience a problem. Start here before choosing features or assuming that interest means a strong need.",
+          "tryThis": "Describe one specific customer and the situation that creates the problem. How do they deal with it now, and what evidence do you have?"
+        },
+        {
+          "itemId": "archive-6cb80ac74208",
+          "heading": "Describe the desired change",
+          "why": "Butterfield’s memo asks the team to think beyond the software being sold. Use it to turn the first step’s problem into an outcome someone would recognise and value.",
+          "tryThis": "Explain the proposed benefit without naming a feature or using your product category. What becomes easier, possible or less frustrating?"
+        },
+        {
+          "itemId": "archive-008591ecaccc",
+          "heading": "Build a habit of contact and evidence",
+          "why": "Armstrong’s email makes product work concrete through users, behaviour and communication. It follows the positioning exercise because an elegant description needs contact with what people actually do.",
+          "tryThis": "Plan three conversations or observations around the customer’s existing workflow. Ask about a recent real instance before describing your proposed solution."
+        },
+        {
+          "itemId": "archive-919b447e84e8",
+          "heading": "Examine the organisation around the idea",
+          "why": "Startup.com adds the interpersonal and organisational pressures of building a company. Watch with your own assumptions in mind: a business needs more than a convincing account of the customer’s problem.",
+          "tryThis": "Name one disagreement your collaborators might have about money, roles or direction. Discuss how you would decide it before the stakes increase."
+        },
+        {
+          "itemId": "archive-5f9387f3a01e",
+          "heading": "Protect the experience as it grows",
+          "why": "Schultz’s memo questions whether operational changes weakened the experience that made Starbucks distinctive. It closes the route by examining what success and expansion could accidentally remove.",
+          "tryThis": "What part of the customer experience must survive a faster or cheaper process? Describe a way to check it directly with customers."
+        }
+      ],
+      "finish": "Write the customer, problem, current alternative and proposed change on one page. Run a small test with a clear sign of failure as well as success. Use what people do and report to revise the hypothesis before investing in a larger version."
+    },
+    {
+      "collectionId": "leadership",
+      "intro": "This route is for someone responsible for making a team’s work possible. It moves from creative conditions to daily operations and explicit culture, then challenges the idea of total executive control. Finish by inspecting the harm a narrow success metric can permit. Bring one current team problem to each step.",
+      "outcome": "One operating change, a named owner and a check on unintended consequences.",
+      "steps": [
+        {
+          "itemId": "archive-0e3663981d8d",
+          "heading": "Create conditions for useful contributions",
+          "why": "Catmull’s account of Pixar examines how a company supports collective creativity. Begin with the environment around the work, including whether people can surface problems and contribute across boundaries.",
+          "tryThis": "Where does useful information stop moving in your team? Choose one meeting or handoff where a quieter or more distant person’s perspective is missing."
+        },
+        {
+          "itemId": "archive-d5479cc27874",
+          "heading": "Connect attention to responsibility",
+          "why": "Rabois’s operating advice turns the broader cultural question into executive attention, inputs and ownership. Use it to look at a current problem that repeatedly returns without becoming anyone’s clear responsibility.",
+          "tryThis": "Name the owner, useful inputs and next decision for that problem. Check that the owner has the authority and context to act."
+        },
+        {
+          "itemId": "archive-26550db542d1",
+          "heading": "Make the trade-offs explicit",
+          "why": "Netflix’s culture slides state a particular set of choices about performance, freedom and responsibility. Read them as choices to examine, including their costs, rather than a culture to copy wholesale.",
+          "tryThis": "Choose one principle you admire and one you would adapt or reject. Explain what each would mean for an ordinary team member during a difficult week."
+        },
+        {
+          "itemId": "archive-336319fbe7cf",
+          "heading": "Question the story of total control",
+          "why": "Rao’s CEOs Don’t Steer challenges reassuring management narratives. Place it after the operational material to distinguish actions a leader can take from outcomes they cannot simply command.",
+          "tryThis": "For one team outcome, separate direct decisions from conditions you can influence and events you must respond to. Where is your attention currently misplaced?"
+        },
+        {
+          "itemId": "archive-70a75c21981c",
+          "heading": "Inspect what the metric leaves out",
+          "why": "The reported Facebook memo makes growth-at-any-cost reasoning stark. Read it as a cautionary case, considering the surrounding reporting as well as the memo’s language, before choosing your own measure of progress.",
+          "tryThis": "Who could be harmed while your team’s main metric improves? Add one concrete check that would make that harm visible."
+        }
+      ],
+      "finish": "Choose one change to ownership, information flow or review. Explain its purpose to the people affected and agree when to revisit it. Evaluate both the intended result and the cost to those doing or receiving the work."
+    },
+    {
+      "collectionId": "money",
+      "intro": "This path asks what you want money to make possible. It moves from independence to changing expectations, inherited advantage and the limits of reaching a financial goal, then returns to a practical conversation about value. Use it to clarify priorities and questions rather than choose investments.",
+      "outcome": "A statement of what ‘enough’ would make possible and one grounded question about your working income.",
+      "steps": [
+        {
+          "itemId": "archive-fe4408394eb0",
+          "heading": "Name the freedom you want",
+          "why": "Collins’s F-You Money essay frames money as the ability to refuse or leave an unwanted situation. Begin with the specific freedom behind the financial goal rather than a number chosen for its own sake.",
+          "tryThis": "What would you like to be able to say no to? What ordinary decision would become easier if you had more room to choose?"
+        },
+        {
+          "itemId": "archive-92a881b5085c",
+          "heading": "Examine how expectations move",
+          "why": "The hedonic adaptation essay asks how an improved lifestyle can become the new normal. Follow the independence question with a check on whether your definition of enough keeps moving without a clear reason.",
+          "tryThis": "Compare a purchase or upgrade you anticipated with how it feels now. Which benefits remain useful, and which have faded into the background?"
+        },
+        {
+          "itemId": "archive-0ac2b501f974",
+          "heading": "Look beyond an individual success story",
+          "why": "The One Percent examines wealth and inequality from within an affluent family context. It broadens the route to inheritance and social position, which can disappear in advice focused only on individual habits.",
+          "tryThis": "Name one advantage or constraint in your own starting position. How should it change the comparisons you make with other people?"
+        },
+        {
+          "itemId": "archive-66ba14869461",
+          "heading": "Ask what happens after the target",
+          "why": "The account of being rich without knowing what to do next tests the assumption that a financial result automatically supplies direction. Read it with the first step’s desired freedom in view.",
+          "tryThis": "If the financial target were met, what would you want a normal week to contain? Identify one small part you could make room for already."
+        },
+        {
+          "itemId": "archive-b71da3c455fa",
+          "heading": "Prepare a concrete conversation",
+          "why": "McKenzie’s negotiation essay brings the route back to something practical: discussing the value of your work. Consider the suggestions in the context of your role, available evidence and alternatives.",
+          "tryThis": "List the outcomes you contribute to and the question you want answered about compensation or scope. Prepare for a conversation rather than choosing a number without context."
+        }
+      ],
+      "finish": "Write a short definition of enough in terms of security, choices and daily life. Record which assumptions need checking and one conversation you can prepare. Revisit the definition when your circumstances change, rather than only when somebody else’s lifestyle resets the target."
+    },
+    {
+      "collectionId": "power",
+      "intro": "Use this route to examine persuasive language, organisational incentives and polished success stories. It moves between an essay, a corporate failure, an internal memo and investigative reporting before ending with satire. The point is to become more precise about evidence and consequences, not to assume every institution hides the same story.",
+      "outcome": "A short analysis separating a public claim, the incentives behind it and the people affected.",
+      "steps": [
+        {
+          "itemId": "archive-b6da727f1fe6",
+          "heading": "Notice what the words make invisible",
+          "why": "Orwell’s essay begins with language because unclear or inflated phrasing can conceal an action before you start evaluating it. Practise turning an impressive claim into a statement you can actually question.",
+          "tryThis": "Choose a public statement. Rewrite it using a named actor, a concrete action and an identifiable consequence. What information is still missing?"
+        },
+        {
+          "itemId": "archive-6784d172e874",
+          "heading": "Look at incentives inside a success story",
+          "why": "Enron’s rise and collapse gives the language exercise an organisational setting. Watch how reputation and incentives interact, then distinguish warning signs visible at the time from explanations that only seem obvious afterwards.",
+          "tryThis": "Identify a reward, an inconvenient fact and a person with reason to ignore it. What independent evidence could have challenged the story?"
+        },
+        {
+          "itemId": "archive-70a75c21981c",
+          "heading": "Read the logic when it is stated openly",
+          "why": "The reported Facebook memo exposes a stark argument about connection and growth. Read the surrounding reporting too, including how the memo is framed and contested, rather than treating an isolated quotation as the entire case.",
+          "tryThis": "Write the goal the argument prioritises, the cost it accepts and the people who bear that cost. Where would you challenge its reasoning?"
+        },
+        {
+          "itemId": "archive-cd1346a980bd",
+          "heading": "Follow the rules as well as the rhetoric",
+          "why": "ProPublica’s McKinsey investigation adds questions about institutional arrangements and conflicts. It follows the internal memo to shift attention from what individuals say to the structures that let decisions proceed.",
+          "tryThis": "Map who advises, who pays, who decides and who is affected in the case. Which relationship needs disclosure or independent scrutiny?"
+        },
+        {
+          "itemId": "archive-e26187144167",
+          "heading": "Use satire to test your recognition",
+          "why": "Thank You for Smoking is a fictional satire, offered here as a lens on argument and persuasion. After the reported cases, notice the difference between making a position sound defensible and supplying evidence for it.",
+          "tryThis": "Describe one persuasive move in the film. Find a real example of the same form of argument, then evaluate its evidence separately from its style."
+        }
+      ],
+      "finish": "Apply the actor, incentive, evidence and consequence questions to one current claim you encounter. Keep facts, interpretations and unanswered questions separate. A useful result is a better-supported judgment, including knowing when there is not enough information to reach one."
+    },
+    {
+      "collectionId": "change",
+      "intro": "This path studies technological change through forecasts, history, an internal response and a company that arrived with ambitious ideas. Read the older material as evidence of how people reasoned at the time. Comparing expectations with outcomes is more useful here than treating any one prediction as a current map of the future.",
+      "outcome": "A small map of how one technological change could affect your work, including uncertainties and counterexamples.",
+      "steps": [
+        {
+          "itemId": "archive-4366b4cb7ff1",
+          "heading": "Start with an influential thesis",
+          "why": "Andreessen’s software essay offers a broad claim about how industries change. Begin by extracting its mechanism: what is supposed to change, why, and under which conditions? Keep its historical setting in view.",
+          "tryThis": "Write the thesis in your own words. Name one industry where you think it fits and one where the fit is less straightforward."
+        },
+        {
+          "itemId": "archive-cc0b9e0c0361",
+          "heading": "Add the messiness of history",
+          "why": "Triumph of the Nerds tells a history of the personal-computer industry. Put it beside the broad thesis to notice the companies, decisions and circumstances that a sweeping account can compress.",
+          "tryThis": "Choose one turning point in the series. Which parts depended on technology, distribution, organisational choices or timing?"
+        },
+        {
+          "itemId": "archive-c357030a291b",
+          "heading": "Read a response from inside an organisation",
+          "why": "Gates’s Internet Tidal Wave memo shows an established company framing a major change for itself. This moves the route from explaining an industry to deciding what people inside a company should pay attention to.",
+          "tryThis": "Write a short memo about a change relevant to your field. Separate what is observable now from what you expect might follow."
+        },
+        {
+          "itemId": "archive-0e4e7efdff83",
+          "heading": "Examine a forecast about work",
+          "why": "Humans Need Not Apply offers an older account of automation and employment. Treat it as a forecast to inspect: some claims may look different now, and changes in tasks need not imply identical changes in entire occupations.",
+          "tryThis": "Pick one task in your work. What could change technically, and what other conditions would have to change before the prediction affected the whole role?"
+        },
+        {
+          "itemId": "archive-b019c33a8db0",
+          "heading": "Consider why an idea can arrive without winning",
+          "why": "General Magic complicates a simple story of inevitable progress. Its company history invites questions about timing, execution and the distance between imagining a useful future and building a sustainable business in it.",
+          "tryThis": "What would have to be true for your expected change to happen soon? Name one plausible obstacle and an early sign that would make you revise the timeline."
+        }
+      ],
+      "finish": "Keep a one-page map with the change, affected tasks, enabling conditions and uncertainties. Choose one small skill or experiment that would be useful under more than one outcome. Set a date to update the map from new evidence rather than accumulating confident forecasts."
+    },
+    {
+      "collectionId": "adventure",
+      "intro": "Use this route when routine has made the world feel smaller. It moves from a large journey to a more unusual local interest, then examines risk, encounter and the impossibility of repeating an experience exactly. Let the films expand your curiosity without setting the required scale or danger of your own outing.",
+      "outcome": "A modest adventure with a reason to go, sensible boundaries and room for surprise.",
+      "steps": [
+        {
+          "itemId": "archive-00752223f3a7",
+          "heading": "Ask what draws you out",
+          "why": "180° South starts the route with a journey and the values around it. Look beyond the landscape to ask what makes travel or exploration meaningful to the people involved.",
+          "tryThis": "Name what you want more of: unfamiliarity, physical effort, nature, companionship or time away. Which matters most for your next outing?"
+        },
+        {
+          "itemId": "archive-5dd6cfdf0cac",
+          "heading": "Find a doorway through a particular interest",
+          "why": "LISTERS offers birdwatching as a world of attention and pursuit. It is a useful next step because an adventure can begin with noticing something specific rather than travelling a great distance.",
+          "tryThis": "Choose a nearby place and one thing to look for closely. Find out enough to begin, leaving room to notice what you did not expect."
+        },
+        {
+          "itemId": "archive-a014e1c66206",
+          "heading": "Distinguish preparation from the spectacle",
+          "why": "Free Solo adds a demanding example of preparation and risk. Watch to examine the stakes and the people affected, rather than treating the level of danger as a model to copy.",
+          "tryThis": "For your own outing, write the practical limits, necessary preparation and conditions for turning back. Choose a level of challenge appropriate to your experience."
+        },
+        {
+          "itemId": "archive-1fe8f8c42bda",
+          "heading": "Leave room for people and context",
+          "why": "An episode of Parts Unknown adds food, conversation and the lives of people in a place. It broadens adventure beyond personal achievement and scenery.",
+          "tryThis": "What could you learn about the place from someone who knows it? Plan a respectful opportunity to listen without expecting them to perform an experience for you."
+        },
+        {
+          "itemId": "archive-4625ca75c7df",
+          "heading": "Let the experience be different",
+          "why": "Quammen’s river essay reflects on change and the impossibility of holding experience still. End here to loosen the demand that your outing reproduce a film, memory or ideal version of travel.",
+          "tryThis": "After going, record one detail you could not have planned. What changed when you allowed the day to take its own shape?"
+        }
+      ],
+      "finish": "Put the outing on the calendar and make the necessary preparations. Afterwards, keep a short account of what you noticed, not just what you completed. Use that observation to choose the next small departure from routine."
+    },
+    {
+      "collectionId": "perspective",
+      "intro": "This path is for a problem that has begun to fill the whole frame. Move through curiosity, attentive listening, lives unfolding over time and a wider scientific scale, then return to ordinary daily experience. The aim is to change the setting around the problem, without pretending that scale makes it unimportant.",
+      "outcome": "A fuller description of a current concern and one different way to meet it tomorrow.",
+      "steps": [
+        {
+          "itemId": "archive-c57e33955afd",
+          "heading": "Begin with a question about the world",
+          "why": "Feynman’s Fun to Imagine brings curiosity to familiar phenomena. Start by letting an ordinary object or event become interesting again, rather than immediately trying to solve the concern that brought you here.",
+          "tryThis": "Choose something ordinary you do not fully understand. Write three questions about how it works before looking for an explanation."
+        },
+        {
+          "itemId": "archive-36f0e394d4a0",
+          "heading": "Spend time with a single performance",
+          "why": "Sakamoto’s Opus offers an extended musical performance as a different form of attention. Place it after the questions as a chance to stay with an experience without needing to turn every moment into information.",
+          "tryThis": "Listen to a passage without multitasking. Note a detail of timing, sound or silence you might have missed while doing something else."
+        },
+        {
+          "itemId": "archive-860d4a978d72",
+          "heading": "Look at lives across time",
+          "why": "The Up Series follows people at intervals across their lives. Begin with the first instalment and return to later ones as time allows; you do not need to consume the whole series in one sitting to start noticing change and continuity.",
+          "tryThis": "What do you expect will still matter about your current concern in seven years? What might change in a way you cannot predict?"
+        },
+        {
+          "itemId": "archive-ee52223f377d",
+          "heading": "Widen the scale again",
+          "why": "Sagan’s Cosmos adds a scientific and historical setting beyond an individual lifetime. Start with one episode, then connect its questions to the curiosity you began with rather than treating the wider scale as an instruction to dismiss everyday life.",
+          "tryThis": "Name one idea that changes your sense of scale. Does it alter the urgency, significance or simply the setting of the problem you brought?"
+        },
+        {
+          "itemId": "archive-3b6715a87c86",
+          "heading": "Bring the wider view into an ordinary day",
+          "why": "Wallace’s This Is Water returns the route to familiar frustrations and choices of attention. The final move is practical: a changed perspective matters when it affects how you meet an actual person or situation.",
+          "tryThis": "Choose a recurring irritation tomorrow. Write two plausible interpretations of it and decide what response would fit the wider view you want to practise."
+        }
+      ],
+      "finish": "Describe the original concern again, including the people, timescale and uncertainty around it. Keep what still deserves action and identify one response you can change tomorrow. Return to a performance, question or episode when it helps you see more, rather than merely consume more."
+    }
+  ]
+}

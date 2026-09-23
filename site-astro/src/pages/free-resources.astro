@@ -2,6 +2,8 @@
 import raw from '../../../data/products.json';
 import Base from '../layouts/Base.astro';
 import { renderResourceCard } from '../lib/free-resources-render';
+import { guides, guideGroups } from '../lib/library-guides';
+import '../styles/library-guides.css';
 
 interface Resource {
   id: string;
@@ -35,14 +37,42 @@ const cards = resources.map((r) => renderResourceCard(r, resourceCategories)).jo
 >
   <main class="resources-content">
     <section class="resources-intro">
-      <h1 class="resources-title">Practical artifacts from the archive.</h1>
-      <p class="resources-subtitle">Templates, guides, and tools I use or am shaping into something useful. Start with the weekly review.</p>
+      <h1 class="resources-title">A place to start. A path to follow.</h1>
+      <p class="resources-subtitle">Guides through the archive, organised around what you’re working on. Find a reading and watching order, make a little time, and take something useful into your own life.</p>
       <div class="resources-cta-row">
-        <a href="#resources-grid" class="resources-cta resources-cta--primary">Browse resources</a>
-        <a href="/newsletter.html" class="resources-cta resources-cta--secondary">Subscribe to newsletter</a>
+        <a href="#collection-guides" class="resources-cta resources-cta--primary">Find a guide</a>
+        <a href="#resources-grid" class="resources-cta resources-cta--secondary">Templates & tools</a>
       </div>
     </section>
 
+    <section class="collection-guides" id="collection-guides" aria-labelledby="collection-guides-title">
+      <header>
+        <p class="guide-eyebrow">20 collections · 20 suggested paths</p>
+        <h2 id="collection-guides-title">What are you working on?</h2>
+        <p>Each guide connects five pieces of material in a deliberate order, explains why each comes next, and gives you something to try along the way. Follow the path at your own pace, then explore the wider collection.</p>
+        <p>I haven’t read or watched everything here yet. These are suggested routes based on source text, excerpts and descriptions, rather than personal ratings.</p>
+      </header>
+      <nav class="guide-group-nav" aria-label="Guide topics">
+        {guideGroups.map((group, index) => <a href={`#guide-group-${index}`}>{group}</a>)}
+      </nav>
+      {guideGroups.map((group, index) => (
+        <section class="guide-group" id={`guide-group-${index}`} aria-labelledby={`guide-group-heading-${index}`}>
+          <h3 id={`guide-group-heading-${index}`}>{group}</h3>
+          <div class="guide-cards">
+            {guides.filter((guide) => guide.collection.group === group).map((guide) => (
+              <article class="guide-card">
+                <p class="guide-eyebrow">5 stops · {guide.itemCount} items to explore</p>
+                <h4>{guide.collection.label}</h4>
+                <p>{guide.outcome}</p>
+                <a href={guide.href}>Follow the guide<span class="sr-only">: {guide.collection.label}</span> →</a>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+    </section>
+
+    <h2 class="resources-tools-title">Templates & tools</h2>
     <div class="resources-grid" id="resources-grid">
       <Fragment set:html={cards} />
     </div>
@@ -50,6 +80,8 @@ const cards = resources.map((r) => renderResourceCard(r, resourceCategories)).jo
   </main>
 
   <style is:inline>
+    .resources-tools-title { color: var(--primary-color); font-family: Chivo, sans-serif; font-size: 1.7rem; margin-bottom: 1.25rem; }
+    #resources-grid { scroll-margin-top: 110px; }
     /* === Restyled resource cards ===
        Aligned with the site's broader visual language: cream/white
        cards with thin neutral borders (matching the books, movies,

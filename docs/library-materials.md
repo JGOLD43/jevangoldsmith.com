@@ -79,3 +79,27 @@ every new ID. The unit checks reject missing/orphan classifications, invalid
 collection membership, duplicate generic explanations, invalid starting points,
 and corrections that replace identities. Review uncertain placements again when
 more of their source becomes available; do not silently imply completed viewing.
+
+## Collection guides
+
+Resources (`/free-resources.html#collection-guides`) contains one suggested route
+for each of the 20 problem collections. Static pages at `/guides/<collection>.html`
+connect five reviewed sources in an authored sequence, with an introduction,
+placement rationale, specific practice prompts, and a closing application.
+
+`data/library-guides.json` stores the prose and stable material IDs. The server-only
+`site-astro/src/lib/library-guides.ts` resolves the same source corrections and
+attributions as the shelf. Guide source links open separately, while “Find on the
+shelf” preserves the collection and selected material. An item's context dialog
+links to the active collection's guide (or its first collection when unfiltered).
+
+These are editorial reading/viewing suggestions, not claims of completed reading
+or personal ratings. The note remains visible on the index and every guide. No
+provisional placements are used as guide stops. Series are introduced as material
+to approach over multiple sittings; no invented total completion time is shown.
+The complete collection remains available after the five-stop path.
+
+When updating a collection, review its guide alongside its three shelf starters.
+A guide may order sources differently when its written progression explains the
+choice. Unit checks require a unique guide per collection, five distinct valid
+members, non-provisional classifications and individually authored prompts.
