@@ -122,13 +122,49 @@
 .book-library .library-volume[data-kind="interview"] .material-illustration i { width: 23px; height: 23px; background: radial-gradient(circle, #171913 0 20%, #d8cfad 22% 47%, #676555 50% 60%, #d8cfad 62%); border-radius: 50%; }
 .book-library .library-volume[data-kind="interview"] .material-illustration i:nth-child(3), .book-library .library-volume[data-kind="interview"] .material-rule { display: none; }
 .book-library .library-volume[data-kind="interview"] .material-footnote { order: 3; font-size: 6px; padding-top: 5%; }
-/* A circular metal film tin, labelled for the documentary. */
-.book-library .library-volume[data-kind="documentary"] .library-volume-cover, .book-library .library-volume[data-kind="documentary"] .library-volume-back { border-radius: 50%; background: #8f958d; box-shadow: inset 0 0 0 3px #c3c6b8, inset 0 0 0 7px #5c665d, inset 0 0 0 10px #a9afa3; }
-.book-library .library-volume[data-kind="documentary"] .material-design { background: repeating-radial-gradient(circle at 50% 50%, #d1d1bd18 0 1px, #404c4218 1px 3px), linear-gradient(135deg, #d6d7c5, #7c897c 40%, #c1c6b7 70%, #727e70); align-items: center; justify-content: center; padding: 20% 12%; text-align: center; }
-.book-library .library-volume[data-kind="documentary"] .material-heading { padding: 8% 6%; background: #f0dfad; font: 600 13px/1.2 Georgia, serif; width: 100%; box-shadow: 0 2px 3px #0004; -webkit-line-clamp: 4; }
-.book-library .library-volume[data-kind="documentary"] .material-edition { font-size: 6px; }
-.book-library .library-volume[data-kind="documentary"] .material-illustration, .book-library .library-volume[data-kind="documentary"] .material-rule, .book-library .library-volume[data-kind="documentary"] .library-volume-spine, .book-library .library-volume[data-kind="documentary"] .library-volume-pages, .book-library .library-volume[data-kind="documentary"] .library-volume-top, .book-library .library-volume[data-kind="documentary"] .library-volume-bottom { display: none; }
-.book-library .library-volume[data-kind="documentary"] .material-footnote { margin-top: 0; font-size: 6px; }
+/* A perforated metal reel around a real-depth stack of wound film. */
+.book-library .library-volume[data-kind="documentary"] :is(.library-volume-cover, .library-volume-back) {
+  border-radius: 50%; background: transparent; overflow: visible; box-shadow: none;
+}
+.book-library .library-volume[data-kind="documentary"] .library-volume-back {
+  background: linear-gradient(135deg, #e0e0d5, #747a76 40%, #bbc0b7 65%, #454c49);
+  border: 2px solid #a6ada4; box-sizing: border-box;
+  box-shadow: inset 0 0 0 3px #444d48, inset 0 0 0 6px #c2c8bc;
+}
+.book-library .reel-film {
+  inset: 3%; border-radius: 50%;
+  background: repeating-radial-gradient(circle, #31271d 0 1px, #594939 1px 2px, #211d18 2px 3px);
+  box-shadow: inset 0 0 0 2px #171813, 0 0 0 1px #6a6758;
+}
+.book-library .library-volume[data-kind="documentary"] .reel-design {
+  position: relative; display: block; padding: 0; background: transparent; container-type: inline-size;
+}
+.book-library .reel-flange {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from -40deg, #e5e7da, #7e8981 16%, #cdd2c5 28%, #69756e 44%, #dfe1d1 62%, #8c978e 82%, #e5e7da);
+  mask: url('/images/library/reel-flange.svg') center / contain no-repeat;
+  box-shadow: inset 0 0 0 2px #eff1e3, inset 0 0 0 5px #667169, inset 0 0 0 7px #c9d0bf;
+}
+.book-library .reel-hub {
+  position: absolute; inset: 42%; border-radius: 50%;
+  background: radial-gradient(circle, #131915 0 26%, #a5aea0 28% 37%, #e0e3d3 39% 47%, #5f6e63 50% 62%, #bdc7b6 66%);
+  box-shadow: 1px 2px 3px #0006;
+}
+.book-library .reel-label {
+  position: absolute; left: 9%; top: 50%; width: 82%; box-sizing: border-box; padding: 4% 5%;
+  transform: translateY(-50%) rotate(-4deg);
+  background: linear-gradient(100deg, #e4cd90, #f2e3b7 20%, #efddaa 80%, #dfc785);
+  box-shadow: 1px 3px 4px #0006, inset 0 1px #fff5;
+  border-inline: 1px dashed #b79e65;
+}
+.book-library .reel-label-text { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.book-library .library-volume[data-kind="documentary"] .material-heading {
+  display: block; flex: none; width: 100%; padding: 0; margin: 0; overflow: visible; -webkit-line-clamp: unset;
+  font: 700 16px/1.12 Georgia, serif; text-align: center; color: #302719; overflow-wrap: normal; hyphens: none;
+}
+.book-library .reel-mark { position: absolute; top: 4%; left: 0; width: 100%; text-align: center; color: #354338; font: 700 4cqw/1 Arial, sans-serif; letter-spacing: .15em; }
+.book-library .library-volume[data-kind="documentary"] .library-volume-cover::after { display: none; }
+.book-library .library-volume[data-kind="documentary"] .library-cover-number { top: 12%; right: 14%; }
 /* Manila folder with a tab and a pinned memo. */
 .book-library .library-volume[data-kind="memo"] .library-volume-cover { overflow: visible; background: #b79864; border-radius: 0 7px 3px 3px; }
 .book-library .library-volume[data-kind="memo"] .library-volume-cover::before { content: ''; position: absolute; left: 0; bottom: 100%; width: 45%; height: 12px; background: #b79864; border-radius: 6px 6px 0 0; }
