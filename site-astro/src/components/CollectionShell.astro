@@ -61,9 +61,9 @@ const tasteOptions = config.sidebar.listOptions ?? [];
     </button>
   </div>
 
-  <aside class={config.sidebar.className} id={config.sidebar.id}>
+  <aside class:list={[config.sidebar.className, 'sidebar-refined']} id={config.sidebar.id}>
     <div class="sidebar-header">
-      <button class="sidebar-collapse-btn" data-action={config.sidebar.collapseAction} title="Collapse sidebar">
+      <button class="sidebar-collapse-btn" data-action={config.sidebar.collapseAction} title="Toggle sidebar" aria-label="Toggle sidebar" aria-controls={config.sidebar.id}>
         <svg class="ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-sidebarCollapse"></use></svg>
       </button>
       <span class="sidebar-browse-label">Browse</span>
@@ -88,6 +88,7 @@ const tasteOptions = config.sidebar.listOptions ?? [];
 
     {config.sidebar.search && (
       <div class="sidebar-search">
+        <label class="sidebar-search-label" for={config.sidebar.search.inputId}>Search</label>
         <div class={config.sidebar.search.wrapperClass ?? 'search-input-wrapper search-bubble'}>
           <svg class="search-icon ico-stroke ico-18" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-search"></use></svg>
           <input
@@ -100,7 +101,7 @@ const tasteOptions = config.sidebar.listOptions ?? [];
             data-action-event={config.sidebar.search.searchEvent}
             data-action-value={config.sidebar.search.searchUsesValue ? 'true' : undefined}
           />
-          <button id={config.sidebar.search.clearButtonId} class="search-clear-btn" data-action={config.sidebar.search.clearAction} style="display: none;">
+          <button id={config.sidebar.search.clearButtonId} class="search-clear-btn" aria-label="Clear search" data-action={config.sidebar.search.clearAction} style="display: none;">
             <svg class="ico-stroke ico-14" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-close"></use></svg>
           </button>
         </div>
@@ -114,6 +115,7 @@ const tasteOptions = config.sidebar.listOptions ?? [];
       </div>
     )}
 
+    {sections.length > 0 && <div class="sidebar-section-label">Categories</div>}
     {config.sidebar.sectionsWrapperId ? (
       <div id={config.sidebar.sectionsWrapperId} style="display: none;">
         {sections.map((item) => {
