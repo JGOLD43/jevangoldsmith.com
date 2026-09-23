@@ -18,9 +18,13 @@
 .book-library .material-footnote { display: block; margin-top: auto; padding-top: 8%; font: 7px/1.5 Arial, sans-serif; }
 .book-library .material-illustration { position: relative; display: block; flex: 1; min-height: 14%; margin: 10% 0; }
 .book-library .material-rule { display: block; height: 12px; margin-top: 8%; opacity: .3; background: repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 4px); }
-/* Folded, layered paper with a narrow editorial column. */
+/* Article headlines use all available paper space and are fitted in full. */
 .book-library .library-volume[data-kind="article"] .material-design { background: linear-gradient(90deg, #00000008, transparent 8%, #ffffff20 50%, #0000000a), #eee5ce; }
-.book-library .library-volume[data-kind="article"] .material-illustration { flex: 0; height: 30px; min-height: 0; background: repeating-linear-gradient(0deg, #51442d66 0 1px, transparent 1px 5px); width: 52%; }
+.book-library .library-volume[data-kind="article"] .material-design { container-type: inline-size; }
+.book-library .library-volume[data-kind="article"] .material-edition { flex: none; font-size: 5.5cqw; padding-bottom: 7%; }
+.book-library .article-headline-space { display: flex; align-items: center; flex: 1; min-height: 0; margin: 8% 0; }
+.book-library .library-volume[data-kind="article"] .material-heading { display: block; flex: none; width: 100%; overflow: visible; -webkit-line-clamp: unset; line-height: 1.12; overflow-wrap: normal; word-break: normal; hyphens: none; }
+.book-library .library-volume[data-kind="article"] .material-footnote { flex: none; margin: 0; border-top: 1px solid #51442d55; padding-top: 6%; font-size: 5cqw; }
 .book-library .library-volume[data-kind="article"] .library-volume-cover { box-shadow: 2px 2px #e2d6ba, 4px 4px #eee5d1; }
 /* A walnut frame and paper mat around an original abstract print. */
 .book-library .library-volume[data-kind="art"] .library-volume-cover { border: 8px ridge var(--art-frame, #775038); box-sizing: border-box; background: var(--art-frame, #775038); box-shadow: inset 0 0 8px #0009; }

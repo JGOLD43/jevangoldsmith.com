@@ -58,6 +58,17 @@ export function materialCover(material: { title: string; kind: MaterialKind; col
     return cover;
   }
   text('material-edition', materialLabels[material.kind]);
+  if (material.kind === 'article') {
+    const space = document.createElement('span');
+    space.className = 'article-headline-space';
+    const heading = document.createElement('span');
+    heading.className = 'material-heading';
+    heading.textContent = material.title;
+    space.append(heading);
+    cover.append(space);
+    text('material-footnote', [material.collection, material.duration || material.medium].filter(Boolean).join(' · '));
+    return cover;
+  }
   const illustration = document.createElement('span');
   illustration.className = 'material-illustration';
   for (let i = 0; i < 3; i++) illustration.append(document.createElement('i'));
@@ -66,4 +77,30 @@ export function materialCover(material: { title: string; kind: MaterialKind; col
   text('material-rule', '');
   text('material-footnote', `${material.collection} · ${material.duration || material.medium || 'Collected material'}`);
   return cover;
+}
+
+// Fit the actual rendered lines, including long words, instead of truncating
+// after a fixed line count. Cache dimensions so shelf animation does no layout reads.
+const articleSizes = new WeakMap<HTMLElement, string>();
+export function fitArticleHeadline(volume: HTMLElement, width: number, height: number) {
+  const size = `${width}:${height}`;
+  if (articleSizes.get(volume) === size) return;
+  const space = volume.querySelector<HTMLElement>('.article-headline-space');
+  const heading = space?.querySelector<HTMLElement>('.material-heading');
+  if (!space || !heading || !space.clientHeight) return;
+  const fits = () => heading.scrollHeight <= space.clientHeight && heading.scrollWidth <= space.clientWidth;
+  let low = 1;
+  let high = width * .14;
+  heading.style.fontSize = `${high}px`;
+  if (!fits()) {
+    // The text stays at the largest size that fits its available print area.
+    for (let i = 0; i < 9; i++) {
+      const mid = (low + high) / 2;
+      heading.style.fontSize = `${mid}px`;
+      if (fits()) low = mid;
+      else high = mid;
+    }
+    heading.style.fontSize = `${Math.floor(low * 10) / 10}px`;
+  }
+  articleSizes.set(volume, size);
 }

@@ -4,7 +4,7 @@ import { flyCoverToDetail } from './books-flight';
 import type { BookBinding } from '../lib/book-binding';
 import type { VideoArtwork } from '../lib/video-artwork';
 import { materialLabels, parseMaterialFilter, type MaterialKind, type MaterialFilter, type LibraryClassification, type ProblemCollection, type ArtArtwork } from '../lib/library-materials';
-import { materialCover } from './material-cover';
+import { materialCover, fitArticleHeadline } from './material-cover';
 
 interface LibraryBook {
   id: string;
@@ -55,6 +55,21 @@ function initBookLibrary() {
   let materialFilter: MaterialFilter = 'book';
   const allBooks = readInlineJson<LibraryBook[]>('jg-book-library') || [];
   const problemCollections = readInlineJson<ProblemCollection[]>('jg-library-collections') || [];
+  const room = library.querySelector<HTMLElement>('.book-library-room');
+  const woodGrains = [...stage.querySelectorAll<HTMLElement>('.book-library-wood-grain')];
+  const seeds = new Map(allBooks.map(({ id }) => [id, Array.from(id).reduce((sum, char) => sum + char.charCodeAt(0), 0)]));
+  const geometry = new WeakMap<HTMLElement, string>();
+  const selectedStates = new WeakMap<HTMLElement, boolean>();
+  const styleValues = new WeakMap<HTMLElement, Map<string, string>>();
+  // Pointer motion often changes one book. Leave every unchanged DOM value alone.
+  function setStyle(node: HTMLElement, property: string, value: string) {
+    let values = styleValues.get(node);
+    if (!values) { values = new Map(); styleValues.set(node, values); }
+    if (values.get(property) === value) return;
+    values.set(property, value);
+    node.style.setProperty(property, value);
+  }
+  let roomTileWidth = 1;
   const collectionPicker = library.querySelector<HTMLDetailsElement>('.library-collection-picker')!;
   const activeCollection = library.querySelector<HTMLElement>('.library-active-collection')!;
   const collectionChange = library.querySelector<HTMLButtonElement>('[data-library-change-collection]')!;
@@ -243,7 +258,6 @@ function initBookLibrary() {
       outgoingShelf.inert = true;
       outgoingShelf.setAttribute('aria-hidden', 'true');
       outgoingShelf.removeAttribute('tabindex');
-      outgoingShelf.style.setProperty('--wood-offset', library!.style.getPropertyValue('--wood-offset'));
       stage!.before(outgoingShelf);
     }
     sceneryPosition += position;
@@ -439,10 +453,11 @@ function initBookLibrary() {
     if (!books.length) return;
     // The grain travels with the books; the distant room moves more slowly.
     // Modulo a complete texture tile keeps long browsing sessions continuous.
-    library!.style.setProperty('--wood-offset', `${(-(position + sceneryPosition) * pitch) % 960}px`);
-    library!.style.setProperty('--room-offset', `${-(position + sceneryPosition) * pitch * .14}px`);
-    stage!.style.setProperty('--shelf-depth', `${130 * scale}px`);
-    stage!.style.setProperty('--shelf-rear-depth', `${52 * scale}px`);
+    const woodOffset = (-(position + sceneryPosition) * pitch) % 960;
+    for (const grain of woodGrains) setStyle(grain, 'transform', `translate3d(${woodOffset}px, 0, 0)`);
+    if (room) setStyle(room, 'transform', `translate3d(${(-(position + sceneryPosition) * pitch * .14) % roomTileWidth}px, 0, 0)`);
+    setStyle(stage!, '--shelf-depth', `${130 * scale}px`);
+    setStyle(stage!, '--shelf-rear-depth', `${52 * scale}px`);
     const center = Math.round(position);
     // A small moving window keeps the infinite shelf light, even for large libraries.
     const radius = Math.min(12, Math.floor((books.length - 1) / 2));
@@ -459,44 +474,52 @@ function initBookLibrary() {
       const book = books[wrap(logical)];
       const distance = logical - position;
       // Slightly varied binding sizes, with the cover's true aspect ratio retained.
-      const seed = Array.from(book.id).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+      const seed = seeds.get(book.id)!;
       const height = (230 + seed % 45) * scale * (book.kind === 'interview' ? .62 : book.kind === 'art' || book.kind === 'documentary' ? .85 : 1);
       const width = height * clamp(book.ratio, .48, 1.6);
       const depth = (book.kind === 'book' ? 22 + seed % 18 : book.kind === 'article' ? 4 : book.kind === 'memo' ? 8 : 18) * scale;
       const x = distance * pitch + clamp(distance, -1, 1) * gap * openAmount;
       const y = -x * .28 + Math.max(0, 1 - Math.abs(distance)) * 90 * scale * openAmount;
-      node.style.setProperty('--width', `${width}px`);
-      node.style.setProperty('--height', `${height}px`);
-      node.style.setProperty('--depth', `${depth}px`);
-      node.style.setProperty('--x', `${x}px`);
-      node.style.setProperty('--y', `${y}px`);
-      const inspecting = logical === inspectedBook;
-      node.style.setProperty('--inspect-pitch', `${inspecting ? tiltX : 0}deg`);
-      node.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
-      node.style.setProperty('--inspect-shine', String(inspecting ? Math.min(.18, (Math.abs(tiltX) + Math.abs(tiltY)) * .004) : 0));
       const shadow = shadows.get(logical)!;
-      shadow.style.setProperty('--x', `${x}px`);
-      shadow.style.setProperty('--y', `${y}px`);
-      shadow.style.setProperty('--width', `${width}px`);
-      shadow.style.setProperty('--depth', `${depth}px`);
-      shadow.style.setProperty('--inspect-yaw', `${inspecting ? tiltY : 0}deg`);
-      node.style.zIndex = String(50 - (logical - center));
+      const dimensions = `${width}:${height}:${depth}`;
+      if (geometry.get(node) !== dimensions) {
+        setStyle(node, '--width', `${width}px`);
+        setStyle(node, '--height', `${height}px`);
+        setStyle(node, '--depth', `${depth}px`);
+        setStyle(shadow, '--width', `${width}px`);
+        setStyle(shadow, '--depth', `${depth}px`);
+        if (book.kind === 'article') fitArticleHeadline(node, width, height);
+        geometry.set(node, dimensions);
+      }
+      const inspecting = logical === inspectedBook;
+      const yaw = inspecting ? tiltY : 0;
+      const tilt = inspecting ? tiltX : 0;
+      // Direct transforms avoid cascading inherited position variables through
+      // every cover, spine and image. The geometry and easing stay identical.
+      setStyle(node, 'transform', `translate3d(calc(-50% + ${x}px), calc(-100% + ${y}px), 0) rotateY(${-16 + yaw}deg) rotateX(${tilt}deg) rotateZ(3deg)`);
+      setStyle(node, '--inspect-yaw', `${yaw}deg`);
+      setStyle(node, '--inspect-shine', String(inspecting ? Math.min(.18, (Math.abs(tiltX) + Math.abs(tiltY)) * .004) : 0));
+      setStyle(shadow, 'transform', `translate3d(calc(-50% + ${x}px), ${y}px, 0) rotateY(${-16 + yaw}deg) rotateZ(3deg)`);
+      setStyle(node, 'z-index', String(50 - (logical - center)));
       const isSelected = logical === Math.round(target);
-      node.setAttribute('aria-pressed', String(isSelected));
-      node.tabIndex = isSelected ? 0 : -1;
-      if (isSelected && book.kind === 'book') node.setAttribute('aria-describedby', 'book-library-thought');
-      else node.removeAttribute('aria-describedby');
+      if (selectedStates.get(node) !== isSelected) {
+        selectedStates.set(node, isSelected);
+        node.setAttribute('aria-pressed', String(isSelected));
+        node.tabIndex = isSelected ? 0 : -1;
+        if (isSelected && book.kind === 'book') node.setAttribute('aria-describedby', 'book-library-thought');
+        else node.removeAttribute('aria-describedby');
+      }
     }
-    if (thought) {
+    if (thought && !thought.hidden) {
       const settled = Math.abs(target - position) < .02 && openAmount > .98 && !sorting && !openingDetail;
-      thought.dataset.visible = String(settled);
+      if (thought.dataset.visible !== String(settled)) thought.dataset.visible = String(settled);
       const node = settled ? volumes.get(Math.round(target)) : null;
       if (node) {
         const bounds = node.getBoundingClientRect();
         const stageBounds = stage!.getBoundingClientRect();
         const half = thought.offsetWidth / 2 + 16;
-        thought.style.setProperty('--thought-x', `${Math.round(clamp(bounds.left + bounds.width / 2 - stageBounds.left, half, stageBounds.width - half))}px`);
-        thought.style.setProperty('--thought-y', `${Math.round(Math.max(thought.offsetHeight + 8, bounds.top - stageBounds.top - 32))}px`);
+        setStyle(thought, '--thought-x', `${Math.round(clamp(bounds.left + bounds.width / 2 - stageBounds.left, half, stageBounds.width - half))}px`);
+        setStyle(thought, '--thought-y', `${Math.round(Math.max(thought.offsetHeight + 8, bounds.top - stageBounds.top - 32))}px`);
       }
     }
   }
@@ -541,6 +564,10 @@ function initBookLibrary() {
     hoverPointer = null;
     resetInspection(true);
     const rect = stage!.getBoundingClientRect();
+    // The room image is 1536 × 1024 and repeats at its rendered height.
+    // Overscan by one tile each side, then move the already-painted layer.
+    roomTileWidth = (library!.clientHeight + 24) * 1.5;
+    if (room) setStyle(room, '--room-tile-width', `${roomTileWidth}px`);
     scale = Math.min(clamp(rect.width / 900, .74, 1), Math.max(.4, rect.height / 350));
     pitch = 62 * scale;
     gap = clamp(rect.width * .255, 105, 280);
@@ -750,7 +777,7 @@ function initBookLibrary() {
       if (event.pointerType !== 'mouse' || event.buttons) return;
       hoverPointer = { x: event.clientX, y: event.clientY };
       updateHover();
-      schedule();
+      if (tiltTargetX !== tiltX || tiltTargetY !== tiltY) schedule();
       return;
     }
     if (event.pointerId !== drag.id) return;

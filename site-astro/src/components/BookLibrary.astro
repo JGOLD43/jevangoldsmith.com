@@ -175,10 +175,11 @@ const filters = [
     isolation: isolate;
   }
   .book-library-room {
-    position: absolute; inset: -12px;
+    position: absolute; inset: -12px calc(-12px - var(--room-tile-width, 0px));
     background-image: linear-gradient(#160e0780, #160e07ad), url('/images/library/library-room.webp');
     background-size: auto 100%; background-repeat: repeat-x;
-    background-position: calc(50% + var(--room-offset, 0px)) center;
+    background-position: center center;
+    will-change: transform;
     filter: blur(3px); pointer-events: none;
   }
   .book-library::after {
