@@ -1,201 +1,181 @@
 {
-  "updated": "2026-04-23",
+  "updated": "2026-09-23",
   "categories": [
-    { "id": "tech", "label": "Tech", "emoji": "⚙️" },
-    { "id": "design", "label": "Design", "emoji": "🎨" },
-    { "id": "ideas", "label": "Ideas", "emoji": "💡" },
-    { "id": "tools", "label": "Tools", "emoji": "🛠️" },
-    { "id": "gear", "label": "Gear", "emoji": "📦" },
-    { "id": "content", "label": "Content", "emoji": "🎬" },
-    { "id": "random", "label": "Random", "emoji": "🎲" }
+    {
+      "id": "building",
+      "label": "Building",
+      "emoji": ""
+    },
+    {
+      "id": "thinking",
+      "label": "Thinking",
+      "emoji": ""
+    },
+    {
+      "id": "reading",
+      "label": "Reading",
+      "emoji": ""
+    },
+    {
+      "id": "technology",
+      "label": "Technology",
+      "emoji": ""
+    },
+    {
+      "id": "writing",
+      "label": "Writing",
+      "emoji": ""
+    },
+    {
+      "id": "adventure",
+      "label": "Adventure",
+      "emoji": ""
+    }
   ],
   "items": [
     {
-      "id": "ai-agents-2026-04",
-      "date": "2026-04-18",
+      "id": "business-worth-building",
+      "date": "2026-09-23",
       "type": "thought",
-      "category": "tech",
-      "title": "AI agents that actually work",
-      "body": "Crossed the threshold from neat demo to genuinely useful. Claude, the tool ecosystem, the way it reshapes a workday. I am using agents every day now and feeling the compounding.",
-      "image": "images/generated/remote/e26a01c8730400-800.jpg",
-      "source": "Personal log",
-      "url": ""
-    },
-    {
-      "id": "mech-keyboard-2026-04",
-      "date": "2026-04-12",
-      "type": "gear",
-      "category": "gear",
-      "title": "Down the mechanical keyboard rabbit hole",
-      "body": "Tactile feedback, sound profile, keycap sets. Went in skeptical, came out with a HHKB-layout board and opinions about switches.",
-      "image": "images/generated/remote/99174dbdbc2a7f-800.jpg",
-      "source": "Bookmarked",
-      "url": ""
-    },
-    {
-      "id": "inversion-2026-04",
-      "date": "2026-04-05",
-      "type": "quote",
-      "category": "ideas",
-      "title": "Inversion",
-      "body": "Instead of asking 'how do I succeed?' ask 'how do I fail?' Then avoid those things. Stupid simple, incredibly powerful.",
+      "category": "building",
+      "title": "A business worth building",
+      "body": "The interesting part of a business is where the idea meets the real world: customers, operations, and something useful enough that people come back. My Now page records the current direction: starting a petfood business.",
+      "url": "/now.html",
+      "source": "What I’m working on",
       "image": "",
-      "source": "Mental model",
-      "url": ""
+      "question": "What would make someone come back?"
     },
     {
-      "id": "framework-laptop-2026-03",
-      "date": "2026-03-28",
-      "type": "link",
-      "category": "gear",
-      "title": "Framework Laptop",
-      "body": "A laptop you can actually repair and upgrade yourself. Modular ports, replaceable everything. This is how all tech should be made.",
-      "image": "images/generated/remote/4832bb3b4b80b9-800.jpg",
-      "source": "frame.work",
-      "url": "https://frame.work"
-    },
-    {
-      "id": "raycast-2026-03",
-      "date": "2026-03-20",
-      "type": "link",
-      "category": "tools",
-      "title": "Raycast",
-      "body": "Spotlight replacement on steroids. Snippets, window management, calculator, endless extensions. Mac only, worth buying a Mac for.",
-      "image": "",
-      "source": "raycast.com",
-      "url": "https://raycast.com"
-    },
-    {
-      "id": "observable-universe-2026-03",
-      "date": "2026-03-14",
+      "id": "read-for-judgment",
+      "date": "2026-09-23",
       "type": "thought",
-      "category": "ideas",
-      "title": "The observable universe",
-      "body": "There are more stars in the universe than grains of sand on Earth. And that's just the part we can see. What the actual fuck.",
-      "image": "images/generated/remote/2fda916e22c579-800.jpg",
-      "source": "Science",
-      "url": ""
+      "category": "reading",
+      "title": "Reading for better judgment",
+      "body": "Books about business, psychology, philosophy, and lives well lived. The thread running through my reading notes is finding better questions and ideas that change the next decision.",
+      "url": "/reading-philosophy.html",
+      "source": "How I read",
+      "image": "/images/challenges/52-books-2026.jpg",
+      "question": ""
     },
     {
-      "id": "obsidian-2026-03",
-      "date": "2026-03-07",
-      "type": "link",
-      "category": "tools",
-      "title": "Obsidian",
-      "body": "Where my second brain lives. Markdown files, local storage, insane plugin ecosystem. The graph view is beautiful but honestly I never use it.",
-      "image": "",
-      "source": "obsidian.md",
-      "url": "https://obsidian.md"
-    },
-    {
-      "id": "compound-skills-2026-02",
-      "date": "2026-02-24",
+      "id": "psychology-decisions",
+      "date": "2026-09-23",
       "type": "thought",
-      "category": "ideas",
-      "title": "Compound interest in skills",
-      "body": "Getting 1% better every day means you're 37x better after a year. The math checks out and it completely reframed how I think about learning.",
-      "image": "images/generated/remote/1b7453ddc53e08-800.jpg",
-      "source": "James Clear",
-      "url": ""
+      "category": "thinking",
+      "title": "The mind behind the decision",
+      "body": "Bias, intuition, incentives, and the stories we tell ourselves. Thinking, Fast and Slow is one of the places this interest shows up on my bookshelf.",
+      "url": "/books/9780374533557.html",
+      "source": "Notes on Thinking, Fast and Slow",
+      "image": "",
+      "question": ""
     },
     {
-      "id": "third-wave-coffee-2026-02",
-      "date": "2026-02-15",
+      "id": "personal-archive",
+      "date": "2026-09-23",
       "type": "thought",
-      "category": "random",
-      "title": "Third wave coffee",
-      "body": "Once you go specialty, you can't go back to Starbucks. Learning about origins, processing methods, and roast profiles is its own rabbit hole.",
-      "image": "images/generated/remote/324627bd455358-800.jpg",
-      "source": "Life",
-      "url": ""
+      "category": "technology",
+      "title": "A home for a curious mind",
+      "body": "This website is an ongoing experiment in remembering more of life: books, thoughts, projects, people, and places, gathered somewhere I can return to and build on.",
+      "url": "/projects/personal-website.html",
+      "source": "Inside the website project",
+      "image": "/images/projects/personal-website.svg",
+      "question": ""
     },
     {
-      "id": "claude-code-2026-02",
-      "date": "2026-02-08",
-      "type": "link",
-      "category": "tools",
-      "title": "Claude Code",
-      "body": "The AI coding assistant that actually understands context. Built this website with it. Yes, we're in a recursive situation here.",
+      "id": "company-culture",
+      "date": "2026-09-23",
+      "type": "thought",
+      "category": "building",
+      "title": "Culture is part of the product",
+      "body": "How people work together can decide what a business becomes. My essay on “hot” and “warm” cultures explores the difference between a team that is comfortable and one that brings energy to the work.",
+      "url": "/essays.html#hot-spas",
+      "source": "Read the culture essay",
       "image": "",
-      "source": "claude.ai",
-      "url": "https://claude.ai"
+      "question": ""
     },
     {
-      "id": "plant-tree-2026-01",
-      "date": "2026-01-29",
-      "type": "quote",
-      "category": "ideas",
-      "title": "The best time to plant a tree",
-      "body": "The best time to plant a tree was 20 years ago. The second best time is now. This proverb lives rent-free in my head whenever I think about starting something new.",
+      "id": "vietnam-roads",
+      "date": "2026-09-23",
+      "type": "thought",
+      "category": "adventure",
+      "title": "Motorbikes, mountains, unfamiliar places",
+      "body": "The Vietnam travel notes bring together a different kind of learning: new landscapes, street food, ancient temples, and time spent outside the familiar.",
+      "url": "/adventures.html?trip=vietnam-adventure",
+      "source": "Explore the Vietnam notes",
+      "image": "/images/generated/remote/df41b1a7ecc9af-800.jpg",
+      "question": ""
+    },
+    {
+      "id": "attention",
+      "date": "2026-09-23",
+      "type": "thought",
+      "category": "thinking",
+      "title": "Attention is worth protecting",
+      "body": "Technology can expand what we can do and quietly consume the time to do it. That tension sits at the heart of Feed My Addiction, alongside the focus on my bookshelf in Deep Work.",
+      "url": "/essays.html#feed-my-addiction",
+      "source": "Read Feed My Addiction",
       "image": "",
-      "source": "Proverb",
-      "url": ""
+      "question": "What are you feeding?"
     },
     {
-      "id": "figma-2026-01",
-      "date": "2026-01-20",
-      "type": "link",
-      "category": "design",
-      "title": "Figma dev mode",
-      "body": "Still the gold standard for design. Dev mode update made handoff so much smoother. Plus it runs in a browser which is wild.",
+      "id": "small-experiments",
+      "date": "2026-09-23",
+      "type": "thought",
+      "category": "building",
+      "title": "Small experiments, honest feedback",
+      "body": "The Lean Startup and The Mom Test share a useful question: what evidence would show that an idea is worth pursuing? Customer conversations and small experiments make an interesting pair.",
+      "url": "/books/9781492180746.html",
+      "source": "Notes on The Mom Test",
       "image": "",
-      "source": "figma.com",
-      "url": "https://figma.com"
+      "question": ""
     },
     {
-      "id": "standing-desk-2026-01",
-      "date": "2026-01-10",
-      "type": "gear",
-      "category": "gear",
-      "title": "Standing desk setup",
-      "body": "Took me 3 iterations to get it right. Standing mat, monitor arms, cable management. Your back will thank you.",
-      "image": "images/generated/remote/7fa9de77a67263-800.jpg",
-      "source": "Workspace",
-      "url": ""
-    },
-    {
-      "id": "you-are-average-2025-12",
-      "date": "2025-12-18",
-      "type": "quote",
-      "category": "ideas",
-      "title": "You are the average",
-      "body": "You become the average of the 5 people you spend most time with. Choose wisely. This made me audit my relationships ruthlessly.",
-      "image": "images/generated/remote/098ebbf4c40038-800.jpg",
-      "source": "Jim Rohn",
-      "url": ""
-    },
-    {
-      "id": "lex-fridman-2025-12",
-      "date": "2025-12-05",
-      "type": "link",
-      "category": "content",
-      "title": "Lex Fridman Podcast",
-      "body": "Three-hour conversations with the most interesting people on the planet. Put it on 1.5x and go for a long walk.",
+      "id": "ai-building",
+      "date": "2026-09-23",
+      "type": "thought",
+      "category": "technology",
+      "title": "AI as a way to build",
+      "body": "The appeal is practical: turning a question into a working tool, testing an idea, and shortening the distance between thinking about a project and making it. This site is a place to keep those experiments visible.",
+      "url": "/projects.html",
+      "source": "Explore the projects",
       "image": "",
-      "source": "lexfridman.com",
-      "url": "https://lexfridman.com"
+      "question": ""
     },
     {
-      "id": "veritasium-2025-11",
-      "date": "2025-11-22",
-      "type": "link",
-      "category": "content",
-      "title": "Veritasium",
-      "body": "Derek makes science videos that make you feel smarter. Production quality insane, not afraid to go deep on complex topics.",
-      "image": "",
-      "source": "youtube.com/@veritasium",
-      "url": "https://youtube.com/@veritasium"
+      "id": "writing-thinking",
+      "date": "2026-09-23",
+      "type": "thought",
+      "category": "writing",
+      "title": "Writing to find the thought",
+      "body": "Essays on attention, culture, endings, and beginnings. A place to work through an idea long enough to discover what is actually worth saying.",
+      "url": "/essays.html",
+      "source": "Explore the essays",
+      "image": "/images/projects/field-notes.svg",
+      "question": ""
     },
     {
-      "id": "not-boring-2025-11",
-      "date": "2025-11-08",
-      "type": "link",
-      "category": "content",
-      "title": "Not Boring by Packy McCormick",
-      "body": "Best business/tech newsletter out there. Deep dives into companies and trends that make you smarter about the world.",
+      "id": "lives-of-builders",
+      "date": "2026-09-23",
+      "type": "thought",
+      "category": "reading",
+      "title": "The lives behind the businesses",
+      "body": "Founder stories make the decisions tangible: uncertainty, persistence, timing, and the work behind the eventual outcome. Shoe Dog is one of the biographies on my shelf.",
+      "url": "/books/9781501135910.html",
+      "source": "Notes on Shoe Dog",
       "image": "",
-      "source": "notboring.co",
-      "url": "https://notboring.co"
+      "question": ""
+    },
+    {
+      "id": "systems-practice",
+      "date": "2026-09-23",
+      "type": "thought",
+      "category": "thinking",
+      "title": "Systems that make practice easier",
+      "body": "Atomic Habits brings the focus back to everyday actions: the cue, the environment, the repetition. An interest in learning becomes more useful when it has somewhere to go each day.",
+      "url": "/books/9780735211292.html",
+      "source": "Notes on Atomic Habits",
+      "image": "",
+      "question": ""
     }
   ]
 }

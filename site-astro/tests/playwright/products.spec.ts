@@ -1,23 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-test('Shelf navigation matches the Interests navigation layout', async ({ page }) => {
+test('Shelf navigation keeps its compact typography and spacing', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-
-  await page.goto('/cool-shit.html');
-  const interestsHeaderHeight = await page.locator('.wall-topbar').evaluate((element) =>
-    Math.round(element.getBoundingClientRect().height),
-  );
 
   await page.goto('/products.html');
   const shelfHeader = page.locator('.shelf-topbar');
   const shelfRail = page.locator('.shelf-filter');
   const shelfButton = shelfRail.locator('button').first();
-  const shelfHeaderHeight = await shelfHeader.evaluate((element) =>
-    Math.round(element.getBoundingClientRect().height),
-  );
 
   await expect(shelfHeader).toHaveCSS('font-family', /JetBrains Mono/);
-  expect(shelfHeaderHeight).toBe(interestsHeaderHeight);
+  await expect(shelfHeader).toHaveCSS('padding', '18px 32px');
+  await expect(shelfHeader).toHaveCSS('gap', '24px');
   await expect(shelfRail).toHaveCSS('max-width', 'none');
   await expect(shelfRail).toHaveCSS('margin-bottom', '0px');
   await expect(shelfRail).toHaveCSS('justify-content', 'normal');
