@@ -473,6 +473,15 @@ function initBookLibrary() {
     setStyle(stage!, '--shelf-depth', `${130 * scale}px`);
     setStyle(stage!, '--shelf-rear-depth', `${52 * scale}px`);
     const center = Math.round(position);
+    // Wide cassette labels need more clearance on phones. Ease that clearance
+    // in as a cassette approaches, so mixed shelves never jump between gaps.
+    let displayGap = gap;
+    for (let logical = center - 2; logical <= center + 2; logical++) {
+      if (books[wrap(logical)].kind === 'interview') {
+        const proximity = clamp(2 - Math.abs(logical - position), 0, 1);
+        displayGap = Math.max(displayGap, gap + Math.max(0, 320 * scale - pitch - gap) * proximity);
+      }
+    }
     // A small moving window keeps the infinite shelf light, even for large libraries.
     const radius = Math.min(12, Math.floor((books.length - 1) / 2));
     for (const [logical, node] of volumes) {
@@ -492,7 +501,7 @@ function initBookLibrary() {
       const height = (230 + seed % 45) * scale * (book.kind === 'interview' ? .72 : book.kind === 'art' || book.kind === 'documentary' ? .85 : 1);
       const width = height * clamp(book.ratio, .48, 1.6);
       const depth = (book.kind === 'book' ? 22 + seed % 18 : book.kind === 'article' ? 4 : book.kind === 'memo' ? 8 : book.kind === 'documentary' ? 24 : 18) * scale;
-      const x = distance * pitch + clamp(distance, -1, 1) * gap * openAmount;
+      const x = distance * pitch + clamp(distance, -1, 1) * displayGap * openAmount;
       const y = -x * .28 + Math.max(0, 1 - Math.abs(distance)) * 90 * scale * openAmount;
       const shadow = shadows.get(logical)!;
       const dimensions = `${width}:${height}:${depth}`;
