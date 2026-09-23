@@ -53,7 +53,7 @@ const CHECKS = [
   },
   {
     url: '/essays',
-    must: ['id="essays-container"', 'id="essay-search"', 'id="essay-count"']
+    must: ['id="essays-list"', '/essays/feed-my-addiction.html', '/start-here.html']
   },
   {
     url: '/projects',

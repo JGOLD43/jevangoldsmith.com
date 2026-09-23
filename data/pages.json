@@ -670,50 +670,41 @@
   {
     "path": "index.html",
     "url": "/",
-    "title": "Jevan Goldsmith | Follow What I’m Building",
-    "description": "A monthly note on my projects, lessons from trying things, and the books and tools I'm putting to use.",
+    "title": "Jevan Goldsmith — Essays on attention, work & life",
+    "description": "Essays, projects, books and a monthly letter from Jevan Goldsmith.",
     "intent": "personal-home",
     "topics": [
-      "real-estate-development",
-      "business-building",
       "better-thinking",
-      "books-reading",
-      "ai-assisted-work",
-      "personal-systems",
-      "tools-objects"
+      "business-building",
+      "books-reading"
     ],
     "index": true,
-    "schemaType": "WebPage",
+    "schemaType": "WebSite",
     "primaryKeyword": "Jevan Goldsmith",
     "secondaryKeywords": [
-      "Real Estate Development",
-      "Business & Building",
-      "Better Thinking",
-      "Books & Reading",
-      "AI-Assisted Work",
-      "Personal Systems",
-      "Tools & Objects",
-      "Newsletter | Jevan Goldsmith"
+      "Essays",
+      "Attention",
+      "Work",
+      "Life",
+      "Monthly letter"
     ],
     "audience": "Readers, builders, collaborators, and curious visitors",
     "searchIntent": "navigate",
     "contentDepth": "pillar",
     "relatedPages": [
-      "newsletter.html",
-      "free-resources.html",
+      "start-here.html",
       "essays.html",
-      "reading-philosophy.html",
-      "projects.html",
-      "products.html"
+      "about.html",
+      "explore.html",
+      "newsletter.html"
     ],
-    "lastReviewed": "2026-09-17",
+    "lastReviewed": "2026-09-23",
     "section": "home",
     "generatedFrom": "_src/pages",
     "journeyStage": "orientation",
-    "primaryCta": "newsletter",
+    "primaryCta": "best-essays",
     "secondaryCtas": [
-      "free-resources",
-      "best-essays"
+      "newsletter"
     ],
     "ctaOptional": false
   },
@@ -3175,5 +3166,50 @@
       "contact"
     ],
     "ctaOptional": false
+  },
+  {
+    "path": "start-here.html",
+    "url": "/start-here.html",
+    "title": "Start Here",
+    "description": "An introduction to Jevan Goldsmith’s writing and three essays to begin with.",
+    "index": true,
+    "section": "essays",
+    "schemaType": "WebPage",
+    "topics": [],
+    "relatedPages": [
+      "essays.html",
+      "newsletter.html"
+    ],
+    "lastReviewed": "2026-09-23"
+  },
+  {
+    "path": "about.html",
+    "url": "/about.html",
+    "title": "About Jevan Goldsmith",
+    "description": "The person behind the writing: business, books, projects and life.",
+    "index": true,
+    "section": "personal",
+    "schemaType": "AboutPage",
+    "topics": [],
+    "relatedPages": [
+      "essays.html",
+      "newsletter.html"
+    ],
+    "lastReviewed": "2026-09-23"
+  },
+  {
+    "path": "explore.html",
+    "url": "/explore.html",
+    "title": "Explore",
+    "description": "Books, projects, trips and other interests behind the writing.",
+    "index": true,
+    "section": "personal",
+    "schemaType": "WebPage",
+    "topics": [],
+    "relatedPages": [
+      "essays.html",
+      "newsletter.html"
+    ],
+    "lastReviewed": "2026-09-23"
   }
 ]

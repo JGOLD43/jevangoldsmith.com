@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import EssayPicks from '../components/EssayPicks.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import '../styles/publication.css';
+---
+<Base title="Start Here | Jevan Goldsmith" description="A short introduction to Jevan Goldsmith's writing, with three essays to begin with and a guide to the rest of the site." canonical="https://jevangoldsmith.com/start-here.html">
+  <main class="publication">
+    <header class="start-intro"><p class="eyebrow">Welcome, I’m Jevan</p><h1>Follow the thought<br />that interests you.</h1><p class="lead">This is a small, growing collection of essays about attention, work and life. These three early pieces are a place to begin.</p></header>
+    <section class="publication-section" aria-labelledby="begin-title"><h2 id="begin-title">Choose a starting point</h2><EssayPicks /></section>
+    <section class="publication-section narrow"><h2>There’s more around the edges</h2><p>My <a href="/updates.html">shorter notes</a> include the work behind this website and a weekly-review exercise. The <a href="/books.html">reading collection</a>, <a href="/projects.html">projects</a> and <a href="/adventures.html">trips</a> offer another way to get to know my interests.</p><p>You can <a href="/about.html">read about me</a>, see <a href="/now.html">what I’m doing now</a>, or <a href="/contact.html">say hello</a>. If something here changes your mind—or you disagree—I’d like to hear about it.</p><a class="text-link" href="/essays.html">Browse all essays →</a></section>
+    <NewsletterSignup id="start-signup" source="start-here" />
+  </main>
+</Base>
+<style>.start-intro { padding-bottom: 2rem; }</style>

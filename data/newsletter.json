@@ -1,7 +1,7 @@
 {
-  "name": "Jevan's monthly update",
-  "headline": "A letter from me, once a month.",
-  "description": "A monthly letter from Jevan: a pet food business in progress, what I’m reading, and whatever else is on my mind.",
+  "name": "Letters from Jevan",
+  "headline": "New writing. A letter once a month.",
+  "description": "A free monthly letter with new essays, notes on what I’m building, and something worth reading. Reply anytime.",
   "cadence": "Once a month",
   "sampleUrl": "/updates/a-look-inside.html",
   "delivery": {
@@ -9,6 +9,9 @@
     "action": "https://formsubmit.co/hello@jevangoldsmith.com",
     "endpoint": "https://formsubmit.co/ajax/hello@jevangoldsmith.com",
     "emailField": "email",
-    "fields": { "_subject": "Monthly newsletter signup", "_template": "table" }
+    "fields": {
+      "_subject": "Monthly newsletter signup",
+      "_template": "table"
+    }
   }
 }

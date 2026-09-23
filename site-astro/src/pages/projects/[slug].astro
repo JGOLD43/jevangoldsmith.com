@@ -79,7 +79,7 @@ const heroAlt = p.imageAlt || p.title;
       {p.nextStep && <section><h2>What's next</h2><p>{p.nextStep}</p></section>}
       {p.buildLog?.length > 0 && <section><h2>Build notes</h2><ol class="project-build-log">{[...p.buildLog].sort((a: any, b: any) => String(b.date).localeCompare(String(a.date))).map((note: any) => <li><time datetime={note.date}>{note.date}</time><h3>{note.title}</h3><p>{note.note}</p></li>)}</ol></section>}
     </div>}
-    <NewsletterSignup id="project-signup" source={`project:${slug}`} title="Follow this project as it develops." description="Get progress, decisions and lessons from my projects in one monthly email." />
+    <NewsletterSignup id="project-signup" source={`project:${slug}`} title="Follow this project as it develops." />
   </main>
 </Base>
 

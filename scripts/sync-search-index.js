@@ -127,6 +127,14 @@ function main() {
     readJson(path.join(DATA, 'pages.json')),
     readJson(path.join(DATA, 'newsletter.json'))
   );
+  const essays = unwrap(readJson(path.join(DATA, 'essays.json')), 'essays').filter((essay) => essay.status === 'published' && essay.visibility !== 'private');
+  for (let i = records.length - 1; i >= 0; i--) {
+    if (records[i].type === 'essays' || records[i].type === 'essay') records.splice(i, 1);
+  }
+  for (const essay of essays) {
+    const summary = essay.subtitle || essay.content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160);
+    records.push({ type: 'essays', id: essay.id, title: essay.title, summary, section: 'essays', url: `${SITE}/essays/${encodeURIComponent(essay.id)}.html`, tags: [essay.category].filter(Boolean), searchText: buildSearchText([essay.title, summary, essay.category, 'essays']) });
+  }
   const seen = new Set(records.map((r) => `${r.type}:${(r.title || '').toLowerCase().trim()}`));
 
   const additions = [];

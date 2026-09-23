@@ -2,7 +2,7 @@
 import NewsletterForm from './NewsletterForm.astro';
 import newsletter from '../../../data/newsletter.json';
 interface Props { id: string; source: string; title?: string; description?: string; resource?: string; buttonLabel?: string; }
-const { id, source, title = 'Keep in touch with what I’m building.', description = newsletter.description, resource, buttonLabel } = Astro.props;
+const { id, source, title = newsletter.headline, description = newsletter.description, resource, buttonLabel } = Astro.props;
 ---
 <section class="newsletter-signup" aria-labelledby={`${id}-title`}>
   <div class="newsletter-signup-copy">

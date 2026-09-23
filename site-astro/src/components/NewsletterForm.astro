@@ -1,7 +1,7 @@
 ---
 import newsletter from '../../../data/newsletter.json';
 interface Props { id: string; source: string; buttonLabel?: string; resource?: string; }
-const { id, source, buttonLabel = 'Keep in touch', resource = '' } = Astro.props;
+const { id, source, buttonLabel = 'Subscribe', resource = '' } = Astro.props;
 const { delivery } = newsletter;
 const page = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
@@ -13,7 +13,7 @@ const page = Astro.url.pathname.replace(/\/$/, '') || '/';
     <input type="hidden" name="signup_source" value={source} />
     <input type="hidden" name="signup_page" value={page} />
     <input type="hidden" name="resource" value={resource} />
-    <input type="hidden" name="consent" value="I want Jevan Goldsmith's monthly project updates and can unsubscribe anytime." />
+    <input type="hidden" name="consent" value="I want Jevan Goldsmith's monthly letter with essays and project notes, and can unsubscribe anytime." />
     <div class="signup-trap" aria-hidden="true">
       <label for={`${id}-website`}>Leave this empty</label>
       <input id={`${id}-website`} type="text" name="_honey" tabindex="-1" autocomplete="off" />

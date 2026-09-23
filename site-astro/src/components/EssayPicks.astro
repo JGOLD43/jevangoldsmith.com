@@ -1,0 +1,12 @@
+---
+import { selectedEssays, essayUrl, essayReason, type Essay } from '../lib/essays';
+const { essays = selectedEssays } = Astro.props as { essays?: Essay[] };
+---
+<div class="essay-picks">
+  {essays.map((essay, i) => <article class="essay-pick">
+    <span class="pick-number">{String(i + 1).padStart(2, '0')} / {essay.category}</span>
+    <h3><a href={essayUrl(essay.id)}>{essay.title}</a></h3>
+    <p>{essayReason(essay)}</p>
+    <a class="text-link" href={essayUrl(essay.id)}>Read the essay <span aria-hidden="true">→</span></a>
+  </article>)}
+</div>

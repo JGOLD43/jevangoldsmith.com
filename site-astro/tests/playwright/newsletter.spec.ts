@@ -4,7 +4,8 @@ test('the main action leads to signup and the form fits a small screen', async (
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   const form = page.locator('#home-signup');
-  await expect(form.getByRole('button', { name: 'Keep in touch' })).toBeInViewport();
+  await form.scrollIntoViewIfNeeded();
+  await expect(form.getByRole('button', { name: 'Subscribe' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.locator('.navbar-contact-btn').click();
   await expect(page).toHaveURL(/newsletter\.html#newsletter-signup$/);
@@ -52,11 +53,11 @@ test('network errors keep signup recoverable', async ({ page }) => {
 
 test('shared essays open directly and retain the newsletter invitation', async ({ page }) => {
   await page.goto('/essays.html#feed-my-addiction');
-  await expect(page.locator('#essays-container')).toBeVisible();
-  await expect(page.locator('#essays-container h2')).toHaveText('Feed My Addiction');
+  await expect(page).toHaveURL(/essays\/feed-my-addiction\.html$/);
+  await expect(page.locator('h1')).toHaveText('Feed My Addiction');
   await expect(page.locator('#essay-signup')).toBeVisible();
-  await page.getByRole('button', { name: 'All essays', exact: true }).click();
-  await expect(page.locator('#essays-cards')).toBeVisible();
+  await page.getByRole('link', { name: '← All essays', exact: true }).click();
+  await expect(page.locator('#essays-list')).toBeVisible();
   expect(new URL(page.url()).hash).toBe('');
 });
 

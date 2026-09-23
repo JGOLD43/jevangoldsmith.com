@@ -1,13 +1,13 @@
 ---
 import NewsletterSignup from './NewsletterSignup.astro';
-const hasInlineSignup = ['/newsletter', '/newsletter.html', '/now', '/now.html', '/essays', '/essays.html', '/weekly-review-template', '/weekly-review-template.html'].includes(Astro.url.pathname) || /^\/(projects|updates)\//.test(Astro.url.pathname);
+const hasInlineSignup = ['/', '/index.html', '/about', '/about.html', '/start-here', '/start-here.html', '/newsletter', '/newsletter.html', '/now', '/now.html', '/essays', '/essays.html', '/weekly-review-template', '/weekly-review-template.html'].includes(Astro.url.pathname) || /^\/(projects|updates|essays)\//.test(Astro.url.pathname);
 ---
 <footer class="footer site-footer">
   {!hasInlineSignup && !['/products', '/products.html', '/cool-shit', '/cool-shit.html'].includes(Astro.url.pathname) && <div class="container"><NewsletterSignup id="footer-signup" source="footer" /></div>}
   <div class="container site-footer-grid">
     <div class="site-footer-brand">
       <a href="/index.html" class="site-footer-brand-link">Jevan Goldsmith</a>
-      <p class="site-footer-tagline">Projects, lessons and useful ideas. A monthly note from me.</p>
+      <p class="site-footer-tagline">Essays on attention, work and life. A letter once a month.</p>
       <div class="site-footer-social" aria-label="Social">
         <a href="https://x.com/JevanGoldsmith" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
           <svg class="ico-fill ico-20" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-x"/></svg>
@@ -23,11 +23,14 @@ const hasInlineSignup = ['/newsletter', '/newsletter.html', '/now', '/now.html',
         </a>
       </div>
     </div>
-    <nav class="site-footer-col" aria-label="Thoughts">
-      <h3 class="site-footer-col-title">Thoughts</h3>
+    <nav class="site-footer-col" aria-label="Writing">
+      <h3 class="site-footer-col-title">Writing</h3>
       <ul>
-        <li><a href="/newsletter.html">Keep in touch</a></li>
+        <li><a href="/newsletter.html">Monthly letter</a></li>
         <li><a href="/essays.html">Essays</a></li>
+        <li><a href="/start-here.html">Start Here</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/rss.xml">RSS</a></li>
         <li><a href="/lesson-logger.html">Lesson Log</a></li>
         <li><a href="/free-resources.html">Resources</a></li>
       </ul>

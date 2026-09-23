@@ -1,0 +1,41 @@
+.publication { max-width: 1080px; margin: 0 auto; padding: 3.5rem 1.5rem 4rem; color: var(--text-color); }
+.publication a { color: inherit; text-underline-offset: 4px; }
+.publication a:hover { text-decoration-thickness: 2px; }
+.publication :focus-visible { outline: 2px solid var(--text-color); outline-offset: 5px; }
+.publication h1, .publication h2, .publication h3 { font-family: Chivo, sans-serif; color: var(--text-color); }
+.publication h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 1.06; letter-spacing: -.055em; margin: .75rem 0 1.5rem; max-width: 850px; }
+.publication h2 { font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -.035em; line-height: 1.25; margin: 0 0 1rem; }
+.publication h3 { font-size: 1.2rem; line-height: 1.35; letter-spacing: -.02em; margin: .7rem 0; }
+.publication p { line-height: 1.75; }
+.publication .eyebrow { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .13em; color: var(--text-light); margin: 0 0 .85rem; }
+.publication .lead { font-size: clamp(1.1rem, 2vw, 1.25rem); max-width: 680px; color: var(--text-light); margin: 0 0 1.5rem; }
+.publication .muted { color: var(--text-light); }
+.publication .text-link { font-size: .9rem; font-weight: 600; }
+.publication-section { padding: 2.5rem 0; border-top: 1px solid var(--border-color); }
+.publication-section-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; }
+.publication-section-heading h2 { margin: 0; }
+.essay-picks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+.essay-pick { padding-top: 1rem; border-top: 3px solid #d4b329; }
+.essay-pick h3 a, .writing-list h2 a, .writing-list h3 a { text-decoration: none; }
+.essay-pick p { font-size: .94rem; color: var(--text-light); margin: .75rem 0; }
+.essay-pick .pick-number { font-size: .75rem; color: var(--text-light); }
+.writing-list { list-style: none; padding: 0; margin: 0; }
+.writing-list > li { padding: 1.5rem 0; border-top: 1px solid var(--border-color); }
+.writing-list h2, .writing-list h3 { margin: .5rem 0; font-size: 1.35rem; }
+.writing-list p { color: var(--text-light); margin: .5rem 0; }
+.writing-meta { display: flex; flex-wrap: wrap; gap: .5rem 1rem; font-size: .78rem; color: var(--text-light); }
+.publication .reading-links { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: center; }
+.publication .primary-link { display: inline-block; background: #ffd700; color: #171713; padding: .8rem 1.2rem; border-radius: 5px; font-weight: 700; text-decoration: none; }
+.publication .narrow { max-width: 720px; }
+.publication .prose { font-size: 1.1rem; line-height: 1.8; }
+.publication .prose p { margin: 0 0 1.5rem; }
+.publication .prose ul { padding-left: 1.3rem; margin: 1.5rem 0; }
+.publication .prose li { margin: .65rem 0; }
+.publication .prose img, .publication .prose video { max-width: 100%; height: auto; }
+.publication .prose a { overflow-wrap: anywhere; }
+@media (max-width: 680px) {
+  .publication { padding: 2rem 1.25rem 3rem; }
+  .essay-picks { grid-template-columns: 1fr; gap: 1.75rem; }
+  .publication-section-heading { align-items: flex-start; flex-direction: column; gap: .65rem; }
+  .publication-section { padding: 2rem 0; }
+}

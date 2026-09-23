@@ -9,6 +9,7 @@ Purpose: `small active index for docs that guide current website work`
 - [Start Here](START_HERE.md)
 - [Architecture](../ARCHITECTURE.md)
 - [Release Runbook](RELEASE_RUNBOOK.md)
+- [Writing Publication](WRITING_PUBLICATION.md)
 
 ## Archived Product, Design, And Planning Docs
 

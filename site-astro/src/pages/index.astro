@@ -1,440 +1,50 @@
 ---
-import { getCollection } from 'astro:content';
-import remoteAssets from '../../../data/remote-assets.generated.json';
 import Base from '../layouts/Base.astro';
-import NewsletterForm from '../components/NewsletterForm.astro';
+import EssayPicks from '../components/EssayPicks.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import { publishedEssays, selectedEssays, essayUrl, essayDescription, essayDate, readingMinutes } from '../lib/essays';
 import { NOW_SECTIONS, NOW_LAST_UPDATED } from '../lib/now-location';
-
-interface RemoteAssetEntry { widths?: number[]; formats?: Record<string, Record<string, string>>; }
-
-// Convert remote Unsplash URLs into locally cached asset paths. The
-// perf:budget check fails the build if any HTML references unsplash at
-// runtime, so every dynamic image on this page MUST go through here.
-function remoteAssetFor(url: string | undefined | null, preferredWidth = 800, format = 'jpg'): string {
-  if (!url || !/^https?:\/\//i.test(url)) return url ?? '';
-  const map = remoteAssets as Record<string, RemoteAssetEntry>;
-  const entry = map[url.replace(/&amp;/g, '&')];
-  if (!entry) return url;
-  const widths = (entry.widths ?? Object.keys(entry.formats ?? {}).map(Number)).sort((a, b) => a - b);
-  const width = widths.find((w) => w >= preferredWidth) ?? widths[widths.length - 1];
-  return entry.formats?.[String(width)]?.[format] ?? entry.formats?.[String(width)]?.jpg ?? url;
-}
-
-// Pull one fresh item from each of the four feature sections so this
-// carousel stays current with no hand-editing. Sorting prefers explicit
-// dates where available; otherwise we trust the source array order
-// (curated newest-first in the JSONs).
-type FeatureCard = { href: string; image: string; kicker: string; title: string; meta: string; description: string };
-
-// Looser typing on purpose — the collection schemas use z.looseObject so
-// each item carries arbitrary extra fields. A narrow generic constraint
-// here would discard everything except date/startDate.
-const sortByDateDesc = (arr: any[]): any[] =>
-  [...arr].sort((a, b) => {
-    const aDate = (a?.date as string) || (a?.startDate as string) || '';
-    const bDate = (b?.date as string) || (b?.startDate as string) || '';
-    return bDate.localeCompare(aDate);
-  });
-
-const adventuresAll = await getCollection('adventures');
-const essaysAll = await getCollection('essays');
-const projectsAll = await getCollection('projects');
-const challengesAll = await getCollection('challenges');
-
-const latestAdventure: any = sortByDateDesc(adventuresAll.map((a: any) => a.data))[0];
-const latestEssay: any = sortByDateDesc(essaysAll.map((e: any) => e.data).filter((e: any) => e.status !== 'draft'))[0];
-const latestProject: any = projectsAll.map((p: any) => p.data).filter((p: any) => p.status !== 'draft' && p.visibility !== 'private')[0];
-const latestChallenge: any = challengesAll.map((c: any) => c.data).filter((c: any) => c.status !== 'draft')[0];
-
-const featureCards: FeatureCard[] = [];
-if (latestAdventure) {
-  featureCards.push({
-    // Route through the polished /adventures overlay rather than the
-    // standalone /adventure-<slug>.html legacy page — the two render
-    // very differently and clicking from the homepage carousel should
-    // land users in the same view as clicking from the trips list /
-    // map. adventures.ts reads ?trip= and opens the overlay on load.
-    href: `/adventures.html?trip=${latestAdventure.id}`,
-    image: remoteAssetFor(latestAdventure.heroImage) || '/images/generated/remote/bedf9633d8221e-800.jpg',
-    kicker: 'Adventure',
-    title: latestAdventure.title,
-    meta: [latestAdventure.location, latestAdventure.duration].filter(Boolean).join(' • '),
-    description: latestAdventure.subtitle || latestAdventure.shortDescription || ''
-  });
-}
-if (latestEssay) {
-  featureCards.push({
-    href: `/essays.html#${latestEssay.id}`,
-    image: remoteAssetFor((latestEssay as any).featuredImage) || '/images/generated/remote/cd2aacee7b912f-800.jpg',
-    kicker: 'Essay',
-    title: latestEssay.title,
-    meta: latestEssay.category || '',
-    description: latestEssay.subtitle || latestEssay.category || ''
-  });
-}
-if (latestProject) {
-  featureCards.push({
-    href: `/projects/${latestProject.slug || latestProject.id}.html`,
-    image: remoteAssetFor(latestProject.image) || '/images/generated/remote/3764adabb88a12-800.jpg',
-    kicker: 'Project',
-    title: latestProject.title,
-    meta: latestProject.category || '',
-    description: latestProject.shortDescription || latestProject.description || ''
-  });
-}
-if (latestChallenge) {
-  featureCards.push({
-    href: `/challenges/${latestChallenge.slug || latestChallenge.id}.html`,
-    image: remoteAssetFor(latestChallenge.image) || '/images/generated/remote/0c026ddcd6c4bb-800.jpg',
-    kicker: 'Challenge',
-    title: latestChallenge.title,
-    meta: latestChallenge.timeframe || '',
-    description: latestChallenge.shortDescription || ''
-  });
-}
+import '../styles/publication.css';
+const featured = selectedEssays[0] || publishedEssays[0];
 ---
-<Base
-  title="Jevan Goldsmith | A Personal Website"
-  description="Hi, I’m Jevan. I’m working on a pet food business. This is a place for my writing, the books I’ve read, and the places I’ve been."
-  canonical="https://jevangoldsmith.com/"
-  pageType="WebSite"
->
-  <Fragment slot="head">
-    {/* LCP candidate — profile portrait. Preload BOTH the AVIF
-        srcset and the JPG fallback, with matching imagesizes, so the
-        browser preloads the exact variant it will actually display.
-        Previously only the 720 JPG was preloaded, but the <img> uses
-        responsive AVIF srcset — so the variant the browser picked
-        (e.g. AVIF 520 on a 414px viewport) wasn't preloaded and the
-        portrait visibly faded in after HTML parse reached the img. */}
-    <link
-      rel="preload"
-      as="image"
-      type="image/avif"
-      imagesrcset="/images/generated/profile/profile-360.avif 360w, /images/generated/profile/profile-520.avif 520w, /images/generated/profile/profile-720.avif 720w, /images/generated/profile/profile-960.avif 960w"
-      imagesizes="(max-width: 559px) calc(100vw - 32px), (max-width: 900px) 40vw, (max-width: 1024px) 360px, 42vw"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      type="image/jpeg"
-      imagesrcset="/images/generated/profile/profile-360.jpg 360w, /images/generated/profile/profile-520.jpg 520w, /images/generated/profile/profile-720.jpg 720w, /images/generated/profile/profile-960.jpg 960w"
-      imagesizes="(max-width: 559px) calc(100vw - 32px), (max-width: 900px) 40vw, (max-width: 1024px) 360px, 42vw"
-      fetchpriority="high"
-    />
-  </Fragment>
-    <header class="hero" id="hero">
-        <div class="hero-container">
-            <div class="hero-left">
-                <h1 class="hero-headline">Hi, I’m Jevan.</h1>
-                <p class="hero-welcome">I’m currently working on a pet food business. I made this site to keep the other parts of my life in one place: what I’m reading, where I’ve been, and what’s been on my mind.</p>
-                <p class="hero-welcome">If we share an interest, <a href="/contact.html">say hello</a>.</p>
-                <div class="hero-reading-links">
-                    <a href="/now.html">See what I'm working on <span aria-hidden="true">→</span></a>
-                </div>
-                <p class="hero-newsletter-invitation">I also send a monthly letter. You’re welcome to join.</p>
-                <NewsletterForm id="home-signup" source="home-hero" />
-
-            </div>
-            <div class="hero-right">
-                <div class="profile-container">
-                    <picture class="hero-picture">
-                        <source type="image/avif" srcset="/images/generated/profile/profile-360.avif 360w, /images/generated/profile/profile-520.avif 520w, /images/generated/profile/profile-720.avif 720w, /images/generated/profile/profile-960.avif 960w" sizes="(max-width: 559px) calc(100vw - 32px), (max-width: 900px) 40vw, (max-width: 1024px) 360px, 42vw">
-                        <img src="/images/generated/profile/profile-720.jpg" srcset="/images/generated/profile/profile-360.jpg 360w, /images/generated/profile/profile-520.jpg 520w, /images/generated/profile/profile-720.jpg 720w, /images/generated/profile/profile-960.jpg 960w" sizes="(max-width: 559px) calc(100vw - 32px), (max-width: 900px) 40vw, (max-width: 1024px) 360px, 42vw" alt="Jevan Goldsmith" class="hero-image" width="713" height="778" decoding="async" fetchpriority="high">
-                    </picture>
-
-                    <!-- Animated Snapshot Card (Hidden by default) -->
-                    <div class="snapshot-card" id="snapshot-card">
-                        <div class="snapshot-header">
-                            <span class="snapshot-eyebrow">QUICK SNAPSHOT</span>
-                            <svg class="snapshot-camera-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 32">
-                                <!-- Flash starburst -->
-                                <g class="flash-burst">
-                                    <polygon points="26,2 27,5 30,4 28,7 31,9 28,10 29,13 26,11 24,14 24,11 21,12 23,9 20,8 23,6 22,3 25,5" fill="#FFD700"/>
-                                    <circle cx="25" cy="8" r="2" fill="#FFF5CC"/>
-                                </g>
-                                <!-- Retro camera body - black -->
-                                <rect x="2" y="10" width="22" height="16" rx="2" fill="#1a1a1a" stroke="#333" stroke-width="0.5"/>
-                                <!-- Viewfinder bump -->
-                                <rect x="6" y="6" width="8" height="5" rx="1" fill="#1a1a1a" stroke="#333" stroke-width="0.5"/>
-                                <!-- Flash cube on top -->
-                                <rect x="16" y="7" width="4" height="4" fill="#444" stroke="#555" stroke-width="0.5"/>
-                                <!-- Main lens ring - silver -->
-                                <circle cx="13" cy="18" r="6" fill="#2a2a2a" stroke="#666" stroke-width="1"/>
-                                <circle cx="13" cy="18" r="4.5" fill="#1a1a1a" stroke="#888" stroke-width="0.5"/>
-                                <!-- Lens glass - dark with reflection -->
-                                <circle cx="13" cy="18" r="3" fill="#0a0a0a"/>
-                                <ellipse cx="12" cy="17" rx="1" ry="0.6" fill="rgba(255,255,255,0.15)"/>
-                                <!-- Shutter button - red accent -->
-                                <circle cx="20" cy="13" r="1.5" fill="#cc3333"/>
-                                <!-- Grip lines -->
-                                <line x1="3" y1="14" x2="3" y2="22" stroke="#333" stroke-width="0.5"/>
-                                <line x1="4.5" y1="14" x2="4.5" y2="22" stroke="#333" stroke-width="0.5"/>
-                            </svg>
-                            <button class="snapshot-close" data-snapshot-toggle aria-label="Close">&times;</button>
-                        </div>
-                        <div class="snapshot-content">
-                            <div class="snapshot-row">
-                                <div class="snapshot-label">Focus</div>
-                                <div class="snapshot-value">Building Beautiful Products</div>
-                            </div>
-                            <div class="snapshot-row">
-                                <div class="snapshot-label">Values</div>
-                                <div class="snapshot-value">Impact • Mastery • Adventure</div>
-                            </div>
-                            <div class="snapshot-row">
-                                <div class="snapshot-label">Stats</div>
-                                <div class="snapshot-value">Height 183cm • <img src="/images/flags/au.png" alt="Australian Flag" class="snapshot-flag" width="80" height="40" loading="lazy" decoding="async"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Snapshot Toggle Button — placed AFTER the
-                         snapshot card in DOM so it paints on top in 2D
-                         stacking order regardless of 3D context tricks. -->
-                    <button class="snapshot-toggle" data-snapshot-toggle aria-label="Toggle profile snapshot">
-                        PROFILE
-                    </button>
-                </div>
-                <div class="hero-social-links">
-                    <a href="https://x.com/JevanGoldsmith" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
-                        <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-x"/></svg>
-                    </a>
-                    <a href="https://youtube.com/@JevanGoldsmith" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                        <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-youtube"/></svg>
-                    </a>
-                    <a href="https://letterboxd.com/contentwatch" target="_blank" rel="noopener noreferrer" aria-label="Letterboxd">
-                        <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-letterboxd"/></svg>
-                    </a>
-                    <a href="https://linkedin.com/in/jevan-goldsmith-7b885a185" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                        <svg class="ico-fill ico-24" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-linkedin"/></svg>
-                    </a>
-                </div>
-            </div>
-        </div>
+<Base title="Jevan Goldsmith — Essays on attention, work & life" description="Essays by Jevan Goldsmith on attention, culture and starting again. Explore the writing, books, projects and a monthly letter." canonical="https://jevangoldsmith.com/" pageType="WebSite" bodyClass="publication-home">
+  <main class="publication">
+    <header class="publication-intro">
+      <div>
+        <p class="eyebrow">Jevan Goldsmith · Essays & a monthly letter</p>
+        <h1>A place to think<br />things through.</h1>
+        <p class="lead">I’m Jevan. I write about attention, how we work, and the way we move through life. I’m also starting a pet food business, reading, and making things.</p>
+        <div class="reading-links"><a class="primary-link" href="/start-here.html">Start reading <span aria-hidden="true">→</span></a><a class="text-link" href="/about.html">A little about me</a></div>
+      </div>
+      {featured && <aside class="featured-essay" aria-label="Featured essay"><p class="eyebrow">A place to begin</p><h2><a href={essayUrl(featured.id)}>{featured.title}</a></h2><p>{essayDescription(featured)}</p><p class="writing-meta">{featured.category} · {readingMinutes(featured)} min read</p><a class="text-link" href={essayUrl(featured.id)}>Read the essay <span aria-hidden="true">→</span></a></aside>}
+      <a class="publication-portrait" href="/about.html" aria-label="About Jevan Goldsmith"><img src="/images/generated/profile/profile-360.jpg" alt="Jevan Goldsmith" width="360" height="393" fetchpriority="high" /></a>
     </header>
-
-    <section class="home-current" aria-labelledby="home-current-title">
-        <div class="home-current-intro">
-            <p class="home-section-kicker">Updated {NOW_LAST_UPDATED}</p>
-            <h2 id="home-current-title">What I'm working on now</h2>
-        </div>
-        <div class="home-current-stories">
-            {NOW_SECTIONS.slice(0, 2).map((section) => (
-                <article>
-                    <h3>{section.title}</h3>
-                    <div set:html={section.body} />
-                    <a href="/now.html">Read the current update <span aria-hidden="true">→</span></a>
-                </article>
-            ))}
-            <article>
-                <h3>A home for what I'm building</h3>
-                <p>The website brings my projects, writing and useful notes together. Here's how it works and what I'm improving.</p>
-                <a href="/projects/personal-website.html">Inside the website <span aria-hidden="true">→</span></a>
-            </article>
-        </div>
+    <section class="publication-section" aria-labelledby="selected-title">
+      <div class="publication-section-heading"><h2 id="selected-title">Three places to begin</h2><a class="text-link" href="/essays.html">All essays <span aria-hidden="true">→</span></a></div>
+      <EssayPicks />
     </section>
-
-    <section class="home-current home-notes" aria-labelledby="home-notes-title">
-        <p class="home-section-kicker">From the work</p>
-        <h2 id="home-notes-title">A couple of useful starting points</h2>
-        <div class="home-current-stories">
-            <article><h3>How this website fits together</h3><p>A home for projects, writing and useful notes, and the decisions behind it.</p><a href="/updates/how-this-website-works.html">Read the story <span aria-hidden="true">→</span></a></article>
-            <article><h3>A weekly review with a next step</h3><p>Four questions, a worked example and an editable template to try yourself.</p><a href="/updates/a-weekly-review-with-a-next-step.html">Try the review <span aria-hidden="true">→</span></a></article>
-        </div>
+    <section class="publication-section" aria-labelledby="recent-title">
+      <div class="publication-section-heading"><h2 id="recent-title">Latest essays</h2><a class="text-link" href="/rss.xml">Follow via RSS</a></div>
+      <ul class="writing-list">{publishedEssays.slice(0, 3).map((essay) => <li><div class="writing-meta"><time datetime={essay.date}>{essayDate(essay.date)}</time><span>{essay.category}</span></div><h3><a href={essayUrl(essay.id)}>{essay.title}</a></h3><p>{essayDescription(essay)}</p></li>)}</ul>
+      <p class="muted">For shorter pieces and practical notes, explore <a href="/updates.html">notes from the work</a>.</p>
     </section>
-
-    <!-- Featured Carousel Section -->
-    <section class="featured-carousel-section" id="featured">
-        <div class="carousel-header">
-            <h2 class="carousel-title">Explore my writing and projects</h2>
-            <a href="search.html" class="carousel-discover">Explore everything →</a>
-        </div>
-        <div class="carousel-controls">
-            <button class="carousel-arrow carousel-prev" data-carousel-direction="-1" aria-label="Previous">‹</button>
-            <button class="carousel-arrow carousel-next" data-carousel-direction="1" aria-label="Next">›</button>
-        </div>
-        <div class="carousel-container">
-            <div class="feature-carousel-track" id="carousel-track">
-                {featureCards.map((card) => (
-                    <a href={card.href} class="feature-card">
-                        <img src={card.image} alt={card.title} class="feature-image" width="800" height="600" loading="lazy" decoding="async">
-                        <div class="feature-content">
-                            <span class="feature-kicker">{card.kicker}</span>
-                            <h3 class="feature-title">{card.title}</h3>
-                            {card.meta && <p class="feature-meta">{card.meta}</p>}
-                            {card.description && <p class="feature-description">{card.description}</p>}
-                        </div>
-                    </a>
-                ))}
-            </div>
-        </div>
-        <div class="carousel-dots" id="carousel-dots">
-            {featureCards.map((_, i) => (
-                <span class={i === 0 ? 'dot active' : 'dot'} data-carousel-slide={i}></span>
-            ))}
-        </div>
+    <NewsletterSignup id="home-signup" source="home-writing" />
+    <section class="publication-section personal-section" aria-labelledby="now-title">
+      <div><p class="eyebrow">Away from the page · {NOW_LAST_UPDATED}</p><h2 id="now-title">What I’m working on</h2>{NOW_SECTIONS.slice(0, 1).map((section) => <><h3>{section.title}</h3><div class="muted" set:html={section.body} /></>)}<a class="text-link" href="/now.html">Read the current update <span aria-hidden="true">→</span></a></div>
+      <div><p class="eyebrow">The rest of the site</p><h2>Follow a curiosity</h2><p class="muted">The books, projects and places behind the writing.</p><div class="reading-links"><a href="/books.html">Reading</a><a href="/projects.html">Projects</a><a href="/adventures.html">Trips</a><a href="/explore.html">Explore everything →</a></div></div>
     </section>
-
+  </main>
 </Base>
-
-<style is:inline>
-  .hero .hero-container { gap: 3rem; }
-  .hero .hero-left { max-width: 36rem; }
-  .hero .hero-headline { font-size: clamp(2.5rem, 4.6vw, 4rem); letter-spacing: -.045em; line-height: 1.05; margin: 0 0 1.25rem; }
-  .hero .hero-welcome { display: block; max-width: 34rem; font-size: 1.05rem; line-height: 1.7; margin: 0 0 1.6rem; }
-  .hero .hero-welcome a { color: inherit; text-underline-offset: 4px; }
-  .hero-reading-links { display: flex; flex-wrap: wrap; gap: .8rem 1.5rem; margin-top: 1.25rem; }
-  .hero-newsletter-invitation { color: var(--text-light); font-size: .9rem; line-height: 1.6; margin: 1.5rem 0 .75rem; }
-  .hero-reading-links a { font-size: .83rem; color: var(--text-color); text-underline-offset: 4px; }
-  .home-current { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 3rem; border-top: 1px solid var(--border-color); }
-  .home-section-kicker { color: var(--text-light); font-size: .72rem; margin: 0 0 .7rem; }
-  .home-current h2 { color: var(--text-color); font-family: Chivo, sans-serif; font-size: 1.8rem; line-height: 1.2; letter-spacing: -.03em; margin: 0 0 1.8rem; }
-  .home-current-stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
-  .home-current-stories h3 { color: var(--text-color); font-size: 1.1rem; margin: 0 0 .7rem; }
-  .home-current-stories p { color: var(--text-light); font-size: .95rem; line-height: 1.7; margin: 0 0 1rem; }
-  .home-current-stories a { color: var(--text-color); font-size: .85rem; text-underline-offset: 4px; }
-  @media (max-width: 900px) { .hero .hero-container { gap: 1.5rem; } }
-  @media (max-width: 559px) {
-    .hero { padding-top: 2.25rem !important; }
-    .hero .hero-container { display: flex; flex-direction: column; }
-    .hero .hero-left { order: 0; width: 100%; }
-    .hero .hero-right { order: 1; width: 100%; }
-    .hero .hero-headline { font-size: 2.7rem; }
-    .hero .hero-welcome { font-size: 1rem; }
-    .home-current { padding: 2rem 1rem; }
-    .home-current-stories { grid-template-columns: 1fr; }
-  }
-
-  /* Compact windows: PROFILE tap slides the snapshot up from the bottom of
-     the profile picture, covering it with a frosted-glass panel. */
-  @media (max-width: 1024px) {
-    .profile-container {
-      position: relative;
-      overflow: hidden;
-      border-radius: 12px;
-    }
-    /* Slide-up snapshot panel. Transform is driven by inline style from
-       JS (the legacy stylesheet has a handful of !important transforms
-       on .snapshot-card variants that win against any CSS-cascade
-       attempt to override them on this page). The CSS here owns
-       everything except the transform. */
-    .profile-container .snapshot-card {
-      position: absolute !important;
-      inset: 0 !important;
-      width: 100% !important;
-      max-width: none !important;
-      margin: 0 !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-      pointer-events: none;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.45);
-      /* Border matches the glass instead of the legacy dark outline,
-         so the panel reads as one continuous frosted surface. */
-      border: 1px solid rgba(255, 255, 255, 0.12) !important;
-      background: rgba(20, 20, 20, 0.55) !important;
-      backdrop-filter: blur(20px) saturate(160%);
-      -webkit-backdrop-filter: blur(20px) saturate(160%);
-      /* GPU-composite the slide so backdrop-filter doesn't re-rasterize
-         every frame — without this the slide-up visibly stutters on
-         mid-range phones. */
-      will-change: transform;
-      transform: translate3d(0, 100%, 0);
-      contain: layout paint;
-      /* No CSS transition — animation is driven by the Web Animations
-         API in home.ts (bypasses cascade fights with legacy rules). */
-    }
-    .profile-container.is-flipped .snapshot-card { pointer-events: auto; }
-    /* Header inside the glass panel — no separate solid bar, just a
-       hairline divider so the whole panel reads as one piece of glass. */
-    .profile-container .snapshot-header {
-      background: transparent !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.18) !important;
-      color: #fff !important;
-      justify-content: flex-start !important;
-      gap: 0.55rem !important;
-    }
-    .profile-container .snapshot-header .snapshot-camera-icon {
-      order: 0;
-      margin-right: auto;
-    }
-    .profile-container .snapshot-header .snapshot-eyebrow { color: #fff !important; }
-    .profile-container .snapshot-content { color: #fff; }
-    .profile-container .snapshot-label { color: rgba(255, 255, 255, 0.65) !important; }
-    .profile-container .snapshot-value {
-      color: #fff !important;
-      /* Match the "What I'm working on now" hero text exactly —
-         same Inter font stack, same letter-spacing, lighter weight
-         so the values read as body copy rather than headings. */
-      font-family: Inter, -apple-system, BlinkMacSystemFont, Chivo, sans-serif !important;
-      font-weight: 400 !important;
-      letter-spacing: -0.01em !important;
-    }
-    /* Each snapshot row is now a link to a specific section on the
-       About page — strip the default link colour/underline, then
-       add a subtle background highlight on hover to signal that the
-       row is clickable. Same affordance pattern as the essay rows. */
-    .profile-container .snapshot-row {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.18s ease;
-      border-radius: 6px;
-      margin: 0 -0.5rem;
-      padding: 0.85rem 0.5rem;
-    }
-    .profile-container .snapshot-row:hover {
-      background: rgba(255, 255, 255, 0.06);
-    }
-    .profile-container .snapshot-row:focus-visible {
-      outline: 2px solid var(--secondary-color);
-      outline-offset: 2px;
-    }
-    .profile-container .snapshot-row { border-bottom-color: rgba(255, 255, 255, 0.12) !important; }
-    /* PROFILE button stays anchored in the bottom-right of the card.
-       Always on top of both photo and the sliding snapshot. */
-    .profile-container .snapshot-toggle {
-      position: absolute !important;
-      bottom: 12px !important;
-      right: 12px !important;
-      top: auto !important;
-      left: auto !important;
-      z-index: 100 !important;
-      background: var(--background) !important;
-      color: var(--text-color) !important;
-      border: 1px solid var(--border-color) !important;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.35) !important;
-    }
-    [data-theme="dark"] .profile-container .snapshot-toggle {
-      box-shadow: 0 4px 14px rgba(0,0,0,0.6) !important;
-    }
-    /* Hide the snapshot's internal "X" close button on mobile — the
-       PROFILE button below it is the single source of truth. */
-    .profile-container .snapshot-card .snapshot-close { display: none !important; }
-  }
-
-  @media (560px <= width <= 1024px) {
-    .profile-container .snapshot-card { display: flex; flex-direction: column; }
-    .profile-container .snapshot-header { flex-shrink: 0; padding: .75rem; }
-    .profile-container .snapshot-content {
-      min-height: 0;
-      overflow-y: auto;
-      padding: .5rem .75rem 3.5rem;
-    }
-    .profile-container .snapshot-row { padding-top: .5rem; padding-bottom: .5rem; }
-  }
+<style>
+  .publication-intro { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 3rem; align-items: center; padding: 1rem 0 3.5rem; }
+  .featured-essay { padding: 2rem; border: 1px solid var(--border-color); border-top: 4px solid #d4b329; background: var(--card-bg, var(--background)); }
+  .featured-essay h2 { font-size: 1.8rem; }
+  .featured-essay h2 a { text-decoration: none; }
+  .featured-essay p { color: var(--text-light); margin: 1rem 0; }
+  .publication-portrait { display: none; width: 190px; justify-self: center; }
+  :global(html[data-mode="personal"]) .publication-portrait { display: block; }
+  :global(html[data-mode="personal"]) .featured-essay { display: none; }
+  .publication-portrait img { width: 100%; height: auto; border-radius: 3px; filter: saturate(.75); }
+  .personal-section { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  @media (max-width: 680px) { .publication-intro { grid-template-columns: 1fr; padding: 0 0 2rem; gap: 1.5rem; } .featured-essay { padding: 1.5rem; } .personal-section { grid-template-columns: 1fr; gap: 2.5rem; } }
 </style>
-
-<script>
-  // (slice 14) + Phase 7 (slice 5): home + newsletter + sanitize as native.
-  import '../scripts/home.ts';
-
-</script>

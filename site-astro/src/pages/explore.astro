@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/publication.css';
+const groups = [
+  { title: 'Reading & ideas', text: 'Explore the inputs to the writing: books, conversations, people and passages worth returning to.', links: [['Books','/books.html'],['Podcasts','/podcasts.html'],['People','/people.html'],['Quotes','/quotes.html']] },
+  { title: 'Making & learning', text: 'Projects, experiments and practical notes. Follow the work behind an idea.', links: [['Projects','/projects.html'],['Challenges','/challenges.html'],['Lesson Log','/lesson-logger.html'],['Resources','/free-resources.html']] },
+  { title: 'Life beyond the page', text: 'Places I’ve been, things I enjoy, and what’s happening now.', links: [['Trips','/adventures.html'],['Movies','/movies.html'],['The Shelf','/products.html'],['Interests','/cool-shit.html'],['Now','/now.html']] }
+];
+---
+<Base title="Explore | Jevan Goldsmith" description="Explore Jevan Goldsmith's books, projects, trips, films and other interests behind the writing." canonical="https://jevangoldsmith.com/explore.html" pageType="CollectionPage">
+  <main class="publication"><header><p class="eyebrow">Behind the writing</p><h1>Follow a curiosity.</h1><p class="lead">A collection of books, projects, places and things I keep coming back to.</p></header>{groups.map((group) => <section class="publication-section"><h2>{group.title}</h2><p class="muted">{group.text}</p><div class="reading-links">{group.links.map(([label, href]) => <a href={href}>{label} →</a>)}</div></section>)}<section class="publication-section"><h2>Back to the writing</h2><div class="reading-links"><a href="/start-here.html">Start Here</a><a href="/essays.html">Essays</a><a href="/updates.html">Shorter notes</a><a href="/newsletter.html">The monthly letter</a><a href="/search.html">Search everything</a></div></section></main>
+</Base>

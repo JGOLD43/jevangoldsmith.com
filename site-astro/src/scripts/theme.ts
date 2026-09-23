@@ -217,10 +217,10 @@ if (workToggle) {
                 el.style.setProperty('display', 'none', 'important');
             }
         };
-        clone.querySelectorAll<HTMLElement>('.hero-headline .mode-work, .hero-welcome .mode-work').forEach((el) => {
+        clone.querySelectorAll<HTMLElement>('.hero-headline .mode-work, .hero-welcome .mode-work, .publication-intro .featured-essay').forEach((el) => {
             lock(el, oldMode === 'work');
         });
-        clone.querySelectorAll<HTMLElement>('.hero-headline .mode-personal, .hero-welcome .mode-personal').forEach((el) => {
+        clone.querySelectorAll<HTMLElement>('.hero-headline .mode-personal, .hero-welcome .mode-personal, .publication-intro .publication-portrait').forEach((el) => {
             lock(el, oldMode === 'personal');
         });
         // Preserve the live body's computed padding/margin so the

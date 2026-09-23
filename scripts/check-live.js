@@ -18,6 +18,12 @@ const ROUTES = [
   '/people.html',
   '/adventures.html',
   '/essays.html',
+  '/essays/feed-my-addiction.html',
+  '/start-here.html',
+  '/about.html',
+  '/explore.html',
+  '/newsletter.html',
+  '/rss.xml',
   '/sitemap-index.xml',
   '/robots.txt'
 ];
