@@ -42,7 +42,6 @@
 .book-library .article-design[data-layout="studio"] { border-top: 9px solid var(--article-accent); }
 .book-library .article-design[data-layout="studio"] .material-edition { font-family: Arial, sans-serif; font-weight: 800; text-transform: uppercase; font-size: 4.8cqw; letter-spacing: .08em; }
 .book-library .article-design[data-layout="studio"] .material-footnote { border-top: 4px solid var(--article-accent); }
-.book-library .library-volume[data-kind="article"] .library-cover-number { top: auto; right: 9%; bottom: 9%; width: 12%; min-width: 0; height: auto; aspect-ratio: 1; padding: 0; font-size: calc(var(--width) * .055); }
 /* A walnut frame and paper mat around an original abstract print. */
 .book-library .library-volume[data-kind="art"] .library-volume-cover { border: 8px ridge var(--art-frame, #775038); box-sizing: border-box; background: var(--art-frame, #775038); box-shadow: inset 0 0 8px #0009; }
 .book-library .library-volume[data-kind="art"] .material-design { padding: 9%; background: #eee6d6; }
@@ -144,7 +143,6 @@
 .book-library .cassette-window { position: absolute; top: 68%; left: 7%; right: 7%; height: 18%; display: flex; align-items: center; justify-content: space-around; border-radius: 1.5cqw; background: linear-gradient(#151c1c, #343b35); box-shadow: inset 0 1px 3px #000a, 0 1px #fff5; }
 .book-library .cassette-window i { height: 83%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #191e1b 0 19%, #e6dec8 21% 42%, #8a8c79 44% 51%, #e6dec8 53% 62%, #535b50 64%); }
 .book-library .cassette-footer { position: absolute; bottom: 3%; right: 6%; font: 600 3.2cqw/1.1 Arial, sans-serif; }
-.book-library .library-volume[data-kind="interview"] .library-cover-number { top: auto; right: 45.5%; bottom: 14%; width: 9%; min-width: 0; height: auto; aspect-ratio: 1; padding: 0; font-size: calc(var(--width) * .045); }
 /* Subject-specific graphics occupy the base, clear of the title and reels. */
 .book-library .cassette-design::before { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 11%; background: var(--cassette-accent); opacity: .35; }
 .book-library .cassette-design::after { content: ''; position: absolute; left: 6%; bottom: 2%; width: 44%; height: 7%; background: var(--cassette-accent); }
