@@ -49,6 +49,7 @@ function initShelf() {
   const mobile = window.matchMedia('(max-width: 760px)');
   let activeItem: HTMLElement | null = null;
   let previousScroll = 0;
+  let minimumFrameHeight = 0;
   let animationFrame = 0;
   let closeTimer = 0;
 
@@ -62,7 +63,8 @@ function initShelf() {
       activeItem.querySelector('.shelf-object-detail')?.getBoundingClientRect().bottom ?? 0,
     );
     const top = frame!.getBoundingClientRect().top;
-    frame!.style.height = Math.max(0, Math.ceil(bottom - top)) + 'px';
+    // Keep the original scroll range while the first zoom frames expand.
+    frame!.style.height = Math.max(minimumFrameHeight, Math.ceil(bottom - top)) + 'px';
   }
 
   const observer = new ResizeObserver(syncHeight);
@@ -71,6 +73,7 @@ function initShelf() {
     shelf!.classList.remove('shelf-zoom-layout');
     shelf!.style.removeProperty('--shelf-back-top');
     frame!.style.height = '';
+    minimumFrameHeight = 0;
     closeTimer = 0;
   }
 
@@ -81,7 +84,8 @@ function initShelf() {
     item.querySelector('.shelf-object-detail')?.setAttribute('aria-hidden', 'false');
     item.querySelector('[data-shelf-item]')?.setAttribute('aria-expanded', 'true');
     previousScroll = window.scrollY;
-    frame!.style.height = frame!.offsetHeight + 'px';
+    minimumFrameHeight = frame!.offsetHeight;
+    frame!.style.height = minimumFrameHeight + 'px';
     shelf!.classList.add('shelf-zoom-layout');
     observer.observe(item);
     const detail = item.querySelector('.shelf-object-detail');
