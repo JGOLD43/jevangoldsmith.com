@@ -56,7 +56,9 @@ export default defineConfig({
         '/data-smoke',
         '/data-smoke.html',
         '/resume-requested',
-        '/resume-requested.html'
+        '/resume-requested.html',
+        '/private-library',
+        '/private-library.html'
       ].some((suffix) => page.endsWith(suffix))
     })
   ]
