@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-06T23:49:27.519Z",
+  "coverageStartedAt": "2026-10-06T23:46:22Z",
+  "partialWeek": true,
+  "cycle": {
+    "name": "Foundation and workflow depth · first cycle",
+    "total": 15,
+    "accepted": 0,
+    "items": [
+      {
+        "id": "launch-source",
+        "title": "Public source and contributor onboarding",
+        "area": "Launch",
+        "acceptance": "A clean source checkout passes portable verification without private reading material.",
+        "startedAt": "2026-10-06T23:46:22Z",
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "in-progress"
+      },
+      {
+        "id": "launch-website",
+        "title": "Public website and honest product tour",
+        "area": "Launch",
+        "acceptance": "Responsive website serves on the custom domain with working source and community links.",
+        "startedAt": "2026-10-06T23:46:22Z",
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "in-progress"
+      },
+      {
+        "id": "launch-plugins",
+        "title": "Starter catalogue and plugin proposal path",
+        "area": "Plugins",
+        "acceptance": "Three immutable starter bundles have matching checksums and a native catalogue install succeeds.",
+        "startedAt": "2026-10-06T23:46:22Z",
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "in-progress"
+      },
+      {
+        "id": "launch-shipping",
+        "title": "Active delivery measurement",
+        "area": "Delivery",
+        "acceptance": "Receipt deduplication, bounded outcome evidence and dashboard refresh work; recurring observation is enabled.",
+        "startedAt": "2026-10-06T23:46:22Z",
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "in-progress"
+      },
+      {
+        "id": "capture-resume",
+        "title": "Capture and resume real context",
+        "area": "Work",
+        "acceptance": "Five mixed captures, three later lookups and one interrupted resume work with tolerable correction effort.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "finish-work",
+        "title": "Finish three ordinary work outputs",
+        "area": "Work",
+        "acceptance": "Three real outputs meet chosen criteria and retain context after interruption.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "ai-sharing",
+        "title": "Dependable selected-context AI",
+        "area": "AI",
+        "acceptance": "Inspect selected sharing, changes and undo across three ordinary tasks; no extra records leak.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "learning-loop",
+        "title": "Independent learning and delayed review",
+        "area": "Learning",
+        "acceptance": "One chosen skill path includes independent attempt, delayed recall and a fresh-case application.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "attention-review",
+        "title": "Trustworthy time and weekly allocation",
+        "area": "Attention",
+        "acceptance": "Three mixed-app days show known and unknown coverage; one review changes an allocation.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "relationship-followthrough",
+        "title": "Useful relationship preparation",
+        "area": "People",
+        "acceptance": "Three chosen conversations support useful recall and follow-through without compulsory logging.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "money-reconcile",
+        "title": "Reliable import and reconciliation",
+        "area": "Money",
+        "acceptance": "A disposable import reconciles and corrected records survive restart with unknowns explained.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "health-practice",
+        "title": "Dependable health and chosen practices",
+        "area": "Health",
+        "acceptance": "Three workouts and food days reopen correctly; one recipe and one practice adjustment are useful.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "decision-experiment",
+        "title": "Ideas applied to decisions and tests",
+        "area": "Decisions",
+        "acceptance": "One model clarifies a decision and one reviewed experiment changes a next action.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "personal-library",
+        "title": "Saved media and trip context",
+        "area": "Library",
+        "acceptance": "Three saved-title lookups and one chosen trip preparation or music discovery work.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      },
+      {
+        "id": "plugin-author",
+        "title": "Independent plugin author onboarding",
+        "area": "Plugins",
+        "acceptance": "An outside author builds, installs, exports, updates and submits a plugin using the guide.",
+        "startedAt": null,
+        "acceptedAt": null,
+        "evidence": [],
+        "status": "planned"
+      }
+    ]
+  },
+  "metrics": {
+    "acceptedLast7Days": 0,
+    "localVersionsLast7Days": 1,
+    "publicReleasesLast7Days": 0,
+    "medianCycleHours": null,
+    "cycleSamples": 0,
+    "inProgress": 4,
+    "openRegressions": 0
+  },
+  "installations": [
+    {
+      "version": "0.7.63",
+      "installedAt": "2026-10-06T23:39:22.311Z"
+    }
+  ],
+  "publicReleases": [],
+  "regressions": []
+}

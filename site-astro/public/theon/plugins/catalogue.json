@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "name": "Made by Theon",
+  "plugins": [
+    {
+      "apiVersion": 1,
+      "id": "focus-timer",
+      "name": "Focus Timer",
+      "category": "Focus",
+      "description": "Give one important task a quiet, timed work session.",
+      "details": "Choose a task, start a 15, 25 or 50 minute session, and pause when you need to. The timer keeps its finish time when you close and reopen the window. No tracking, notifications or network requests.",
+      "author": "Theon",
+      "license": "MIT",
+      "version": "1.0.0",
+      "minAppVersion": "0.7.33",
+      "permissions": [],
+      "entry": "https://raw.githubusercontent.com/JGOLD43/theon/e5437c468b0851dad25cc4a8c7613d416f3c3aad/desktop/plugins/focus-timer/plugin.html",
+      "sha256": "4e58f7ff770580c5f22a521880e299f4f2653c4f7d7b45a036cb20ed9064a250",
+      "repository": "https://github.com/JGOLD43/theon/tree/main/desktop/plugins/focus-timer"
+    },
+    {
+      "apiVersion": 1,
+      "id": "scratchpad",
+      "name": "Scratchpad",
+      "category": "Writing",
+      "description": "Clear your head with a small, automatically saved writing space.",
+      "details": "A distraction-free scratchpad for a rough thought or the next step in your work. Text saves as you type in this plugin\u2019s own browser storage. Download a text copy when you want to keep it elsewhere.",
+      "author": "Theon",
+      "license": "MIT",
+      "version": "1.0.0",
+      "minAppVersion": "0.7.33",
+      "permissions": [],
+      "entry": "https://raw.githubusercontent.com/JGOLD43/theon/e5437c468b0851dad25cc4a8c7613d416f3c3aad/desktop/plugins/scratchpad/plugin.html",
+      "sha256": "6f5873e8bd1bd0a6dccdfa00e5570f6c977be6e67e033457355e8152d0363d2b",
+      "repository": "https://github.com/JGOLD43/theon/tree/main/desktop/plugins/scratchpad"
+    },
+    {
+      "apiVersion": 1,
+      "id": "recall-cards",
+      "name": "Recall Cards",
+      "category": "Learning",
+      "description": "Turn a chosen idea into a question and practise recalling it.",
+      "details": "Create question-and-answer cards for something you have chosen to learn. Try to answer before revealing, then move to the next card. Cards save in this plugin\u2019s own browser storage. This is a practice aid, not a mastery score or spaced-repetition scheduler.",
+      "author": "Theon",
+      "license": "MIT",
+      "version": "1.0.0",
+      "minAppVersion": "0.7.33",
+      "permissions": [],
+      "entry": "https://raw.githubusercontent.com/JGOLD43/theon/e5437c468b0851dad25cc4a8c7613d416f3c3aad/desktop/plugins/recall-cards/plugin.html",
+      "sha256": "703de31b9e53c4e4c736fd4dc38a47c6e10e5150858875d2e901ddf8656f5a17",
+      "repository": "https://github.com/JGOLD43/theon/tree/main/desktop/plugins/recall-cards"
+    }
+  ]
+}
