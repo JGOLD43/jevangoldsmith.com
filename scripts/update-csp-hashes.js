@@ -113,9 +113,10 @@ const ADMIN_CSP = [
   "form-action 'self'"
 ].join('; ');
 const ADMIN_DIR = path.join(DIST, 'admin') + path.sep;
+const PRIVATE_LIBRARY_CSP = ["default-src 'none'", "script-src 'self'", "style-src 'self' 'unsafe-inline'", "connect-src https://api.github.com", "img-src 'none'", "font-src 'self'", "frame-src 'none'", "object-src 'none'", "base-uri 'none'", "form-action 'none'"].join('; ');
 let injected = 0;
 for (const [file, { html, scripts, styles }] of fileHashes) {
-  const policy = file.startsWith(ADMIN_DIR) ? ADMIN_CSP : buildPolicy(scripts, styles);
+  const policy = file.endsWith(`${path.sep}private-library.html`) ? PRIVATE_LIBRARY_CSP : file.startsWith(ADMIN_DIR) ? ADMIN_CSP : buildPolicy(scripts, styles);
   const meta = `<meta http-equiv="Content-Security-Policy" content="${policy}">`;
   const charsetRe = /(<meta\s+charset=[^>]*>)/i;
   let out;
