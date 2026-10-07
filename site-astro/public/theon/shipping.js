@@ -39,7 +39,7 @@ async function refresh() {
   if (busy) return;busy=true;byId('refresh').disabled=true;
   try {
     // Only public repository metadata is fetched. No tokens or private workspace records.
-    const response = await fetch('https://raw.githubusercontent.com/JGOLD43/theon/main/shipping/public.json?fresh='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(15000)});
+    const response = await fetch('https://raw.githubusercontent.com/JGOLD43/theon/shipping-evidence/shipping/public.json?fresh='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(15000)});
     if(!response.ok) throw new Error('Public evidence unavailable');
     const data=await response.json();if(data.schemaVersion !== 1 || !data.cycle?.items || !data.metrics) throw new Error('Invalid evidence');render(data);
   } catch {

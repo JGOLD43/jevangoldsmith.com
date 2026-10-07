@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-06T23:49:27.519Z",
+  "generatedAt": "2026-10-07T00:56:09.747Z",
   "coverageStartedAt": "2026-10-06T23:46:22Z",
   "partialWeek": true,
   "cycle": {
-    "name": "Foundation and workflow depth · first cycle",
-    "total": 15,
-    "accepted": 0,
+    "name": "Foundation and workflow depth · first cycle + open-source readiness",
+    "total": 20,
+    "accepted": 7,
     "items": [
       {
         "id": "launch-source",
@@ -14,9 +14,13 @@
         "area": "Launch",
         "acceptance": "A clean source checkout passes portable verification without private reading material.",
         "startedAt": "2026-10-06T23:46:22Z",
-        "acceptedAt": null,
-        "evidence": [],
-        "status": "in-progress"
+        "acceptedAt": "2026-10-07T00:02:59.782089Z",
+        "evidence": [
+          "Public MIT source, third-party notices, contributor guides and private vulnerability reporting are available at https://github.com/JGOLD43/theon.",
+          "Clean source with empty private reading content passed portable verification: https://github.com/JGOLD43/theon/actions/runs/37549463621",
+          "Clean Mac renderer build passed after verified public hand-model setup; guide now documents the required step."
+        ],
+        "status": "accepted"
       },
       {
         "id": "launch-website",
@@ -24,9 +28,13 @@
         "area": "Launch",
         "acceptance": "Responsive website serves on the custom domain with working source and community links.",
         "startedAt": "2026-10-06T23:46:22Z",
-        "acceptedAt": null,
-        "evidence": [],
-        "status": "in-progress"
+        "acceptedAt": "2026-10-07T00:07:48.731078Z",
+        "evidence": [
+          "Website build, unit checks, type checks, smoke harness and full browser suite passed in the existing GitHub Pages pipeline: https://github.com/JGOLD43/jevangoldsmith.com/actions/runs/37549733481",
+          "Custom domain returned HTTP 200 and expected homepage, dashboard and catalogue content at https://jevangoldsmith.com/theon/.",
+          "Desktop and mobile layout, plugin filters, catalogue copying, dashboard state filters and live metrics were checked; live dashboard had no browser errors."
+        ],
+        "status": "accepted"
       },
       {
         "id": "launch-plugins",
@@ -34,9 +42,13 @@
         "area": "Plugins",
         "acceptance": "Three immutable starter bundles have matching checksums and a native catalogue install succeeds.",
         "startedAt": "2026-10-06T23:46:22Z",
-        "acceptedAt": null,
-        "evidence": [],
-        "status": "in-progress"
+        "acceptedAt": "2026-10-07T00:07:48.731078Z",
+        "evidence": [
+          "Canonical HTTPS catalogue is live at https://jevangoldsmith.com/theon/plugins/catalogue.json with three Theon-authored offline starters.",
+          "Published Focus Timer, Scratchpad and Recall Cards passed checksum installation, separate enable/open and runtime isolation in a disposable native profile using the canonical website catalogue.",
+          "Public Discussions welcome and three bounded contributor opportunities are open; plugin proposal form, source/license, permissions and immutable bundle requirements are documented."
+        ],
+        "status": "accepted"
       },
       {
         "id": "launch-shipping",
@@ -44,9 +56,14 @@
         "area": "Delivery",
         "acceptance": "Receipt deduplication, bounded outcome evidence and dashboard refresh work; recurring observation is enabled.",
         "startedAt": "2026-10-06T23:46:22Z",
-        "acceptedAt": null,
-        "evidence": [],
-        "status": "in-progress"
+        "acceptedAt": "2026-10-07T00:02:59.782089Z",
+        "evidence": [
+          "Shipping tests passed receipt deduplication, private-path stripping, dated acceptance validation and partial observation coverage.",
+          "Production-build dashboard rendered public repository evidence without browser errors; state filters and catalogue copy worked.",
+          "Six-hour local observer is active and public release refresh workflow passed: https://github.com/JGOLD43/theon/actions/runs/37549376754",
+          "Successful signed local installation used the backup-preserving installer and recorded only public-safe receipt fields."
+        ],
+        "status": "accepted"
       },
       {
         "id": "capture-resume",
@@ -157,22 +174,104 @@
         "acceptedAt": null,
         "evidence": [],
         "status": "planned"
+      },
+      {
+        "id": "ready-protection",
+        "title": "Protected contribution review",
+        "area": "Readiness",
+        "acceptance": "Main requires pull requests and passing portable, Mac and publication checks; dependency alerts and security update proposals are enabled.",
+        "startedAt": "2026-10-07T00:13:00Z",
+        "acceptedAt": "2026-10-07T00:45:19.053149Z",
+        "evidence": [
+          "Live main protection requires PRs, current GitHub Actions portable/Mac/publication checks and resolved conversations, including admins; force pushes and deletion are disabled. Dependency alerts/update proposals, secret scanning and push protection are enabled."
+        ],
+        "status": "accepted"
+      },
+      {
+        "id": "ready-build",
+        "title": "Independent Mac contributor setup",
+        "area": "Readiness",
+        "acceptance": "A fresh hosted Mac installs, builds and passes native browser/plugin isolation without maintainer credentials.",
+        "startedAt": "2026-10-07T00:13:00Z",
+        "acceptedAt": "2026-10-07T00:45:19.053149Z",
+        "evidence": [
+          "Independent clean Mac runner installed dependencies, built and passed native browser/plugin isolation: https://github.com/JGOLD43/theon/actions/runs/37551876007",
+          "Local fresh dependencies with Node 24 passed portable checks and disposable native browser/plugin fixtures; no maintainer credentials or private source bodies were needed."
+        ],
+        "status": "accepted"
+      },
+      {
+        "id": "ready-redistribution",
+        "title": "Privacy and redistribution clearance",
+        "area": "Readiness",
+        "acceptance": "Published-source history, inventory and corresponding source are reviewed, and pending component redistribution terms are resolved.",
+        "startedAt": "2026-10-07T00:13:00Z",
+        "acceptedAt": null,
+        "evidence": [
+          "History/source and locked-package review passed; nonfree FFmpeg replaced and exact hand-model terms verified. Downloader bundled-dependency source coverage remains https://github.com/JGOLD43/theon/issues/10; not accepted."
+        ],
+        "status": "in-progress"
+      },
+      {
+        "id": "ready-community",
+        "title": "Dependable community contribution path",
+        "area": "Readiness",
+        "acceptance": "Named maintainership, private reporting, API v1 compatibility and author tooling are documented and validated; real outside authorship remains a separate outcome.",
+        "startedAt": "2026-10-07T00:13:00Z",
+        "acceptedAt": "2026-10-07T00:45:19.053149Z",
+        "evidence": [
+          "Named maintainership/contact, review policy and API v1 compatibility contract are documented. Starter tooling validates using native installer rules, detects altered checksums, denies workspace permissions and preserves existing folders.",
+          "Outside-author trial remains https://github.com/JGOLD43/theon/issues/4 and is not marked accepted by this automated fixture."
+        ],
+        "status": "accepted"
+      },
+      {
+        "id": "ready-release",
+        "title": "Notarized public Mac alpha",
+        "area": "Readiness",
+        "acceptance": "Developer ID signing, Apple notarization, downloadable checksums/source and independent install/upgrade/recovery are verified before publishing.",
+        "startedAt": "2026-10-07T00:13:00Z",
+        "acceptedAt": null,
+        "evidence": [
+          "Guarded preparation and recovery instructions are implemented. Apple identity/profile, actual notarization and independent installation/update/recovery remain https://github.com/JGOLD43/theon/issues/11; not accepted."
+        ],
+        "status": "in-progress"
       }
     ]
   },
   "metrics": {
-    "acceptedLast7Days": 0,
-    "localVersionsLast7Days": 1,
+    "acceptedLast7Days": 7,
+    "localVersionsLast7Days": 5,
     "publicReleasesLast7Days": 0,
-    "medianCycleHours": null,
-    "cycleSamples": 0,
-    "inProgress": 4,
+    "medianCycleHours": 0.3574252777777778,
+    "cycleSamples": 7,
+    "inProgress": 2,
     "openRegressions": 0
   },
   "installations": [
     {
       "version": "0.7.63",
       "installedAt": "2026-10-06T23:39:22.311Z"
+    },
+    {
+      "version": "0.7.63",
+      "installedAt": "2026-10-06T23:58:07.178Z"
+    },
+    {
+      "version": "0.7.64",
+      "installedAt": "2026-10-07T00:26:44.106Z"
+    },
+    {
+      "version": "0.7.65",
+      "installedAt": "2026-10-07T00:30:03.871Z"
+    },
+    {
+      "version": "0.7.67",
+      "installedAt": "2026-10-07T00:40:03.889Z"
+    },
+    {
+      "version": "0.7.68",
+      "installedAt": "2026-10-07T00:54:47.251Z"
     }
   ],
   "publicReleases": [],

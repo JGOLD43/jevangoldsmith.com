@@ -116,7 +116,7 @@ const ADMIN_DIR = path.join(DIST, 'admin') + path.sep;
 const PRIVATE_LIBRARY_CSP = ["default-src 'none'", "script-src 'self'", "style-src 'self' 'unsafe-inline'", "connect-src https://api.github.com", "img-src 'none'", "font-src 'self'", "frame-src 'none'", "object-src 'none'", "base-uri 'none'", "form-action 'none'"].join('; ');
 // Theon reads only public delivery metadata, with no account credentials.
 const THEON_DIR = path.join(DIST, 'theon') + path.sep;
-const THEON_CSP = ["default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline'", "connect-src 'self' https://raw.githubusercontent.com/JGOLD43/theon/main/shipping/", "img-src 'self'", "font-src 'self'", "frame-src 'none'", "object-src 'none'", "base-uri 'self'", "form-action 'none'"].join('; ');
+const THEON_CSP = ["default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline'", "connect-src 'self' https://raw.githubusercontent.com/JGOLD43/theon/shipping-evidence/shipping/", "img-src 'self'", "font-src 'self'", "frame-src 'none'", "object-src 'none'", "base-uri 'self'", "form-action 'none'"].join('; ');
 let injected = 0;
 for (const [file, { html, scripts, styles }] of fileHashes) {
   const policy = file.startsWith(THEON_DIR) ? THEON_CSP : file.endsWith(`${path.sep}private-library.html`) ? PRIVATE_LIBRARY_CSP : file.startsWith(ADMIN_DIR) ? ADMIN_CSP : buildPolicy(scripts, styles);
