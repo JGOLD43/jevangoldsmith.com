@@ -3,6 +3,7 @@ import { defaultDatabaseDirectory, openDatabaseAsync, type SQLiteDatabase } from
 import { excludeFromDeviceBackup } from './backup-exclusion';
 import { getOrCreateVaultKey } from './keys';
 import { runLearningMigrations } from './learning-migrations';
+import { runDocumentMigrations } from './document-migrations';
 
 let databasePromise: Promise<SQLiteDatabase> | null = null;
 
@@ -268,6 +269,7 @@ async function createDatabase(): Promise<SQLiteDatabase> {
   if (!relationshipColumnNames.has('first_met_place')) await database.execAsync("ALTER TABLE relationship_contacts ADD COLUMN first_met_place TEXT NOT NULL DEFAULT '';");
   await database.execAsync('CREATE UNIQUE INDEX IF NOT EXISTS relationship_contacts_device_unique ON relationship_contacts(device_contact_id) WHERE device_contact_id IS NOT NULL;');
   await runLearningMigrations(database);
+  await runDocumentMigrations(database);
   return database;
 }
 

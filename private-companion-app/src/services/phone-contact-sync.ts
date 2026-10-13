@@ -1,5 +1,6 @@
 import {
   Contact,
+  addContactsChangeListener,
   ContactField,
   ContactsSortOrder,
   getPermissionsAsync,
@@ -9,7 +10,10 @@ import {
   type ExistingDate,
 } from 'expo-contacts';
 import * as LegacyContacts from 'expo-contacts/legacy';
+import { AppState } from 'react-native';
+import { onSyncedData } from './device-sync-events';
 import * as SecureStore from 'expo-secure-store';
+import { pendingDeviceContacts, clearPendingDeviceContact } from '@/storage/device-contact-pending';
 
 import type { NewRelationshipContact, RelationshipContact } from '@/domain/models';
 import { addRelationshipContact, listRelationshipContacts, updateRelationshipContact } from '@/storage/repository';
@@ -126,6 +130,20 @@ function splitName(name: string) {
   return { givenName: parts.slice(0, -1).join(' ') || parts[0] || '', familyName: parts.length > 1 ? parts.at(-1) ?? '' : '' };
 }
 
+export function subscribePhoneContactChanges(refresh: () => void): () => void {
+  const contacts = addContactsChangeListener(refresh);
+  const foreground = AppState.addEventListener('change', state => {
+    if (state === 'active') refresh();
+  });
+  const remote = onSyncedData(refresh, ['relationship_contacts']);
+  return () => { contacts.remove(); foreground.remove(); remote(); };
+}
+
+function unchangedContact(existing: RelationshipContact, input: NewRelationshipContact) {
+  return Object.entries(input).every(([key, value]) =>
+    JSON.stringify(existing[key as keyof RelationshipContact]) === JSON.stringify(value));
+}
+
 export async function getPhoneSyncMode(): Promise<PhoneSyncMode> {
   const value = await SecureStore.getItemAsync(PHONE_SYNC_MODE_KEY, SECURE_OPTIONS);
   return value === 'import' || value === 'two-way' ? value : 'off';
@@ -153,6 +171,7 @@ export async function pushRelationshipContactToPhone(contact: RelationshipContac
         company: contact.company || undefined,
         jobTitle: contact.role || undefined,
         isFavourite: contact.favorite,
+        addresses: contact.location ? [{ label: 'home', street: contact.location }] : [],
         emails: contact.email ? [{ label: 'main', address: contact.email }] : [],
         phones: contact.phone ? [{ label: 'mobile', number: contact.phone }] : [],
         urlAddresses: contact.website ? [{ label: 'homepage', url: contact.website }] : [],
@@ -167,6 +186,7 @@ export async function pushRelationshipContactToPhone(contact: RelationshipContac
         company: contact.company,
         jobTitle: contact.role,
         isFavorite: contact.favorite,
+        addresses: contact.location ? [{ label: 'home', street: contact.location }] : [],
         emails: contact.email ? [{ label: 'main', email: contact.email }] : [],
         phoneNumbers: contact.phone ? [{ label: 'mobile', number: contact.phone }] : [],
         urlAddresses: contact.website ? [{ label: 'homepage', url: contact.website }] : [],
@@ -176,15 +196,45 @@ export async function pushRelationshipContactToPhone(contact: RelationshipContac
   }
 
   const device = new Contact(contact.deviceContactId);
-  const details = await device.getDetails([ContactField.EMAILS, ContactField.PHONES, ContactField.URL_ADDRESSES] as const);
+  let details;
+  try {
+    details = await device.getDetails([ContactField.EMAILS, ContactField.PHONES, ContactField.URL_ADDRESSES, ContactField.ADDRESSES] as const);
+  } catch {
+    // The installed Android runtime may only expose Expo's legacy bridge.
+    // Update that same address-book record, preserving its additional fields.
+    const existing = await LegacyContacts.getContactByIdAsync(contact.deviceContactId);
+    if (!existing) throw new Error(`The phone contact for ${contact.name} is no longer available.`);
+    const emails = existing.emails ?? [];
+    const phones = existing.phoneNumbers ?? [];
+    const urls = existing.urlAddresses ?? [];
+    const addresses = existing.addresses ?? [];
+    const firstAddress = addresses[0];
+    const savedLocation = firstAddress ? [firstAddress.street, firstAddress.city, firstAddress.region, firstAddress.postalCode, firstAddress.country].map(clean).filter(Boolean).join(', ') : '';
+    await LegacyContacts.updateContactAsync({
+      ...existing, name: contact.name, firstName: names.givenName, lastName: names.familyName,
+      company: contact.company, jobTitle: contact.role, isFavorite: contact.favorite,
+      // Preserve secondary addresses and structured fields unless the user edited the location.
+      addresses: savedLocation === contact.location ? addresses : [
+        { ...(firstAddress ?? { label: 'home' }), street: contact.location, city: '', region: '', postalCode: '', country: '', isoCountryCode: '' }, ...addresses.slice(1),
+      ],
+      emails: contact.email ? [{ ...(emails[0] ?? { label: 'main' }), email: contact.email }, ...emails.slice(1)] : emails,
+      phoneNumbers: contact.phone ? [{ ...(phones[0] ?? { label: 'mobile' }), number: contact.phone }, ...phones.slice(1)] : phones,
+      urlAddresses: contact.website ? [{ ...(urls[0] ?? { label: 'homepage' }), url: contact.website }, ...urls.slice(1)] : urls,
+    });
+    return contact;
+  }
   const emails = details.emails ?? [];
   const phones = details.phones ?? [];
   const urls = details.urlAddresses ?? [];
+  const addresses = details.addresses ?? [];
   await device.patch({
     ...names,
     company: contact.company || null,
     jobTitle: contact.role || null,
     isFavourite: contact.favorite,
+    addresses: locationFor(addresses[0]) === contact.location ? addresses : [
+      { ...(addresses[0] ?? { label: 'home' }), street: contact.location, city: '', state: '', region: '', postcode: '', country: '' }, ...addresses.slice(1),
+    ],
     emails: contact.email ? [{ ...(emails[0]?.id ? emails[0] : { label: 'main' }), address: contact.email }, ...emails.slice(1)] : emails,
     phones: contact.phone ? [{ ...(phones[0]?.id ? phones[0] : { label: 'mobile' }), number: contact.phone }, ...phones.slice(1)] : phones,
     urlAddresses: contact.website ? [{ ...(urls[0]?.id ? urls[0] : { label: 'homepage' }), url: contact.website }, ...urls.slice(1)] : urls,
@@ -192,9 +242,41 @@ export async function pushRelationshipContactToPhone(contact: RelationshipContac
   return contact;
 }
 
-export async function syncPhoneContacts(mode: Exclude<PhoneSyncMode, 'off'>, request = false): Promise<PhoneSyncResult> {
+let contactSync: Promise<PhoneSyncResult> | null = null;
+let nextContactSync: { mode: Exclude<PhoneSyncMode, 'off'>; request: boolean } | null = null;
+export function syncPhoneContacts(mode: Exclude<PhoneSyncMode, 'off'>, request = false): Promise<PhoneSyncResult> {
+  nextContactSync = { mode, request: request || (nextContactSync?.request ?? false) };
+  if (contactSync) return contactSync;
+  contactSync = (async () => {
+    const total: PhoneSyncResult = { imported: 0, updated: 0, exported: 0, total: 0 };
+    while (nextContactSync) {
+      const next = nextContactSync;
+      nextContactSync = null;
+      const result = await performPhoneContactSync(next.mode, next.request);
+      total.imported += result.imported;
+      total.updated += result.updated;
+      total.exported += result.exported;
+      total.total = result.total;
+    }
+    return total;
+  })().finally(() => { contactSync = null; nextContactSync = null; });
+  return contactSync;
+}
+async function performPhoneContactSync(mode: Exclude<PhoneSyncMode, 'off'>, request: boolean): Promise<PhoneSyncResult> {
   if (!await ensurePermission(request)) throw new Error('Contacts permission is required to sync your phone address book.');
   await setPhoneSyncMode(mode);
+  const pending = await pendingDeviceContacts();
+  if (mode === 'two-way' && pending.size) {
+    // Apply edits received from the other JGOLD device before importing the
+    // address book, so its older copy cannot silently undo a desktop edit.
+    const contacts = await listRelationshipContacts();
+    for (const id of pending) {
+      const contact = contacts.find(item => item.id === id);
+      if (contact) await pushRelationshipContactToPhone(contact);
+      await clearPendingDeviceContact(id);
+    }
+    pending.clear();
+  }
   let deviceContacts: DeviceContact[] = [];
   try {
     deviceContacts = await Contact.getAllDetails(FIELDS, { sortOrder: ContactsSortOrder.UserDefault });
@@ -220,7 +302,9 @@ export async function syncPhoneContacts(mode: Exclude<PhoneSyncMode, 'off'>, req
       ?? (!email && !phone ? byName.get(nameKey(fullName)) : undefined);
     const input = inputFromDevice(person, existing);
     if (!input) continue;
+    if (existing && pending.has(existing.id)) continue;
     if (existing) {
+      if (unchangedContact(existing, input)) continue;
       const next = await updateRelationshipContact(existing.id, input);
       byDeviceId.set(person.id, next);
       updated += 1;
@@ -253,7 +337,9 @@ export async function syncPhoneContacts(mode: Exclude<PhoneSyncMode, 'off'>, req
         ?? (!email && !phone ? byName.get(nameKey(person.name)) : undefined);
       const input = inputFromLegacy(person, existing);
       if (!input) continue;
+      if (existing && pending.has(existing.id)) continue;
       if (existing) {
+        if (unchangedContact(existing, input)) continue;
         const next = await updateRelationshipContact(existing.id, input);
         byDeviceId.set(person.id, next);
         updated += 1;

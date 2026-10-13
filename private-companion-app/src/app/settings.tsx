@@ -1,14 +1,17 @@
 import release from '@/constants/release.json';
 import Constants from 'expo-constants';
 import { SymbolView } from 'expo-symbols';
-import { type ComponentProps, type ReactNode, useEffect, useMemo, useState } from 'react';
+import { type ComponentProps, type ReactNode, useEffect, useMemo, useState, useRef, useSyncExternalStore } from 'react';
 import { ActivityIndicator, Alert, AppState, Image, Linking, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui';
+import { DeviceSyncPanel } from '@/components/device-sync';
 import { Fonts, type AppColors } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { isAiConfigured } from '@/services/ai';
+import { deviceSyncStatus, subscribeDeviceSync } from '@/services/device-sync';
+import { flushPendingSaves } from '@/services/save-queue';
 import { githubPublishingConfigured } from '@/services/github-publishing';
 import { retryPendingPublications } from '@/services/publication-outbox';
 import { applyDownloadedUpdate, checkForRemoteUpdate, remoteUpdatesEnabled } from '@/services/remote-updates';
@@ -81,6 +84,8 @@ export default function SettingsScreen() {
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { lock, screenshotsAllowed, setScreenshotsAllowed, developerAccessEnabled, setDeveloperAccessEnabled } = useApp();
+  const deviceSync = useSyncExternalStore(subscribeDeviceSync, deviceSyncStatus, deviceSyncStatus);
+  const scroll = useRef<ScrollView>(null);
   const [authorization, setAuthorization] = useState<DeviceAuthorization | null>(null);
   const [connectionError, setConnectionError] = useState('');
   const [connected, setConnected] = useState(false);
@@ -157,7 +162,7 @@ export default function SettingsScreen() {
     else await connect();
   };
 
-  const disconnect = () => Alert.alert('Disconnect website publishing?', 'This removes the publishing connection from this phone. Your website and drafts are unchanged.', [
+  const disconnect = () => Alert.alert('Disconnect GitHub?', 'Publishing and encrypted device sync will pause until you sign in again. Your saved local records remain on this phone.', [
     { text: 'Cancel', style: 'cancel' },
     { text: 'Disconnect', style: 'destructive', onPress: async () => { await removePublishingToken(); setConnected(false); setPublishingExpanded(false); } },
   ]);
@@ -170,7 +175,7 @@ export default function SettingsScreen() {
       else if (result === 'current') Alert.alert('App is up to date', 'This phone already has the newest compatible app update.');
       else Alert.alert('Update ready', 'The update has downloaded. Restart now to apply it?', [
         { text: 'Later', style: 'cancel' },
-        { text: 'Restart now', onPress: () => { void applyDownloadedUpdate(); } },
+        { text: 'Restart now', onPress: () => { void flushPendingSaves().then(() => applyDownloadedUpdate()).catch(() => Alert.alert('Changes could not be saved', 'Keep JGOLD open and retry before restarting.')); } },
       ]);
     } catch {
       Alert.alert('Could not check for updates', 'Check the internet connection and try again.');
@@ -228,7 +233,7 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView edges={['top']} style={styles.safeArea}>
-      <ScrollView contentInsetAdjustmentBehavior="automatic" keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
+      <ScrollView ref={scroll} contentInsetAdjustmentBehavior="automatic" keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
         <Text style={styles.title}>Settings</Text>
 
         <View style={styles.profileCard}>
@@ -284,6 +289,14 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
+          <SectionLabel>Phone & Mac sync</SectionLabel>
+          <DeviceSyncPanel connected={connected} connection={<View style={{ gap: 10 }}>
+            <Text style={styles.panelCopy}>Use the existing GitHub connection in Publishing inbox above. That connection also supports encrypted device sync; private records stay separate from publishing.</Text>
+            <Button label="Open GitHub connection" onPress={() => { setPublishingExpanded(true); scroll.current?.scrollTo({ y: 0, animated: true }); }} />
+          </View>} />
+        </View>
+
+        <View style={styles.section}>
           <SectionLabel>Privacy & security</SectionLabel>
           <SettingsGroup>
             <SettingsRow
@@ -309,7 +322,7 @@ export default function SettingsScreen() {
                 <View style={styles.securityLine}><Text style={styles.securityLabel}>Private attachments</Text><Text style={styles.securityValue}>AES-GCM encrypted</Text></View>
                 <View style={styles.securityLine}><Text style={styles.securityLabel}>Samsung backup</Text><Text style={styles.securityValue}>Excluded</Text></View>
                 <View style={styles.securityLine}><Text style={styles.securityLabel}>App switcher preview</Text><Text style={styles.securityValue}>Always protected</Text></View>
-                <View style={styles.securityLine}><Text style={styles.securityLabel}>Private data cloud sync</Text><Text style={styles.securityValue}>Off</Text></View>
+                <View style={styles.securityLine}><Text style={styles.securityLabel}>Private data cloud sync</Text><Text style={styles.securityValue}>{deviceSync.enabled ? 'End-to-end encrypted' : 'Off'}</Text></View>
                 <View style={[styles.securityLine, styles.securityLineLast]}><Text style={styles.securityLabel}>Approved public publishing</Text><Text style={styles.securityValue}>{connected ? 'Automatic' : 'Not connected'}</Text></View>
               </View>
             ) : null}
