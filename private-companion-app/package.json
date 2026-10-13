@@ -8,6 +8,8 @@
     "@epubjs-react-native/expo-file-system": "^1.1.4",
     "@expo-google-fonts/chivo": "^0.4.2",
     "@expo/ui": "~57.0.12",
+    "@zxing/browser": "0.2.1",
+    "@zxing/library": "0.23.0",
     "expo": "~57.0.15",
     "expo-calendar": "~57.0.2",
     "expo-constants": "~57.0.13",
@@ -48,6 +50,7 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "esbuild": "0.25.9",
     "typescript": "~6.0.3"
   },
   "scripts": {
