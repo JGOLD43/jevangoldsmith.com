@@ -10,6 +10,7 @@ import {
 
 import type { Book, BookAnnotation, BookCollection, LibraryReadingStats, NewBook } from '@/domain/models';
 import { loadPublicBooks } from '@/services/public-books';
+import { onSyncedData } from '@/services/device-sync-events';
 import { importBookFile } from '@/storage/book-files';
 import { pickKindleImport } from '@/storage/kindle-import';
 import {
@@ -97,6 +98,7 @@ export function BooksProvider({ children }: PropsWithChildren) {
   }, []);
 
   useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => onSyncedData(() => { void refresh().catch(() => undefined); }, ['books', 'book_annotations', 'book_collections', 'book_collection_members', 'reading_sessions']), [refresh]);
 
   const syncWebsite = useCallback(async () => {
     setSyncing(true);

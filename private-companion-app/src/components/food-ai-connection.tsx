@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import { Button } from "@/components/ui";
-import { PeopleSheet } from "@/components/people-ui";
+import { FoodSheet } from "@/components/food-sheet";
 import { useTheme } from "@/hooks/use-theme";
 import {
   configureFoodAI,
@@ -25,7 +25,7 @@ export function FoodAIConnection({
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   return (
-    <PeopleSheet
+    <FoodSheet
       visible={visible}
       title="Food photo AI"
       subtitle="Optional · just this phone"
@@ -136,6 +136,6 @@ export function FoodAIConnection({
           }}
         />
       ) : null}
-    </PeopleSheet>
+    </FoodSheet>
   );
 }

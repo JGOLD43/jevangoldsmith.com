@@ -15,12 +15,14 @@ import { StatusBar } from 'expo-status-bar';
 
 import AppTabs from '@/components/app-tabs';
 import { LockGate } from '@/components/lock-gate';
+import { AutomaticDeviceSync } from '@/components/device-sync';
 import { AppProvider } from '@/state/app-context';
 import { BooksProvider } from '@/state/books-context';
 import { LearningProvider } from '@/state/learning-context';
 import { AppThemeProvider, useAppTheme } from '@/state/theme-context';
 import { refreshPublicationJobs } from '@/services/publication-outbox';
 import { checkForRemoteUpdate } from '@/services/remote-updates';
+import { flushPendingSaves } from '@/services/save-queue';
 
 function AutomaticRemoteUpdates() {
   const { isUpdatePending } = Updates.useUpdates();
@@ -30,7 +32,7 @@ function AutomaticRemoteUpdates() {
   const applyPendingUpdate = () => {
     if (reloading.current) return;
     reloading.current = true;
-    void Updates.reloadAsync().catch(() => {
+    void flushPendingSaves().then(() => Updates.reloadAsync()).catch(() => {
       reloading.current = false;
     });
   };
@@ -98,6 +100,7 @@ function ThemedApp() {
           <LearningProvider>
             <AutomaticRemoteUpdates />
             <AutomaticPublicSync />
+            <AutomaticDeviceSync />
             <AppTabs />
           </LearningProvider>
         </BooksProvider>

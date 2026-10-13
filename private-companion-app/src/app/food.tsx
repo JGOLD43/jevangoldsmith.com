@@ -28,7 +28,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { useKnowledgePreferences } from "@/hooks/use-knowledge-preferences";
 import { useViewState } from "@/hooks/use-view-state";
 import { Button, Card, Chip } from "@/components/ui";
-import { PeopleSheet } from "@/components/people-ui";
+import { FoodSheet } from "@/components/food-sheet";
 import {
   FoodImageCodec,
   type FoodImageJob,
@@ -802,20 +802,36 @@ export default function FoodDiary() {
           {!!pending.length && (
             <Card>
               <Text style={s.section}>
-                {pending.length} photo{pending.length === 1 ? "" : "s"} waiting
+                {pending.length} capture{pending.length === 1 ? "" : "s"} waiting
                 for review
               </Text>
               <Text style={s.muted}>
-                Saved on this phone even offline. After Phone & Mac sync, open
-                Food diary on your Mac to review amounts and save. These photos
-                are not counted as food yet.
+                Saved captures stay on this phone even offline. After Phone &
+                Mac sync, open Food diary on your Mac to review amounts and save.
+                These captures are not counted as food yet.
               </Text>
               {pending.map((c) => (
                 <View key={c.id} style={s.between}>
-                  <Image source={{ uri: c.photo! }} style={s.thumb} />
+                  {c.photo ? (
+                    <Image source={{ uri: c.photo }} style={s.thumb} />
+                  ) : (
+                    <View
+                      style={[s.thumb, s.textCapture]}
+                      accessible
+                      accessibilityLabel="Text food capture"
+                    >
+                      <Text style={s.small}>Text</Text>
+                    </View>
+                  )}
                   <View style={s.flex}>
                     <Text style={s.foodName}>
-                      {c.mode === "label" ? "Pack label" : "Meal photo"}
+                      {c.photo
+                        ? c.mode === "label"
+                          ? "Pack label"
+                          : "Meal photo"
+                        : c.mode === "label"
+                          ? "Pack label notes"
+                          : "Food description"}
                     </Text>
                     <Text style={s.small}>
                       {c.day} · {c.meal}
@@ -830,7 +846,7 @@ export default function FoodDiary() {
                     disabled={busy}
                     onPress={() =>
                       Alert.alert(
-                        "Discard this photo?",
+                        "Discard this capture?",
                         "It will be removed from the capture queue after sync. Your logged foods stay saved.",
                         [
                           { text: "Keep", style: "cancel" },
@@ -899,7 +915,7 @@ export default function FoodDiary() {
               ))}
         </ScrollView>
       </SafeAreaView>
-      <PeopleSheet
+      <FoodSheet
         visible={open && !!draft}
         title={draft?.updatedAt ? "Edit food" : "What did you eat?"}
         onDismiss={close}
@@ -1269,8 +1285,8 @@ export default function FoodDiary() {
             ) : null}
           </>
         )}
-      </PeopleSheet>
-      <PeopleSheet
+      </FoodSheet>
+      <FoodSheet
         visible={photoOpen && !!photoDraft}
         title="Review your food photo"
         subtitle="Private on this phone"
@@ -1411,8 +1427,8 @@ export default function FoodDiary() {
             ) : null}
           </>
         )}
-      </PeopleSheet>
-      <PeopleSheet
+      </FoodSheet>
+      <FoodSheet
         visible={dataOpen}
         title="Food data and photo privacy"
         onDismiss={() => setDataOpen(false)}
@@ -1447,8 +1463,8 @@ export default function FoodDiary() {
             {FOOD_CODEC_NOTICES}
           </Text>
         ) : null}
-      </PeopleSheet>
-      <PeopleSheet
+      </FoodSheet>
+      <FoodSheet
         visible={savedOpen}
         title="Saved meals"
         onDismiss={() => setSavedOpen(false)}
@@ -1471,7 +1487,7 @@ export default function FoodDiary() {
               />
             </Card>
           ))}
-      </PeopleSheet>
+      </FoodSheet>
       {aiOpen ? (
         <FoodAIConnection
           visible
@@ -1637,6 +1653,11 @@ const styles = (c: AppColors) =>
       color: c.danger,
     },
     thumb: { width: 45, height: 45, borderRadius: 10 },
+    textCapture: {
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.backgroundElement,
+    },
     photo: {
       width: "100%",
       height: 245,

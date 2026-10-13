@@ -15,12 +15,16 @@ export type FoodCapture = {
   status: "pending" | "reviewed" | "discarded";
   foodEntryId?: string;
 };
-export function validateFoodCapture(capture: FoodCapture) {
+export function validateFoodCapture(value: unknown): asserts value is FoodCapture {
+  const capture = value as FoodCapture;
   if (
     !capture ||
     capture.version !== 1 ||
-    !/^[a-zA-Z0-9-]{1,100}$/.test(capture.id) ||
+    typeof capture.id !== "string" ||
+    !/^[a-zA-Z0-9_-]{1,100}$/.test(capture.id) ||
+    typeof capture.createdAt !== "string" ||
     !Number.isFinite(Date.parse(capture.createdAt)) ||
+    typeof capture.updatedAt !== "string" ||
     !Number.isFinite(Date.parse(capture.updatedAt)) ||
     !isDay(capture.day) ||
     !["Breakfast", "Lunch", "Dinner", "Snack", "Other"].includes(
@@ -36,11 +40,11 @@ export function validateFoodCapture(capture: FoodCapture) {
     );
   if (capture.status === "pending") {
     if (
-      typeof capture.photo !== "string" ||
-      capture.photo.length > 900000 ||
-      !/^data:image\/jpeg;base64,\/9j\/[A-Za-z0-9+/]+={0,2}$/.test(
-        capture.photo,
-      )
+      (capture.photo !== null &&
+        (typeof capture.photo !== "string" ||
+          capture.photo.length > 900000 ||
+          !/^data:image\/jpeg;base64,\/9j\/[A-Za-z0-9+/]+={0,2}$/.test(capture.photo))) ||
+      (!capture.photo && !capture.description.trim())
     )
       throw Error("Choose a smaller JPEG food photo.");
   } else if (

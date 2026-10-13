@@ -14,6 +14,16 @@ Meal analysis identifies foods, then chooses from bounded USDA reference candida
 
 You can also choose **Save for Mac review** without an AI connection or internet. That commits a photo packet to the encrypted vault before acknowledging it. Up to five photos can wait, with at most 5 MB of photo text across the queue. After Phone & Mac sync, review the packet in the Mac Food diary. The queue does not add calories. Retrying an interrupted save reuses the same capture identity; reviewed and discarded packets keep a receipt to avoid reappearing after sync.
 
+## Phone & Mac sync
+
+Open **Phone & Mac sync** in Settings. Its GitHub connection is shared with the separate approved publishing queue, but private sync records are encrypted before they enter the private inbox. Enabling sync connects the whole workspace, including writing, books and learning; it is not limited to food. Review the preview before combining devices and resolve any conflicting versions. A recovery snapshot is saved before incoming records replace local ones.
+
+Food logs, saved meals and pending review packets travel through the existing encrypted preference records. Unsaved view drafts and the food AI key stay on this device. Sync waits for pending local saves, pauses when the app backgrounds or locks, and refreshes screens after incoming changes. Software-update restarts also wait for these saves; a failed save keeps the app open. The public source integration retains document history and deletion receipts so bringing in food sync does not discard those records.
+
+The existing essay editor now binds each save to the version it opened. An incoming edit keeps your unsaved writing visible and asks which writing to keep. Keeping your writing preserves the incoming document properties. If an essay is removed elsewhere while you are editing, review the retained writing and choose **Save as a new private essay** or confirm **Discard retained draft**. A recovered essay has a fresh identity, no publishing source and private visibility; retries of the same retained writing reuse its committed copy. Neither choice recreates or deletes the removed record or its history. Failed recovery keeps the draft and save barriers intact. Moving an essay to Trash keeps its encrypted record and history.
+
+This scoped integration does not add the broader Writing or Trash-management screens. Unresolved writing drafts stay in memory while the app runs, so resolve them before closing the app; they are not promised to survive Android terminating it.
+
 ## Food sources
 
 Offline references use 7,793 USDA FoodData Central SR Legacy (2018) foods. These are public-domain US government averages, not a match for every brand or recipe. Barcode lookup sends only the printed code to Open Food Facts; check the returned product against your current pack. Food data attribution and barcode reader licences are available from **Food data and photo privacy**.
@@ -24,4 +34,6 @@ Offline references use 7,793 USDA FoodData Central SR Legacy (2018) foods. These
 
 ## Current validation boundary
 
-Compilation, the Android-only export, a static credential/queue review, and a hidden synthetic walkthrough cover the implemented flow. The walkthrough checks amount scaling, missing nutrients, optical barcode decoding, and save/reload/retry without touching a user vault. Actual Android camera, SQLCipher reopen, encrypted phone-to-Mac sync and a live phone provider request still need a connected phone. A preview update is separate from installation and production promotion.
+The earlier integrated phone source passed compilation, an Android-only export, a static credential/queue review and a hidden synthetic walkthrough. That walkthrough checked amount scaling, missing nutrients, optical barcode decoding and save/reload/retry without touching a user vault.
+
+The scoped public integration now includes the required save/sync modules and a Food-specific sheet instead of the broader People screen. Source checks cover its local import closure, encryption/transaction wiring and retained record compatibility. Compilation, export and a fresh screen walkthrough have not yet been rerun for this integration while the coordinator's disk hold is active. Actual Android camera, SQLCipher reopen, encrypted phone-to-Mac sync and a live phone provider request still need a connected phone. No unit suites, OTA publication or installation are part of these source checks.
