@@ -8,6 +8,8 @@ A reference amount explains what the nutrient values describe. If a pack gives 5
 
 **Take food photo** opens Android's camera; **Choose food photo** opens its picker. The selected image is resized and re-encoded locally to remove metadata. The camera or picker may keep a temporary copy in the app cache. Your original gallery pictures are never removed.
 
+Both photo choices stay above your meals after saving; use **Choose food photo** when camera access is off. Capture controls stay dimmed while preparing, saving or analysing.
+
 For an immediate estimate, connect your own OpenRouter API key in the photo's **Food photo AI** settings. The key stays in device-only secure storage, outside the encrypted device sync and the local image reader. Trident checks that your chosen model supports images and private routing. **Analyse with OpenRouter** explicitly sends the selected picture and description to OpenRouter and its provider; it uses your account credits. Backgrounding, locking, Stop or Disconnect cancels pending analysis. Reconnecting never automatically submits a photo.
 
 Meal analysis identifies foods, then chooses from bounded USDA reference candidates. The model does not supply a made-up nutrient table. Photo identity and portions still remain estimates: a picture cannot reveal hidden oil, recipes or exact weight. Review the matched food and correct its edible amount. Pack-label mode transcribes label values for your review. Nothing is logged until **Save food**.

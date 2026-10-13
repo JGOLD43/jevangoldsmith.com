@@ -588,6 +588,7 @@ export default function FoodDiary() {
     setOpen(true);
   }
   const bodyError = error || query.error || captures.error;
+  const captureDisabled = busy || analysing || !!job || !photoReady || !pickReady;
   return (
     <InputLock.Provider value={busy || analysing}>
       <SafeAreaView edges={["top"]} style={s.safe}>
@@ -657,14 +658,20 @@ export default function FoodDiary() {
             <Button
               label="Take food photo"
               onPress={() => void pick("photo", true)}
-              disabled={busy || !!job}
+              disabled={captureDisabled}
+            />
+            <Button
+              label="Choose food photo"
+              variant="quiet"
+              onPress={() => void pick("photo", false)}
+              disabled={captureDisabled}
             />
             <View style={s.two}>
               <Button
                 label="Scan barcode"
                 variant="secondary"
                 onPress={() => void pick("barcode", true)}
-                disabled={busy || !!job}
+                disabled={captureDisabled}
               />
               <Button
                 label="Add food"
@@ -724,11 +731,6 @@ export default function FoodDiary() {
                 A photo, a pack barcode or a familiar food is enough to start.
                 Check portions before saving.
               </Text>
-              <Button
-                label="Choose food photo"
-                variant="quiet"
-                onPress={() => void pick("photo", false)}
-              />
             </Card>
           ) : (
             MEALS.filter((m) => logged.some((r) => r.meal === m)).map(
