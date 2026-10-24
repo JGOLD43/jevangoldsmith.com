@@ -10,6 +10,7 @@ Purpose: `small active index for docs that guide current website work`
 - [Architecture](../ARCHITECTURE.md)
 - [Release Runbook](RELEASE_RUNBOOK.md)
 - [Writing Publication](WRITING_PUBLICATION.md)
+- [Trident website and pricing](wiki/trident-website-and-pricing.md)
 
 ## Archived Product, Design, And Planning Docs
 
