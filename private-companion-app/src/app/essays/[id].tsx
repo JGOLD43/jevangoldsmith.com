@@ -1,7 +1,7 @@
 import { bodyText } from '@/domain/studio-document.cjs';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert, BackHandler, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,6 +10,7 @@ import { Fonts, type AppColors } from '@/constants/theme';
 import type { EssayDocument, EssayRevision, EssayVisibility, NewEssayDocument } from '@/domain/models';
 import { createPublishManifest } from '@/domain/privacy';
 import { useTheme } from '@/hooks/use-theme';
+import { useEssayDraft } from '@/hooks/use-essay-draft';
 import { queueAndAttemptPublication } from '@/services/publication-outbox';
 import { loadSiteCollection, type SiteItem } from '@/services/public-site';
 import { listEssayRevisions } from '@/storage/repository';
@@ -35,48 +36,37 @@ export default function EssayEditorScreen() {
   const router = useRouter();
   const colors = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const { essays, createEssay, editEssay, deleteEssay, createDraft, setDraftStatus } = useApp();
+  const { essays, createEssay, recoverEssayDraft, editEssay, deleteEssay, createDraft, setDraftStatus } = useApp();
   const localId = id?.startsWith('local:') ? id.slice(6) : null;
   const publicId = id?.startsWith('public:') ? id.slice(7) : null;
   const isNew = id === 'new';
   const localEssay = localId ? essays.find((essay) => essay.id === localId) ?? null : null;
   const [publicEssay, setPublicEssay] = useState<SiteItem | null>(null);
   const [loadingPublic, setLoadingPublic] = useState(Boolean(publicId));
-  const [title, setTitle] = useState('');
-  const [summary, setSummary] = useState('');
-  const [body, setBody] = useState('');
-  const [collectionName, setCollectionName] = useState(collection || 'Unsorted');
-  const [visibility, setVisibility] = useState<EssayVisibility>('private');
   const [revisions, setRevisions] = useState<EssayRevision[]>([]);
   const [selectedRevision, setSelectedRevision] = useState<EssayRevision | null>(null);
-  const [status, setStatus] = useState('Saved locally');
   const [publishing, setPublishing] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-  const creatingRef = useRef(false);
-  const latestRef = useRef<NewEssayDocument>({ title: '', summary: '', body: '', collectionName: collection || 'Unsorted', visibility: 'private' });
-
-  useEffect(() => {
-    latestRef.current = { title, summary, body, collectionName, visibility };
-  }, [body, collectionName, summary, title, visibility]);
-
-  useEffect(() => {
-    if (!localEssay) {
-      if (isNew) setHydrated(true);
-      return;
-    }
-    setTitle(localEssay.title);
-    setSummary(localEssay.summary);
-    setBody(localEssay.body);
-    setCollectionName(localEssay.collectionName);
-    setVisibility(localEssay.visibility);
-    setHydrated(true);
-  }, [isNew, localEssay]);
+  const [recovering, setRecovering] = useState(false);
+  const [recoveryError, setRecoveryError] = useState('');
+  const initial = useMemo<NewEssayDocument>(() => localEssay ?? {
+    title: '', summary: '', body: '', collectionName: collection || 'Unsorted', visibility: 'private',
+  }, [collection, localEssay]);
+  const saveDraft = useCallback((essayId: string | null, value: NewEssayDocument, reason: EssayRevision['reason']) =>
+    essayId ? editEssay(essayId, value, reason) : createEssay(value), [createEssay, editEssay]);
+  const draft = useEssayDraft(localId ? 'local:' + localId : 'new:' + (collection || ''), initial, localId, saveDraft, !publicId && (isNew || Boolean(localEssay)));
+  const { title, summary, body, collectionName, visibility } = draft.state.value;
+  const setTitle = (value: string) => draft.change('title', value);
+  const setSummary = (value: string) => draft.change('summary', value);
+  const setBody = (value: string) => draft.change('body', value);
+  const setCollectionName = (value: string) => draft.change('collectionName', value);
+  const setVisibility = (value: EssayVisibility) => draft.change('visibility', value);
+  const status = draft.state.status === 'saved' ? 'Saved locally' : draft.state.status === 'saving' ? 'Saving…' : draft.state.status === 'error' ? 'Save failed — retry below' : 'Unsaved changes';
 
   const refreshTimeline = useCallback(async (essayId: string) => {
     setRevisions(await listEssayRevisions(essayId));
   }, []);
 
-  useEffect(() => { if (localId) void refreshTimeline(localId); }, [localId, refreshTimeline]);
+  useEffect(() => { if (localId) void refreshTimeline(localId); }, [localId, localEssay?.updatedAt, refreshTimeline]);
 
   useEffect(() => {
     if (!publicId) return;
@@ -88,49 +78,26 @@ export default function EssayEditorScreen() {
     return () => { active = false; };
   }, [publicId]);
 
-  const persist = useCallback(async (reason: 'autosave' | 'manual' | 'studio') => {
-    const input = latestRef.current;
-    if (localId) {
-      setStatus(reason === 'autosave' ? 'Saving…' : 'Saving version…');
-      const saved = await editEssay(localId, input, reason);
-      if (saved) {
-        setStatus(`Saved ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`);
-        await refreshTimeline(localId);
-      }
-      return saved;
+  const persist = async (reason: 'autosave' | 'manual' | 'studio') => {
+    const saved = await draft.persist(reason);
+    if (saved) {
+      if (isNew) router.replace(`/essays/${encodeURIComponent('local:' + saved.id)}`);
+      await refreshTimeline(saved.id);
     }
-    if (!isNew || creatingRef.current || (!input.title.trim() && !input.body.trim())) return null;
-    creatingRef.current = true;
-    setStatus('Creating essay…');
-    const created = await createEssay(input);
-    creatingRef.current = false;
-    if (created) router.replace(`/essays/${encodeURIComponent(`local:${created.id}`)}`);
-    return created;
-  }, [createEssay, editEssay, isNew, localId, refreshTimeline, router]);
+    return saved ?? localEssay;
+  };
+  useEffect(() => {
+    if (isNew && draft.savedId && draft.state.status === 'saved') router.replace(`/essays/${encodeURIComponent('local:' + draft.savedId)}`);
+  }, [draft.savedId, draft.state.status, isNew, router]);
 
   useFocusEffect(useCallback(() => {
     if (publicId) return undefined;
     const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
-      void persist('manual').finally(() => router.back());
+      void persist('manual').then(() => router.back()).catch(() => undefined);
       return true;
     });
     return () => subscription.remove();
   }, [persist, publicId, router]));
-
-  useEffect(() => {
-    if (!hydrated || publicId) return;
-    if (isNew && !title.trim() && !summary.trim() && !body.trim()) {
-      setStatus('New essay');
-      return;
-    }
-    setStatus('Unsaved changes');
-    const timeout = setTimeout(() => { void persist('autosave'); }, 1400);
-    return () => clearTimeout(timeout);
-  }, [body, collectionName, hydrated, isNew, persist, publicId, summary, title, visibility]);
-
-  useEffect(() => () => {
-    if (hydrated && localId) void editEssay(localId, latestRef.current, 'autosave');
-  }, [editEssay, hydrated, localId]);
 
   const makeEditableCopy = async () => {
     if (!publicEssay) return;
@@ -153,16 +120,17 @@ export default function EssayEditorScreen() {
       if (!essay) return;
       const stableSourceId = essay.sourceId ?? `jgold-${essay.id}`;
       if (!essay.sourceId) {
-        await editEssay(essay.id, { ...latestRef.current, sourceId: stableSourceId }, 'studio');
+        draft.change('sourceId', stableSourceId);
+        await draft.persist('studio');
       }
-      const draft = await createDraft({
+      const publicDraft = await createDraft({
         type: 'essay', title: essay.title, summary: essay.summary, body: essay.body,
         sourceId: stableSourceId, operation: essay.sourceId ? 'update' : 'create',
       });
-      if (!draft) return;
-      const job = await queueAndAttemptPublication(createPublishManifest(draft), draft.id);
+      if (!publicDraft) return;
+      const job = await queueAndAttemptPublication(createPublishManifest(publicDraft), publicDraft.id);
       if (job.status === 'submitted') {
-        await setDraftStatus(draft.id, 'ready');
+        await setDraftStatus(publicDraft.id, 'ready');
         Alert.alert('Website update submitted', 'The approved essay was committed and will deploy automatically. Your revision history remains only on this phone.');
       } else if (job.status === 'queued') {
         Alert.alert('Queued in Studio', 'The approved public copy will submit automatically after publishing is connected.', [
@@ -180,9 +148,33 @@ export default function EssayEditorScreen() {
 
   const remove = () => {
     if (!localId || !localEssay) return;
-    Alert.alert('Delete this essay?', 'Its complete local revision timeline will also be deleted.', [
+    Alert.alert('Move this essay to Trash?', 'Its encrypted record and revision history will be retained.', [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => { void deleteEssay(localId).then(() => router.replace('/books')); } },
+      { text: 'Move to Trash', style: 'destructive', onPress: () => { void persist('manual').then(() => deleteEssay(localId)).then(() => router.replace('/books')).catch(() => undefined); } },
+    ]);
+  };
+
+  const recoverRemovedWriting = async () => {
+    const reviewed = draft.state;
+    if (!localId || localEssay || recovering) return;
+    setRecovering(true);
+    setRecoveryError('');
+    try {
+      const copied = await draft.recoverRemoved(reviewed, recoverEssayDraft);
+      router.replace(`/essays/${encodeURIComponent('local:' + copied.id)}`);
+    } catch (cause) {
+      setRecoveryError(cause instanceof Error ? cause.message : 'Could not recover this writing. Your draft is still here.');
+    } finally { setRecovering(false); }
+  };
+  const discardRemovedWriting = () => {
+    const reviewed = draft.state;
+    if (!localId || localEssay || recovering) return;
+    Alert.alert('Discard this retained draft?', 'This deliberately discards the unsaved writing shown below. The removed essay and its history stay unchanged.', [
+      { text: 'Keep writing', style: 'cancel' },
+      { text: 'Discard draft', style: 'destructive', onPress: () => {
+        try { draft.discard(reviewed); router.replace('/books'); }
+        catch (cause) { setRecoveryError(cause instanceof Error ? cause.message : 'Review the current writing before discarding.'); }
+      } },
     ]);
   };
 
@@ -209,11 +201,39 @@ export default function EssayEditorScreen() {
     <SafeAreaView edges={['top']} style={styles.safe}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
         <View style={styles.topbar}>
-          <Pressable accessibilityLabel="Back to essays" onPress={() => { void persist('manual').finally(() => router.back()); }} style={styles.iconButton}><SymbolView name={{ ios: 'chevron.left', android: 'arrow_back' }} size={25} tintColor={colors.text} /></Pressable>
+          <Pressable accessibilityLabel="Back to essays" onPress={() => { void persist('manual').then(() => router.back()).catch(() => undefined); }} style={styles.iconButton}><SymbolView name={{ ios: 'chevron.left', android: 'arrow_back' }} size={25} tintColor={colors.text} /></Pressable>
           <View style={styles.topbarCopy}><Text style={styles.topbarEyebrow}>{visibility === 'private' ? 'PRIVATE ESSAY' : 'PUBLIC ESSAY'}</Text><Text numberOfLines={1} style={styles.topbarTitle}>{status}</Text></View>
-          <Pressable accessibilityRole="button" onPress={() => { void persist('manual'); }} style={styles.saveButton}><Text style={styles.saveText}>Save</Text></Pressable>
+          <Pressable accessibilityRole="button" disabled={recovering || Boolean(localId && !localEssay)} onPress={() => { void persist('manual').catch(() => undefined); }} style={styles.saveButton}><Text style={styles.saveText}>Save</Text></Pressable>
         </View>
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.editorContent}>
+          {draft.state.error ? <View><Text accessibilityRole="alert" style={styles.helper}>{draft.state.error}</Text><Pressable accessibilityRole="button" onPress={() => { void persist('manual').catch(() => undefined); }}><Text style={styles.saveText}>Retry saving</Text></Pressable></View> : null}
+          {localId && !localEssay ? <View style={{ gap: 8 }}>
+            <Text accessibilityRole="alert" style={styles.helper}>This essay was removed or moved to Trash elsewhere. Review your retained writing below, then save a new private essay or deliberately discard this draft. The removed record and history stay unchanged.</Text>
+            <Text selectable style={styles.helper}>{title} · {collectionName}{"\n"}{summary}{"\n"}{bodyText(body)}</Text>
+            {recoveryError ? <Text accessibilityRole="alert" style={styles.helper}>{recoveryError}</Text> : null}
+            <Pressable accessibilityRole="button" disabled={recovering || !(title.trim() || summary.trim() || body.trim())} onPress={() => { void recoverRemovedWriting(); }}><Text style={styles.saveText}>{recovering ? 'Saving private copy…' : 'Save as a new private essay'}</Text></Pressable>
+            <Pressable accessibilityRole="button" disabled={recovering} onPress={discardRemovedWriting}><Text style={styles.deleteText}>Discard retained draft</Text></Pressable>
+          </View> : null}
+          {draft.state.conflict && localEssay ? <View style={{ gap: 8 }}>
+            <Text accessibilityRole="alert" style={styles.helper}>This essay changed elsewhere while you were writing. Your draft is preserved. Choose which writing to keep before saving.</Text>
+            <Text selectable style={styles.helper}>Your draft: {title} · {collectionName} · {visibility}{"\n"}{summary}{"\n"}{bodyText(body)}</Text>
+            <Text selectable style={styles.helper}>Incoming: {draft.state.conflict.title} · {draft.state.conflict.collectionName} · {draft.state.conflict.visibility}{"\n"}{draft.state.conflict.summary}{"\n"}{bodyText(draft.state.conflict.body)}</Text>
+            <Pressable accessibilityRole="button" onPress={() => {
+              const incoming = draft.queue.snapshot().conflict;
+              if (!incoming) return;
+              draft.queue.resolve(false);
+              // This legacy editor edits writing only. Preserve incoming properties and source identity.
+              draft.change('metadata', incoming.metadata);
+              draft.change('sourceId', incoming.sourceId);
+            }}><Text style={styles.saveText}>Keep my writing</Text></Pressable>
+            <Pressable accessibilityRole="button" onPress={() => {
+              const incoming = draft.queue.snapshot().conflict;
+              Alert.alert('Use the incoming writing?', 'This replaces your unsaved writing with the incoming version.', [{ text: 'Keep editing', style: 'cancel' }, { text: 'Use incoming', onPress: () => {
+                if (draft.queue.snapshot().conflict !== incoming) return Alert.alert('Another version arrived', 'Review the current incoming writing before choosing again.');
+                draft.queue.resolve(true);
+              } }]);
+            }}><Text style={styles.saveText}>Use incoming writing</Text></Pressable>
+          </View> : null}
           <View style={styles.visibilitySwitch}>
             {(['private', 'public'] as const).map((option) => <Pressable key={option} accessibilityRole="tab" accessibilityState={{ selected: visibility === option }} onPress={() => setVisibility(option)} style={[styles.visibilityOption, visibility === option && styles.visibilitySelected]}><SymbolView name={option === 'private' ? { ios: 'lock.fill', android: 'lock' } : { ios: 'globe', android: 'public' }} size={16} tintColor={visibility === option ? colors.onAction : colors.textSecondary} /><Text style={[styles.visibilityText, visibility === option && styles.visibilityTextSelected]}>{option === 'private' ? 'Private' : 'Public'}</Text></Pressable>)}
           </View>
@@ -235,7 +255,7 @@ export default function EssayEditorScreen() {
               <SymbolView name={{ ios: 'chevron.right', android: 'chevron_right' }} size={16} tintColor={colors.textSecondary} />
             </Pressable>)}
           </View> : null}
-          {localEssay ? <Pressable accessibilityRole="button" onPress={remove} style={styles.deleteButton}><Text style={styles.deleteText}>Delete essay and history</Text></Pressable> : null}
+          {localEssay ? <Pressable accessibilityRole="button" onPress={remove} style={styles.deleteButton}><Text style={styles.deleteText}>Move essay to Trash</Text></Pressable> : null}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

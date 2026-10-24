@@ -1,6 +1,7 @@
 import { createContext, type PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { buildSessionPlan } from '@/learning/engine';
+import { onSyncedData } from '@/services/device-sync-events';
 import { FRENCH_SKILLS } from '@/learning/french-seed';
 import type { AttemptResult, LearningDashboard, LearningSessionPlan, LearningSkillState } from '@/learning/types';
 import { completeLearningMilestone, finishLearningSession, getLearningDashboard, listLearningStates, recordLearningAttempt, startLearningSession } from '@/storage/learning-repository';
@@ -14,6 +15,7 @@ export function LearningProvider({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
   const refresh = useCallback(async () => { const [nextDashboard, nextStates] = await Promise.all([getLearningDashboard(), listLearningStates()]); setDashboard(nextDashboard); setStates(nextStates); setLoading(false); }, []);
   useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => onSyncedData(() => { void refresh().catch(() => undefined); }, ['learning_skill_states', 'learning_sessions', 'learning_attempts', 'learning_milestone_evidence']), [refresh]);
   const createPlan = useCallback(async (minutes: number) => { const plan = buildSessionPlan(FRENCH_SKILLS, await listLearningStates(), minutes); await startLearningSession(plan); return plan; }, []);
   const recordAttempt = useCallback(async (plan: LearningSessionPlan, exerciseIndex: number, result: AttemptResult, seconds: number) => { const exercise = plan.exercises[exerciseIndex]; if (exercise) await recordLearningAttempt({ sessionId: plan.id, skillId: exercise.skillId, kind: exercise.kind, result, responseSeconds: seconds }); }, []);
   const finishSession = useCallback(async (planId: string, seconds: number) => { await finishLearningSession(planId, seconds); await refresh(); }, [refresh]);

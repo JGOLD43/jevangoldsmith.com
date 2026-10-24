@@ -1,8 +1,9 @@
+import type { DocumentMetadata } from './document-history';
 export type VaultKind = 'note' | 'finance' | 'photo';
 
 export type LifeArea = 'goal' | 'fucket' | 'learning' | 'interest' | 'trip';
 export type EssayVisibility = 'private' | 'public';
-export type EssayRevisionReason = 'created' | 'autosave' | 'manual' | 'studio';
+export type EssayRevisionReason = 'created' | 'autosave' | 'manual' | 'studio' | 'restored' | 'trash' | 'import' | 'merge' | 'capture' | 'sync';
 
 export type EssayDocument = {
   id: string;
@@ -14,10 +15,15 @@ export type EssayDocument = {
   visibility: EssayVisibility;
   createdAt: string;
   updatedAt: string;
+  metadata?: DocumentMetadata;
+  deletedAt?: string | null;
 };
 
 export type NewEssayDocument = Pick<EssayDocument, 'title' | 'summary' | 'body' | 'collectionName' | 'visibility'> & {
   sourceId?: string | null;
+  expectedUpdatedAt?: string;
+  importedCreatedAt?: string;
+  metadata?: DocumentMetadata;
 };
 
 export type EssayRevision = {
@@ -31,6 +37,14 @@ export type EssayRevision = {
   changeSize: number;
   reason: EssayRevisionReason;
   createdAt: string;
+  collectionName?: string | null;
+  visibility?: EssayVisibility | null;
+  sourceId?: string | null;
+  metadata?: DocumentMetadata;
+  deletedAt?: string | null;
+  deviceId?: string;
+  parentId?: string | null;
+  changeSummary?: string;
 };
 
 export type LifeItem = {

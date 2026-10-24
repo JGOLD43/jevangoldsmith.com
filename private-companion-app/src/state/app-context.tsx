@@ -1,6 +1,5 @@
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as ScreenCapture from 'expo-screen-capture';
-import { addContactsChangeListener } from 'expo-contacts';
 import {
   createContext,
   type PropsWithChildren,
@@ -29,8 +28,10 @@ import type {
 } from '@/domain/models';
 import { createAiContext, createPublicDraftFromVault } from '@/domain/privacy';
 import { askFrontierModel } from '@/services/ai';
+import { onSyncedData } from '@/services/device-sync-events';
 import {
   getPhoneSyncMode,
+  subscribePhoneContactChanges,
   pushRelationshipContactToPhone,
   syncPhoneContacts as syncPhoneContactsService,
   type PhoneSyncMode,
@@ -61,12 +62,14 @@ import {
   updateDraftStatus,
   updatePublicDraft,
   saveEssayDocument,
+  recoverRemovedEssayDraft,
   updateLifeItem,
   updateRelationshipContact,
   addRelationshipContact,
   removeRelationshipContact,
   addRelationshipInteraction,
 } from '@/storage/repository';
+import { trackPendingSave } from '@/services/save-queue';
 import {
   loadScreenshotsAllowed,
   saveScreenshotsAllowed,
@@ -103,6 +106,7 @@ type AppContextValue = {
   sendAiMessage: (prompt: string, draft?: PublicDraft) => Promise<void>;
   clearChat: () => Promise<void>;
   createEssay: (input: NewEssayDocument) => Promise<EssayDocument | null>;
+  recoverEssayDraft: (removedId: string, copyId: string, input: NewEssayDocument) => Promise<EssayDocument>;
   editEssay: (id: string, input: NewEssayDocument, reason?: EssayRevisionReason) => Promise<EssayDocument | null>;
   deleteEssay: (id: string) => Promise<void>;
   createLifeItem: (input: NewLifeItem) => Promise<void>;
@@ -213,22 +217,16 @@ export function AppProvider({ children }: PropsWithChildren) {
     return () => subscription.remove();
   }, [developerAccessEnabled]);
 
-  const reload = useCallback(async () => {
-    const [nextVaultItems, nextDrafts, nextMessages, nextLifeItems, nextEssays, nextContacts] = await Promise.all([
-      listVaultItems(),
-      listPublicDrafts(),
-      listAiMessages(),
-      listLifeItems(),
-      listEssayDocuments(),
-      listRelationshipContacts(),
+  const reload = useCallback(async (tables?: readonly string[]) => {
+    const includes = (name: string) => !tables || tables.includes(name);
+    await Promise.all([
+      includes('vault_items') ? listVaultItems().then(setVaultItems) : null,
+      includes('public_drafts') ? listPublicDrafts().then(setDrafts) : null,
+      includes('ai_messages') ? listAiMessages().then(setMessages) : null,
+      includes('life_items') ? listLifeItems().then(setLifeItems) : null,
+      includes('essay_documents') ? listEssayDocuments().then(setEssays) : null,
+      includes('relationship_contacts') ? listRelationshipContacts().then(contacts => { setContacts(contacts); void syncAllRelationshipReminders(contacts).catch(() => undefined); }) : null,
     ]);
-    setVaultItems(nextVaultItems);
-    setDrafts(nextDrafts);
-    setMessages(nextMessages);
-    setLifeItems(nextLifeItems);
-    setEssays(nextEssays);
-    setContacts(nextContacts);
-    void syncAllRelationshipReminders(nextContacts).catch(() => undefined);
   }, []);
 
   const syncContacts = useCallback(async (mode: Exclude<PhoneSyncMode, 'off'> = 'two-way', requestPermission = true) => {
@@ -243,6 +241,8 @@ export function AppProvider({ children }: PropsWithChildren) {
     }
   }, [reload]);
 
+  useEffect(() => locked ? undefined : onSyncedData(tables => { void reload(tables).catch(() => setError('Sync saved. Reopen this page to refresh it.')); }), [locked, reload]);
+
   useEffect(() => {
     let active = true;
     void getPhoneSyncMode().then((mode) => { if (active) setPhoneSyncModeState(mode); });
@@ -252,9 +252,9 @@ export function AppProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     if (locked || phoneSyncMode === 'off') return;
     const refresh = () => { void syncContacts(phoneSyncMode, false); };
-    const subscription = addContactsChangeListener(refresh);
+    const unsubscribe = subscribePhoneContactChanges(refresh);
     refresh();
-    return () => subscription.remove();
+    return unsubscribe;
   }, [locked, phoneSyncMode, syncContacts]);
 
   useEffect(() => {
@@ -404,14 +404,29 @@ export function AppProvider({ children }: PropsWithChildren) {
     }
   }, []);
 
+  const recoverEssayDraft = useCallback(async (removedId: string, copyId: string, input: NewEssayDocument) => {
+    try {
+      const essay = await trackPendingSave(recoverRemovedEssayDraft(removedId, copyId, input));
+      setEssays(current => {
+        const newer = current.find(candidate => candidate.id === essay.id && candidate.updatedAt > essay.updatedAt);
+        return newer ? current : [essay, ...current.filter(candidate => candidate.id !== essay.id)];
+      });
+      return essay;
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Could not save this retained writing.');
+      throw cause;
+    }
+  }, []);
+
   const editEssay = useCallback(async (essayId: string, input: NewEssayDocument, reason: EssayRevisionReason = 'manual') => {
     try {
+      if (!input.expectedUpdatedAt) throw new Error('Reopen this essay before saving so its current version can be checked.');
       const essay = await saveEssayDocument(essayId, input, reason);
-      setEssays((current) => current.map((candidate) => candidate.id === essayId ? essay : candidate));
+      setEssays((current) => current.map((candidate) => candidate.id === essayId && candidate.updatedAt <= essay.updatedAt ? essay : candidate));
       return essay;
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Could not save this essay.');
-      return null;
+      throw cause;
     }
   }, []);
 
@@ -421,6 +436,7 @@ export function AppProvider({ children }: PropsWithChildren) {
       setEssays((current) => current.filter((essay) => essay.id !== essayId));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Could not delete this essay.');
+      throw cause;
     }
   }, []);
 
@@ -547,6 +563,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     sendAiMessage,
     clearChat,
     createEssay,
+    recoverEssayDraft,
     editEssay,
     deleteEssay,
     createLifeItem,
@@ -587,6 +604,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     sendAiMessage,
     clearChat,
     createEssay,
+    recoverEssayDraft,
     editEssay,
     deleteEssay,
     createLifeItem,

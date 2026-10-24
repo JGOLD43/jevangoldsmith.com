@@ -1,13 +1,8 @@
-import { bodyText } from '@/domain/studio-document.cjs';
 import * as Crypto from 'expo-crypto';
 
 import type {
   AiMessage,
-  EssayDocument,
-  EssayRevision,
-  EssayRevisionReason,
   LifeItem,
-  NewEssayDocument,
   NewLifeItem,
   NewRelationshipContact,
   NewPublicDraft,
@@ -102,31 +97,6 @@ type RelationshipInteractionRow = {
   created_at: string;
 };
 
-type EssayDocumentRow = {
-  id: string;
-  source_id: string | null;
-  title: string;
-  summary: string;
-  body: string;
-  collection_name: string;
-  visibility: EssayDocument['visibility'];
-  created_at: string;
-  updated_at: string;
-};
-
-type EssayRevisionRow = {
-  id: string;
-  essay_id: string;
-  sequence: number;
-  title: string;
-  summary: string;
-  body: string;
-  character_count: number;
-  change_size: number;
-  reason: EssayRevisionReason;
-  created_at: string;
-};
-
 function id(): string {
   return Crypto.randomUUID();
 }
@@ -213,130 +183,7 @@ function mapRelationshipInteraction(row: RelationshipInteractionRow): Relationsh
   return { id: row.id, contactId: row.contact_id, summary: row.summary, occurredAt: row.occurred_at, createdAt: row.created_at };
 }
 
-function mapEssayDocument(row: EssayDocumentRow): EssayDocument {
-  return {
-    id: row.id,
-    sourceId: row.source_id,
-    title: row.title,
-    summary: row.summary,
-    body: row.body,
-    collectionName: row.collection_name,
-    visibility: row.visibility,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
-  };
-}
-
-function mapEssayRevision(row: EssayRevisionRow): EssayRevision {
-  return {
-    id: row.id,
-    essayId: row.essay_id,
-    sequence: row.sequence,
-    title: row.title,
-    summary: row.summary,
-    body: row.body,
-    characterCount: row.character_count,
-    changeSize: row.change_size,
-    reason: row.reason,
-    createdAt: row.created_at,
-  };
-}
-
-export async function listEssayDocuments(): Promise<EssayDocument[]> {
-  const database = await getDatabase();
-  const rows = await database.getAllAsync<EssayDocumentRow>('SELECT * FROM essay_documents ORDER BY updated_at DESC');
-  return rows.map(mapEssayDocument);
-}
-
-export async function addEssayDocument(input: NewEssayDocument): Promise<EssayDocument> {
-  const database = await getDatabase();
-  const now = new Date().toISOString();
-  const essay: EssayDocument = {
-    id: id(),
-    sourceId: input.sourceId ?? null,
-    title: input.title.trim() || 'Untitled essay',
-    summary: input.summary.trim(),
-    body: input.body,
-    collectionName: input.collectionName.trim() || 'Unsorted',
-    visibility: input.visibility,
-    createdAt: now,
-    updatedAt: now,
-  };
-  await database.withTransactionAsync(async () => {
-    await database.runAsync(
-      `INSERT INTO essay_documents
-        (id, source_id, title, summary, body, collection_name, visibility, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      essay.id, essay.sourceId, essay.title, essay.summary, essay.body,
-      essay.collectionName, essay.visibility, essay.createdAt, essay.updatedAt,
-    );
-    await database.runAsync(
-      `INSERT INTO essay_revisions
-        (id, essay_id, sequence, title, summary, body, character_count, change_size, reason, created_at)
-        VALUES (?, ?, 1, ?, ?, ?, ?, ?, 'created', ?)`,
-      id(), essay.id, essay.title, essay.summary, essay.body, bodyText(essay.body).length, bodyText(essay.body).length, now,
-    );
-  });
-  return essay;
-}
-
-export async function saveEssayDocument(
-  essayId: string,
-  input: NewEssayDocument,
-  reason: EssayRevisionReason = 'manual',
-): Promise<EssayDocument> {
-  const database = await getDatabase();
-  const existing = await database.getFirstAsync<EssayDocumentRow>('SELECT * FROM essay_documents WHERE id = ?', essayId);
-  if (!existing) throw new Error('This essay no longer exists.');
-  const title = input.title.trim() || 'Untitled essay';
-  const summary = input.summary.trim();
-  const collectionName = input.collectionName.trim() || 'Unsorted';
-  const unchanged = title === existing.title && summary === existing.summary && input.body === existing.body
-    && collectionName === existing.collection_name && input.visibility === existing.visibility;
-  if (unchanged) return mapEssayDocument(existing);
-  const now = new Date().toISOString();
-  const next: EssayDocument = {
-    id: existing.id,
-    sourceId: input.sourceId ?? existing.source_id,
-    title,
-    summary,
-    body: input.body,
-    collectionName,
-    visibility: input.visibility,
-    createdAt: existing.created_at,
-    updatedAt: now,
-  };
-  await database.withTransactionAsync(async () => {
-    const latest = await database.getFirstAsync<{ sequence: number }>(
-      'SELECT sequence FROM essay_revisions WHERE essay_id=? ORDER BY sequence DESC LIMIT 1', essayId,
-    );
-    await database.runAsync(
-      `UPDATE essay_documents SET source_id=?, title=?, summary=?, body=?, collection_name=?, visibility=?, updated_at=? WHERE id=?`,
-      next.sourceId, next.title, next.summary, next.body, next.collectionName, next.visibility, next.updatedAt, essayId,
-    );
-    await database.runAsync(
-      `INSERT INTO essay_revisions
-        (id, essay_id, sequence, title, summary, body, character_count, change_size, reason, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      id(), essayId, (latest?.sequence ?? 0) + 1, next.title, next.summary, next.body,
-      bodyText(next.body).length, bodyText(next.body).length - bodyText(existing.body).length, reason, now,
-    );
-  });
-  return next;
-}
-
-export async function listEssayRevisions(essayId: string): Promise<EssayRevision[]> {
-  const database = await getDatabase();
-  const rows = await database.getAllAsync<EssayRevisionRow>(
-    'SELECT * FROM essay_revisions WHERE essay_id=? ORDER BY sequence DESC', essayId,
-  );
-  return rows.map(mapEssayRevision);
-}
-
-export async function removeEssayDocument(essayId: string): Promise<void> {
-  const database = await getDatabase();
-  await database.runAsync('DELETE FROM essay_documents WHERE id=?', essayId);
-}
+export { listEssayDocuments, addEssayDocument, saveEssayDocument, recoverRemovedEssayDraft, listEssayRevisions, listEssayRevisionSummaries, getEssayRevision, removeEssayDocument, type EssayRevisionSummary } from './documents-repository';
 
 export async function listLifeItems(): Promise<LifeItem[]> {
   const database = await getDatabase();
